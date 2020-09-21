@@ -1,0 +1,1 @@
+export const FONT = "Quicksand, sans-serif";
