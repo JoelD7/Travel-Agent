@@ -4,20 +4,28 @@ import {
   CSSProperties,
   ThemeProvider,
 } from "@material-ui/styles";
-import React, { ChangeEvent, ReactNode } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  FocusEvent,
+  ReactNode,
+  SetStateAction,
+  useState,
+} from "react";
+import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
 import { FONT } from "../../assets/fonts";
 import { BLUE, PURPLE } from "../../styles";
+import { onTextChanged } from "../../utils/slices/signUpSlice";
 
 interface TextInputProps {
   name: string;
   value: string;
   label: string;
   type: string;
-  onChange: (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  coPassword: string;
   style: CreateCSSProperties<{}>;
   className: string;
+  updateState: (name: string, value: string) => void;
   endAdornment: ReactNode;
 }
 
@@ -25,18 +33,19 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type TextInputType = PartialBy<
   TextInputProps,
-  "style" | "label" | "type" | "className" | "endAdornment"
+  "style" | "label" | "type" | "className" | "endAdornment" | "coPassword"
 >;
 
 export default function TextInput({
   name,
   label,
   value,
-  onChange,
   style,
   className,
   type,
   endAdornment,
+  coPassword,
+  updateState,
 }: TextInputType) {
   const theme = createMuiTheme({
     overrides: {
@@ -67,6 +76,11 @@ export default function TextInput({
     },
   });
 
+  const [text, setText] = useState(value);
+
+  const [error, setError] = useState(false);
+  const [helperText, setHelperText] = useState("");
+
   const textStyles = makeStyles({
     textField: {
       width: "50%",
@@ -79,6 +93,24 @@ export default function TextInput({
   });
   const styles = textStyles();
 
+  function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+    setText(e.target.value);
+  }
+
+  function onBlur() {
+    if (coPassword) {
+      updateState(name, text);
+
+      if (text !== coPassword && coPassword !== "") {
+        setError(true);
+        setHelperText("The passwords don't match");
+      } else {
+        setError(false);
+        setHelperText("");
+      }
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <TextField
@@ -90,8 +122,11 @@ export default function TextInput({
         }}
         name={name}
         label={label}
-        value={value}
-        onChange={onChange}
+        value={text}
+        error={error}
+        helperText={helperText}
+        onChange={(e) => onChange(e)}
+        onBlur={onBlur}
       />
     </ThemeProvider>
   );

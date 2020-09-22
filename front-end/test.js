@@ -1,8 +1,11 @@
-let st = {a: 41}
-let obj = {
-    a: 32,
-    b: 'hola',
-    ...st
+let obj ={
+    a: '23',
+    b: 'baba'
 }
 
+let an ={
+    a: '333'
+}
+
+obj = {...obj, ...an}
 console.log(obj);

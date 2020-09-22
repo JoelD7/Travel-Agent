@@ -2,11 +2,11 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, InputAdornment } from "@material-ui/core";
-import React, { ChangeEvent, useState } from "react";
+import React, {  MouseEvent, useState } from "react";
 import { logoType, signup } from "../../assets/images";
 import { CustomButton } from "../../components";
 import TextInput from "../../components/atoms/TextInput";
-import { BLUE, signUpStyles } from "../../styles";
+import { BLUE, PURPLE, signUpStyles } from "../../styles";
 
 interface SignUpValuesType {
   firstName: string;
@@ -40,23 +40,13 @@ export default function SignUp() {
     passwordConfirmation: false,
   });
 
-  function onNameChanged(
-    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
-    let name = event.target.name;
-    let value = event.target.value;
+  function signUp(
+    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) {}
 
-    setValues({ ...values, [name]: value });
-  }
-
-  function onPasswordChanged(
-    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
-    let name = event.target.name;
-    let value = event.target.value;
-
-    setValues({ ...values, [name]: value });
-  }
+  function googleSignUp(
+    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) {}
 
   function PasswordEye({ name }: PasswordProps) {
     return (
@@ -66,10 +56,17 @@ export default function SignUp() {
             setVisibility({ ...visibility, [name]: !visibility[name] })
           }
         >
-          <FontAwesomeIcon transform="shrink-4" icon={visibility[name] ? faEye : faEyeSlash} />
+          <FontAwesomeIcon
+            transform="shrink-4"
+            icon={visibility[name] ? faEye : faEyeSlash}
+          />
         </IconButton>
       </InputAdornment>
     );
+  }
+
+  function updateState(name: string, value: string){
+      setValues({...values, [name]: value})
   }
 
   return (
@@ -88,57 +85,87 @@ export default function SignUp() {
             label="Google Sign up"
             style={{ width: "100%" }}
             icon={faGoogle}
+            onClick={googleSignUp}
           />
 
-          <Grid style={{ marginTop: "15px" }} container justify="space-between">
+          <Grid
+            id="name"
+            style={{ marginTop: "15px" }}
+            container
+            justify="space-between"
+          >
             <TextInput
               name="firstName"
-              onChange={onNameChanged}
               value={values.firstName}
               label="First name"
               className={style.nameTextField}
+              updateState={updateState}
             />
 
             <TextInput
               name="lastName"
-              onChange={onNameChanged}
               value={values.lastName}
               label="Last name"
               className={style.nameTextField}
+              updateState={updateState}
             />
           </Grid>
 
-          <Grid style={{ marginTop: "15px" }} container>
+          <Grid id="email" style={{ marginTop: "15px" }} container>
             <TextInput
               label="Email"
               name="email"
               value={values.email}
               style={{ width: "100%" }}
               type="email"
-              onChange={onNameChanged}
+              updateState={updateState}
             />
           </Grid>
-          <Grid style={{ marginTop: "15px" }} container>
+
+          <Grid id="password" style={{ marginTop: "15px" }} container>
             <TextInput
               label="Password"
               name="password"
+              coPassword={values.passwordConfirmation}
               value={values.password}
               style={{ width: "100%" }}
-              type={visibility.password? "text" : "password"}
-              onChange={onPasswordChanged}
+              type={visibility.password ? "text" : "password"}
+              updateState={updateState}
               endAdornment={<PasswordEye name="password" />}
             />
           </Grid>
-          <Grid style={{ marginTop: "15px" }} container>
+
+          <Grid
+            id="passwordConfirmation"
+            style={{ marginTop: "15px" }}   
+            container
+          >
             <TextInput
               label="Confirm password"
               name="passwordConfirmation"
+              coPassword={values.password}
               value={values.passwordConfirmation}
               style={{ width: "100%" }}
               type={visibility.passwordConfirmation ? "text" : "password"}
-              onChange={onPasswordChanged}
+              updateState={updateState}
               endAdornment={<PasswordEye name="passwordConfirmation" />}
             />
+          </Grid>
+
+          <Grid id="signUp" style={{ marginTop: "15px" }} container>
+            <CustomButton
+              onClick={signUp}
+              label="Sign up"
+              style={{ width: "100%" }}
+            />
+          </Grid>
+          <Grid id="redirectLogin" container>
+            <p style={{ color: PURPLE }}>
+              Already registered?
+              <b>
+                <a href="#">Sign in</a>
+              </b>
+            </p>
           </Grid>
         </Grid>
       </Grid>
