@@ -11,6 +11,7 @@ interface CustomButtonProps {
   label: string;
   style: CreateCSSProperties<{}>;
   icon: IconDefinition;
+  submit: boolean;
   onClick: (event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void
 }
 
@@ -18,7 +19,7 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type CustomButtonType = PartialBy<
   CustomButtonProps,
-  "color" | "style" | "icon"
+  "color" | "style" | "icon" | "submit" | "onClick"
 >;
 
 export default function CustomButton({
@@ -27,6 +28,7 @@ export default function CustomButton({
   style,
   icon,
   onClick,
+  submit,
 }: CustomButtonType) {
   const buttonStyles = makeStyles({
     button: {
@@ -49,6 +51,7 @@ export default function CustomButton({
       className={styles.button}
       startIcon={icon ? <FontAwesomeIcon icon={icon} /> : <b></b>}
       onClick={onClick} 
+      type={submit ? "submit": "button"}
     >
       {label}
     </Button>

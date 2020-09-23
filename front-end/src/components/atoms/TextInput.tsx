@@ -6,8 +6,6 @@ import {
 } from "@material-ui/styles";
 import React, {
   ChangeEvent,
-  Dispatch,
-  FocusEvent,
   ReactNode,
   SetStateAction,
   useState,
@@ -15,7 +13,6 @@ import React, {
 import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
 import { FONT } from "../../assets/fonts";
 import { BLUE, PURPLE } from "../../styles";
-import { onTextChanged } from "../../utils/slices/signUpSlice";
 
 interface TextInputProps {
   name: string;
@@ -94,20 +91,44 @@ export default function TextInput({
   const styles = textStyles();
 
   function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    setText(e.target.value);
+    if (!Number.isFinite(Number(e.target.value)) || e.target.value==='') {
+      setText(e.target.value);
+    }
   }
 
-  function onBlur() {
-    if (coPassword) {
-      updateState(name, text);
+  function validateInput() {
+    updateState(name, text);
 
-      if (text !== coPassword && coPassword !== "") {
-        setError(true);
-        setHelperText("The passwords don't match");
-      } else {
+    if (text === "") {
+      setError(true);
+      setHelperText("Required");
+      return;
+    }
+
+    switch (name) {
+      case "email":
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(text)) {
+          setError(true);
+          setHelperText("Invalid email address");
+        } else {
+          setError(false);
+          setHelperText("");
+        }
+        break;
+      case "password":
+      case "passwordConfirmation":
+        if (text !== coPassword && coPassword !== "") {
+          setError(true);
+          setHelperText("The passwords don't match");
+        } else {
+          setError(false);
+          setHelperText("");
+        }
+        break;
+      default:
         setError(false);
         setHelperText("");
-      }
+        break;
     }
   }
 
@@ -126,7 +147,7 @@ export default function TextInput({
         error={error}
         helperText={helperText}
         onChange={(e) => onChange(e)}
-        onBlur={onBlur}
+        onBlur={validateInput}
       />
     </ThemeProvider>
   );

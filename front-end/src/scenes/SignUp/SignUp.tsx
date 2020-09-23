@@ -2,11 +2,14 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, InputAdornment } from "@material-ui/core";
-import React, {  MouseEvent, useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import { logoType, signup } from "../../assets/images";
 import { CustomButton } from "../../components";
 import TextInput from "../../components/atoms/TextInput";
 import { BLUE, PURPLE, signUpStyles } from "../../styles";
+import { Formik, Form, FastField } from "formik";
+import * as Yup from "yup";
+import { ObjectSchemaConstructor, ObjectSchema } from "yup";
 
 interface SignUpValuesType {
   firstName: string;
@@ -65,8 +68,21 @@ export default function SignUp() {
     );
   }
 
-  function updateState(name: string, value: string){
-      setValues({...values, [name]: value})
+  function updateState(name: string, value: string) {
+    setValues({ ...values, [name]: value });
+  }
+
+  function validationSchema(): ObjectSchema {
+    return Yup.object({
+      firstName: Yup.string().required("Required"),
+      lastName: Yup.string().required("Required"),
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string().required("Password is required"),
+      passwordConfirmation: Yup.string().oneOf(
+        [Yup.ref("password"), ""],
+        "Passwords must match"
+      ),
+    });
   }
 
   return (
@@ -88,77 +104,90 @@ export default function SignUp() {
             onClick={googleSignUp}
           />
 
-          <Grid
-            id="name"
-            style={{ marginTop: "15px" }}
-            container
-            justify="space-between"
+          <Formik
+            initialValues={values}
+            validationSchema={validationSchema}
+            validateOnChange={false}
+            onSubmit={(values, { setSubmitting }) => {
+              alert(JSON.stringify(values, null, 2));
+              setSubmitting(false);
+            }}
           >
-            <TextInput
-              name="firstName"
-              value={values.firstName}
-              label="First name"
-              className={style.nameTextField}
-              updateState={updateState}
-            />
+            <Form>
+              <Grid
+                id="name"
+                style={{ marginTop: "15px" }}
+                container
+                justify="space-between"
+              >
+                <TextInput
+                  name="firstName"
+                  value={values.firstName}
+                  label="First name"
+                  className={style.nameTextField}
+                  updateState={updateState}
+                />
 
-            <TextInput
-              name="lastName"
-              value={values.lastName}
-              label="Last name"
-              className={style.nameTextField}
-              updateState={updateState}
-            />
-          </Grid>
+                <TextInput
+                  name="lastName"
+                  value={values.lastName}
+                  label="Last name"
+                  className={style.nameTextField}
+                  updateState={updateState}
+                />
+              </Grid>
 
-          <Grid id="email" style={{ marginTop: "15px" }} container>
-            <TextInput
-              label="Email"
-              name="email"
-              value={values.email}
-              style={{ width: "100%" }}
-              type="email"
-              updateState={updateState}
-            />
-          </Grid>
+              <Grid id="email" style={{ marginTop: "15px" }} container>
+                <TextInput
+                  label="Email"
+                  name="email"
+                  value={values.email}
+                  style={{ width: "100%" }}
+                  type="email"
+                  updateState={updateState}
+                />
+              </Grid>
 
-          <Grid id="password" style={{ marginTop: "15px" }} container>
-            <TextInput
-              label="Password"
-              name="password"
-              coPassword={values.passwordConfirmation}
-              value={values.password}
-              style={{ width: "100%" }}
-              type={visibility.password ? "text" : "password"}
-              updateState={updateState}
-              endAdornment={<PasswordEye name="password" />}
-            />
-          </Grid>
+              <Grid id="password" style={{ marginTop: "15px" }} container>
+                <TextInput
+                  label="Password"
+                  name="password"
+                  coPassword={values.passwordConfirmation}
+                  value={values.password}
+                  style={{ width: "100%" }}
+                  type={visibility.password ? "text" : "password"}
+                  updateState={updateState}
+                  endAdornment={<PasswordEye name="password" />}
+                />
+              </Grid>
 
-          <Grid
-            id="passwordConfirmation"
-            style={{ marginTop: "15px" }}   
-            container
-          >
-            <TextInput
-              label="Confirm password"
-              name="passwordConfirmation"
-              coPassword={values.password}
-              value={values.passwordConfirmation}
-              style={{ width: "100%" }}
-              type={visibility.passwordConfirmation ? "text" : "password"}
-              updateState={updateState}
-              endAdornment={<PasswordEye name="passwordConfirmation" />}
-            />
-          </Grid>
+              <Grid
+                id="passwordConfirmation"
+                style={{ marginTop: "15px" }}
+                container
+              >
+                <TextInput
+                  label="Confirm password"
+                  name="passwordConfirmation"
+                  coPassword={values.password}
+                  value={values.passwordConfirmation}
+                  style={{ width: "100%" }}
+                  type={visibility.passwordConfirmation ? "text" : "password"}
+                  updateState={updateState}
+                  endAdornment={<PasswordEye name="passwordConfirmation" />}
+                />
+              </Grid>
 
-          <Grid id="signUp" style={{ marginTop: "15px" }} container>
-            <CustomButton
-              onClick={signUp}
-              label="Sign up"
-              style={{ width: "100%" }}
-            />
-          </Grid>
+              <Grid id="signUp" style={{ marginTop: "15px" }} container>
+                <CustomButton
+                  onClick={signUp}
+                  label="Sign up"
+                  submit={true}
+                  style={{ width: "100%" }}
+                />
+              </Grid>
+            </Form>
+          </Formik>
           <Grid id="redirectLogin" container>
             <p style={{ color: PURPLE }}>
               Already registered?
