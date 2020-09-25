@@ -4,12 +4,7 @@ import {
   CSSProperties,
   ThemeProvider,
 } from "@material-ui/styles";
-import React, {
-  ChangeEvent,
-  ReactNode,
-  SetStateAction,
-  useState,
-} from "react";
+import React, { ChangeEvent, ReactNode, SetStateAction, useState } from "react";
 import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
 import { FONT } from "../../assets/fonts";
 import { BLUE, PURPLE } from "../../styles";
@@ -30,7 +25,13 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type TextInputType = PartialBy<
   TextInputProps,
-  "style" | "label" | "type" | "className" | "endAdornment" | "coPassword"
+  | "style"
+  | "label"
+  | "type"
+  | "className"
+  | "endAdornment"
+  | "coPassword"
+  | "updateState"
 >;
 
 export default function TextInput({
@@ -91,13 +92,15 @@ export default function TextInput({
   const styles = textStyles();
 
   function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    if (!Number.isFinite(Number(e.target.value)) || e.target.value==='') {
+    if (!Number.isFinite(Number(e.target.value)) || e.target.value === "") {
       setText(e.target.value);
     }
   }
 
   function validateInput() {
-    updateState(name, text);
+    if (updateState !== undefined) {
+      updateState(name, text);
+    }
 
     if (text === "") {
       setError(true);
@@ -117,7 +120,7 @@ export default function TextInput({
         break;
       case "password":
       case "passwordConfirmation":
-        if (text !== coPassword && coPassword !== "") {
+        if (coPassword && text !== coPassword && coPassword !== "") {
           setError(true);
           setHelperText("The passwords don't match");
         } else {

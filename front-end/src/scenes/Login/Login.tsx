@@ -3,20 +3,14 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, InputAdornment } from "@material-ui/core";
 import React, { MouseEvent, useState } from "react";
-import { logoType, signup } from "../../assets/images";
+import { logoType, loginImage } from "../../assets";
 import { CustomButton } from "../../components";
 import TextInput from "../../components/atoms/TextInput";
 import { BLUE, PURPLE, signStyles } from "../../styles";
-import { Formik, Form, FastField } from "formik";
-import * as Yup from "yup";
-import { ObjectSchemaConstructor, ObjectSchema } from "yup";
 
-interface SignUpValuesType {
-  firstName: string;
-  lastName: string;
+interface LoginType {
   email: string;
   password: string;
-  passwordConfirmation: string;
 }
 
 interface VisibilityProps {
@@ -27,27 +21,21 @@ interface PasswordProps {
   name: string;
 }
 
-export default function SignUp() {
+export default function Login() {
   const style = signStyles();
-
-  const [values, setValues] = useState<SignUpValuesType>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    passwordConfirmation: "",
-  });
 
   const [visibility, setVisibility] = useState<VisibilityProps>({
     password: false,
-    passwordConfirmation: false,
   });
 
-  function signUp(
-    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-  ) {}
+  const [values, setValues] = useState<LoginType>({
+    email: "",
+    password: "",
+  });
 
-  function googleSignUp(
+  function login(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
+
+  function googleLogin(
     event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) {}
 
@@ -68,10 +56,6 @@ export default function SignUp() {
     );
   }
 
-  function updateState(name: string, value: string) {
-    setValues({ ...values, [name]: value });
-  }
-
   return (
     <Grid className={style.mainContainer} container>
       <Grid item className={style.formGrid}>
@@ -80,39 +64,16 @@ export default function SignUp() {
         </div>
 
         <Grid item className={style.formContainer}>
-          <h1 className={style.title}>Sign up</h1>
+          <h1 className={style.title}>Login</h1>
           <h5 style={{ color: BLUE, fontWeight: "normal" }}>
-            Sign up with Google
+            Login with Google
           </h5>
           <CustomButton
-            label="Google Sign up"
+            label="Google Login"
             style={{ width: "100%" }}
             icon={faGoogle}
-            onClick={googleSignUp}
+            onClick={googleLogin}
           />
-
-          <Grid
-            id="name"
-            style={{ marginTop: "15px" }}
-            container
-            justify="space-between"
-          >
-            <TextInput
-              name="firstName"
-              value={values.firstName}
-              label="First name"
-              className={style.nameTextField}
-              updateState={updateState}
-            />
-
-            <TextInput
-              name="lastName"
-              value={values.lastName}
-              label="Last name"
-              className={style.nameTextField}
-              updateState={updateState}
-            />
-          </Grid>
 
           <Grid id="email" style={{ marginTop: "15px" }} container>
             <TextInput
@@ -121,7 +82,6 @@ export default function SignUp() {
               value={values.email}
               style={{ width: "100%" }}
               type="email"
-              updateState={updateState}
             />
           </Grid>
 
@@ -129,35 +89,16 @@ export default function SignUp() {
             <TextInput
               label="Password"
               name="password"
-              coPassword={values.passwordConfirmation}
               value={values.password}
               style={{ width: "100%" }}
               type={visibility.password ? "text" : "password"}
-              updateState={updateState}
               endAdornment={<PasswordEye name="password" />}
-            />
-          </Grid>
-
-          <Grid
-            id="passwordConfirmation"
-            style={{ marginTop: "15px" }}
-            container
-          >
-            <TextInput
-              label="Confirm password"
-              name="passwordConfirmation"
-              coPassword={values.password}
-              value={values.passwordConfirmation}
-              style={{ width: "100%" }}
-              type={visibility.passwordConfirmation ? "text" : "password"}
-              updateState={updateState}
-              endAdornment={<PasswordEye name="passwordConfirmation" />}
             />
           </Grid>
 
           <Grid id="signUp" style={{ marginTop: "15px" }} container>
             <CustomButton
-              onClick={signUp}
+              onClick={login}
               label="Sign up"
               submit={true}
               style={{ width: "100%" }}
@@ -166,9 +107,9 @@ export default function SignUp() {
 
           <Grid id="redirectLogin" container>
             <p style={{ color: PURPLE }}>
-              Already registered?
+              Not registered?
               <b>
-                <a href="/login">Sign in</a>
+                <a href="/signup">Sign up</a>
               </b>
             </p>
           </Grid>
@@ -176,7 +117,7 @@ export default function SignUp() {
       </Grid>
 
       <Grid item className={style.imageGrid}>
-        <img className={style.image} src={signup} />
+        <img className={style.image} src={loginImage} />
       </Grid>
     </Grid>
   );

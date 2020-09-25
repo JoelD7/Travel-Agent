@@ -1,8 +1,7 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import { FONT } from "../assets/fonts";
 import { BLUE } from "./colors";
 
-export const signUpStyles = makeStyles((theme: Theme) => ({
+export const signStyles = makeStyles((theme: Theme) => ({
   formContainer: {
     padding: "30px",
     paddingLeft: "50px",
