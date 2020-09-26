@@ -73,7 +73,7 @@ export default function SignUp() {
   }
 
   return (
-    <Grid className={style.mainContainer} container>
+    <Grid className={style.mainContainerSignUp} container>
       <Grid item className={style.formGrid}>
         <div className={style.imageContainer}>
           <img className={style.logotype} src={logoType} />

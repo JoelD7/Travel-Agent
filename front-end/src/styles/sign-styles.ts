@@ -1,14 +1,17 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { BLUE } from "./colors";
+import { loginImage, signup } from "../assets/images";
 
 export const signStyles = makeStyles((theme: Theme) => ({
   formContainer: {
-    padding: "30px",
     paddingLeft: "50px",
     paddingRight: "50px",
   },
   formGrid: {
     width: "40%",
+    minWidth: "412px",
+    backgroundColor: "white",
+    borderRadius: "5px",
   },
   image: {
     objectFit: "cover",
@@ -24,14 +27,38 @@ export const signStyles = makeStyles((theme: Theme) => ({
   imageGrid: {
     width: "60%",
     height: "100vh",
+
+    [theme.breakpoints.down(1045)]: {
+      display: "none",
+    },
   },
-  mainContainer: {
+  mainContainerSignUp: {
     backgroundColor: "white",
     width: "99vw",
+    height: "100vh",
+
+    [theme.breakpoints.down(1045)]: {
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundImage: `url(${signup})`,
+      backgroundSize: "cover",
+    },
+  },
+  mainContainerLogin: {
+    backgroundColor: "white",
+    width: "99vw",
+    height: "100vh",
+
+    [theme.breakpoints.down(1045)]: {
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundImage: `url(${loginImage})`,
+      backgroundSize: "cover",
+    },
   },
   nameTextField: {
     width: "45%",
-    minWidth: '147px',
+    minWidth: "147px",
   },
   logotype: {
     width: "40%",

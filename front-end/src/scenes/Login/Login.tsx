@@ -57,7 +57,7 @@ export default function Login() {
   }
 
   return (
-    <Grid className={style.mainContainer} container>
+    <Grid className={style.mainContainerLogin} container>
       <Grid item className={style.formGrid}>
         <div className={style.imageContainer}>
           <img className={style.logotype} src={logoType} />
