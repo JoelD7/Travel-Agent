@@ -1,5 +1,5 @@
 import * as React from "react";
-import Login from "./scenes/Login/Login";
+// import Login from "./scenes/Login/Login";
 import SignUp from "./scenes/SignUp/SignUp";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 export default function App() {
@@ -10,6 +10,6 @@ export default function App() {
     //     <Route exact path="/login" component={Login} />
     //   </Switch>
     // </Router>
-    <Login/>
+    <SignUp/>
   );
 }

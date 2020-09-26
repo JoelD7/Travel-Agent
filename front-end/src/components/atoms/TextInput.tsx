@@ -19,6 +19,13 @@ interface TextInputProps {
   className: string;
   updateState: (name: string, value: string) => void;
   endAdornment: ReactNode;
+  onChange: (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
+  onBlur: (e: React.FocusEvent<any>) => void;
+  error: boolean;
+  helperText: string;
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => any
 }
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -31,7 +38,7 @@ type TextInputType = PartialBy<
   | "className"
   | "endAdornment"
   | "coPassword"
-  | "updateState"
+  | "updateState"|"onChange" |"onBlur"
 >;
 
 export default function TextInput({
@@ -44,6 +51,11 @@ export default function TextInput({
   endAdornment,
   coPassword,
   updateState,
+  // onChange,
+  onBlur,
+  error,
+  helperText,
+  setFieldValue,
 }: TextInputType) {
   const theme = createMuiTheme({
     overrides: {
@@ -73,11 +85,10 @@ export default function TextInput({
       },
     },
   });
-
   const [text, setText] = useState(value);
 
-  const [error, setError] = useState(false);
-  const [helperText, setHelperText] = useState("");
+  // const [error, setError] = useState(false);
+  // const [helperText, setHelperText] = useState("");
 
   const textStyles = makeStyles({
     textField: {
@@ -91,53 +102,56 @@ export default function TextInput({
   });
   const styles = textStyles();
 
+//#region Methods
   function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     if (!Number.isFinite(Number(e.target.value)) || e.target.value === "") {
       setText(e.target.value);
     }
   }
 
-  function validateInput() {
-    if (updateState !== undefined) {
-      updateState(name, text);
-    }
+  // function validateInput() {
+  //   if (updateState !== undefined) {
+  //     updateState(name, text);
+  //   }
 
-    if (text === "") {
-      setError(true);
-      setHelperText("Required");
-      return;
-    }
+  //   if (text === "") {
+  //     setError(true);
+  //     setHelperText("Required");
+  //     return;
+  //   }
 
-    switch (name) {
-      case "email":
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(text)) {
-          setError(true);
-          setHelperText("Invalid email address");
-        } else {
-          setError(false);
-          setHelperText("");
-        }
-        break;
-      case "password":
-      case "passwordConfirmation":
-        if (coPassword && text !== coPassword && coPassword !== "") {
-          setError(true);
-          setHelperText("The passwords don't match");
-        } else {
-          setError(false);
-          setHelperText("");
-        }
-        break;
-      default:
-        setError(false);
-        setHelperText("");
-        break;
-    }
-  }
+  //   switch (name) {
+  //     case "email":
+  //       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(text)) {
+  //         setError(true);
+  //         setHelperText("Invalid email address");
+  //       } else {
+  //         setError(false);
+  //         setHelperText("");
+  //       }
+  //       break;
+  //     case "password":
+  //     case "passwordConfirmation":
+  //       if (coPassword && text !== coPassword && coPassword !== "") {
+  //         setError(true);
+  //         setHelperText("The passwords don't match");
+  //       } else {
+  //         setError(false);
+  //         setHelperText("");
+  //       }
+  //       break;
+  //     default:
+  //       setError(false);
+  //       setHelperText("");
+  //       break;
+  //   }
+  // }
+  //#endregion
 
   return (
     <ThemeProvider theme={theme}>
       <TextField
+        // id={name}
         className={className ? className : styles.textField}
         InputProps={{
           classes: { root: styles.input },
@@ -149,8 +163,8 @@ export default function TextInput({
         value={text}
         error={error}
         helperText={helperText}
-        onChange={(e) => onChange(e)}
-        onBlur={validateInput}
+        onChange={onChange}
+        onBlur={()=>setFieldValue(name, text)}
       />
     </ThemeProvider>
   );

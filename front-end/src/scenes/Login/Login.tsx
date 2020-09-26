@@ -58,7 +58,7 @@ export default function Login() {
 
   return (
     <Grid className={style.mainContainer} container>
-      <Grid item className={style.formGrid}>
+      {/* <Grid item className={style.formGrid}>
         <div className={style.imageContainer}>
           <img className={style.logotype} src={logoType} />
         </div>
@@ -118,7 +118,7 @@ export default function Login() {
 
       <Grid item className={style.imageGrid}>
         <img className={style.image} src={loginImage} />
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }

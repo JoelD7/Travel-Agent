@@ -7,8 +7,8 @@ import { logoType, signup } from "../../assets/images";
 import { CustomButton } from "../../components";
 import TextInput from "../../components/atoms/TextInput";
 import { BLUE, PURPLE, signStyles } from "../../styles";
-import { Formik, Form, FastField } from "formik";
-import * as Yup from "yup";
+import { Formik, Form, FastField, useFormik } from "formik";
+import * as yup from "yup";
 import { ObjectSchemaConstructor, ObjectSchema } from "yup";
 
 interface SignUpValuesType {
@@ -41,6 +41,32 @@ export default function SignUp() {
   const [visibility, setVisibility] = useState<VisibilityProps>({
     password: false,
     passwordConfirmation: false,
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+    },
+
+    validationSchema: yup.object({
+      firstName: yup.string().required("Required"),
+
+      lastName: yup.string().required("Required"),
+
+      email: yup.string().email("Invalid email address").required("Required"),
+      password: yup.string().required("Password is required"),
+      passwordConfirmation: yup
+        .string()
+        .oneOf([yup.ref("password"), undefined], "Passwords must match"),
+    }),
+
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
   });
 
   function signUp(
@@ -90,79 +116,131 @@ export default function SignUp() {
             icon={faGoogle}
             onClick={googleSignUp}
           />
+          <form onSubmit={formik.handleSubmit}>
+            <Grid
+              id="name"
+              style={{ marginTop: "15px" }}
+              container
+              justify="space-between"
+            >
+              <TextInput
+                name="firstName"
+                // value={values.firstName}
+                label="First name"
+                className={style.nameTextField}
+                // updateState={updateState}
+                // onChange={formik.handleChange}
+                setFieldValue={formik.setFieldValue}
+                value={formik.values.firstName}
+                error={
+                  ((formik.touched.firstName !== undefined ? formik.touched.firstName : false) && (formik.errors.firstName !== '' ))
+                }
+                helperText={
+                  formik.errors.firstName !== undefined
+                    ? formik.errors.firstName
+                    : ""
+                }
+              />
 
-          <Grid
-            id="name"
-            style={{ marginTop: "15px" }}
-            container
-            justify="space-between"
-          >
-            <TextInput
-              name="firstName"
-              value={values.firstName}
-              label="First name"
-              className={style.nameTextField}
-              updateState={updateState}
-            />
+              <TextInput
+                name="lastName"
+                // value={values.lastName}
+                label="Last name"
+                className={style.nameTextField}
+                updateState={updateState}
+                setFieldValue={formik.setFieldValue}
+                value={formik.values.lastName}
+                error={
+                  (formik.touched.lastName && formik.errors.lastName) !==
+                  undefined
+                }
+                helperText={
+                  formik.errors.lastName !== undefined
+                    ? formik.errors.lastName
+                    : ""
+                }
+              />
+            </Grid>
 
-            <TextInput
-              name="lastName"
-              value={values.lastName}
-              label="Last name"
-              className={style.nameTextField}
-              updateState={updateState}
-            />
-          </Grid>
+            <Grid id="email" style={{ marginTop: "15px" }} container>
+              <TextInput
+                label="Email"
+                name="email"
+                // value={values.email}
+                style={{ width: "100%" }}
+                type="email"
+                updateState={updateState}
+                setFieldValue={formik.setFieldValue}
+                value={formik.values.email}
+                error={
+                  (formik.touched.email && formik.errors.email) !== undefined
+                }
+                helperText={
+                  formik.errors.email !== undefined ? formik.errors.email : ""
+                }
+              />
+            </Grid>
 
-          <Grid id="email" style={{ marginTop: "15px" }} container>
-            <TextInput
-              label="Email"
-              name="email"
-              value={values.email}
-              style={{ width: "100%" }}
-              type="email"
-              updateState={updateState}
-            />
-          </Grid>
+            <Grid id="password" style={{ marginTop: "15px" }} container>
+              <TextInput
+                label="Password"
+                name="password"
+                coPassword={values.passwordConfirmation}
+                // value={values.password}
+                style={{ width: "100%" }}
+                type={visibility.password ? "text" : "password"}
+                updateState={updateState}
+                endAdornment={<PasswordEye name="password" />}
+                setFieldValue={formik.setFieldValue}
+                value={formik.values.password}
+                error={
+                  (formik.touched.password && formik.errors.password) !==
+                  undefined
+                }
+                helperText={
+                  formik.errors.password !== undefined
+                    ? formik.errors.password
+                    : ""
+                }
+              />
+            </Grid>
 
-          <Grid id="password" style={{ marginTop: "15px" }} container>
-            <TextInput
-              label="Password"
-              name="password"
-              coPassword={values.passwordConfirmation}
-              value={values.password}
-              style={{ width: "100%" }}
-              type={visibility.password ? "text" : "password"}
-              updateState={updateState}
-              endAdornment={<PasswordEye name="password" />}
-            />
-          </Grid>
-
-          <Grid
-            id="passwordConfirmation"
-            style={{ marginTop: "15px" }}
-            container
-          >
-            <TextInput
-              label="Confirm password"
-              name="passwordConfirmation"
-              coPassword={values.password}
-              value={values.passwordConfirmation}
-              style={{ width: "100%" }}
-              type={visibility.passwordConfirmation ? "text" : "password"}
-              updateState={updateState}
-              endAdornment={<PasswordEye name="passwordConfirmation" />}
-            />
-          </Grid>
-
-          <Grid id="signUp" style={{ marginTop: "15px" }} container>
-            <CustomButton
-              onClick={signUp}
-              label="Sign up"
-              submit={true}
-              style={{ width: "100%" }}
-            />
-          </Grid>
+            <Grid
+              id="passwordConfirmation"
+              style={{ marginTop: "15px" }}
+              container
+            >
+              <TextInput
+                label="Confirm password"
+                name="passwordConfirmation"
+                coPassword={values.password}
+                // value={values.passwordConfirmation}
+                style={{ width: "100%" }}
+                type={visibility.passwordConfirmation ? "text" : "password"}
+                updateState={updateState}
+                endAdornment={<PasswordEye name="passwordConfirmation" />}
+                setFieldValue={formik.setFieldValue}
+                value={formik.values.passwordConfirmation}
+                error={
+                  (formik.touched.passwordConfirmation &&
+                    formik.errors.passwordConfirmation) !== undefined
+                }
+                helperText={
+                  formik.errors.passwordConfirmation !== undefined
+                    ? formik.errors.passwordConfirmation
+                    : ""
+                }
+              />
+            </Grid>
+            <Grid id="signUp" style={{ marginTop: "15px" }} container>
+              <CustomButton
+                // onClick={signUp}
+                label="Sign up"
+                submit={true}
+                style={{ width: "100%" }}
+              />
+            </Grid>
+          </form>
 
           <Grid id="redirectLogin" container>
             <p style={{ color: PURPLE }}>
