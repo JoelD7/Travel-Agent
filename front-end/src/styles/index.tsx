@@ -1,2 +1,2 @@
 export * from "./colors";
-export * from "./sign-styles";
+export * from "./LoginSignUp/sign-styles";

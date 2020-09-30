@@ -1,6 +1,6 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import { BLUE } from "./colors";
-import { loginImage, signup } from "../assets/images";
+import { BLUE } from "../colors";
+import { loginImage, signup } from "../../assets/images";
 
 export const signStyles = makeStyles((theme: Theme) => ({
   formContainer: {
@@ -23,6 +23,7 @@ export const signStyles = makeStyles((theme: Theme) => ({
     paddingTop: "0px",
     alignItems: "flex-start",
     justifyContent: "center",
+    marginTop: '10px',
   },
   imageGrid: {
     width: "60%",

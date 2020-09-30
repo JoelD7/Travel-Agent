@@ -27,7 +27,7 @@ interface PasswordProps {
   name: string;
 }
 
-export default function SignUp() {
+export  function SignUp() {
   const style = signStyles();
 
   const [values, setValues] = useState<SignUpValuesType>({

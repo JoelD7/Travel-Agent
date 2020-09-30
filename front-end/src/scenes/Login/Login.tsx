@@ -21,7 +21,7 @@ interface PasswordProps {
   name: string;
 }
 
-export default function Login() {
+export function Login() {
   const style = signStyles();
 
   const [visibility, setVisibility] = useState<VisibilityProps>({

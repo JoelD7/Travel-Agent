@@ -22,7 +22,7 @@ type CustomButtonType = PartialBy<
   "color" | "style" | "icon" | "submit" | "onClick"
 >;
 
-export default function CustomButton({
+export function CustomButton({
   color,
   label,
   style,
