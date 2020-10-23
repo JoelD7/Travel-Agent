@@ -1,0 +1,32 @@
+.explore-button{
+    text-transform: capitalize;
+    border: 1px solid white;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.46);
+}
+.homeImageDiv {
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 521px;
+  background-image: url("../../assets/images/home.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.homeImageText {
+    font-family: "Quicksand", sans-serif;
+    color: white;
+  }
+.mainContainer {
+  font-family: "Century Gothic", sans-serif;
+}
+.mainPhotoGrid {
+  width: 60%;
+  border: 1px solid black;
+  padding: 10px;
+}
+.reservationGrid {
+  width: 40%;
+  border: 1px solid black;
+}

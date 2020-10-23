@@ -6,7 +6,7 @@ import React, { MouseEvent, useState } from "react";
 import { logoType, signup } from "../../assets/images";
 import { CustomButton } from "../../components";
 import TextInput from "../../components/atoms/TextInput";
-import { BLUE, PURPLE, signStyles } from "../../styles";
+import {Colors, signStyles } from "../../styles";
 import { Formik, Form, FastField } from "formik";
 import * as Yup from "yup";
 import { ObjectSchemaConstructor, ObjectSchema } from "yup";
@@ -81,7 +81,7 @@ export  function SignUp() {
 
         <Grid item className={style.formContainer}>
           <h1 className={style.title}>Sign up</h1>
-          <h5 style={{ color: BLUE, fontWeight: "normal" }}>
+          <h5 style={{ color: Colors.BLUE, fontWeight: "normal" }}>
             Sign up with Google
           </h5>
           <CustomButton
@@ -165,7 +165,7 @@ export  function SignUp() {
           </Grid>
 
           <Grid id="redirectLogin" container>
-            <p style={{ color: PURPLE }}>
+            <p style={{ color: Colors.PURPLE }}>
               Already registered?
               <b>
                 <a href="/login">Sign in</a>

@@ -36,6 +36,8 @@ export const Navbar: FunctionComponent = ({ children }) => {
             ),
           }}
         />
+
+        <div className={style.rightChildrenContainer}>{children}</div>
       </Toolbar>
     </AppBar>
   );

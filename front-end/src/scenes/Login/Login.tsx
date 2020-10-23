@@ -6,7 +6,7 @@ import React, { MouseEvent, useState } from "react";
 import { logoType, loginImage } from "../../assets";
 import { CustomButton } from "../../components";
 import TextInput from "../../components/atoms/TextInput";
-import { BLUE, PURPLE, signStyles } from "../../styles";
+import { Colors, signStyles } from "../../styles";
 
 interface LoginType {
   email: string;
@@ -65,7 +65,7 @@ export function Login() {
 
         <Grid item className={style.formContainer}>
           <h1 className={style.title}>Login</h1>
-          <h5 style={{ color: BLUE, fontWeight: "normal" }}>
+          <h5 style={{ color: Colors.BLUE, fontWeight: "normal" }}>
             Login with Google
           </h5>
           <CustomButton
@@ -106,7 +106,7 @@ export function Login() {
           </Grid>
 
           <Grid id="redirectLogin" container>
-            <p style={{ color: PURPLE }}>
+            <p style={{ color: Colors.PURPLE }}>
               Not registered?
               <b>
                 <a href="/signup">Sign up</a>

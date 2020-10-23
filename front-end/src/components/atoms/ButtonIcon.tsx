@@ -3,7 +3,7 @@ import { createMuiTheme, makeStyles, ThemeProvider } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconButton } from "@material-ui/core";
 import React, { CSSProperties, MouseEvent, useState } from "react";
-import {  PURPLE } from "../../styles";
+import {  Colors } from "../../styles";
 
 interface ButtonIconInterface {
   size: "small" | "medium";
@@ -41,7 +41,7 @@ export function ButtonIcon({ icon, size, style, onClick }: ButtonIconType) {
         size={size}
         style={style}
       >
-        <FontAwesomeIcon icon={icon} color={hover ? PURPLE : "#b1b1b1"} />
+        <FontAwesomeIcon icon={icon} color={hover ? Colors.PURPLE : "#b1b1b1"} />
       </IconButton>
     </ThemeProvider>
   );

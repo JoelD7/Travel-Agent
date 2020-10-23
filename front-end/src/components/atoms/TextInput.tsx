@@ -7,7 +7,7 @@ import {
 import React, { ChangeEvent, ReactNode, SetStateAction, useState } from "react";
 import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
 import { FONT } from "../../assets/fonts";
-import { BLUE, PURPLE } from "../../styles";
+import { Colors } from "../../styles";
 
 interface TextInputProps {
   name: string;
@@ -54,20 +54,20 @@ export default function TextInput({
       },
       MuiInputLabel: {
         shrink: {
-          color: PURPLE,
+          color: Colors.PURPLE,
           "&$focused": {
-            color: PURPLE,
+            color: Colors.PURPLE,
           },
         },
       },
       MuiInput: {
         underline: {
-          borderBottomColor: PURPLE,
+          borderBottomColor: Colors.PURPLE,
           "&:hover": {
-            borderBottomColor: PURPLE,
+            borderBottomColor: Colors.PURPLE,
           },
           "&::after": {
-            borderBottomColor: PURPLE,
+            borderBottomColor: Colors.PURPLE,
           },
         },
       },
@@ -86,7 +86,7 @@ export default function TextInput({
     },
     input: {
       fontFamily: FONT,
-      color: BLUE,
+      color: Colors.BLUE,
     },
   });
   const styles = textStyles();
