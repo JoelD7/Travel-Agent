@@ -1,29 +1,33 @@
-.explore-button{
-    text-transform: capitalize;
-    border: 1px solid white;
-    color: white;
-    background-color: rgba(255, 255, 255, 0.46);
+.explore-button {
+  text-transform: capitalize;
+  border: 1px solid white;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.46);
+}
+.explore-button-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
 .homeImageDiv {
   border-radius: 10px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
   height: 521px;
   background-image: url("../../assets/images/home.jpg");
   background-size: contain;
   background-repeat: no-repeat;
 }
 .homeImageText {
-    font-family: "Quicksand", sans-serif;
-    color: white;
-  }
+  font-family: "Quicksand", sans-serif;
+  color: white;
+  width: 100%;
+}
 .mainContainer {
   font-family: "Century Gothic", sans-serif;
 }
 .mainPhotoGrid {
   width: 60%;
-  border: 1px solid black;
   padding: 10px;
 }
 .reservationGrid {

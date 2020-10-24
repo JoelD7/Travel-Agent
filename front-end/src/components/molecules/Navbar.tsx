@@ -4,6 +4,7 @@ import { AppBar, IconButton, TextField, Toolbar } from "@material-ui/core";
 import React, { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoType } from "../../assets";
+import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
 import { selectSearchQuery, onQueryChanged } from "../../utils";
 import { ButtonIcon } from "../atoms/ButtonIcon";
@@ -31,6 +32,8 @@ export const Navbar: FunctionComponent = ({ children }) => {
                 size="small"
                 style={{ marginRight: "5px", padding: "5px" }}
                 icon={faSearch}
+                primary={"#b1b1b1"}
+                secondary={Colors.PURPLE}
                 onClick={() => console.log("hello")}
               />
             ),
