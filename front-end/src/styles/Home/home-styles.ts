@@ -18,6 +18,26 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     justifyContent: "center",
   },
+  datepicker: {
+    backgroundColor: "white",
+    fontFamily: FONT,
+    borderRadius: "20px",
+    padding: "0px 10px 0px 10px",
+
+    "& .MuiIconButton-root": {
+      color: Colors.BLUE,
+    },
+  },
+  datepickerItemGrid: {
+    borderRadius: "20px",
+    marginTop: "5px",
+  },
+  reservationParamText: {
+    color: Colors.BLUE,
+    marginLeft: "5px",
+    marginBottom: "3px",
+    marginTop: "5px",
+  },
   homeImageDiv: {
     borderRadius: "10px",
     height: "521px",
@@ -57,12 +77,41 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   reservationGrid: {
     width: "40%",
   },
+  reservationParamsGrid: {
+    marginTop: "20px",
+    borderRadius: "10px",
+    backgroundColor: "#eeeeee",
+    width: "90%",
+    margin: "auto",
+  },
+  reservationParamsBox: {
+    borderRadius: "20px",
+  },
   searchLocationContainer: {
     width: "80%",
     display: "flex",
     margin: "auto",
     marginTop: "30px",
     justifyContent: "center",
+  },
+  select: {
+    "& .MuiOutlinedInput-input": {
+      padding: "10px 25px 10px 15px",
+      borderRadius: "10px",
+    },
+
+    "& .MuiOutlinedInput-root": {
+      "&:hover fieldset": {
+        borderColor: "#cecece",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#cecece",
+      },
+    },
+
+    "& .MuiMenuItem-root": {
+      fontFamily: FONT,
+    },
   },
   servicesContainer: {
     width: "80%",
