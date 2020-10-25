@@ -127,6 +127,7 @@ export function Home() {
                   <ButtonIcon
                     primary={Colors.PURPLE}
                     secondary={"white"}
+                    selectable={true}
                     selected={selectedService[service.name]}
                     onClick={() => onServicePressed(service.name)}
                     size="medium"

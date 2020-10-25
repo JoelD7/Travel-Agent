@@ -8,6 +8,7 @@ interface ButtonIconInterface {
   size: "small" | "medium";
   style?: CSSProperties;
   className?: string;
+  selectable?: boolean;
   selected?: boolean;
   primary: string;
   secondary?: string;
@@ -30,6 +31,7 @@ export function ButtonIcon({
   primary,
   selected,
   secondary,
+  selectable,
 }: ButtonIconType) {
   const theme = createMuiTheme({
     overrides: {
@@ -48,7 +50,7 @@ export function ButtonIcon({
    * whether the icon button is selectable or not.
    */
   function getStyle() {
-    if (selected) {
+    if (selectable) {
       return {
         ...style,
         backgroundColor: hover ? primary : selected ? primary : secondary,
@@ -59,7 +61,7 @@ export function ButtonIcon({
   }
 
   function getIconColor() {
-    if (selected) {
+    if (selectable) {
       return hover
         ? secondary
           ? secondary
