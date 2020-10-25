@@ -1,9 +1,8 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { createMuiTheme, makeStyles, ThemeProvider } from "@material-ui/core";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconButton } from "@material-ui/core";
 import React, { CSSProperties, MouseEvent, useState } from "react";
-import { Colors } from "../../styles";
 
 interface ButtonIconInterface {
   size: "small" | "medium";
@@ -30,7 +29,7 @@ export function ButtonIcon({
   className,
   primary,
   selected,
-   secondary,
+  secondary,
 }: ButtonIconType) {
   const theme = createMuiTheme({
     overrides: {
@@ -44,6 +43,35 @@ export function ButtonIcon({
     },
   });
 
+  /**
+   * The color assigment logic changes depending 
+   * whether the icon button is selectable or not.
+   */
+  function getStyle() {
+    if (selected) {
+      return {
+        ...style,
+        backgroundColor: hover ? primary : selected ? primary : secondary,
+      };
+    } else {
+      return style;
+    }
+  }
+
+  function getIconColor() {
+    if (selected) {
+      return hover
+        ? secondary
+          ? secondary
+          : primary
+        : selected
+        ? secondary
+        : primary;
+    } else {
+      return hover ? secondary : primary;
+    }
+  }
+
   const [hover, setHover] = useState(false);
   return (
     <ThemeProvider theme={theme}>
@@ -52,13 +80,10 @@ export function ButtonIcon({
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         size={size}
-        style={{...style, backgroundColor: hover ? primary : selected? primary: secondary}}
+        style={getStyle()}
         className={className}
       >
-        <FontAwesomeIcon
-          icon={icon}
-          color={hover ? (secondary ? secondary : primary): selected? secondary: primary   }
-        />
+        <FontAwesomeIcon icon={icon} color={getIconColor()} />
       </IconButton>
     </ThemeProvider>
   );
