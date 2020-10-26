@@ -1,13 +1,10 @@
 import {
-  faBed,
   faCar,
-  faChild,
   faConciergeBell,
   faPlaneDeparture,
-  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Avatar, createMuiTheme, Grid, IconButton } from "@material-ui/core";
+import { Avatar, Grid, IconButton } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
 
@@ -17,6 +14,7 @@ import {
   HomeCarReservation,
   HomeFlightReservation,
   HomeHotelReservation,
+  PageSubtitle,
 } from "../../components";
 import { ButtonIcon } from "../../components/atoms/ButtonIcon";
 import { Navbar } from "../../components/molecules";
@@ -25,9 +23,6 @@ import { homeStyles, home_explore_button } from "../../styles/Home/home-styles";
 
 import "./home.css";
 
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { addDays, format } from "date-fns";
-import { FONT } from "../../assets/fonts";
 import SwipeableViews from "react-swipeable-views";
 
 interface ServiceIconType {
@@ -105,12 +100,12 @@ export function Home() {
   return (
     <div className="mainContainer">
       <Navbar>
-        <CustomButton style={buttonStyle} label="Login" color={Colors.BLUE} />
-        <CustomButton style={buttonStyle} label="Sign up" color={Colors.BLUE} />
+        <CustomButton style={buttonStyle} label="Login" backgroundColor={Colors.BLUE} />
+        <CustomButton style={buttonStyle} label="Sign up" backgroundColor={Colors.BLUE} />
         <CustomButton
           style={buttonStyle}
           label="Make a trip"
-          color={Colors.PURPLE}
+          backgroundColor={Colors.PURPLE}
         />
 
         <IconButton style={{ marginLeft: "10px" }}>
@@ -118,7 +113,7 @@ export function Home() {
         </IconButton>
       </Navbar>
 
-      <Grid container>
+      <Grid container style={{marginBottom: '40px'}}>
         <Grid item className={style.reservationGrid}>
           <h3 style={{ textAlign: "center", color: Colors.BLUE }}>
             What are you looking for?
@@ -167,6 +162,7 @@ export function Home() {
               <div className={style.exploreButtonContainer}>
                 <CustomButton
                   style={home_explore_button}
+                  backgroundColor={Colors.WHITE_TRANSPARENT}
                   label="Explore places"
                 />
               </div>
@@ -174,6 +170,9 @@ export function Home() {
           </Grid>
         </Grid>
       </Grid>
+
+      <PageSubtitle label="Plan your trip"  />        
+
     </div>
   );
 }

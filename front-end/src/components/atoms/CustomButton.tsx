@@ -7,7 +7,7 @@ import { FONT } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
 interface CustomButtonProps {
-  color: string;
+  backgroundColor: string;
   label: string;
   rounded?: boolean;
   style: CreateCSSProperties<{}>;
@@ -23,11 +23,11 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type CustomButtonType = PartialBy<
   CustomButtonProps,
-  "color" | "style" | "icon" | "submit" | "onClick" | "className"
+  "backgroundColor" | "style" | "icon" | "submit" | "onClick" | "className"
 >;
 
 export function CustomButton({
-  color = Colors.BLUE,
+  backgroundColor = Colors.BLUE,
   label,
   rounded,
   style,
@@ -38,11 +38,11 @@ export function CustomButton({
 }: CustomButtonType) {
   const buttonStyles = makeStyles({
     button: {
-      backgroundColor: color ? color : Colors.BLUE,
+      backgroundColor: backgroundColor ? backgroundColor : Colors.BLUE,
       fontFamily: FONT,
-      borderRadius: rounded ? '20px' : '',
+      borderRadius: rounded ? "20px" : "",
       "&:hover": {
-        backgroundColor: getHoverColor(color),
+        backgroundColor: getHoverColor(backgroundColor),
       },
 
       textTransform: "capitalize",
@@ -59,10 +59,13 @@ export function CustomButton({
       case Colors.BLUE:
         return Colors.BLUE_HOVER;
 
-        case Colors.GREEN:
-          return Colors.GREEN_HOVER;
+      case Colors.GREEN:
+        return Colors.GREEN_HOVER;
+
+      case Colors.WHITE_TRANSPARENT:
+        return Colors.WHITE_TRANSPARENT_HOVER;
       default:
-        return color ? color: "";
+        return color ? color : "";
     }
   }
 

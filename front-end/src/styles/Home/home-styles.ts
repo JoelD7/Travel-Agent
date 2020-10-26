@@ -6,10 +6,10 @@ import { FONT } from "../../assets/fonts";
 
 export const home_explore_button: CreateCSSProperties<{}> = {
   border: "3px solid white",
+  fontSize: "18px",
   borderRadius: "50px",
   color: "white",
   margin: "auto",
-  backgroundColor: "rgba(255, 255, 255, 0.35)",
 };
 
 export const homeStyles = makeStyles((theme: Theme) => ({
@@ -76,7 +76,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   },
   reservationGrid: {
     width: "40%",
-    marginTop: '20px',
+    marginTop: "20px",
   },
   reservationParamsGrid: {
     marginTop: "20px",
