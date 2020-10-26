@@ -44,7 +44,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     display: "flex",
     backgroundImage: `url(${home})`,
-    backgroundSize: "contain",
+    backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
   },
   homeImageText: {
@@ -76,6 +76,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   },
   reservationGrid: {
     width: "40%",
+    marginTop: '20px',
   },
   reservationParamsGrid: {
     marginTop: "20px",

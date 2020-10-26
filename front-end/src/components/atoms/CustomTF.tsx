@@ -5,7 +5,7 @@ import { FONT } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
 interface CustomTFProps {
-  value: string;
+  value: string ;
   updateState: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   containerStyle?: CreateCSSProperties<{}>;
   textStyle?: string;
@@ -37,7 +37,7 @@ export function CustomTF({
 
   const fieldStyles = makeStyles({
     textField: {
-      marginLeft: "10px",
+    //   marginLeft: "10px",
       width: width,
       backgroundColor: backgroundColor,
       borderRadius: rounded ? "20px" : "5px",

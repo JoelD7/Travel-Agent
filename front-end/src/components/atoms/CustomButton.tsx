@@ -9,6 +9,7 @@ import { Colors } from "../../styles";
 interface CustomButtonProps {
   color: string;
   label: string;
+  rounded?: boolean;
   style: CreateCSSProperties<{}>;
   className: string;
   icon: IconDefinition;
@@ -26,8 +27,9 @@ type CustomButtonType = PartialBy<
 >;
 
 export function CustomButton({
-  color,
+  color = Colors.BLUE,
   label,
+  rounded,
   style,
   icon,
   onClick,
@@ -38,6 +40,7 @@ export function CustomButton({
     button: {
       backgroundColor: color ? color : Colors.BLUE,
       fontFamily: FONT,
+      borderRadius: rounded ? '20px' : '',
       "&:hover": {
         backgroundColor: getHoverColor(color),
       },
