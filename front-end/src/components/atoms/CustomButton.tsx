@@ -14,6 +14,7 @@ interface CustomButtonProps {
   className: string;
   icon: IconDefinition;
   submit: boolean;
+  textColor?: string;
   onClick: (
     event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => void;
@@ -34,6 +35,7 @@ export function CustomButton({
   icon,
   onClick,
   submit,
+  textColor = 'white',
   className,
 }: CustomButtonType) {
   const buttonStyles = makeStyles({
@@ -44,9 +46,9 @@ export function CustomButton({
       "&:hover": {
         backgroundColor: getHoverColor(backgroundColor),
       },
-
+      fontSize: "18px",
       textTransform: "capitalize",
-      color: "white",
+      color: textColor,
       ...style,
     },
   });

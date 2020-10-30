@@ -24,8 +24,8 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
-import { Colors } from "../../styles";
-import { homeStyles } from "../../styles/Home/home-styles";
+import { Colors, Shadow } from "../../styles";
+import { homeStyles, style_createTripButton } from "../../styles/Home/home-styles";
 import { CustomButton } from "../atoms";
 
 interface HotelType {
@@ -213,7 +213,7 @@ export default function HomeHotelReservation() {
               <CustomButton
                 rounded
                 label="Search"
-                style={{ width: "30%" }}
+                style={{ width: "30%", boxShadow: Shadow.SHADOW }}
                 onClick={() => {}}
               />
             </Grid>

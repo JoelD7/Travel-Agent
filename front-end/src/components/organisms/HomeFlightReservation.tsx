@@ -21,7 +21,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
 import { FlightClass } from "../../utils/types";
 import { FlightClassType } from "../../utils/types/FlightClassType";
@@ -247,7 +247,7 @@ export default function HomeFlightReservation() {
               <CustomButton
                 rounded
                 label="Search"
-                style={{ width: "30%" }}
+                style={{ width: "30%", boxShadow: Shadow.SHADOW }}
                 onClick={() => {}}
               />
             </Grid>

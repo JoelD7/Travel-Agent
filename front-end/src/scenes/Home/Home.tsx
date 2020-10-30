@@ -20,10 +20,11 @@ import { ButtonIcon } from "../../components/atoms/ButtonIcon";
 import { Navbar } from "../../components/molecules";
 import { Colors } from "../../styles";
 import { homeStyles, home_explore_button } from "../../styles/Home/home-styles";
-
-import "./home.css";
-
 import SwipeableViews from "react-swipeable-views";
+import "./home.css";
+import * as styles from "../../styles/Home/home-styles";
+import  { Navigation, Pagination} from "swiper";
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 interface ServiceIconType {
   hotel: boolean;
@@ -68,6 +69,44 @@ export function Home() {
 
   const [index, setIndex] = useState(0);
 
+  const popularDestinations = [
+    {
+      image: require("../../assets/images/paris.jpg"),
+      country: 'France',
+      city:"Paris",
+    },
+    {
+      image: require("../../assets/images/tokio.jpg"),
+      country: 'Japan',
+      city:"Tokio",
+    },
+    {
+      image: require("../../assets/images/agra.jpg"),
+      country: 'India',
+      city:"Agra",
+    },
+    {
+      image: require("../../assets/images/singapore.jpg"),
+      country: 'Singapore',
+      city:"Singapore",
+    },
+    {
+      image: require("../../assets/images/rio.jpg"),
+      country: 'Brazil',
+      city:"Rio de Janeiro",
+    },
+    {
+      image: require("../../assets/images/new-york.jpg"),
+      country: 'United States',
+      city:"New York",
+    },
+    {
+      image: require("../../assets/images/rome.jpg"),
+      country: 'Italy',
+      city:"Rome",
+    },
+  ]
+
   function onServicePressed(service: string) {
     setSelectedService({
       hotel: false,
@@ -100,8 +139,16 @@ export function Home() {
   return (
     <div className="mainContainer">
       <Navbar>
-        <CustomButton style={buttonStyle} label="Login" backgroundColor={Colors.BLUE} />
-        <CustomButton style={buttonStyle} label="Sign up" backgroundColor={Colors.BLUE} />
+        <CustomButton
+          style={buttonStyle}
+          label="Login"
+          backgroundColor={Colors.BLUE}
+        />
+        <CustomButton
+          style={buttonStyle}
+          label="Sign up"
+          backgroundColor={Colors.BLUE}
+        />
         <CustomButton
           style={buttonStyle}
           label="Make a trip"
@@ -113,7 +160,7 @@ export function Home() {
         </IconButton>
       </Navbar>
 
-      <Grid container style={{marginBottom: '40px'}}>
+      <Grid id="section-1" container style={{ marginBottom: "40px" }}>
         <Grid item className={style.reservationGrid}>
           <h3 style={{ textAlign: "center", color: Colors.BLUE }}>
             What are you looking for?
@@ -171,7 +218,49 @@ export function Home() {
         </Grid>
       </Grid>
 
-      <PageSubtitle label="Plan your trip"  />        
+      <PageSubtitle label="Plan your trip" />
+
+      <Grid id="section-2" container className={style.section2}>
+        <Grid item xs={6}>
+          <div className={style.redirectTripContainer}>
+            <h2 style={{ fontWeight: "normal" }}>Make a trip</h2>
+
+            <p>Plan your trips however you want! </p>
+
+            <p>
+              The first step in planning your trip is making an itinerary. An
+              itinerary will help you organize your time so you can get the most
+              out of your journey.
+            </p>
+
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <CustomButton
+                label="Create trip"
+                backgroundColor={Colors.GREEN}
+                textColor={Colors.BLUE}
+                style={styles.style_createTripButton}
+              />
+            </div>
+          </div>
+        </Grid>
+
+        <Grid item xs={6} className={style.planTripPhotoContainer}></Grid>
+      </Grid>
+
+      <PageSubtitle label="Popular destinations" />
+
+      <Grid id="section-3" container>
+        <Swiper navigation pagination>
+          {/* <SwiperSlide></SwiperSlide> */}
+        </Swiper>
+      </Grid>
+
 
     </div>
   );

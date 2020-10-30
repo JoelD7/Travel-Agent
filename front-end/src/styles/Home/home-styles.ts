@@ -1,7 +1,7 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
-import { Colors } from "..";
-import { home } from "../../assets";
+import { Colors, Shadow } from "..";
+import { home, homeItinerary } from "../../assets";
 import { FONT } from "../../assets/fonts";
 
 export const home_explore_button: CreateCSSProperties<{}> = {
@@ -12,7 +12,14 @@ export const home_explore_button: CreateCSSProperties<{}> = {
   margin: "auto",
 };
 
+export const style_createTripButton: CreateCSSProperties<{}> = {
+  boxShadow: Shadow.SHADOW_DARK,
+};
+
 export const homeStyles = makeStyles((theme: Theme) => ({
+  createTripButton: {
+    boxShadow: `5px 5px 10px ${Colors.BLUE}`,
+  },
   exploreButtonContainer: {
     display: " flex",
     width: "100%",
@@ -74,6 +81,20 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     width: "60%",
     padding: "10px",
   },
+  planTripPhotoContainer:{
+    backgroundImage: `url(${homeItinerary})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    borderRadius: '10px',
+  },
+  redirectTripContainer: {
+    backgroundColor: Colors.BLUE,
+    width: "90%",
+    color: "white",
+    padding: "10px 20px",
+    borderRadius: "10px",
+    margin: "40px auto",
+  },
   reservationGrid: {
     width: "40%",
     marginTop: "20px",
@@ -94,6 +115,12 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     margin: "auto",
     marginTop: "30px",
     justifyContent: "center",
+  },
+  section2: {
+    width: "85%",
+    margin: "auto",
+    marginBottom: "40px",
+    marginTop: "10px",
   },
   select: {
     "& .MuiOutlinedInput-input": {
