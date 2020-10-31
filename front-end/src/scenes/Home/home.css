@@ -19,17 +19,21 @@
   background-repeat: no-repeat;
 }
 .homeImageText {
-  font-family: "Quicksand", sans-serif;
+  font-family: "Montserrat", sans-serif;
   color: white;
   width: 100%;
 }
 .mainContainer {
-  font-family: "Century Gothic", sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 .mainPhotoGrid {
   width: 60%;
   padding: 10px;
 }
+.nextButton {
+  background-color: white;
+}
+
 .reservationGrid {
   width: 40%;
   border: 1px solid black;

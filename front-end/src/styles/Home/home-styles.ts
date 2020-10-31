@@ -10,6 +10,10 @@ export const home_explore_button: CreateCSSProperties<{}> = {
   borderRadius: "50px",
   color: "white",
   margin: "auto",
+
+  "& .MuiButton-label":{
+    fontFamily: "Montserrat",
+  }
 };
 
 export const style_createTripButton: CreateCSSProperties<{}> = {
@@ -17,6 +21,9 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
 };
 
 export const homeStyles = makeStyles((theme: Theme) => ({
+  card: {
+    width: "95%",
+  },
   createTripButton: {
     boxShadow: `5px 5px 10px ${Colors.BLUE}`,
   },
@@ -55,7 +62,6 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     backgroundRepeat: "no-repeat",
   },
   homeImageText: {
-    fontFamily: '"Quicksand", sans-serif',
     color: "white",
     width: "100%",
   },
@@ -81,11 +87,14 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     width: "60%",
     padding: "10px",
   },
-  planTripPhotoContainer:{
+  nextButton: {
+    backgroundColor: "white",
+  },
+  planTripPhotoContainer: {
     backgroundImage: `url(${homeItinerary})`,
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
-    borderRadius: '10px',
+    borderRadius: "10px",
   },
   redirectTripContainer: {
     backgroundColor: Colors.BLUE,
@@ -116,10 +125,10 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     marginTop: "30px",
     justifyContent: "center",
   },
-  section2: {
+  section: {
     width: "85%",
     margin: "auto",
-    marginBottom: "40px",
+    marginBottom: "60px",
     marginTop: "10px",
   },
   select: {
@@ -170,5 +179,10 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     marginTop: "2",
     color: Colors.BLUE,
     fontSize: "14px",
+  },
+  slider: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
   },
 }));

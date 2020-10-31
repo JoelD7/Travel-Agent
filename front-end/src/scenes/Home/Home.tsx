@@ -4,7 +4,15 @@ import {
   faPlaneDeparture,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Avatar, Grid, IconButton } from "@material-ui/core";
+import {
+  Avatar,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Grid,
+  IconButton,
+} from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
 
@@ -15,6 +23,7 @@ import {
   HomeFlightReservation,
   HomeHotelReservation,
   PageSubtitle,
+  SliderArrow,
 } from "../../components";
 import { ButtonIcon } from "../../components/atoms/ButtonIcon";
 import { Navbar } from "../../components/molecules";
@@ -23,8 +32,10 @@ import { homeStyles, home_explore_button } from "../../styles/Home/home-styles";
 import SwipeableViews from "react-swipeable-views";
 import "./home.css";
 import * as styles from "../../styles/Home/home-styles";
-import  { Navigation, Pagination} from "swiper";
-import { Swiper, SwiperSlide } from 'swiper/react';
+import "swiper/swiper-bundle.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 interface ServiceIconType {
   hotel: boolean;
@@ -71,41 +82,41 @@ export function Home() {
 
   const popularDestinations = [
     {
-      image: require("../../assets/images/paris.jpg"),
-      country: 'France',
-      city:"Paris",
+      image: "/destinations/paris.jpg",
+      country: "France",
+      city: "Paris",
     },
     {
-      image: require("../../assets/images/tokio.jpg"),
-      country: 'Japan',
-      city:"Tokio",
+      image: "/destinations/tokio.jpg",
+      country: "Japan",
+      city: "Tokio",
     },
     {
-      image: require("../../assets/images/agra.jpg"),
-      country: 'India',
-      city:"Agra",
+      image: "/destinations/agra.jpg",
+      country: "India",
+      city: "Agra",
     },
     {
-      image: require("../../assets/images/singapore.jpg"),
-      country: 'Singapore',
-      city:"Singapore",
+      image: "/destinations/singapore.jpg",
+      country: "Singapore",
+      city: "Singapore",
     },
     {
-      image: require("../../assets/images/rio.jpg"),
-      country: 'Brazil',
-      city:"Rio de Janeiro",
+      image: "/destinations/rio.jpg",
+      country: "Brazil",
+      city: "Rio de Janeiro",
     },
     {
-      image: require("../../assets/images/new-york.jpg"),
-      country: 'United States',
-      city:"New York",
+      image: "/destinations/new-york.jpg",
+      country: "United States",
+      city: "New York",
     },
     {
-      image: require("../../assets/images/rome.jpg"),
-      country: 'Italy',
-      city:"Rome",
+      image: "/destinations/rome.jpg",
+      country: "Italy",
+      city: "Rome",
     },
-  ]
+  ];
 
   function onServicePressed(service: string) {
     setSelectedService({
@@ -135,6 +146,12 @@ export function Home() {
       ? style.serviceIconPurple
       : style.serviceIcon;
   }
+
+  const sliderSettings = {
+    className: style.slider,
+    nextArrow: <SliderArrow direction="right" />,
+    prevArrow: <SliderArrow direction="left" />,
+  };
 
   return (
     <div className="mainContainer">
@@ -219,8 +236,7 @@ export function Home() {
       </Grid>
 
       <PageSubtitle label="Plan your trip" />
-
-      <Grid id="section-2" container className={style.section2}>
+      <Grid id="section-2" container className={style.section}>
         <Grid item xs={6}>
           <div className={style.redirectTripContainer}>
             <h2 style={{ fontWeight: "normal" }}>Make a trip</h2>
@@ -254,14 +270,27 @@ export function Home() {
       </Grid>
 
       <PageSubtitle label="Popular destinations" />
+      <Grid id="section-3" container className={style.section}>
+        <Slider {...sliderSettings} slidesToScroll={1} slidesToShow={3}>
+          {popularDestinations.map((destination) => (
+            <div>
+              <Card className={style.card}>
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    height="250"
+                    image={destination.image}
+                  />
+                </CardActionArea>
 
-      <Grid id="section-3" container>
-        <Swiper navigation pagination>
-          {/* <SwiperSlide></SwiperSlide> */}
-        </Swiper>
+                <CardContent>
+                  <div style={{fontWeight: 'bold'}}>{`${destination.city}, ${destination.country}`}</div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+        </Slider>
       </Grid>
-
-
     </div>
   );
 }
