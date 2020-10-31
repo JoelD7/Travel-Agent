@@ -275,7 +275,7 @@ export function Home() {
           {popularDestinations.map((destination) => (
             <div>
               <Card className={style.card}>
-                <CardActionArea>
+                <CardActionArea> 
                   <CardMedia
                     component="img"
                     height="250"
