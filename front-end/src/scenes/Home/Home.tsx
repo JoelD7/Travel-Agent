@@ -11,11 +11,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
+  AppBar,
   Avatar,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
+  createMuiTheme,
   Drawer,
   Grid,
   IconButton,
@@ -23,8 +25,11 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
+  Toolbar,
 } from "@material-ui/core";
-import { CreateCSSProperties } from "@material-ui/styles";
+import { CreateCSSProperties, ThemeProvider } from "@material-ui/styles";
 import React, { useState } from "react";
 
 import { carlos, logoTypeWhiteFore } from "../../assets";
@@ -59,6 +64,18 @@ interface ServiceIconType {
 
 export function Home() {
   const style = homeStyles();
+
+  const theme = createMuiTheme({
+    overrides: {
+      // MuiListItem: {
+      //   button: {
+      //     "&:hover": {
+      //       backgroundColor: "rgba(0,0,0,0)",
+      //     },
+      //   },
+      // },
+    },
+  });
 
   const buttonStyle: CreateCSSProperties<{}> = {
     margin: "0 5px 0 5px",
@@ -186,6 +203,29 @@ export function Home() {
     ],
   };
 
+  const navbarServices = [
+    {
+      label: "Hotels",
+      route: "",
+    },
+    {
+      label: "Flights",
+      route: "",
+    },
+    {
+      label: "Restaurants",
+      route: "",
+    },
+    {
+      label: "Things to do",
+      route: "",
+    },
+    {
+      label: "Car rental",
+      route: "",
+    },
+  ];
+
   return (
     <div className="mainContainer">
       <Navbar>
@@ -218,6 +258,18 @@ export function Home() {
           <FontAwesomeIcon color={Colors.BLUE} icon={faBars} />
         </IconButton>
       </Navbar>
+
+      <Toolbar className={style.servicesToolbar}>
+        {navbarServices.map((service, i) => (
+          <MenuItem
+            key={i}
+            onClick={() => {}}
+            classes={{ root: style.menuItemRoot }}
+          >
+            {service.label}
+          </MenuItem>
+        ))}
+      </Toolbar>
 
       <Grid id="section-1" container style={{ marginBottom: "40px" }}>
         <Grid item className={style.reservationGrid}>

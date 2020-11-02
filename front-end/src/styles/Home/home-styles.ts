@@ -52,8 +52,8 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     marginTop: "5px",
     width: "50%",
 
-    [theme.breakpoints.down(600)]:{
-      width: '100%',
+    [theme.breakpoints.down(600)]: {
+      width: "100%",
     },
   },
   datepickerItemGridCar: {
@@ -103,7 +103,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   },
   homeImageText: {
     color: "white",
-    padding: '10px',
+    padding: "10px",
     width: "100%",
   },
   locationParamsGrid: {
@@ -137,6 +137,13 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     width: "60%",
     padding: "10px",
   },
+  menuItemRoot: {
+    fontFamily: FONT,
+    fontWeight: "bold",
+    margin: "0px 5px",
+    color: Colors.BLUE,
+    borderRadius: "5px",
+  },
   nextButton: {
     backgroundColor: "white",
   },
@@ -147,21 +154,21 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     },
   },
   planTripPhotoContainer: {
-    width: '50%',
+    width: "50%",
     backgroundImage: `url(${homeItinerary})`,
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     borderRadius: "10px",
 
-    [theme.breakpoints.down(990)]:{
-      width: '100%',
-    }
+    [theme.breakpoints.down(990)]: {
+      width: "100%",
+    },
   },
-  planTripGrid:{
-    width: '50%',
-    [theme.breakpoints.down(990)]:{
-      width: '60%',
-    }
+  planTripGrid: {
+    width: "50%",
+    [theme.breakpoints.down(990)]: {
+      width: "60%",
+    },
   },
   redirectTripContainer: {
     backgroundColor: Colors.BLUE,
@@ -171,9 +178,9 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     borderRadius: "10px",
     margin: "40px auto",
 
-    [theme.breakpoints.down(990)]:{
-      display: 'none',
-    }
+    [theme.breakpoints.down(990)]: {
+      display: "none",
+    },
   },
   redirectTripContainerHidden: {
     backgroundColor: Colors.BLUE,
@@ -182,13 +189,13 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     padding: "10px 20px",
     borderRadius: "10px",
     margin: "40px auto",
-    display: 'none',
+    display: "none",
 
-    [theme.breakpoints.down(990)]:{
-      width: '60%',
+    [theme.breakpoints.down(990)]: {
+      width: "60%",
       margin: "40px auto",
-      display: 'block',
-    }
+      display: "block",
+    },
   },
   reservationGrid: {
     [theme.breakpoints.down(1150)]: {
@@ -270,6 +277,18 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     marginTop: "2",
     color: Colors.BLUE,
     fontSize: "14px",
+  },
+  servicesToolbar: {
+    display: "flex",
+    minHeight: "20px",
+    marginTop: "20px",
+    borderTop: "1px solid #cecece",
+    borderBottom: "1px solid #cecece",
+    justifyContent: "center",
+
+    [theme.breakpoints.down(1000)]: {
+      display: "none",
+    },
   },
   slider: {
     width: "100%",
