@@ -11,13 +11,13 @@ export const home_explore_button: CreateCSSProperties<{}> = {
   color: "white",
   margin: "auto",
 
-  "& .MuiButton-label":{
+  "& .MuiButton-label": {
     fontFamily: "Montserrat",
-  }
+  },
 };
 
 export const style_createTripButton: CreateCSSProperties<{}> = {
-  boxShadow: Shadow.SHADOW_DARK,
+  boxShadow: Shadow.DARK,
 };
 
 export const homeStyles = makeStyles((theme: Theme) => ({
@@ -35,16 +35,52 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   datepicker: {
     backgroundColor: "white",
     fontFamily: FONT,
+    width: "100%",
+    maxWidth: "100%",
     borderRadius: "20px",
-    padding: "0px 10px 0px 10px",
 
     "& .MuiIconButton-root": {
       color: Colors.BLUE,
+    },
+
+    "& .MuiInputBase-input": {
+      padding: "5px 0px 5px 10px",
     },
   },
   datepickerItemGrid: {
     borderRadius: "20px",
     marginTop: "5px",
+    width: "50%",
+  },
+  datepickerItemGridCar: {
+    [theme.breakpoints.down(740)]: {
+      width: "100%",
+      margin: "auto",
+    },
+    borderRadius: "20px",
+    marginTop: "5px",
+    width: "50%",
+  },
+  datepickerItemGridFlight: {
+    [theme.breakpoints.down(560)]: {
+      width: "100%",
+      margin: "auto",
+    },
+    borderRadius: "20px",
+    marginTop: "5px",
+    width: "50%",
+  },
+  defaultHomeNav: {
+    display: "inline",
+    [theme.breakpoints.down(1000)]: {
+      display: "none",
+    },
+  },
+  drawerOpenButton: {
+    display: "none",
+    [theme.breakpoints.down(1000)]: {
+      display: "inline",
+    },
   },
   reservationParamText: {
     color: Colors.BLUE,
@@ -65,6 +101,12 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     color: "white",
     width: "100%",
   },
+  locationParamsGrid: {
+    width: "50%",
+    [theme.breakpoints.down(595)]: {
+      width: "100%",
+    },
+  },
   locationQueryTF: {
     maxHeight: "30px",
     marginLeft: "10px",
@@ -84,11 +126,20 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     fontFamily: FONT,
   },
   mainPhotoGrid: {
+    [theme.breakpoints.down(1150)]: {
+      width: "100%",
+    },
     width: "60%",
     padding: "10px",
   },
   nextButton: {
     backgroundColor: "white",
+  },
+  passengersClassGrid: {
+    width: "50%",
+    [theme.breakpoints.down(580)]: {
+      width: "100%",
+    },
   },
   planTripPhotoContainer: {
     backgroundImage: `url(${homeItinerary})`,
@@ -105,11 +156,16 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     margin: "40px auto",
   },
   reservationGrid: {
+    [theme.breakpoints.down(1150)]: {
+      width: "85%",
+      margin: "auto",
+    },
     width: "40%",
     marginTop: "20px",
   },
   reservationParamsGrid: {
     marginTop: "20px",
+    padding: "10px",
     borderRadius: "10px",
     backgroundColor: "#eeeeee",
     width: "90%",

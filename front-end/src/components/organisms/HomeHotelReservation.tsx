@@ -213,7 +213,7 @@ export default function HomeHotelReservation() {
               <CustomButton
                 rounded
                 label="Search"
-                style={{ width: "30%", boxShadow: Shadow.SHADOW }}
+                style={{ width: "90%", boxShadow: Shadow.LIGHT }}
                 onClick={() => {}}
               />
             </Grid>

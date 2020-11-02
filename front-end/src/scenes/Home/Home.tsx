@@ -1,7 +1,13 @@
 import {
+  faBars,
   faCar,
   faConciergeBell,
+  faDice,
+  faHotel,
   faPlaneDeparture,
+  faSignInAlt,
+  faUtensils,
+  IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -10,13 +16,18 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Drawer,
   Grid,
   IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
 
-import { carlos } from "../../assets";
+import { carlos, logoTypeWhiteFore } from "../../assets";
 import {
   CustomButton,
   HomeCarReservation,
@@ -26,7 +37,7 @@ import {
   SliderArrow,
 } from "../../components";
 import { ButtonIcon } from "../../components/atoms/ButtonIcon";
-import { Navbar } from "../../components/molecules";
+import { CDrawer, Navbar } from "../../components/molecules";
 import { Colors } from "../../styles";
 import { homeStyles, home_explore_button } from "../../styles/Home/home-styles";
 import SwipeableViews from "react-swipeable-views";
@@ -36,6 +47,8 @@ import "swiper/swiper-bundle.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DrawerOptions } from "../../utils/types/DrawerOptionsType";
 
 interface ServiceIconType {
   hotel: boolean;
@@ -118,6 +131,8 @@ export function Home() {
     },
   ];
 
+  const [openDrawer, setOpenDrawer] = useState(false);
+
   function onServicePressed(service: string) {
     setSelectedService({
       hotel: false,
@@ -156,24 +171,33 @@ export function Home() {
   return (
     <div className="mainContainer">
       <Navbar>
-        <CustomButton
-          style={buttonStyle}
-          label="Login"
-          backgroundColor={Colors.BLUE}
-        />
-        <CustomButton
-          style={buttonStyle}
-          label="Sign up"
-          backgroundColor={Colors.BLUE}
-        />
-        <CustomButton
-          style={buttonStyle}
-          label="Make a trip"
-          backgroundColor={Colors.PURPLE}
-        />
+        <div className={style.defaultHomeNav}>
+          <CustomButton
+            style={buttonStyle}
+            label="Login"
+            backgroundColor={Colors.BLUE}
+          />
+          <CustomButton
+            style={buttonStyle}
+            label="Sign up"
+            backgroundColor={Colors.BLUE}
+          />
+          <CustomButton
+            style={buttonStyle}
+            label="Make a trip"
+            backgroundColor={Colors.PURPLE}
+          />
 
-        <IconButton style={{ marginLeft: "10px" }}>
-          <Avatar src={carlos} />
+          <IconButton style={{ marginLeft: "10px" }}>
+            <Avatar src={carlos} />
+          </IconButton>
+        </div>
+
+        <IconButton
+          className={style.drawerOpenButton}
+          onClick={() => setOpenDrawer(true)}
+        >
+          <FontAwesomeIcon color={Colors.BLUE} icon={faBars} />
         </IconButton>
       </Navbar>
 
@@ -275,7 +299,7 @@ export function Home() {
           {popularDestinations.map((destination) => (
             <div>
               <Card className={style.card}>
-                <CardActionArea> 
+                <CardActionArea>
                   <CardMedia
                     component="img"
                     height="250"
@@ -284,13 +308,21 @@ export function Home() {
                 </CardActionArea>
 
                 <CardContent>
-                  <div style={{fontWeight: 'bold'}}>{`${destination.city}, ${destination.country}`}</div>
+                  <div
+                    style={{ fontWeight: "bold" }}
+                  >{`${destination.city}, ${destination.country}`}</div>
                 </CardContent>
               </Card>
             </div>
           ))}
         </Slider>
       </Grid>
+
+      <CDrawer
+        open={openDrawer}
+        userLoggedIn
+        onClose={() => setOpenDrawer(false)}
+      />
     </div>
   );
 }

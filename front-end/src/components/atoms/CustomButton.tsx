@@ -2,11 +2,12 @@ import { IconDefinition } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, makeStyles } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
-import React, { MouseEvent } from "react";
+import React, { MouseEvent, ReactNode } from "react";
 import { FONT } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
 interface CustomButtonProps {
+  avatar?: ReactNode;
   backgroundColor: string;
   label: string;
   rounded?: boolean;
@@ -28,6 +29,7 @@ type CustomButtonType = PartialBy<
 >;
 
 export function CustomButton({
+  avatar,
   backgroundColor = Colors.BLUE,
   label,
   rounded,
@@ -42,13 +44,14 @@ export function CustomButton({
     button: {
       backgroundColor: backgroundColor ? backgroundColor : Colors.BLUE,
       fontFamily: FONT,
-      borderRadius: rounded ? "20px" : "",
+      borderRadius: rounded ? "50px" : "",
       "&:hover": {
         backgroundColor: getHoverColor(backgroundColor),
       },
       fontSize: "18px",
       textTransform: "capitalize",
       color: textColor,
+      cursor: "hand",
       ...style,
     },
   });
@@ -73,10 +76,14 @@ export function CustomButton({
 
   const styles = buttonStyles();
 
+  function renderIcon(): ReactNode{
+    return icon ? <FontAwesomeIcon icon={icon} /> : avatar?  avatar: <b></b>
+  }
+
   return (
     <Button
       className={styles.button}
-      startIcon={icon ? <FontAwesomeIcon icon={icon} /> : <b></b>}
+      startIcon={renderIcon()}
       onClick={onClick}
       type={submit ? "submit" : "button"}
     >

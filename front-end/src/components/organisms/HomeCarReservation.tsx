@@ -130,7 +130,7 @@ export default function HomeCarReservation() {
         <ThemeProvider theme={theme}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             {dateTimeParams.map((param) => (
-              <Grid item xs={6} className={style.datepickerItemGrid}>
+              <Grid item className={style.datepickerItemGridCar}>
                 <h5 className={style.reservationParamText}>{param.label}</h5>
                 <KeyboardDateTimePicker
                   value={car[param.prop]}
@@ -144,7 +144,7 @@ export default function HomeCarReservation() {
           </MuiPickersUtilsProvider>
 
           {locationParms.map((param) => (
-            <Grid item xs={6}>
+            <Grid item className={style.locationParamsGrid}>
               <h5 className={style.reservationParamText}>{param.label}</h5>
 
               <CustomTF
@@ -166,7 +166,7 @@ export default function HomeCarReservation() {
               <CustomButton
                 rounded
                 label="Search"
-                style={{ width: "30%", boxShadow: Shadow.SHADOW }}
+                style={{ width: "90%", boxShadow: Shadow.LIGHT }}
                 onClick={() => {}}
               />
             </Grid>

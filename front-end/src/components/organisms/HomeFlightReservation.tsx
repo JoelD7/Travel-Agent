@@ -151,7 +151,7 @@ export default function HomeFlightReservation() {
       <Grid container className={style.reservationParamsGrid} spacing={2}>
         <ThemeProvider theme={theme}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid item xs={6} className={style.datepickerItemGrid}>
+            <Grid item  className={style.datepickerItemGridFlight}>
               <h5 className={style.reservationParamText}>Departure</h5>
               <KeyboardDatePicker
                 value={flight.departure}
@@ -162,7 +162,7 @@ export default function HomeFlightReservation() {
               />
             </Grid>
 
-            <Grid item xs={6} className={style.datepickerItemGrid}>
+            <Grid item className={style.datepickerItemGridFlight}>
               <h5 className={style.reservationParamText}>Return</h5>
               <KeyboardDatePicker
                 value={flight.return}
@@ -175,7 +175,7 @@ export default function HomeFlightReservation() {
           </MuiPickersUtilsProvider>
 
           {locationParms.map((param) => (
-            <Grid item xs={6}>
+            <Grid item className={style.locationParamsGrid}>
               <h5 className={style.reservationParamText}>{param.label}</h5>
               <CustomTF
                 value={flight[param.prop] as string}
@@ -193,7 +193,7 @@ export default function HomeFlightReservation() {
         </ThemeProvider>
 
         <ThemeProvider theme={theme}>
-          <Grid item xs={4} key="passengers">
+          <Grid item className={style.passengersClassGrid} key="passengers">
             <h5 className={style.reservationParamText}>Passengers</h5>
 
             <FormControl style={{ width: "100%" }}>
@@ -215,7 +215,7 @@ export default function HomeFlightReservation() {
             </FormControl>
           </Grid>
 
-          <Grid item xs={6} key="class">
+          <Grid item className={style.passengersClassGrid} key="class">
             <h5 className={style.reservationParamText}>Class</h5>
 
             <FormControl style={{ width: "100%" }}>
@@ -247,7 +247,7 @@ export default function HomeFlightReservation() {
               <CustomButton
                 rounded
                 label="Search"
-                style={{ width: "30%", boxShadow: Shadow.SHADOW }}
+                style={{ width: "90%", boxShadow: Shadow.LIGHT }}
                 onClick={() => {}}
               />
             </Grid>
