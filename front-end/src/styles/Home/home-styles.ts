@@ -51,6 +51,10 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     borderRadius: "20px",
     marginTop: "5px",
     width: "50%",
+
+    [theme.breakpoints.down(600)]:{
+      width: '100%',
+    },
   },
   datepickerItemGridCar: {
     [theme.breakpoints.down(740)]: {
@@ -99,6 +103,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   },
   homeImageText: {
     color: "white",
+    padding: '10px',
     width: "100%",
   },
   locationParamsGrid: {
@@ -142,10 +147,21 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     },
   },
   planTripPhotoContainer: {
+    width: '50%',
     backgroundImage: `url(${homeItinerary})`,
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     borderRadius: "10px",
+
+    [theme.breakpoints.down(990)]:{
+      width: '100%',
+    }
+  },
+  planTripGrid:{
+    width: '50%',
+    [theme.breakpoints.down(990)]:{
+      width: '60%',
+    }
   },
   redirectTripContainer: {
     backgroundColor: Colors.BLUE,
@@ -154,6 +170,25 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     padding: "10px 20px",
     borderRadius: "10px",
     margin: "40px auto",
+
+    [theme.breakpoints.down(990)]:{
+      display: 'none',
+    }
+  },
+  redirectTripContainerHidden: {
+    backgroundColor: Colors.BLUE,
+    width: "90%",
+    color: "white",
+    padding: "10px 20px",
+    borderRadius: "10px",
+    margin: "40px auto",
+    display: 'none',
+
+    [theme.breakpoints.down(990)]:{
+      width: '60%',
+      margin: "40px auto",
+      display: 'block',
+    }
   },
   reservationGrid: {
     [theme.breakpoints.down(1150)]: {

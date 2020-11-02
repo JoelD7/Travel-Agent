@@ -25,7 +25,10 @@ import { addDays } from "date-fns";
 import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
-import { homeStyles, style_createTripButton } from "../../styles/Home/home-styles";
+import {
+  homeStyles,
+  style_createTripButton,
+} from "../../styles/Home/home-styles";
 import { CustomButton } from "../atoms";
 
 interface HotelType {
@@ -159,7 +162,7 @@ export default function HomeHotelReservation() {
       <Grid container className={style.reservationParamsGrid} spacing={2}>
         <ThemeProvider theme={theme}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid item xs={6} className={style.datepickerItemGrid}>
+            <Grid item className={style.datepickerItemGrid}>
               <h5 className={style.reservationParamText}>Check-in</h5>
               <KeyboardDatePicker
                 value={hotel.checkIn}
@@ -170,7 +173,7 @@ export default function HomeHotelReservation() {
               />
             </Grid>
 
-            <Grid item xs={6} className={style.datepickerItemGrid}>
+            <Grid item className={style.datepickerItemGrid}>
               <h5 className={style.reservationParamText}>Check-out</h5>
               <KeyboardDatePicker
                 value={hotel.checkOut}

@@ -166,6 +166,24 @@ export function Home() {
     className: style.slider,
     nextArrow: <SliderArrow direction="right" />,
     prevArrow: <SliderArrow direction="left" />,
+    responsive: [
+      {
+        breakpoint: 990,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 740,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+    ],
   };
 
   return (
@@ -261,7 +279,7 @@ export function Home() {
 
       <PageSubtitle label="Plan your trip" />
       <Grid id="section-2" container className={style.section}>
-        <Grid item xs={6}>
+        <Grid item className={style.planTripGrid}>
           <div className={style.redirectTripContainer}>
             <h2 style={{ fontWeight: "normal" }}>Make a trip</h2>
 
@@ -290,7 +308,34 @@ export function Home() {
           </div>
         </Grid>
 
-        <Grid item xs={6} className={style.planTripPhotoContainer}></Grid>
+        <Grid item className={style.planTripPhotoContainer}>
+          <div className={style.redirectTripContainerHidden}>
+            <h2 style={{ fontWeight: "normal" }}>Make a trip</h2>
+
+            <p>Plan your trips however you want! </p>
+
+            <p>
+              The first step in planning your trip is making an itinerary. An
+              itinerary will help you organize your time so you can get the most
+              out of your journey.
+            </p>
+
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <CustomButton
+                label="Create trip"
+                backgroundColor={Colors.GREEN}
+                textColor={Colors.BLUE}
+                style={styles.style_createTripButton}
+              />
+            </div>
+          </div>
+        </Grid>
       </Grid>
 
       <PageSubtitle label="Popular destinations" />
