@@ -21,6 +21,7 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { carlos, logoTypeWhiteFore } from "../../../assets";
+import { FONT } from "../../../assets/fonts";
 import { Colors, Shadow } from "../../../styles";
 import { DrawerOptions } from "../../../utils/types/DrawerOptionsType";
 import { CustomButton } from "../../atoms";
@@ -28,7 +29,7 @@ import { drawerButtonStyle, drawerStyles } from "./cdrawer-styles";
 
 interface CDrawerProps {
   open: boolean;
-  userLoggedIn: boolean;
+  userLoggedIn?: boolean;
   onClose: () => void;
 }
 
@@ -39,6 +40,7 @@ export function CDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
     overrides: {
       MuiListItem: {
         root: {
+          borderBottom: `2px solid ${Colors.BLUE}`,
           "&.Mui-selected": {
             backgroundColor: Colors.BLUE_HOVER,
 
@@ -118,12 +120,12 @@ export function CDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
             />
           </div>
         ) : (
-          <div>
+          <div style={{ fontFamily: FONT }}>
             <CustomButton
               label="Login"
               backgroundColor={Colors.PURPLE}
               rounded
-              style={drawerButtonStyle}
+              style={{ ...drawerButtonStyle, marginBottom: "0px" }}
               onClick={() => {}}
             />
 

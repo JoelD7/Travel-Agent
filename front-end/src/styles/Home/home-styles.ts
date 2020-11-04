@@ -74,12 +74,6 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     marginTop: "5px",
     width: "50%",
   },
-  defaultHomeNav: {
-    display: "inline",
-    [theme.breakpoints.down(1000)]: {
-      display: "none",
-    },
-  },
   drawerOpenButton: {
     display: "none",
     [theme.breakpoints.down(1000)]: {
@@ -137,13 +131,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     width: "60%",
     padding: "10px",
   },
-  menuItemRoot: {
-    fontFamily: FONT,
-    fontWeight: "bold",
-    margin: "0px 5px",
-    color: Colors.BLUE,
-    borderRadius: "5px",
-  },
+  
   nextButton: {
     backgroundColor: "white",
   },
@@ -278,18 +266,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     color: Colors.BLUE,
     fontSize: "14px",
   },
-  servicesToolbar: {
-    display: "flex",
-    minHeight: "20px",
-    marginTop: "20px",
-    borderTop: "1px solid #cecece",
-    borderBottom: "1px solid #cecece",
-    justifyContent: "center",
-
-    [theme.breakpoints.down(1000)]: {
-      display: "none",
-    },
-  },
+  
   slider: {
     width: "100%",
     display: "flex",

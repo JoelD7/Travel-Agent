@@ -42,7 +42,7 @@ import {
   SliderArrow,
 } from "../../components";
 import { ButtonIcon } from "../../components/atoms/ButtonIcon";
-import { CDrawer, Navbar } from "../../components/molecules";
+import { CDrawer, Navbar, ServicesToolbar } from "../../components/molecules";
 import { Colors } from "../../styles";
 import { homeStyles, home_explore_button } from "../../styles/Home/home-styles";
 import SwipeableViews from "react-swipeable-views";
@@ -64,22 +64,6 @@ interface ServiceIconType {
 
 export function Home() {
   const style = homeStyles();
-
-  const theme = createMuiTheme({
-    overrides: {
-      // MuiListItem: {
-      //   button: {
-      //     "&:hover": {
-      //       backgroundColor: "rgba(0,0,0,0)",
-      //     },
-      //   },
-      // },
-    },
-  });
-
-  const buttonStyle: CreateCSSProperties<{}> = {
-    margin: "0 5px 0 5px",
-  };
 
   const services = [
     {
@@ -203,73 +187,13 @@ export function Home() {
     ],
   };
 
-  const navbarServices = [
-    {
-      label: "Hotels",
-      route: "",
-    },
-    {
-      label: "Flights",
-      route: "",
-    },
-    {
-      label: "Restaurants",
-      route: "",
-    },
-    {
-      label: "Things to do",
-      route: "",
-    },
-    {
-      label: "Car rental",
-      route: "",
-    },
-  ];
-
   return (
     <div className="mainContainer">
       <Navbar>
-        <div className={style.defaultHomeNav}>
-          <CustomButton
-            style={buttonStyle}
-            label="Login"
-            backgroundColor={Colors.BLUE}
-          />
-          <CustomButton
-            style={buttonStyle}
-            label="Sign up"
-            backgroundColor={Colors.BLUE}
-          />
-          <CustomButton
-            style={buttonStyle}
-            label="Make a trip"
-            backgroundColor={Colors.PURPLE}
-          />
-
-          <IconButton style={{ marginLeft: "10px" }}>
-            <Avatar src={carlos} />
-          </IconButton>
-        </div>
-
-        <IconButton
-          className={style.drawerOpenButton}
-          onClick={() => setOpenDrawer(true)}
-        >
-          <FontAwesomeIcon color={Colors.BLUE} icon={faBars} />
-        </IconButton>
+        
       </Navbar>
 
-      <Toolbar className={style.servicesToolbar}>
-        {navbarServices.map((service, i) => (
-          <MenuItem
-            key={i}
-            onClick={() => {}}
-            classes={{ root: style.menuItemRoot }}
-          >
-            {service.label}
-          </MenuItem>
-        ))}
-      </Toolbar>
+      <ServicesToolbar />
 
       <Grid id="section-1" container style={{ marginBottom: "40px" }}>
         <Grid item className={style.reservationGrid}>
@@ -415,11 +339,6 @@ export function Home() {
         </Slider>
       </Grid>
 
-      <CDrawer
-        open={openDrawer}
-        userLoggedIn
-        onClose={() => setOpenDrawer(false)}
-      />
     </div>
   );
 }

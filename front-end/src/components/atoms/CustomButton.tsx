@@ -7,15 +7,15 @@ import { FONT } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
 interface CustomButtonProps {
-  avatar?: ReactNode;
+  avatar: ReactNode;
   backgroundColor: string;
   label: string;
-  rounded?: boolean;
+  rounded: boolean;
   style: CreateCSSProperties<{}>;
   className: string;
   icon: IconDefinition;
   submit: boolean;
-  textColor?: string;
+  textColor: string;
   onClick: (
     event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => void;
@@ -25,7 +25,15 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type CustomButtonType = PartialBy<
   CustomButtonProps,
-  "backgroundColor" | "style" | "icon" | "submit" | "onClick" | "className"
+  | "backgroundColor"
+  | "style"
+  | "icon"
+  | "submit"
+  | "onClick"
+  | "className"
+  | "avatar"
+  | "textColor"
+  | "rounded"
 >;
 
 export function CustomButton({
@@ -37,7 +45,7 @@ export function CustomButton({
   icon,
   onClick,
   submit,
-  textColor = 'white',
+  textColor = "white",
   className,
 }: CustomButtonType) {
   const buttonStyles = makeStyles({
@@ -76,8 +84,8 @@ export function CustomButton({
 
   const styles = buttonStyles();
 
-  function renderIcon(): ReactNode{
-    return icon ? <FontAwesomeIcon icon={icon} /> : avatar?  avatar: <b></b>
+  function renderIcon(): ReactNode {
+    return icon ? <FontAwesomeIcon icon={icon} /> : avatar ? avatar : <b></b>;
   }
 
   return (

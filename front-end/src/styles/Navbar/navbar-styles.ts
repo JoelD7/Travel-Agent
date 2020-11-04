@@ -6,17 +6,29 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "white",
     height: "60px",
   },
+  defaultHomeNav: {
+    display: "inline",
+    [theme.breakpoints.down(1000)]: {
+      display: "none",
+    },
+  },
+  drawerOpenButton: {
+    display: "none",
+    [theme.breakpoints.down(1000)]: {
+      display: "inline",
+    },
+  },
   logotype: {
     maxHeight: "40px",
-    height: '40px',
+    height: "40px",
   },
-  rightChildrenContainer:{
-    marginLeft: 'auto',
+  rightChildrenContainer: {
+    marginLeft: "auto",
   },
   searchBar: {
     maxHeight: "30px",
-    marginLeft: '10px',
-    width: '300px',
+    marginLeft: "10px",
+    width: "300px",
     "& .MuiOutlinedInput-root": {
       "&:hover fieldset": {
         borderColor: "#cecece",
@@ -28,7 +40,7 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
   },
   searchBarText: {
     fontFamily: FONT,
-    fontSize: '14px',
+    fontSize: "14px",
   },
   toolbar: {
     minHeight: "60px",
