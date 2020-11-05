@@ -3,6 +3,14 @@ import { FONT } from "../../../assets/fonts";
 import { Colors } from "../../../styles";
 
 export const hotelAmenitiesStyles = makeStyles((theme: Theme) => ({
+  button: {
+    padding: '0px',
+    fontWeight: 'bold',
+    "&:hover": {
+      backgroundColor: "rgba(0,0,0,0)",
+      textDecoration: "underline black solid",
+    },
+  },
   dialogTitle: {
     padding: "0px",
 

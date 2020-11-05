@@ -85,7 +85,13 @@ export function CustomButton({
   const styles = buttonStyles();
 
   function renderIcon(): ReactNode {
-    return icon ? <FontAwesomeIcon icon={icon} /> : avatar ? avatar : <b></b>;
+    return icon ? (
+      <FontAwesomeIcon style={{ marginLeft: "5px" }} icon={icon} />
+    ) : avatar ? (
+      avatar
+    ) : (
+      <b></b>
+    );
   }
 
   return (

@@ -166,7 +166,7 @@ export default function HomeCarReservation() {
               <CustomButton
                 rounded
                 label="Search"
-                style={{ width: "90%", boxShadow: Shadow.LIGHT }}
+                style={{ width: "90%", boxShadow: Shadow.MEDIUM }}
                 onClick={() => {}}
               />
             </Grid>

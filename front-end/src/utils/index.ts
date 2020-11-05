@@ -1,3 +1,3 @@
-import * as Amenity from "./HotelAmenities";
+import * as HotelAmenity from "./HotelAmenities";
 export * from "./slices";
-export { Amenity };
+export { HotelAmenity };

@@ -10,22 +10,24 @@ import {
 } from "@material-ui/core";
 import React, { ChangeEvent, useState } from "react";
 import { hotelAmenitiesStyles } from "./hotelAmenities-styles";
-import { AmenitiesType } from "../../../utils/HotelAmenities";
+import { Amenity } from "../../../utils/HotelAmenities";
 import { CustomButton } from "../CustomButton";
 import { Colors } from "../../../styles";
 
 interface HotelAmenitiesSelectorProps {
-  values: AmenitiesType[];
-  updateState: (selectedAmenities: AmenitiesType[]) => void;
+  values: Amenity[];
+  updateState: (selectedAmenities: Amenity[]) => void;
+  buttonColor?: string;
 }
 
 export function HotelAmenitiesSelector({
   values,
   updateState,
+  buttonColor = "black",
 }: HotelAmenitiesSelectorProps) {
   const style = hotelAmenitiesStyles();
 
-  const [selectedAmenities, setSelectedAmenities] = useState<AmenitiesType[]>(
+  const [selectedAmenities, setSelectedAmenities] = useState<Amenity[]>(
     values
   );
 
@@ -69,7 +71,8 @@ export function HotelAmenitiesSelector({
       </div>
 
       <Button
-        style={{ textTransform: "capitalize" }}
+        style={{ textTransform: "capitalize", color: buttonColor }}
+        classes={{root: style.button}}
         onClick={() => setOpenDialog(true)}
       >
         Select amenities

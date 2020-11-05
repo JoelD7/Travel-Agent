@@ -247,7 +247,7 @@ export default function HomeFlightReservation() {
               <CustomButton
                 rounded
                 label="Search"
-                style={{ width: "90%", boxShadow: Shadow.LIGHT }}
+                style={{ width: "90%", boxShadow: Shadow.MEDIUM }}
                 onClick={() => {}}
               />
             </Grid>
