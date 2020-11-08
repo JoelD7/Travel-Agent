@@ -86,7 +86,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     },
   },
   topContainer: {
-    height: "475px",
+    height: "525px",
     padding: "10px",
     fontFamily: FONT,
     display: "flex",

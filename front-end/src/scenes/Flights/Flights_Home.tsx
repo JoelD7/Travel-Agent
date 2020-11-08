@@ -24,7 +24,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
-import { Navbar, ServicesToolbar } from "../../components";
+import { CustomButton, Navbar, ServicesToolbar } from "../../components";
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors } from "../../styles";
 import { muiDateFormatter } from "../../utils";
@@ -224,7 +224,11 @@ export function Flights_Home() {
             </Toolbar>
           </Grid>
 
-          <Grid item xs={6} key="destinationTF">
+          <Grid
+            item
+            xs={state.flightType === FlightTypes.ROUND ? 6 : 12}
+            key="destinationTF"
+          >
             <h5 className={style.reservationParamText}>From</h5>
             <CustomTF
               value={state.from}
@@ -238,23 +242,25 @@ export function Flights_Home() {
             />
           </Grid>
 
-          <Grid item xs={6} key="destinationTF">
-            <h5 className={style.reservationParamText}>To</h5>
-            <CustomTF
-              value={state.to}
-              className={style.destinationTF}
-              outlineColor={Colors.BLUE}
-              updateState={(e) => setState({ ...state, to: e.target.value })}
-              placeholder="City or airport"
-              startAdornment={
-                <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
-              }
-            />
-          </Grid>
+          {state.flightType === FlightTypes.ROUND && (
+            <Grid item xs={6} key="destinationTF">
+              <h5 className={style.reservationParamText}>To</h5>
+              <CustomTF
+                value={state.to}
+                className={style.destinationTF}
+                outlineColor={Colors.BLUE}
+                updateState={(e) => setState({ ...state, to: e.target.value })}
+                placeholder="City or airport"
+                startAdornment={
+                  <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
+                }
+              />
+            </Grid>
+          )}
 
           <ThemeProvider theme={theme}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid item xs={6}>
+              <Grid item xs={state.flightType === FlightTypes.ROUND ? 6 : 12}>
                 <h5 className={style.reservationParamText}>Departure</h5>
                 <KeyboardDatePicker
                   value={state.departure}
@@ -266,17 +272,19 @@ export function Flights_Home() {
                 />
               </Grid>
 
-              <Grid item xs={6}>
-                <h5 className={style.reservationParamText}>Return</h5>
-                <KeyboardDatePicker
-                  value={state.return}
-                  labelFunc={muiDateFormatter}
-                  className={style.datepicker}
-                  minDate={new Date()}
-                  format="dd MMM., yyyy"
-                  onChange={(d) => setState({ ...state, return: d })}
-                />
-              </Grid>
+              {state.flightType === FlightTypes.ROUND && (
+                <Grid item xs={6}>
+                  <h5 className={style.reservationParamText}>Return</h5>
+                  <KeyboardDatePicker
+                    value={state.return}
+                    labelFunc={muiDateFormatter}
+                    className={style.datepicker}
+                    minDate={new Date()}
+                    format="dd MMM., yyyy"
+                    onChange={(d) => setState({ ...state, return: d })}
+                  />
+                </Grid>
+              )}
             </MuiPickersUtilsProvider>
           </ThemeProvider>
 
@@ -340,6 +348,16 @@ export function Flights_Home() {
               </FormControl>
             </Grid>
           </ThemeProvider>
+
+          <Grid item xs={12}>
+            <CustomButton
+              rounded
+              backgroundColor={Colors.PURPLE}
+              style={{ width: "100%" }}
+              label="Find flights"
+              onClick={() => {}}
+            />
+          </Grid>
         </Grid>
       </div>
     </div>
