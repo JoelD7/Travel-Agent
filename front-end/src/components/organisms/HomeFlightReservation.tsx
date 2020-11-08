@@ -23,6 +23,7 @@ import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
+import { muiDateFormatter } from "../../utils";
 import { FlightClass } from "../../utils/types";
 import { FlightClassType } from "../../utils/types/FlightClassType";
 import { CustomButton } from "../atoms";
@@ -155,6 +156,7 @@ export default function HomeFlightReservation() {
               <h5 className={style.reservationParamText}>Departure</h5>
               <KeyboardDatePicker
                 value={flight.departure}
+                labelFunc={muiDateFormatter}
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"
@@ -166,6 +168,7 @@ export default function HomeFlightReservation() {
               <h5 className={style.reservationParamText}>Return</h5>
               <KeyboardDatePicker
                 value={flight.return}
+                labelFunc={muiDateFormatter}
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"

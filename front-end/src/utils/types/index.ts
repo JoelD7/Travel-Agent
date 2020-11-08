@@ -1,3 +1,4 @@
 import * as FlightClass from "./FlightClassType";
-export { FlightClass };
+import * as FlightTypes from "./FlightSearchParams"
+export { FlightClass, FlightTypes };
 

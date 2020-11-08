@@ -27,7 +27,7 @@ import {
 } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
 import {
   CustomButton,
@@ -39,10 +39,11 @@ import {
 } from "../../components";
 import { HotelAmenitiesSelector } from "../../components/atoms/HotelAmenitiesSelector/HotelAmenitiesSelector";
 import { Colors, Shadow } from "../../styles";
-import { HotelAmenity } from "../../utils";
+import { HotelAmenity, muiDateFormatter } from "../../utils";
 import { AmenitiesList, Amenity } from "../../utils/HotelAmenities";
 import { Hotel } from "../../utils/types/Hotel";
 import { hotelsStyles } from "./hotels-styles";
+import {format} from "date-fns"
 
 interface HotelSearch {
   checkIn: MaterialUiPickersDate;
@@ -207,7 +208,7 @@ export function Hotels() {
             <h1 style={{ color: "white", marginBottom: "0px" }}>
               Hotels in Paris
             </h1>
-          </Grid>
+          </Grid> 
 
           <ThemeProvider theme={theme}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -215,6 +216,7 @@ export function Hotels() {
                 <h5 className={style.reservationParamText}>Check-in</h5>
                 <KeyboardDatePicker
                   value={state.checkIn}
+                  labelFunc={muiDateFormatter}
                   className={style.datepicker}
                   minDate={new Date()}
                   format="dd MMM., yyyy"
@@ -226,6 +228,7 @@ export function Hotels() {
                 <h5 className={style.reservationParamText}>Check-out</h5>
                 <KeyboardDatePicker
                   value={state.checkOut}
+                  labelFunc={muiDateFormatter}
                   className={style.datepicker}
                   minDate={new Date()}
                   format="dd MMM., yyyy"

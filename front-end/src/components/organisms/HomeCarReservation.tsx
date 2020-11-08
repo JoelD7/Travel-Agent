@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
+import { muiDateFormatter } from "../../utils";
 import { CustomButton } from "../atoms";
 import { CustomTF } from "../atoms/CustomTF";
 
@@ -124,6 +125,8 @@ export default function HomeCarReservation() {
   ];
 
   const style = homeStyles();
+
+  console.log(`hotel car`);
   return (
     <div>
       <Grid container className={style.reservationParamsGrid} spacing={2}>
@@ -134,6 +137,7 @@ export default function HomeCarReservation() {
                 <h5 className={style.reservationParamText}>{param.label}</h5>
                 <KeyboardDateTimePicker
                   value={car[param.prop]}
+                  labelFunc={muiDateFormatter}
                   className={style.datepicker}
                   minDate={new Date()}
                   format="dd MMM., yyyy  hh:mm a"

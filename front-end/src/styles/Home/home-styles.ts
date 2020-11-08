@@ -20,7 +20,7 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
   boxShadow: Shadow.DARK,
 };
 
-export const homeStyles = makeStyles((theme: Theme) => ({
+  export const homeStyles = makeStyles((theme: Theme) => ({
   card: {
     width: "95%",
   },

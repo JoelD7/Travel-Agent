@@ -29,6 +29,7 @@ import {
   homeStyles,
   style_createTripButton,
 } from "../../styles/Home/home-styles";
+import { muiDateFormatter } from "../../utils";
 import { CustomButton } from "../atoms";
 
 interface HotelType {
@@ -166,6 +167,7 @@ export default function HomeHotelReservation() {
               <h5 className={style.reservationParamText}>Check-in</h5>
               <KeyboardDatePicker
                 value={hotel.checkIn}
+                labelFunc={muiDateFormatter}
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"
@@ -177,6 +179,7 @@ export default function HomeHotelReservation() {
               <h5 className={style.reservationParamText}>Check-out</h5>
               <KeyboardDatePicker
                 value={hotel.checkOut}
+                labelFunc={muiDateFormatter}
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"

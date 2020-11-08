@@ -5,9 +5,10 @@ import { FONT } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
 interface CustomTFProps {
-  value: string ;
+  value: string;
   updateState: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   containerStyle?: CreateCSSProperties<{}>;
+  className?: string;
   textStyle?: string;
   startAdornment?: ReactNode;
   size?: "small" | "medium";
@@ -32,13 +33,13 @@ export function CustomTF({
   placeholder,
   rounded,
   numeric,
+  className,
 }: CustomTFProps) {
   const [text, setText] = useState(value);
 
   const fieldStyles = makeStyles({
     textField: {
-    //   marginLeft: "10px",
-      width: width,
+      width: className ? "" : width,
       backgroundColor: backgroundColor,
       borderRadius: rounded ? "20px" : "5px",
 
@@ -81,7 +82,7 @@ export function CustomTF({
       value={text}
       size={size}
       placeholder={placeholder}
-      className={style.textField}
+      className={`${style.textField} ${className}`}
       InputProps={{
         classes: {
           root: style.text,
