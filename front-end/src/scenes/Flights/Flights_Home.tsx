@@ -3,11 +3,14 @@ import {
   faBaby,
   faChild,
   faMapMarkerAlt,
+  faPlane,
+  faPlaneDeparture,
   faStar,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  Card,
   createMuiTheme,
   FormControl,
   Grid,
@@ -15,20 +18,29 @@ import {
   Select,
   ThemeProvider,
   Toolbar,
+  CardHeader,
+  CardContent,
 } from "@material-ui/core";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { addDays } from "date-fns";
+import { addDays, format, parseISO } from "date-fns";
 import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
-import { CustomButton, Navbar, ServicesToolbar } from "../../components";
+import {
+  CustomButton,
+  IconText,
+  Navbar,
+  PageSubtitle,
+  ServicesToolbar,
+} from "../../components";
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors } from "../../styles";
 import { muiDateFormatter } from "../../utils";
 import { FlightClass, FlightTypes } from "../../utils/types";
+import { Flight } from "../../utils/types/Flight";
 import { FlightClassType } from "../../utils/types/FlightClassType";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightStyles } from "./flights-styles";
@@ -190,8 +202,104 @@ export function Flights_Home() {
     FlightClass.First,
   ];
 
+  const deals: Flight[] = [
+    {
+      price: {
+        currency: "USD",
+        total: 245,
+      },
+      class: "Economy",
+      segments: [
+        {
+          departure: {
+            iata: "SIN",
+            city: "Singapore",
+            at: parseISO("2021-02-02T00:30:00"),
+            terminal: "2",
+          },
+          arrival: {
+            iata: "DMK",
+            city: "Bangkok",
+            at: parseISO("2021-02-02T23:30:00"),
+            terminal: "31",
+          },
+          carrier: "Egyptair",
+          duration: "PT8H15M",
+        },
+      ],
+    },
+    {
+      price: {
+        currency: "USD",
+        total: 198,
+      },
+      class: "Economy",
+      segments: [
+        {
+          departure: {
+            iata: "SIN",
+            city: "Singapore",
+            at: parseISO("2021-02-02T07:15:00"),
+            terminal: "2",
+          },
+          arrival: {
+            iata: "DXB",
+            city: "Dubai",
+            at: parseISO("2021-02-02T13:39:00"),
+            terminal: "31",
+          },
+          carrier: "Egyptair",
+          duration: "PT6H15M",
+        },
+      ],
+    },
+    {
+      price: {
+        currency: "USD",
+        total: 303,
+      },
+      class: "Economy",
+      segments: [
+        {
+          departure: {
+            iata: "DMK",
+            city: "Bangkok",
+            at: parseISO("2021-02-02T23:30:00"),
+            terminal: "31",
+          },
+          arrival: {
+            iata: "SIN",
+            city: "Singapore",
+            at: parseISO("2021-02-02T00:30:00"),
+            terminal: "2",
+          },
+          carrier: "Egyptair",
+          duration: "PT9H42M",
+        },
+      ],
+    },
+  ];
+
+  function getFlightCitiesLabel(
+    flight: Flight,
+    point: "departure" | "arrival"
+  ) {
+    return point === "departure"
+      ? `${flight.segments[0].departure.city} (${flight.segments[0].departure.iata})`
+      : `${flight.segments[0].arrival.city} (${flight.segments[0].arrival.iata})`;
+  }
+
+  function getDateTimeValues(flight: Flight, point: "departure" | "arrival") {
+    let departureTime = flight.segments[0].departure.at;
+    let arrivalTime = flight.segments[0].arrival.at;
+
+    return point === "departure"
+      ? `${format(departureTime, "d/MMM, hh:mm aaa")}`
+      : `${format(arrivalTime, "d/MMM,  hh:mm aaa")}`;
+  }
+
   return (
-    <div>
+    <div className={style.mainContainer}>
       <Navbar />
       <ServicesToolbar />
 
@@ -226,8 +334,8 @@ export function Flights_Home() {
 
           <Grid
             item
-            xs={state.flightType === FlightTypes.ROUND ? 6 : 12}
             key="destinationTF"
+            xs={state.flightType === FlightTypes.ROUND ? 6 : 12}
           >
             <h5 className={style.reservationParamText}>From</h5>
             <CustomTF
@@ -360,6 +468,65 @@ export function Flights_Home() {
           </Grid>
         </Grid>
       </div>
+
+      <PageSubtitle
+        label="Great deals"
+        containerStyle={{ margin: "20px auto" }}
+      />
+
+      <Grid container spacing={2} className={style.dealsContainer}>
+        {deals.map((deal, i) => (
+          <Card key={i} className={style.card}>
+            <CardHeader
+              title={
+                <div style={{ display: "flex", fontFamily: FONT }}>
+                  <p className={style.dealTitle}>
+                    {getFlightCitiesLabel(deal, "departure")}
+                  </p>
+                  <FontAwesomeIcon
+                    icon={faPlane}
+                    style={{ margin: "0px 10px" }}
+                    color="black"
+                  />
+                  <p className={style.dealTitle}>
+                    {getFlightCitiesLabel(deal, "arrival")}
+                  </p>
+
+                  <h5
+                    style={{ margin: "auto 0px auto auto" }}
+                  >{`${deal.price.currency}$ ${deal.price.total}`}</h5>
+                </div>
+              }
+              subheader={
+                <div>
+                  <p className={style.dealSubtitle}>
+                    {`${getDateTimeValues(
+                      deal,
+                      "departure"
+                    )} - ${getDateTimeValues(deal, "arrival")}`}
+                  </p>
+                </div>
+              }
+            />
+
+            <CardContent>
+              <div style={{ display: "flex" }}>
+                <IconText
+                  icon={faPlaneDeparture}
+                  text={`${deal.segments[0].carrier}, ${deal.class}`}
+                />
+
+                <CustomButton
+                  style={{ marginLeft: "auto", fontSize:'14px' }}
+                  label="View deal"
+                  onClick={() => {}}
+                  backgroundColor={Colors.PURPLE}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </Grid>
     </div>
   );
 }

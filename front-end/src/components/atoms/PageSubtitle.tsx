@@ -1,11 +1,13 @@
 import { Divider, makeStyles, Typography } from "@material-ui/core";
+import { CreateCSSProperties } from "@material-ui/styles";
 import React from "react";
 
 interface PageSubtitleProps {
   label: string;
+  containerStyle?: CreateCSSProperties<{}>;
 }
 
-export function PageSubtitle({ label }: PageSubtitleProps) {
+export function PageSubtitle({ label, containerStyle }: PageSubtitleProps) {
   const muiStyles = makeStyles({
     text: {
       margin: "auto",
@@ -28,14 +30,15 @@ export function PageSubtitle({ label }: PageSubtitleProps) {
       width: "90%",
       display: "flex",
       justifyContent: "center",
+      ...containerStyle,
     },
   });
 
-  const style = muiStyles();
+  const styles = muiStyles();
   return (
-    <div className={style.container}>
-      <Divider className={style.divider} />
-      <h2 className={style.text}>{label}</h2>
+    <div className={styles.container}>
+      <Divider className={styles.divider} />
+      <h2 className={styles.text}>{label}</h2>
     </div>
   );
 }

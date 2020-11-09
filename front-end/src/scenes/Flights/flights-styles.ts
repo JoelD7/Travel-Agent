@@ -3,6 +3,10 @@ import { FONT } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
 export const flightStyles = makeStyles((theme: Theme) => ({
+  card: {
+    width: "500px",
+    margin: '10px',
+  },
   datepicker: {
     backgroundColor: "white",
     fontFamily: FONT,
@@ -18,8 +22,26 @@ export const flightStyles = makeStyles((theme: Theme) => ({
       padding: "5px 0px 5px 10px",
     },
   },
+  dealsContainer: {
+    width: "66%",
+    margin: "auto",
+  },
+  dealTitle: {
+    fontWeight: "bold",
+    fontSize: "16px",
+    margin: "0px 0px",
+    fontFamily: FONT,
+  },
+  dealSubtitle: {
+    fontSize: "13px",
+    color: Colors.BLUE,
+    margin: "0px auto",
+  },
   destinationTF: {
     width: "100%",
+  },
+  mainContainer: {
+    fontFamily: FONT,
   },
   menuItemRoot: {
     fontFamily: FONT,
@@ -86,7 +108,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     },
   },
   topContainer: {
-    height: "525px",
+    height: "575px",
     padding: "10px",
     fontFamily: FONT,
     display: "flex",

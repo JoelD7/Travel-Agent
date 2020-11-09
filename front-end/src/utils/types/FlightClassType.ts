@@ -10,4 +10,6 @@ export type Business = typeof Business;
 export const First = "First";
 export type First = typeof First;
 
+export const FlightClasses = [Economy, PremiumEconomy, Business, First];
+
 export type FlightClassType = Economy | PremiumEconomy | Business | First | "";
