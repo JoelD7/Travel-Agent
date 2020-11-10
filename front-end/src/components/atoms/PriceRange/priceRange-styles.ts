@@ -1,7 +1,7 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Colors } from "../../../styles";
 
-export const hotelPriceStyles = makeStyles((theme: Theme) => ({
+export const priceRangeStyles = makeStyles((theme: Theme) => ({
   sliderRoot: {
     color: Colors.PURPLE,
     width: "90%",

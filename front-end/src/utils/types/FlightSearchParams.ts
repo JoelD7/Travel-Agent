@@ -11,7 +11,16 @@ export interface FlightSearchParams {
   infants: string;
   flightType: FlightType;
   class: FlightClassType;
+  priceRange: number[];
+  goDatetime?: DatetimeRange;
+  returnDatetime?: DatetimeRange;
+
   [key: string]: FlightSearchParams[keyof FlightSearchParams];
+}
+
+interface DatetimeRange {
+  departureDatetimeRange?: Date[];
+  arrivalDatetimeRange?: Date[];
 }
 
 export const ROUND = "Round trip";

@@ -1,58 +1,61 @@
 import DateFnsUtils from "@date-io/date-fns";
 import {
+  faMapMarkerAlt,
+  faUsers,
   faBaby,
   faChild,
-  faMapMarkerAlt,
-  faPlane,
-  faPlaneDeparture,
   faStar,
-  faUsers,
+  faFilter,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Card,
   createMuiTheme,
+  Divider,
   FormControl,
   Grid,
   MenuItem,
   Select,
   ThemeProvider,
-  Toolbar,
-  CardHeader,
-  CardContent,
 } from "@material-ui/core";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { addDays, format, parseISO } from "date-fns";
+import { addDays, parseISO } from "date-fns";
 import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
 import {
   CustomButton,
-  IconText,
+  DatetimeRange,
   Navbar,
-  PageSubtitle,
+  PriceRange,
   ServicesToolbar,
 } from "../../components";
 import { CustomTF } from "../../components/atoms/CustomTF";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 import { muiDateFormatter } from "../../utils";
-import { FlightClass, FlightTypes } from "../../utils/types";
+import { FlightTypes } from "../../utils/types";
 import { Flight } from "../../utils/types/Flight";
-import { FlightClassType } from "../../utils/types/FlightClassType";
+import {
+  flightClasses,
+  FlightClassType,
+} from "../../utils/types/FlightClassType";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
-import { flightStyles } from "./flights-styles";
+import { flightListStyles } from "./flight-list-styles";
 
-export function Flights_Home() {
-  const style = flightStyles();
+export function Flight_List() {
+  const style = flightListStyles();
 
   const theme = createMuiTheme({
     overrides: {
       MuiMenuItem: {
         root: {
           fontFamily: FONT,
+          border: "2px solid rgba(0,0,0,0)",
+
+          "&:hover": {
+            border: "2px solid rgba(0,0,0,0)",
+          },
         },
       },
       MuiButton: {
@@ -115,55 +118,8 @@ export function Flights_Home() {
           },
         },
       },
-      MuiSelect: {
-        select: {
-          borderColor: "#cecece",
-          "&:focus": {
-            borderColor: "#cecece",
-          },
-        },
-      },
     },
   });
-
-  const reservationParamsTheme = createMuiTheme({
-    overrides: {
-      MuiInputBase: {
-        root: {
-          fontFamily: FONT,
-        },
-      },
-      MuiMenuItem: {
-        root: {
-          fontFamily: FONT,
-        },
-      },
-      MuiListItem: {
-        button: {
-          borderBottom: "1px solid rgba(0,0,0,0)",
-          "&:hover": {
-            borderBottom: "1px solid rgba(0,0,0,0)",
-          },
-        },
-      },
-
-      MuiOutlinedInput: {
-        root: {
-          "&:hover fieldset": {
-            borderColor: "#cecece",
-          },
-          "&.Mui-focused fieldset": {
-            borderColor: "#cecece",
-          },
-        },
-      },
-    },
-  });
-
-  const destination = {
-    image: "/destinations/dubai.jpg",
-    name: "Dubai",
-  };
 
   const [state, setState] = useState<FlightSearchParams>({
     adults: "",
@@ -175,8 +131,30 @@ export function Flights_Home() {
     to: "",
     flightType: "Round trip",
     infants: "",
-    priceRange: [0,500],
+    priceRange: [0, 500],
+    goDatetime: {
+      departureDatetimeRange: [
+        new Date(2020, 10, 9, 10, 0),
+        new Date(2020, 10, 10, 15, 0),
+      ],
+      arrivalDatetimeRange: [
+        new Date(2020, 10, 10, 17, 0),
+        new Date(2020, 10, 11, 5, 0),
+      ],
+    },
+    returnDatetime: {
+      departureDatetimeRange: [
+        new Date(2020, 10, 20, 10, 0),
+        new Date(2020, 10, 20, 15, 0),
+      ],
+      arrivalDatetimeRange: [
+        new Date(2020, 10, 21, 8, 0),
+        new Date(2020, 10, 21, 15, 0),
+      ],
+    },
   });
+
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   const passengersParams = [
     {
@@ -196,14 +174,7 @@ export function Flights_Home() {
     },
   ];
 
-  const classes = [
-    FlightClass.Economy,
-    FlightClass.PremiumEconomy,
-    FlightClass.Business,
-    FlightClass.First,
-  ];
-
-  const deals: Flight[] = [
+  const flights: Flight[] = [
     {
       price: {
         currency: "USD",
@@ -281,22 +252,51 @@ export function Flights_Home() {
     },
   ];
 
-  function getFlightCitiesLabel(
-    flight: Flight,
-    point: "departure" | "arrival"
-  ) {
-    return point === "departure"
-      ? `${flight.segments[0].departure.city} (${flight.segments[0].departure.iata})`
-      : `${flight.segments[0].arrival.city} (${flight.segments[0].arrival.iata})`;
-  }
+  const flight: Flight = {
+    price: {
+      currency: "USD",
+      total: 245,
+    },
+    class: "Economy",
+    segments: [
+      {
+        departure: {
+          iata: "SIN",
+          city: "Singapore",
+          at: parseISO("2021-02-02T00:30:00"),
+          terminal: "2",
+        },
+        arrival: {
+          iata: "DMK",
+          city: "Bangkok",
+          at: parseISO("2021-02-02T23:30:00"),
+          terminal: "31",
+        },
+        carrier: "Egyptair",
+        duration: "PT8H15M",
+      },
+    ],
+  };
 
-  function getDateTimeValues(flight: Flight, point: "departure" | "arrival") {
-    let departureTime = flight.segments[0].departure.at;
-    let arrivalTime = flight.segments[0].arrival.at;
-
-    return point === "departure"
-      ? `${format(departureTime, "d/MMM, hh:mm aaa")}`
-      : `${format(arrivalTime, "d/MMM,  hh:mm aaa")}`;
+  function onDateRangeChanged(arr: number[], go: boolean, departure: boolean) {
+    let field = departure ? "departureDatetimeRange" : "arrivalDatetimeRange";
+    if (go) {
+      setState({
+        ...state,
+        goDatetime: {
+          ...state.goDatetime,
+          [field]: [new Date(arr[0]), new Date(arr[1])],
+        },
+      });
+    } else {
+      setState({
+        ...state,
+        returnDatetime: {
+          ...state.goDatetime,
+          [field]: [new Date(arr[0]), new Date(arr[1])],
+        },
+      });
+    }
   }
 
   return (
@@ -304,40 +304,15 @@ export function Flights_Home() {
       <Navbar />
       <ServicesToolbar />
 
-      <div
-        className={style.topContainer}
-        style={{ backgroundImage: `url(${destination.image})` }}
-      >
-        <Grid container spacing={2} className={style.reservationContainer}>
+      <div className={style.pageTitleContainerPic}>
+        <Grid container spacing={2} className={style.pageTitleContainer}>
           <Grid item xs={12}>
-            <h2>{`Find the best flight to ${destination.name}`}</h2>
+            <h1 style={{ color: "white", marginBottom: "0px" }}>
+              Flights to Dubai
+            </h1>
           </Grid>
 
-          <Grid item xs={12} key="toolbar">
-            <Toolbar classes={{ root: style.reservationOptionsToolbar }}>
-              <MenuItem
-                selected={state.flightType === FlightTypes.ROUND}
-                classes={{ root: style.menuItemRoot }}
-                onClick={() => setState({ ...state, flightType: "Round trip" })}
-              >
-                Round-trip
-              </MenuItem>
-
-              <MenuItem
-                selected={state.flightType === FlightTypes.ONE_WAY}
-                classes={{ root: style.menuItemRoot }}
-                onClick={() => setState({ ...state, flightType: "One way" })}
-              >
-                One way
-              </MenuItem>
-            </Toolbar>
-          </Grid>
-
-          <Grid
-            item
-            key="destinationTF"
-            xs={state.flightType === FlightTypes.ROUND ? 6 : 12}
-          >
+          <Grid key="destinationTF" item className={style.reservParamGrid}>
             <h5 className={style.reservationParamText}>From</h5>
             <CustomTF
               value={state.from}
@@ -352,7 +327,7 @@ export function Flights_Home() {
           </Grid>
 
           {state.flightType === FlightTypes.ROUND && (
-            <Grid item xs={6} key="destinationTF">
+            <Grid item className={style.reservParamGrid} key="destinationTF">
               <h5 className={style.reservationParamText}>To</h5>
               <CustomTF
                 value={state.to}
@@ -369,7 +344,7 @@ export function Flights_Home() {
 
           <ThemeProvider theme={theme}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid item xs={state.flightType === FlightTypes.ROUND ? 6 : 12}>
+              <Grid item className={style.datepickerGrid}>
                 <h5 className={style.reservationParamText}>Departure</h5>
                 <KeyboardDatePicker
                   value={state.departure}
@@ -382,7 +357,7 @@ export function Flights_Home() {
               </Grid>
 
               {state.flightType === FlightTypes.ROUND && (
-                <Grid item xs={6}>
+                <Grid item className={style.datepickerGrid}>
                   <h5 className={style.reservationParamText}>Return</h5>
                   <KeyboardDatePicker
                     value={state.return}
@@ -395,11 +370,9 @@ export function Flights_Home() {
                 </Grid>
               )}
             </MuiPickersUtilsProvider>
-          </ThemeProvider>
 
-          <ThemeProvider theme={reservationParamsTheme}>
             {passengersParams.map((passenger, i) => (
-              <Grid item key={i} xs={4}>
+              <Grid item key={i} className={style.passengerParamGrid}>
                 <h5 className={style.reservationParamText}>
                   {passenger.label}
                 </h5>
@@ -430,7 +403,7 @@ export function Flights_Home() {
               </Grid>
             ))}
 
-            <Grid item xs={6}>
+            <Grid item className={style.reservParamGrid}>
               <h5 className={style.reservationParamText}>Class</h5>
 
               <FormControl style={{ width: "100%" }}>
@@ -448,7 +421,7 @@ export function Flights_Home() {
                     })
                   }
                 >
-                  {classes.map((n, i) => (
+                  {flightClasses.map((n, i) => (
                     <MenuItem key={i} value={n}>
                       {n}
                     </MenuItem>
@@ -456,78 +429,63 @@ export function Flights_Home() {
                 </Select>
               </FormControl>
             </Grid>
-          </ThemeProvider>
 
-          <Grid item xs={12}>
+            <Grid item style={{ margin: "auto 0px 0px auto" }}>
+              <CustomButton
+                label="Search"
+                backgroundColor={Colors.GREEN}
+                style={{
+                  width: "140px",
+                  boxShadow: Shadow.DARK,
+                  color: Colors.BLUE,
+                }}
+                onClick={() => {}}
+              />
+            </Grid>
+          </ThemeProvider>
+        </Grid>
+      </div>
+
+      <div style={{ width: "85%", margin: "20px auto" }}>
+        <Grid container className={style.pageContentContainer}>
+          <Grid item className={style.filtersGrid}>
+            <h3>Price range</h3>
+            <PriceRange
+              value={state.priceRange ? state.priceRange : [0, 100]}
+              max={500}
+              updateState={(slider) =>
+                setState({ ...state, priceRange: slider })
+              }
+            />
+
+            <Divider style={{ margin: "10px auto" }} />
+
+            <h3 style={{ marginBottom: "0px" }}>Flight times</h3>
+            <p style={{ fontSize: "14px" }}>
+              {" "}
+              <b style={{ fontSize: "16px" }}>Take off</b>{" "}
+              {`${flight.segments[0].departure.city}`}
+            </p>
+
+            <DatetimeRange
+              max={new Date(2020, 10, 10, 15, 0)}
+              min={new Date()}
+              updateState={(slider) => onDateRangeChanged(slider, true, true)}
+              value={state.goDatetime?.departureDatetimeRange as Date[]}
+            />
+          </Grid>
+
+          <Grid item className={style.filterButtonGrid}>
             <CustomButton
-              rounded
+              label="Filter"
+              icon={faFilter}
               backgroundColor={Colors.PURPLE}
-              style={{ width: "100%" }}
-              label="Find flights"
-              onClick={() => {}}
+              style={{ paddingLeft: "10px", fontSize: "14px" }}
+              onClick={() => setOpenDrawer(true)}
             />
           </Grid>
         </Grid>
       </div>
-
-      <PageSubtitle
-        label="Great deals"
-        containerStyle={{ margin: "20px auto" }}
-      />
-
-      <Grid container spacing={2} className={style.dealsContainer}>
-        {deals.map((deal, i) => (
-          <Card key={i} className={style.card}>
-            <CardHeader
-              title={
-                <div style={{ display: "flex", fontFamily: FONT }}>
-                  <p className={style.dealTitle}>
-                    {getFlightCitiesLabel(deal, "departure")}
-                  </p>
-                  <FontAwesomeIcon
-                    icon={faPlane}
-                    style={{ margin: "0px 10px" }}
-                    color="black"
-                  />
-                  <p className={style.dealTitle}>
-                    {getFlightCitiesLabel(deal, "arrival")}
-                  </p>
-
-                  <h5
-                    style={{ margin: "auto 0px auto auto" }}
-                  >{`${deal.price.currency}$ ${deal.price.total}`}</h5>
-                </div>
-              }
-              subheader={
-                <div>
-                  <p className={style.dealSubtitle}>
-                    {`${getDateTimeValues(
-                      deal,
-                      "departure"
-                    )} - ${getDateTimeValues(deal, "arrival")}`}
-                  </p>
-                </div>
-              }
-            />
-
-            <CardContent>
-              <div style={{ display: "flex" }}>
-                <IconText
-                  icon={faPlaneDeparture}
-                  text={`${deal.segments[0].carrier}, ${deal.class}`}
-                />
-
-                <CustomButton
-                  style={{ marginLeft: "auto", fontSize:'14px' }}
-                  label="View deal"
-                  onClick={() => {}}
-                  backgroundColor={Colors.PURPLE}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </Grid>
     </div>
   );
 }

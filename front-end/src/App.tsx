@@ -1,7 +1,7 @@
 import * as React from "react";
 // import Login from "./scenes/Login/Login";
 // import SignUp from "./scenes/SignUp/SignUp";
-import { Flights_Home, Home, Hotels, Login, SignUp } from "./scenes";
+import { Flights_Home, Flight_List, Home, Hotels, Login, SignUp } from "./scenes";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 export default function App() {
   return (
@@ -11,7 +11,9 @@ export default function App() {
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/hotels" component={Hotels} />
-        <Route exact path="/flights" component={Flights_Home} />
+        {/* <Route exact path="/flights" component={Flights_Home} /> */}
+        <Route exact path="/flights" component={Flight_List} />
+        <Route exact path="/flights-list" component={Flight_List} />
       </Switch>
     </Router>
   );

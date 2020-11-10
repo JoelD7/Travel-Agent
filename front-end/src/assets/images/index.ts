@@ -7,4 +7,13 @@ import carlos from "./carlos.jpg";
 import home from "./home.jpg";
 import homeItinerary from "./home-itinerary.jpg";
 
-export { logoIcon, loginImage, logoType, signup, carlos, home, homeItinerary, logoTypeWhiteFore };
+export {
+  logoIcon,
+  loginImage,
+  logoType,
+  signup,
+  carlos,
+  home,
+  homeItinerary,
+  logoTypeWhiteFore,
+};

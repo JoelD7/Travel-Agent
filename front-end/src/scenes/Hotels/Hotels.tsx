@@ -31,7 +31,7 @@ import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
 import {
   CustomButton,
-  HotelPriceRange,
+  PriceRange,
   HotelStarSelector,
   IconText,
   Navbar,
@@ -43,7 +43,7 @@ import { HotelAmenity, muiDateFormatter } from "../../utils";
 import { AmenitiesList, Amenity } from "../../utils/HotelAmenities";
 import { Hotel } from "../../utils/types/Hotel";
 import { hotelsStyles } from "./hotels-styles";
-import {format} from "date-fns"
+import { format } from "date-fns";
 
 interface HotelSearch {
   checkIn: MaterialUiPickersDate;
@@ -208,7 +208,7 @@ export function Hotels() {
             <h1 style={{ color: "white", marginBottom: "0px" }}>
               Hotels in Paris
             </h1>
-          </Grid> 
+          </Grid>
 
           <ThemeProvider theme={theme}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -289,8 +289,9 @@ export function Hotels() {
         <Grid container className={style.pageContentContainer}>
           <Grid item className={style.filtersGrid}>
             <h3>Price range</h3>
-            <HotelPriceRange
+            <PriceRange
               value={state.priceRange}
+              max={200}
               updateState={(slider) =>
                 setState({ ...state, priceRange: slider })
               }
@@ -339,10 +340,12 @@ export function Hotels() {
 
                 <Grid item className={style.hotelContentGrid} id="content">
                   <Grid item xs={12} id="title">
-                    <Grid container alignItems="center" style={{marginTop: '10px'}}>
-                      <h3 style={{ margin: "0px 10px" }}>
-                        {hotel.name}
-                      </h3>
+                    <Grid
+                      container
+                      alignItems="center"
+                      style={{ marginTop: "10px" }}
+                    >
+                      <h3 style={{ margin: "0px 10px" }}>{hotel.name}</h3>
 
                       {renderStars(hotel.stars)}
                     </Grid>
@@ -459,7 +462,8 @@ export function Hotels() {
         <h2>Search filters</h2>
 
         <h3>Price range</h3>
-        <HotelPriceRange
+        <PriceRange
+          max={200}
           value={state.priceRange}
           updateState={(slider) => setState({ ...state, priceRange: slider })}
         />

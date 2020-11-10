@@ -43,6 +43,10 @@ export function CustomTF({
       backgroundColor: backgroundColor,
       borderRadius: rounded ? "20px" : "5px",
 
+      "& .MuiInputBase-root":{
+        height: '37px',
+      },
+
       "& .MuiOutlinedInput-root": {
         borderRadius: rounded ? "20px" : "5px",
         "&:hover fieldset": {

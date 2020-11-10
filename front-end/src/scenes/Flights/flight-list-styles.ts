@@ -2,17 +2,16 @@ import { makeStyles, Theme } from "@material-ui/core";
 import { FONT } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
-export const flightStyles = makeStyles((theme: Theme) => ({
-  card: {
-    width: "500px",
-    margin: '10px',
+export const flightListStyles = makeStyles((theme: Theme) => ({
+  mainContainer: {
+    fontFamily: FONT,
   },
   datepicker: {
     backgroundColor: "white",
     fontFamily: FONT,
     width: "100%",
     maxWidth: "100%",
-    borderRadius: "20px",
+    borderRadius: "5px",
 
     "& .MuiIconButton-root": {
       color: Colors.BLUE,
@@ -21,59 +20,55 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     "& .MuiInputBase-input": {
       padding: "5px 0px 5px 10px",
     },
+    "& .MuiInputBase-root": {
+      height: "37px",
+    },
   },
-  dealsContainer: {
-    width: "66%",
-    margin: "auto",
-  },
-  dealTitle: {
-    fontWeight: "bold",
-    fontSize: "16px",
-    margin: "0px 0px",
-    fontFamily: FONT,
-  },
-  dealSubtitle: {
-    fontSize: "13px",
-    color: Colors.BLUE,
-    margin: "0px auto",
+  datepickerGrid: {
+    width: "20%",
   },
   destinationTF: {
     width: "100%",
   },
-  mainContainer: {
-    fontFamily: FONT,
-  },
-  menuItemRoot: {
-    fontFamily: FONT,
-    borderBottom: `2px solid rgba(0,0,0,0)`,
-    margin: "0px 5px",
-    fontSize: "14px",
-    color: Colors.BLUE,
+  filtersGrid: {
+    border: "1px solid #cecece",
+    borderRadius: "5px",
+    padding: "10px",
+    width: "25%",
 
-    "&.MuiListItem-root": {
-      "&.Mui-selected": {
-        backgroundColor: "rgba(0,0,0,0)",
-        borderBottom: `2px solid ${Colors.BLUE}`,
-      },
+    [theme.breakpoints.down(1280)]: {
+      display: "none",
     },
-    "&.MuiListItem-button": {
-      "&:hover": {
-        borderBottom: `2px solid ${Colors.BLUE}`,
-      },
+  },
+  filterButtonGrid: {
+    display: "none",
+    marginBottom: '20px',
+    [theme.breakpoints.down(1280)]: {
+      display: "block",
+      width: "50%",
     },
+  },
+  pageContentContainer: {
+    marginTop: "50px",
   },
   pageTitleContainer: {
     backgroundColor: Colors.BLUE,
     boxShadow: Shadow.MEDIUM,
     borderRadius: "10px",
     padding: "10px",
+    width: '85%',
   },
-  reservationContainer: {
-    backgroundColor: "white",
-    borderRadius: "5px",
-    padding: "20px",
-    marginLeft: "20px",
-    width: "35%",
+  pageTitleContainerPic:{
+    backgroundImage: `url('flights.jpg')`,
+    backgroundPositionY: '20%',
+    backgroundSize: 'cover',
+    padding: '20px',
+    height: '350px',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  passengerParamGrid: {
+    width: "12.5%",
   },
   reservationOptionsToolbar: {
     display: "flex",
@@ -82,10 +77,13 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     paddingLeft: "0px",
   },
   reservationParamText: {
-    color: Colors.BLUE,
+    color: 'white',
     marginLeft: "5px",
     marginBottom: "3px",
     marginTop: "5px",
+  },
+  reservParamGrid: {
+    width: "25%",
   },
   reservationParamMenuItem: {
     "&. MuiListItem-button": {
@@ -97,7 +95,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
   select: {
     "& .MuiOutlinedInput-input": {
       padding: "10px 25px 10px 15px",
-      borderRadius: "10px",
+      borderRadius: "5px",
     },
 
     "& .MuiOutlinedInput-root": {
@@ -112,12 +110,5 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     "& .MuiMenuItem-root": {
       fontFamily: FONT,
     },
-  },
-  topContainer: {
-    height: "575px",
-    padding: "10px",
-    fontFamily: FONT,
-    display: "flex",
-    alignItems: "center",
   },
 }));

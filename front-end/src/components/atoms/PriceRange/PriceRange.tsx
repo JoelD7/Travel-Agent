@@ -1,14 +1,15 @@
 import { Slider } from "@material-ui/core";
 import React, { ChangeEvent, useState } from "react";
-import { hotelPriceStyles } from "./hotelPrice-styles";
+import { priceRangeStyles } from "./priceRange-styles";
 
-interface HotelPriceRange {
+interface PriceRange {
   value: number[];
+  max: number;
   updateState: (value: number[]) => void;
 }
 
-export function HotelPriceRange({ updateState, value }: HotelPriceRange) {
-  const style = hotelPriceStyles();
+export function PriceRange({ updateState, value, max }: PriceRange) {
+  const style = priceRangeStyles();
 
   const [slider, setSlider] = useState<number[]>(value);
 
@@ -22,11 +23,10 @@ export function HotelPriceRange({ updateState, value }: HotelPriceRange) {
         style={{ textAlign: "center", fontSize: "16px" }}
       >{`$ ${slider[0]} - $ ${slider[1]}`}</p>
 
-      <div
-        style={{ display: "flex", justifyContent: "center" }}
-      >
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <Slider
           value={slider}
+          max={max}
           onChange={onSliderChange}
           classes={{
             root: style.sliderRoot,
