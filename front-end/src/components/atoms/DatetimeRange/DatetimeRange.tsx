@@ -23,14 +23,14 @@ export function DatetimeRange({ updateState, value, max, min }: DatetimeRange) {
 
   function parseNumberToDateLabel(value: number) {
     let date: Date = new Date(value);
-    return format(date, "EEE h:MM aa");
+    return format(date, "EEE h:mm aa");
   }
 
   return (
     <div onBlur={() => updateState(slider)}>
-      <div style={{ display: "flex", width: "88%", margin: 'auto' }}>
+      <div style={{ display: "flex", width: "88%", margin: "auto" }}>
         <p
-          style={{ textAlign: "start", fontSize: "16px"}}
+          style={{ textAlign: "start", fontSize: "16px" }}
         >{`${parseNumberToDateLabel(slider[0])}`}</p>
 
         <p
@@ -43,7 +43,11 @@ export function DatetimeRange({ updateState, value, max, min }: DatetimeRange) {
           value={slider}
           step={900000}
           max={max.valueOf()}
-          min={min.valueOf()}
+          min={
+            min.valueOf() < value[0].valueOf()
+              ? min.valueOf()
+              : value[0].valueOf()
+          }
           onChange={onSliderChange}
           classes={{
             root: style.sliderRoot,

@@ -12,13 +12,17 @@ export interface FlightSearchParams {
   flightType: FlightType;
   class: FlightClassType;
   priceRange: number[];
-  goDatetime?: DatetimeRange;
-  returnDatetime?: DatetimeRange;
+  goFlightDates?: DatetimeRange;
+  returnFlightDates?: DatetimeRange;
 
   [key: string]: FlightSearchParams[keyof FlightSearchParams];
 }
 
-interface DatetimeRange {
+export interface DatetimeRange {
+  maxDeparture: Date;
+  minDeparture: Date;
+  maxArrival: Date;
+  minArrival: Date;
   departureDatetimeRange?: Date[];
   arrivalDatetimeRange?: Date[];
 }

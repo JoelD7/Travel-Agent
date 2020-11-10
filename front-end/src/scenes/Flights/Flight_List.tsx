@@ -27,6 +27,7 @@ import { FONT } from "../../assets/fonts";
 import {
   CustomButton,
   DatetimeRange,
+  FlightTimesRange,
   Navbar,
   PriceRange,
   ServicesToolbar,
@@ -40,8 +41,18 @@ import {
   flightClasses,
   FlightClassType,
 } from "../../utils/types/FlightClassType";
-import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
+import {
+  FlightSearchParams,
+  DatetimeRange as DatetimeRangeType,
+} from "../../utils/types/FlightSearchParams";
 import { flightListStyles } from "./flight-list-styles";
+
+interface FlightTimesParams {
+  flightDateRange: "goFlightDates" | "returnFlightDates";
+  destinationDateRange: "departureDatetimeRange" | "arrivalDatetimeRange";
+  label: string;
+  city: string;
+}
 
 export function Flight_List() {
   const style = flightListStyles();
@@ -132,17 +143,29 @@ export function Flight_List() {
     flightType: "Round trip",
     infants: "",
     priceRange: [0, 500],
-    goDatetime: {
+    goFlightDates: {
+      minDeparture: new Date(2020, 10, 9, 10, 0),
+      maxDeparture: new Date(2020, 10, 10, 10, 0),
+
+      minArrival: new Date(2020, 10, 10, 17, 0),
+      maxArrival: new Date(2020, 10, 11, 5, 0),
+
       departureDatetimeRange: [
         new Date(2020, 10, 9, 10, 0),
-        new Date(2020, 10, 10, 15, 0),
+        new Date(2020, 10, 10, 10, 0),
       ],
       arrivalDatetimeRange: [
         new Date(2020, 10, 10, 17, 0),
         new Date(2020, 10, 11, 5, 0),
       ],
     },
-    returnDatetime: {
+    returnFlightDates: {
+      minDeparture: new Date(2020, 10, 20, 10, 0),
+      maxDeparture: new Date(2020, 10, 20, 15, 0),
+
+      minArrival: new Date(2020, 10, 21, 8, 0),
+      maxArrival: new Date(2020, 10, 21, 15, 0),
+
       departureDatetimeRange: [
         new Date(2020, 10, 20, 10, 0),
         new Date(2020, 10, 20, 15, 0),
@@ -278,22 +301,20 @@ export function Flight_List() {
     ],
   };
 
-  function onDateRangeChanged(arr: number[], go: boolean, departure: boolean) {
-    let field = departure ? "departureDatetimeRange" : "arrivalDatetimeRange";
-    if (go) {
+  function onDateRangeChanged(
+    arr: number[],
+    flightDateRangeField: "goFlightDates" | "returnFlightDates",
+    destinationDateRangeField: "departureDatetimeRange" | "arrivalDatetimeRange"
+  ) {
+    let curFlightTypeRange: DatetimeRangeType | undefined =
+      state[flightDateRangeField];
+
+    if (curFlightTypeRange) {
       setState({
         ...state,
-        goDatetime: {
-          ...state.goDatetime,
-          [field]: [new Date(arr[0]), new Date(arr[1])],
-        },
-      });
-    } else {
-      setState({
-        ...state,
-        returnDatetime: {
-          ...state.goDatetime,
-          [field]: [new Date(arr[0]), new Date(arr[1])],
+        [flightDateRangeField]: {
+          ...curFlightTypeRange,
+          [destinationDateRangeField]: [new Date(arr[0]), new Date(arr[1])],
         },
       });
     }
@@ -460,19 +481,62 @@ export function Flight_List() {
 
             <Divider style={{ margin: "10px auto" }} />
 
-            <h3 style={{ marginBottom: "0px" }}>Flight times</h3>
-            <p style={{ fontSize: "14px" }}>
-              {" "}
-              <b style={{ fontSize: "16px" }}>Take off</b>{" "}
-              {`${flight.segments[0].departure.city}`}
-            </p>
+            <div key="fligh times">
+              <h3 style={{ marginBottom: "0px" }}>Flight times</h3>
 
-            <DatetimeRange
-              max={new Date(2020, 10, 10, 15, 0)}
-              min={new Date()}
-              updateState={(slider) => onDateRangeChanged(slider, true, true)}
-              value={state.goDatetime?.departureDatetimeRange as Date[]}
-            />
+              <FlightTimesRange
+                city={state.from}
+                label="Take-off"
+                max={state.goFlightDates?.maxDeparture}
+                min={state.goFlightDates?.minDeparture}
+                destinationDateRangeField="departureDatetimeRange"
+                flightDateRangeField="goFlightDates"
+                destinationDateRangeValue={
+                  state.goFlightDates?.departureDatetimeRange
+                }
+                onDateRangeChanged={onDateRangeChanged}
+              />
+
+              <FlightTimesRange
+                city={state.to}
+                label="Landing"
+                max={state.goFlightDates?.maxArrival}
+                min={state.goFlightDates?.minArrival}
+                destinationDateRangeField="arrivalDatetimeRange"
+                flightDateRangeField="goFlightDates"
+                destinationDateRangeValue={
+                  state.goFlightDates?.arrivalDatetimeRange
+                }
+                onDateRangeChanged={onDateRangeChanged}
+              />
+
+              <FlightTimesRange
+                city={state.to}
+                label="Take-off"
+                max={state.returnFlightDates?.maxDeparture}
+                min={state.returnFlightDates?.minDeparture}
+                destinationDateRangeField="departureDatetimeRange"
+                flightDateRangeField="returnFlightDates"
+                destinationDateRangeValue={
+                  state.returnFlightDates?.departureDatetimeRange
+                }
+                onDateRangeChanged={onDateRangeChanged}
+              />
+
+              <FlightTimesRange
+                city={state.from}
+                label="Landing"
+                max={state.returnFlightDates?.maxArrival}
+                min={state.returnFlightDates?.minArrival}
+                destinationDateRangeField="arrivalDatetimeRange"
+                flightDateRangeField="returnFlightDates"
+                destinationDateRangeValue={
+                  state.returnFlightDates?.arrivalDatetimeRange
+                }
+                onDateRangeChanged={onDateRangeChanged}
+              />
+            </div>
+          
           </Grid>
 
           <Grid item className={style.filterButtonGrid}>
