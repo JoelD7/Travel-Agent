@@ -4,11 +4,11 @@ import { DatetimeRange } from "../DatetimeRange/DatetimeRange";
 interface FlightTimesRange {
   onDateRangeChanged: (
     slider: number[],
-    flightDateRangeField: "goFlightDates" | "returnFlightDates",
+    flightDateRangeField: "exitFlightDates" | "returnFlightDates",
     destinationDateRangeField: "departureDatetimeRange" | "arrivalDatetimeRange"
   ) => void;
 
-  flightDateRangeField: "goFlightDates" | "returnFlightDates";
+  flightDateRangeField: "exitFlightDates" | "returnFlightDates";
   destinationDateRangeField: "departureDatetimeRange" | "arrivalDatetimeRange";
   destinationDateRangeValue: Date[] | undefined;
   label: string;

@@ -25,7 +25,6 @@ import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays, format, parseISO } from "date-fns";
 import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
@@ -175,7 +174,7 @@ export function Flights_Home() {
     to: "",
     flightType: "Round trip",
     infants: "",
-    priceRange: [0,500],
+    priceRange: [0, 500],
   });
 
   const passengersParams = [
@@ -210,22 +209,27 @@ export function Flights_Home() {
         total: 245,
       },
       class: "Economy",
-      segments: [
+      itineraries: [
         {
-          departure: {
-            iata: "SIN",
-            city: "Singapore",
-            at: parseISO("2021-02-02T00:30:00"),
-            terminal: "2",
-          },
-          arrival: {
-            iata: "DMK",
-            city: "Bangkok",
-            at: parseISO("2021-02-02T23:30:00"),
-            terminal: "31",
-          },
-          carrier: "Egyptair",
           duration: "PT8H15M",
+          segments: [
+            {
+              departure: {
+                iata: "SIN",
+                city: "Singapore",
+                at: parseISO("2021-02-02T00:30:00"),
+                terminal: "2",
+              },
+              arrival: {
+                iata: "DMK",
+                city: "Bangkok",
+                at: parseISO("2021-02-02T23:30:00"),
+                terminal: "31",
+              },
+              carrier: "Egyptair",
+              duration: "PT8H15M",
+            },
+          ],
         },
       ],
     },
@@ -235,47 +239,99 @@ export function Flights_Home() {
         total: 198,
       },
       class: "Economy",
-      segments: [
+      itineraries: [
         {
-          departure: {
-            iata: "SIN",
-            city: "Singapore",
-            at: parseISO("2021-02-02T07:15:00"),
-            terminal: "2",
-          },
-          arrival: {
-            iata: "DXB",
-            city: "Dubai",
-            at: parseISO("2021-02-02T13:39:00"),
-            terminal: "31",
-          },
-          carrier: "Egyptair",
           duration: "PT6H15M",
+          segments: [
+            {
+              departure: {
+                iata: "SIN",
+                city: "Singapore",
+                at: parseISO("2021-02-02T07:15:00"),
+                terminal: "2",
+              },
+              arrival: {
+                iata: "DXB",
+                city: "Dubai",
+                at: parseISO("2021-02-02T13:39:00"),
+                terminal: "31",
+              },
+              carrier: "Egyptair",
+              duration: "PT6H15M",
+            },
+          ],
+        },
+        {
+          duration: "PT8H25M",
+          segments: [
+            {
+              departure: {
+                iata: "DXB",
+                city: "Dubai",
+                at: parseISO("2021-02-12T09:15:00"),
+                terminal: "2",
+              },
+              arrival: {
+                iata: "SIN",
+                city: "Singapore",
+                at: parseISO("2021-02-12T16:55:00"),
+                terminal: "31",
+              },
+              carrier: "Emirates",
+              duration: "PT8H25M",
+            },
+          ],
         },
       ],
     },
     {
       price: {
         currency: "USD",
-        total: 303,
+        total: 198,
       },
       class: "Economy",
-      segments: [
+      itineraries: [
         {
-          departure: {
-            iata: "DMK",
-            city: "Bangkok",
-            at: parseISO("2021-02-02T23:30:00"),
-            terminal: "31",
-          },
-          arrival: {
-            iata: "SIN",
-            city: "Singapore",
-            at: parseISO("2021-02-02T00:30:00"),
-            terminal: "2",
-          },
-          carrier: "Egyptair",
-          duration: "PT9H42M",
+          duration: "PT6H15M",
+          segments: [
+            {
+              departure: {
+                iata: "SIN",
+                city: "Singapore",
+                at: parseISO("2021-02-02T07:15:00"),
+                terminal: "2",
+              },
+              arrival: {
+                iata: "DXB",
+                city: "Dubai",
+                at: parseISO("2021-02-02T13:39:00"),
+                terminal: "31",
+              },
+              carrier: "Egyptair",
+              duration: "PT6H15M",
+            },
+          ],
+        },
+        {
+          duration: "PT8H25M",
+          segments: [
+            {
+              departure: {
+                iata: "DXB",
+                city: "Dubai",
+                at: parseISO("2021-02-12T09:15:00"),
+                terminal: "2",
+              },
+              arrival: {
+                iata: "SIN",
+                city: "Singapore",
+                at: parseISO("2021-02-12T16:55:00"),
+                terminal: "31",
+              },
+              carrier: "Emirates",
+              duration: "PT8H25M",
+            },
+          ],
         },
       ],
     },
@@ -286,13 +342,13 @@ export function Flights_Home() {
     point: "departure" | "arrival"
   ) {
     return point === "departure"
-      ? `${flight.segments[0].departure.city} (${flight.segments[0].departure.iata})`
-      : `${flight.segments[0].arrival.city} (${flight.segments[0].arrival.iata})`;
+      ? `${flight.itineraries[0].segments[0].departure.city} (${flight.itineraries[0].segments[0].departure.iata})`
+      : `${flight.itineraries[0].segments[0].arrival.city} (${flight.itineraries[0].segments[0].arrival.iata})`;
   }
 
   function getDateTimeValues(flight: Flight, point: "departure" | "arrival") {
-    let departureTime = flight.segments[0].departure.at;
-    let arrivalTime = flight.segments[0].arrival.at;
+    let departureTime = flight.itineraries[0].segments[0].departure.at;
+    let arrivalTime = flight.itineraries[0].segments[0].arrival.at;
 
     return point === "departure"
       ? `${format(departureTime, "d/MMM, hh:mm aaa")}`
@@ -336,7 +392,11 @@ export function Flights_Home() {
           <Grid
             item
             key="destinationTF"
-            xs={state.flightType === FlightTypes.ROUND ? 6 : 12}
+            className={
+              state.flightType === FlightTypes.ROUND
+                ? style.largeGrid
+                : style.largeGridFull
+            }
           >
             <h5 className={style.reservationParamText}>From</h5>
             <CustomTF
@@ -352,7 +412,7 @@ export function Flights_Home() {
           </Grid>
 
           {state.flightType === FlightTypes.ROUND && (
-            <Grid item xs={6} key="destinationTF">
+            <Grid item className={style.largeGrid} key="destinationTF">
               <h5 className={style.reservationParamText}>To</h5>
               <CustomTF
                 value={state.to}
@@ -369,7 +429,14 @@ export function Flights_Home() {
 
           <ThemeProvider theme={theme}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid item xs={state.flightType === FlightTypes.ROUND ? 6 : 12}>
+              <Grid
+                item
+                className={
+                  state.flightType === FlightTypes.ROUND
+                    ? style.largeGrid
+                    : style.largeGridFull
+                }
+              >
                 <h5 className={style.reservationParamText}>Departure</h5>
                 <KeyboardDatePicker
                   value={state.departure}
@@ -382,7 +449,7 @@ export function Flights_Home() {
               </Grid>
 
               {state.flightType === FlightTypes.ROUND && (
-                <Grid item xs={6}>
+                <Grid item className={style.largeGrid}>
                   <h5 className={style.reservationParamText}>Return</h5>
                   <KeyboardDatePicker
                     value={state.return}
@@ -399,7 +466,7 @@ export function Flights_Home() {
 
           <ThemeProvider theme={reservationParamsTheme}>
             {passengersParams.map((passenger, i) => (
-              <Grid item key={i} xs={4}>
+              <Grid item key={i} className={style.passengerParamGrid}>
                 <h5 className={style.reservationParamText}>
                   {passenger.label}
                 </h5>
@@ -430,7 +497,7 @@ export function Flights_Home() {
               </Grid>
             ))}
 
-            <Grid item xs={6}>
+            <Grid item className={style.largeGrid}>
               <h5 className={style.reservationParamText}>Class</h5>
 
               <FormControl style={{ width: "100%" }}>
@@ -477,55 +544,57 @@ export function Flights_Home() {
 
       <Grid container spacing={2} className={style.dealsContainer}>
         {deals.map((deal, i) => (
-          <Card key={i} className={style.card}>
-            <CardHeader
-              title={
-                <div style={{ display: "flex", fontFamily: FONT }}>
-                  <p className={style.dealTitle}>
-                    {getFlightCitiesLabel(deal, "departure")}
-                  </p>
-                  <FontAwesomeIcon
-                    icon={faPlane}
-                    style={{ margin: "0px 10px" }}
-                    color="black"
+          <Grid key={i} item className={style.dealGrid}>
+            <Card className={style.card}>
+              <CardHeader
+                title={
+                  <div style={{ display: "flex", fontFamily: FONT }}>
+                    <p className={style.dealTitle}>
+                      {getFlightCitiesLabel(deal, "departure")}
+                    </p>
+                    <FontAwesomeIcon
+                      icon={faPlane}
+                      style={{ margin: "0px 10px" }}
+                      color="black"
+                    />
+                    <p className={style.dealTitle}>
+                      {getFlightCitiesLabel(deal, "arrival")}
+                    </p>
+
+                    <h5
+                      style={{ margin: "auto 0px auto auto" }}
+                    >{`${deal.price.currency}$ ${deal.price.total}`}</h5>
+                  </div>
+                }
+                subheader={
+                  <div>
+                    <p className={style.dealSubtitle}>
+                      {`${getDateTimeValues(
+                        deal,
+                        "departure"
+                      )} - ${getDateTimeValues(deal, "arrival")}`}
+                    </p>
+                  </div>
+                }
+              />
+
+              <CardContent>
+                <div style={{ display: "flex" }}>
+                  <IconText
+                    icon={faPlaneDeparture}
+                    text={`${deal.itineraries[0].segments[0].carrier}, ${deal.class}`}
                   />
-                  <p className={style.dealTitle}>
-                    {getFlightCitiesLabel(deal, "arrival")}
-                  </p>
 
-                  <h5
-                    style={{ margin: "auto 0px auto auto" }}
-                  >{`${deal.price.currency}$ ${deal.price.total}`}</h5>
+                  <CustomButton
+                    style={{ marginLeft: "auto", fontSize: "14px" }}
+                    label="View deal"
+                    onClick={() => {}}
+                    backgroundColor={Colors.PURPLE}
+                  />
                 </div>
-              }
-              subheader={
-                <div>
-                  <p className={style.dealSubtitle}>
-                    {`${getDateTimeValues(
-                      deal,
-                      "departure"
-                    )} - ${getDateTimeValues(deal, "arrival")}`}
-                  </p>
-                </div>
-              }
-            />
-
-            <CardContent>
-              <div style={{ display: "flex" }}>
-                <IconText
-                  icon={faPlaneDeparture}
-                  text={`${deal.segments[0].carrier}, ${deal.class}`}
-                />
-
-                <CustomButton
-                  style={{ marginLeft: "auto", fontSize:'14px' }}
-                  label="View deal"
-                  onClick={() => {}}
-                  backgroundColor={Colors.PURPLE}
-                />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
       </Grid>
     </div>

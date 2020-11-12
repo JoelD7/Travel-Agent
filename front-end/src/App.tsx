@@ -11,8 +11,8 @@ export default function App() {
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/hotels" component={Hotels} />
-        {/* <Route exact path="/flights" component={Flights_Home} /> */}
-        <Route exact path="/flights" component={Flight_List} />
+        <Route exact path="/flights" component={Flights_Home} />
+        {/* <Route exact path="/flights" component={Flight_List} /> */}
         <Route exact path="/flights-list" component={Flight_List} />
       </Switch>
     </Router>

@@ -4,8 +4,12 @@ import { Colors, Shadow } from "../../styles";
 
 export const flightStyles = makeStyles((theme: Theme) => ({
   card: {
-    width: "500px",
-    margin: '10px',
+    width: "100%",
+    margin: "10px",
+
+    [theme.breakpoints.down(518)]: {
+      margin: "10px 0px",
+    },
   },
   datepicker: {
     backgroundColor: "white",
@@ -23,8 +27,32 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     },
   },
   dealsContainer: {
-    width: "66%",
+    width: "70%",
     margin: "auto",
+    [theme.breakpoints.down(1348)]: {
+      width: "80%",
+    },
+    [theme.breakpoints.down(1150)]: {
+      width: "90%",
+    },
+    [theme.breakpoints.down(990)]: {
+      justifyContent: "center",
+    },
+    [theme.breakpoints.down(518)]: {
+      width: "101%",
+    },
+  },
+  dealGrid: {
+    width: "50%",
+    [theme.breakpoints.down(990)]: {
+      width: "77%",
+    },
+    [theme.breakpoints.down(865)]: {
+      width: "85%",
+    },
+    [theme.breakpoints.down(635)]: {
+      width: "100%",
+    },
   },
   dealTitle: {
     fontWeight: "bold",
@@ -36,6 +64,15 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     fontSize: "13px",
     color: Colors.BLUE,
     margin: "0px auto",
+  },
+  largeGrid: {
+    width: "50%",
+    [theme.breakpoints.down(600)]: {
+      width: "100%",
+    },
+  },
+  largeGridFull: {
+    width: "100%",
   },
   destinationTF: {
     width: "100%",
@@ -68,12 +105,22 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     borderRadius: "10px",
     padding: "10px",
   },
+  passengerParamGrid: {
+    width: "33%",
+    [theme.breakpoints.down(600)]: {
+      width: "50%",
+    },
+  },
   reservationContainer: {
     backgroundColor: "white",
     borderRadius: "5px",
     padding: "20px",
     marginLeft: "20px",
-    width: "35%",
+    width: "550px",
+
+    [theme.breakpoints.down(650)]: {
+      width: "90%",
+    },
   },
   reservationOptionsToolbar: {
     display: "flex",
@@ -114,8 +161,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     },
   },
   topContainer: {
-    height: "575px",
-    padding: "10px",
+    padding: "30px",
     fontFamily: FONT,
     display: "flex",
     alignItems: "center",

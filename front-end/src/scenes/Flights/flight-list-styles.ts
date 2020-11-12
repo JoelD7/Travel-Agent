@@ -25,10 +25,26 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     },
   },
   datepickerGrid: {
-    width: "20%",
+    width: "25%",
+    [theme.breakpoints.down(1245)]: {
+      width: "33%",
+    },
+    [theme.breakpoints.down(1083)]: {
+      width: "50%",
+    },
+    [theme.breakpoints.down(640)]: {
+      width: "100%",
+    },
   },
   destinationTF: {
     width: "100%",
+  },
+  drawer: {
+    width: "250px",
+    backgroundColor: Colors.BLUE,
+    fontFamily: FONT,
+    color: "white",
+    padding: "10px",
   },
   filtersGrid: {
     border: "1px solid #cecece",
@@ -36,19 +52,48 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     padding: "10px",
     width: "25%",
 
-    [theme.breakpoints.down(1280)]: {
+    [theme.breakpoints.down(1215)]: {
+      width: "30%",
+    },
+    [theme.breakpoints.down(1040)]: {
       display: "none",
+    },
+  },
+  flightsGrid: {
+    padding: "10px",
+    width: "65%",
+    backgroundColor: "#f6f6f9",
+
+    [theme.breakpoints.down(1215)]: {
+      width: "70%",
+    },
+    [theme.breakpoints.down(1040)]: {
+      margin: "auto",
+      width: "75%",
+    },
+    [theme.breakpoints.down(821)]: {
+      width: "85%",
+    },
+    [theme.breakpoints.down(736)]: {
+      width: "100%",
     },
   },
   filterButtonGrid: {
     display: "none",
-    marginBottom: '20px',
-    [theme.breakpoints.down(1280)]: {
+    marginBottom: "20px",
+    [theme.breakpoints.down(1040)]: {
       display: "block",
       width: "50%",
     },
   },
   pageContentContainer: {
+    width: "85%",
+    margin: "20px auto",
+    [theme.breakpoints.down(1318)]: {
+      width: "95%",
+    },
+  },
+  pageContentContainerGrid: {
     marginTop: "50px",
   },
   pageTitleContainer: {
@@ -56,19 +101,29 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     boxShadow: Shadow.MEDIUM,
     borderRadius: "10px",
     padding: "10px",
-    width: '85%',
+    width: "85%",
   },
-  pageTitleContainerPic:{
+  pageTitleContainerPic: {
     backgroundImage: `url('flights.jpg')`,
-    backgroundPositionY: '20%',
-    backgroundSize: 'cover',
-    padding: '20px',
-    height: '350px',
-    display: 'flex',
-    alignItems: 'center',
+    backgroundPositionY: "20%",
+    backgroundSize: "cover",
+    padding: "70px",
+    display: "flex",
+    alignItems: "center",
+
+    [theme.breakpoints.down(1000)]: {
+      margin: "auto",
+      width: "100%",
+    },
   },
   passengerParamGrid: {
     width: "12.5%",
+    [theme.breakpoints.down(1245)]: {
+      width: "22%",
+    },
+    [theme.breakpoints.down(1083)]: {
+      width: "33%",
+    },
   },
   reservationOptionsToolbar: {
     display: "flex",
@@ -77,13 +132,22 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     paddingLeft: "0px",
   },
   reservationParamText: {
-    color: 'white',
+    color: "white",
     marginLeft: "5px",
     marginBottom: "3px",
     marginTop: "5px",
   },
   reservParamGrid: {
     width: "25%",
+    [theme.breakpoints.down(1245)]: {
+      width: "33%",
+    },
+    [theme.breakpoints.down(1083)]: {
+      width: "50%",
+    },
+    [theme.breakpoints.down(640)]: {
+      width: "100%",
+    },
   },
   reservationParamMenuItem: {
     "&. MuiListItem-button": {

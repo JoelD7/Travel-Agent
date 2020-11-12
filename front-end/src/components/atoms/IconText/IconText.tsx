@@ -9,6 +9,7 @@ interface IconTextProps {
   text: string;
   icon: IconDefinition;
   iconColor?: string;
+  size?: string;
   style?: CreateCSSProperties<{}>;
 }
 
@@ -17,6 +18,7 @@ export function IconText({
   icon,
   style,
   iconColor = Colors.PURPLE,
+  size = "16px",
 }: IconTextProps) {
   const iconTextStyles = makeStyles((theme: Theme) => ({
     mainContainer: {
@@ -26,8 +28,8 @@ export function IconText({
     },
     iconContainer: {
       backgroundColor: iconColor,
-      width: "16px",
-      height: "16px",
+      width: size,
+      height: size,
       borderRadius: "50%",
       padding: "5px",
       marginRight: "5px",
@@ -42,7 +44,7 @@ export function IconText({
         <FontAwesomeIcon
           icon={icon}
           color="white"
-          style={{ width: "16px", height: "16px" }}
+          style={{ width: size, height: size }}
         />
       </div>
       <p style={{ fontSize: "14px", margin: "0px" }}>{text}</p>

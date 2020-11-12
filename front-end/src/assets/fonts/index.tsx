@@ -1,1 +1,1 @@
-export const FONT = "Montserrat, sans-serif";
+export const FONT = "Montserrat, 'Century Gothic' , sans-serif";

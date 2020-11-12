@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   createMuiTheme,
   Divider,
+  Drawer,
   FormControl,
   Grid,
   MenuItem,
@@ -21,10 +22,12 @@ import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import { addDays, parseISO } from "date-fns";
+import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
+import { addDays, parseISO, isBefore } from "date-fns";
 import React, { useState } from "react";
 import { FONT } from "../../assets/fonts";
 import {
+  CardFlight,
   CustomButton,
   DatetimeRange,
   FlightTimesRange,
@@ -46,13 +49,6 @@ import {
   DatetimeRange as DatetimeRangeType,
 } from "../../utils/types/FlightSearchParams";
 import { flightListStyles } from "./flight-list-styles";
-
-interface FlightTimesParams {
-  flightDateRange: "goFlightDates" | "returnFlightDates";
-  destinationDateRange: "departureDatetimeRange" | "arrivalDatetimeRange";
-  label: string;
-  city: string;
-}
 
 export function Flight_List() {
   const style = flightListStyles();
@@ -143,7 +139,7 @@ export function Flight_List() {
     flightType: "Round trip",
     infants: "",
     priceRange: [0, 500],
-    goFlightDates: {
+    exitFlightDates: {
       minDeparture: new Date(2020, 10, 9, 10, 0),
       maxDeparture: new Date(2020, 10, 10, 10, 0),
 
@@ -204,22 +200,27 @@ export function Flight_List() {
         total: 245,
       },
       class: "Economy",
-      segments: [
+      itineraries: [
         {
-          departure: {
-            iata: "SIN",
-            city: "Singapore",
-            at: parseISO("2021-02-02T00:30:00"),
-            terminal: "2",
-          },
-          arrival: {
-            iata: "DMK",
-            city: "Bangkok",
-            at: parseISO("2021-02-02T23:30:00"),
-            terminal: "31",
-          },
-          carrier: "Egyptair",
           duration: "PT8H15M",
+          segments: [
+            {
+              departure: {
+                iata: "SIN",
+                city: "Singapore",
+                at: parseISO("2021-02-02T00:30:00"),
+                terminal: "2",
+              },
+              arrival: {
+                iata: "DMK",
+                city: "Bangkok",
+                at: parseISO("2021-02-02T23:30:00"),
+                terminal: "31",
+              },
+              carrier: "Egyptair",
+              duration: "PT8H15M",
+            },
+          ],
         },
       ],
     },
@@ -229,81 +230,56 @@ export function Flight_List() {
         total: 198,
       },
       class: "Economy",
-      segments: [
+      itineraries: [
         {
-          departure: {
-            iata: "SIN",
-            city: "Singapore",
-            at: parseISO("2021-02-02T07:15:00"),
-            terminal: "2",
-          },
-          arrival: {
-            iata: "DXB",
-            city: "Dubai",
-            at: parseISO("2021-02-02T13:39:00"),
-            terminal: "31",
-          },
-          carrier: "Egyptair",
           duration: "PT6H15M",
+          segments: [
+            {
+              departure: {
+                iata: "SIN",
+                city: "Singapore",
+                at: parseISO("2021-02-02T07:15:00"),
+                terminal: "2",
+              },
+              arrival: {
+                iata: "DXB",
+                city: "Dubai",
+                at: parseISO("2021-02-02T13:39:00"),
+                terminal: "31",
+              },
+              carrier: "Egyptair",
+              duration: "PT6H15M",
+            },
+          ],
         },
-      ],
-    },
-    {
-      price: {
-        currency: "USD",
-        total: 303,
-      },
-      class: "Economy",
-      segments: [
         {
-          departure: {
-            iata: "DMK",
-            city: "Bangkok",
-            at: parseISO("2021-02-02T23:30:00"),
-            terminal: "31",
-          },
-          arrival: {
-            iata: "SIN",
-            city: "Singapore",
-            at: parseISO("2021-02-02T00:30:00"),
-            terminal: "2",
-          },
-          carrier: "Egyptair",
-          duration: "PT9H42M",
+          duration: "PT8H25M",
+          segments: [
+            {
+              departure: {
+                iata: "DXB",
+                city: "Dubai",
+                at: parseISO("2021-02-12T09:15:00"),
+                terminal: "2",
+              },
+              arrival: {
+                iata: "SIN",
+                city: "Singapore",
+                at: parseISO("2021-02-12T16:55:00"),
+                terminal: "31",
+              },
+              carrier: "Emirates",
+              duration: "PT8H25M",
+            },
+          ],
         },
       ],
     },
   ];
 
-  const flight: Flight = {
-    price: {
-      currency: "USD",
-      total: 245,
-    },
-    class: "Economy",
-    segments: [
-      {
-        departure: {
-          iata: "SIN",
-          city: "Singapore",
-          at: parseISO("2021-02-02T00:30:00"),
-          terminal: "2",
-        },
-        arrival: {
-          iata: "DMK",
-          city: "Bangkok",
-          at: parseISO("2021-02-02T23:30:00"),
-          terminal: "31",
-        },
-        carrier: "Egyptair",
-        duration: "PT8H15M",
-      },
-    ],
-  };
-
   function onDateRangeChanged(
     arr: number[],
-    flightDateRangeField: "goFlightDates" | "returnFlightDates",
+    flightDateRangeField: "exitFlightDates" | "returnFlightDates",
     destinationDateRangeField: "departureDatetimeRange" | "arrivalDatetimeRange"
   ) {
     let curFlightTypeRange: DatetimeRangeType | undefined =
@@ -320,13 +296,85 @@ export function Flight_List() {
     }
   }
 
+  function SearchFilters() {
+    return (
+      <>
+        <h2>Search filters</h2>
+        <h3>Price range</h3>
+        <PriceRange
+          value={state.priceRange ? state.priceRange : [0, 100]}
+          max={500}
+          updateState={(slider) => setState({ ...state, priceRange: slider })}
+        />
+
+        <Divider style={{ margin: "10px auto" }} />
+
+        <div key="flight times">
+          <h3 style={{ marginBottom: "0px" }}>Flight times</h3>
+
+          <FlightTimesRange
+            city={state.from}
+            label="Take-off"
+            max={state.exitFlightDates?.maxDeparture}
+            min={state.exitFlightDates?.minDeparture}
+            destinationDateRangeField="departureDatetimeRange"
+            flightDateRangeField="exitFlightDates"
+            destinationDateRangeValue={
+              state.exitFlightDates?.departureDatetimeRange
+            }
+            onDateRangeChanged={onDateRangeChanged}
+          />
+
+          <FlightTimesRange
+            city={state.to}
+            label="Landing"
+            max={state.exitFlightDates?.maxArrival}
+            min={state.exitFlightDates?.minArrival}
+            destinationDateRangeField="arrivalDatetimeRange"
+            flightDateRangeField="exitFlightDates"
+            destinationDateRangeValue={
+              state.exitFlightDates?.arrivalDatetimeRange
+            }
+            onDateRangeChanged={onDateRangeChanged}
+          />
+
+          <FlightTimesRange
+            city={state.to}
+            label="Take-off"
+            max={state.returnFlightDates?.maxDeparture}
+            min={state.returnFlightDates?.minDeparture}
+            destinationDateRangeField="departureDatetimeRange"
+            flightDateRangeField="returnFlightDates"
+            destinationDateRangeValue={
+              state.returnFlightDates?.departureDatetimeRange
+            }
+            onDateRangeChanged={onDateRangeChanged}
+          />
+
+          <FlightTimesRange
+            city={state.from}
+            label="Landing"
+            max={state.returnFlightDates?.maxArrival}
+            min={state.returnFlightDates?.minArrival}
+            destinationDateRangeField="arrivalDatetimeRange"
+            flightDateRangeField="returnFlightDates"
+            destinationDateRangeValue={
+              state.returnFlightDates?.arrivalDatetimeRange
+            }
+            onDateRangeChanged={onDateRangeChanged}
+          />
+        </div>
+      </>
+    );
+  }
+
   return (
     <div className={style.mainContainer}>
       <Navbar />
       <ServicesToolbar />
 
       <div className={style.pageTitleContainerPic}>
-        <Grid container spacing={2} className={style.pageTitleContainer}>
+        <Grid container spacing={4} className={style.pageTitleContainer}>
           <Grid item xs={12}>
             <h1 style={{ color: "white", marginBottom: "0px" }}>
               Flights to Dubai
@@ -384,7 +432,8 @@ export function Flight_List() {
                     value={state.return}
                     labelFunc={muiDateFormatter}
                     className={style.datepicker}
-                    minDate={new Date()}
+                    //@ts-ignore
+                    minDate={addDays(state.departure.valueOf(), 1)}
                     format="dd MMM., yyyy"
                     onChange={(d) => setState({ ...state, return: d })}
                   />
@@ -467,76 +516,10 @@ export function Flight_List() {
         </Grid>
       </div>
 
-      <div style={{ width: "85%", margin: "20px auto" }}>
-        <Grid container className={style.pageContentContainer}>
+      <div className={style.pageContentContainer}>
+        <Grid container className={style.pageContentContainerGrid}>
           <Grid item className={style.filtersGrid}>
-            <h3>Price range</h3>
-            <PriceRange
-              value={state.priceRange ? state.priceRange : [0, 100]}
-              max={500}
-              updateState={(slider) =>
-                setState({ ...state, priceRange: slider })
-              }
-            />
-
-            <Divider style={{ margin: "10px auto" }} />
-
-            <div key="fligh times">
-              <h3 style={{ marginBottom: "0px" }}>Flight times</h3>
-
-              <FlightTimesRange
-                city={state.from}
-                label="Take-off"
-                max={state.goFlightDates?.maxDeparture}
-                min={state.goFlightDates?.minDeparture}
-                destinationDateRangeField="departureDatetimeRange"
-                flightDateRangeField="goFlightDates"
-                destinationDateRangeValue={
-                  state.goFlightDates?.departureDatetimeRange
-                }
-                onDateRangeChanged={onDateRangeChanged}
-              />
-
-              <FlightTimesRange
-                city={state.to}
-                label="Landing"
-                max={state.goFlightDates?.maxArrival}
-                min={state.goFlightDates?.minArrival}
-                destinationDateRangeField="arrivalDatetimeRange"
-                flightDateRangeField="goFlightDates"
-                destinationDateRangeValue={
-                  state.goFlightDates?.arrivalDatetimeRange
-                }
-                onDateRangeChanged={onDateRangeChanged}
-              />
-
-              <FlightTimesRange
-                city={state.to}
-                label="Take-off"
-                max={state.returnFlightDates?.maxDeparture}
-                min={state.returnFlightDates?.minDeparture}
-                destinationDateRangeField="departureDatetimeRange"
-                flightDateRangeField="returnFlightDates"
-                destinationDateRangeValue={
-                  state.returnFlightDates?.departureDatetimeRange
-                }
-                onDateRangeChanged={onDateRangeChanged}
-              />
-
-              <FlightTimesRange
-                city={state.from}
-                label="Landing"
-                max={state.returnFlightDates?.maxArrival}
-                min={state.returnFlightDates?.minArrival}
-                destinationDateRangeField="arrivalDatetimeRange"
-                flightDateRangeField="returnFlightDates"
-                destinationDateRangeValue={
-                  state.returnFlightDates?.arrivalDatetimeRange
-                }
-                onDateRangeChanged={onDateRangeChanged}
-              />
-            </div>
-          
+            <SearchFilters />
           </Grid>
 
           <Grid item className={style.filterButtonGrid}>
@@ -548,8 +531,23 @@ export function Flight_List() {
               onClick={() => setOpenDrawer(true)}
             />
           </Grid>
+
+          <Grid item className={style.flightsGrid}>
+            {flights.map((flight, i) => (
+              <CardFlight key={i} flight={flight} />
+            ))}
+          </Grid>
         </Grid>
       </div>
+
+      <Drawer
+        open={openDrawer}
+        anchor="left"
+        onClose={() => setOpenDrawer(false)}
+        classes={{ paper: style.drawer }}
+      >
+        <SearchFilters />
+      </Drawer>
     </div>
   );
 }

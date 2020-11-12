@@ -12,7 +12,7 @@ export interface FlightSearchParams {
   flightType: FlightType;
   class: FlightClassType;
   priceRange: number[];
-  goFlightDates?: DatetimeRange;
+  exitFlightDates?: DatetimeRange;
   returnFlightDates?: DatetimeRange;
 
   [key: string]: FlightSearchParams[keyof FlightSearchParams];
