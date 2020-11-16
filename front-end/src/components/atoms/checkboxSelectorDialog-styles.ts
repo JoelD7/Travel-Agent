@@ -1,8 +1,8 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import { FONT } from "../../../assets/fonts";
-import { Colors } from "../../../styles";
+import { FONT } from "../../assets/fonts";
+import { Colors } from "../../styles";
 
-export const hotelAmenitiesStyles = makeStyles((theme: Theme) => ({
+export const checkboxSelectorDialog = makeStyles((theme: Theme) => ({
   button: {
     padding: '0px',
     fontWeight: 'bold',
@@ -10,7 +10,7 @@ export const hotelAmenitiesStyles = makeStyles((theme: Theme) => ({
       backgroundColor: "rgba(0,0,0,0)",
       textDecoration: "underline black solid",
     },
-  },
+  }, 
   dialogTitle: {
     padding: "0px",
 

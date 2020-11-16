@@ -9,10 +9,13 @@ import {
   Grid,
 } from "@material-ui/core";
 import React, { ChangeEvent, useState } from "react";
-import { hotelAmenitiesStyles } from "./hotelAmenities-styles";
+import { checkboxSelectorDialog } from "../checkboxSelectorDialog-styles";
 import { Amenity } from "../../../utils/HotelAmenities";
 import { CustomButton } from "../CustomButton";
 import { Colors } from "../../../styles";
+import { faCircle } from "@fortawesome/free-regular-svg-icons";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface HotelAmenitiesSelectorProps {
   values: Amenity[];
@@ -25,11 +28,9 @@ export function HotelAmenitiesSelector({
   updateState,
   buttonColor = "black",
 }: HotelAmenitiesSelectorProps) {
-  const style = hotelAmenitiesStyles();
+  const style = checkboxSelectorDialog();
 
-  const [selectedAmenities, setSelectedAmenities] = useState<Amenity[]>(
-    values
-  );
+  const [selectedAmenities, setSelectedAmenities] = useState<Amenity[]>(values);
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -72,7 +73,7 @@ export function HotelAmenitiesSelector({
 
       <Button
         style={{ textTransform: "capitalize", color: buttonColor }}
-        classes={{root: style.button}}
+        classes={{ root: style.button }}
         onClick={() => setOpenDialog(true)}
       >
         Select amenities
@@ -83,9 +84,7 @@ export function HotelAmenitiesSelector({
         onClose={() => closeDialog()}
         classes={{ paper: style.paper }}
       >
-        <DialogTitle classes={{ root: style.dialogTitle }}>
-          Select amenities
-        </DialogTitle>
+        <DialogTitle classes={{ root: style.dialogTitle }}>Select amenities</DialogTitle>
         <Divider />
 
         <Grid container spacing={2} style={{ marginTop: "20px" }}>
@@ -93,12 +92,17 @@ export function HotelAmenitiesSelector({
             <FormGroup>
               {selectedAmenities.slice(0, 13).map((amenity, i) => (
                 <FormControlLabel
+                  key={i}
                   label={amenity.value}
                   classes={{ label: style.formLabel }}
                   control={
                     <Checkbox
                       checked={amenity.checked}
                       classes={{ colorSecondary: style.colorSecondary }}
+                      icon={<FontAwesomeIcon icon={faCircle} />}
+                      checkedIcon={
+                        <FontAwesomeIcon icon={faCheckCircle} color={Colors.PURPLE} />
+                      }
                       onChange={onSelectedAmenitiesChange}
                       name={amenity.key}
                     />
@@ -112,12 +116,17 @@ export function HotelAmenitiesSelector({
             <FormGroup>
               {selectedAmenities.slice(13, 25).map((amenity, i) => (
                 <FormControlLabel
+                  key={i}
                   label={amenity.value}
                   classes={{ label: style.formLabel }}
                   control={
                     <Checkbox
                       checked={amenity.checked}
                       classes={{ colorSecondary: style.colorSecondary }}
+                      icon={<FontAwesomeIcon icon={faCircle} />}
+                      checkedIcon={
+                        <FontAwesomeIcon icon={faCheckCircle} color={Colors.PURPLE} />
+                      }
                       onChange={onSelectedAmenitiesChange}
                       name={amenity.key}
                     />
@@ -131,12 +140,17 @@ export function HotelAmenitiesSelector({
             <FormGroup>
               {selectedAmenities.slice(25).map((amenity, i) => (
                 <FormControlLabel
+                  key={i}
                   label={amenity.value}
                   classes={{ label: style.formLabel }}
                   control={
                     <Checkbox
                       checked={amenity.checked}
                       classes={{ colorSecondary: style.colorSecondary }}
+                      icon={<FontAwesomeIcon icon={faCircle} />}
+                      checkedIcon={
+                        <FontAwesomeIcon icon={faCheckCircle} color={Colors.PURPLE} />
+                      }
                       onChange={onSelectedAmenitiesChange}
                       name={amenity.key}
                     />
@@ -146,11 +160,7 @@ export function HotelAmenitiesSelector({
             </FormGroup>
           </Grid>
 
-          <Grid
-            item
-            xs={12}
-            style={{ display: "flex", justifyContent: "center" }}
-          >
+          <Grid item xs={12} style={{ display: "flex", justifyContent: "center" }}>
             <CustomButton
               style={{ width: "50%" }}
               label="Ok"

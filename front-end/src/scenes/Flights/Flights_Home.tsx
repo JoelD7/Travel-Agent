@@ -26,7 +26,7 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import { addDays, format, parseISO } from "date-fns";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FONT } from "../../assets/fonts";
 import {
   CustomButton,
@@ -44,7 +44,25 @@ import { FlightClassType } from "../../utils/types/FlightClassType";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightStyles } from "./flights-styles";
 
+import axios, { AxiosRequestConfig } from "axios";
+
 export function Flights_Home() {
+  useEffect(() => {
+    const options: AxiosRequestConfig = {
+      method: "GET",
+      url: "http://opentable.herokuapp.com/api/cities",
+    };
+
+    axios
+      .request(options)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, []);
+
   const style = flightStyles();
 
   const theme = createMuiTheme({

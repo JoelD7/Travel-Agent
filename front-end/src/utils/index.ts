@@ -1,8 +1,9 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { format } from "date-fns";
+import * as Route from "./Routes";
 import * as HotelAmenity from "./HotelAmenities";
 export * from "./slices";
-export { HotelAmenity };
+export { HotelAmenity, Route };
 
 export function muiDateFormatter(
   date: MaterialUiPickersDate,
@@ -17,5 +18,7 @@ export function muiDateFormatter(
 }
 
 export const currencyFormatter = Intl.NumberFormat("en-US", {
-    style: 'currency', currency: 'USD', maximumFractionDigits: 2
-}).format
+  style: "currency",
+  currency: "USD",
+  maximumFractionDigits: 2,
+}).format;

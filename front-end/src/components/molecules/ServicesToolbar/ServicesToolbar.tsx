@@ -8,28 +8,29 @@ import {
 import { Colors } from "../../../styles";
 import { servicesToolbarStyles } from "../servicesToolbar-styles";
 import { useHistory } from "react-router-dom";
+import { Route } from "../../../utils";
 
 export function ServicesToolbar() {
   const navbarServices = [
     {
       label: "Hotels",
-      route: "/hotels",
+      route: Route.HOTELS,
     },
     {
       label: "Flights",
-      route: "/flights",
+      route: Route.FLIGHTS,
     },
     {
       label: "Restaurants",
-      route: "",
+      route: Route.RESTAURANTS,
     },
     {
       label: "Things to do",
-      route: "",
+      route: Route.THINGS_TODO,
     },
     {
       label: "Car rental",
-      route: "",
+      route: Route.CAR_RENTAL,
     },
   ];
 
