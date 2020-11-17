@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import { FONT } from "../../../assets/fonts";
+import { Family } from "../../../assets/fonts";
 import { Shadow } from "../../../styles";
 
 export const cardFlightStyles = makeStyles((theme: Theme) => ({
@@ -78,7 +78,7 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     color: "#5f5f5f",
   },
   mainContainer: {
-    fontFamily: FONT,
+    fontFamily: Family,
     marginBottom: "10px",
     padding: "10px",
     backgroundColor: "white",

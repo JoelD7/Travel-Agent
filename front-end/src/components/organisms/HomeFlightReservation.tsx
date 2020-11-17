@@ -20,7 +20,7 @@ import {
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
 import { muiDateFormatter } from "../../utils";
@@ -44,12 +44,12 @@ export default function HomeFlightReservation() {
     overrides: {
       MuiMenuItem: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
       },
       MuiButton: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
           textTransform: "capitalize",
         },
         textPrimary: {
@@ -58,7 +58,7 @@ export default function HomeFlightReservation() {
       },
       MuiInputBase: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
           color: Colors.BLUE,
         },
       },
@@ -70,19 +70,19 @@ export default function HomeFlightReservation() {
       },
       MuiTypography: {
         h4: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         subtitle1: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         body1: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         body2: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         caption: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
       },
       MuiOutlinedInput: {

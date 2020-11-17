@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, makeStyles } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React, { MouseEvent, ReactNode } from "react";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
 interface CustomButtonProps {
@@ -51,7 +51,7 @@ export function CustomButton({
   const buttonStyles = makeStyles({
     button: {
       backgroundColor: backgroundColor ? backgroundColor : Colors.BLUE,
-      fontFamily: FONT,
+      fontFamily: Family,
       borderRadius: rounded ? "50px" : "",
       "&:hover": {
         backgroundColor: getHoverColor(backgroundColor),

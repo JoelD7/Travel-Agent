@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 
 export const navbarStyles = makeStyles((theme: Theme) => ({
   appbar: {
@@ -39,7 +39,7 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     },
   },
   searchBarText: {
-    fontFamily: FONT,
+    fontFamily: Family,
     fontSize: "14px",
   },
   toolbar: {

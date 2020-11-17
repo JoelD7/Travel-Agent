@@ -6,7 +6,7 @@ import {
 } from "@material-ui/styles";
 import React, { ChangeEvent, ReactNode, SetStateAction, useState } from "react";
 import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
 interface TextInputProps {
@@ -49,7 +49,7 @@ export default function TextInput({
     overrides: {
       MuiFormLabel: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
       },
       MuiInputLabel: {
@@ -85,7 +85,7 @@ export default function TextInput({
       ...style,
     },
     input: {
-      fontFamily: FONT,
+      fontFamily: Family,
       color: Colors.BLUE,
     },
   });

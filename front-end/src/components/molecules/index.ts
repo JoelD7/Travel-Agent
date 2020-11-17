@@ -6,3 +6,4 @@ export { FlightTimesRange } from "./FlightTimesRange/FlightTimesRange";
 export { CardFlight } from "./CardFlight/CardFlight";
 export { RestaurantEstablishments } from "./RestaurantEstablishments/RestaurantEstablishments";
 export { RestaurantCuisinesSelec } from "./RestaurantCuisinesSelec/RestaurantCuisinesSelec";
+export { RestaurantFeature } from "./RestaurantFeature/RestaurantFeature";

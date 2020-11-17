@@ -28,7 +28,7 @@ import {
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import {
   CustomButton,
   PriceRange,
@@ -62,7 +62,7 @@ export function Hotels() {
     overrides: {
       MuiMenuItem: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
           border: "2px solid rgba(0,0,0,0)",
 
           "&:hover": {
@@ -72,7 +72,7 @@ export function Hotels() {
       },
       MuiButton: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
           textTransform: "capitalize",
         },
         textPrimary: {
@@ -81,7 +81,7 @@ export function Hotels() {
       },
       MuiInputBase: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
           color: Colors.BLUE,
         },
       },
@@ -93,19 +93,19 @@ export function Hotels() {
       },
       MuiTypography: {
         h4: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         subtitle1: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         body1: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         body2: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         caption: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
       },
       MuiOutlinedInput: {

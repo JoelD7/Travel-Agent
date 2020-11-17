@@ -1,10 +1,10 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
 export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
   menuItemRoot: {
-    fontFamily: FONT,
+    fontFamily: Family,
     borderBottom: `2px solid rgba(0,0,0,0)`,
     fontWeight: "bold",
     margin: "0px 5px",

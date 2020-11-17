@@ -317,8 +317,8 @@ export function Home() {
       <PageSubtitle label="Popular destinations" />
       <Grid id="section-3" container className={style.section}>
         <Slider {...sliderSettings} slidesToScroll={1} slidesToShow={3}>
-          {popularDestinations.map((destination) => (
-            <div>
+          {popularDestinations.map((destination, i) => (
+            <div key={i}>
               <Card className={style.card}>
                 <CardActionArea>
                   <CardMedia

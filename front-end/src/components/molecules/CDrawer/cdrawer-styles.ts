@@ -1,6 +1,6 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
-import { FONT } from "../../../assets/fonts";
+import { Family } from "../../../assets/fonts";
 import { Colors, Shadow } from "../../../styles";
 
 export const drawerButtonStyle: CreateCSSProperties<{}> = {
@@ -15,7 +15,7 @@ export const drawerStyles = makeStyles((theme: Theme) => ({
     backgroundColor: Colors.BLUE,
   },
   drawerText: {
-    fontFamily: FONT,
+    fontFamily: Family,
     color: "white",
   },
   listItem: {

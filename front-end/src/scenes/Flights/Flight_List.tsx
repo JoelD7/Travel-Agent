@@ -25,7 +25,7 @@ import {
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays, parseISO, isBefore } from "date-fns";
 import React, { useState } from "react";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import {
   CardFlight,
   CustomButton,
@@ -57,7 +57,7 @@ export function Flight_List() {
     overrides: {
       MuiMenuItem: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
           border: "2px solid rgba(0,0,0,0)",
 
           "&:hover": {
@@ -67,7 +67,7 @@ export function Flight_List() {
       },
       MuiButton: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
           textTransform: "capitalize",
         },
         textPrimary: {
@@ -76,7 +76,7 @@ export function Flight_List() {
       },
       MuiInputBase: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
           color: Colors.BLUE,
         },
       },
@@ -88,19 +88,19 @@ export function Flight_List() {
       },
       MuiTypography: {
         h4: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         subtitle1: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         body1: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         body2: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         caption: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
       },
       MuiOutlinedInput: {

@@ -27,7 +27,7 @@ import {
 } from "@material-ui/pickers";
 import { addDays, format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import {
   CustomButton,
   IconText,
@@ -69,12 +69,12 @@ export function Flights_Home() {
     overrides: {
       MuiMenuItem: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
       },
       MuiButton: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
           textTransform: "capitalize",
         },
         textPrimary: {
@@ -83,7 +83,7 @@ export function Flights_Home() {
       },
       MuiInputBase: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
           color: Colors.BLUE,
         },
       },
@@ -95,19 +95,19 @@ export function Flights_Home() {
       },
       MuiTypography: {
         h4: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         subtitle1: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         body1: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         body2: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
         caption: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
       },
       MuiOutlinedInput: {
@@ -147,12 +147,12 @@ export function Flights_Home() {
     overrides: {
       MuiInputBase: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
       },
       MuiMenuItem: {
         root: {
-          fontFamily: FONT,
+          fontFamily: Family,
         },
       },
       MuiListItem: {
@@ -566,7 +566,7 @@ export function Flights_Home() {
             <Card className={style.card}>
               <CardHeader
                 title={
-                  <div style={{ display: "flex", fontFamily: FONT }}>
+                  <div style={{ display: "flex", fontFamily: Family }}>
                     <p className={style.dealTitle}>
                       {getFlightCitiesLabel(deal, "departure")}
                     </p>

@@ -1,7 +1,7 @@
 import { TextField } from "@material-ui/core";
 import { CreateCSSProperties, makeStyles } from "@material-ui/styles";
 import React, { ChangeEvent, ReactNode, useState } from "react";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
 interface CustomTFProps {
@@ -59,7 +59,7 @@ export function CustomTF({
       ...containerStyle,
     },
     text: {
-      fontFamily: FONT,
+      fontFamily: Family,
       color: Colors.BLUE,
     },
     inputAdornedStart: {

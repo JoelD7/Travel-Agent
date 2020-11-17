@@ -2,7 +2,7 @@ import { makeStyles, Theme } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import { Colors, Shadow } from "..";
 import { home, homeItinerary } from "../../assets";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 
 export const home_explore_button: CreateCSSProperties<{}> = {
   border: "3px solid white",
@@ -34,7 +34,7 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
   },
   datepicker: {
     backgroundColor: "white",
-    fontFamily: FONT,
+    fontFamily: Family,
     width: "100%",
     maxWidth: "100%",
     borderRadius: "20px",
@@ -122,7 +122,7 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
     },
   },
   locationQueryText: {
-    fontFamily: FONT,
+    fontFamily: Family,
   },
   mainPhotoGrid: {
     [theme.breakpoints.down(1150)]: {
@@ -233,7 +233,7 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
     },
 
     "& .MuiMenuItem-root": {
-      fontFamily: FONT,
+      fontFamily: Family,
     },
   },
   servicesContainer: {

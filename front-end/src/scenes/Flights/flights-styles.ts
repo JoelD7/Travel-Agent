@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
 export const flightStyles = makeStyles((theme: Theme) => ({
@@ -13,7 +13,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
   },
   datepicker: {
     backgroundColor: "white",
-    fontFamily: FONT,
+    fontFamily: Family,
     width: "100%",
     maxWidth: "100%",
     borderRadius: "20px",
@@ -58,7 +58,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     fontWeight: "bold",
     fontSize: "16px",
     margin: "0px 0px",
-    fontFamily: FONT,
+    fontFamily: Family,
   },
   dealSubtitle: {
     fontSize: "13px",
@@ -78,10 +78,10 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     width: "100%",
   },
   mainContainer: {
-    fontFamily: FONT,
+    fontFamily: Family,
   },
   menuItemRoot: {
-    fontFamily: FONT,
+    fontFamily: Family,
     borderBottom: `2px solid rgba(0,0,0,0)`,
     margin: "0px 5px",
     fontSize: "14px",
@@ -157,12 +157,12 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     },
 
     "& .MuiMenuItem-root": {
-      fontFamily: FONT,
+      fontFamily: Family,
     },
   },
   topContainer: {
     padding: "30px",
-    fontFamily: FONT,
+    fontFamily: Family,
     display: "flex",
     alignItems: "center",
   },

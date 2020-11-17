@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
 export const checkboxSelectorDialog = makeStyles((theme: Theme) => ({
@@ -15,7 +15,7 @@ export const checkboxSelectorDialog = makeStyles((theme: Theme) => ({
     padding: "0px",
 
     "& .MuiTypography-h6": {
-      fontFamily: FONT,
+      fontFamily: Family,
       fontWeight: "bold",
       color: Colors.BLUE,
     },
@@ -33,7 +33,7 @@ export const checkboxSelectorDialog = makeStyles((theme: Theme) => ({
     },
   },
   formLabel: {
-    fontFamily: FONT,
+    fontFamily: Family,
   },
   paper: {
     maxWidth: "1000px",

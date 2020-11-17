@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import { FONT } from "../../assets/fonts";
+import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
 export const hotelsStyles = makeStyles((theme: Theme) => ({
@@ -31,7 +31,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   },
   datepicker: {
     backgroundColor: "white",
-    fontFamily: FONT,
+    fontFamily: Family,
     width: "100%",
     maxWidth: "100%",
     borderRadius: "10px",
@@ -77,7 +77,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   drawer: {
     width: "250px",
     backgroundColor: Colors.BLUE,
-    fontFamily: FONT,
+    fontFamily: Family,
     color: 'white',
     padding: '10px',
   },
@@ -142,7 +142,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     },
   },
   mainContainer: {
-    fontFamily: FONT,
+    fontFamily: Family,
   },
   pageContentContainer: {
     marginTop: "50px",
@@ -185,7 +185,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     },
 
     "& .MuiMenuItem-root": {
-      fontFamily: FONT,
+      fontFamily: Family,
     },
   },
   textButton: {

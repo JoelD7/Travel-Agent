@@ -21,7 +21,7 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { carlos, logoTypeWhiteFore } from "../../../assets";
-import { FONT } from "../../../assets/fonts";
+import { Family } from "../../../assets/fonts";
 import { Colors, Shadow } from "../../../styles";
 import { DrawerOptions } from "../../../utils/types/DrawerOptionsType";
 import { CustomButton } from "../../atoms";
@@ -120,7 +120,7 @@ export function CDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
             />
           </div>
         ) : (
-          <div style={{ fontFamily: FONT }}>
+          <div style={{ fontFamily: Family }}>
             <CustomButton
               label="Login"
               backgroundColor={Colors.PURPLE}
