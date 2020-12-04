@@ -14,11 +14,10 @@ interface CustomButtonProps {
   style: CreateCSSProperties<{}>;
   className: string;
   icon: IconDefinition;
+  iconColor?: string;
   submit: boolean;
   textColor: string;
-  onClick: (
-    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-  ) => void;
+  onClick: (event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 }
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -46,6 +45,7 @@ export function CustomButton({
   onClick,
   submit,
   textColor = "white",
+  iconColor,
   className,
 }: CustomButtonType) {
   const buttonStyles = makeStyles({
@@ -62,6 +62,14 @@ export function CustomButton({
       cursor: "hand",
       ...style,
     },
+    // iconContainer: {
+    //   backgroundColor: iconColor,
+    //   width: size,
+    //   height: size,
+    //   borderRadius: "50%",
+    //   padding: "5px",
+    //   marginRight: "5px",
+    // },
   });
 
   function getHoverColor(color: string | undefined): string {
@@ -86,7 +94,13 @@ export function CustomButton({
 
   function renderIcon(): ReactNode {
     return icon ? (
-      <FontAwesomeIcon style={{ marginLeft: "5px" }} icon={icon} />
+      iconColor ? (
+        <div>
+          <FontAwesomeIcon style={{ marginLeft: "5px" }} icon={icon} color={iconColor} />
+        </div>
+      ) : (
+        <FontAwesomeIcon style={{ marginLeft: "5px" }} icon={icon} color={iconColor} />
+      )
     ) : avatar ? (
       avatar
     ) : (

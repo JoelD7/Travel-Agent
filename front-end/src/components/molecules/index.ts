@@ -7,3 +7,5 @@ export { CardFlight } from "./CardFlight/CardFlight";
 export { RestaurantEstablishments } from "./RestaurantEstablishments/RestaurantEstablishments";
 export { RestaurantCuisinesSelec } from "./RestaurantCuisinesSelec/RestaurantCuisinesSelec";
 export { RestaurantFeature } from "./RestaurantFeature/RestaurantFeature";
+export { RestaurantSlides } from "./RestaurantSlides/RestaurantSlides";
+export { RestaurantCard } from "./RestaurantCard/RestaurantCard";

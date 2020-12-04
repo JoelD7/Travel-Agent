@@ -5,7 +5,7 @@ import { Colors, Shadow } from "../../styles";
 export const restaurantListStyles = makeStyles((theme: Theme) => ({
   card: {
     width: "95%",
-    margin: 'auto 5px',
+    margin: "auto 5px",
   },
   mainContainer: {
     fontFamily: Family,
@@ -18,19 +18,30 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     border: "1px solid #cecece",
     borderRadius: "5px",
     padding: "10px",
+    height: '770px',
     width: "25%",
   },
-  restaurantName:{
+  restaurantName: {
     fontSize: "14px",
-    fontWeight: 'bold',
+    fontWeight: "bold",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   restaurantCuisines: {
     fontSize: "13px",
     color: "#5f5f5f",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
   restaurantsGrid: {
     width: "74%",
     marginLeft: "10px",
+  },
+  browseByFoodGrid: {
+    width: "60%",
+    marginLeft: "41px",
   },
   filterButtonGrid: {
     display: "none",
@@ -49,8 +60,8 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     alignItems: "center",
   },
-  slideshowGrid:{
-    width: '100%',
+  slideshowGrid: {
+    width: "100%",
   },
   textButton: {
     padding: "0px",

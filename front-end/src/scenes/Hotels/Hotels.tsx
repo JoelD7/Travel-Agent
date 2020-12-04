@@ -21,10 +21,7 @@ import {
   Slider,
   ThemeProvider,
 } from "@material-ui/core";
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
@@ -36,6 +33,7 @@ import {
   IconText,
   Navbar,
   ServicesToolbar,
+  StarRating,
 } from "../../components";
 import { HotelAmenitiesSelector } from "../../components/atoms/HotelAmenitiesSelector/HotelAmenitiesSelector";
 import { Colors, Shadow } from "../../styles";
@@ -205,9 +203,7 @@ export function Hotels() {
       <div style={{ width: "85%", margin: "20px auto" }}>
         <Grid container spacing={2} className={style.pageTitleContainer}>
           <Grid item xs={12}>
-            <h1 style={{ color: "white", marginBottom: "0px" }}>
-              Hotels in Paris
-            </h1>
+            <h1 style={{ color: "white", marginBottom: "0px" }}>Hotels in Paris</h1>
           </Grid>
 
           <ThemeProvider theme={theme}>
@@ -292,9 +288,7 @@ export function Hotels() {
             <PriceRange
               value={state.priceRange}
               max={200}
-              updateState={(slider) =>
-                setState({ ...state, priceRange: slider })
-              }
+              updateState={(slider) => setState({ ...state, priceRange: slider })}
             />
 
             <Divider style={{ margin: "10px auto" }} />
@@ -340,14 +334,10 @@ export function Hotels() {
 
                 <Grid item className={style.hotelContentGrid} id="content">
                   <Grid item xs={12} id="title">
-                    <Grid
-                      container
-                      alignItems="center"
-                      style={{ marginTop: "10px" }}
-                    >
+                    <Grid container alignItems="center" style={{ marginTop: "10px" }}>
                       <h3 style={{ margin: "0px 10px" }}>{hotel.name}</h3>
 
-                      {renderStars(hotel.stars)}
+                      <StarRating stars={hotel.stars} />
                     </Grid>
                   </Grid>
 
@@ -429,9 +419,7 @@ export function Hotels() {
 
                     <Grid item xs={12} style={{ padding: "10px" }}>
                       <Grid container>
-                        <h2
-                          style={{ textAlign: "center", marginRight: "auto" }}
-                        >
+                        <h2 style={{ textAlign: "center", marginRight: "auto" }}>
                           {`$ ${hotel.pricePerNight}`}
                         </h2>
                         <CustomButton

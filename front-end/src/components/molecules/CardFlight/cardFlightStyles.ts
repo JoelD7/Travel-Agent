@@ -1,6 +1,6 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Family } from "../../../assets/fonts";
-import { Shadow } from "../../../styles";
+import { Colors, Shadow } from "../../../styles";
 
 export const cardFlightStyles = makeStyles((theme: Theme) => ({
   airportsText: {
@@ -75,7 +75,7 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
   durationSubText: {
     fontSize: "12px",
     marginTop: "4px",
-    color: "#5f5f5f",
+    color: Colors.GRAY,
   },
   mainContainer: {
     fontFamily: Family,

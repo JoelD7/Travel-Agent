@@ -1,5 +1,4 @@
 import { faCircle, faFilter } from "@fortawesome/free-solid-svg-icons";
-import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
 import {
   Button,
   Card,
@@ -13,13 +12,15 @@ import React, { useState } from "react";
 import {
   CustomButton,
   Navbar,
+  RestaurantCard,
   RestaurantCuisinesSelec,
   RestaurantEstablishments,
   RestaurantFeature,
+  RestaurantSlides,
   ServicesToolbar,
   SliderArrow,
 } from "../../components";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 import { restaurantListStyles } from "./restaurantList-styles";
 import { RestaurantFilter } from "../../utils/types/Establishment";
 import { Restaurant } from "../../utils/types/Restaurant";
@@ -38,28 +39,6 @@ export function Restaurant_List() {
   const style = restaurantListStyles();
 
   const [openDrawer, setOpenDrawer] = useState(false);
-
-  const sliderSettings = {
-    className: style.slider,
-    nextArrow: <SliderArrow direction="right" />,
-    prevArrow: <SliderArrow direction="left" />,
-    responsive: [
-      {
-        breakpoint: 990,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 740,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
 
   const [state, setState] = useState<Restaurant_List>({
     city: "Santo Domingo",
@@ -243,21 +222,6 @@ export function Restaurant_List() {
 
   const restaurants: Restaurant[] = restaurantsPlaceholder;
 
-  function RestaurantScore({ score }: { score: number }) {
-    return (
-      <div style={{ display: "flex" }}>
-        {[1, 2, 3, 4, 5].map((n) => (
-          <FontAwesomeIcon
-            size="xs"
-            key={n}
-            icon={score >= n ? faCircle : faCircleReg}
-            color={Colors.PURPLE}
-          />
-        ))}
-      </div>
-    );
-  }
-
   return (
     <div className={style.mainContainer}>
       <Navbar />
@@ -300,42 +264,36 @@ export function Restaurant_List() {
         </Grid>
 
         <Grid item className={style.restaurantsGrid}>
-          <Grid container>
-            <h2 style={{marginLeft: '53px'}}>Delivery available</h2>
-            <Button
-              style={{ textTransform: "capitalize", marginLeft: "auto" }}
-              classes={{ root: style.textButton }}
-              onClick={() => {}}
-            >
-              Show all
-            </Button>
-          </Grid>
+          <RestaurantSlides restaurants={restaurants} title="Delivery Available" />
+          <RestaurantSlides restaurants={restaurants} title="Outdoor Seating Available" />
 
-          <Grid item className={style.slideshowGrid}>
-            <Grid container>
-              <Slider {...sliderSettings} slidesToScroll={1} slidesToShow={4}>
-                {restaurants.map((restaurant, i) => (
-                  <div key={i}>
-                    <Card className={style.card}>
-                      <CardActionArea>
-                        <CardMedia
-                          component="img"
-                          height="150"
-                          image={restaurant.thumb}
-                        />
-                      </CardActionArea>
-
-                      <CardContent>
-                        <div className={style.restaurantName}>{`${restaurant.name}`}</div>
-                        <RestaurantScore score={Number(restaurant.rating)} />
-                        <p className={style.restaurantCuisines}>{restaurant.cuisines}</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))}
-              </Slider>
+          <Grid container className={style.browseByFoodGrid} spacing={3}>
+            <Grid item xs={12}>
+              <h2 style={{ marginBottom: "0px" }}>{`Browse ${state.city} by Food`}</h2>
             </Grid>
+
+            {state.cuisines.slice(0, 9).map((cuisine, i) => (
+              <Grid item key={i} style={{ width: "33%" }}>
+                <CustomButton
+                  backgroundColor={Colors.PURPLE}
+                  style={{ width: "150px", boxShadow: Shadow.MEDIUM }}
+                  label={cuisine.name}
+                  onClick={() => {}}
+                />
+              </Grid>
+            ))}
           </Grid>
+
+          <RestaurantSlides restaurants={restaurants} title="Fine Dining" />
+          <RestaurantSlides restaurants={restaurants} title="Cheap Eats" />
+          <RestaurantSlides restaurants={restaurants} title="Local Cuisine" />
+
+          <h2>{`Top Restaurants in ${state.city}`}</h2>
+          {
+            restaurants.map((restaurant, i)=>(
+              <RestaurantCard key={i} restaurant={restaurant} />
+            ))
+          }
         </Grid>
       </Grid>
     </div>

@@ -11,6 +11,8 @@ interface IconTextProps {
   iconColor?: string;
   size?: string;
   style?: CreateCSSProperties<{}>;
+  className?: string;
+  shadow?: boolean;
 }
 
 export function IconText({
@@ -19,6 +21,8 @@ export function IconText({
   style,
   iconColor = Colors.PURPLE,
   size = "16px",
+  className,
+  shadow,
 }: IconTextProps) {
   const iconTextStyles = makeStyles((theme: Theme) => ({
     mainContainer: {
@@ -33,6 +37,7 @@ export function IconText({
       borderRadius: "50%",
       padding: "5px",
       marginRight: "5px",
+      boxShadow: shadow ? Shadow.MEDIUM : '0px 0px 0px white',
     },
   }));
 
@@ -47,7 +52,12 @@ export function IconText({
           style={{ width: size, height: size }}
         />
       </div>
-      <p style={{ fontSize: "14px", margin: "0px" }}>{text}</p>
+      
+      {className ? (
+        <p className={className}>{text}</p>
+      ) : (
+        <p style={{ fontSize: "14px", margin: "0px" }}>{text}</p>
+      )}
     </div>
   );
 }
