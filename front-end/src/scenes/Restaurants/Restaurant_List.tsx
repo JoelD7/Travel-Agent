@@ -288,7 +288,7 @@ export function Restaurant_List() {
           <RestaurantSlides restaurants={restaurants} title="Cheap Eats" />
           <RestaurantSlides restaurants={restaurants} title="Local Cuisine" />
 
-          <h2>{`Top Restaurants in ${state.city}`}</h2>
+          <h2 style={{marginTop: '50px'}}>{`Top Restaurants in ${state.city}`}</h2>
           {
             restaurants.map((restaurant, i)=>(
               <RestaurantCard key={i} restaurant={restaurant} />

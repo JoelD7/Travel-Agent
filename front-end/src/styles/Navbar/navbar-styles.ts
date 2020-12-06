@@ -21,6 +21,7 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
   logotype: {
     maxHeight: "40px",
     height: "40px",
+    cursor: 'pointer',
   },
   rightChildrenContainer: {
     marginLeft: "auto",

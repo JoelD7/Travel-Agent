@@ -1,39 +1,35 @@
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Colors } from "../../../styles";
+import Ratings from "react-ratings-declarative";
 
 interface HotelStarSelectorProps {
   value: number;
   updateState: (star: number) => void;
 }
 
-export function HotelStarSelector({
-  updateState,
-  value,
-}: HotelStarSelectorProps) {
+export function HotelStarSelector({ updateState, value }: HotelStarSelectorProps) {
   const [star, setStar] = useState(value);
 
   function onStarClicked(n: number) {
     setStar(n);
   }
 
-  function getStarColor(n: number): string {
-    return star >= n ? Colors.PURPLE : "#c4c4c4";
-  }
-
   return (
     <div onBlur={() => updateState(star)}>
-      {[1, 2, 3, 4, 5].map((n) => (
-        <FontAwesomeIcon
-          key={n}
-          style={{cursor: 'pointer'}}
-          icon={faStar}
-          size="2x"
-          color={getStarColor(n)}
-          onClick={() => onStarClicked(n)}
-        />
-      ))}
+      <Ratings
+        rating={star}
+        widgetRatedColors={Colors.PURPLE}
+        widgetHoverColors={Colors.PURPLE}
+        widgetDimensions="35px"
+        widgetSpacings="4px"
+        changeRating={onStarClicked}
+      >
+        <Ratings.Widget />
+        <Ratings.Widget />
+        <Ratings.Widget />
+        <Ratings.Widget />
+        <Ratings.Widget />
+      </Ratings>
     </div>
   );
 }

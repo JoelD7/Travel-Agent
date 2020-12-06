@@ -52,8 +52,6 @@ import "swiper/swiper-bundle.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { DrawerOptions } from "../../utils/types/DrawerOptionsType";
 
 interface ServiceIconType {
   hotel: boolean;
@@ -189,9 +187,7 @@ export function Home() {
 
   return (
     <div className="mainContainer">
-      <Navbar>
-        
-      </Navbar>
+      <Navbar />
 
       <ServicesToolbar />
 

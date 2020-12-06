@@ -1,13 +1,13 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../../assets";
-import { Colors, Shadow } from "../../../styles";
+import { Shadow } from "../../../styles";
 
 export const restaurantCardStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     fontFamily: Font.Family,
-    boxShadow: Shadow.MEDIUM,
+    boxShadow: Shadow.LIGHT,
     height: "210px",
-    borderRadius: "10px",
+    borderRadius: "5px",
     marginBottom: "20px",
   },
   photoGrid: {
@@ -16,8 +16,8 @@ export const restaurantCardStyles = makeStyles((theme: Theme) => ({
   },
   cardImage: {
     objectFit: "cover",
-    borderTopLeftRadius: "10px",
-    borderBottomLeftRadius: "10px",
+    borderTopLeftRadius: "5px",
+    borderBottomLeftRadius: "5px",
     height: "100%",
     width: "100%",
   },

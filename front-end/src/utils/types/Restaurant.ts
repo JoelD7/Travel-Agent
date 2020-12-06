@@ -1,6 +1,6 @@
 export interface Restaurant {
   id: string;
-  name: string;
+  name: string; 
   url: string;
   location: ResLocation;
   cuisines: string;
@@ -8,15 +8,15 @@ export interface Restaurant {
   avgCostForTwo: number;
   priceRange: number;
   currency: string;
-  highlights: string[];
+  highlights: string[];//Amenities
   thumb: string;
-  rating: string;
+  rating: number;
   ratingText: string;
-  photosURL: string;
-  menuURL: string;
-  featuredImage: string;
+  photosURL: string; //Url to Zomato page with photos
+  menuURL: string; //Url to Zomato page with menu
+  featuredImage: string;//Main pic
   phoneNumbers: string;
-  establishment: string[];
+  establishment: string[];//Establisment types
 }
 
 interface ResLocation {

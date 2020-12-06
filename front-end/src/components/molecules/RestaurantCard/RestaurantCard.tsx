@@ -1,12 +1,12 @@
-import { faClock } from "@fortawesome/free-regular-svg-icons";
 import {
-  faChevronCircleRight,
+  faChevronRight,
   faMapMarkerAlt,
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { Colors, Shadow } from "../../../styles";
+import { useHistory } from "react-router-dom";
+import { Routes } from "../../../utils";
 import { Restaurant } from "../../../utils/types/Restaurant";
 import { CustomButton, IconText, StarRating } from "../../atoms";
 import { restaurantCardStyles } from "./restaurantCard-styles";
@@ -17,6 +17,7 @@ interface RestaurantCard {
 
 export function RestaurantCard({ restaurant }: RestaurantCard) {
   const style = restaurantCardStyles();
+  const history = useHistory()
 
   return (
     <Grid container className={style.mainContainer}>
@@ -57,8 +58,8 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
               <CustomButton
                 style={{ marginLeft: "auto" }}
                 label="Check details"
-                iconColor={Colors.PURPLE}
-                icon={faChevronCircleRight}
+                onClick={()=> history.push(`${Routes.RESTAURANTS}/${restaurant.id}`) }
+                icon={faChevronRight}
                 rounded
               />
             </Grid>

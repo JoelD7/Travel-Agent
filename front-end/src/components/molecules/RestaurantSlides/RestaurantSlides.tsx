@@ -15,6 +15,9 @@ import Slider from "react-slick";
 import { Colors } from "../../../styles";
 import { Restaurant } from "../../../utils/types/Restaurant";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Ratings from "react-ratings-declarative";
+import { useHistory } from "react-router-dom";
+import { Routes } from "../../../utils";
 
 interface RestaurantSlides {
   restaurants: Restaurant[];
@@ -23,6 +26,8 @@ interface RestaurantSlides {
 
 export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
   const style = restaurantSlidesStyles();
+
+  const history = useHistory();
 
   const sliderSettings = {
     className: style.slider,
@@ -52,6 +57,7 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
         {[1, 2, 3, 4, 5].map((n) => (
           <FontAwesomeIcon
             size="xs"
+            style={{ margin: "auto 1px" }}
             key={n}
             icon={score >= n ? faCircle : faCircleReg}
             color={Colors.PURPLE}
@@ -62,7 +68,7 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
   }
 
   return (
-    <div style={{marginTop: '20px'}}>
+    <div style={{ marginTop: "20px" }}>
       <Grid item className={style.slideshowGrid}>
         <Grid container>
           <h2 style={{ marginLeft: "53px" }}>{`${title}`}</h2>
@@ -80,13 +86,15 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
             {restaurants.map((restaurant, i) => (
               <div key={i}>
                 <Card className={style.card}>
-                  <CardActionArea>
-                    <CardMedia component="img" height="150" image={restaurant.thumb} />
+                  <CardActionArea
+                    onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
+                  >
+                    <CardMedia component="img" height="150" image={restaurant.featuredImage} />
                   </CardActionArea>
 
                   <CardContent>
                     <p className={style.restaurantName}>{`${restaurant.name}`}</p>
-                    <RestaurantScore score={Number(restaurant.rating)} />
+                    <RestaurantScore score={restaurant.rating} />
                     <p className={style.restaurantCuisines}>{restaurant.cuisines}</p>
                   </CardContent>
                 </Card>

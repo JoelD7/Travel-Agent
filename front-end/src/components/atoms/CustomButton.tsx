@@ -52,6 +52,8 @@ export function CustomButton({
     button: {
       backgroundColor: backgroundColor ? backgroundColor : Colors.BLUE,
       fontFamily: Family,
+      paddingRight: icon ? '16px' : '10px',
+      paddingLeft: '10px',
       borderRadius: rounded ? "50px" : "",
       "&:hover": {
         backgroundColor: getHoverColor(backgroundColor),
@@ -62,14 +64,6 @@ export function CustomButton({
       cursor: "hand",
       ...style,
     },
-    // iconContainer: {
-    //   backgroundColor: iconColor,
-    //   width: size,
-    //   height: size,
-    //   borderRadius: "50%",
-    //   padding: "5px",
-    //   marginRight: "5px",
-    // },
   });
 
   function getHoverColor(color: string | undefined): string {

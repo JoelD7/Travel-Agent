@@ -1,10 +1,10 @@
-import * as Route from "./Routes";
+import * as Routes from "./Routes";
 import * as HotelAmenity from "./HotelAmenities";
 import { Restaurant } from "./types/Restaurant";
 export * from "./slices";
 export * from "./types";
 export * from "./functions/functions";
-export { HotelAmenity, Route };
+export { HotelAmenity, Routes };
 
 export const restaurantsPlaceholder: Restaurant[] = [
   {
@@ -51,7 +51,7 @@ export const restaurantsPlaceholder: Restaurant[] = [
       "https://b.zmtcdn.com/data/pictures/6/16769546/48ab9901ddf191d13ade07221b43ba93.jpg",
     phoneNumbers: "(212) 254-2246",
     establishment: ["Deli"],
-    rating: "5",
+    rating: 4.6,
     ratingText: "Excellent",
   },
   {
@@ -99,7 +99,7 @@ export const restaurantsPlaceholder: Restaurant[] = [
       "https://b.zmtcdn.com/data/res_imagery/16771079_RESTAURANT_da60c9abb32fa64cddc148a2795ae43c_c.jpg",
     phoneNumbers: "(212) 941-7994",
     establishment: ["Pizzeria"],
-    rating: "4",
+    rating: 4.2,
     ratingText: "Very good",
   },
   {
@@ -146,7 +146,7 @@ export const restaurantsPlaceholder: Restaurant[] = [
       "https://b.zmtcdn.com/data/pictures/chains/3/16772773/032b860c175202ad63c7a5ae1add1f99.png?output-format=webp",
     phoneNumbers: "(212) 777-7773",
     establishment: ["Casual Dining"],
-    rating: "5",
+    rating: 3.6,
     ratingText: "Excellent",
   },
   {
@@ -191,7 +191,7 @@ export const restaurantsPlaceholder: Restaurant[] = [
       "https://b.zmtcdn.com/data/pictures/chains/1/16777961/1c02d5846ed641b4a9d096b1486f30e2.png?output-format=webp",
     phoneNumbers: "(212) 937-8518, (212) 620-0393, (212) 937-8518",
     establishment: ["Casual Dining"],
-    rating: "4",
+    rating: 4.7,
     ratingText: "Very good",
   },
   {
@@ -239,7 +239,7 @@ export const restaurantsPlaceholder: Restaurant[] = [
       "https://b.zmtcdn.com/data/pictures/0/16760100/2cee8640b74a1e53fde146c9c90f5213.png?output-format=webp",
     phoneNumbers: "(212) 965-1414",
     establishment: ["Casual Dining"],
-    rating: "5",
+    rating: 4.2,
     ratingText: "Excellent",
   },
   {
@@ -288,7 +288,7 @@ export const restaurantsPlaceholder: Restaurant[] = [
       "https://b.zmtcdn.com/data/pictures/4/16777384/2a989275f117f6bf1f63919c66cbc2cc.jpg?output-format=webp",
     phoneNumbers: "(212) 889-6600",
     establishment: ["Fast Food"],
-    rating: "4",
+    rating: 3.5,
     ratingText: "Very good",
   },
   {
@@ -330,7 +330,7 @@ export const restaurantsPlaceholder: Restaurant[] = [
       "https://b.zmtcdn.com/data/pictures/5/16781875/1a72663426d6e780f6363b6b7da6d48b.png?output-format=webp",
     phoneNumbers: "(212) 388-0088",
     establishment: ["Casual Dining"],
-    rating: "5",
+    rating: 4.65,
     ratingText: "Excellent",
   },
   {
@@ -375,7 +375,7 @@ export const restaurantsPlaceholder: Restaurant[] = [
       "https://b.zmtcdn.com/data/reviews_photos/ea9/ed66f37a5492836605ec71582db68ea9_1441919144.jpg?output-format=webp",
     phoneNumbers: "(718) 387-7400",
     establishment: ["Fine Dining"],
-    rating: "4",
+    rating: 4,
     ratingText: "Very good",
   },
   {
@@ -418,7 +418,7 @@ export const restaurantsPlaceholder: Restaurant[] = [
       "https://b.zmtcdn.com/data/pictures/4/16761344/5535198640b49778b948e916d392ebb8.jpg?output-format=webp",
     phoneNumbers: "(212) 989-6699, (212) 989-6699",
     establishment: ["Fine Dining"],
-    rating: "5",
+    rating: 5,
     ratingText: "Excellent",
   },
   {
@@ -464,7 +464,7 @@ export const restaurantsPlaceholder: Restaurant[] = [
       "https://b.zmtcdn.com/data/pictures/9/16767139/8e3fae144133ba709852d6eec7280397.jpg?output-format=webp",
     phoneNumbers: "(212) 477-0777",
     establishment: ["Fine Dining"],
-    rating: "4",
+    rating: 4,
     ratingText: "Very good",
   },
 ];

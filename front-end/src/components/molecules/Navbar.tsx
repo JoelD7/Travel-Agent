@@ -1,19 +1,14 @@
 import { faBars, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  AppBar,
-  IconButton,
-  TextField,
-  Toolbar,
-  Avatar,
-} from "@material-ui/core";
+import { AppBar, IconButton, TextField, Toolbar, Avatar } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React, { FunctionComponent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { carlos, logoType } from "../../assets";
 import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
-import { selectSearchQuery, onQueryChanged } from "../../utils";
+import { selectSearchQuery, onQueryChanged, Routes } from "../../utils";
 import { CustomButton } from "../atoms";
 import { ButtonIcon } from "../atoms/ButtonIcon";
 import { CDrawer } from "./CDrawer/CDrawer";
@@ -29,12 +24,14 @@ export const Navbar: FunctionComponent = ({ children }) => {
 
   const userLoggedIn = false;
 
-  const[openDrawer, setOpenDrawer] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   return (
     <AppBar position="static" className={style.appbar}>
       <Toolbar className={style.toolbar}>
-        <img src={logoType} className={style.logotype} />
+        <Link to={Routes.HOME} style={{outline: 'none', border: 'none'}}>
+          <img src={logoType} className={style.logotype} />
+        </Link>
 
         <TextField
           value={searchQuery}
