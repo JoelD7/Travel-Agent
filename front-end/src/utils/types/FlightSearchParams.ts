@@ -1,5 +1,4 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { FlightClassType } from "./FlightClassType";
 
 export interface FlightSearchParams {
   departure: MaterialUiPickersDate;
@@ -16,15 +15,6 @@ export interface FlightSearchParams {
   returnFlightDates?: DatetimeRange;
 
   [key: string]: FlightSearchParams[keyof FlightSearchParams];
-}
-
-export interface DatetimeRange {
-  maxDeparture: Date;
-  minDeparture: Date;
-  maxArrival: Date;
-  minArrival: Date;
-  departureDatetimeRange?: Date[];
-  arrivalDatetimeRange?: Date[];
 }
 
 export const ROUND = "Round trip";

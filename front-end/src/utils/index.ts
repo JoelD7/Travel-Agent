@@ -1,6 +1,5 @@
 import * as Routes from "./Routes";
 import * as HotelAmenity from "./HotelAmenities";
-import { Restaurant } from "./types/Restaurant";
 export * from "./slices";
 export * from "./types";
 export * from "./functions/functions";

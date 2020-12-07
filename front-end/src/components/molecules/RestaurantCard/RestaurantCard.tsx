@@ -7,7 +7,6 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { Routes } from "../../../utils";
-import { Restaurant } from "../../../utils/types/Restaurant";
 import { CustomButton, IconText, StarRating } from "../../atoms";
 import { restaurantCardStyles } from "./restaurantCard-styles";
 
@@ -22,7 +21,7 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
   return (
     <Grid container className={style.mainContainer}>
       <Grid item className={style.photoGrid}>
-        <img src={restaurant.thumb} className={style.cardImage} />
+        <img src={restaurant.featuredImage} className={style.cardImage} />
       </Grid>
 
       <Grid item className={style.cardContentGrid}>

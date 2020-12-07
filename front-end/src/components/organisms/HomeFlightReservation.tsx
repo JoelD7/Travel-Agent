@@ -1,9 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  faMapMarkerAlt,
-  faStar,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMapMarkerAlt, faStar, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   createMuiTheme,
@@ -13,10 +9,7 @@ import {
   Select,
   ThemeProvider,
 } from "@material-ui/core";
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
@@ -24,8 +17,6 @@ import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
 import { muiDateFormatter } from "../../utils";
-import { FlightClass } from "../../utils/types";
-import { FlightClassType } from "../../utils/types/FlightClassType";
 import { CustomButton } from "../atoms";
 import { CustomTF } from "../atoms/CustomTF";
 
@@ -139,12 +130,7 @@ export default function HomeFlightReservation() {
     },
   ];
 
-  const classes = [
-    FlightClass.Economy,
-    FlightClass.PremiumEconomy,
-    FlightClass.Business,
-    FlightClass.First,
-  ];
+  const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
 
   const style = homeStyles();
   return (
@@ -152,7 +138,7 @@ export default function HomeFlightReservation() {
       <Grid container className={style.reservationParamsGrid} spacing={2}>
         <ThemeProvider theme={theme}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid item  className={style.datepickerItemGridFlight}>
+            <Grid item className={style.datepickerItemGridFlight}>
               <h5 className={style.reservationParamText}>Departure</h5>
               <KeyboardDatePicker
                 value={flight.departure}
@@ -204,9 +190,7 @@ export default function HomeFlightReservation() {
                 value={flight.passengers}
                 variant="outlined"
                 className={style.select}
-                startAdornment={
-                  <FontAwesomeIcon icon={faUsers} color={Colors.BLUE} />
-                }
+                startAdornment={<FontAwesomeIcon icon={faUsers} color={Colors.BLUE} />}
                 onChange={(e) =>
                   setFlight({ ...flight, passengers: e.target.value as string })
                 }
@@ -226,9 +210,7 @@ export default function HomeFlightReservation() {
                 value={flight.class}
                 variant="outlined"
                 className={style.select}
-                startAdornment={
-                  <FontAwesomeIcon icon={faStar} color={Colors.BLUE} />
-                }
+                startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
                 onChange={(e) =>
                   setFlight({
                     ...flight,
@@ -244,7 +226,7 @@ export default function HomeFlightReservation() {
               </Select>
             </FormControl>
           </Grid>
-        
+
           <Grid item xs={12}>
             <Grid container justify="center">
               <CustomButton

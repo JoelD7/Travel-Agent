@@ -21,10 +21,7 @@ import {
   CardHeader,
   CardContent,
 } from "@material-ui/core";
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { addDays, format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Family } from "../../assets/fonts";
@@ -38,9 +35,7 @@ import {
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors } from "../../styles";
 import { muiDateFormatter } from "../../utils";
-import { FlightClass, FlightTypes } from "../../utils/types";
-import { Flight } from "../../utils/types/Flight";
-import { FlightClassType } from "../../utils/types/FlightClassType";
+import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightStyles } from "./flights-styles";
 
@@ -213,12 +208,7 @@ export function Flights_Home() {
     },
   ];
 
-  const classes = [
-    FlightClass.Economy,
-    FlightClass.PremiumEconomy,
-    FlightClass.Business,
-    FlightClass.First,
-  ];
+  const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
 
   const deals: Flight[] = [
     {
@@ -355,10 +345,7 @@ export function Flights_Home() {
     },
   ];
 
-  function getFlightCitiesLabel(
-    flight: Flight,
-    point: "departure" | "arrival"
-  ) {
+  function getFlightCitiesLabel(flight: Flight, point: "departure" | "arrival") {
     return point === "departure"
       ? `${flight.itineraries[0].segments[0].departure.city} (${flight.itineraries[0].segments[0].departure.iata})`
       : `${flight.itineraries[0].segments[0].arrival.city} (${flight.itineraries[0].segments[0].arrival.iata})`;
@@ -485,9 +472,7 @@ export function Flights_Home() {
           <ThemeProvider theme={reservationParamsTheme}>
             {passengersParams.map((passenger, i) => (
               <Grid item key={i} className={style.passengerParamGrid}>
-                <h5 className={style.reservationParamText}>
-                  {passenger.label}
-                </h5>
+                <h5 className={style.reservationParamText}>{passenger.label}</h5>
 
                 <FormControl style={{ width: "100%" }}>
                   <Select
@@ -495,10 +480,7 @@ export function Flights_Home() {
                     variant="outlined"
                     className={style.select}
                     startAdornment={
-                      <FontAwesomeIcon
-                        icon={passenger.icon}
-                        color={Colors.BLUE}
-                      />
+                      <FontAwesomeIcon icon={passenger.icon} color={Colors.BLUE} />
                     }
                     onChange={(e) =>
                       setState({
@@ -523,9 +505,7 @@ export function Flights_Home() {
                   value={state.class}
                   variant="outlined"
                   className={style.select}
-                  startAdornment={
-                    <FontAwesomeIcon icon={faStar} color={Colors.BLUE} />
-                  }
+                  startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
                   onChange={(e) =>
                     setState({
                       ...state,
@@ -555,10 +535,7 @@ export function Flights_Home() {
         </Grid>
       </div>
 
-      <PageSubtitle
-        label="Great deals"
-        containerStyle={{ margin: "20px auto" }}
-      />
+      <PageSubtitle label="Great deals" containerStyle={{ margin: "20px auto" }} />
 
       <Grid container spacing={2} className={style.dealsContainer}>
         {deals.map((deal, i) => (
@@ -587,10 +564,10 @@ export function Flights_Home() {
                 subheader={
                   <div>
                     <p className={style.dealSubtitle}>
-                      {`${getDateTimeValues(
+                      {`${getDateTimeValues(deal, "departure")} - ${getDateTimeValues(
                         deal,
-                        "departure"
-                      )} - ${getDateTimeValues(deal, "arrival")}`}
+                        "arrival"
+                      )}`}
                     </p>
                   </div>
                 }

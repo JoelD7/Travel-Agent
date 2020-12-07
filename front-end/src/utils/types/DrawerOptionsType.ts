@@ -6,3 +6,9 @@ export interface DrawerOptions {
   route: string;
   selected: boolean;
 }
+
+export interface RestaurantFilter {
+  id: number;
+  name: string;
+  checked: boolean;
+}

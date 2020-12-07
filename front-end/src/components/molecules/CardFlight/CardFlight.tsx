@@ -5,11 +5,6 @@ import { format } from "date-fns";
 import React from "react";
 import { Colors } from "../../../styles";
 import { currencyFormatter } from "../../../utils";
-import {
-  Flight,
-  FlightItinerary,
-  FlightSegment,
-} from "../../../utils/types/Flight";
 import { CustomButton, IconText } from "../../atoms";
 import { cardFlightStyles } from "./cardFlightStyles";
 

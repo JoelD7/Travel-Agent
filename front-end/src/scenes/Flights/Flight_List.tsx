@@ -39,14 +39,8 @@ import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors, Shadow } from "../../styles";
 import { muiDateFormatter } from "../../utils";
 import { FlightTypes } from "../../utils/types";
-import { Flight } from "../../utils/types/Flight";
-import {
-  flightClasses,
-  FlightClassType,
-} from "../../utils/types/FlightClassType";
 import {
   FlightSearchParams,
-  DatetimeRange as DatetimeRangeType,
 } from "../../utils/types/FlightSearchParams";
 import { flightListStyles } from "./flight-list-styles";
 
@@ -282,7 +276,7 @@ export function Flight_List() {
     flightDateRangeField: "exitFlightDates" | "returnFlightDates",
     destinationDateRangeField: "departureDatetimeRange" | "arrivalDatetimeRange"
   ) {
-    let curFlightTypeRange: DatetimeRangeType | undefined =
+    let curFlightTypeRange: DatetimeRange | undefined =
       state[flightDateRangeField];
 
     if (curFlightTypeRange) {

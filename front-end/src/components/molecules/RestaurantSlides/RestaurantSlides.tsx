@@ -13,7 +13,6 @@ import { SliderArrow } from "../../atoms";
 import { restaurantSlidesStyles } from "./restaurantSlides-styles";
 import Slider from "react-slick";
 import { Colors } from "../../../styles";
-import { Restaurant } from "../../../utils/types/Restaurant";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Ratings from "react-ratings-declarative";
 import { useHistory } from "react-router-dom";

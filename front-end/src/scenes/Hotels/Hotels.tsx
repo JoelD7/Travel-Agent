@@ -151,6 +151,8 @@ export function Hotels() {
     },
   ];
 
+  
+
   const [state, setState] = useState<HotelSearch>({
     checkIn: new Date(),
     checkOut: addDays(new Date(), 2),

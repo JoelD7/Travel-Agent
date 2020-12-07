@@ -2,8 +2,7 @@ import { restaurantDetailsStyles } from "./restaurantDetails-styles";
 import React from "react";
 import { CustomButton, IconText, Navbar, ServicesToolbar } from "../../components";
 import { useParams } from "react-router-dom";
-import { Grid, Typography } from "@material-ui/core";
-import { Restaurant } from "../../utils/types/Restaurant";
+import { Grid } from "@material-ui/core";
 import Ratings from "react-ratings-declarative";
 import { Colors, Shadow } from "../../styles";
 import { faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -86,13 +85,16 @@ export function RestaurantDetails() {
             <IconText text={restaurant.location.address} icon={faMapMarkerAlt} />
             <p style={{ margin: "auto 5px" }}>|</p>
             <IconText text={restaurant.phoneNumbers} icon={faPhone} />
-            <CustomButton
-              style={{ margin: "auto 0px auto auto", boxShadow: Shadow.LIGHT }}
-              label="Include in trip"
-              onClick={() => {}}
-              backgroundColor={Colors.GREEN}
-              rounded
-            />
+            
+            <Grid item className={style.tripButtonGrid}>
+              <CustomButton
+                style={{ boxShadow: Shadow.LIGHT }}
+                label="Include in trip"
+                onClick={() => {}}
+                backgroundColor={Colors.GREEN}
+                rounded
+              />
+            </Grid>
           </Grid>
         </Grid>
 

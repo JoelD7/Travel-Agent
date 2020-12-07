@@ -13,7 +13,6 @@ import {
 } from "@material-ui/core";
 import React, { ChangeEvent, useState } from "react";
 import { Colors } from "../../../styles";
-import { RestaurantFilter } from "../../../utils/types/Establishment";
 import { CustomButton } from "../../atoms";
 import { checkboxSelectorDialog } from "../../atoms/checkboxSelectorDialog-styles";
 

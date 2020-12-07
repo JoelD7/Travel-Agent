@@ -1,6 +1,11 @@
-export interface Restaurant {
+interface Queso {
+  type: string;
+  color: string;
+}
+
+interface Restaurant {
   id: string;
-  name: string; 
+  name: string;
   url: string;
   location: ResLocation;
   cuisines: string;
@@ -8,15 +13,15 @@ export interface Restaurant {
   avgCostForTwo: number;
   priceRange: number;
   currency: string;
-  highlights: string[];//Amenities
+  highlights: string[]; //Amenities
   thumb: string;
   rating: number;
   ratingText: string;
   photosURL: string; //Url to Zomato page with photos
   menuURL: string; //Url to Zomato page with menu
-  featuredImage: string;//Main pic
+  featuredImage: string; //Main pic
   phoneNumbers: string;
-  establishment: string[];//Establisment types
+  establishment: string[]; //Establisment types
 }
 
 interface ResLocation {
@@ -28,4 +33,10 @@ interface ResLocation {
   longitude: string;
   zipcode: string;
   countryID: number;
+}
+
+interface RestaurantFilter {
+  id: number;
+  name: string;
+  checked: boolean;
 }

@@ -22,8 +22,6 @@ import {
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import { restaurantListStyles } from "./restaurantList-styles";
-import { RestaurantFilter } from "../../utils/types/Establishment";
-import { Restaurant } from "../../utils/types/Restaurant";
 import { restaurantsPlaceholder } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Slider from "react-slick";
