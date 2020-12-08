@@ -34,30 +34,15 @@ import {
 } from "../../components";
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors } from "../../styles";
-import { muiDateFormatter } from "../../utils";
+import { formatFlightDateTime, getFlightCitiesLabel, muiDateFormatter, Routes } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightStyles } from "./flights-styles";
 
 import axios, { AxiosRequestConfig } from "axios";
+import { useHistory } from "react-router-dom";
 
 export function Flights_Home() {
-  useEffect(() => {
-    const options: AxiosRequestConfig = {
-      method: "GET",
-      url: "http://opentable.herokuapp.com/api/cities",
-    };
-
-    axios
-      .request(options)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  }, []);
-
   const style = flightStyles();
 
   const theme = createMuiTheme({
@@ -176,6 +161,8 @@ export function Flights_Home() {
     image: "/destinations/dubai.jpg",
     name: "Dubai",
   };
+
+  const history = useHistory()
 
   const [state, setState] = useState<FlightSearchParams>({
     adults: "",
@@ -345,20 +332,6 @@ export function Flights_Home() {
     },
   ];
 
-  function getFlightCitiesLabel(flight: Flight, point: "departure" | "arrival") {
-    return point === "departure"
-      ? `${flight.itineraries[0].segments[0].departure.city} (${flight.itineraries[0].segments[0].departure.iata})`
-      : `${flight.itineraries[0].segments[0].arrival.city} (${flight.itineraries[0].segments[0].arrival.iata})`;
-  }
-
-  function getDateTimeValues(flight: Flight, point: "departure" | "arrival") {
-    let departureTime = flight.itineraries[0].segments[0].departure.at;
-    let arrivalTime = flight.itineraries[0].segments[0].arrival.at;
-
-    return point === "departure"
-      ? `${format(departureTime, "d/MMM, hh:mm aaa")}`
-      : `${format(arrivalTime, "d/MMM,  hh:mm aaa")}`;
-  }
 
   return (
     <div className={style.mainContainer}>
@@ -529,7 +502,7 @@ export function Flights_Home() {
               backgroundColor={Colors.PURPLE}
               style={{ width: "100%" }}
               label="Find flights"
-              onClick={() => {}}
+              onClick={() => history.push(Routes.FLIGHT_LIST)}
             />
           </Grid>
         </Grid>
@@ -564,7 +537,7 @@ export function Flights_Home() {
                 subheader={
                   <div>
                     <p className={style.dealSubtitle}>
-                      {`${getDateTimeValues(deal, "departure")} - ${getDateTimeValues(
+                      {`${formatFlightDateTime(deal, "departure")} - ${formatFlightDateTime(
                         deal,
                         "arrival"
                       )}`}

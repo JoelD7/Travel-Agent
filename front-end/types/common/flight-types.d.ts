@@ -16,8 +16,6 @@ type Business = typeof Business;
 const First = "First";
 type First = typeof First;
 
-const flightClasses = [Economy, PremiumEconomy, Business, First];
-
 type FlightClassType = Economy | PremiumEconomy | Business | First | "";
 
 //#region
@@ -47,13 +45,13 @@ interface FlightItinerary {
  *  - Segments: A - B and then, B - C
  */
 interface FlightSegment {
-  departure: DepartArrive;
-  arrival: DepartArrive;
+  departure: PlaceRelation;
+  arrival: PlaceRelation;
   carrier: string;
   duration: string;
 }
 
-interface DepartArrive {
+interface PlaceRelation {
   iata: string;
   city: string;
   terminal: string;

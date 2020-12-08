@@ -8,7 +8,7 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     width: "85%",
-    margin: "auto",
+    margin: "auto auto 50px auto",
   },
   detailsGrid: {
     [theme.breakpoints.down(910)]: {
@@ -33,6 +33,7 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
   },
   restaurantImage: {
     objectFit: "cover",
+    width: '100%',
     height: "100%",
     margin: "auto",
   },

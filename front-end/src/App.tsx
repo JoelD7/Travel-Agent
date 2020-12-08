@@ -2,6 +2,7 @@ import * as React from "react";
 // import Login from "./scenes/Login/Login";
 // import SignUp from "./scenes/SignUp/SignUp";
 import {
+  FlightDetails,
   Flights_Home,
   Flight_List,
   Home,

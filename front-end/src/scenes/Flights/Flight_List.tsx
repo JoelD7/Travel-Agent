@@ -9,25 +9,24 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  Backdrop,
   createMuiTheme,
   Divider,
   Drawer,
   FormControl,
   Grid,
   MenuItem,
+  Modal,
   Select,
   ThemeProvider,
 } from "@material-ui/core";
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays, parseISO, isBefore } from "date-fns";
 import React, { useState } from "react";
 import { Family } from "../../assets/fonts";
 import {
-  CardFlight,
+  CardFlightDeal,
   CustomButton,
   DatetimeRange,
   FlightTimesRange,
@@ -39,10 +38,9 @@ import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors, Shadow } from "../../styles";
 import { muiDateFormatter } from "../../utils";
 import { FlightTypes } from "../../utils/types";
-import {
-  FlightSearchParams,
-} from "../../utils/types/FlightSearchParams";
+import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightListStyles } from "./flight-list-styles";
+import { FlightDetails } from "./FlightDetails";
 
 export function Flight_List() {
   const style = flightListStyles();
@@ -144,10 +142,7 @@ export function Flight_List() {
         new Date(2020, 10, 9, 10, 0),
         new Date(2020, 10, 10, 10, 0),
       ],
-      arrivalDatetimeRange: [
-        new Date(2020, 10, 10, 17, 0),
-        new Date(2020, 10, 11, 5, 0),
-      ],
+      arrivalDatetimeRange: [new Date(2020, 10, 10, 17, 0), new Date(2020, 10, 11, 5, 0)],
     },
     returnFlightDates: {
       minDeparture: new Date(2020, 10, 20, 10, 0),
@@ -160,10 +155,7 @@ export function Flight_List() {
         new Date(2020, 10, 20, 10, 0),
         new Date(2020, 10, 20, 15, 0),
       ],
-      arrivalDatetimeRange: [
-        new Date(2020, 10, 21, 8, 0),
-        new Date(2020, 10, 21, 15, 0),
-      ],
+      arrivalDatetimeRange: [new Date(2020, 10, 21, 8, 0), new Date(2020, 10, 21, 15, 0)],
     },
   });
 
@@ -271,13 +263,19 @@ export function Flight_List() {
     },
   ];
 
+  const flightClasses: FlightClassType[] = [
+    "Business",
+    "Economy",
+    "First",
+    "Premium Economy",
+  ];
+
   function onDateRangeChanged(
     arr: number[],
     flightDateRangeField: "exitFlightDates" | "returnFlightDates",
     destinationDateRangeField: "departureDatetimeRange" | "arrivalDatetimeRange"
   ) {
-    let curFlightTypeRange: DatetimeRange | undefined =
-      state[flightDateRangeField];
+    let curFlightTypeRange: DatetimeRange | undefined = state[flightDateRangeField];
 
     if (curFlightTypeRange) {
       setState({
@@ -313,9 +311,7 @@ export function Flight_List() {
             min={state.exitFlightDates?.minDeparture}
             destinationDateRangeField="departureDatetimeRange"
             flightDateRangeField="exitFlightDates"
-            destinationDateRangeValue={
-              state.exitFlightDates?.departureDatetimeRange
-            }
+            destinationDateRangeValue={state.exitFlightDates?.departureDatetimeRange}
             onDateRangeChanged={onDateRangeChanged}
           />
 
@@ -326,9 +322,7 @@ export function Flight_List() {
             min={state.exitFlightDates?.minArrival}
             destinationDateRangeField="arrivalDatetimeRange"
             flightDateRangeField="exitFlightDates"
-            destinationDateRangeValue={
-              state.exitFlightDates?.arrivalDatetimeRange
-            }
+            destinationDateRangeValue={state.exitFlightDates?.arrivalDatetimeRange}
             onDateRangeChanged={onDateRangeChanged}
           />
 
@@ -339,9 +333,7 @@ export function Flight_List() {
             min={state.returnFlightDates?.minDeparture}
             destinationDateRangeField="departureDatetimeRange"
             flightDateRangeField="returnFlightDates"
-            destinationDateRangeValue={
-              state.returnFlightDates?.departureDatetimeRange
-            }
+            destinationDateRangeValue={state.returnFlightDates?.departureDatetimeRange}
             onDateRangeChanged={onDateRangeChanged}
           />
 
@@ -352,9 +344,7 @@ export function Flight_List() {
             min={state.returnFlightDates?.minArrival}
             destinationDateRangeField="arrivalDatetimeRange"
             flightDateRangeField="returnFlightDates"
-            destinationDateRangeValue={
-              state.returnFlightDates?.arrivalDatetimeRange
-            }
+            destinationDateRangeValue={state.returnFlightDates?.arrivalDatetimeRange}
             onDateRangeChanged={onDateRangeChanged}
           />
         </div>
@@ -370,9 +360,7 @@ export function Flight_List() {
       <div className={style.pageTitleContainerPic}>
         <Grid container spacing={4} className={style.pageTitleContainer}>
           <Grid item xs={12}>
-            <h1 style={{ color: "white", marginBottom: "0px" }}>
-              Flights to Dubai
-            </h1>
+            <h1 style={{ color: "white", marginBottom: "0px" }}>Flights to Dubai</h1>
           </Grid>
 
           <Grid key="destinationTF" item className={style.reservParamGrid}>
@@ -437,9 +425,7 @@ export function Flight_List() {
 
             {passengersParams.map((passenger, i) => (
               <Grid item key={i} className={style.passengerParamGrid}>
-                <h5 className={style.reservationParamText}>
-                  {passenger.label}
-                </h5>
+                <h5 className={style.reservationParamText}>{passenger.label}</h5>
 
                 <FormControl style={{ width: "100%" }}>
                   <Select
@@ -447,10 +433,7 @@ export function Flight_List() {
                     variant="outlined"
                     className={style.select}
                     startAdornment={
-                      <FontAwesomeIcon
-                        icon={passenger.icon}
-                        color={Colors.BLUE}
-                      />
+                      <FontAwesomeIcon icon={passenger.icon} color={Colors.BLUE} />
                     }
                     onChange={(e) =>
                       setState({
@@ -475,9 +458,7 @@ export function Flight_List() {
                   value={state.class}
                   variant="outlined"
                   className={style.select}
-                  startAdornment={
-                    <FontAwesomeIcon icon={faStar} color={Colors.BLUE} />
-                  }
+                  startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
                   onChange={(e) =>
                     setState({
                       ...state,
@@ -528,7 +509,7 @@ export function Flight_List() {
 
           <Grid item className={style.flightsGrid}>
             {flights.map((flight, i) => (
-              <CardFlight key={i} flight={flight} />
+              <CardFlightDeal key={i} flight={flight} />
             ))}
           </Grid>
         </Grid>

@@ -1,10 +1,10 @@
 import { faPlane } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid } from "@material-ui/core";
 import { format } from "date-fns";
-import React from "react";
+import React, { useState } from "react";
+import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
-import { currencyFormatter } from "../../../utils";
+import { currencyFormatter, parseFlightDuration } from "../../../utils";
 import { CustomButton, IconText } from "../../atoms";
 import { cardFlightStyles } from "./cardFlightStyles";
 
@@ -18,23 +18,8 @@ export function CardFlight({ flight }: CardFlight) {
   const returnFlight: FlightItinerary | undefined =
     flight.itineraries.length > 1 ? flight.itineraries[1] : undefined;
 
-  function parseDuration(duration: string) {
-    let hours = "";
-    let minutes = "";
-
-    duration
-      .substring(2)
-      .split("H")
-      .forEach((value, i) => {
-        if (i === 0) {
-          hours = value;
-        } else {
-          minutes = value.substring(0, value.length - 1);
-        }
-      });
-
-    return `${hours}h ${minutes}m`;
-  }
+  const [flightDetailsModal, setFlightDetailsModal] = useState(false);
+  console.log(flightDetailsModal);
 
   function parseStops(segments: FlightSegment[]) {
     let stopsSegments: FlightSegment[] = segments.slice(1, segments.length - 1);
@@ -51,9 +36,7 @@ export function CardFlight({ flight }: CardFlight) {
       }
     });
 
-    return segments.length > 1
-      ? `${quant} stops, ${stops}`
-      : `1 stop, ${stops}`;
+    return segments.length > 1 ? `${quant} stops, ${stops}` : `1 stop, ${stops}`;
   }
 
   return (
@@ -76,7 +59,7 @@ export function CardFlight({ flight }: CardFlight) {
           </Grid>
 
           <Grid item className={style.containerThree}>
-            <p className={style.durationText}>{`${parseDuration(
+            <p className={style.durationText}>{`${parseFlightDuration(
               exitFlight.duration
             )}`}</p>
             <p className={style.durationSubText}>
@@ -104,10 +87,7 @@ export function CardFlight({ flight }: CardFlight) {
                 <p className={style.timesText}>{`${format(
                   returnFlight.segments[0].departure.at,
                   "h:mm aa"
-                )} - ${format(
-                  returnFlight.segments[0].arrival.at,
-                  "h:mm aa"
-                )}`}</p>
+                )} - ${format(returnFlight.segments[0].arrival.at, "h:mm aa")}`}</p>
 
                 <p
                   className={style.airportsText}
@@ -116,7 +96,7 @@ export function CardFlight({ flight }: CardFlight) {
               </Grid>
 
               <Grid item className={style.containerThree}>
-                <p className={style.durationText}>{`${parseDuration(
+                <p className={style.durationText}>{`${parseFlightDuration(
                   returnFlight.duration
                 )}`}</p>
                 <p className={style.durationSubText}>
@@ -130,36 +110,21 @@ export function CardFlight({ flight }: CardFlight) {
 
           <Grid
             item
-            className={
-              returnFlight ? style.containerFour : style.containerFourFull
-            }
+            className={returnFlight ? style.containerFour : style.containerFourFull}
           >
             <CustomButton
               label="View details"
-              onClick={() => {}}
+              onClick={() => setFlightDetailsModal(true)}
               backgroundColor={Colors.GREEN}
             />
           </Grid>
         </Grid>
       </Grid>
 
-      <Grid item xs={12}>
-        <Grid container>
-          <Grid item className={style.priceGridRes}>
-            <h2 style={{ marginTop: "12px" }}>{`${currencyFormatter(
-              flight.price.total
-            )}`}</h2>
-          </Grid>
-
-          <Grid item className={style.buttonGridRes}>
-            <CustomButton
-              label="View details"
-              onClick={() => {}}
-              backgroundColor={Colors.GREEN}
-            />
-          </Grid>
-        </Grid>
-      </Grid>
+      <FlightDetails
+        onClose={() => setFlightDetailsModal(false)}
+        open={flightDetailsModal}
+      />
     </Grid>
   );
 }
