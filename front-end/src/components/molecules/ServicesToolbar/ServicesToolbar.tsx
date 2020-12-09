@@ -1,17 +1,17 @@
 import React from "react";
-import {
-  createMuiTheme,
-  MenuItem,
-  ThemeProvider,
-  Toolbar,
-} from "@material-ui/core";
+import { createMuiTheme, MenuItem, ThemeProvider, Toolbar } from "@material-ui/core";
 import { Colors } from "../../../styles";
 import { servicesToolbarStyles } from "../servicesToolbar-styles";
 import { useHistory } from "react-router-dom";
 import { Routes } from "../../../utils";
 
+interface NavbarService {
+  label: string;
+  route: string;
+}
+
 export function ServicesToolbar() {
-  const navbarServices = [
+  const navbarServices: NavbarService[] = [
     {
       label: "Hotels",
       route: Routes.HOTELS,
@@ -39,7 +39,7 @@ export function ServicesToolbar() {
       MuiListItem: {
         root: {
           "&.Mui-selected": {
-            backgroundColor: 'rgba(0,0,0,0)',
+            backgroundColor: "rgba(0,0,0,0)",
             borderBottom: `2px solid ${Colors.BLUE}`,
           },
         },
@@ -57,13 +57,24 @@ export function ServicesToolbar() {
 
   const history = useHistory();
 
+  function isServiceSelected(service: NavbarService) {
+    if (service.label === "Flights") {
+      return (
+        history.location.pathname === service.route ||
+        history.location.pathname === Routes.FLIGHT_LIST
+      );
+    } else {
+      return history.location.pathname === service.route;
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Toolbar className={style.servicesToolbar}>
         {navbarServices.map((service, i) => (
           <MenuItem
             key={i}
-            selected={history.location.pathname === service.route}
+            selected={isServiceSelected(service)}
             onClick={() => history.push(service.route)}
             classes={{ root: style.menuItemRoot }}
           >

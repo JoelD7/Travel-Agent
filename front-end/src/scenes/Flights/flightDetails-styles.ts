@@ -10,7 +10,7 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
   flightCard: {
     borderRadius: "5px",
     boxShadow: Shadow.LIGHT,
-    padding: "10px",
+    padding: "0px 15px",
     margin: "10px",
     backgroundColor: "white",
   },
@@ -49,11 +49,13 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    // margin: "50px auto auto auto",
     width: "750px",
     padding: "10px 30px",
     borderRadius: "5px",
-    backgroundColor: "#fcfcfc",
+    backgroundColor: "#f6f6f9",
+  },
+  paper: {
+    maxWidth: "750px",
   },
   subtitle: {
     marginTop: "0px",

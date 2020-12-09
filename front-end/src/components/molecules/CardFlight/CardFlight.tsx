@@ -19,7 +19,6 @@ export function CardFlight({ flight }: CardFlight) {
     flight.itineraries.length > 1 ? flight.itineraries[1] : undefined;
 
   const [flightDetailsModal, setFlightDetailsModal] = useState(false);
-  console.log(flightDetailsModal);
 
   function parseStops(segments: FlightSegment[]) {
     let stopsSegments: FlightSegment[] = segments.slice(1, segments.length - 1);
@@ -115,7 +114,6 @@ export function CardFlight({ flight }: CardFlight) {
             <CustomButton
               label="View details"
               onClick={() => setFlightDetailsModal(true)}
-              backgroundColor={Colors.GREEN}
             />
           </Grid>
         </Grid>

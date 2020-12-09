@@ -12,8 +12,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Backdrop, Dialog, Divider, Grid, IconButton, Modal } from "@material-ui/core";
 import { parseISO } from "date-fns";
 import React from "react";
+import { CustomButton } from "../../components";
 import { Colors } from "../../styles";
 import {
+  currencyFormatter,
   formatFlightDate,
   formatFlightTime,
   getFlightCitiesLabel,
@@ -23,9 +25,9 @@ import { flightDetailsStyles } from "./flightDetails-styles";
 
 interface FlightDetails {
   open: boolean;
-//   flight: Flight;
+  //   flight: Flight;
   onClose: () => void;
-//   passengers: number;
+  //   passengers: number;
 }
 
 interface FlightCard {
@@ -163,6 +165,7 @@ export function FlightDetails({ open, onClose }: FlightDetails) {
     <Dialog
       open={open}
       BackdropComponent={Backdrop}
+      classes={{ paper: style.paper }}
       BackdropProps={{
         timeout: 500,
       }}
@@ -232,6 +235,15 @@ export function FlightDetails({ open, onClose }: FlightDetails) {
         </Grid>
         <FlightCard itinerary={0} />
         <FlightCard itinerary={1} />
+
+        <Grid item xs={12} style={{ marginTop: "20px" }}>
+          <Grid container justify="flex-end">
+            <h2 style={{ fontSize: "20px", marginRight: '10px' }}>{`US${currencyFormatter(
+              flight.price.total
+            )}`}</h2>
+            <CustomButton label="Purchase flight" onClick={() => {}} />
+          </Grid>
+        </Grid>
       </Grid>
     </Dialog>
   );
