@@ -101,7 +101,7 @@ export function RestaurantDetails() {
         <Grid item className={style.imageGrid}>
           <Grid container style={{ height: "100%" }}>
             <img
-              src={restaurant.featuredImage}
+              src={restaurant.featuredImage}  
               className={style.restaurantImage}
               alt="restaurant image"
             />

@@ -7,14 +7,13 @@ import {
   CardContent,
 } from "@material-ui/core";
 import React from "react";
-import { faCircle, faFilter } from "@fortawesome/free-solid-svg-icons";
+import { faCircle} from "@fortawesome/free-solid-svg-icons";
 import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
-import { SliderArrow } from "../../atoms";
+import { SliderArrow, Title } from "../../atoms";
 import { restaurantSlidesStyles } from "./restaurantSlides-styles";
 import Slider from "react-slick";
 import { Colors } from "../../../styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Ratings from "react-ratings-declarative";
 import { useHistory } from "react-router-dom";
 import { Routes } from "../../../utils";
 
@@ -70,7 +69,7 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
     <div style={{ marginTop: "20px" }}>
       <Grid item className={style.slideshowGrid}>
         <Grid container>
-          <h2 style={{ marginLeft: "53px" }}>{`${title}`}</h2>
+          <Title style={{ marginLeft: "53px" }} component="h2">{title}</Title>
           <Button
             style={{ textTransform: "capitalize", margin: "auto 0px auto auto" }}
             classes={{ root: style.textButton }}
@@ -88,7 +87,11 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
                   <CardActionArea
                     onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
                   >
-                    <CardMedia component="img" height="150" image={restaurant.featuredImage} />
+                    <CardMedia
+                      component="img"
+                      height="150"
+                      image={restaurant.featuredImage}
+                    />
                   </CardActionArea>
 
                   <CardContent>

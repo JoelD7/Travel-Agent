@@ -16,7 +16,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Routes } from "./utils";
 export default function App() {
   return (
-    <Router>
+    <Router basename="/Travel-Agent">
       <Switch>
         <Route exact path={Routes.HOME} component={Home} />
         <Route exact path={Routes.SIGNUP} component={SignUp} />

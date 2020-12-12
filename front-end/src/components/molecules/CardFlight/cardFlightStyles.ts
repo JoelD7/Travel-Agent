@@ -8,13 +8,13 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     color: "#5f5f5f",
     marginTop: "0px",
   },
-  containerOne: {
+  planeIconGrid: {
     width: "8.3%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
-  containerTwo: {
+  timesIataGrid: {
     width: "50%",
     alignItems: "center",
     justifyContent: "center",
@@ -22,13 +22,13 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
       width: "75.1%",
     },
   },
-  containerThree: {
-    width: "16.6%",
+  timeStopsGrid: {
+    width: "10.6%",
     alignItems: "center",
     justifyContent: "center",
   },
-  containerFour: {
-    width: "25%",
+  priceButtonGrid: {
+    width: "31%",
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
@@ -37,7 +37,7 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
       display: "none",
     },
   },
-  containerFourFull: {
+  priceButtonGridFull: {
     width: "100%",
     display: "flex",
     alignItems: "center",
@@ -45,6 +45,12 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
 
     [theme.breakpoints.down(625)]: {
       display: "none",
+    },
+  },
+  priceButtonXS: {
+    display: "none",
+    [theme.breakpoints.down(625)]: {
+      display: "block",
     },
   },
   priceGridRes: {

@@ -7,7 +7,6 @@ export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
   },
   restaurantName:{
     fontSize: "14px",
-    fontWeight: 'bold',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',

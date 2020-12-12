@@ -16,7 +16,7 @@ import { CDrawer } from "./CDrawer/CDrawer";
 export const Navbar: FunctionComponent = ({ children }) => {
   const style = navbarStyles();
   const searchQuery = useSelector(selectSearchQuery);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
 
   const buttonStyle: CreateCSSProperties<{}> = {
     margin: "0 5px 0 5px",

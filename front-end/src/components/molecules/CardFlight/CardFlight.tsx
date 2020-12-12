@@ -40,12 +40,12 @@ export function CardFlight({ flight }: CardFlight) {
 
   return (
     <Grid container className={style.mainContainer}>
-      <Grid item xs={12}>
+      <Grid key="outgoing flight" item xs={12}>
         <Grid container>
-          <Grid item className={style.containerOne}>
+          <Grid item className={style.planeIconGrid}>
             <IconText text="" icon={faPlane} size="22px" />
           </Grid>
-          <Grid item className={style.containerTwo}>
+          <Grid item className={style.timesIataGrid}>
             <p className={style.timesText}>{`${format(
               exitFlight.segments[0].departure.at,
               "h:mm aa"
@@ -57,7 +57,7 @@ export function CardFlight({ flight }: CardFlight) {
             ${exitFlight.segments[0].arrival.iata}, ${exitFlight.segments[0].carrier}`}</p>
           </Grid>
 
-          <Grid item className={style.containerThree}>
+          <Grid item className={style.timeStopsGrid}>
             <p className={style.durationText}>{`${parseFlightDuration(
               exitFlight.duration
             )}`}</p>
@@ -67,7 +67,8 @@ export function CardFlight({ flight }: CardFlight) {
                 : "Nonstop"}
             </p>
           </Grid>
-          <Grid item className={style.containerFour}>
+          
+          <Grid item className={style.priceButtonGrid}>
             <h2 style={{ marginTop: "12px" }}>{`${currencyFormatter(
               flight.price.total
             )}`}</h2>
@@ -75,14 +76,14 @@ export function CardFlight({ flight }: CardFlight) {
         </Grid>
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid key="return flight" item xs={12}>
         <Grid container>
           {returnFlight && (
             <>
-              <Grid item className={style.containerOne}>
+              <Grid item className={style.planeIconGrid}>
                 <IconText text="" icon={faPlane} size="22px" />
               </Grid>
-              <Grid item className={style.containerTwo}>
+              <Grid item className={style.timesIataGrid}>
                 <p className={style.timesText}>{`${format(
                   returnFlight.segments[0].departure.at,
                   "h:mm aa"
@@ -94,7 +95,7 @@ export function CardFlight({ flight }: CardFlight) {
               ${returnFlight.segments[0].arrival.iata}, ${returnFlight.segments[0].carrier}`}</p>
               </Grid>
 
-              <Grid item className={style.containerThree}>
+              <Grid item className={style.timeStopsGrid}>
                 <p className={style.durationText}>{`${parseFlightDuration(
                   returnFlight.duration
                 )}`}</p>
@@ -109,13 +110,26 @@ export function CardFlight({ flight }: CardFlight) {
 
           <Grid
             item
-            className={returnFlight ? style.containerFour : style.containerFourFull}
+            className={returnFlight ? style.priceButtonGrid : style.priceButtonGridFull}
           >
             <CustomButton
               label="View details"
               onClick={() => setFlightDetailsModal(true)}
             />
           </Grid>
+        </Grid>
+      </Grid>
+
+      <Grid key="price & button xs" item xs={12} className={style.priceButtonXS}>
+        <Grid container alignItems="center">
+          <h2 style={{ marginRight: "auto", marginTop: "12px" }}>{`${currencyFormatter(
+            flight.price.total
+          )}`}</h2>
+          <CustomButton
+            label="View details"
+            style={{ marginLeft: "auto" }}
+            onClick={() => setFlightDetailsModal(true)}
+          />
         </Grid>
       </Grid>
 

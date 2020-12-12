@@ -1,502 +1,362 @@
-let arr = [
+let o = [
   {
-    id: "16769546",
-    name: "Katz's Delicatessen",
-    url:
-      "https://www.zomato.com/new-york-city/katzs-delicatessen-lower-east-side?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "205 East Houston Street, New York 10002",
-      locality: "Lower East Side",
-      city: "New York City",
-      city_id: 280,
-      latitude: "40.7223277778",
-      longitude: "-73.9873500000",
-      zipcode: "10002",
-      country_id: 216,
-      locality_verbose: "Lower East Side",
+    type: "Feature",
+    id: "9632200",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.926155, 18.488581],
     },
-    cuisines: "Sandwich",
-    timings:
-      "8 AM to 10:30 PM (Mon, Tue, Wed, Sun), 8 AM to 2:30 AM (Thu),24 Hours (Fri-Sat)",
-    avgCostForTwo: 30,
-    priceRange: 2,
-    currency: "$",
-    highlights: [
-      "Lunch",
-      "Serves Alcohol",
-      "Cash",
-      "Dinner",
-      "Credit Card",
-      "Takeaway Available",
-      "Breakfast",
-      "Wine",
-      "Indoor Seating",
-      "Kosher",
-      "Beer",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/6/16769546/48ab9901ddf191d13ade07221b43ba93.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-
-    photosURL:
-      "https://www.zomato.com/new-york-city/katzs-delicatessen-lower-east-side/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    photo_count: 9323,
-    menuURL:
-      "https://www.zomato.com/new-york-city/katzs-delicatessen-lower-east-side/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    feauturedImage:
-      "https://b.zmtcdn.com/data/pictures/6/16769546/48ab9901ddf191d13ade07221b43ba93.jpg",
-    phoneNumbers: "(212) 254-2246",
-    establishment: ["Deli"],
-    rating: "",
-    ratingText: "",
+    properties: {
+      xid: "W111187823",
+      name: "Estadio Quisqueya",
+      dist: 599.56992893,
+      rate: 3,
+      osm: "way/111187823",
+      wikidata: "Q5400466",
+      kinds: "sport,stadiums",
+    },
   },
   {
-    id: "16771079",
-    name: "Lombardi's Pizza",
-    url:
-      "https://www.zomato.com/new-york-city/lombardis-pizza-lower-east-side?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "32 Spring Street, New York 10012",
-      locality: "Spring Street, Lower East Side",
-      city: "New York City",
-      city_id: 280,
-      latitude: "40.7215730000",
-      longitude: "-73.9956350000",
-      zipcode: "10012",
-      country_id: 216,
-      locality_verbose: "Spring Street, Lower East Side, New York City",
+    type: "Feature",
+    id: "5631482",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.919411, 18.480495],
     },
-    cuisines: "Pizza, Italian",
-    timings:
-      "11:30 AM to 11 PM (Mon, Tue, Wed, Thu, Sun), 11:30 AM to 12 Midnight (Fri-Sat)",
-    avgCostForTwo: 50,
-    priceRange: 3,
-    currency: "$",
-    highlights: [
-      "Lunch",
-      "Delivery",
-      "Dinner",
-      "Cash",
-      "Takeaway Available",
-      "Wine",
-      "Private Parking",
-      "Street Parking",
-      "ATM",
-      "Beer",
-      "Indoor Seating",
-      "Casual Attire",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/res_imagery/16771079_RESTAURANT_da60c9abb32fa64cddc148a2795ae43c_c.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-
-    photosURL:
-      "https://www.zomato.com/new-york-city/lombardis-pizza-lower-east-side/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    photo_count: 2152,
-    menuURL:
-      "https://www.zomato.com/new-york-city/lombardis-pizza-lower-east-side/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    feauturedImage:
-      "https://b.zmtcdn.com/data/res_imagery/16771079_RESTAURANT_da60c9abb32fa64cddc148a2795ae43c_c.jpg",
-    phoneNumbers: "(212) 941-7994",
-    establishment: ["Pizzeria"],
-    rating: "",
-    ratingText: "",
+    properties: {
+      xid: "W28809979",
+      name: "Estadio Olímpico Félix Sánchez",
+      dist: 1391.39722096,
+      rate: 2,
+      osm: "way/28809979",
+      wikidata: "Q770641",
+      kinds: "sport,stadiums",
+    },
   },
   {
-    id: "16781904",
-    name: "Momofuku Noodle Bar",
-    url:
-      "https://www.zomato.com/new-york-city/momofuku-noodle-bar-east-village?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "171 1st Avenue 10003",
-      locality: "East Village",
-      city: "New York City",
-      city_id: 280,
-      latitude: "40.7291000000",
-      longitude: "-73.9843200000",
-      zipcode: "10003",
-      country_id: 216,
-      locality_verbose: "East Village",
+    type: "Feature",
+    id: "12275166",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.919212, 18.477503],
     },
-    cuisines: "Asian, Ramen",
-    timings:
-      "12 Noon to 4:30 PM, 5:30 PM to 11 PM (Mon-Thu),12 Noon to 4:30 PM, 5:30 PM to 1 AM (Fri),12 Noon to 4 PM, 5:30 PM to 1 AM (Sat),12 Noon to 4 PM, 5:30 PM to 11 PM (Sun)",
-    avgCostForTwo: 70,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Lunch",
-      "Serves Alcohol",
-      "Delivery",
-      "Credit Card",
-      "Dinner",
-      "Takeaway Available",
-      "Lunch Menu",
-      "Beer",
-      "Wine",
-      "Indoor Seating",
-      "Table booking recommended",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/chains/3/16772773/032b860c175202ad63c7a5ae1add1f99.png?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-
-    photosURL:
-      "https://www.zomato.com/new-york-city/momofuku-noodle-bar-east-village/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    photo_count: 9169,
-    menuURL:
-      "https://www.zomato.com/new-york-city/momofuku-noodle-bar-east-village/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    feauturedImage:
-      "https://b.zmtcdn.com/data/pictures/chains/3/16772773/032b860c175202ad63c7a5ae1add1f99.png?output-format=webp",
-    phoneNumbers: "(212) 777-7773",
-    establishment: ["Casual Dining"],
-    rating: "",
-    ratingText: "",
+    properties: {
+      xid: "Q29427284",
+      name: "Centro Olímpico Juan Pablo Duarte Velodrome",
+      dist: 1583.90264927,
+      rate: 1,
+      wikidata: "Q29427284",
+      kinds: "sport,stadiums",
+    },
   },
   {
-    id: "16777961",
-    name: "The Spotted Pig",
-    url:
-      "https://www.zomato.com/new-york-city/the-spotted-pig-greenwich-village?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "314 West 11th Street 10014",
-      locality: "Greenwich Village",
-      city: "New York City",
-      city_id: 280,
-      latitude: "40.7355900000",
-      longitude: "-74.0065000000",
-      zipcode: "10014",
-      country_id: 216,
-      locality_verbose: "Greenwich Village",
+    type: "Feature",
+    id: "45691",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.919914, 18.476021],
     },
-    cuisines: "Burger, Bar Food",
-    timings: "12 Noon to 2 AM (Mon-Fri),11 AM to 2 AM (Sat-Sun)",
-    avgCostForTwo: 70,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Dinner",
-      "Credit Card",
-      "Lunch",
-      "Serves Alcohol",
-      "Michelin Starred",
-      "Fullbar",
-      "Indoor Seating",
-      "Nightlife",
-      "Gastro Pub",
-      "Brunch",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/chains/1/16777961/1c02d5846ed641b4a9d096b1486f30e2.png?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-
-    photosURL:
-      "https://www.zomato.com/new-york-city/the-spotted-pig-greenwich-village/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    photo_count: 2744,
-    menuURL:
-      "https://www.zomato.com/new-york-city/the-spotted-pig-greenwich-village/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    feauturedImage:
-      "https://b.zmtcdn.com/data/pictures/chains/1/16777961/1c02d5846ed641b4a9d096b1486f30e2.png?output-format=webp",
-    phoneNumbers: "(212) 937-8518, (212) 620-0393, (212) 937-8518",
-    establishment: ["Casual Dining"],
-    rating: "",
-    ratingText: "",
+    properties: {
+      xid: "W180423715",
+      name: "Pabellon de Esgrima",
+      dist: 1632.630265,
+      rate: 1,
+      osm: "way/180423715",
+      kinds: "sport,stadiums",
+    },
   },
   {
-    id: "16760100",
-    name: "Balthazar",
-    url:
-      "https://www.zomato.com/new-york-city/balthazar-soho?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "80 Spring Street 10012",
-      locality: "Soho",
-      city: "New York City",
-      city_id: 280,
-      latitude: "40.7225900000",
-      longitude: "-73.9980500000",
-      zipcode: "10012",
-      country_id: 216,
-      locality_verbose: "Soho",
+    type: "Feature",
+    id: "70303",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.921364, 18.498959],
     },
-    cuisines: "French, Seafood, Bakery",
-    timings:
-      "7:30 AM to 11:30 AM, 12 Noon to 5 PM, 6 PM to 12 Midnight (Mon-Fri),9 AM to 4 PM, 6 PM to 1 AM (Sat),9 AM to 4 PM, 5:30 PM to 1 AM (Sun)",
-    avgCostForTwo: 140,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Dinner",
-      "Takeaway Available",
-      "Credit Card",
-      "Lunch",
-      "Serves Alcohol",
-      "Breakfast",
-      "Lunch Menu",
-      "Indoor Seating",
-      "Brunch",
-      "Fullbar",
-      "Vegan Options",
-      "Desserts and Bakes",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/0/16760100/2cee8640b74a1e53fde146c9c90f5213.png?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-
-    photosURL:
-      "https://www.zomato.com/new-york-city/balthazar-soho/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    photo_count: 4916,
-    menuURL:
-      "https://www.zomato.com/new-york-city/balthazar-soho/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    feauturedImage:
-      "https://b.zmtcdn.com/data/pictures/0/16760100/2cee8640b74a1e53fde146c9c90f5213.png?output-format=webp",
-    phoneNumbers: "(212) 965-1414",
-    establishment: ["Casual Dining"],
-    rating: "",
-    ratingText: "",
+    properties: {
+      xid: "W196942228",
+      name: "Club Los Cachorros",
+      dist: 1762.06595799,
+      rate: 1,
+      osm: "way/196942228",
+      kinds: "sport,stadiums",
+    },
   },
   {
-    id: "16777384",
-    name: "Shake Shack",
-    url:
-      "https://www.zomato.com/new-york-city/shake-shack-gramercy-flatiron?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "Madison Square Park, 23rd & Madison, New York 10010",
-      locality: "Gramercy-Flatiron",
-      city: "New York City",
-      city_id: 280,
-      latitude: "40.7408681000",
-      longitude: "-73.9879841000",
-      zipcode: "10010",
-      country_id: 216,
-      locality_verbose: "Gramercy-Flatiron",
+    type: "Feature",
+    id: "5631683",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.918747, 18.474911],
     },
-    cuisines: "American, Burger",
-    timings: "7 AM to 11 PM (Mon-Fri), 8 AM to 11 PM (Sat-Sun)",
-    avgCostForTwo: 30,
-    priceRange: 2,
-    currency: "$",
-    highlights: [
-      "Lunch",
-      "Serves Alcohol",
-      "Breakfast",
-      "Dinner",
-      "Cash",
-      "Takeaway Available",
-      "Credit Card",
-      "Debit Card",
-      "Outdoor Seating",
-      "Beer",
-      "Dog Friendly",
-      "Gluten Free Options",
-      "Wine",
-      "Indoor Seating",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/4/16777384/2a989275f117f6bf1f63919c66cbc2cc.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-
-    photosURL:
-      "https://www.zomato.com/new-york-city/shake-shack-gramercy-flatiron/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    photo_count: 133,
-    menuURL:
-      "https://www.zomato.com/new-york-city/shake-shack-gramercy-flatiron/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    feauturedImage:
-      "https://b.zmtcdn.com/data/pictures/4/16777384/2a989275f117f6bf1f63919c66cbc2cc.jpg?output-format=webp",
-    phoneNumbers: "(212) 889-6600",
-    establishment: ["Fast Food"],
-    rating: "",
-    ratingText: "",
+    properties: {
+      xid: "W359228107",
+      name: "Palacio de los Deportes Virgilio Travieso Soto",
+      dist: 1806.61972416,
+      rate: 1,
+      osm: "way/359228107",
+      kinds: "sport,stadiums",
+    },
   },
   {
-    id: "16781875",
-    name: "Ippudo",
-    url:
-      "https://www.zomato.com/new-york-city/ippudo-east-village?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "65 4th Avenue, New York 10003",
-      locality: "East Village",
-      city: "New York City",
-      city_id: 280,
-      latitude: "40.7307361111",
-      longitude: "-73.9906833333",
-      zipcode: "10003",
-      country_id: 216,
-      locality_verbose: "East Village",
+    type: "Feature",
+    id: "9404250",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.916199, 18.477766],
     },
-    cuisines: "Ramen",
-    timings:
-      "11 AM to 3:30 PM, 5 PM to 12:30 AM (Mon-Fri),11 AM to 11:30 PM (Sat),11 AM to 8:30 PM (Sun)",
-    avgCostForTwo: 40,
-    priceRange: 3,
-    currency: "$",
-    highlights: [
-      "Dinner",
-      "Lunch",
-      "Credit Card",
-      "Lunch Menu",
-      "Indoor Seating",
-      "Fullbar",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/5/16781875/1a72663426d6e780f6363b6b7da6d48b.png?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-
-    photosURL:
-      "https://www.zomato.com/new-york-city/ippudo-east-village/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    photo_count: 606,
-    menuURL:
-      "https://www.zomato.com/new-york-city/ippudo-east-village/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    feauturedImage:
-      "https://b.zmtcdn.com/data/pictures/5/16781875/1a72663426d6e780f6363b6b7da6d48b.png?output-format=webp",
-    phoneNumbers: "(212) 388-0088",
-    establishment: ["Casual Dining"],
-    rating: "",
-    ratingText: "",
+    properties: {
+      xid: "W112410952",
+      name: "Palacio del Voleibol",
+      dist: 1833.16355205,
+      rate: 1,
+      osm: "way/112410952",
+      kinds: "sport,stadiums",
+    },
   },
   {
-    id: "16775039",
-    name: "Peter Luger Steak House",
-    url:
-      "https://www.zomato.com/new-york-city/peter-luger-steak-house-south-side?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "178 Broadway, Brooklyn 11211",
-      locality: "South Side",
-      city: "New York City",
-      city_id: 280,
-      latitude: "40.7098777778",
-      longitude: "-73.9623416667",
-      zipcode: "11211",
-      country_id: 216,
-      locality_verbose: "South Side",
+    type: "Feature",
+    id: "1127778",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.914696, 18.478273],
     },
-    cuisines: "Steak, American, German, Burger",
-    timings:
-      "11:30 AM to 9:30 PM (Mon-Thu),12 Noon to 10:30 PM (Fri-Sat),1 PM to 9:30 PM (Sun)",
-    avgCostForTwo: 150,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Lunch",
-      "Serves Alcohol",
-      "Cash",
-      "Dinner",
-      "Debit Card",
-      "Fullbar",
-      "Michelin Starred",
-      "Indoor Seating",
-      "Table booking recommended",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/reviews_photos/ea9/ed66f37a5492836605ec71582db68ea9_1441919144.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-
-    photosURL:
-      "https://www.zomato.com/new-york-city/peter-luger-steak-house-south-side/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    photo_count: 4171,
-    menuURL:
-      "https://www.zomato.com/new-york-city/peter-luger-steak-house-south-side/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    feauturedImage:
-      "https://b.zmtcdn.com/data/reviews_photos/ea9/ed66f37a5492836605ec71582db68ea9_1441919144.jpg?output-format=webp",
-    phoneNumbers: "(718) 387-7400",
-    establishment: ["Fine Dining"],
-    rating: "",
-    ratingText: "",
+    properties: {
+      xid: "N1235965983",
+      name: "Pabellón de Racquetball",
+      dist: 1946.13981328,
+      rate: 1,
+      osm: "node/1235965983",
+      kinds: "sport,stadiums",
+    },
   },
   {
-    id: "16761344",
-    name: "Buddakan",
-    url:
-      "https://www.zomato.com/new-york-city/buddakan-greenwich-village?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "75 9th Avenue 10011",
-      locality: "9th Avenue, Greenwich Village",
-      city: "New York City",
-      city_id: 280,
-      latitude: "40.7422762672",
-      longitude: "-74.0048000962",
-      zipcode: "10011",
-      country_id: 216,
-      locality_verbose: "9th Avenue, Greenwich Village, New York City",
+    type: "Feature",
+    id: "2428039",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.951591, 18.46578],
     },
-    cuisines: "Chinese, Fusion, Asian",
-    timings:
-      "5:30 PM to 11 PM (Mon-Tue), 5:30 PM to 12 Midnight (Wed-Thu), 5 PM to 1 AM (Fri-Sat), 5 PM to 11 PM (Sun)",
-    avgCostForTwo: 130,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Serves Alcohol",
-      "Credit Card",
-      "Dinner",
-      "Nightlife",
-      "Indoor Seating",
-      "Fullbar",
-      "Table booking recommended",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/4/16761344/5535198640b49778b948e916d392ebb8.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-
-    photosURL:
-      "https://www.zomato.com/new-york-city/buddakan-greenwich-village/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    photo_count: 212,
-    menuURL:
-      "https://www.zomato.com/new-york-city/buddakan-greenwich-village/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    feauturedImage:
-      "https://b.zmtcdn.com/data/pictures/4/16761344/5535198640b49778b948e916d392ebb8.jpg?output-format=webp",
-    phoneNumbers: "(212) 989-6699, (212) 989-6699",
-    establishment: ["Fine Dining"],
-    rating: "",
-    ratingText: "",
+    properties: {
+      xid: "N4642149668",
+      name: "Cancha de Baloncesto del Club Metropolitano",
+      dist: 3114.17321624,
+      rate: 1,
+      osm: "node/4642149668",
+      kinds: "sport,stadiums",
+    },
   },
   {
-    id: "16767139",
-    name: "Gramercy Tavern",
-    url:
-      "https://www.zomato.com/new-york-city/gramercy-tavern-gramercy-flatiron?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "42 E 20th Street 10003",
-      locality: "East 20th Street, Gramercy-Flatiron",
-      city: "New York City",
-      city_id: 280,
-      latitude: "40.7387166667",
-      longitude: "-73.9883888889",
-      zipcode: "10003",
-      country_id: 216,
-      locality_verbose: "East 20th Street, Gramercy-Flatiron, New York City",
+    type: "Feature",
+    id: "2427997",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.952408, 18.464991],
     },
-    cuisines: "American",
-    timings: "11:30 AM to 11 PM (Mon-Thu, Sun), 11:30 AM to 12 Midnight (Fri-Sat)",
-    avgCostForTwo: 200,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Dinner",
-      "Takeaway Available",
-      "Lunch",
-      "Serves Alcohol",
-      "Cash",
-      "Credit Card",
-      "Michelin Starred",
-      "Indoor Seating",
-      "Table booking recommended",
-      "Lunch Menu",
-      "Fullbar",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/9/16767139/8e3fae144133ba709852d6eec7280397.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-
-    photosURL:
-      "https://www.zomato.com/new-york-city/gramercy-tavern-gramercy-flatiron/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    photo_count: 610,
-    menuURL:
-      "https://www.zomato.com/new-york-city/gramercy-tavern-gramercy-flatiron/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    feauturedImage:
-      "https://b.zmtcdn.com/data/pictures/9/16767139/8e3fae144133ba709852d6eec7280397.jpg?output-format=webp",
-    phoneNumbers: "(212) 477-0777",
-    establishment: ["Fine Dining"],
-    rating: "",
-    ratingText: "",
+    properties: {
+      xid: "N4642081455",
+      name: "",
+      dist: 3236.80961253,
+      rate: 0,
+      osm: "node/4642081455",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "226777",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.860374, 18.479015],
+    },
+    properties: {
+      xid: "W300120643",
+      name: "Centro Nacional de Tenis",
+      dist: 7521.2465204,
+      rate: 1,
+      osm: "way/300120643",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "42104",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.856735, 18.479031],
+    },
+    properties: {
+      xid: "W177997939",
+      name: "",
+      dist: 7903.66884987,
+      rate: 0,
+      osm: "way/177997939",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "5636189",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.856163, 18.485287],
+    },
+    properties: {
+      xid: "W177374402",
+      name: "Play de Softball Patria Mella",
+      dist: 7925.28275897,
+      rate: 1,
+      osm: "way/177374402",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "5636208",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.855705, 18.480118],
+    },
+    properties: {
+      xid: "W177997947",
+      name: "Pabellon de Halterofilia",
+      dist: 8000.5908743,
+      rate: 1,
+      osm: "way/177997947",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "40186",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.8545, 18.47905],
+    },
+    properties: {
+      xid: "W176653203",
+      name: "Estadio de Futbol",
+      dist: 8137.91451177,
+      rate: 1,
+      osm: "way/176653203",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "9692793",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.853584, 18.47961],
+    },
+    properties: {
+      xid: "W175681296",
+      name: "Parque Mirador del Este",
+      dist: 8228.65397716,
+      rate: 2,
+      osm: "way/175681296",
+      wikidata: "Q16544115",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "5636207",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.851768, 18.480526],
+    },
+    properties: {
+      xid: "W177997923",
+      name: "Pabellon de Tenis de Mesa",
+      dist: 8411.55769313,
+      rate: 1,
+      osm: "way/177997923",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "40191",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.850502, 18.479515],
+    },
+    properties: {
+      xid: "W176653209",
+      name: "Pabellon de Gimnasia",
+      dist: 8554.06972831,
+      rate: 1,
+      osm: "way/176653209",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "5638714",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.847549, 18.479298],
+    },
+    properties: {
+      xid: "W300129410",
+      name: "Hockey sobre Césped",
+      dist: 8866.67821932,
+      rate: 1,
+      osm: "way/300129410",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "5636174",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.845627, 18.47937],
+    },
+    properties: {
+      xid: "W176653210",
+      name: "Campo de Arqueria",
+      dist: 9067.92952135,
+      rate: 1,
+      osm: "way/176653210",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "42290",
+    geometry: {
+      type: "Point",
+      coordinates: [-69.84346, 18.48921],
+    },
+    properties: {
+      xid: "W178148849",
+      name: "Play Urb Italia",
+      dist: 9272.3102266,
+      rate: 1,
+      osm: "way/178148849",
+      kinds: "sport,stadiums",
+    },
+  },
+  {
+    type: "Feature",
+    id: "130926",
+    geometry: {
+      type: "Point",
+      coordinates: [-70.04023, 18.409517],
+    },
+    properties: {
+      xid: "W233676120",
+      name: "Tampa Bay",
+      dist: 14300.46601777,
+      rate: 1,
+      osm: "way/233676120",
+      kinds: "sport,stadiums",
+    },
   },
 ];
 
-let arr2 = arr.map((e, i) => {
-  if (i % 2 === 0) {
-    return { ...e, rating: "5", ratingText: "Excellent" };
-  } else {
-    return { ...e, rating: "4", ratingText: "Very good" };
-  }
-});
-
-console.log(JSON.stringify(arr2));
+let o2 = o.filter(e=> e.properties.rate > 1)
+o2.forEach(e=>{
+  console.log(`${e.properties.name} - ${e.properties.xid}` );
+})

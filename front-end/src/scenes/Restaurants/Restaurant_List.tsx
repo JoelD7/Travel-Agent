@@ -19,6 +19,7 @@ import {
   RestaurantSlides,
   ServicesToolbar,
   SliderArrow,
+  Title,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import { restaurantListStyles } from "./restaurantList-styles";
@@ -286,12 +287,13 @@ export function Restaurant_List() {
           <RestaurantSlides restaurants={restaurants} title="Cheap Eats" />
           <RestaurantSlides restaurants={restaurants} title="Local Cuisine" />
 
-          <h2 style={{marginTop: '50px'}}>{`Top Restaurants in ${state.city}`}</h2>
-          {
-            restaurants.map((restaurant, i)=>(
-              <RestaurantCard key={i} restaurant={restaurant} />
-            ))
-          }
+          <Title
+            style={{ marginTop: "50px" }}
+            component="h1"
+          >{`Top Restaurants in ${state.city}`}</Title>
+          {restaurants.map((restaurant, i) => (
+            <RestaurantCard key={i} restaurant={restaurant} />
+          ))}
         </Grid>
       </Grid>
     </div>

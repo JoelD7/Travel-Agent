@@ -53,9 +53,21 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
     padding: "10px 30px",
     borderRadius: "5px",
     backgroundColor: "#f6f6f9",
+    minWidth: "525px",
+
+    [theme.breakpoints.down(820)]: {
+      width: "100%",
+    },
+    [theme.breakpoints.down(630)]: {
+      padding: "10px 10px",
+    },
   },
   paper: {
     maxWidth: "750px",
+    minWidth: "525px",
+    [theme.breakpoints.down(820)]: {
+      width: "90%",
+    },
   },
   subtitle: {
     marginTop: "0px",
