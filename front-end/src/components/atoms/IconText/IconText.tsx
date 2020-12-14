@@ -35,7 +35,7 @@ export function IconText({
       width: size,
       height: size,
       borderRadius: "50%",
-      padding: "5px",
+      padding: "2px 5px 8px 5px",
       marginRight: "5px",
       boxShadow: shadow ? Shadow.MEDIUM : '0px 0px 0px white',
     },

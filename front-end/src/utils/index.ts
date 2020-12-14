@@ -1,9 +1,10 @@
 import * as Routes from "./Routes";
 import * as HotelAmenity from "./HotelAmenities";
+import * as POICategory from "./POICategory"
 export * from "./slices";
 export * from "./types";
 export * from "./functions/functions";
-export { HotelAmenity, Routes };
+export { HotelAmenity, Routes, POICategory };
 
 export const restaurantsPlaceholder: Restaurant[] = [
   {

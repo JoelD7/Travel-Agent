@@ -7,10 +7,10 @@ type Component = "h1" | "h2" | "h3";
 
 export const Title: FunctionComponent<{
   component: Component;
-  style: CreateCSSProperties<{}>;
+  style?: CreateCSSProperties<{}>;
 }> = ({ children, component , style}) => {
   let componentParser = {
-    h1: "28px",
+    h1: "32px",
     h2: "22px",
     h3: "20px",
   };

@@ -8,7 +8,7 @@ import {
   Divider,
   Grid,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CustomButton,
   Navbar,
@@ -26,6 +26,7 @@ import { restaurantListStyles } from "./restaurantList-styles";
 import { restaurantsPlaceholder } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Slider from "react-slick";
+import Axios from "axios";
 
 interface Restaurant_List {
   city: string;
@@ -38,6 +39,27 @@ export function Restaurant_List() {
   const style = restaurantListStyles();
 
   const [openDrawer, setOpenDrawer] = useState(false);
+
+  useEffect(() => {
+    // test();
+  }, []);
+
+  function test() {
+    Axios.get("https://api.foursquare.com/v2/venues/56eeeafc498ef048783a68f5", {
+      params: {
+        client_id: "D2KZP5LQRWPEFKPA0PQLOIC3Z0CYDGYGR3UVIP4DOF2T0FWZ",
+        client_secret: "HLUNYVTHZS2DB4THW2ZV0AFRIPG2HQNMM3V44NBOIMZX1C32",
+        v: "20180323",
+        VENUE_ID: "56eeeafc498ef048783a68f5",
+      },
+    })
+      .then((res) => {
+        console.log(JSON.stringify(res.data));
+      })
+      .catch((er) => {
+        console.log(er);
+      });
+  }
 
   const [state, setState] = useState<Restaurant_List>({
     city: "Santo Domingo",
@@ -226,7 +248,7 @@ export function Restaurant_List() {
       <Navbar />
       <ServicesToolbar />
 
-      <h1 style={{ textAlign: "center" }}>{`Restaurants in ${state.city}`}</h1>
+      <Title component="h1" style={{ textAlign: "center" }}>{`Restaurants in ${state.city}`}</Title>
       <Grid container className={style.pageContentContainer}>
         <Grid item className={style.filterGrid}>
           <h3 className={style.filterTitle}>Establishment</h3>
