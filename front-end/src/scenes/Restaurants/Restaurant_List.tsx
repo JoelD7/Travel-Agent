@@ -45,12 +45,11 @@ export function Restaurant_List() {
   }, []);
 
   function test() {
-    Axios.get("https://api.foursquare.com/v2/venues/56eeeafc498ef048783a68f5", {
+    Axios.get("https://api.foursquare.com/v2/venues/search?ll=41.8781,-87.6298", {
       params: {
         client_id: "D2KZP5LQRWPEFKPA0PQLOIC3Z0CYDGYGR3UVIP4DOF2T0FWZ",
         client_secret: "HLUNYVTHZS2DB4THW2ZV0AFRIPG2HQNMM3V44NBOIMZX1C32",
         v: "20180323",
-        VENUE_ID: "56eeeafc498ef048783a68f5",
       },
     })
       .then((res) => {

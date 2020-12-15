@@ -1,6 +1,6 @@
 import * as Routes from "./Routes";
 import * as HotelAmenity from "./HotelAmenities";
-import * as POICategory from "./POICategory"
+import * as POICategory from "./POICategory";
 export * from "./slices";
 export * from "./types";
 export * from "./functions/functions";
@@ -466,5 +466,88 @@ export const restaurantsPlaceholder: Restaurant[] = [
     establishment: ["Fine Dining"],
     rating: 4,
     ratingText: "Very good",
+  },
+];
+
+export const poisPlaceholder: POISearch[] = [
+  {
+    id: "5c126be2e55d8b002c6430b6",
+    name: "H&M",
+    contact: {},
+    location: {
+      address: "7601 South Cicero Avenue",
+      lat: 41.756158,
+      lng: -87.737777,
+      distance: 16263,
+      postalCode: "60652",
+      city: "Chicago",
+      state: "IL",
+      country: "United States",
+      formattedAddress: [
+        "7601 South Cicero Avenue",
+        "Chicago, IL 60652",
+        "United States",
+      ],
+    },
+    categories: [
+      {
+        id: "4bf58dd8d48988d103951735",
+        name: "Clothing Store",
+        pluralName: "Clothing Stores",
+        shortName: "Apparel",
+      },
+    ],
+  },
+  {
+    id: "4f22e6e5e4b067a3253b02c8",
+    name: "Wigwam at ULC",
+    contact: {},
+    location: {
+      lat: 41.8782400358223,
+      lng: -87.62976060609788,
+      distance: 15,
+      postalCode: "60603",
+      city: "Chicago",
+      state: "IL",
+      country: "United States",
+      formattedAddress: ["Chicago, IL 60603", "United States"],
+    },
+    categories: [
+      {
+        id: "4bf58dd8d48988d1cc941735",
+        name: "Movie Theater",
+        pluralName: "Steakhouses",
+        shortName: "Steakhouse",
+      },
+    ],
+  },
+  {
+    id: "5ba16e7e46e1b6002ca0221b",
+    name: "Athletico Physical Therapy - Union League Club",
+    contact: {},
+    location: {
+      address: "67 W Jackson Blvd",
+      crossStreet: "#175",
+      lat: 41.87805938720703,
+      lng: -87.63006591796875,
+      distance: 22,
+      postalCode: "60604",
+      city: "Chicago",
+      state: "IL",
+      country: "United States",
+      formattedAddress: [
+        "67 W Jackson Blvd (#175)",
+        "Chicago, IL 60604",
+        "United States",
+      ],
+    },
+    categories: [
+      {
+        id: "5744ccdfe4b0c0459246b4af",
+        name: "Gym / Fitness Center",
+        pluralName: "Physical Therapists",
+        shortName: "Physical Therapist",
+      },
+    ],
   },
 ];

@@ -4,18 +4,32 @@ import {
   CardContent,
   CardMedia,
   createMuiTheme,
+  Grid,
   Menu,
   MenuItem,
   ThemeProvider,
   Toolbar,
 } from "@material-ui/core";
 import React, { MouseEvent, useState } from "react";
-import { Navbar, ServicesToolbar, SliderArrow, Title } from "../../components";
+import {
+  CustomButton,
+  IconText,
+  Navbar,
+  ServicesToolbar,
+  SliderArrow,
+  Title,
+} from "../../components";
 import { Colors } from "../../styles";
 import { thingsToDoStyles } from "./thingsToDo-styles";
-import { POICategories, POICategoryParent } from "../../utils/POICategory";
+import {
+  POICategories,
+  POICategoryMap,
+  POICategoryParent,
+} from "../../utils/POICategory";
 import { Font } from "../../assets";
 import Slider from "react-slick";
+import { POICategory, poisPlaceholder } from "../../utils";
+import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 
 export function ThingsToDo() {
   const style = thingsToDoStyles();
@@ -81,7 +95,7 @@ export function ThingsToDo() {
 
   const [open, setOpen] = useState(false);
 
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(POICategory.Museum.pluralName);
 
   const onMenuOpen = (event: MouseEvent<HTMLElement>) => {
     if (event.currentTarget !== anchorEl) {
@@ -89,6 +103,8 @@ export function ThingsToDo() {
       setOpen(true);
     }
   };
+
+  const pois: POISearch[] = poisPlaceholder;
 
   return (
     <div className={style.mainContainer}>
@@ -127,6 +143,7 @@ export function ThingsToDo() {
                 key={i}
                 onClick={() => {
                   setOpen(false);
+                  setSelectedCategory(category.name);
                   setAnchorEl(null);
                 }}
               >
@@ -160,6 +177,48 @@ export function ThingsToDo() {
             </div>
           ))}
         </Slider>
+
+        {selectedCategory !== "" && (
+          <Title component="h2">{`${selectedCategory} in Dubai`}</Title>
+        )}
+
+        <Grid container>
+          {pois.map((poi, i) => (
+            <Card key={i} className={style.poiCard}>
+              <Title
+                style={{
+                  color: Colors.BLUE,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+                component="h3"
+              >
+                {poi.name}
+              </Title>
+              <IconText
+                icon={faMapMarkerAlt}
+                text={
+                  poi.location.address
+                    ? poi.location.address
+                    : poi.location.formattedAddress?.join(", ")
+                }
+              />
+              <IconText
+                icon={POICategoryMap[poi.categories[0].name].icon}
+                text={poi.categories[0].name}
+              />
+
+              <div style={{display: 'flex'}}>
+                <CustomButton
+                  label="Check out"
+                  backgroundColor={Colors.PURPLE}
+                  style={{ borderRadius: "10px", marginLeft: 'auto' }}
+                />
+              </div>
+            </Card>
+          ))}
+        </Grid>
       </div>
     </div>
   );

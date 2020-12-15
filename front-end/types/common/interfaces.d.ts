@@ -40,3 +40,38 @@ interface RestaurantFilter {
   name: string;
   checked: boolean;
 }
+
+interface POISearch{
+  id: string;
+  name: string;
+  contact: POISearchContact;
+  location: POISearchLocation;
+  categories: POISearchCategory[];
+}
+
+interface POISearchContact{
+  phone?: string;
+  formattedPhone?: string;
+  twitter?: string;
+  facebookName?:string;
+}
+
+interface POISearchLocation{
+    address?: string;
+    crossStreet?: string;
+    city?: string;
+    state?: string;
+    postalCode?: string;
+    country?: string;
+    lat: number;
+    lng: number;
+    distance: number;
+    formattedAddress?: string[];
+}
+
+interface POISearchCategory{
+  id: string;
+  name: string;
+  pluralName: string;
+  shortName: string;
+}

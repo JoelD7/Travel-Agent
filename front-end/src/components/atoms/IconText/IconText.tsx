@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { Colors, Shadow } from "../../../styles";
 
 interface IconTextProps {
-  text: string;
+  text?: string;
   icon: IconDefinition;
   iconColor?: string;
   size?: string;
@@ -16,7 +16,7 @@ interface IconTextProps {
 }
 
 export function IconText({
-  text,
+  text = "",
   icon,
   style,
   iconColor = Colors.PURPLE,
@@ -28,6 +28,7 @@ export function IconText({
     mainContainer: {
       display: "flex",
       alignItems: "center",
+      marginBottom: '5px',
       ...style,
     },
     iconContainer: {

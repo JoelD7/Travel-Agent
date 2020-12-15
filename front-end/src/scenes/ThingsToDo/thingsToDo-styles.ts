@@ -1,6 +1,6 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 
 export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   card: {
@@ -33,6 +33,13 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   pageContentContainer: {
     width: "80%",
     margin: "auto",
+  },
+  poiCard:{
+    borderRadius: '10px',
+    margin: '10px',
+    boxShadow: Shadow.LIGHT3D,
+    padding: '10px',
+    width: '30%',
   },
   slider: {
     width: "100%",
