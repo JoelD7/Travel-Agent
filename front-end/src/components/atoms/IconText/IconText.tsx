@@ -7,9 +7,10 @@ import { Colors, Shadow } from "../../../styles";
 
 interface IconTextProps {
   text?: string;
+  fontSize?: number;
   icon: IconDefinition;
   iconColor?: string;
-  size?: string;
+  size?: number;
   style?: CreateCSSProperties<{}>;
   className?: string;
   shadow?: boolean;
@@ -19,8 +20,9 @@ export function IconText({
   text = "",
   icon,
   style,
+  fontSize = 14,
   iconColor = Colors.PURPLE,
-  size = "16px",
+  size = 16,
   className,
   shadow,
 }: IconTextProps) {
@@ -32,11 +34,14 @@ export function IconText({
       ...style,
     },
     iconContainer: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: 'center',
       backgroundColor: iconColor,
-      width: size,
-      height: size,
+      width: `${size}px`,
+      height: `${size}px`,
       borderRadius: "50%",
-      padding: "2px 5px 8px 5px",
+      padding: "5px",
       marginRight: "5px",
       boxShadow: shadow ? Shadow.MEDIUM : '0px 0px 0px white',
     },
@@ -50,14 +55,14 @@ export function IconText({
         <FontAwesomeIcon
           icon={icon}
           color="white"
-          style={{ width: size, height: size }}
+          style={{ width: `${size}px`, height: `${size}px` }}
         />
       </div>
       
       {className ? (
         <p className={className}>{text}</p>
       ) : (
-        <p style={{ fontSize: "14px", margin: "0px" }}>{text}</p>
+        <p style={{ fontSize: `${fontSize}px`, margin: "0px" }}>{text}</p>
       )}
     </div>
   );

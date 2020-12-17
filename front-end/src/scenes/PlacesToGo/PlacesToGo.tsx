@@ -20,7 +20,7 @@ import {
   Title,
 } from "../../components";
 import { Colors } from "../../styles";
-import { thingsToDoStyles } from "./thingsToDo-styles";
+import { placesToGoStyles } from "./placesToGo-styles";
 import {
   POICategories,
   POICategoryMap,
@@ -28,11 +28,12 @@ import {
 } from "../../utils/POICategory";
 import { Font } from "../../assets";
 import Slider from "react-slick";
-import { POICategory, poisPlaceholder } from "../../utils";
+import { POICategory, poisPlaceholder, Routes } from "../../utils";
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { useHistory } from "react-router-dom";
 
-export function ThingsToDo() {
-  const style = thingsToDoStyles();
+export function PlacesToGo() {
+  const style = placesToGoStyles();
   const theme = createMuiTheme({
     overrides: {
       MuiListItem: {
@@ -103,6 +104,8 @@ export function ThingsToDo() {
       setOpen(true);
     }
   };
+
+  const history = useHistory()
 
   const pois: POISearch[] = poisPlaceholder;
 
@@ -185,6 +188,7 @@ export function ThingsToDo() {
         <Grid container>
           {pois.map((poi, i) => (
             <Card key={i} className={style.poiCard}>
+              <CardActionArea onClick={()=> history.push(`${Routes.PLACES_TOGO}/${poi.id}`)}>
               <Title
                 style={{
                   color: Colors.BLUE,
@@ -212,10 +216,12 @@ export function ThingsToDo() {
               <div style={{display: 'flex'}}>
                 <CustomButton
                   label="Check out"
+                  onClick={()=> history.push(`${Routes.PLACES_TOGO}/${poi.id}`)}
                   backgroundColor={Colors.PURPLE}
                   style={{ borderRadius: "10px", marginLeft: 'auto' }}
                 />
               </div>
+              </CardActionArea>
             </Card>
           ))}
         </Grid>

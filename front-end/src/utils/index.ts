@@ -551,3 +551,100 @@ export const poisPlaceholder: POISearch[] = [
     ],
   },
 ];
+
+export const poiPlaceholder: POI = {
+  id: "49eeaf08f964a52078681fe3",
+  name: "Vanessa's Dumpling House",
+  contact: {
+    phone: "2126258008",
+    formattedPhone: "(212) 625-8008",
+    twitter: "vanessadumpling",
+    facebookName: "Vanessa's Dumpling House",
+  },
+  location: {
+    address: "118 Eldridge St",
+    crossStreet: "btwn Broome & Grand St",
+    lat: 40.718316255518644,
+    lng: -73.99188498001898,
+    postalCode: "10002",
+    city: "New York",
+    state: "NY",
+    distance: 16233,
+    country: "United States",
+    formattedAddress: [
+      "118 Eldridge St (btwn Broome & Grand St)",
+      "New York, NY 10002",
+      "United States",
+    ],
+  },
+  categories: [
+    {
+      id: "4bf58dd8d48988d108941735",
+      name: "Dumpling Restaurant",
+      pluralName: "Dumpling Restaurants",
+      shortName: "Dumplings",
+    },
+    {
+      id: "4bf58dd8d48988d145941735",
+      name: "Chinese Restaurant",
+      pluralName: "Chinese Restaurants",
+      shortName: "Chinese",
+    },
+  ],
+  url: "http://vanessas.com",
+  rating: 8.6,
+  photos: {
+    groups: [
+      {
+        items: [
+          {
+            prefix: "https://fastly.4sqi.net/img/general/",
+            suffix: "/6036_Xv3VOJm0A8HMF8EbQWdKPXIce7LxcvXOMt4_nW5gDhU.jpg",
+            width: 960,
+            height: 720,
+          },
+        ],
+      },
+    ],
+  },
+  hours: {
+    timeframes: [
+      {
+        days: "Mon–Sat",
+        open: [{ renderedTime: "10:30 AM–10:30 PM" }],
+      },
+      { days: "Sun", open: [{ renderedTime: "10:30 AM–10:00 PM" }] },
+    ],
+  },
+  attributes: {
+    groups: [
+      {
+        name: "Price",
+      },
+      {
+        name: "Reservations",
+      },
+      {
+        name: "Credit Cards",
+      },
+      {
+        name: "Outdoor Seating",
+      },
+      {
+        name: "Music",
+      },
+      {
+        name: "Menus",
+      },
+      {
+        name: "Parking",
+      },
+    ],
+  },
+  bestPhoto: {
+    prefix: "https://fastly.4sqi.net/img/general/",
+    suffix: "/6036_Xv3VOJm0A8HMF8EbQWdKPXIce7LxcvXOMt4_nW5gDhU.jpg",
+    width: 960,
+    height: 720,
+  },
+};

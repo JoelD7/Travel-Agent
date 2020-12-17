@@ -25,8 +25,8 @@ export function ServicesToolbar() {
       route: Routes.RESTAURANTS,
     },
     {
-      label: "Things to do",
-      route: Routes.THINGS_TODO,
+      label: "Places to go",
+      route: Routes.PLACES_TOGO,
     },
     {
       label: "Car rental",

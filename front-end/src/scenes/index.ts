@@ -7,4 +7,5 @@ export { Flight_List } from "./Flights/Flight_List";
 export { FlightDetails } from "./Flights/FlightDetails";
 export { Restaurant_List } from "./Restaurants/Restaurant_List";
 export { RestaurantDetails } from "./Restaurants/RestaurantDetails";
-export { ThingsToDo } from "./ThingsToDo/ThingsToDo";
+export { PlacesToGo } from "./PlacesToGo/PlacesToGo";
+export { PlacesToGoDetails } from "./PlacesToGo/PlacesToGoDetails";

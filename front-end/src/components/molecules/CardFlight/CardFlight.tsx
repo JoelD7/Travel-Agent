@@ -43,7 +43,7 @@ export function CardFlight({ flight }: CardFlight) {
       <Grid key="outgoing flight" item xs={12}>
         <Grid container>
           <Grid item className={style.planeIconGrid}>
-            <IconText text="" icon={faPlane} size="22px" />
+            <IconText text="" icon={faPlane} size={22} />
           </Grid>
           <Grid item className={style.timesIataGrid}>
             <p className={style.timesText}>{`${format(
@@ -81,7 +81,7 @@ export function CardFlight({ flight }: CardFlight) {
           {returnFlight && (
             <>
               <Grid item className={style.planeIconGrid}>
-                <IconText text="" icon={faPlane} size="22px" />
+                <IconText text="" icon={faPlane} size={22} />
               </Grid>
               <Grid item className={style.timesIataGrid}>
                 <p className={style.timesText}>{`${format(

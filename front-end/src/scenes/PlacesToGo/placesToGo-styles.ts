@@ -2,7 +2,7 @@ import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
 
-export const thingsToDoStyles = makeStyles((theme: Theme) => ({
+export const placesToGoStyles = makeStyles((theme: Theme) => ({
   card: {
     backgroundColor: Colors.BLUE,
     width: "95%",
@@ -13,6 +13,7 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
+    marginBottom: '40px',
   },
   menuItemRoot: {
     fontFamily: Font.Family,

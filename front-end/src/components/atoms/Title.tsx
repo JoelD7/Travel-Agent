@@ -3,7 +3,7 @@ import { CreateCSSProperties } from "@material-ui/styles";
 import React, { FunctionComponent } from "react";
 import { Font } from "../../assets";
 
-type Component = "h1" | "h2" | "h3";
+type Component = "h1" | "h2" | "h3" | "h4";
 
 export const Title: FunctionComponent<{
   component: Component;
@@ -11,8 +11,9 @@ export const Title: FunctionComponent<{
 }> = ({ children, component , style}) => {
   let componentParser = {
     h1: "32px",
-    h2: "22px",
-    h3: "20px",
+    h2: '26px',
+    h3: "22px",
+    h4: "18px",
   };
 
   const titleStyles = makeStyles({
@@ -20,6 +21,7 @@ export const Title: FunctionComponent<{
       fontSize: componentParser[component],
       fontWeight: "bold",
       fontFamily: Font.Family,
+      marginBottom: '5px',
       ...style,
     },
   });

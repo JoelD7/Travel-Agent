@@ -37,6 +37,7 @@ interface Restaurant_List {
 
 export function Restaurant_List() {
   const style = restaurantListStyles();
+  let poiDetail: POI;
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -45,7 +46,7 @@ export function Restaurant_List() {
   }, []);
 
   function test() {
-    Axios.get("https://api.foursquare.com/v2/venues/search?ll=41.8781,-87.6298", {
+    Axios.get("https://api.foursquare.com/v2/venues/49eeaf08f964a52078681fe3", {
       params: {
         client_id: "D2KZP5LQRWPEFKPA0PQLOIC3Z0CYDGYGR3UVIP4DOF2T0FWZ",
         client_secret: "HLUNYVTHZS2DB4THW2ZV0AFRIPG2HQNMM3V44NBOIMZX1C32",
@@ -53,7 +54,9 @@ export function Restaurant_List() {
       },
     })
       .then((res) => {
-        console.log(JSON.stringify(res.data));
+        poiDetail = res.data.response.venue;
+        console.log(`Categories: ${JSON.stringify(poiDetail.categories)}`);
+        console.log(JSON.stringify(poiDetail));
       })
       .catch((er) => {
         console.log(er);

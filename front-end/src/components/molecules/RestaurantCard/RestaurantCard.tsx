@@ -34,9 +34,10 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
             <StarRating stars={Number(restaurant.rating)} />
           </Grid>
 
-          <Grid item xs={12} style={{ marginTop: "10px" }}>
+          <Grid item xs={12} style={{ marginTop: '5px'}}>
             <IconText
               shadow
+              style={{marginBottom: '0px'}}
               className={style.bodyText}
               icon={faUtensils}
               text={restaurant.cuisines}
@@ -46,6 +47,7 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
           <Grid item xs={12}>
             <IconText
               shadow
+              style={{marginBottom: '0px'}}
               className={style.bodyText}
               icon={faMapMarkerAlt}
               text={restaurant.location.address}
