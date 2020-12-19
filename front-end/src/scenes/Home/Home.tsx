@@ -157,9 +157,7 @@ export function Home() {
   }
 
   function getIconClassname(service: string) {
-    return selectedService[service]
-      ? style.serviceIconPurple
-      : style.serviceIcon;
+    return selectedService[service] ? style.serviceIconPurple : style.serviceIcon;
   }
 
   const sliderSettings = {
@@ -187,43 +185,45 @@ export function Home() {
   };
 
   return (
-    <div className="mainContainer">
-      <Navbar />
-
-      <ServicesToolbar />
-
-      <Grid id="section-1" container style={{ marginBottom: "40px" }}>
+    <div className="mainContainer"> 
+      <Grid id="section-1" container className={style.topContainer}>
+        <Grid item xs={12}>
+          <Navbar home />
+          <ServicesToolbar home />
+        </Grid>
         <Grid item className={style.reservationGrid}>
-          <h3 style={{ textAlign: "center", color: Colors.BLUE }}>
-            What are you looking for?
-          </h3>
+          <div className={style.reservationContainer}>
+            <h3 style={{ textAlign: "center", color: Colors.BLUE }}>
+              What are you looking for?
+            </h3>
 
-          <div className={style.servicesContainer}>
-            {services.map((service) => (
-              <div>
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <ButtonIcon
-                    primary={Colors.PURPLE}
-                    secondary={"white"}
-                    selectable={true}
-                    selected={selectedService[service.prop]}
-                    onClick={() => onServicePressed(service.prop)}
-                    size="medium"
-                    className={getIconClassname(service.prop)}
-                    icon={service.icon}
-                  />
+            <div className={style.servicesContainer}>
+              {services.map((service) => (
+                <div>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <ButtonIcon
+                      primary={Colors.PURPLE}
+                      secondary={"white"}
+                      selectable={true}
+                      selected={selectedService[service.prop]}
+                      onClick={() => onServicePressed(service.prop)}
+                      size="medium"
+                      className={getIconClassname(service.prop)}
+                      icon={service.icon}
+                    />
+                  </div>
+                  <p className={style.serviceName}>{service.name}</p>
                 </div>
-                <p className={style.serviceName}>{service.name}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          <div id="reservationMode">
-            <SwipeableViews index={index} onChangeIndex={(i) => setIndex(i)}>
-              <HomeHotelReservation />
-              <HomeFlightReservation />
-              <HomeCarReservation />
-            </SwipeableViews>
+            <div id="reservationMode">
+              <SwipeableViews index={index} onChangeIndex={(i) => setIndex(i)}>
+                <HomeHotelReservation />
+                <HomeFlightReservation />
+                <HomeCarReservation />
+              </SwipeableViews>
+            </div>
           </div>
         </Grid>
 
@@ -235,9 +235,7 @@ export function Home() {
             className={style.homeImageDiv}
           >
             <div>
-              <h1 className={style.homeImageText}>
-                Hey, where you're off to next?
-              </h1>
+              <h1 className={style.homeImageText}>Hey, where you're off to next?</h1>
               <div className={style.exploreButtonContainer}>
                 <CustomButton
                   style={home_explore_button}
@@ -250,6 +248,8 @@ export function Home() {
         </Grid>
       </Grid>
 
+      
+
       <PageSubtitle label="Plan your trip" />
       <Grid id="section-2" container className={style.section}>
         <Grid item className={style.planTripGrid}>
@@ -259,9 +259,9 @@ export function Home() {
             <p>Plan your trips however you want! </p>
 
             <p>
-              The first step in planning your trip is making an itinerary. An
-              itinerary will help you organize your time so you can get the most
-              out of your journey.
+              The first step in planning your trip is making an itinerary. An itinerary
+              will help you organize your time so you can get the most out of your
+              journey.
             </p>
 
             <div
@@ -288,9 +288,9 @@ export function Home() {
             <p>Plan your trips however you want! </p>
 
             <p>
-              The first step in planning your trip is making an itinerary. An
-              itinerary will help you organize your time so you can get the most
-              out of your journey.
+              The first step in planning your trip is making an itinerary. An itinerary
+              will help you organize your time so you can get the most out of your
+              journey.
             </p>
 
             <div
@@ -318,11 +318,7 @@ export function Home() {
             <div key={i}>
               <Card className={style.card}>
                 <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    height="250"
-                    image={destination.image}
-                  />
+                  <CardMedia component="img" height="250" image={destination.image} />
                 </CardActionArea>
 
                 <CardContent>
@@ -335,7 +331,6 @@ export function Home() {
           ))}
         </Slider>
       </Grid>
-
     </div>
   );
 }

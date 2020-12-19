@@ -20,7 +20,7 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
   boxShadow: Shadow.DARK,
 };
 
-  export const homeStyles = makeStyles((theme: Theme) => ({
+export const homeStyles = makeStyles((theme: Theme) => ({
   card: {
     width: "95%",
   },
@@ -91,9 +91,13 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
     height: "521px",
     width: "100%",
     display: "flex",
-    backgroundImage: `url(${home})`,
+  },
+  topContainer: {
+    background: `linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0) ), url(https://images.unsplash.com/photo-1484804959297-65e7c19d7c9f?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1014&q=80)`,
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
+    marginBottom: "40px",
+    height: "100vh",
   },
   homeImageText: {
     color: "white",
@@ -131,7 +135,7 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
     width: "60%",
     padding: "10px",
   },
-  
+
   nextButton: {
     backgroundColor: "white",
   },
@@ -192,6 +196,7 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
     },
     width: "40%",
     marginTop: "20px",
+    padding: "10px",
   },
   reservationParamsGrid: {
     marginTop: "20px",
@@ -203,6 +208,11 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
   },
   reservationParamsBox: {
     borderRadius: "20px",
+  },
+  reservationContainer: {
+    padding: "10px 0px",
+    backgroundColor: "white",
+    borderRadius: "10px",
   },
   searchLocationContainer: {
     width: "80%",
@@ -266,7 +276,7 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
     color: Colors.BLUE,
     fontSize: "14px",
   },
-  
+
   slider: {
     width: "100%",
     display: "flex",

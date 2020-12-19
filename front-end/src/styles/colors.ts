@@ -7,3 +7,4 @@ export const GREEN_HOVER = "#10D17A";
 export const WHITE_TRANSPARENT = "rgba(255, 255, 255, 0.35)";
 export const WHITE_TRANSPARENT_HOVER = "rgba(255, 255, 255, 0.20)";
 export const GRAY = "#5f5f5f";
+export const BACKGROUND = "#f6f6f9";

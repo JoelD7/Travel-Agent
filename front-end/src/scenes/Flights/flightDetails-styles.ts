@@ -52,7 +52,7 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
     width: "750px",
     padding: "10px 30px",
     borderRadius: "5px",
-    backgroundColor: "#f6f6f9",
+    backgroundColor: Colors.BACKGROUND,
     minWidth: "525px",
 
     [theme.breakpoints.down(820)]: {

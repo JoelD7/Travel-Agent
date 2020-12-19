@@ -10,6 +10,13 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
     margin: "0px 5px",
     color: Colors.BLUE,
   },
+  menuItemRootHome: {
+    fontFamily: Family,
+    borderBottom: `2px solid rgba(0,0,0,0)`,
+    fontWeight: "bold",
+    margin: "0px 5px",
+    color: "white",
+  },
   servicesToolbar: {
     display: "flex",
     minHeight: "20px",
@@ -17,6 +24,17 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
     marginTop: "20px",
     borderTop: "1px solid #cecece",
     borderBottom: "1px solid #cecece",
+    justifyContent: "center",
+
+    [theme.breakpoints.down(1000)]: {
+      display: "none",
+    },
+  },
+  servicesToolbarHome: {
+    display: "flex",
+    minHeight: "20px",
+    height: "40px",
+    marginTop: "20px",
     justifyContent: "center",
 
     [theme.breakpoints.down(1000)]: {

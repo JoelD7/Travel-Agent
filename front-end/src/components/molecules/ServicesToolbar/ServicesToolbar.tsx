@@ -10,7 +10,11 @@ interface NavbarService {
   route: string;
 }
 
-export function ServicesToolbar() {
+interface ServicesToolbar {
+  home?: boolean;
+}
+
+export function ServicesToolbar({ home }: ServicesToolbar) {
   const navbarServices: NavbarService[] = [
     {
       label: "Hotels",
@@ -25,8 +29,8 @@ export function ServicesToolbar() {
       route: Routes.RESTAURANTS,
     },
     {
-      label: "Places to go",
-      route: Routes.PLACES_TOGO,
+      label: "Things to do",
+      route: Routes.THINGS_TODO,
     },
     {
       label: "Car rental",
@@ -70,13 +74,13 @@ export function ServicesToolbar() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Toolbar className={style.servicesToolbar}>
+      <Toolbar className={home ? style.servicesToolbarHome : style.servicesToolbar}>
         {navbarServices.map((service, i) => (
           <MenuItem
             key={i}
             selected={isServiceSelected(service)}
             onClick={() => history.push(service.route)}
-            classes={{ root: style.menuItemRoot }}
+            classes={{ root: home ? style.menuItemRootHome : style.menuItemRoot }}
           >
             {service.label}
           </MenuItem>

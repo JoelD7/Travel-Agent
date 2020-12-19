@@ -212,82 +212,86 @@ export function ThingsToDo() {
         </Menu>
       </ThemeProvider>
 
-      <div className={style.pageContentContainer}>
-        <Title component="h2">Browse by category</Title>
-        <Slider {...sliderSettings}>
-          {POICategories.map((category, i) => (
-            <div key={i}>
-              <Card
-                className={
-                  selectedCategory === category.pluralName
-                    ? style.cardSelected
-                    : style.card
-                }
-              >
-                <CardActionArea onClick={() => setSelectedCategory(category.pluralName)}>
-                  <CardMedia component="img" height="150" image={category.image} />
-                </CardActionArea>
-
-                <CardContent>
-                  <div style={{ color: "white", fontWeight: "bold" }}>
-                    {category.name}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
-        </Slider>
-
-        {selectedCategory !== POICategory.TOURS && (
-          <>
-            <Title component="h2">{`${selectedCategory} in Dubai`}</Title>
-
-            <Grid key="pois cards" container>
-              {pois.slice(0, 6).map((poi, i) => (
-                <Card key={i} className={style.poiCard}>
+      <div style={{backgroundColor: Colors.BACKGROUND}}>
+        <div className={style.pageContentContainer}>
+          <Title component="h2">Browse by category</Title>
+          <Slider {...sliderSettings}>
+            {POICategories.map((category, i) => (
+              <div key={i}>
+                <Card
+                  className={
+                    selectedCategory === category.pluralName
+                      ? style.cardSelected
+                      : style.card
+                  }
+                >
                   <CardActionArea
-                    onClick={() => history.push(`${Routes.PLACES_TOGO}/${poi.id}`)}
+                    onClick={() => setSelectedCategory(category.pluralName)}
                   >
-                    <Title
-                      style={{
-                        color: Colors.BLUE,
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                      component="h3"
-                    >
-                      {poi.name}
-                    </Title>
-                    <IconText
-                      icon={faMapMarkerAlt}
-                      text={
-                        poi.location.address
-                          ? poi.location.address
-                          : poi.location.formattedAddress?.join(", ")
-                      }
-                    />
-                    <IconText
-                      icon={POICategoryMap[poi.categories[0].name].icon}
-                      text={poi.categories[0].name}
-                    />
-
-                    <div style={{ display: "flex" }}>
-                      <CustomButton
-                        label="Check out"
-                        onClick={() => history.push(`${Routes.PLACES_TOGO}/${poi.id}`)}
-                        backgroundColor={Colors.PURPLE}
-                        style={{ borderRadius: "10px", marginLeft: "auto" }}
-                      />
-                    </div>
+                    <CardMedia component="img" height="150" image={category.image} />
                   </CardActionArea>
-                </Card>
-              ))}
-            </Grid>
-          </>
-        )}
 
-        {(selectedCategory === initialCategory || selectedCategory === POICategory.TOURS) && (
+                  <CardContent>
+                    <div style={{ color: "white", fontWeight: "bold" }}>
+                      {category.name}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </Slider>
+
+          {selectedCategory !== POICategory.TOURS && (
+            <>
+              <Title component="h2">{`${selectedCategory} in Dubai`}</Title>
+
+              <Grid key="pois cards" container>
+                {pois.slice(0, 6).map((poi, i) => (
+                  <Card key={i} className={style.poiCard}>
+                    <CardActionArea
+                      onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
+                    >
+                      <Title
+                        style={{
+                          color: Colors.BLUE,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        component="h3"
+                      >
+                        {poi.name}
+                      </Title>
+                      <IconText
+                        icon={faMapMarkerAlt}
+                        text={
+                          poi.location.address
+                            ? poi.location.address
+                            : poi.location.formattedAddress?.join(", ")
+                        }
+                      />
+                      <IconText
+                        icon={POICategoryMap[poi.categories[0].name].icon}
+                        text={poi.categories[0].name}
+                      />
+
+                      <div style={{ display: "flex" }}>
+                        <CustomButton
+                          label="Check out"
+                          onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
+                          backgroundColor={Colors.PURPLE}
+                          style={{ borderRadius: "10px", marginLeft: "auto" }}
+                        />
+                      </div>
+                    </CardActionArea>
+                  </Card>
+                ))}
+              </Grid>
+            </>
+          )}
+
+          {(selectedCategory === initialCategory ||
+            selectedCategory === POICategory.TOURS) && (
             <>
               {" "}
               <Title component="h2">{`Tours and activites in Dubai`}</Title>
@@ -343,6 +347,7 @@ export function ThingsToDo() {
               </Grid>
             </>
           )}
+        </div>
       </div>
     </div>
   );
