@@ -33,6 +33,9 @@ export enum POICategoryParent {
   ShopService = "Shopping & service",
 }
 
+export const TOURS = "Tours and activities"
+export type TOURS = typeof TOURS;
+
 export const HistoricSite: POICategory = {
   pluralName: 'Historic Sites',
   name: "Historic Site",

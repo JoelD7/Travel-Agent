@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import { CustomButton, IconText, Navbar, ServicesToolbar, Title } from "../../components";
 import { poiPlaceholder } from "../../utils";
-import { placesToGoDetailsStyles } from "./placesToGoDetails-styles";
+import { thingsToDoDetailsStyles as thingsToDoDetailsStyles } from "./thingsToDoDetails-styles";
 import Ratings from "react-ratings-declarative";
 import { Colors, Shadow } from "../../styles";
 import {
@@ -14,7 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
-export function PlacesToGoDetails() {
+export function ThingsToDoDetails() {
   const poi = poiPlaceholder;
 
   function photoURLBuilder(photo: POIPhotoItems) {
@@ -65,7 +65,7 @@ export function PlacesToGoDetails() {
     return attributes;
   }
 
-  const style = placesToGoDetailsStyles();
+  const style = thingsToDoDetailsStyles();
   return (
     <div className={style.mainContainer}>
       <Navbar />

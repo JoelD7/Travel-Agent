@@ -1,6 +1,7 @@
 import { Divider, makeStyles, Typography } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React from "react";
+import { Font } from "../../assets";
 
 interface PageSubtitleProps {
   label: string;
@@ -13,7 +14,9 @@ export function PageSubtitle({ label, containerStyle }: PageSubtitleProps) {
       margin: "auto",
       textAlign: "center",
       zIndex: 2,
-      fontWeight: "bolder",
+      fontSize: '26px',
+      fontWeight: "bold",
+      fontFamily: Font.Family,
       padding: "0 5px 0 5px",
       backgroundColor: "white",
     },
@@ -38,7 +41,7 @@ export function PageSubtitle({ label, containerStyle }: PageSubtitleProps) {
   return (
     <div className={styles.container}>
       <Divider className={styles.divider} />
-      <h2 className={styles.text}>{label}</h2>
+      <p className={styles.text}>{label}</p>
     </div>
   );
 }

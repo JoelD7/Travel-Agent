@@ -2,7 +2,7 @@ import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
 
-export const placesToGoStyles = makeStyles((theme: Theme) => ({
+export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   card: {
     backgroundColor: Colors.BLUE,
     width: "95%",
@@ -13,14 +13,14 @@ export const placesToGoStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    marginBottom: '40px',
+    marginBottom: "40px",
   },
   menuItemRoot: {
     fontFamily: Font.Family,
     borderBottom: `2px solid rgba(0,0,0,0)`,
     fontWeight: "bold",
     margin: "0px 5px",
-    color: Colors.PURPLE_HOVER,
+    color: Colors.BLUE,
   },
   parentCategoryBar: {
     display: "flex",
@@ -35,12 +35,18 @@ export const placesToGoStyles = makeStyles((theme: Theme) => ({
     width: "80%",
     margin: "auto",
   },
-  poiCard:{
-    borderRadius: '10px',
-    margin: '10px',
+  activityCard: {
+    borderRadius: "10px",
+    margin: "10px",
     boxShadow: Shadow.LIGHT3D,
-    padding: '10px',
-    width: '30%',
+    width: "25%",
+  },
+  poiCard: {
+    borderRadius: "10px",
+    margin: "10px",
+    boxShadow: Shadow.LIGHT3D,
+    padding: "10px",
+    width: "30%",
   },
   slider: {
     width: "100%",

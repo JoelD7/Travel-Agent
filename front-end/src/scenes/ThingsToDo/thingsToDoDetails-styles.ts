@@ -2,7 +2,7 @@ import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
 
-export const placesToGoDetailsStyles = makeStyles((theme: Theme) => ({
+export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
   detailsGrid: {
     [theme.breakpoints.down(910)]: {
       width: "100%",

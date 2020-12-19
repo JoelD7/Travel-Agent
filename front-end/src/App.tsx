@@ -11,8 +11,8 @@ import {
   RestaurantDetails,
   Restaurant_List,
   SignUp,
-  PlacesToGo,
-  PlacesToGoDetails,
+  ThingsToDo ,
+  ThingsToDoDetails,
 } from "./scenes";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Routes } from "./utils";
@@ -28,8 +28,8 @@ export default function App() {
         <Route exact path={Routes.FLIGHT_LIST} component={Flight_List} />
         <Route exact path={Routes.RESTAURANTS} component={Restaurant_List} />
         <Route exact path={`${Routes.RESTAURANTS}/:id`} component={RestaurantDetails} />
-        <Route exact path={Routes.PLACES_TOGO} component={PlacesToGo} />
-        <Route exact path={`${Routes.PLACES_TOGO}/:id`} component={PlacesToGoDetails} />
+        <Route exact path={Routes.PLACES_TOGO} component={ThingsToDo } />
+        <Route exact path={`${Routes.PLACES_TOGO}/:id`} component={ThingsToDoDetails} />
       </Switch>
     </Router>
   );

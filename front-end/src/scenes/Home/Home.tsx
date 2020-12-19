@@ -40,6 +40,7 @@ import {
   HomeHotelReservation,
   PageSubtitle,
   SliderArrow,
+  Title,
 } from "../../components";
 import { ButtonIcon } from "../../components/atoms/ButtonIcon";
 import { CDrawer, Navbar, ServicesToolbar } from "../../components/molecules";
@@ -253,7 +254,7 @@ export function Home() {
       <Grid id="section-2" container className={style.section}>
         <Grid item className={style.planTripGrid}>
           <div className={style.redirectTripContainer}>
-            <h2 style={{ fontWeight: "normal" }}>Make a trip</h2>
+            <Title component="h2">Make a trip</Title>
 
             <p>Plan your trips however you want! </p>
 
