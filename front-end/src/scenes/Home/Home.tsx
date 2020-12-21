@@ -238,8 +238,6 @@ export function Home() {
               <h1 className={style.homeImageText}>Hey, where you're off to next?</h1>
               <div className={style.exploreButtonContainer}>
                 <CustomButton
-                  style={home_explore_button}
-                  backgroundColor={Colors.WHITE_TRANSPARENT}
                   label="Explore places"
                 />
               </div>
@@ -247,8 +245,6 @@ export function Home() {
           </Grid>
         </Grid>
       </Grid>
-
-      
 
       <PageSubtitle label="Plan your trip" />
       <Grid id="section-2" container className={style.section}>

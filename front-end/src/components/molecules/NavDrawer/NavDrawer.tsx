@@ -1,7 +1,10 @@
 import {
+  faCalendar,
   faCar,
   faDice,
+  faHeart,
   faHotel,
+  faPlane,
   faPlaneDeparture,
   faUser,
   faUtensils,
@@ -20,12 +23,14 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { carlos, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors, Shadow } from "../../../styles";
+import { Routes } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/DrawerOptionsType";
 import { CustomButton } from "../../atoms";
-import { drawerButtonStyle, drawerStyles } from "./cdrawer-styles";
+import { drawerButtonStyle, drawerStyles } from "./navDrawer-styles";
 
 interface CDrawerProps {
   open: boolean;
@@ -33,67 +38,83 @@ interface CDrawerProps {
   onClose: () => void;
 }
 
-export function CDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
+export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
   const style = drawerStyles();
 
-  const theme = createMuiTheme({
-    overrides: {
-      MuiListItem: {
-        root: {
-          borderBottom: `2px solid ${Colors.BLUE}`,
-          "&.Mui-selected": {
-            backgroundColor: Colors.BLUE_HOVER,
-
-            "&:hover": {
-              backgroundColor: Colors.BLUE_HOVER,
-            },
-          },
-        },
-      },
-    },
-  });
+  let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
+  let page = "/" + segmentedURL[segmentedURL.length - 1];
 
   const [drawerOptions, setDrawerOptions] = useState<DrawerOptions[]>([
     {
+      label: "Reservations",
+      icon: faCalendar,
+      route: Routes.RESERVATIONS,
+      selected: page === Routes.RESERVATIONS,
+      user: true,
+    },
+    {
+      label: "Trips",
+      icon: faPlane,
+      route: Routes.TRIPS,
+      selected: page === Routes.TRIPS,
+      user: true,
+    },
+    {
+      label: "Favorite places",
+      icon: faHeart,
+      route: Routes.FAVORITE_PLACES,
+      selected: page === Routes.FAVORITE_PLACES,
+      user: true,
+    },
+    {
       label: "Hotels",
       icon: faHotel,
-      route: "",
-      selected: false,
+      route: Routes.HOTELS,
+      selected: page === Routes.HOTELS,
+      user: false,
     },
     {
       label: "Flights",
       icon: faPlaneDeparture,
-      route: "",
-      selected: false,
+      route: Routes.FLIGHTS,
+      selected: page === Routes.FLIGHTS,
+      user: false,
     },
     {
       label: "Restaurants",
       icon: faUtensils,
-      route: "",
-      selected: false,
+      route: Routes.RESTAURANTS,
+      selected: page === Routes.RESTAURANTS,
+      user: false,
     },
     {
       label: "Things to do",
       icon: faDice,
-      route: "",
-      selected: false,
+      route: Routes.THINGS_TODO,
+      selected: page === Routes.THINGS_TODO,
+      user: false,
     },
     {
       label: "Car rental",
       icon: faCar,
       route: "",
       selected: false,
+      user: false,
     },
   ]);
+
+  const history = useHistory();
 
   function onOptionClick(option: DrawerOptions) {
     let newDrawer = drawerOptions.map((op) => {
       if (op.label === option.label) {
-        return { ...op, selected: !op.selected };
+        return { ...op, selected: true };
       } else {
         return { ...op, selected: false };
       }
     });
+
+    history.push(option.route);
     setDrawerOptions(newDrawer);
   }
 
@@ -152,18 +173,20 @@ export function CDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
         src={logoTypeWhiteFore}
         style={{ height: "40px", margin: "20px auto 0px auto" }}
       />
-      <ThemeProvider theme={theme}>
-        <List style={{ marginTop: "40px" }}>
-          <DrawerButtons />
+      <List style={{ marginTop: "40px" }}>
+        <DrawerButtons />
 
-          <Divider style={{ backgroundColor: "#cecece" }} />
+        <Divider style={{ backgroundColor: "#cecece" }} />
 
-          {drawerOptions.map((option, i) => (
+        {drawerOptions
+          .filter((o) => o.user)
+          .map((option, i) => (
             <ListItem
               selected={option.selected}
               button
               key={i}
               classes={{
+                root: style.listItemRoot,
                 button: style.listItem,
               }}
               onClick={() => onOptionClick(option)}
@@ -177,8 +200,32 @@ export function CDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
               />
             </ListItem>
           ))}
-        </List>
-      </ThemeProvider>
+
+        <Divider style={{ backgroundColor: "#cecece" }} />
+
+        {drawerOptions
+          .filter((o) => !o.user)
+          .map((option, i) => (
+            <ListItem
+              selected={option.selected}
+              button
+              key={i}
+              classes={{
+                root: style.listItemRoot,
+                button: style.listItem,
+              }}
+              onClick={() => onOptionClick(option)}
+            >
+              <ListItemIcon>
+                <FontAwesomeIcon icon={option.icon} color="white" />
+              </ListItemIcon>
+              <ListItemText
+                classes={{ primary: style.drawerText }}
+                primary={option.label}
+              />
+            </ListItem>
+          ))}
+      </List>
     </Drawer>
   );
 }

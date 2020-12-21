@@ -9,22 +9,21 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     alignItems: "center",
     padding: "0px 10px 10px 10px",
     borderRight: "1px solid #cecece",
-    width: '33%',
+    width: "33%",
 
-    [theme.breakpoints.down(715)]:{
-      width: '50%',
-    }
-
+    [theme.breakpoints.down(715)]: {
+      width: "50%",
+    },
   },
   cardData2: {
     display: "flex",
     padding: "0px 10px 10px 10px",
 
-    width: '33%',
+    width: "33%",
 
-    [theme.breakpoints.down(715)]:{
-      width: '50%',
-    }
+    [theme.breakpoints.down(715)]: {
+      width: "50%",
+    },
   },
   cardText: {
     fontSize: "14px",
@@ -34,7 +33,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     fontFamily: Family,
     width: "100%",
     maxWidth: "100%",
-    borderRadius: "10px",
+    borderRadius: "4px",
 
     "& .MuiIconButton-root": {
       color: Colors.BLUE,
@@ -45,7 +44,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     },
   },
   datepickerItemGrid: {
-    borderRadius: "20px",
+    borderRadius: "5px",
     marginTop: "5px",
     width: "24%",
 
@@ -62,24 +61,24 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
-  defaultContentContainer:{
-    [theme.breakpoints.down(950)]:{
-       display: 'none', 
-    }
+  defaultContentContainer: {
+    [theme.breakpoints.down(950)]: {
+      display: "none",
+    },
   },
-  smContentContainer:{
-    display: 'none',
-    
-    [theme.breakpoints.down(950)]:{
-      display: 'flex', 
-   }
+  smContentContainer: {
+    display: "none",
+
+    [theme.breakpoints.down(950)]: {
+      display: "flex",
+    },
   },
   drawer: {
     width: "250px",
     backgroundColor: Colors.BLUE,
     fontFamily: Family,
-    color: 'white',
-    padding: '10px',
+    color: "white",
+    padding: "10px",
   },
   filtersGrid: {
     border: "1px solid #cecece",
@@ -93,7 +92,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   },
   filterButtonGrid: {
     display: "none",
-    marginBottom: '20px',
+    marginBottom: "20px",
     [theme.breakpoints.down(1280)]: {
       display: "block",
       width: "50%",
@@ -110,7 +109,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     marginLeft: "15px",
     borderRadius: "10px",
     display: "flex",
-    width: '100%',
+    width: "100%",
 
     [theme.breakpoints.down(1280)]: {
       marginLeft: "0px",
@@ -123,26 +122,31 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     height: "100%",
     width: "100%",
 
-    [theme.breakpoints.down(950)]:{
-      borderRadius: '10px 10px 0px 0px'
+    [theme.breakpoints.down(950)]: {
+      borderRadius: "10px 10px 0px 0px",
     },
   },
-  hotelImageGrid:{
-    width: '33%',
+  hotelImageGrid: {
+    width: "33%",
 
-    [theme.breakpoints.down(950)]:{
-      width: '100%',
-    }
+    [theme.breakpoints.down(950)]: {
+      width: "100%",
+    },
   },
-  hotelContentGrid:{
-    width: '66%',
+  hotelContentGrid: {
+    width: "66%",
 
-    [theme.breakpoints.down(950)]:{
-      width: '100%',
+    [theme.breakpoints.down(950)]: {
+      width: "100%",
     },
   },
   mainContainer: {
     fontFamily: Family,
+  },
+  pageContainer: {
+    padding: '0px 115px',
+    margin: "20px auto",
+    background: Colors.PAGE_BACKG,
   },
   pageContentContainer: {
     marginTop: "50px",

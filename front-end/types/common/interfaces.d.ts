@@ -37,6 +37,10 @@ interface RestaurantFilter {
 }
 
 interface ExchangeRate {
-  rates: Object;
+  lastUpdated: number;
+  base: string;
+  rates: {
+    [key: string]: number;
+  };
   [key: string]: ExchangeRate[keyof ExchangeRate];
 }

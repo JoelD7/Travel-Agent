@@ -108,7 +108,6 @@ export function Hotels() {
       },
       MuiOutlinedInput: {
         root: {
-          borderRadius: "10px",
           backgroundColor: "white",
 
           "&:hover": {
@@ -151,8 +150,6 @@ export function Hotels() {
     },
   ];
 
-  
-
   const [state, setState] = useState<HotelSearch>({
     checkIn: new Date(),
     checkOut: addDays(new Date(), 2),
@@ -181,20 +178,6 @@ export function Hotels() {
     },
   ];
 
-  function renderStars(n: number) {
-    return (
-      <div style={{ display: "flex" }}>
-        {[1, 2, 3, 4, 5].map((star, i) => (
-          <FontAwesomeIcon
-            key={i}
-            icon={faStar}
-            color={star <= n ? Colors.PURPLE : "#cecece"}
-          />
-        ))}
-      </div>
-    );
-  }
-
   const [openDrawer, setOpenDrawer] = useState(false);
 
   return (
@@ -202,7 +185,7 @@ export function Hotels() {
       <Navbar />
       <ServicesToolbar />
 
-      <div style={{ width: "85%", margin: "20px auto" }}>
+      <div className={style.pageContainer}>
         <Grid container spacing={2} className={style.pageTitleContainer}>
           <Grid item xs={12}>
             <h1 style={{ color: "white", marginBottom: "0px" }}>Hotels in Paris</h1>

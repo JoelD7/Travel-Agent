@@ -3,7 +3,7 @@ import { CreateCSSProperties } from "@material-ui/styles";
 import React, { FunctionComponent } from "react";
 import { Font } from "../../assets";
 
-type Component = "h1" | "h2" | "h3" | "h4";
+type Component = "h1" | "h2" | "h3" | "h4" | "h5";
 
 export const Title: FunctionComponent<{
   component: Component;
@@ -14,6 +14,7 @@ export const Title: FunctionComponent<{
     h2: '26px',
     h3: "22px",
     h4: "18px",
+    h5: '16px',
   };
 
   const titleStyles = makeStyles({

@@ -21,6 +21,17 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     fontWeight: "bold",
     margin: "0px 5px",
     color: Colors.BLUE,
+    "&.MuiListItem-root": {
+      "&.Mui-selected": {
+        backgroundColor: "rgba(0,0,0,0)",
+        borderBottom: `2px solid ${Colors.PURPLE_HOVER}`,
+      },
+    },
+    "&.MuiListItem-button": {
+      "&:hover": {
+        borderBottom: `2px solid ${Colors.PURPLE_HOVER}`,
+      },
+    },
   },
   parentCategoryBar: {
     display: "flex",
@@ -35,6 +46,10 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     width: "80%",
     margin: "auto",
   },
+  pageContentParent: {
+    backgroundColor: Colors.BACKGROUND,
+    background: Colors.PAGE_BACKG,
+  },
   activityCard: {
     borderRadius: "10px",
     margin: "10px",
@@ -42,10 +57,9 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     width: "25%",
   },
   poiCard: {
-    borderRadius: "10px",
+    borderRadius: "5px",
     margin: "10px",
     boxShadow: Shadow.LIGHT3D,
-    padding: "10px",
     width: "30%",
   },
   slider: {

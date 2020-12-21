@@ -1,5 +1,5 @@
 export { Navbar } from "./Navbar";
-export { CDrawer } from "./CDrawer/CDrawer";
+export { NavDrawer as CDrawer } from "./NavDrawer/NavDrawer";
 export { ServicesToolbar } from "./ServicesToolbar/ServicesToolbar";
 export { DatetimeRange } from "./DatetimeRange/DatetimeRange";
 export { FlightTimesRange } from "./FlightTimesRange/FlightTimesRange";

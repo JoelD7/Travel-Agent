@@ -5,6 +5,7 @@ export interface DrawerOptions {
   icon: IconDefinition;
   route: string;
   selected: boolean;
+  user: boolean;
 }
 
 export interface RestaurantFilter {

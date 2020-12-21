@@ -3,7 +3,7 @@ import {
   faMapMarkerAlt,
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
-import { Grid } from "@material-ui/core";
+import { CardActionArea, Grid } from "@material-ui/core";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { Routes } from "../../../utils";
@@ -16,12 +16,17 @@ interface RestaurantCard {
 
 export function RestaurantCard({ restaurant }: RestaurantCard) {
   const style = restaurantCardStyles();
-  const history = useHistory()
+  const history = useHistory();
 
   return (
     <Grid container className={style.mainContainer}>
       <Grid item className={style.photoGrid}>
-        <img src={restaurant.featuredImage} className={style.cardImage} />
+        <CardActionArea
+          style={{ height: "100%" }}
+          onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
+        >
+          <img src={restaurant.featuredImage} className={style.cardImage} />
+        </CardActionArea>
       </Grid>
 
       <Grid item className={style.cardContentGrid}>
@@ -34,10 +39,10 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
             <StarRating stars={Number(restaurant.rating)} />
           </Grid>
 
-          <Grid item xs={12} style={{ marginTop: '5px'}}>
+          <Grid item xs={12} style={{ marginTop: "5px" }}>
             <IconText
               shadow
-              style={{marginBottom: '0px'}}
+              style={{ marginBottom: "0px" }}
               className={style.bodyText}
               icon={faUtensils}
               text={restaurant.cuisines}
@@ -47,19 +52,19 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
           <Grid item xs={12}>
             <IconText
               shadow
-              style={{marginBottom: '0px'}}
+              style={{ marginBottom: "0px" }}
               className={style.bodyText}
               icon={faMapMarkerAlt}
               text={restaurant.location.address}
             />
           </Grid>
 
-          <Grid item xs={12} >
+          <Grid item xs={12}>
             <Grid container>
               <CustomButton
                 style={{ marginLeft: "auto" }}
                 label="Check details"
-                onClick={()=> history.push(`${Routes.RESTAURANTS}/${restaurant.id}`) }
+                onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
                 icon={faChevronRight}
                 rounded
               />

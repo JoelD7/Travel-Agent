@@ -11,7 +11,7 @@ import { navbarStyles } from "../../styles/Navbar/navbar-styles";
 import { selectSearchQuery, onQueryChanged, Routes } from "../../utils";
 import { CustomButton } from "../atoms";
 import { ButtonIcon } from "../atoms/ButtonIcon";
-import { CDrawer } from "./CDrawer/CDrawer";
+import { NavDrawer } from "./NavDrawer/NavDrawer";
 
 interface Navbar {
   home?: boolean;
@@ -98,7 +98,6 @@ export const Navbar: FunctionComponent<Navbar> = ({ children, home }: Navbar) =>
           </div>
 
           <IconButton
-            className={style.drawerOpenButton}
             onClick={() => setOpenDrawer(true)}
           >
             <FontAwesomeIcon color={Colors.BLUE} icon={faBars} />
@@ -106,7 +105,7 @@ export const Navbar: FunctionComponent<Navbar> = ({ children, home }: Navbar) =>
         </div>
       </Toolbar>
 
-      <CDrawer open={openDrawer} onClose={() => setOpenDrawer(false)} />
+      <NavDrawer open={openDrawer} onClose={() => setOpenDrawer(false)} />
     </AppBar>
   );
 };

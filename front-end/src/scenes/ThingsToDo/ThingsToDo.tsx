@@ -39,26 +39,12 @@ import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
 import Ratings from "react-ratings-declarative";
 import Axios from "axios";
+import { differenceInHours } from "date-fns";
 
 export function ThingsToDo() {
   const style = thingsToDoStyles();
   const theme = createMuiTheme({
     overrides: {
-      MuiListItem: {
-        root: {
-          borderBottom: `2px solid rgba(0,0,0,0)`,
-          "&.Mui-selected": {
-            backgroundColor: "rgba(0,0,0,0)",
-            borderBottom: `2px solid ${Colors.PURPLE_HOVER}`,
-          },
-        },
-
-        button: {
-          "&:hover": {
-            borderBottom: `2px solid ${Colors.PURPLE_HOVER}`,
-          },
-        },
-      },
       MuiMenuItem: {
         root: {
           fontFamily: Font.Family,
@@ -119,11 +105,22 @@ export function ThingsToDo() {
   const pois: POISearch[] = poisPlaceholder;
 
   const activities: Activity[] = activitiesPlaceholder;
-  const [rates, setRates] = useState<ExchangeRate>({ rates: {} });
+  const [rates, setRates] = useState<ExchangeRate>(
+    JSON.parse(String(localStorage.getItem("rates")))
+  );
 
   useEffect(() => {
-    // getExchangeRates();
+    if (!areRatesUpdated()) {
+      getExchangeRates();
+    }
   }, []);
+
+  function areRatesUpdated() {
+    if (rates === null) {
+      return false;
+    }
+    return differenceInHours(Date.now(), rates.lastUpdated) < 24;
+  }
 
   function getExchangeRates() {
     Axios.get("https://openexchangerates.org/api/latest.json", {
@@ -133,8 +130,9 @@ export function ThingsToDo() {
       },
     })
       .then((res) => {
-        setRates(res.data.rates);
-        console.log(`Currencies: `, res.data);
+        let newExchangeRates = { ...res.data, lastUpdated: Date.now() };
+        setRates(newExchangeRates);
+        localStorage.setItem("rates", JSON.stringify(newExchangeRates));
       })
       .catch((er) => {
         console.log(`Error: ${er}`);
@@ -151,7 +149,7 @@ export function ThingsToDo() {
   function convertCurrency(currency: string, amount: string) {
     if (rates) {
       let value = Number(amount);
-      return currencyFormatter((1 / Number(rates[currency])) * value);
+      return currencyFormatter((1 / Number(rates.rates[currency])) * value);
     } else {
       return amount;
     }
@@ -212,7 +210,7 @@ export function ThingsToDo() {
         </Menu>
       </ThemeProvider>
 
-      <div style={{backgroundColor: Colors.BACKGROUND}}>
+      <div className={style.pageContentParent}>
         <div className={style.pageContentContainer}>
           <Title component="h2">Browse by category</Title>
           <Slider {...sliderSettings}>
@@ -249,6 +247,7 @@ export function ThingsToDo() {
                 {pois.slice(0, 6).map((poi, i) => (
                   <Card key={i} className={style.poiCard}>
                     <CardActionArea
+                      style={{ padding: "10px" }}
                       onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
                     >
                       <Title
@@ -258,7 +257,7 @@ export function ThingsToDo() {
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                         }}
-                        component="h3"
+                        component="h4"
                       >
                         {poi.name}
                       </Title>
@@ -280,7 +279,11 @@ export function ThingsToDo() {
                           label="Check out"
                           onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
                           backgroundColor={Colors.PURPLE}
-                          style={{ borderRadius: "10px", marginLeft: "auto" }}
+                          style={{
+                            borderRadius: "10px",
+                            fontSize: "16px",
+                            marginLeft: "auto",
+                          }}
                         />
                       </div>
                     </CardActionArea>
@@ -308,11 +311,10 @@ export function ThingsToDo() {
 
                     <CardContent>
                       <Title
-                        component="h4"
+                        component="h5"
                         style={{
                           overflow: "hidden",
                           textOverflow: "ellipsis",
-                          height: "52px",
                           maxHeight: "52px",
                           marginTop: "0px",
                         }}
@@ -338,7 +340,7 @@ export function ThingsToDo() {
                       <CustomButton
                         label="Check out"
                         rounded
-                        style={{ fontSize: "16px" }}
+                        style={{ fontSize: "16px", marginTop: 'auto' }}
                         onClick={() => goToBookingLink(activity.bookingLink)}
                       />
                     </CardContent>

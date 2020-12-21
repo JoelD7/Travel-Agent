@@ -9,6 +9,16 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
     fontWeight: "bold",
     margin: "0px 5px",
     color: Colors.BLUE,
+    "&.MuiListItem-root": {
+      "&.Mui-selected": {
+        backgroundColor: "rgba(0,0,0,0)",
+        borderBottom: `2px solid ${Colors.BLUE}`,
+
+        "&:hover": {
+          backgroundColor: "rgba(0,0,0,0)",
+        },
+      },
+    },
   },
   menuItemRootHome: {
     fontFamily: Family,
@@ -16,6 +26,16 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
     fontWeight: "bold",
     margin: "0px 5px",
     color: "white",
+    "&.MuiListItem-root": {
+      "&.Mui-selected": {
+        backgroundColor: "rgba(0,0,0,0)",
+        borderBottom: `2px solid ${Colors.BLUE}`,
+
+        "&:hover": {
+          backgroundColor: "red",
+        },
+      },
+    },
   },
   servicesToolbar: {
     display: "flex",

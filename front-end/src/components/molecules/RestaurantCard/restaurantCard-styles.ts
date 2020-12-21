@@ -6,9 +6,10 @@ export const restaurantCardStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     fontFamily: Font.Family,
     boxShadow: Shadow.LIGHT,
-    height: "210px",
+    height: "210px",  
     borderRadius: "5px",
     marginBottom: "20px",
+    backgroundColor: 'white',
   },
   photoGrid: {
     width: "30%",

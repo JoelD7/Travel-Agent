@@ -8,6 +8,7 @@ import { Routes } from "../../../utils";
 interface NavbarService {
   label: string;
   route: string;
+  selected: boolean;
 }
 
 interface ServicesToolbar {
@@ -15,41 +16,43 @@ interface ServicesToolbar {
 }
 
 export function ServicesToolbar({ home }: ServicesToolbar) {
+  let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
+  let page = "/" + segmentedURL[segmentedURL.length - 1];
+
   const navbarServices: NavbarService[] = [
     {
       label: "Hotels",
       route: Routes.HOTELS,
+      selected: page === Routes.HOTELS,
     },
     {
       label: "Flights",
       route: Routes.FLIGHTS,
+      selected: page === Routes.FLIGHTS,
     },
     {
       label: "Restaurants",
       route: Routes.RESTAURANTS,
+      selected: page === Routes.RESTAURANTS,
     },
     {
       label: "Things to do",
       route: Routes.THINGS_TODO,
+      selected: page === Routes.THINGS_TODO,
     },
     {
       label: "Car rental",
       route: Routes.CAR_RENTAL,
+      selected: false,
     },
   ];
 
   const theme = createMuiTheme({
     overrides: {
       MuiListItem: {
-        root: {
-          "&.Mui-selected": {
-            backgroundColor: "rgba(0,0,0,0)",
-            borderBottom: `2px solid ${Colors.BLUE}`,
-          },
-        },
-
         button: {
           "&:hover": {
+            backgroundColor: "rgba(0,0,0,0)",
             borderBottom: `2px solid ${Colors.BLUE}`,
           },
         },
@@ -61,24 +64,13 @@ export function ServicesToolbar({ home }: ServicesToolbar) {
 
   const history = useHistory();
 
-  function isServiceSelected(service: NavbarService) {
-    if (service.label === "Flights") {
-      return (
-        history.location.pathname === service.route ||
-        history.location.pathname === Routes.FLIGHT_LIST
-      );
-    } else {
-      return history.location.pathname === service.route;
-    }
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <Toolbar className={home ? style.servicesToolbarHome : style.servicesToolbar}>
         {navbarServices.map((service, i) => (
           <MenuItem
             key={i}
-            selected={isServiceSelected(service)}
+            selected={service.selected}
             onClick={() => history.push(service.route)}
             classes={{ root: home ? style.menuItemRootHome : style.menuItemRoot }}
           >

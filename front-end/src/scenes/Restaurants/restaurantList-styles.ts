@@ -11,15 +11,16 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     fontFamily: Family,
   },
   pageContentContainer: {
-    width: "85%",
+    width: "90%",
     margin: "auto",
   },
   filterGrid: {
-    border: "1px solid #cecece",
+    boxShadow: Shadow.LIGHT,
+    backgroundColor: 'white',
     borderRadius: "5px",
     padding: "10px",
-    height: '770px',
-    width: "25%",
+    height: '785px',
+    width: "22%",
   },
   restaurantName: {
     fontSize: "14px",
@@ -36,7 +37,9 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     textOverflow: "ellipsis",
   },
   restaurantsGrid: {
-    width: "74%",
+    backgroundColor: Colors.BACKGROUND,
+    padding: '15px',
+    width: "77%",
     marginLeft: "10px",
   },
   browseByFoodGrid: {

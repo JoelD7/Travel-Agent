@@ -17,12 +17,6 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
       display: "none",
     },
   },
-  drawerOpenButton: {
-    display: "none",
-    [theme.breakpoints.down(1000)]: {
-      display: "inline",
-    },
-  },
   logotype: {
     maxHeight: "40px",
     height: "40px",

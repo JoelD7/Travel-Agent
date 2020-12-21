@@ -250,76 +250,84 @@ export function Restaurant_List() {
       <Navbar />
       <ServicesToolbar />
 
-      <Title component="h1" style={{ textAlign: "center" }}>{`Restaurants in ${state.city}`}</Title>
-      <Grid container className={style.pageContentContainer}>
-        <Grid item className={style.filterGrid}>
-          <h3 className={style.filterTitle}>Establishment</h3>
-          <RestaurantEstablishments
-            values={state.establishments}
-            updateState={(values) => setState({ ...state, establishments: values })}
-          />
+      <div style={{backgroundColor: Colors.BACKGROUND}}>
+        <Title
+          component="h1"
+          style={{ textAlign: "center" }}
+        >{`Restaurants in ${state.city}`}</Title>
+        <Grid container className={style.pageContentContainer}>
+          <Grid item className={style.filterGrid}>
+            <h3 className={style.filterTitle}>Establishment</h3>
+            <RestaurantEstablishments
+              values={state.establishments}
+              updateState={(values) => setState({ ...state, establishments: values })}
+            />
 
-          <Divider style={{ marginTop: "18px" }} />
+            <Divider style={{ marginTop: "18px" }} />
 
-          <h3 className={style.filterTitle}>Restaurant features</h3>
-          <RestaurantFeature
-            values={state.features}
-            updateState={(values) => setState({ ...state, features: values })}
-          />
+            <h3 className={style.filterTitle}>Restaurant features</h3>
+            <RestaurantFeature
+              values={state.features}
+              updateState={(values) => setState({ ...state, features: values })}
+            />
 
-          <Divider style={{ marginTop: "18px" }} />
+            <Divider style={{ marginTop: "18px" }} />
 
-          <h3 className={style.filterTitle}>Cuisines</h3>
-          <RestaurantCuisinesSelec
-            values={state.cuisines}
-            updateState={(values) => setState({ ...state, cuisines: values })}
-          />
-        </Grid>
-
-        <Grid item className={style.filterButtonGrid}>
-          <CustomButton
-            label="Filter"
-            icon={faFilter}
-            backgroundColor={Colors.PURPLE}
-            style={{ paddingLeft: "10px", fontSize: "14px" }}
-            onClick={() => setOpenDrawer(true)}
-          />
-        </Grid>
-
-        <Grid item className={style.restaurantsGrid}>
-          <RestaurantSlides restaurants={restaurants} title="Delivery Available" />
-          <RestaurantSlides restaurants={restaurants} title="Outdoor Seating Available" />
-
-          <Grid container className={style.browseByFoodGrid} spacing={3}>
-            <Grid item xs={12}>
-              <h2 style={{ marginBottom: "0px" }}>{`Browse ${state.city} by Food`}</h2>
-            </Grid>
-
-            {state.cuisines.slice(0, 9).map((cuisine, i) => (
-              <Grid item key={i} style={{ width: "33%" }}>
-                <CustomButton
-                  backgroundColor={Colors.PURPLE}
-                  style={{ width: "150px", boxShadow: Shadow.MEDIUM }}
-                  label={cuisine.name}
-                  onClick={() => {}}
-                />
-              </Grid>
-            ))}
+            <h3 className={style.filterTitle}>Cuisines</h3>
+            <RestaurantCuisinesSelec
+              values={state.cuisines}
+              updateState={(values) => setState({ ...state, cuisines: values })}
+            />
           </Grid>
 
-          <RestaurantSlides restaurants={restaurants} title="Fine Dining" />
-          <RestaurantSlides restaurants={restaurants} title="Cheap Eats" />
-          <RestaurantSlides restaurants={restaurants} title="Local Cuisine" />
+          <Grid item className={style.filterButtonGrid}>
+            <CustomButton
+              label="Filter"
+              icon={faFilter}
+              backgroundColor={Colors.PURPLE}
+              style={{ paddingLeft: "10px", fontSize: "14px" }}
+              onClick={() => setOpenDrawer(true)}
+            />
+          </Grid>
 
-          <Title
-            style={{ marginTop: "50px" }}
-            component="h1"
-          >{`Top Restaurants in ${state.city}`}</Title>
-          {restaurants.map((restaurant, i) => (
-            <RestaurantCard key={i} restaurant={restaurant} />
-          ))}
+          <Grid item className={style.restaurantsGrid}>
+            <RestaurantSlides restaurants={restaurants} title="Delivery Available" />
+            <RestaurantSlides
+              restaurants={restaurants}
+              title="Outdoor Seating Available"
+            />
+
+            <Grid container className={style.browseByFoodGrid} spacing={3}>
+              <Grid item xs={12}>
+                <h2 style={{ marginBottom: "0px" }}>{`Browse ${state.city} by Food`}</h2>
+              </Grid>
+
+              {state.cuisines.slice(0, 9).map((cuisine, i) => (
+                <Grid item key={i} style={{ width: "33%" }}>
+                  <CustomButton
+                    backgroundColor={Colors.PURPLE}
+                    style={{ width: "150px", boxShadow: Shadow.MEDIUM }}
+                    label={cuisine.name}
+                    onClick={() => {}}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+
+            <RestaurantSlides restaurants={restaurants} title="Fine Dining" />
+            <RestaurantSlides restaurants={restaurants} title="Cheap Eats" />
+            <RestaurantSlides restaurants={restaurants} title="Local Cuisine" />
+
+            <Title
+              style={{ marginTop: "50px" }}
+              component="h2"
+            >{`Top Restaurants in ${state.city}`}</Title>
+            {restaurants.map((restaurant, i) => (
+              <RestaurantCard key={i} restaurant={restaurant} />
+            ))}
+          </Grid>
         </Grid>
-      </Grid>
+      </div>
     </div>
   );
 }
