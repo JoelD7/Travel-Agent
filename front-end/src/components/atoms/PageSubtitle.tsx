@@ -2,6 +2,7 @@ import { Divider, makeStyles, Typography } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React from "react";
 import { Font } from "../../assets";
+import { Colors } from "../../styles";
 
 interface PageSubtitleProps {
   label: string;
@@ -18,7 +19,7 @@ export function PageSubtitle({ label, containerStyle }: PageSubtitleProps) {
       fontWeight: "bold",
       fontFamily: Font.Family,
       padding: "0 5px 0 5px",
-      backgroundColor: "white",
+      backgroundColor: Colors.BACKGROUND,
     },
     divider: {
       backgroundColor: "black",

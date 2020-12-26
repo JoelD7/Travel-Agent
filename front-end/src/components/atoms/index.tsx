@@ -5,4 +5,4 @@ export { PriceRange } from "./PriceRange/PriceRange";
 export { HotelStarSelector } from "./HotelStarSelector/HotelStarSelector";
 export { IconText } from "./IconText/IconText";
 export { StarRating } from "./StarRating";
-export { Title } from "./Title";
+export { Text } from "./Text";

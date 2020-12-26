@@ -9,18 +9,20 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Family,
+    backgroundColor: Colors.BACKGROUND,
   },
   pageContentContainer: {
     width: "90%",
     margin: "auto",
   },
   filterGrid: {
-    boxShadow: Shadow.LIGHT,
-    backgroundColor: 'white',
-    borderRadius: "5px",
-    padding: "10px",
-    height: '785px',
     width: "22%",
+  },
+  filterContainer: {
+    boxShadow: Shadow.LIGHT,
+    backgroundColor: "white",
+    borderRadius: "5px",
+    padding: "15px",
   },
   restaurantName: {
     fontSize: "14px",
@@ -38,7 +40,7 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   },
   restaurantsGrid: {
     backgroundColor: Colors.BACKGROUND,
-    padding: '15px',
+    padding: "15px",
     width: "77%",
     marginLeft: "10px",
   },

@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { faCircle} from "@fortawesome/free-solid-svg-icons";
 import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
-import { SliderArrow, Title } from "../../atoms";
+import { SliderArrow, Text } from "../../atoms";
 import { restaurantSlidesStyles } from "./restaurantSlides-styles";
 import Slider from "react-slick";
 import { Colors } from "../../../styles";
@@ -69,9 +69,9 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
     <div style={{ marginTop: "20px" }}>
       <Grid item className={style.slideshowGrid}>
         <Grid container>
-          <Title style={{ marginLeft: "53px" }} component="h2">{title}</Title>
+          <Text style={{ marginLeft: "53px" }} component="h2">{title}</Text>
           <Button
-            style={{ textTransform: "capitalize", margin: "auto 0px auto auto" }}
+            style={{ textTransform: "capitalize", margin: "auto 0px 5px auto" }}
             classes={{ root: style.textButton }}
             onClick={() => {}}
           >

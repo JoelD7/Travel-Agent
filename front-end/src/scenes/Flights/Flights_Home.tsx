@@ -34,7 +34,12 @@ import {
 } from "../../components";
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors } from "../../styles";
-import { formatFlightDateTime, getFlightCitiesLabel, muiDateFormatter, Routes } from "../../utils";
+import {
+  formatFlightDateTime,
+  getFlightCitiesLabel,
+  muiDateFormatter,
+  Routes,
+} from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightStyles } from "./flights-styles";
@@ -158,11 +163,11 @@ export function Flights_Home() {
   });
 
   const destination = {
-    image: "/destinations/dubai.jpg",
+    image: "dubai.jpg",
     name: "Dubai",
   };
 
-  const history = useHistory()
+  const history = useHistory();
 
   const [state, setState] = useState<FlightSearchParams>({
     adults: "",
@@ -332,16 +337,18 @@ export function Flights_Home() {
     },
   ];
 
-
   return (
     <div className={style.mainContainer}>
       <Navbar />
-      <ServicesToolbar />
 
-      <div
+      <Grid
+        container
         className={style.topContainer}
         style={{ backgroundImage: `url(${destination.image})` }}
       >
+        <Grid item xs={12}>
+          <ServicesToolbar />
+        </Grid>
         <Grid container spacing={2} className={style.reservationContainer}>
           <Grid item xs={12}>
             <h2>{`Find the best flight to ${destination.name}`}</h2>
@@ -506,7 +513,7 @@ export function Flights_Home() {
             />
           </Grid>
         </Grid>
-      </div>
+      </Grid>
 
       <PageSubtitle label="Great deals" containerStyle={{ margin: "20px auto" }} />
 
@@ -537,10 +544,10 @@ export function Flights_Home() {
                 subheader={
                   <div>
                     <p className={style.dealSubtitle}>
-                      {`${formatFlightDateTime(deal, "departure")} - ${formatFlightDateTime(
+                      {`${formatFlightDateTime(
                         deal,
-                        "arrival"
-                      )}`}
+                        "departure"
+                      )} - ${formatFlightDateTime(deal, "arrival")}`}
                     </p>
                   </div>
                 }

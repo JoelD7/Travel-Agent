@@ -19,7 +19,7 @@ import {
   RestaurantSlides,
   ServicesToolbar,
   SliderArrow,
-  Title,
+  Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import { restaurantListStyles } from "./restaurantList-styles";
@@ -250,34 +250,42 @@ export function Restaurant_List() {
       <Navbar />
       <ServicesToolbar />
 
-      <div style={{backgroundColor: Colors.BACKGROUND}}>
-        <Title
+      <div>
+        <Text
           component="h1"
           style={{ textAlign: "center" }}
-        >{`Restaurants in ${state.city}`}</Title>
+        >{`Restaurants in ${state.city}`}</Text>
         <Grid container className={style.pageContentContainer}>
           <Grid item className={style.filterGrid}>
-            <h3 className={style.filterTitle}>Establishment</h3>
-            <RestaurantEstablishments
-              values={state.establishments}
-              updateState={(values) => setState({ ...state, establishments: values })}
-            />
+            <div className={style.filterContainer}>
+              <Text className={style.filterTitle} component="h4">
+                Establishment
+              </Text>
+              <RestaurantEstablishments
+                values={state.establishments}
+                updateState={(values) => setState({ ...state, establishments: values })}
+              />
 
-            <Divider style={{ marginTop: "18px" }} />
+              <Divider style={{ marginTop: "18px" }} />
 
-            <h3 className={style.filterTitle}>Restaurant features</h3>
-            <RestaurantFeature
-              values={state.features}
-              updateState={(values) => setState({ ...state, features: values })}
-            />
+              <Text className={style.filterTitle} component="h4">
+                Restaurant features
+              </Text>
+              <RestaurantFeature
+                values={state.features}
+                updateState={(values) => setState({ ...state, features: values })}
+              />
 
-            <Divider style={{ marginTop: "18px" }} />
+              <Divider style={{ marginTop: "18px" }} />
 
-            <h3 className={style.filterTitle}>Cuisines</h3>
-            <RestaurantCuisinesSelec
-              values={state.cuisines}
-              updateState={(values) => setState({ ...state, cuisines: values })}
-            />
+              <Text className={style.filterTitle} component="h4">
+                Cuisines
+              </Text>
+              <RestaurantCuisinesSelec
+                values={state.cuisines}
+                updateState={(values) => setState({ ...state, cuisines: values })}
+              />
+            </div>
           </Grid>
 
           <Grid item className={style.filterButtonGrid}>
@@ -297,31 +305,14 @@ export function Restaurant_List() {
               title="Outdoor Seating Available"
             />
 
-            <Grid container className={style.browseByFoodGrid} spacing={3}>
-              <Grid item xs={12}>
-                <h2 style={{ marginBottom: "0px" }}>{`Browse ${state.city} by Food`}</h2>
-              </Grid>
-
-              {state.cuisines.slice(0, 9).map((cuisine, i) => (
-                <Grid item key={i} style={{ width: "33%" }}>
-                  <CustomButton
-                    backgroundColor={Colors.PURPLE}
-                    style={{ width: "150px", boxShadow: Shadow.MEDIUM }}
-                    label={cuisine.name}
-                    onClick={() => {}}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-
             <RestaurantSlides restaurants={restaurants} title="Fine Dining" />
             <RestaurantSlides restaurants={restaurants} title="Cheap Eats" />
             <RestaurantSlides restaurants={restaurants} title="Local Cuisine" />
 
-            <Title
+            <Text
               style={{ marginTop: "50px" }}
               component="h2"
-            >{`Top Restaurants in ${state.city}`}</Title>
+            >{`Top Restaurants in ${state.city}`}</Text>
             {restaurants.map((restaurant, i) => (
               <RestaurantCard key={i} restaurant={restaurant} />
             ))}

@@ -81,10 +81,11 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     padding: "10px",
   },
   filtersGrid: {
-    border: "1px solid #cecece",
     borderRadius: "5px",
-    padding: "10px",
     width: "25%",
+    boxShadow: Shadow.LIGHT,
+    backgroundColor: "white",
+    padding: "1px 15px 15px 15px",
 
     [theme.breakpoints.down(1280)]: {
       display: "none",
@@ -142,11 +143,11 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Family,
+    backgroundColor: Colors.BACKGROUND,
   },
   pageContainer: {
     padding: '0px 115px',
     margin: "20px auto",
-    background: Colors.PAGE_BACKG,
   },
   pageContentContainer: {
     marginTop: "50px",

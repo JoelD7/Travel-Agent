@@ -5,10 +5,15 @@ import { Colors, Shadow } from "../../styles";
 export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     fontFamily: Font.Family,
+    backgroundColor: Colors.BACKGROUND,
   },
   pageContentContainer: {
     width: "85%",
     margin: "auto auto 50px auto",
+    backgroundColor: 'white',
+    borderRadius: '5px',
+    boxShadow: Shadow.LIGHT,
+    padding: '10px',
   },
   detailsGrid: {
     [theme.breakpoints.down(910)]: {

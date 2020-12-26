@@ -1,10 +1,18 @@
+import { faCaretSquareLeft } from "@fortawesome/free-regular-svg-icons";
 import { faBars, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AppBar, IconButton, TextField, Toolbar, Avatar } from "@material-ui/core";
+import {
+  AppBar,
+  IconButton,
+  TextField,
+  Toolbar,
+  Avatar,
+  MenuItem,
+} from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React, { FunctionComponent, ReactNode, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { carlos, logoType, logoTypeWhiteFore } from "../../assets";
 import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
@@ -16,20 +24,26 @@ import { NavDrawer } from "./NavDrawer/NavDrawer";
 interface Navbar {
   home?: boolean;
   children?: ReactNode;
+  position?: "fixed" | "absolute" | "sticky" | "static" | "relative";
 }
 
-export const Navbar: FunctionComponent<Navbar> = ({ children, home }: Navbar) => {
+export const Navbar: FunctionComponent<Navbar> = ({
+  children,
+  home,
+  position = "relative",
+}: Navbar) => {
   const style = navbarStyles();
   const searchQuery = useSelector(selectSearchQuery);
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  const buttonStyle: CreateCSSProperties<{}> = {
-    margin: "0 5px 0 5px",
-  };
-
-  const userLoggedIn = false;
+  let userLoggedIn = true;
+  // userLoggedIn = false;
 
   const [openDrawer, setOpenDrawer] = useState(false);
+
+  let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
+  let page = "/" + segmentedURL[segmentedURL.length - 1];
 
   function getInputPropsClasses() {
     return {
@@ -39,7 +53,7 @@ export const Navbar: FunctionComponent<Navbar> = ({ children, home }: Navbar) =>
   }
 
   return (
-    <AppBar position="static" className={home ? style.appbarHome : style.appbar}>
+    <AppBar position={position} className={home ? style.appbarHome : style.appbar}>
       <Toolbar className={style.toolbar}>
         <Link to={Routes.HOME} style={{ outline: "none", border: "none" }}>
           <img src={home ? logoTypeWhiteFore : logoType} className={style.logotype} />
@@ -69,26 +83,43 @@ export const Navbar: FunctionComponent<Navbar> = ({ children, home }: Navbar) =>
 
         <div className={style.rightChildrenContainer}>
           <div className={style.defaultHomeNav}>
-            {!userLoggedIn && (
+            {userLoggedIn ? (
               <>
-                <CustomButton
-                  style={buttonStyle}
-                  label="Login"
-                  backgroundColor={home ? "rgba(0,0,0,0)" : Colors.BLUE}
-                />
-                <CustomButton
-                  style={buttonStyle}
-                  label="Sign up"
-                  backgroundColor={home ? "rgba(0,0,0,0)" : Colors.BLUE}
-                />
+                <MenuItem
+                  onClick={() => history.push(Routes.TRIPS)}
+                  style={home ? { color: "white" } : {}}
+                  // selected={page === }
+                  classes={{ root: style.menuItemRoot }}
+                >
+                  Trips
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {}}
+                  style={home ? { color: "white" } : {}}
+                  // selected={page === }
+                  classes={{ root: style.menuItemRoot }}
+                >
+                  Reservations
+                </MenuItem>
+              </>
+            ) : (
+              <>
+                <MenuItem
+                  onClick={() => {}}
+                  style={home ? { color: "white" } : {}}
+                  classes={{ root: style.menuItemRoot }}
+                >
+                  Login
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {}}
+                  style={home ? { color: "white" } : {}}
+                  classes={{ root: style.menuItemRoot }}
+                >
+                  Sign Up
+                </MenuItem>
               </>
             )}
-
-            <CustomButton
-              style={buttonStyle}
-              label="Trips"
-              backgroundColor={home ? "rgba(0,0,0,0)" : Colors.PURPLE}
-            />
 
             {userLoggedIn && (
               <IconButton style={{ marginLeft: "10px" }}>
@@ -97,10 +128,8 @@ export const Navbar: FunctionComponent<Navbar> = ({ children, home }: Navbar) =>
             )}
           </div>
 
-          <IconButton
-            onClick={() => setOpenDrawer(true)}
-          >
-            <FontAwesomeIcon color={Colors.BLUE} icon={faBars} />
+          <IconButton onClick={() => setOpenDrawer(true)}>
+            <FontAwesomeIcon color={home ? "white" : Colors.BLUE} icon={faBars} />
           </IconButton>
         </div>
       </Toolbar>

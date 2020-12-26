@@ -9,3 +9,5 @@ export { Restaurant_List } from "./Restaurants/Restaurant_List";
 export { RestaurantDetails } from "./Restaurants/RestaurantDetails";
 export { ThingsToDo } from "./ThingsToDo/ThingsToDo";
 export { ThingsToDoDetails } from "./ThingsToDo/ThingsToDoDetails";
+export { Trips  } from "./Trip/Trips";
+export { TripDetails  } from "./Trip/TripDetails";

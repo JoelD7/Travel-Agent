@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { CustomButton, IconText, Navbar, ServicesToolbar, Title } from "../../components";
+import { CustomButton, IconText, Navbar, ServicesToolbar, Text } from "../../components";
 import { poiPlaceholder } from "../../utils";
 import { thingsToDoDetailsStyles as thingsToDoDetailsStyles } from "./thingsToDoDetails-styles";
 import Ratings from "react-ratings-declarative";
@@ -75,7 +75,7 @@ export function ThingsToDoDetails() {
         <Grid item key="title" xs={12}>
           <Grid container alignItems="baseline">
             <Grid item xs={8}>
-              <Title component="h2">{poi.name}</Title>
+              <Text component="h2">{poi.name}</Text>
               <Ratings
                 rating={poi.rating / 2}
                 widgetRatedColors={Colors.PURPLE}
@@ -110,9 +110,9 @@ export function ThingsToDoDetails() {
 
         <Grid item className={style.detailsGrid}>
           <div className={style.detailsContainer}>
-            <Title component="h3" style={{marginTop: '5px'}}>Details</Title>
+            <Text component="h3" style={{marginTop: '5px'}}>Details</Text>
 
-            <Title component="h4">Contact</Title>
+            <Text component="h4">Contact</Text>
             {poi.contact.formattedPhone && (
               <IconText icon={faPhone} fontSize={16} text={poi.contact.formattedPhone} />
             )}
@@ -125,20 +125,20 @@ export function ThingsToDoDetails() {
               <IconText icon={faTwitter} fontSize={16} text={poi.contact.twitter} />
             )}
 
-            <Title component="h4">Address</Title>
+            <Text component="h4">Address</Text>
             {poi.location.formattedAddress && (
               <IconText icon={faMapMarkerAlt} fontSize={16} text={parseAddress(poi)} />
             )}
 
-            <Title component="h4">Hours</Title>
+            <Text component="h4">Hours</Text>
             {poi.hours.timeframes && (
               <IconText icon={faClock} fontSize={16} text={parseHours(poi)} />
             )}
 
-            <Title component="h4">Website</Title>
+            <Text component="h4">Website</Text>
             {poi.url && <IconText icon={faGlobe} fontSize={16} text={poi.url} />}
 
-            <Title component="h4">Amenities</Title>
+            <Text component="h4">Amenities</Text>
             {poi.attributes && (
               <IconText icon={faStar} fontSize={16} text={parseAttributes(poi)} />
             )}

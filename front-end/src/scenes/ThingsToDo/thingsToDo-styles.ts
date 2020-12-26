@@ -14,11 +14,11 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     fontFamily: Font.Family,
     marginBottom: "40px",
+    backgroundColor: Colors.BACKGROUND,
   },
   menuItemRoot: {
     fontFamily: Font.Family,
     borderBottom: `2px solid rgba(0,0,0,0)`,
-    fontWeight: "bold",
     margin: "0px 5px",
     color: Colors.BLUE,
     "&.MuiListItem-root": {
@@ -37,19 +37,18 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     minHeight: "20px",
     height: "40px",
-    marginTop: "20px",
-    borderTop: "1px solid #cecece",
-    borderBottom: "1px solid #cecece",
+    margin: "20px auto",
     justifyContent: "center",
+    boxShadow: Shadow.LIGHT,
+    borderRadius: "50px",
+    width: "60%",
+    backgroundColor: "white",
   },
   pageContentContainer: {
     width: "80%",
     margin: "auto",
   },
-  pageContentParent: {
-    backgroundColor: Colors.BACKGROUND,
-    background: Colors.PAGE_BACKG,
-  },
+  pageContentParent: {},
   activityCard: {
     borderRadius: "10px",
     margin: "10px",

@@ -10,3 +10,5 @@ export { RestaurantFeature } from "./RestaurantFeature/RestaurantFeature";
 export { RestaurantSlides } from "./RestaurantSlides/RestaurantSlides";
 export { RestaurantCard } from "./RestaurantCard/RestaurantCard";
 export { CardFlight } from "./CardFlight/CardFlight";
+export { DashDrawer } from "./DashDrawer/DashDrawer";
+export { PhotoAlbumCard } from "./PhotoAlbumCard/PhotoAlbumCard";

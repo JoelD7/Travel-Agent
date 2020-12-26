@@ -40,7 +40,7 @@ import {
   HomeHotelReservation,
   PageSubtitle,
   SliderArrow,
-  Title,
+  Text,
 } from "../../components";
 import { ButtonIcon } from "../../components/atoms/ButtonIcon";
 import { CDrawer, Navbar, ServicesToolbar } from "../../components/molecules";
@@ -95,43 +95,41 @@ export function Home() {
 
   const popularDestinations = [
     {
-      image: "/destinations/paris.jpg",
+      image: "destinations/paris.jpg",
       country: "France",
       city: "Paris",
     },
     {
-      image: "/destinations/tokio.jpg",
+      image: "destinations/tokio.jpg",
       country: "Japan",
       city: "Tokio",
     },
     {
-      image: "/destinations/agra.jpg",
+      image: "destinations/agra.jpg",
       country: "India",
       city: "Agra",
     },
     {
-      image: "/destinations/singapore.jpg",
+      image: "destinations/singapore.jpg",
       country: "Singapore",
       city: "Singapore",
     },
     {
-      image: "/destinations/rio.jpg",
+      image: "destinations/rio.jpg",
       country: "Brazil",
       city: "Rio de Janeiro",
     },
     {
-      image: "/destinations/new-york.jpg",
+      image: "destinations/new-york.jpg",
       country: "United States",
       city: "New York",
     },
     {
-      image: "/destinations/rome.jpg",
+      image: "destinations/rome.jpg",
       country: "Italy",
       city: "Rome",
     },
   ];
-
-  const [openDrawer, setOpenDrawer] = useState(false);
 
   function onServicePressed(service: string) {
     setSelectedService({
@@ -239,6 +237,7 @@ export function Home() {
               <div className={style.exploreButtonContainer}>
                 <CustomButton
                   label="Explore places"
+                  size={18}
                 />
               </div>
             </div>
@@ -250,7 +249,7 @@ export function Home() {
       <Grid id="section-2" container className={style.section}>
         <Grid item className={style.planTripGrid}>
           <div className={style.redirectTripContainer}>
-            <Title component="h2">Make a trip</Title>
+            <Text component="h2">Make a trip</Text>
 
             <p>Plan your trips however you want! </p>
 

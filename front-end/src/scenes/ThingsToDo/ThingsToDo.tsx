@@ -17,7 +17,7 @@ import {
   Navbar,
   ServicesToolbar,
   SliderArrow,
-  Title,
+  Text,
 } from "../../components";
 import { Colors } from "../../styles";
 import { thingsToDoStyles as thingsToDoStyles } from "./thingsToDo-styles";
@@ -160,9 +160,9 @@ export function ThingsToDo() {
       <Navbar />
       <ServicesToolbar />
 
-      <Title style={{ textAlign: "center" }} component="h1">
+      <Text style={{ textAlign: "center" }} component="h1">
         Things to in Dubai
-      </Title>
+      </Text>
 
       <ThemeProvider key="categories parent menu" theme={theme}>
         <Toolbar className={style.parentCategoryBar}>
@@ -212,7 +212,7 @@ export function ThingsToDo() {
 
       <div className={style.pageContentParent}>
         <div className={style.pageContentContainer}>
-          <Title component="h2">Browse by category</Title>
+          <Text component="h2">Browse by category</Text>
           <Slider {...sliderSettings}>
             {POICategories.map((category, i) => (
               <div key={i}>
@@ -241,7 +241,7 @@ export function ThingsToDo() {
 
           {selectedCategory !== POICategory.TOURS && (
             <>
-              <Title component="h2">{`${selectedCategory} in Dubai`}</Title>
+              <Text component="h2">{`${selectedCategory} in Dubai`}</Text>
 
               <Grid key="pois cards" container>
                 {pois.slice(0, 6).map((poi, i) => (
@@ -250,7 +250,7 @@ export function ThingsToDo() {
                       style={{ padding: "10px" }}
                       onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
                     >
-                      <Title
+                      <Text
                         style={{
                           color: Colors.BLUE,
                           whiteSpace: "nowrap",
@@ -260,7 +260,7 @@ export function ThingsToDo() {
                         component="h4"
                       >
                         {poi.name}
-                      </Title>
+                      </Text>
                       <IconText
                         icon={faMapMarkerAlt}
                         text={
@@ -297,7 +297,7 @@ export function ThingsToDo() {
             selectedCategory === POICategory.TOURS) && (
             <>
               {" "}
-              <Title component="h2">{`Tours and activites in Dubai`}</Title>
+              <Text component="h2">{`Tours and activites in Dubai`}</Text>
               <Grid key="tours cards" container>
                 {activities.slice(0, 6).map((activity, i) => (
                   <Card key={i} className={style.activityCard}>
@@ -310,7 +310,7 @@ export function ThingsToDo() {
                     </CardActionArea>
 
                     <CardContent>
-                      <Title
+                      <Text
                         component="h5"
                         style={{
                           overflow: "hidden",
@@ -320,7 +320,7 @@ export function ThingsToDo() {
                         }}
                       >
                         {activity.name}
-                      </Title>
+                      </Text>
                       <Ratings
                         rating={Number(activity.rating)}
                         widgetRatedColors={Colors.PURPLE}

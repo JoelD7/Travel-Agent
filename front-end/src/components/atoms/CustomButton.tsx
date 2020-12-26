@@ -10,6 +10,7 @@ interface CustomButtonProps {
   avatar: ReactNode;
   backgroundColor: string;
   label: string;
+  size?: number;
   rounded: boolean;
   style: CreateCSSProperties<{}>;
   className: string;
@@ -46,18 +47,19 @@ export function CustomButton({
   submit,
   textColor = "white",
   iconColor,
+  size = 16,
   className,
 }: CustomButtonType) {
   const buttonStyles = makeStyles({
     button: {
       backgroundColor: backgroundColor ? backgroundColor : Colors.BLUE,
       fontFamily: Family,
-      paddingRight: icon ? '16px' : '10px',
+      padding: `5px ${icon ? '16px' : '10px'} 5px 10px`,
       borderRadius: rounded ? "50px" : "",
       "&:hover": {
         backgroundColor: getHoverColor(backgroundColor),
       },
-      fontSize: "18px",
+      fontSize: `${size}px`,
       textTransform: "capitalize",
       color: backgroundColor === Colors.GREEN ? Colors.BLUE : textColor,
       cursor: "hand",

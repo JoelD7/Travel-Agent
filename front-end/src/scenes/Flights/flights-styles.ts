@@ -79,6 +79,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Family,
+    backgroundColor: Colors.BACKGROUND,
   },
   menuItemRoot: {
     fontFamily: Family,
@@ -163,7 +164,5 @@ export const flightStyles = makeStyles((theme: Theme) => ({
   topContainer: {
     padding: "30px",
     fontFamily: Family,
-    display: "flex",
-    alignItems: "center",
   },
 }));
