@@ -33,10 +33,15 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
+    backgroundColor: Colors.BACKGROUND,
   },
   pageContentContainer: {
     width: "85%",
     margin: "auto auto 50px auto",
+    borderRadius: '10px',
+    boxShadow: Shadow.LIGHT,
+    padding: '10px',
+    backgroundColor: 'white',
   },
   tripButtonGrid: {
     margin: "auto 0px auto auto",

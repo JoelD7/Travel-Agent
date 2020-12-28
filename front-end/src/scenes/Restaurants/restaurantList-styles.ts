@@ -9,7 +9,6 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Family,
-    backgroundColor: Colors.BACKGROUND,
   },
   pageContentContainer: {
     width: "90%",
@@ -31,6 +30,11 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
   },
+  restaurantCardContainer:{
+    borderRadius: '10px',
+    padding: '15px',
+    background: 'linear-gradient(90deg, rgb(245, 245, 245) 0%, rgb(240, 240, 240) 50%, rgb(245, 245, 245) 100%)',
+  },
   restaurantCuisines: {
     fontSize: "13px",
     color: "#5f5f5f",
@@ -39,7 +43,6 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     textOverflow: "ellipsis",
   },
   restaurantsGrid: {
-    backgroundColor: Colors.BACKGROUND,
     padding: "15px",
     width: "77%",
     marginLeft: "10px",

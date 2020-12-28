@@ -54,6 +54,8 @@ interface POISearch {
   contact: POIContact;
   location: POILocation;
   categories: POICategory[];
+  photo?: string;
+  rating?: number;
 }
 
 interface POIContact {

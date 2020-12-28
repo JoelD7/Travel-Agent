@@ -1,1 +1,1 @@
-export const Family = "'Poppins', sans-serif";
+export const Family = "'Quicksand', sans-serif";

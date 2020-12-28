@@ -110,37 +110,66 @@ export function ThingsToDoDetails() {
 
         <Grid item className={style.detailsGrid}>
           <div className={style.detailsContainer}>
-            <Text component="h3" style={{marginTop: '5px'}}>Details</Text>
+            <Text component="h3" style={{ marginTop: "5px" }}>
+              Details
+            </Text>
 
             <Text component="h4">Contact</Text>
             {poi.contact.formattedPhone && (
-              <IconText icon={faPhone} fontSize={16} text={poi.contact.formattedPhone} />
+              <IconText icon={faPhone} fontSize={15} text={poi.contact.formattedPhone} />
             )}
 
             {poi.contact.facebookName && (
-              <IconText icon={faFacebook} fontSize={16} text={poi.contact.facebookName} />
+              <IconText icon={faFacebook} fontSize={15} text={poi.contact.facebookName} />
             )}
 
             {poi.contact.twitter && (
-              <IconText icon={faTwitter} fontSize={16} text={poi.contact.twitter} />
+              <IconText
+                style={{ marginBottom: "20px" }}
+                icon={faTwitter}
+                fontSize={15}
+                text={poi.contact.twitter}
+              />
             )}
 
             <Text component="h4">Address</Text>
             {poi.location.formattedAddress && (
-              <IconText icon={faMapMarkerAlt} fontSize={16} text={parseAddress(poi)} />
+              <IconText
+                style={{ marginBottom: "20px" }}
+                icon={faMapMarkerAlt}
+                fontSize={15}
+                text={parseAddress(poi)}
+              />
             )}
 
             <Text component="h4">Hours</Text>
             {poi.hours.timeframes && (
-              <IconText icon={faClock} fontSize={16} text={parseHours(poi)} />
+              <IconText
+                style={{ marginBottom: "20px" }}
+                icon={faClock}
+                fontSize={15}
+                text={parseHours(poi)}
+              />
             )}
 
             <Text component="h4">Website</Text>
-            {poi.url && <IconText icon={faGlobe} fontSize={16} text={poi.url} />}
+            {poi.url && (
+              <IconText
+                style={{ marginBottom: "20px" }}
+                icon={faGlobe}
+                fontSize={15}
+                text={poi.url}
+              />
+            )}
 
             <Text component="h4">Amenities</Text>
             {poi.attributes && (
-              <IconText icon={faStar} fontSize={16} text={parseAttributes(poi)} />
+              <IconText
+                style={{ marginBottom: "20px" }}
+                icon={faStar}
+                fontSize={15}
+                text={parseAttributes(poi)}
+              />
             )}
           </div>
         </Grid>

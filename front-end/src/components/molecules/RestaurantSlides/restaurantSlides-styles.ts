@@ -1,15 +1,15 @@
 import { makeStyles, Theme } from "@material-ui/core";
+import { Colors, Shadow } from "../../../styles";
 
 export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
   card: {
     width: "95%",
     margin: 'auto 5px',
+    boxShadow: Shadow.LIGHT,
   },
   restaurantName:{
-    fontSize: "14px",
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    fontWeight: 'bold',
     textOverflow: 'ellipsis',
   },
   restaurantCuisines: {
@@ -26,6 +26,7 @@ export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
   },
   slideshowGrid:{
     width: '100%',
+    background: Colors.PAGE_BACKG,
   },
   textButton: {
     padding: "0px",

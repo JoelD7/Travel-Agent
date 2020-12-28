@@ -247,18 +247,23 @@ export function Restaurant_List() {
 
   return (
     <div className={style.mainContainer}>
+      <head>
+        <title>Tripper | Restaurants</title>
+      </head>
+      
       <Navbar />
       <ServicesToolbar />
 
       <div>
         <Text
           component="h1"
+          weight="bold"
           style={{ textAlign: "center" }}
         >{`Restaurants in ${state.city}`}</Text>
         <Grid container className={style.pageContentContainer}>
           <Grid item className={style.filterGrid}>
             <div className={style.filterContainer}>
-              <Text className={style.filterTitle} component="h4">
+              <Text className={style.filterTitle} component="h4" weight="bold">
                 Establishment
               </Text>
               <RestaurantEstablishments
@@ -266,9 +271,9 @@ export function Restaurant_List() {
                 updateState={(values) => setState({ ...state, establishments: values })}
               />
 
-              <Divider style={{ marginTop: "18px" }} />
+              <Divider style={{ margin: "18px 0px 10px 0px" }} />
 
-              <Text className={style.filterTitle} component="h4">
+              <Text className={style.filterTitle} component="h4" weight="bold">
                 Restaurant features
               </Text>
               <RestaurantFeature
@@ -276,9 +281,9 @@ export function Restaurant_List() {
                 updateState={(values) => setState({ ...state, features: values })}
               />
 
-              <Divider style={{ marginTop: "18px" }} />
+              <Divider style={{ margin: "18px 0px 10px 0px" }} />
 
-              <Text className={style.filterTitle} component="h4">
+              <Text className={style.filterTitle} component="h4" weight="bold">
                 Cuisines
               </Text>
               <RestaurantCuisinesSelec
@@ -310,12 +315,15 @@ export function Restaurant_List() {
             <RestaurantSlides restaurants={restaurants} title="Local Cuisine" />
 
             <Text
-              style={{ marginTop: "50px" }}
+              style={{ margin: "50px 0px 20px 0px" }}
+              weight={500}
               component="h2"
             >{`Top Restaurants in ${state.city}`}</Text>
-            {restaurants.map((restaurant, i) => (
-              <RestaurantCard key={i} restaurant={restaurant} />
-            ))}
+            <div className={style.restaurantCardContainer}>
+              {restaurants.map((restaurant, i) => (
+                <RestaurantCard key={i} restaurant={restaurant} />
+              ))}
+            </div>
           </Grid>
         </Grid>
       </div>

@@ -7,7 +7,7 @@ import {
   CardContent,
 } from "@material-ui/core";
 import React from "react";
-import { faCircle} from "@fortawesome/free-solid-svg-icons";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
 import { SliderArrow, Text } from "../../atoms";
 import { restaurantSlidesStyles } from "./restaurantSlides-styles";
@@ -16,6 +16,7 @@ import { Colors } from "../../../styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom";
 import { Routes } from "../../../utils";
+import { CircleScore } from "../CircleScore/CircleScore";
 
 interface RestaurantSlides {
   restaurants: Restaurant[];
@@ -49,27 +50,14 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
     ],
   };
 
-  function RestaurantScore({ score }: { score: number }) {
-    return (
-      <div style={{ display: "flex" }}>
-        {[1, 2, 3, 4, 5].map((n) => (
-          <FontAwesomeIcon
-            size="xs"
-            style={{ margin: "auto 1px" }}
-            key={n}
-            icon={score >= n ? faCircle : faCircleReg}
-            color={Colors.PURPLE}
-          />
-        ))}
-      </div>
-    );
-  }
 
   return (
     <div style={{ marginTop: "20px" }}>
       <Grid item className={style.slideshowGrid}>
         <Grid container>
-          <Text style={{ marginLeft: "53px" }} component="h2">{title}</Text>
+          <Text style={{ marginLeft: "53px" }} weight={500} component="h2">
+            {title}
+          </Text>
           <Button
             style={{ textTransform: "capitalize", margin: "auto 0px 5px auto" }}
             classes={{ root: style.textButton }}
@@ -95,8 +83,12 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
                   </CardActionArea>
 
                   <CardContent>
-                    <p className={style.restaurantName}>{`${restaurant.name}`}</p>
-                    <RestaurantScore score={restaurant.rating} />
+                    <Text
+                      component="h4"
+                      className={style.restaurantName}
+                    >{`${restaurant.name}`}</Text>
+                    <CircleScore score={restaurant.rating} />
+                    
                     <p className={style.restaurantCuisines}>{restaurant.cuisines}</p>
                   </CardContent>
                 </Card>

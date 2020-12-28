@@ -1,7 +1,6 @@
 import * as React from "react";
-// import Login from "./scenes/Login/Login";
-// import SignUp from "./scenes/SignUp/SignUp";
 import {
+  FavPlaces,
   FlightDetails,
   Flights_Home,
   Flight_List,
@@ -34,6 +33,7 @@ export default function App() {
         <Route exact path={`${Routes.THINGS_TODO}/:id`} component={ThingsToDoDetails} />
         <Route exact path={Routes.TRIPS} component={Trips} />
         <Route exact path={`${Routes.TRIPS}/:id`} component={TripDetails} />
+        <Route exact path={Routes.FAVORITE_PLACES} component={FavPlaces} />
       </Switch>
     </Router>
   );

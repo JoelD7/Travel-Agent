@@ -8,5 +8,5 @@ export const FLIGHT_LIST = "/flight-list";
 export const THINGS_TODO = "/thingsTodo";
 export const CAR_RENTAL = "/car-rental";
 export const RESERVATIONS = "/reservations";
-export const FAVORITE_PLACES = "/favorites-places";
+export const FAVORITE_PLACES = "/favorite-places";
 export const TRIPS = "/trips";

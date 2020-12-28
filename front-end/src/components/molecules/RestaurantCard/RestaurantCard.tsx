@@ -7,7 +7,7 @@ import { CardActionArea, Grid } from "@material-ui/core";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { Routes } from "../../../utils";
-import { CustomButton, IconText, StarRating } from "../../atoms";
+import { CustomButton, IconText, StarRating, Text } from "../../atoms";
 import { restaurantCardStyles } from "./restaurantCard-styles";
 
 interface RestaurantCard {
@@ -32,7 +32,9 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
       <Grid item className={style.cardContentGrid}>
         <Grid container>
           <Grid item xs={12}>
-            <h3 style={{ marginBottom: "5px" }}>{restaurant.name}</h3>
+            <Text component="h3" weight={500} style={{ margin: "5px 0px" }}>
+              {restaurant.name}
+            </Text>
           </Grid>
 
           <Grid item xs={12}>

@@ -8,9 +8,10 @@ type Component = "h1" | "h2" | "h3" | "h4" | "h5" | "p";
 export const Text: FunctionComponent<{
   component: Component;
   className?: string;
-  weight?: "bold" | "bolder" | "normal";
+  weight?: "bold" | "bolder" | "normal" | 500 | 700;
   style?: CreateCSSProperties<{}>;
-}> = ({ children, component, style, className, weight = "bold" }) => {
+  endParagraph?: boolean;
+}> = ({ children, endParagraph, component, style, className, weight = "normal" }) => {
   let componentParser = {
     h1: "32px",
     h2: "26px",
@@ -23,7 +24,7 @@ export const Text: FunctionComponent<{
   const textStyles = makeStyles({
     text: {
       fontSize: componentParser[component],
-      fontWeight: component === "h1" ? "bold" : component === "p" ? "normal" : weight,
+      fontWeight:  component === "p" ? 500: weight,
       fontFamily: Font.Family,
       margin: `${component === "p" ? "0px 0px 10px 0px" : "2px 0px"}`,
       ...style,

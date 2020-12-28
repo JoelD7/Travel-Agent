@@ -41,11 +41,11 @@ export function Trips() {
     return trips.map((trip, i) => (
       <div key={i} style={{ width: "25%" }}>
         <Card className={style.tripCard}>
-          <CardActionArea onClick={()=> history.push(`${Routes.TRIPS}/${trip.id}`)}>
+          <CardActionArea onClick={() => history.push(`${Routes.TRIPS}/${trip.id}`)}>
             <CardMedia component="img" height="150" src={`${trip.coverPhoto}`} />
 
             <CardContent>
-              <Text component="h5" style={{ color: Colors.BLUE }}>
+              <Text weight="bold" component="h4" style={{ color: Colors.BLUE }}>
                 {trip.name}
               </Text>
               <IconText
@@ -97,34 +97,34 @@ export function Trips() {
               <Grid container className={style.lastTripDataContainer}>
                 <Grid item xs={1}>
                   <Text
-                    component="h3"
+                    component="h2"
                     style={{ textAlign: "center", marginBottom: "5px" }}
                   >
                     Photos
                   </Text>
-                  <Text component="h4" style={{ textAlign: "center" }}>
+                  <Text component="h3" weight={500} style={{ textAlign: "center" }}>
                     {lastTrip.photos}
                   </Text>
                 </Grid>
                 <Grid item xs={1}>
                   <Text
-                    component="h3"
+                    component="h2"
                     style={{ textAlign: "center", marginBottom: "5px" }}
                   >
                     Places
                   </Text>
-                  <Text component="h4" style={{ textAlign: "center" }}>
-                    {lastTrip.photos}
+                  <Text component="h3" weight={500} style={{ textAlign: "center" }}>
+                    {lastTrip.places}
                   </Text>
                 </Grid>
                 <Grid item xs={1}>
                   <Text
-                    component="h3"
+                    component="h2"
                     style={{ textAlign: "center", marginBottom: "5px" }}
                   >
                     Days
                   </Text>
-                  <Text component="h4" style={{ textAlign: "center" }}>
+                  <Text component="h3" weight={500} style={{ textAlign: "center" }}>
                     {lastTrip.days}
                   </Text>
                 </Grid>

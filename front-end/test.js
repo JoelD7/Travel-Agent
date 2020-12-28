@@ -1,7 +1,3 @@
-const { differenceInHours } = require("date-fns")
-
-let t =1608469224
-let date = new Date(t)
-let cur = Date.now()
-console.log(date);
-console.log(differenceInHours(cur, t))
+let a = 2.43
+let s = "0.45"
+console.log(Number(s));
