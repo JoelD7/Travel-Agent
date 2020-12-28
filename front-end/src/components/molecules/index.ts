@@ -12,4 +12,3 @@ export { RestaurantCard } from "./RestaurantCard/RestaurantCard";
 export { CardFlight } from "./CardFlight/CardFlight";
 export { DashDrawer } from "./DashDrawer/DashDrawer";
 export { PhotoAlbumCard } from "./PhotoAlbumCard/PhotoAlbumCard";
-export { CircleScore } from "./CircleScore/CircleScore";

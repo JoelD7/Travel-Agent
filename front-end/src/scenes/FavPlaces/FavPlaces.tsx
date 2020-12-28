@@ -1,10 +1,13 @@
 import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { CircleScore, DashDrawer, IconText, Navbar, Text } from "../../components";
+import { DashDrawer, IconText, Navbar, Text } from "../../components";
 import { favPlacesStyles } from "./favPlaces-styles";
 import { POICategory, poisPlaceholder } from "../../utils";
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { Colors } from "../../styles";
+import Rating from "react-rating";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
 
 interface POICategoryGroup {
   name: string;
@@ -96,9 +99,23 @@ export function FavPlaces() {
                               {place.name}
                             </Text>
 
-                            <CircleScore
-                              style={{ margin: "5px 0px 20px" }}
-                              score={place.rating as number}
+                            <Rating
+                              initialRating={place.rating}
+                              readonly
+                              emptySymbol={
+                                <FontAwesomeIcon
+                                  style={{ margin: "0px 1px" }}
+                                  icon={faCircleReg}
+                                  color={Colors.PURPLE}
+                                />
+                              }
+                              fullSymbol={
+                                <FontAwesomeIcon
+                                  style={{ margin: "0px 1px" }}
+                                  icon={faCircle}
+                                  color={Colors.PURPLE}
+                                />
+                              }
                             />
 
                             <IconText

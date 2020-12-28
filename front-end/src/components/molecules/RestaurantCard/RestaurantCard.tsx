@@ -1,11 +1,16 @@
+import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
 import {
   faChevronRight,
   faMapMarkerAlt,
   faUtensils,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CardActionArea, Grid } from "@material-ui/core";
 import React from "react";
+import Rating from "react-rating";
 import { useHistory } from "react-router-dom";
+import { Colors } from "../../../styles";
 import { Routes } from "../../../utils";
 import { CustomButton, IconText, StarRating, Text } from "../../atoms";
 import { restaurantCardStyles } from "./restaurantCard-styles";
@@ -38,7 +43,24 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
           </Grid>
 
           <Grid item xs={12}>
-            <StarRating stars={Number(restaurant.rating)} />
+            <Rating
+              initialRating={restaurant.rating}
+              readonly
+              emptySymbol={
+                <FontAwesomeIcon
+                  style={{ margin: "0px 1px" }}
+                  icon={faStarReg}
+                  color={Colors.PURPLE}
+                />
+              }
+              fullSymbol={
+                <FontAwesomeIcon
+                  style={{ margin: "0px 1px" }}
+                  icon={faStar}
+                  color={Colors.PURPLE}
+                />
+              }
+            />
           </Grid>
 
           <Grid item xs={12} style={{ marginTop: "5px" }}>

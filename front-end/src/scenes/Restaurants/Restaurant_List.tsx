@@ -250,7 +250,7 @@ export function Restaurant_List() {
       <head>
         <title>Tripper | Restaurants</title>
       </head>
-      
+
       <Navbar />
       <ServicesToolbar />
 
@@ -327,6 +327,14 @@ export function Restaurant_List() {
           </Grid>
         </Grid>
       </div>
+      <div
+        style={{
+          width: "200px",
+          height: "200px",
+          border: '1px solid black',
+          background: `linear-gradient(90deg, red 90%, white 90%)`,
+        }}
+      ></div>
     </div>
   );
 }

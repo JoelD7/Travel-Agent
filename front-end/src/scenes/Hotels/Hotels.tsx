@@ -34,6 +34,7 @@ import {
   Navbar,
   ServicesToolbar,
   StarRating,
+  Text,
 } from "../../components";
 import { HotelAmenitiesSelector } from "../../components/atoms/HotelAmenitiesSelector/HotelAmenitiesSelector";
 import { Colors, Shadow } from "../../styles";
@@ -42,6 +43,7 @@ import { AmenitiesList, Amenity } from "../../utils/HotelAmenities";
 import { Hotel } from "../../utils/types/Hotel";
 import { hotelsStyles } from "./hotels-styles";
 import { format } from "date-fns";
+import Rating from "react-rating";
 
 interface HotelSearch {
   checkIn: MaterialUiPickersDate;
@@ -177,7 +179,6 @@ export function Hotels() {
       image: "sheraton.jpg",
     },
   ];
-
   const [openDrawer, setOpenDrawer] = useState(false);
 
   return (
@@ -269,7 +270,9 @@ export function Hotels() {
 
         <Grid container className={style.pageContentContainer}>
           <Grid item className={style.filtersGrid}>
-            <h3>Price range</h3>
+            <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+              Price range
+            </Text>
             <PriceRange
               value={state.priceRange}
               max={200}
@@ -278,15 +281,31 @@ export function Hotels() {
 
             <Divider style={{ margin: "10px auto" }} />
 
-            <h3 style={{ marginBottom: "10px" }}>Stars</h3>
-            <HotelStarSelector
-              value={state.stars}
-              updateState={(star) => setState({ ...state, stars: star })}
+            <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>Stars</Text>
+            <Rating
+              initialRating={state.stars}
+              onChange={(star) => setState({ ...state, stars: star })}
+              emptySymbol={
+                <FontAwesomeIcon
+                  style={{ margin: "0px 1px" }}
+                  size="2x"
+                  icon={faStar}
+                  color={"#cecece"}
+                />
+              }
+              fullSymbol={
+                <FontAwesomeIcon
+                  style={{ margin: "0px 1px" }}
+                  size="2x"
+                  icon={faStar}
+                  color={Colors.PURPLE}
+                />
+              }
             />
 
             <Divider style={{ margin: "10px auto" }} />
 
-            <h3>Amenities</h3>
+            <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>Amenities</Text>
             <HotelAmenitiesSelector
               values={state.amenities}
               updateState={(selected) => {
@@ -312,14 +331,13 @@ export function Hotels() {
                   item
                   className={style.hotelImageGrid}
                   id="photo"
-                  style={{ height: "221px" }}
                 >
                   <img src={hotel.image} className={style.hotelImage} />
                 </Grid>
 
                 <Grid item className={style.hotelContentGrid} id="content">
                   <Grid item xs={12} id="title">
-                    <Grid container alignItems="center" style={{ marginTop: "10px" }}>
+                    <Grid container alignItems="center" style={{ margin: "10px 0px" }}>
                       <h3 style={{ margin: "0px 10px" }}>{hotel.name}</h3>
 
                       <StarRating stars={hotel.stars} />

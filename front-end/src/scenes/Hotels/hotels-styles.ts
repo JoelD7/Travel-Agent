@@ -85,7 +85,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     width: "25%",
     boxShadow: Shadow.LIGHT,
     backgroundColor: "white",
-    padding: "1px 15px 15px 15px",
+    padding: "15px",
 
     [theme.breakpoints.down(1280)]: {
       display: "none",

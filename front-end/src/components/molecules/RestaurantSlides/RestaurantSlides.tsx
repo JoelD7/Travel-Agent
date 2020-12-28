@@ -16,7 +16,7 @@ import { Colors } from "../../../styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom";
 import { Routes } from "../../../utils";
-import { CircleScore } from "../CircleScore/CircleScore";
+import Rating from "react-rating";
 
 interface RestaurantSlides {
   restaurants: Restaurant[];
@@ -49,7 +49,6 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
       },
     ],
   };
-
 
   return (
     <div style={{ marginTop: "20px" }}>
@@ -87,8 +86,26 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
                       component="h4"
                       className={style.restaurantName}
                     >{`${restaurant.name}`}</Text>
-                    <CircleScore score={restaurant.rating} />
-                    
+
+                    <Rating
+                      initialRating={restaurant.rating}
+                      readonly
+                      emptySymbol={
+                        <FontAwesomeIcon
+                          style={{ margin: "0px 1px" }}
+                          icon={faCircleReg}
+                          color={Colors.PURPLE}
+                        />
+                      }
+                      fullSymbol={
+                        <FontAwesomeIcon
+                          style={{ margin: "0px 1px" }}
+                          icon={faCircle}
+                          color={Colors.PURPLE}
+                        />
+                      }
+                    />
+
                     <p className={style.restaurantCuisines}>{restaurant.cuisines}</p>
                   </CardContent>
                 </Card>
