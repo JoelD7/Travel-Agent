@@ -12,7 +12,7 @@ import {
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
-import { currencyFormatter, dashDrawerSeparation, flightPlaceholder } from "../../utils";
+import { currencyFormatter, flightPlaceholder } from "../../utils";
 import { reservationStyles } from "./reservation-styles";
 import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
 import { format } from "date-fns";

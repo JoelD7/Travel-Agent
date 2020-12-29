@@ -35,6 +35,22 @@ export function Trips() {
     className: style.slider,
     nextArrow: <SliderArrow direction="right" />,
     prevArrow: <SliderArrow direction="left" />,
+    responsive: [
+      {
+        breakpoint: 1450,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+        },
+      },
+      {
+        breakpoint: 1175,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+        },
+      },
+    ],
   };
 
   function TripCards() {
@@ -68,102 +84,104 @@ export function Trips() {
   return (
     <div className={style.mainContainer}>
       <Navbar position="sticky" />
-
       <DashDrawer />
 
-      <Grid container className={style.pageContentGrid}>
-        <Grid key="photoTitle" item xs={12}>
-          <div
-            className={style.photoTitleContainer}
-            style={{
-              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("journey.jpg")`,
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "50%",
-            }}
-          >
-            <Text color="white" component="h4" style={{ fontWeight: "normal" }}>
-              Your last trip
-            </Text>
-
-            <Grid container alignItems="baseline">
-              <Text color="white" component="h1" style={{ margin: "0px 10px 0px 0px" }}>
-                {lastTrip.name}
-              </Text>
+      <Grid container>
+        <Grid item className={style.pageContentGrid}>
+          {/* Photo title */}
+          <Grid key="photoTitle" item xs={12}>
+            <div
+              className={style.photoTitleContainer}
+              style={{
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("journey.jpg")`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "50%",
+              }}
+            >
               <Text color="white" component="h4" style={{ fontWeight: "normal" }}>
-                {lastTrip.countries.join(", ")}
+                Your last trip
               </Text>
-            </Grid>
 
-            <div style={{ marginTop: "auto" }}>
-              <Grid container className={style.lastTripDataContainer}>
-                <Grid item xs={1}>
-                  <Text
-                    color="white"
-                    component="h2"
-                    style={{ textAlign: "center", marginBottom: "5px" }}
-                  >
-                    Photos
-                  </Text>
-                  <Text
-                    color="white"
-                    component="h3"
-                    weight={500}
-                    style={{ textAlign: "center" }}
-                  >
-                    {lastTrip.photos}
-                  </Text>
-                </Grid>
-                <Grid item xs={1}>
-                  <Text
-                    color="white"
-                    component="h2"
-                    style={{ textAlign: "center", marginBottom: "5px" }}
-                  >
-                    Places
-                  </Text>
-                  <Text
-                    color="white"
-                    component="h3"
-                    weight={500}
-                    style={{ textAlign: "center" }}
-                  >
-                    {lastTrip.places}
-                  </Text>
-                </Grid>
-                <Grid item xs={1}>
-                  <Text
-                    color="white"
-                    component="h2"
-                    style={{ textAlign: "center", marginBottom: "5px" }}
-                  >
-                    Days
-                  </Text>
-                  <Text
-                    color="white"
-                    component="h3"
-                    weight={500}
-                    style={{ textAlign: "center" }}
-                  >
-                    {lastTrip.days}
-                  </Text>
-                </Grid>
+              <Grid container alignItems="baseline">
+                <Text color="white" component="h1" style={{ margin: "0px 10px 0px 0px" }}>
+                  {lastTrip.name}
+                </Text>
+                <Text color="white" component="h4" style={{ fontWeight: "normal" }}>
+                  {lastTrip.countries.join(", ")}
+                </Text>
               </Grid>
+
+              <div style={{ marginTop: "auto" }}>
+                <Grid container className={style.lastTripDataContainer}>
+                  <Grid item xs={1}>
+                    <Text
+                      color="white"
+                      component="h2"
+                      style={{ textAlign: "center", marginBottom: "5px" }}
+                    >
+                      Photos
+                    </Text>
+                    <Text
+                      color="white"
+                      component="h3"
+                      weight={500}
+                      style={{ textAlign: "center" }}
+                    >
+                      {lastTrip.photos}
+                    </Text>
+                  </Grid>
+                  <Grid item xs={1}>
+                    <Text
+                      color="white"
+                      component="h2"
+                      style={{ textAlign: "center", marginBottom: "5px" }}
+                    >
+                      Places
+                    </Text>
+                    <Text
+                      color="white"
+                      component="h3"
+                      weight={500}
+                      style={{ textAlign: "center" }}
+                    >
+                      {lastTrip.places}
+                    </Text>
+                  </Grid>
+                  <Grid item xs={1}>
+                    <Text
+                      color="white"
+                      component="h2"
+                      style={{ textAlign: "center", marginBottom: "5px" }}
+                    >
+                      Days
+                    </Text>
+                    <Text
+                      color="white"
+                      component="h3"
+                      weight={500}
+                      style={{ textAlign: "center" }}
+                    >
+                      {lastTrip.days}
+                    </Text>
+                  </Grid>
+                </Grid>
+              </div>
             </div>
-          </div>
-        </Grid>
+          </Grid>
 
-        <Grid item xs={12} className={style.tripCardGrid}>
-          <Text component="h2">Trips</Text>
+          <Grid item xs={12} className={style.tripCardGrid}>
+            <Text component="h2">Trips</Text>
 
-          <Grid key="trip cards" container>
-            {trips.length > 4 ? (
-              <Slider {...sliderSettings} slidesToShow={4}>
-                {TripCards()}
-              </Slider>
-            ) : (
-              TripCards()
-            )}
+            <Grid key="trip cards" container>
+              {trips.length > 4 ? (
+                <Slider {...sliderSettings} slidesToShow={4}>
+                  {TripCards()}
+                </Slider>
+              ) : (
+                TripCards()
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

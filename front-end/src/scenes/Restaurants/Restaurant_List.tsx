@@ -45,24 +45,6 @@ export function Restaurant_List() {
     // test();
   }, []);
 
-  function test() {
-    Axios.get("https://api.foursquare.com/v2/venues/49eeaf08f964a52078681fe3", {
-      params: {
-        client_id: "D2KZP5LQRWPEFKPA0PQLOIC3Z0CYDGYGR3UVIP4DOF2T0FWZ",
-        client_secret: "HLUNYVTHZS2DB4THW2ZV0AFRIPG2HQNMM3V44NBOIMZX1C32",
-        v: "20180323",
-      },
-    })
-      .then((res) => {
-        poiDetail = res.data.response.venue;
-        console.log(`Categories: ${JSON.stringify(poiDetail.categories)}`);
-        console.log(JSON.stringify(poiDetail));
-      })
-      .catch((er) => {
-        console.log(er);
-      });
-  }
-
   const [state, setState] = useState<Restaurant_List>({
     city: "Santo Domingo",
     establishments: [
@@ -247,10 +229,6 @@ export function Restaurant_List() {
 
   return (
     <div className={style.mainContainer}>
-      <head>
-        <title>Tripper | Restaurants</title>
-      </head>
-
       <Navbar />
       <ServicesToolbar />
 
@@ -299,7 +277,9 @@ export function Restaurant_List() {
               backgroundColor={Colors.PURPLE}
               style={{ paddingLeft: "10px", fontSize: "14px" }}
               onClick={() => setOpenDrawer(true)}
-            >Filter</CustomButton>
+            >
+              Filter
+            </CustomButton>
           </Grid>
 
           <Grid item className={style.restaurantsGrid}>
@@ -330,7 +310,7 @@ export function Restaurant_List() {
         style={{
           width: "200px",
           height: "200px",
-          border: '1px solid black',
+          border: "1px solid black",
           background: `linear-gradient(90deg, red 90%, white 90%)`,
         }}
       ></div>

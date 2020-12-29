@@ -3,13 +3,13 @@ import { Font } from "../../assets";
 import { Colors } from "../../styles";
 
 export const tripStyles = makeStyles((theme: Theme) => ({
-  detailsGrid:{
-    padding: '20px',
+  detailsGrid: {
+    padding: "20px",
   },
-  detailsContainer:{
-    borderRadius: '10px',
-    border: '1px solid #CECECE',
-    padding: '10px',
+  detailsContainer: {
+    borderRadius: "10px",
+    border: "1px solid #CECECE",
+    padding: "10px",
   },
   mainContainer: {
     fontFamily: Font.Family,
@@ -20,11 +20,16 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     marginTop: "13%",
   },
   pageContentGrid: {
-    marginLeft: "275px",
-    maxWidth: "82vw",
+    marginLeft: "265px",
+    width: "81% ",
+    // width: "calc(100%-265px)", this doesn't work
+    [theme.breakpoints.down("sm")]: {
+      // margin: "auto",
+      width: "85%",
+    },
   },
-  photosGrid:{
-    marginTop: '20px',
+  photosGrid: {
+    marginTop: "20px",
   },
   photoTitleContainer: {
     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/journey.jpg")`,
