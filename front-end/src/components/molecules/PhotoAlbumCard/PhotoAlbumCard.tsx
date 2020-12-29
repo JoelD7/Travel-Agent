@@ -19,7 +19,7 @@ export function PhotoAlbumCard({ cover, albumRoute, name, photosQant }: PhotoAlb
     <Card className={styles.card}>
       <CardMedia component="img" height="150" src={cover} />
       <CardContent>
-        <Text component="h4" style={{ color: Colors.BLUE }}>
+        <Text weight="bold" component="h4" style={{ color: Colors.BLUE }}>
           {name}
         </Text>
         <IconText
@@ -34,8 +34,9 @@ export function PhotoAlbumCard({ cover, albumRoute, name, photosQant }: PhotoAlb
           <CustomButton
             style={{ marginLeft: "auto", display: "block" }}
             backgroundColor={Colors.PURPLE}
-            label="View album"
-          />
+          >
+            View album
+          </CustomButton>
         </div>
       </CardContent>
     </Card>

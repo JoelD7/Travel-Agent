@@ -31,7 +31,9 @@ export function TripDetails() {
 
       <Grid container className={style.pageContentGrid}>
         <Grid item xs={12} style={{ marginBottom: "10px" }}>
-          <CustomButton icon={faChevronLeft} rounded label="All trips" />
+          <CustomButton icon={faChevronLeft} rounded>
+            All trips
+          </CustomButton>
         </Grid>
 
         <Grid key="photoTitle" item xs={12}>
@@ -47,8 +49,9 @@ export function TripDetails() {
               <CustomButton
                 style={{ fontSize: "16px", alignSelf: "flex-start", marginLeft: "auto" }}
                 icon={faCalendar}
-                label="Itinerary"
-              />
+              >
+                Itinerary
+              </CustomButton>
             </Grid>
 
             <div style={{ marginTop: "auto" }}>
@@ -99,10 +102,11 @@ export function TripDetails() {
             <CustomButton
               icon={faPlusCircle}
               iconColor="#7e7e7e"
-              label="Upload photo"
               backgroundColor="rgba(0,0,0,0)"
               textColor="#7e7e7e"
-            />
+            >
+              Upload photo
+            </CustomButton>
           </Grid>
 
           <Grid container>
@@ -123,16 +127,24 @@ export function TripDetails() {
 
         <Grid key="details" item xs={3} className={style.detailsGrid}>
           <div className={style.detailsContainer}>
-            <Text style={{color: `${Colors.BLUE}`}} component="h3">Key details</Text>
-            <Divider style={{marginBottom: '10px'}} variant="fullWidth" />
+            <Text style={{ color: `${Colors.BLUE}` }} component="h3">
+              Key details
+            </Text>
+            <Divider style={{ marginBottom: "10px" }} variant="fullWidth" />
 
-            <Text component="h4">Countries</Text>
+            <Text weight="bold" component="h4">
+              Countries
+            </Text>
             <Text component="p">{trip.countries.join(", ")}</Text>
 
-            <Text component="h4">From</Text>
+            <Text weight="bold" component="h4">
+              From
+            </Text>
             <Text component="p">{format(trip.startDate, "MMM. dd, yyyy")}</Text>
 
-            <Text component="h4">To</Text>
+            <Text weight="bold" component="h4">
+              To
+            </Text>
             <Text component="p">{format(trip.endDate, "MMM. dd, yyyy")}</Text>
           </div>
         </Grid>

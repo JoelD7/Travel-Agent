@@ -149,10 +149,9 @@ export function RestaurantCuisinesSelec({
             <CustomButton
               style={{ width: "50%" }}
               backgroundColor={Colors.PURPLE}
-              label="Ok"
               rounded
               onClick={() => closeDialog()}
-            />
+            >Ok</CustomButton>
           </Grid>
         </Grid>
       </Dialog>

@@ -43,7 +43,7 @@ import {
   Text,
 } from "../../components";
 import { ButtonIcon } from "../../components/atoms/ButtonIcon";
-import { CDrawer, Navbar, ServicesToolbar } from "../../components/molecules";
+import { NavDrawer, Navbar, ServicesToolbar } from "../../components/molecules";
 import { Colors } from "../../styles";
 import { homeStyles, home_explore_button } from "../../styles/Home/home-styles";
 import SwipeableViews from "react-swipeable-views";
@@ -183,7 +183,7 @@ export function Home() {
   };
 
   return (
-    <div className="mainContainer"> 
+    <div className="mainContainer">
       <Grid id="section-1" container className={style.topContainer}>
         <Grid item xs={12}>
           <Navbar home />
@@ -235,10 +235,7 @@ export function Home() {
             <div>
               <h1 className={style.homeImageText}>Hey, where you're off to next?</h1>
               <div className={style.exploreButtonContainer}>
-                <CustomButton
-                  label="Explore places"
-                  size={18}
-                />
+                <CustomButton size={18}>Explore places</CustomButton>
               </div>
             </div>
           </Grid>
@@ -267,11 +264,10 @@ export function Home() {
               }}
             >
               <CustomButton
-                label="Create trip"
                 backgroundColor={Colors.GREEN}
                 textColor={Colors.BLUE}
                 style={styles.style_createTripButton}
-              />
+              >Create trip</CustomButton>
             </div>
           </div>
         </Grid>
@@ -296,11 +292,10 @@ export function Home() {
               }}
             >
               <CustomButton
-                label="Create trip"
                 backgroundColor={Colors.GREEN}
                 textColor={Colors.BLUE}
                 style={styles.style_createTripButton}
-              />
+              >Create trip</CustomButton>
             </div>
           </div>
         </Grid>

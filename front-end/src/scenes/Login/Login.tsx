@@ -69,11 +69,10 @@ export function Login() {
             Login with Google
           </h5>
           <CustomButton
-            label="Google Login"
             style={{ width: "100%" }}
             icon={faGoogle}
             onClick={googleLogin}
-          />
+          >Google Login</CustomButton>
 
           <Grid id="email" style={{ marginTop: "15px" }} container>
             <TextInput
@@ -99,10 +98,9 @@ export function Login() {
           <Grid id="signUp" style={{ marginTop: "15px" }} container>
             <CustomButton
               onClick={login}
-              label="Sign up"
               submit={true}
               style={{ width: "100%" }}
-            />
+            >Sign up</CustomButton>
           </Grid>
 
           <Grid id="redirectLogin" container>

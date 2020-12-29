@@ -1,4 +1,3 @@
-import { faCaretSquareLeft } from "@fortawesome/free-regular-svg-icons";
 import { faBars, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,26 +8,22 @@ import {
   Avatar,
   MenuItem,
 } from "@material-ui/core";
-import { CreateCSSProperties } from "@material-ui/styles";
 import React, { FunctionComponent, ReactNode, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { carlos, logoType, logoTypeWhiteFore } from "../../assets";
 import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
-import { selectSearchQuery, onQueryChanged, Routes } from "../../utils";
-import { CustomButton } from "../atoms";
+import { selectSearchQuery, onQueryChanged, Routes, getLinkStyle } from "../../utils";
 import { ButtonIcon } from "../atoms/ButtonIcon";
 import { NavDrawer } from "./NavDrawer/NavDrawer";
 
 interface Navbar {
   home?: boolean;
-  children?: ReactNode;
   position?: "fixed" | "absolute" | "sticky" | "static" | "relative";
 }
 
 export const Navbar: FunctionComponent<Navbar> = ({
-  children,
   home,
   position = "relative",
 }: Navbar) => {
@@ -86,20 +81,26 @@ export const Navbar: FunctionComponent<Navbar> = ({
             {userLoggedIn ? (
               <>
                 <MenuItem
-                  onClick={() => history.push(Routes.TRIPS)}
-                  style={home ? { color: "white" } : {}}
                   // selected={page === }
                   classes={{ root: style.menuItemRoot }}
                 >
-                  Trips
+                  <Link
+                    style={home ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)}
+                    to={Routes.TRIPS}
+                  >
+                    Trips
+                  </Link>
                 </MenuItem>
                 <MenuItem
-                  onClick={() => {}}
-                  style={home ? { color: "white" } : {}}
                   // selected={page === }
                   classes={{ root: style.menuItemRoot }}
                 >
-                  Reservations
+                  <Link
+                    style={home ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)}
+                    to={Routes.RESERVATIONS}
+                  >
+                    Reservations
+                  </Link>
                 </MenuItem>
               </>
             ) : (

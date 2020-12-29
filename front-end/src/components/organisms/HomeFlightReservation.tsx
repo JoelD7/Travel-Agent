@@ -231,10 +231,9 @@ export default function HomeFlightReservation() {
             <Grid container justify="center">
               <CustomButton
                 rounded
-                label="Search"
                 style={{ width: "90%", boxShadow: Shadow.MEDIUM }}
                 onClick={() => {}}
-              />
+              >Search</CustomButton>
             </Grid>
           </Grid>
         </ThemeProvider>

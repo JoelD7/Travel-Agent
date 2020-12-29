@@ -1,18 +1,25 @@
-import { faPlane } from "@fortawesome/free-solid-svg-icons";
-import { Grid } from "@material-ui/core";
+import { faPlane, faPlaneDeparture } from "@fortawesome/free-solid-svg-icons";
+import { Grid, Card, CardHeader, CardContent } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
+import { Font } from "../../../assets";
 import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
-import { currencyFormatter, parseFlightDuration } from "../../../utils";
-import { CustomButton, IconText } from "../../atoms";
+import {
+  currencyFormatter,
+  parseFlightDuration,
+  getFlightCitiesLabel,
+  formatFlightDateTime,
+} from "../../../utils";
+import { CustomButton, IconText, Text } from "../../atoms";
 import { cardFlightStyles } from "./cardFlightStyles";
 
 interface CardFlight {
   flight: Flight;
+  variant?: "deal" | "regular";
 }
 
-export function CardFlight({ flight }: CardFlight) {
+export function CardFlight({ flight, variant = "deal" }: CardFlight) {
   const style = cardFlightStyles();
   const exitFlight: FlightItinerary = flight.itineraries[0];
   const returnFlight: FlightItinerary | undefined =
@@ -38,7 +45,98 @@ export function CardFlight({ flight }: CardFlight) {
     return segments.length > 1 ? `${quant} stops, ${stops}` : `1 stop, ${stops}`;
   }
 
-  return (
+  return variant === "deal" ? (
+    <Grid item className={style.dealGrid}>
+      <Card className={style.card}>
+        <CardHeader
+          title={
+            <Grid container style={{ fontFamily: Font.Family }}>
+              <Grid id="text grid" item xs={8}>
+                <div style={{ display: "flex" }}>
+                  <Text style={{ color: Colors.BLUE }} component="h4" weight="bold">
+                    {getFlightCitiesLabel(flight, "departure")}
+                  </Text>
+
+                  <IconText
+                    text=""
+                    icon={faPlane}
+                    style={{ margin: "0px 5px" }}
+                    size={14}
+                  />
+
+                  <Text style={{ color: Colors.BLUE }} component="h4" weight="bold">
+                    {getFlightCitiesLabel(flight, "arrival")}
+                  </Text>
+                </div>
+
+                <div>
+                  <p className={style.dealSubtitle}>
+                    {`${formatFlightDateTime(
+                      flight,
+                      "departure"
+                    )} - ${formatFlightDateTime(flight, "arrival")}`}
+                  </p>
+                </div>
+
+                {returnFlight && (
+                  <div>
+                    <div style={{ marginTop: "10px", display: "flex" }}>
+                      <Text style={{ color: Colors.BLUE }} component="h4" weight="bold">
+                        {getFlightCitiesLabel(flight, "departure", 1)}
+                      </Text>
+
+                      <IconText
+                        text=""
+                        icon={faPlane}
+                        style={{ margin: "0px 5px" }}
+                        size={14}
+                      />
+
+                      <Text style={{ color: Colors.BLUE }} component="h4" weight="bold">
+                        {getFlightCitiesLabel(flight, "arrival", 1)}
+                      </Text>
+                    </div>
+                    <div>
+                      <p className={style.dealSubtitle}>
+                        {`${formatFlightDateTime(
+                          flight,
+                          "departure",
+                          1
+                        )} - ${formatFlightDateTime(flight, "arrival", 1)}`}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </Grid>
+
+              <Grid id="price grid" item xs={4}>
+                <Grid container alignItems="center">
+                  <h5
+                    style={{ margin: "auto 0px auto auto" }}
+                  >{`${flight.price.currency}$ ${flight.price.total}`}</h5>
+                </Grid>
+              </Grid>
+            </Grid>
+          }
+        />
+
+        <CardContent>
+          <div style={{ display: "flex" }}>
+            <IconText
+              icon={faPlaneDeparture}
+              text={`${flight.itineraries[0].segments[0].carrier}, ${flight.class}`}
+            />
+
+            <CustomButton
+              style={{ marginLeft: "auto", fontSize: "14px" }}
+              onClick={() => {}}
+              backgroundColor={Colors.PURPLE}
+            >View details</CustomButton>
+          </div>
+        </CardContent>
+      </Card>
+    </Grid>
+  ) : (
     <Grid container className={style.mainContainer}>
       <Grid key="outgoing flight" item xs={12}>
         <Grid container>
@@ -54,7 +152,7 @@ export function CardFlight({ flight }: CardFlight) {
             <p
               className={style.airportsText}
             >{`${exitFlight.segments[0].departure.iata} - 
-            ${exitFlight.segments[0].arrival.iata}, ${exitFlight.segments[0].carrier}`}</p>
+          ${exitFlight.segments[0].arrival.iata}, ${exitFlight.segments[0].carrier}`}</p>
           </Grid>
 
           <Grid item className={style.timeStopsGrid}>
@@ -67,7 +165,7 @@ export function CardFlight({ flight }: CardFlight) {
                 : "Nonstop"}
             </p>
           </Grid>
-          
+
           <Grid item className={style.priceButtonGrid}>
             <h2 style={{ marginTop: "12px" }}>{`${currencyFormatter(
               flight.price.total
@@ -92,7 +190,7 @@ export function CardFlight({ flight }: CardFlight) {
                 <p
                   className={style.airportsText}
                 >{`${returnFlight.segments[0].departure.iata} - 
-              ${returnFlight.segments[0].arrival.iata}, ${returnFlight.segments[0].carrier}`}</p>
+            ${returnFlight.segments[0].arrival.iata}, ${returnFlight.segments[0].carrier}`}</p>
               </Grid>
 
               <Grid item className={style.timeStopsGrid}>
@@ -113,9 +211,8 @@ export function CardFlight({ flight }: CardFlight) {
             className={returnFlight ? style.priceButtonGrid : style.priceButtonGridFull}
           >
             <CustomButton
-              label="View details"
               onClick={() => setFlightDetailsModal(true)}
-            />
+            >View details</CustomButton>
           </Grid>
         </Grid>
       </Grid>
@@ -126,10 +223,9 @@ export function CardFlight({ flight }: CardFlight) {
             flight.price.total
           )}`}</h2>
           <CustomButton
-            label="View details"
             style={{ marginLeft: "auto" }}
             onClick={() => setFlightDetailsModal(true)}
-          />
+          >View details</CustomButton>
         </Grid>
       </Grid>
 

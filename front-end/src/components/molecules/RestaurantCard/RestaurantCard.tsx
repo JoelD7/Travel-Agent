@@ -9,9 +9,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CardActionArea, Grid } from "@material-ui/core";
 import React from "react";
 import Rating from "react-rating";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Colors } from "../../../styles";
-import { Routes } from "../../../utils";
+import { getLinkStyle, Routes } from "../../../utils";
 import { CustomButton, IconText, StarRating, Text } from "../../atoms";
 import { restaurantCardStyles } from "./restaurantCard-styles";
 
@@ -87,11 +87,16 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
             <Grid container>
               <CustomButton
                 style={{ marginLeft: "auto" }}
-                label="Check details"
-                onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
                 icon={faChevronRight}
                 rounded
-              />
+              >
+                <Link
+                  style={getLinkStyle("white")}
+                  to={`${Routes.RESTAURANTS}/${restaurant.id}`}
+                >
+                  Link
+                </Link>
+              </CustomButton>
             </Grid>
           </Grid>
         </Grid>

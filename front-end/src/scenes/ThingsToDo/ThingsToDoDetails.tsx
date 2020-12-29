@@ -90,11 +90,12 @@ export function ThingsToDoDetails() {
             </Grid>
             <CustomButton
               style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto", height: "50px" }}
-              label="Include in trip"
               onClick={() => {}}
               backgroundColor={Colors.GREEN}
               rounded
-            />
+            >
+              Include in trip
+            </CustomButton>
           </Grid>
         </Grid>
 

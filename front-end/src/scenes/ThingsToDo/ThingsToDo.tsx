@@ -276,7 +276,6 @@ export function ThingsToDo() {
 
                       <div style={{ display: "flex" }}>
                         <CustomButton
-                          label="Check out"
                           onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
                           backgroundColor={Colors.PURPLE}
                           style={{
@@ -284,7 +283,7 @@ export function ThingsToDo() {
                             fontSize: "16px",
                             marginLeft: "auto",
                           }}
-                        />
+                        >Check out</CustomButton>
                       </div>
                     </CardActionArea>
                   </Card>
@@ -338,11 +337,10 @@ export function ThingsToDo() {
                         activity.price.amount
                       )}`}</p>
                       <CustomButton
-                        label="Check out"
                         rounded
                         style={{ fontSize: "16px", marginTop: 'auto' }}
                         onClick={() => goToBookingLink(activity.bookingLink)}
-                      />
+                      >Check out</CustomButton>
                     </CardContent>
                   </Card>
                 ))}

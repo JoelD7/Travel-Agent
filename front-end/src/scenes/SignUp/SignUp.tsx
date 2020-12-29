@@ -85,11 +85,10 @@ export  function SignUp() {
             Sign up with Google
           </h5>
           <CustomButton
-            label="Google Sign up"
             style={{ width: "100%" }}
             icon={faGoogle}
             onClick={googleSignUp}
-          />
+          >Google Sign up</CustomButton>
 
           <Grid
             id="name"
@@ -158,10 +157,9 @@ export  function SignUp() {
           <Grid id="signUp" style={{ marginTop: "15px" }} container>
             <CustomButton
               onClick={signUp}
-              label="Sign up"
               submit={true}
               style={{ width: "100%" }}
-            />
+            >Sign up</CustomButton>
           </Grid>
 
           <Grid id="redirectLogin" container>

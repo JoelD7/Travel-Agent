@@ -248,7 +248,6 @@ export function Hotels() {
             <Grid item xs={12} style={{ marginLeft: "auto" }}>
               <Grid container justify="flex-end">
                 <CustomButton
-                  label="Search"
                   backgroundColor={Colors.GREEN}
                   style={{
                     width: "140px",
@@ -262,7 +261,7 @@ export function Hotels() {
                       }
                     });
                   }}
-                />
+                >Search</CustomButton>
               </Grid>
             </Grid>
           </ThemeProvider>
@@ -316,12 +315,11 @@ export function Hotels() {
 
           <Grid item className={style.filterButtonGrid}>
             <CustomButton
-              label="Filter"
               icon={faFilter}
               backgroundColor={Colors.PURPLE}
               style={{ paddingLeft: "10px", fontSize: "14px" }}
               onClick={() => setOpenDrawer(true)}
-            />
+            >Filter</CustomButton>
           </Grid>
 
           <Grid item className={style.hotelsGrid}>
@@ -351,10 +349,9 @@ export function Hotels() {
                           style={{ textAlign: "center" }}
                         >{`$ ${hotel.pricePerNight}`}</h4>
                         <CustomButton
-                          label="View details"
                           backgroundColor={Colors.PURPLE}
                           onClick={() => {}}
-                        />
+                        >View details</CustomButton>
                       </div>
                     </Grid>
 
@@ -426,14 +423,13 @@ export function Hotels() {
                           {`$ ${hotel.pricePerNight}`}
                         </h2>
                         <CustomButton
-                          label="View details"
                           style={{
                             margin: "auto 0px auto auto",
                             fontSize: "16px",
                           }}
                           backgroundColor={Colors.PURPLE}
                           onClick={() => {}}
-                        />
+                        >View details</CustomButton>
                       </Grid>
                     </Grid>
                   </Grid>

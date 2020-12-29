@@ -6,28 +6,16 @@ import {
   faHotel,
   faPlane,
   faPlaneDeparture,
-  faUser,
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Avatar,
-  createMuiTheme,
-  Divider,
-  Drawer,
-  Link,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ThemeProvider,
-} from "@material-ui/core";
+import { Avatar, Divider, Drawer, List, ListItem, ListItemIcon } from "@material-ui/core";
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { carlos, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
-import { Colors, Shadow } from "../../../styles";
-import { Routes } from "../../../utils";
+import { Colors } from "../../../styles";
+import { getLinkStyle, Routes } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/DrawerOptionsType";
 import { CustomButton } from "../../atoms";
 import { drawerButtonStyle, drawerStyles } from "./navDrawer-styles";
@@ -103,8 +91,6 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
     },
   ]);
 
-  const history = useHistory();
-
   function onOptionClick(option: DrawerOptions) {
     let newDrawer = drawerOptions.map((op) => {
       if (op.label === option.label) {
@@ -114,7 +100,6 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
       }
     });
 
-    history.push(option.route);
     setDrawerOptions(newDrawer);
   }
 
@@ -124,31 +109,28 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
         {userLoggedIn ? (
           <div>
             <CustomButton
-              label="Account"
               avatar={<Avatar src={carlos} />}
               backgroundColor={Colors.PURPLE}
               rounded
               style={drawerButtonStyle}
               onClick={() => {}}
-            />
+            >Account</CustomButton>
 
             <CustomButton
-              label="Make trip"
               backgroundColor={Colors.PURPLE}
               rounded
               style={drawerButtonStyle}
               onClick={() => {}}
-            />
+            >Make trip</CustomButton>
           </div>
         ) : (
           <div style={{ fontFamily: Family }}>
             <CustomButton
-              label="Login"
               backgroundColor={Colors.PURPLE}
               rounded
               style={{ ...drawerButtonStyle, marginBottom: "0px" }}
               onClick={() => {}}
-            />
+            >Login</CustomButton>
 
             <p style={{ color: "white", fontSize: "14px" }}>
               Or{" "}
@@ -194,10 +176,10 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
               <ListItemIcon>
                 <FontAwesomeIcon icon={option.icon} color="white" />
               </ListItemIcon>
-              <ListItemText
-                classes={{ primary: style.drawerText }}
-                primary={option.label}
-              />
+
+              <Link style={getLinkStyle("white")} to={option.route}>
+                {option.label}
+              </Link>
             </ListItem>
           ))}
 
@@ -219,14 +201,13 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
               <ListItemIcon>
                 <FontAwesomeIcon icon={option.icon} color="white" />
               </ListItemIcon>
-              <ListItemText
-                classes={{ primary: style.drawerText }}
-                primary={option.label}
-              />
+
+              <Link style={getLinkStyle("white")} to={option.route}>
+                {option.label}
+              </Link>
             </ListItem>
           ))}
       </List>
     </Drawer>
-  
   );
 }

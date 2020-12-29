@@ -7,6 +7,7 @@ import {
   Home,
   Hotels,
   Login,
+  Reservations,
   RestaurantDetails,
   Restaurant_List,
   SignUp,
@@ -34,6 +35,7 @@ export default function App() {
         <Route exact path={Routes.TRIPS} component={Trips} />
         <Route exact path={`${Routes.TRIPS}/:id`} component={TripDetails} />
         <Route exact path={Routes.FAVORITE_PLACES} component={FavPlaces} />
+        <Route exact path={Routes.RESERVATIONS} component={Reservations} />
       </Switch>
     </Router>
   );

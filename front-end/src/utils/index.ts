@@ -1,6 +1,9 @@
 import * as Routes from "./Routes";
 import * as HotelAmenity from "./HotelAmenities";
 import * as POICategory from "./POICategory";
+import { CSSProperties } from "@material-ui/styles";
+import { Colors } from "../styles";
+import { parseISO } from "date-fns";
 export * from "./slices";
 export * from "./types";
 export * from "./functions/functions";
@@ -959,4 +962,88 @@ export const tripsPlaceholder = [
   //   endDate: new Date(2019, 5, 5),
   //   coverPhoto: 'country.jpg',
   // },
+];
+
+export const flightPlaceholder: Flight[] = [
+  {
+    price: {
+      currency: "USD",
+      total: 245,
+    },
+    class: "Economy",
+    itineraries: [
+      {
+        duration: "PT8H15M",
+        segments: [
+          {
+            departure: {
+              iata: "SIN",
+              city: "Singapore",
+              at: parseISO("2021-02-02T00:30:00"),
+              terminal: "2",
+            },
+            arrival: {
+              iata: "DMK",
+              city: "Bangkok",
+              at: parseISO("2021-02-02T23:30:00"),
+              terminal: "31",
+            },
+            carrier: "Egyptair",
+            duration: "PT8H15M",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    price: {
+      currency: "USD",
+      total: 198,
+    },
+    class: "Economy",
+    itineraries: [
+      {
+        duration: "PT6H15M",
+        segments: [
+          {
+            departure: {
+              iata: "SIN",
+              city: "Singapore",
+              at: parseISO("2021-02-02T07:15:00"),
+              terminal: "2",
+            },
+            arrival: {
+              iata: "DXB",
+              city: "Dubai",
+              at: parseISO("2021-02-02T13:39:00"),
+              terminal: "31",
+            },
+            carrier: "Egyptair",
+            duration: "PT6H15M",
+          },
+        ],
+      },
+      {
+        duration: "PT8H25M",
+        segments: [
+          {
+            departure: {
+              iata: "DXB",
+              city: "Dubai",
+              at: parseISO("2021-02-12T09:15:00"),
+              terminal: "2",
+            },
+            arrival: {
+              iata: "SIN",
+              city: "Singapore",
+              at: parseISO("2021-02-12T16:55:00"),
+              terminal: "31",
+            },
+            carrier: "Emirates",
+            duration: "PT8H25M",
+          },
+        ],
+      },
+    ],
+  },
 ];

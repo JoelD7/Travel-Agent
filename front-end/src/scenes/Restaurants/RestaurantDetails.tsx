@@ -89,11 +89,10 @@ export function RestaurantDetails() {
             <Grid item className={style.tripButtonGrid}>
               <CustomButton
                 style={{ boxShadow: Shadow.LIGHT }}
-                label="Include in trip"
                 onClick={() => {}}
                 backgroundColor={Colors.GREEN}
                 rounded
-              />
+              >Include in trip</CustomButton>
             </Grid>
           </Grid>
         </Grid>

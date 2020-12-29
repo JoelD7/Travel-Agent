@@ -8,6 +8,31 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     color: "#5f5f5f",
     marginTop: "0px",
   },
+  card: {
+    width: "100%",
+    margin: "10px",
+
+    [theme.breakpoints.down(518)]: {
+      margin: "10px 0px",
+    },
+  },
+  dealGrid: {
+    width: "50%",
+    [theme.breakpoints.down(990)]: {
+      width: "77%",
+    },
+    [theme.breakpoints.down(865)]: {
+      width: "85%",
+    },
+    [theme.breakpoints.down(635)]: {
+      width: "100%",
+    },
+  },
+  dealSubtitle: {
+    fontSize: "13px",
+    color: Colors.BLUE,
+    margin: "0px auto",
+  },
   planeIconGrid: {
     width: "8.3%",
     display: "flex",
@@ -74,12 +99,11 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     },
   },
   durationText: {
-    fontSize: "14px",
     marginBottom: "2px",
     marginTop: "20px",
   },
   durationSubText: {
-    fontSize: "12px",
+    fontSize: "14px",
     marginTop: "4px",
     color: Colors.GRAY,
   },

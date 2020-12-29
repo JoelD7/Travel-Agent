@@ -161,12 +161,9 @@ export function HotelAmenitiesSelector({
           </Grid>
 
           <Grid item xs={12} style={{ display: "flex", justifyContent: "center" }}>
-            <CustomButton
-              style={{ width: "50%" }}
-              label="Ok"
-              rounded
-              onClick={() => closeDialog()}
-            />
+            <CustomButton style={{ width: "50%" }} rounded onClick={() => closeDialog()}>
+              Ok
+            </CustomButton>
           </Grid>
         </Grid>
       </Dialog>

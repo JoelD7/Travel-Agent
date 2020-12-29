@@ -295,12 +295,11 @@ export function Restaurant_List() {
 
           <Grid item className={style.filterButtonGrid}>
             <CustomButton
-              label="Filter"
               icon={faFilter}
               backgroundColor={Colors.PURPLE}
               style={{ paddingLeft: "10px", fontSize: "14px" }}
               onClick={() => setOpenDrawer(true)}
-            />
+            >Filter</CustomButton>
           </Grid>
 
           <Grid item className={style.restaurantsGrid}>

@@ -15,10 +15,10 @@ import {
 } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { DashDrawer, IconText, Navbar, SliderArrow, Text } from "../../components";
 import { Colors } from "../../styles";
-import { Routes, tripPlaceholder, tripsPlaceholder } from "../../utils";
+import { getLinkStyle, Routes, tripPlaceholder, tripsPlaceholder } from "../../utils";
 import { DrawerOptions } from "../../utils/types/DrawerOptionsType";
 import { tripStyles } from "./trip-styles";
 import Slider from "react-slick";
@@ -41,22 +41,24 @@ export function Trips() {
     return trips.map((trip, i) => (
       <div key={i} style={{ width: "25%" }}>
         <Card className={style.tripCard}>
-          <CardActionArea onClick={() => history.push(`${Routes.TRIPS}/${trip.id}`)}>
-            <CardMedia component="img" height="150" src={`${trip.coverPhoto}`} />
+          <CardActionArea>
+            <Link style={getLinkStyle()} to={`${Routes.TRIPS}/${trip.id}`}>
+              <CardMedia component="img" height="150" src={`${trip.coverPhoto}`} />
 
-            <CardContent>
-              <Text weight="bold" component="h4" style={{ color: Colors.BLUE }}>
-                {trip.name}
-              </Text>
-              <IconText
-                icon={faCalendar}
-                text={`${format(trip.startDate, "dd/MM/yyyy")} - ${format(
-                  trip.endDate,
-                  "dd/MM/yyyy"
-                )}`}
-              />
-              <IconText icon={faFlag} text={trip.countries.join(", ")} />
-            </CardContent>
+              <CardContent>
+                <Text weight="bold" component="h4" style={{ color: Colors.BLUE }}>
+                  {trip.name}
+                </Text>
+                <IconText
+                  icon={faCalendar}
+                  text={`${format(trip.startDate, "dd/MM/yyyy")} - ${format(
+                    trip.endDate,
+                    "dd/MM/yyyy"
+                  )}`}
+                />
+                <IconText icon={faFlag} text={trip.countries.join(", ")} />
+              </CardContent>
+            </Link>
           </CardActionArea>
         </Card>
       </div>
@@ -80,15 +82,15 @@ export function Trips() {
               backgroundPosition: "50%",
             }}
           >
-            <Text component="h4" style={{ fontWeight: "normal" }}>
+            <Text color="white" component="h4" style={{ fontWeight: "normal" }}>
               Your last trip
             </Text>
 
             <Grid container alignItems="baseline">
-              <Text component="h1" style={{ margin: "0px 10px 0px 0px" }}>
+              <Text color="white" component="h1" style={{ margin: "0px 10px 0px 0px" }}>
                 {lastTrip.name}
               </Text>
-              <Text component="h4" style={{ fontWeight: "normal" }}>
+              <Text color="white" component="h4" style={{ fontWeight: "normal" }}>
                 {lastTrip.countries.join(", ")}
               </Text>
             </Grid>
@@ -97,34 +99,52 @@ export function Trips() {
               <Grid container className={style.lastTripDataContainer}>
                 <Grid item xs={1}>
                   <Text
+                    color="white"
                     component="h2"
                     style={{ textAlign: "center", marginBottom: "5px" }}
                   >
                     Photos
                   </Text>
-                  <Text component="h3" weight={500} style={{ textAlign: "center" }}>
+                  <Text
+                    color="white"
+                    component="h3"
+                    weight={500}
+                    style={{ textAlign: "center" }}
+                  >
                     {lastTrip.photos}
                   </Text>
                 </Grid>
                 <Grid item xs={1}>
                   <Text
+                    color="white"
                     component="h2"
                     style={{ textAlign: "center", marginBottom: "5px" }}
                   >
                     Places
                   </Text>
-                  <Text component="h3" weight={500} style={{ textAlign: "center" }}>
+                  <Text
+                    color="white"
+                    component="h3"
+                    weight={500}
+                    style={{ textAlign: "center" }}
+                  >
                     {lastTrip.places}
                   </Text>
                 </Grid>
                 <Grid item xs={1}>
                   <Text
+                    color="white"
                     component="h2"
                     style={{ textAlign: "center", marginBottom: "5px" }}
                   >
                     Days
                   </Text>
-                  <Text component="h3" weight={500} style={{ textAlign: "center" }}>
+                  <Text
+                    color="white"
+                    component="h3"
+                    weight={500}
+                    style={{ textAlign: "center" }}
+                  >
                     {lastTrip.days}
                   </Text>
                 </Grid>

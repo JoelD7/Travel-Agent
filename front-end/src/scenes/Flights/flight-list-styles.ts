@@ -5,6 +5,8 @@ import { Colors, Shadow } from "../../styles";
 export const flightListStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     fontFamily: Family,
+    backgroundColor: Colors.BACKGROUND,
+
   },
   datepicker: {
     backgroundColor: "white",
@@ -47,7 +49,8 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     padding: "10px",
   },
   filtersGrid: {
-    border: "1px solid #cecece",
+    backgroundColor:'white',
+    boxShadow: Shadow.LIGHT,
     borderRadius: "5px",
     padding: "10px",
     width: "25%",
@@ -62,7 +65,6 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   flightsGrid: {
     padding: "10px",
     width: "65%",
-    backgroundColor: "#f6f6f9",
 
     [theme.breakpoints.down(1215)]: {
       width: "70%",
@@ -159,7 +161,6 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   select: {
     "& .MuiOutlinedInput-input": {
       padding: "10px 25px 10px 15px",
-      borderRadius: "5px",
     },
 
     "& .MuiOutlinedInput-root": {

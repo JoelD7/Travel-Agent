@@ -26,17 +26,18 @@ import { addDays, parseISO, isBefore } from "date-fns";
 import React, { useState } from "react";
 import { Family } from "../../assets/fonts";
 import {
-  CardFlightDeal,
+  CardFlight,
   CustomButton,
   DatetimeRange,
   FlightTimesRange,
   Navbar,
   PriceRange,
   ServicesToolbar,
+  Text,
 } from "../../components";
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors, Shadow } from "../../styles";
-import { muiDateFormatter } from "../../utils";
+import { flightPlaceholder, muiDateFormatter } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightListStyles } from "./flight-list-styles";
@@ -97,7 +98,7 @@ export function Flight_List() {
       },
       MuiOutlinedInput: {
         root: {
-          borderRadius: "10px",
+          borderRadius: "4px",
           backgroundColor: "white",
 
           "&:hover": {
@@ -179,89 +180,7 @@ export function Flight_List() {
     },
   ];
 
-  const flights: Flight[] = [
-    {
-      price: {
-        currency: "USD",
-        total: 245,
-      },
-      class: "Economy",
-      itineraries: [
-        {
-          duration: "PT8H15M",
-          segments: [
-            {
-              departure: {
-                iata: "SIN",
-                city: "Singapore",
-                at: parseISO("2021-02-02T00:30:00"),
-                terminal: "2",
-              },
-              arrival: {
-                iata: "DMK",
-                city: "Bangkok",
-                at: parseISO("2021-02-02T23:30:00"),
-                terminal: "31",
-              },
-              carrier: "Egyptair",
-              duration: "PT8H15M",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      price: {
-        currency: "USD",
-        total: 198,
-      },
-      class: "Economy",
-      itineraries: [
-        {
-          duration: "PT6H15M",
-          segments: [
-            {
-              departure: {
-                iata: "SIN",
-                city: "Singapore",
-                at: parseISO("2021-02-02T07:15:00"),
-                terminal: "2",
-              },
-              arrival: {
-                iata: "DXB",
-                city: "Dubai",
-                at: parseISO("2021-02-02T13:39:00"),
-                terminal: "31",
-              },
-              carrier: "Egyptair",
-              duration: "PT6H15M",
-            },
-          ],
-        },
-        {
-          duration: "PT8H25M",
-          segments: [
-            {
-              departure: {
-                iata: "DXB",
-                city: "Dubai",
-                at: parseISO("2021-02-12T09:15:00"),
-                terminal: "2",
-              },
-              arrival: {
-                iata: "SIN",
-                city: "Singapore",
-                at: parseISO("2021-02-12T16:55:00"),
-                terminal: "31",
-              },
-              carrier: "Emirates",
-              duration: "PT8H25M",
-            },
-          ],
-        },
-      ],
-    },
-  ];
+  const flights: Flight[] = flightPlaceholder;
 
   const flightClasses: FlightClassType[] = [
     "Business",
@@ -291,8 +210,12 @@ export function Flight_List() {
   function SearchFilters() {
     return (
       <>
-        <h2>Search filters</h2>
-        <h3>Price range</h3>
+        <Text style={{ color: Colors.BLUE }} weight="bold" component="h3">
+          Search filters
+        </Text>
+        <Text style={{ color: Colors.BLUE }} weight="bold" component="h4">
+          Price range
+        </Text>
         <PriceRange
           value={state.priceRange ? state.priceRange : [0, 100]}
           max={500}
@@ -302,7 +225,9 @@ export function Flight_List() {
         <Divider style={{ margin: "10px auto" }} />
 
         <div key="flight times">
-          <h3 style={{ marginBottom: "0px" }}>Flight times</h3>
+          <Text style={{ color: Colors.BLUE }} weight="bold" component="h4">
+            Flight times
+          </Text>
 
           <FlightTimesRange
             city={state.from}
@@ -477,7 +402,6 @@ export function Flight_List() {
 
             <Grid item style={{ margin: "auto 0px 0px auto" }}>
               <CustomButton
-                label="Search"
                 backgroundColor={Colors.GREEN}
                 style={{
                   width: "140px",
@@ -485,7 +409,9 @@ export function Flight_List() {
                   color: Colors.BLUE,
                 }}
                 onClick={() => {}}
-              />
+              >
+                Search
+              </CustomButton>
             </Grid>
           </ThemeProvider>
         </Grid>
@@ -499,17 +425,18 @@ export function Flight_List() {
 
           <Grid item className={style.filterButtonGrid}>
             <CustomButton
-              label="Filter"
               icon={faFilter}
               backgroundColor={Colors.PURPLE}
               style={{ paddingLeft: "10px", fontSize: "14px" }}
               onClick={() => setOpenDrawer(true)}
-            />
+            >
+              Filter
+            </CustomButton>
           </Grid>
 
           <Grid item className={style.flightsGrid}>
             {flights.map((flight, i) => (
-              <CardFlightDeal key={i} flight={flight} />
+              <CardFlight key={i} flight={flight} />
             ))}
           </Grid>
         </Grid>

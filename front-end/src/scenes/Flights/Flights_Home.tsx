@@ -26,11 +26,13 @@ import { addDays, format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Family } from "../../assets/fonts";
 import {
+  CardFlight,
   CustomButton,
   IconText,
   Navbar,
   PageSubtitle,
   ServicesToolbar,
+  Text,
 } from "../../components";
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors } from "../../styles";
@@ -206,36 +208,6 @@ export function Flights_Home() {
     {
       price: {
         currency: "USD",
-        total: 245,
-      },
-      class: "Economy",
-      itineraries: [
-        {
-          duration: "PT8H15M",
-          segments: [
-            {
-              departure: {
-                iata: "SIN",
-                city: "Singapore",
-                at: parseISO("2021-02-02T00:30:00"),
-                terminal: "2",
-              },
-              arrival: {
-                iata: "DMK",
-                city: "Bangkok",
-                at: parseISO("2021-02-02T23:30:00"),
-                terminal: "31",
-              },
-              carrier: "Egyptair",
-              duration: "PT8H15M",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      price: {
-        currency: "USD",
         total: 198,
       },
       class: "Economy",
@@ -279,6 +251,36 @@ export function Flights_Home() {
               },
               carrier: "Emirates",
               duration: "PT8H25M",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      price: {
+        currency: "USD",
+        total: 198,
+      },
+      class: "Economy",
+      itineraries: [
+        {
+          duration: "PT6H15M",
+          segments: [
+            {
+              departure: {
+                iata: "SIN",
+                city: "Singapore",
+                at: parseISO("2021-02-02T07:15:00"),
+                terminal: "2",
+              },
+              arrival: {
+                iata: "DXB",
+                city: "Dubai",
+                at: parseISO("2021-02-02T13:39:00"),
+                terminal: "31",
+              },
+              carrier: "Egyptair",
+              duration: "PT6H15M",
             },
           ],
         },
@@ -508,9 +510,8 @@ export function Flights_Home() {
               rounded
               backgroundColor={Colors.PURPLE}
               style={{ width: "100%" }}
-              label="Find flights"
               onClick={() => history.push(Routes.FLIGHT_LIST)}
-            />
+            >Find flights</CustomButton>
           </Grid>
         </Grid>
       </Grid>
@@ -519,57 +520,7 @@ export function Flights_Home() {
 
       <Grid container spacing={2} className={style.dealsContainer}>
         {deals.map((deal, i) => (
-          <Grid key={i} item className={style.dealGrid}>
-            <Card className={style.card}>
-              <CardHeader
-                title={
-                  <div style={{ display: "flex", fontFamily: Family }}>
-                    <p className={style.dealTitle}>
-                      {getFlightCitiesLabel(deal, "departure")}
-                    </p>
-                    <FontAwesomeIcon
-                      icon={faPlane}
-                      style={{ margin: "0px 10px" }}
-                      color="black"
-                    />
-                    <p className={style.dealTitle}>
-                      {getFlightCitiesLabel(deal, "arrival")}
-                    </p>
-
-                    <h5
-                      style={{ margin: "auto 0px auto auto" }}
-                    >{`${deal.price.currency}$ ${deal.price.total}`}</h5>
-                  </div>
-                }
-                subheader={
-                  <div>
-                    <p className={style.dealSubtitle}>
-                      {`${formatFlightDateTime(
-                        deal,
-                        "departure"
-                      )} - ${formatFlightDateTime(deal, "arrival")}`}
-                    </p>
-                  </div>
-                }
-              />
-
-              <CardContent>
-                <div style={{ display: "flex" }}>
-                  <IconText
-                    icon={faPlaneDeparture}
-                    text={`${deal.itineraries[0].segments[0].carrier}, ${deal.class}`}
-                  />
-
-                  <CustomButton
-                    style={{ marginLeft: "auto", fontSize: "14px" }}
-                    label="View deal"
-                    onClick={() => {}}
-                    backgroundColor={Colors.PURPLE}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
+          <CardFlight variant="deal" flight={deal} />
         ))}
       </Grid>
     </div>

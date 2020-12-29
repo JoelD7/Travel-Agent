@@ -241,7 +241,7 @@ export function FlightDetails({ open, onClose }: FlightDetails) {
             <h2 style={{ fontSize: "20px", marginRight: '10px' }}>{`US${currencyFormatter(
               flight.price.total
             )}`}</h2>
-            <CustomButton label="Purchase flight" onClick={() => {}} />
+            <CustomButton onClick={() => {}} >Purchase flight</CustomButton>
           </Grid>
         </Grid>
       </Grid>

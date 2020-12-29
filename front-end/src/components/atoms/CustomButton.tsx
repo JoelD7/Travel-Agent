@@ -9,7 +9,7 @@ import { Colors } from "../../styles";
 interface CustomButtonProps {
   avatar: ReactNode;
   backgroundColor: string;
-  label: string;
+  label?: string;
   size?: number;
   rounded: boolean;
   style: CreateCSSProperties<{}>;
@@ -17,6 +17,7 @@ interface CustomButtonProps {
   icon: IconDefinition;
   iconColor?: string;
   submit: boolean;
+  children?: ReactNode;
   textColor: string;
   onClick: (event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 }
@@ -41,6 +42,7 @@ export function CustomButton({
   backgroundColor = Colors.BLUE,
   label,
   rounded,
+  children,
   style,
   icon,
   onClick,
@@ -54,7 +56,7 @@ export function CustomButton({
     button: {
       backgroundColor: backgroundColor ? backgroundColor : Colors.BLUE,
       fontFamily: Family,
-      padding: `5px ${icon ? '16px' : '10px'} 5px 10px`,
+      padding: `5px ${icon ? "16px" : "10px"} 5px 10px`,
       borderRadius: rounded ? "50px" : "",
       "&:hover": {
         backgroundColor: getHoverColor(backgroundColor),
@@ -110,7 +112,7 @@ export function CustomButton({
       onClick={onClick}
       type={submit ? "submit" : "button"}
     >
-      {label}
+      {children}
     </Button>
   );
 }

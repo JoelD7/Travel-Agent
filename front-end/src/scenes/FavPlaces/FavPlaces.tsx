@@ -2,12 +2,13 @@ import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui
 import React, { useEffect, useState } from "react";
 import { DashDrawer, IconText, Navbar, Text } from "../../components";
 import { favPlacesStyles } from "./favPlaces-styles";
-import { POICategory, poisPlaceholder } from "../../utils";
+import { getLinkStyle, POICategory, poisPlaceholder } from "../../utils";
 import { faCircle, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { Colors } from "../../styles";
 import Rating from "react-rating";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
+import { Link } from "react-router-dom";
 
 interface POICategoryGroup {
   name: string;
@@ -89,44 +90,48 @@ export function FavPlaces() {
                     {group.places.map((place: POISearch, i) => (
                       <Card key={i} className={styles.favCard}>
                         <CardActionArea>
-                          <CardMedia component="img" height="150" src={place.photo} />
-                          <CardContent>
-                            <Text
-                              weight={700}
-                              style={{ color: Colors.BLUE }}
-                              component="h4"
-                            >
-                              {place.name}
-                            </Text>
+                          <Link style={getLinkStyle()} to="#">
+                            <CardMedia component="img" height="150" src={place.photo} />
+                            <CardContent>
+                              <Text
+                                weight={700}
+                                style={{ color: Colors.BLUE }}
+                                component="h4"
+                              >
+                                {place.name}
+                              </Text>
 
-                            <Rating
-                              initialRating={place.rating}
-                              readonly
-                              emptySymbol={
-                                <FontAwesomeIcon
-                                  style={{ margin: "0px 1px" }}
-                                  icon={faCircleReg}
-                                  color={Colors.PURPLE}
-                                />
-                              }
-                              fullSymbol={
-                                <FontAwesomeIcon
-                                  style={{ margin: "0px 1px" }}
-                                  icon={faCircle}
-                                  color={Colors.PURPLE}
-                                />
-                              }
-                            />
+                              <Rating
+                                initialRating={place.rating}
+                                readonly
+                                emptySymbol={
+                                  <FontAwesomeIcon
+                                    style={{ margin: "0px 1px" }}
+                                    icon={faCircleReg}
+                                    color={Colors.PURPLE}
+                                  />
+                                }
+                                fullSymbol={
+                                  <FontAwesomeIcon
+                                    style={{ margin: "0px 1px" }}
+                                    icon={faCircle}
+                                    color={Colors.PURPLE}
+                                  />
+                                }
+                              />
 
-                            <IconText
-                              icon={faMapMarkerAlt}
-                              text={
-                                place.location.formattedAddress
-                                  ? place.location.formattedAddress.join(", ")
-                                  : "No address"
-                              }
-                            />
-                          </CardContent>
+                              <IconText
+                                style={{ marginTop: "10px" }}
+                                textColor={Colors.BLUE}
+                                icon={faMapMarkerAlt}
+                                text={
+                                  place.location.formattedAddress
+                                    ? place.location.formattedAddress.join(", ")
+                                    : "No address"
+                                }
+                              />
+                            </CardContent>
+                          </Link>
                         </CardActionArea>
                       </Card>
                     ))}

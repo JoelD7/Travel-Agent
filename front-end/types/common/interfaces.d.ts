@@ -44,3 +44,16 @@ interface ExchangeRate {
   };
   [key: string]: ExchangeRate[keyof ExchangeRate];
 }
+
+interface HotelReservation {
+  id: string;
+  name: string;
+  picture: string;
+  stars: number;
+  adults: number;
+  children: number;
+  checkIn: Date;
+  checkOut: Date;
+  rooms: number;
+  cost: number;
+}

@@ -1,4 +1,5 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
+import { CSSProperties } from "@material-ui/styles";
 import { format } from "date-fns";
 
 export function muiDateFormatter(date: MaterialUiPickersDate, invalidLabel: string) {
@@ -8,6 +9,13 @@ export function muiDateFormatter(date: MaterialUiPickersDate, invalidLabel: stri
         "EEE. d/MMM, yyyy"
       )
     : "dd MMM., yyyy";
+}
+
+export function getLinkStyle(color: string = "initial"): CSSProperties {
+  return {
+    color: color,
+    textDecoration: "none",
+  };
 }
 
 export const currencyFormatter = Intl.NumberFormat("en-US", {
@@ -39,9 +47,13 @@ export function getFlightCitiesLabel(
  * @param flight
  * @param point
  */
-export function formatFlightDateTime(flight: Flight, point: "departure" | "arrival") {
-  let departureTime = flight.itineraries[0].segments[0].departure.at;
-  let arrivalTime = flight.itineraries[0].segments[0].arrival.at;
+export function formatFlightDateTime(
+  flight: Flight,
+  point: "departure" | "arrival",
+  itinerary: number = 0
+) {
+  let departureTime = flight.itineraries[itinerary].segments[0].departure.at;
+  let arrivalTime = flight.itineraries[itinerary].segments[0].arrival.at;
 
   return point === "departure"
     ? `${format(departureTime, "d/MMM, hh:mm aaa")}`
