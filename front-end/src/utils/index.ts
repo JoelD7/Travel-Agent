@@ -1047,3 +1047,8 @@ export const flightPlaceholder: Flight[] = [
     ],
   },
 ];
+
+export const dashDrawerSeparation: CSSProperties = {
+  marginLeft: "265px",
+  width: "81%",
+};

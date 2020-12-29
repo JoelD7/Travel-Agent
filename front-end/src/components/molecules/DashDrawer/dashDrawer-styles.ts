@@ -8,6 +8,10 @@ export const dashDrawerStyles = makeStyles((theme: Theme) => ({
     backgroundColor: Colors.BLUE,
     zIndex: 1,
     paddingTop: "30px",
+
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   },
   drawerText: {
     fontFamily: Font.Family,

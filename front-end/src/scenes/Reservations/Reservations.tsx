@@ -12,7 +12,7 @@ import {
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
-import { currencyFormatter, flightPlaceholder } from "../../utils";
+import { currencyFormatter, dashDrawerSeparation, flightPlaceholder } from "../../utils";
 import { reservationStyles } from "./reservation-styles";
 import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
 import { format } from "date-fns";
@@ -71,13 +71,10 @@ export function Reservations() {
   return (
     <div className={style.mainContainer}>
       <Navbar />
+      <DashDrawer />
 
       <Grid container>
-        <Grid id="dashboard bar" item xs={2}>
-          <DashDrawer />
-        </Grid>
-
-        <Grid item xs={9} className={style.pageContentGrid}>
+        <Grid item className={style.pageContentGrid}>
           <Text bold style={{ marginBottom: "20px" }} component="h1">
             Reservations
           </Text>
@@ -99,9 +96,14 @@ export function Reservations() {
 
           {/* Flights */}
           <Grid item xs={12}>
-            <Grid container spacing={2}>
+            <Grid container>
               {flights.map((flight, i) => (
-                <CardFlight key={i} flight={flight} variant="deal" />
+                <CardFlight
+                  className={style.flightCard}
+                  key={i}
+                  flight={flight}
+                  variant="deal"
+                />
               ))}
             </Grid>
           </Grid>

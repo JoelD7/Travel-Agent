@@ -16,10 +16,11 @@ import { cardFlightStyles } from "./cardFlightStyles";
 
 interface CardFlight {
   flight: Flight;
+  className?: string;
   variant?: "deal" | "regular";
 }
 
-export function CardFlight({ flight, variant = "deal" }: CardFlight) {
+export function CardFlight({ flight, variant = "deal", className }: CardFlight) {
   const style = cardFlightStyles();
   const exitFlight: FlightItinerary = flight.itineraries[0];
   const returnFlight: FlightItinerary | undefined =
@@ -46,7 +47,7 @@ export function CardFlight({ flight, variant = "deal" }: CardFlight) {
   }
 
   return variant === "deal" ? (
-    <Grid item className={style.dealGrid}>
+    <Grid item className={`${style.dealGrid} ${className}`}>
       <Card className={style.card}>
         <CardHeader
           title={
@@ -131,7 +132,9 @@ export function CardFlight({ flight, variant = "deal" }: CardFlight) {
               style={{ marginLeft: "auto", fontSize: "14px" }}
               onClick={() => {}}
               backgroundColor={Colors.PURPLE}
-            >View details</CustomButton>
+            >
+              View details
+            </CustomButton>
           </div>
         </CardContent>
       </Card>
@@ -210,9 +213,9 @@ export function CardFlight({ flight, variant = "deal" }: CardFlight) {
             item
             className={returnFlight ? style.priceButtonGrid : style.priceButtonGridFull}
           >
-            <CustomButton
-              onClick={() => setFlightDetailsModal(true)}
-            >View details</CustomButton>
+            <CustomButton onClick={() => setFlightDetailsModal(true)}>
+              View details
+            </CustomButton>
           </Grid>
         </Grid>
       </Grid>
@@ -225,7 +228,9 @@ export function CardFlight({ flight, variant = "deal" }: CardFlight) {
           <CustomButton
             style={{ marginLeft: "auto" }}
             onClick={() => setFlightDetailsModal(true)}
-          >View details</CustomButton>
+          >
+            View details
+          </CustomButton>
         </Grid>
       </Grid>
 
