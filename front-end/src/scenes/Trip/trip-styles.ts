@@ -16,15 +16,12 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     marginBottom: "40px",
     backgroundColor: Colors.BACKGROUND,
   },
-  lastTripDataContainer: {
-    marginTop: "13%",
-  },
+  lastTripDataContainer: {},
   pageContentGrid: {
     marginLeft: "265px",
-    width: "81% ",
-    // width: "calc(100%-265px)", this doesn't work
+    width: "calc(100% - 300px)",
     [theme.breakpoints.down("sm")]: {
-      // margin: "auto",
+      margin: "auto",
       width: "85%",
     },
   },
@@ -37,6 +34,7 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     backgroundRepeat: "no-repeat",
     backgroundPosition: "50%",
     padding: "10px",
+    minWidth: "450px",
     borderRadius: "5px",
     color: "white",
     height: "345px",

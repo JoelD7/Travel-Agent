@@ -5,7 +5,6 @@ import { Colors } from "../../styles";
 export const favPlacesStyles = makeStyles((theme: Theme) => ({
   favCard: {
     margin: "10px",
-    width: "25%",
   },
   mainContainer: {
     fontFamily: Font.Family,
@@ -14,5 +13,10 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
   mainGrid: {
     marginLeft: "265px",
     width: "81%",
+  },
+  slider: {
+    width: "90%",
+    display: "flex",
+    alignItems: "center",
   },
 }));

@@ -1,6 +1,14 @@
 import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui/core";
+import Slider from "react-slick";
 import React, { useEffect, useState } from "react";
-import { DashDrawer, IconText, Navbar, Text } from "../../components";
+import {
+  CustomButton,
+  DashDrawer,
+  IconText,
+  Navbar,
+  SliderArrow,
+  Text,
+} from "../../components";
 import { favPlacesStyles } from "./favPlaces-styles";
 import { getLinkStyle, POICategory, poisPlaceholder } from "../../utils";
 import { faCircle, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
@@ -22,10 +30,29 @@ export function FavPlaces() {
   const pois: POISearch[] = poisPlaceholder;
   let poiCategories = POICategory.POICategories;
 
-  const [categoryGroups, setCategoryGroups] = useState<POICategoryGroup[]>();
+  const [categoryGroups, setCategoryGroups] = useState<POICategoryGroup[]>([]);
 
   let categoryGroupsMap: { [index: string]: POICategoryGroup } = {};
   let categoryGroupsTemp: POICategoryGroup[] = [];
+
+  const sliderSettings = {
+    className: styles.slider,
+    nextArrow: <SliderArrow direction="right" />,
+    prevArrow: <SliderArrow direction="left" />,
+    // responsive: [
+    //   {
+    //     breakpoint: 760,
+    //     settings: {
+    //       slidesToShow: getSlidesToShow(1),
+    //       slidesToScroll: getSlidesToShow(1),
+    //     },
+    //   },
+    // ],
+  };
+
+  function getSlidesToShow(def: number, group: POICategoryGroup) {
+    return group.places.length > def ? def : group.places.length;
+  }
 
   useEffect(() => {
     groupPOIByCategory();
@@ -74,7 +101,9 @@ export function FavPlaces() {
 
       <Grid container className={styles.mainGrid}>
         <Grid item xs={12}>
-          <Text component="h1">Your favorite spots</Text>
+          <Text component="h1" bold>
+            Your favorite spots
+          </Text>
           {categoryGroups && (
             <div>
               {categoryGroups
@@ -82,59 +111,77 @@ export function FavPlaces() {
                 .map((group, i) => (
                   <Grid container style={{ marginTop: "20px" }}>
                     <Grid item xs={12}>
-                      <Text weight={500} component="h2">
-                        {group.pluralName}
-                      </Text>
+                      <Grid container>
+                        <Text weight={500} component="h2">
+                          {group.pluralName}
+                        </Text>
+                        <CustomButton
+                          style={{ paddingBottom: "0px" }}
+                          iconColor="#7e7e7e"
+                          backgroundColor="rgba(0,0,0,0)"
+                          textColor="#7e7e7e"
+                        >
+                          See all
+                        </CustomButton>
+                      </Grid>
                     </Grid>
 
-                    {group.places.map((place: POISearch, i) => (
-                      <Card key={i} className={styles.favCard}>
-                        <CardActionArea>
-                          <Link style={getLinkStyle()} to="#">
-                            <CardMedia component="img" height="150" src={place.photo} />
-                            <CardContent>
-                              <Text
-                                weight={700}
-                                style={{ color: Colors.BLUE }}
-                                component="h4"
-                              >
-                                {place.name}
-                              </Text>
+                    <Slider {...sliderSettings} slidesToShow={getSlidesToShow(3, group)}>
+                      {group.places.map((place: POISearch, i) => (
+                        <div key={i}>
+                          <Card className={styles.favCard}>
+                            <CardActionArea>
+                              <Link style={getLinkStyle()} to="#">
+                                <CardMedia
+                                  component="img"
+                                  height="150"
+                                  src={place.photo}
+                                />
+                                <CardContent>
+                                  <Text
+                                    weight={700}
+                                    style={{ color: Colors.BLUE }}
+                                    component="h4"
+                                  >
+                                    {place.name}
+                                  </Text>
 
-                              <Rating
-                                initialRating={place.rating}
-                                readonly
-                                emptySymbol={
-                                  <FontAwesomeIcon
-                                    style={{ margin: "0px 1px" }}
-                                    icon={faCircleReg}
-                                    color={Colors.PURPLE}
+                                  <Rating
+                                    initialRating={place.rating}
+                                    readonly
+                                    emptySymbol={
+                                      <FontAwesomeIcon
+                                        style={{ margin: "0px 1px" }}
+                                        icon={faCircleReg}
+                                        color={Colors.PURPLE}
+                                      />
+                                    }
+                                    fullSymbol={
+                                      <FontAwesomeIcon
+                                        style={{ margin: "0px 1px" }}
+                                        icon={faCircle}
+                                        color={Colors.PURPLE}
+                                      />
+                                    }
                                   />
-                                }
-                                fullSymbol={
-                                  <FontAwesomeIcon
-                                    style={{ margin: "0px 1px" }}
-                                    icon={faCircle}
-                                    color={Colors.PURPLE}
-                                  />
-                                }
-                              />
 
-                              <IconText
-                                style={{ marginTop: "10px" }}
-                                textColor={Colors.BLUE}
-                                icon={faMapMarkerAlt}
-                                text={
-                                  place.location.formattedAddress
-                                    ? place.location.formattedAddress.join(", ")
-                                    : "No address"
-                                }
-                              />
-                            </CardContent>
-                          </Link>
-                        </CardActionArea>
-                      </Card>
-                    ))}
+                                  <IconText
+                                    style={{ marginTop: "10px" }}
+                                    textColor={Colors.BLUE}
+                                    icon={faMapMarkerAlt}
+                                    text={
+                                      place.location.formattedAddress
+                                        ? place.location.formattedAddress.join(", ")
+                                        : "No address"
+                                    }
+                                  />
+                                </CardContent>
+                              </Link>
+                            </CardActionArea>
+                          </Card>
+                        </div>
+                      ))}
+                    </Slider>
                   </Grid>
                 ))}
             </div>

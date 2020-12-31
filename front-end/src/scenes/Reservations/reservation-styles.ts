@@ -4,10 +4,10 @@ import { Colors } from "../../styles";
 
 export const reservationStyles = makeStyles((theme: Theme) => ({
   flightCard: {
-    width: "50%",
+    width: "48%",
     minWidth: "506px",
     margin: "8px",
-    [theme.breakpoints.down(1295)]: {
+    [theme.breakpoints.down(1325)]: {
       width: "595px",
     },
     [theme.breakpoints.down(560)]: {
