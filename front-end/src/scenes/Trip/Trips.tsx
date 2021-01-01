@@ -22,6 +22,7 @@ import { getLinkStyle, Routes, tripPlaceholder, tripsPlaceholder } from "../../u
 import { DrawerOptions } from "../../utils/types/DrawerOptionsType";
 import { tripStyles } from "./trip-styles";
 import Slider from "react-slick";
+import Helmet from "react-helmet";
 
 export function Trips() {
   const style = tripStyles();
@@ -62,7 +63,12 @@ export function Trips() {
 
   function TripCards() {
     return trips.map((trip, i) => (
-      <div key={i} style={{ width: "25%" }}>
+      <div
+        key={i}
+        className={
+          trips.length > 4 ? style.tripCardContainerSlider : style.tripCardContainer
+        }
+      >
         <Card className={style.tripCard}>
           <CardActionArea>
             <Link style={getLinkStyle()} to={`${Routes.TRIPS}/${trip.id}`}>
@@ -94,26 +100,17 @@ export function Trips() {
 
   return (
     <div className={style.mainContainer}>
+      <Helmet>
+        <title>Trips</title>
+      </Helmet>
+
       <Navbar position="sticky" />
       <DashDrawer />
 
       <Grid container>
         <Grid item className={style.pageContentGrid}>
           {/* Photo title */}
-          <Grid
-            key="photoTitle"
-            item
-            xs={12}
-            className={style.photoTitleContainer}
-            style={
-              {
-                // backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("journey.jpg")`,
-                // backgroundSize: "cover",
-                // backgroundRepeat: "no-repeat",
-                // backgroundPosition: "50%",
-              }
-            }
-          >
+          <Grid key="photoTitle" item xs={12} className={style.photoTitleContainer}>
             <Grid container style={{ height: "100%" }}>
               <Grid item xs={12}>
                 <Text color="white" component="h4" style={{ fontWeight: "normal" }}>
@@ -200,9 +197,13 @@ export function Trips() {
             <Text component="h2">Trips</Text>
 
             <Grid key="trip cards" container>
-              <Slider {...sliderSettings} slidesToShow={getSlidesToShow(4)}>
-                {TripCards()}
-              </Slider>
+              {trips.length > 4 ? (
+                <Slider {...sliderSettings} slidesToShow={getSlidesToShow(4)}>
+                  {TripCards()}
+                </Slider>
+              ) : (
+                TripCards()
+              )}
             </Grid>
           </Grid>
         </Grid>

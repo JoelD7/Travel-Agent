@@ -40,6 +40,7 @@ import { useHistory } from "react-router-dom";
 import Ratings from "react-ratings-declarative";
 import Axios from "axios";
 import { differenceInHours } from "date-fns";
+import Helmet from "react-helmet";
 
 export function ThingsToDo() {
   const style = thingsToDoStyles();
@@ -157,6 +158,10 @@ export function ThingsToDo() {
 
   return (
     <div className={style.mainContainer}>
+      <Helmet>
+        <title>Things to do in Dubai</title>
+      </Helmet>
+
       <Navbar />
       <ServicesToolbar />
 
@@ -283,7 +288,9 @@ export function ThingsToDo() {
                             fontSize: "16px",
                             marginLeft: "auto",
                           }}
-                        >Check out</CustomButton>
+                        >
+                          Check out
+                        </CustomButton>
                       </div>
                     </CardActionArea>
                   </Card>
@@ -338,9 +345,11 @@ export function ThingsToDo() {
                       )}`}</p>
                       <CustomButton
                         rounded
-                        style={{ fontSize: "16px", marginTop: 'auto' }}
+                        style={{ fontSize: "16px", marginTop: "auto" }}
                         onClick={() => goToBookingLink(activity.bookingLink)}
-                      >Check out</CustomButton>
+                      >
+                        Check out
+                      </CustomButton>
                     </CardContent>
                   </Card>
                 ))}

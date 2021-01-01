@@ -44,6 +44,7 @@ import { Hotel } from "../../utils/types/Hotel";
 import { hotelsStyles } from "./hotels-styles";
 import { format } from "date-fns";
 import Rating from "react-rating";
+import Helmet from "react-helmet";
 
 interface HotelSearch {
   checkIn: MaterialUiPickersDate;
@@ -183,6 +184,10 @@ export function Hotels() {
 
   return (
     <div className={style.mainContainer}>
+      <Helmet>
+        <title>Hotels in Paris</title>
+      </Helmet>
+
       <Navbar />
       <ServicesToolbar />
 
@@ -261,7 +266,9 @@ export function Hotels() {
                       }
                     });
                   }}
-                >Search</CustomButton>
+                >
+                  Search
+                </CustomButton>
               </Grid>
             </Grid>
           </ThemeProvider>
@@ -280,7 +287,9 @@ export function Hotels() {
 
             <Divider style={{ margin: "10px auto" }} />
 
-            <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>Stars</Text>
+            <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+              Stars
+            </Text>
             <Rating
               initialRating={state.stars}
               onChange={(star) => setState({ ...state, stars: star })}
@@ -304,7 +313,9 @@ export function Hotels() {
 
             <Divider style={{ margin: "10px auto" }} />
 
-            <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>Amenities</Text>
+            <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+              Amenities
+            </Text>
             <HotelAmenitiesSelector
               values={state.amenities}
               updateState={(selected) => {
@@ -319,17 +330,15 @@ export function Hotels() {
               backgroundColor={Colors.PURPLE}
               style={{ paddingLeft: "10px", fontSize: "14px" }}
               onClick={() => setOpenDrawer(true)}
-            >Filter</CustomButton>
+            >
+              Filter
+            </CustomButton>
           </Grid>
 
           <Grid item className={style.hotelsGrid}>
             {hotels.map((hotel, i) => (
               <Grid key={i} container id="card" className={style.hotelCard}>
-                <Grid
-                  item
-                  className={style.hotelImageGrid}
-                  id="photo"
-                >
+                <Grid item className={style.hotelImageGrid} id="photo">
                   <img src={hotel.image} className={style.hotelImage} />
                 </Grid>
 
@@ -348,10 +357,9 @@ export function Hotels() {
                         <h4
                           style={{ textAlign: "center" }}
                         >{`$ ${hotel.pricePerNight}`}</h4>
-                        <CustomButton
-                          backgroundColor={Colors.PURPLE}
-                          onClick={() => {}}
-                        >View details</CustomButton>
+                        <CustomButton backgroundColor={Colors.PURPLE} onClick={() => {}}>
+                          View details
+                        </CustomButton>
                       </div>
                     </Grid>
 
@@ -429,7 +437,9 @@ export function Hotels() {
                           }}
                           backgroundColor={Colors.PURPLE}
                           onClick={() => {}}
-                        >View details</CustomButton>
+                        >
+                          View details
+                        </CustomButton>
                       </Grid>
                     </Grid>
                   </Grid>

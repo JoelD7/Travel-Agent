@@ -35,7 +35,7 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
       </Grid>
 
       <Grid item className={style.cardContentGrid}>
-        <Grid container>
+        <Grid container style={{ height: "100%" }}>
           <Grid item xs={12}>
             <Text component="h3" weight={500} style={{ margin: "5px 0px" }}>
               {restaurant.name}
@@ -63,10 +63,9 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
             />
           </Grid>
 
-          <Grid item xs={12} style={{ marginTop: "5px" }}>
+          <Grid item xs={12} style={{ marginTop: "15px" }}>
             <IconText
               shadow
-              style={{ marginBottom: "0px" }}
               className={style.bodyText}
               icon={faUtensils}
               text={restaurant.cuisines}
@@ -76,7 +75,6 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
           <Grid item xs={12}>
             <IconText
               shadow
-              style={{ marginBottom: "0px" }}
               className={style.bodyText}
               icon={faMapMarkerAlt}
               text={restaurant.location.address}
@@ -84,17 +82,13 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
           </Grid>
 
           <Grid item xs={12}>
-            <Grid container>
-              <CustomButton
-                style={{ marginLeft: "auto" }}
-                icon={faChevronRight}
-                rounded
-              >
+            <Grid container style={{ paddingRight: "10px" }}>
+              <CustomButton style={{ marginLeft: "auto" }} icon={faChevronRight} rounded>
                 <Link
                   style={getLinkStyle("white")}
                   to={`${Routes.RESTAURANTS}/${restaurant.id}`}
                 >
-                  Link
+                  View details
                 </Link>
               </CustomButton>
             </Grid>

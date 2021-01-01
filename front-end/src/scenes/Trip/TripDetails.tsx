@@ -4,27 +4,73 @@ import {
   faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CardActionArea, Divider, Grid, IconButton } from "@material-ui/core";
+import { Divider, Grid, IconButton } from "@material-ui/core";
 import { format } from "date-fns";
 import React from "react";
 import {
   CustomButton,
   DashDrawer,
-  IconText,
   Navbar,
   PhotoAlbumCard,
+  SliderArrow,
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
 import { tripPlaceholder } from "../../utils";
 import { tripStyles } from "./trip-styles";
+import Slider from "react-slick";
+import Helmet from "react-helmet";
 
 export function TripDetails() {
   const style = tripStyles();
   const trip = tripPlaceholder;
 
+  const sliderSettings = {
+    className: style.slider,
+    nextArrow: <SliderArrow direction="right" />,
+    prevArrow: <SliderArrow direction="left" />,
+    responsive: [
+      {
+        breakpoint: 1244,
+        settings: {
+          slidesToShow: getSlidesToShow(2),
+          slidesToScroll: getSlidesToShow(2),
+        },
+      },
+      {
+        breakpoint: 973,
+        settings: {
+          slidesToShow: getSlidesToShow(3),
+          slidesToScroll: getSlidesToShow(3),
+        },
+      },
+      {
+        breakpoint: 826,
+        settings: {
+          slidesToShow: getSlidesToShow(2),
+          slidesToScroll: getSlidesToShow(2),
+        },
+      },
+      {
+        breakpoint: 608,
+        settings: {
+          slidesToShow: getSlidesToShow(1),
+          slidesToScroll: getSlidesToShow(1),
+        },
+      },
+    ],
+  };
+
+  function getSlidesToShow(def: number) {
+    return trip.albums.length > def ? def : trip.albums.length;
+  }
+
   return (
     <div className={style.mainContainer}>
+      <Helmet>
+        <title>{trip.name}</title>
+      </Helmet>
+
       <Navbar position="sticky" />
 
       <DashDrawer />
@@ -36,65 +82,89 @@ export function TripDetails() {
           </CustomButton>
         </Grid>
 
-        <Grid key="photoTitle" item xs={12}>
-          <div className={style.photoTitleContainer}>
-            <Grid container alignItems="baseline">
-              <Text component="h1" style={{ margin: "20px 10px 0px 0px" }}>
-                {trip.name}
-              </Text>
-              <Text component="h4" style={{ marginTop: "20px", fontWeight: "normal" }}>
-                {trip.countries.join(", ")}
-              </Text>
+        {/* Photo title */}
+        <Grid key="photoTitle" item xs={12} className={style.photoTitleContainer}>
+          <Grid container style={{ height: "100%" }}>
+            <Grid item xs={12}>
+              <Grid container alignItems="baseline" style={{ marginTop: "20px" }}>
+                <Grid item xs={9}>
+                  <Text
+                    color="white"
+                    component="h1"
+                    style={{ margin: "0px 10px 0px 0px" }}
+                  >
+                    {trip.name}
+                  </Text>
+                </Grid>
 
-              <CustomButton
-                style={{ fontSize: "16px", alignSelf: "flex-start", marginLeft: "auto" }}
-                icon={faCalendar}
-              >
-                Itinerary
-              </CustomButton>
+                <Grid item xs={3}>
+                  <Grid container>
+                    <CustomButton className={style.itineraryButton} icon={faCalendar}>
+                      Itinerary
+                    </CustomButton>
+
+                    <IconButton className={style.itineraryIconButton}>
+                      <FontAwesomeIcon icon={faCalendar} color="white" />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Text color="white" component="h4" style={{ fontWeight: "normal" }}>
+                    {trip.countries.join(", ")}
+                  </Text>
+                </Grid>
+              </Grid>
             </Grid>
 
-            <div style={{ marginTop: "auto" }}>
+            {/* Trip quick info */}
+            <Grid item xs={12} style={{ alignSelf: "center" }}>
               <Grid container className={style.lastTripDataContainer}>
-                <Grid item xs={1}>
+                <div style={{ width: "105px" }}>
                   <Text
+                    color="white"
                     component="h3"
                     style={{ textAlign: "center", marginBottom: "5px" }}
                   >
                     Photos
                   </Text>
-                  <Text component="h4" style={{ textAlign: "center" }}>
+                  <Text color="white" component="h4" style={{ textAlign: "center" }}>
                     {trip.photos}
                   </Text>
-                </Grid>
-                <Grid item xs={1}>
+                </div>
+
+                <div style={{ width: "105px" }}>
                   <Text
+                    color="white"
                     component="h3"
                     style={{ textAlign: "center", marginBottom: "5px" }}
                   >
                     Places
                   </Text>
-                  <Text component="h4" style={{ textAlign: "center" }}>
+                  <Text color="white" component="h4" style={{ textAlign: "center" }}>
                     {trip.photos}
                   </Text>
-                </Grid>
-                <Grid item xs={1}>
+                </div>
+
+                <div style={{ width: "105px" }}>
                   <Text
+                    color="white"
                     component="h3"
                     style={{ textAlign: "center", marginBottom: "5px" }}
                   >
                     Days
                   </Text>
-                  <Text component="h4" style={{ textAlign: "center" }}>
+                  <Text color="white" component="h4" style={{ textAlign: "center" }}>
                     {trip.days}
                   </Text>
-                </Grid>
+                </div>
               </Grid>
-            </div>
-          </div>
+            </Grid>
+          </Grid>
         </Grid>
 
-        <Grid key="photos" item xs={9} className={style.photosGrid}>
+        {/* Photos */}
+        <Grid key="photos" item className={style.photosGrid}>
           <Grid container>
             <Text weight="normal" component="h2">
               Photos
@@ -109,25 +179,36 @@ export function TripDetails() {
             </CustomButton>
           </Grid>
 
+          {/* Album cards */}
           <Grid container>
-            <PhotoAlbumCard
-              albumRoute=""
-              name="Ballon day!"
-              cover="/Travel-Agent/globes.jpg"
-              photosQant={23}
-            />
-            <PhotoAlbumCard
-              albumRoute=""
-              name="Villages"
-              cover="/Travel-Agent/country.jpg"
-              photosQant={53}
-            />
+            {trip.albums.length > 3 ? (
+              <Slider {...sliderSettings} slidesToShow={getSlidesToShow(3)}>
+                {trip.albums.map((album, i) => (
+                  <PhotoAlbumCard
+                    albumRoute={album.albumRoute}
+                    name={album.name}
+                    cover={album.cover}
+                    photosQant={23}
+                  />
+                ))}
+              </Slider>
+            ) : (
+              trip.albums.map((album, i) => (
+                <PhotoAlbumCard
+                  albumRoute={album.albumRoute}
+                  name={album.name}
+                  cover={album.cover}
+                  photosQant={23}
+                />
+              ))
+            )}
           </Grid>
         </Grid>
 
-        <Grid key="details" item xs={3} className={style.detailsGrid}>
+        {/* Key details */}
+        <Grid key="details" item className={style.detailsGrid}>
           <div className={style.detailsContainer}>
-            <Text style={{ color: `${Colors.BLUE}` }} component="h3">
+            <Text bold color={Colors.BLUE} component="h3">
               Key details
             </Text>
             <Divider style={{ marginBottom: "10px" }} variant="fullWidth" />

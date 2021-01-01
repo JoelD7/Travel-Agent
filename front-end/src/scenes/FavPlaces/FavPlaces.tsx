@@ -17,6 +17,7 @@ import Rating from "react-rating";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
+import Helmet from "react-helmet";
 
 interface POICategoryGroup {
   name: string;
@@ -39,16 +40,26 @@ export function FavPlaces() {
     className: styles.slider,
     nextArrow: <SliderArrow direction="right" />,
     prevArrow: <SliderArrow direction="left" />,
-    // responsive: [
-    //   {
-    //     breakpoint: 760,
-    //     settings: {
-    //       slidesToShow: getSlidesToShow(1),
-    //       slidesToScroll: getSlidesToShow(1),
-    //     },
-    //   },
-    // ],
   };
+
+  function getResponsiveSlider(group: POICategoryGroup) {
+    return [
+      {
+        breakpoint: 1125,
+        settings: {
+          slidesToShow: getSlidesToShow(2, group),
+          slidesToScroll: getSlidesToShow(2, group),
+        },
+      },
+      {
+        breakpoint: 710,
+        settings: {
+          slidesToShow: getSlidesToShow(1, group),
+          slidesToScroll: getSlidesToShow(1, group),
+        },
+      },
+    ];
+  }
 
   function getSlidesToShow(def: number, group: POICategoryGroup) {
     return group.places.length > def ? def : group.places.length;
@@ -96,11 +107,14 @@ export function FavPlaces() {
 
   return (
     <div className={styles.mainContainer}>
+      <Helmet>
+        <title>Favorite Places</title>
+      </Helmet>
       <Navbar position="sticky" />
       <DashDrawer />
 
       <Grid container className={styles.mainGrid}>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{ marginTop: "10px" }}>
           <Text component="h1" bold>
             Your favorite spots
           </Text>
@@ -126,7 +140,11 @@ export function FavPlaces() {
                       </Grid>
                     </Grid>
 
-                    <Slider {...sliderSettings} slidesToShow={getSlidesToShow(3, group)}>
+                    <Slider
+                      {...sliderSettings}
+                      responsive={getResponsiveSlider(group)}
+                      slidesToShow={getSlidesToShow(3, group)}
+                    >
                       {group.places.map((place: POISearch, i) => (
                         <div key={i}>
                           <Card className={styles.favCard}>

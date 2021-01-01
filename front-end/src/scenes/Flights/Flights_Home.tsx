@@ -45,8 +45,8 @@ import {
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightStyles } from "./flights-styles";
-
 import axios, { AxiosRequestConfig } from "axios";
+import Helmet from "react-helmet";
 import { useHistory } from "react-router-dom";
 
 export function Flights_Home() {
@@ -341,6 +341,10 @@ export function Flights_Home() {
 
   return (
     <div className={style.mainContainer}>
+      <Helmet>
+        <title>Flights</title>
+      </Helmet>
+
       <Navbar />
 
       <Grid
@@ -511,7 +515,9 @@ export function Flights_Home() {
               backgroundColor={Colors.PURPLE}
               style={{ width: "100%" }}
               onClick={() => history.push(Routes.FLIGHT_LIST)}
-            >Find flights</CustomButton>
+            >
+              Find flights
+            </CustomButton>
           </Grid>
         </Grid>
       </Grid>

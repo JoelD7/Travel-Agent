@@ -16,6 +16,7 @@ import { currencyFormatter, flightPlaceholder } from "../../utils";
 import { reservationStyles } from "./reservation-styles";
 import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
 import { format } from "date-fns";
+import Helmet from "react-helmet";
 
 export function Reservations() {
   const style = reservationStyles();
@@ -70,12 +71,16 @@ export function Reservations() {
 
   return (
     <div className={style.mainContainer}>
+      <Helmet>
+        <title>Reservations</title>
+      </Helmet>
+
       <Navbar />
       <DashDrawer />
 
       <Grid container>
         <Grid item className={style.pageContentGrid}>
-          <Text bold style={{ marginBottom: "20px" }} component="h1">
+          <Text bold style={{ marginBottom: "20px", marginTop: "10px" }} component="h1">
             Reservations
           </Text>
 

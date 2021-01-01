@@ -34,21 +34,32 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
     prevArrow: <SliderArrow direction="left" />,
     responsive: [
       {
-        breakpoint: 990,
+        breakpoint: 1388,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToShow: getSlidesToShow(3),
+          slidesToScroll: getSlidesToShow(3),
         },
       },
       {
-        breakpoint: 740,
+        breakpoint: 782,
         settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
+          slidesToShow: getSlidesToShow(2),
+          slidesToScroll: getSlidesToShow(2),
+        },
+      },
+      {
+        breakpoint: 578,
+        settings: {
+          slidesToShow: getSlidesToShow(1),
+          slidesToScroll: getSlidesToShow(1),
         },
       },
     ],
   };
+
+  function getSlidesToShow(def: number) {
+    return restaurants.length > def ? def : restaurants.length;
+  }
 
   return (
     <div style={{ marginTop: "20px" }}>
@@ -67,7 +78,11 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
         </Grid>
 
         <Grid container>
-          <Slider {...sliderSettings} slidesToScroll={1} slidesToShow={4}>
+          <Slider
+            {...sliderSettings}
+            slidesToScroll={1}
+            slidesToShow={getSlidesToShow(4)}
+          >
             {restaurants.map((restaurant, i) => (
               <div key={i}>
                 <Card className={style.card}>

@@ -12,10 +12,15 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
   },
   mainGrid: {
     marginLeft: "265px",
-    width: "81%",
+    // width: "81%",
+    width: "calc(100% - 265px)",
+    [theme.breakpoints.down("sm")]: {
+      width: "85%",
+      margin: "auto",
+    },
   },
   slider: {
-    width: "90%",
+    width: "100%",
     display: "flex",
     alignItems: "center",
   },

@@ -12,6 +12,7 @@ import {
   faPhone,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
+import Helmet from "react-helmet";
 import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 export function ThingsToDoDetails() {
@@ -68,6 +69,10 @@ export function ThingsToDoDetails() {
   const style = thingsToDoDetailsStyles();
   return (
     <div className={style.mainContainer}>
+      <Helmet>
+        <title>{poi.name}</title>
+      </Helmet>
+
       <Navbar />
       <ServicesToolbar />
 

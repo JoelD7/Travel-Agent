@@ -53,6 +53,7 @@ import "swiper/swiper-bundle.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import Helmet from "react-helmet";
 
 interface ServiceIconType {
   hotel: boolean;
@@ -184,6 +185,10 @@ export function Home() {
 
   return (
     <div className="mainContainer">
+      <Helmet>
+        <title>Home</title>
+      </Helmet>
+
       <Grid id="section-1" container className={style.topContainer}>
         <Grid item xs={12}>
           <Navbar home />
@@ -267,7 +272,9 @@ export function Home() {
                 backgroundColor={Colors.GREEN}
                 textColor={Colors.BLUE}
                 style={styles.style_createTripButton}
-              >Create trip</CustomButton>
+              >
+                Create trip
+              </CustomButton>
             </div>
           </div>
         </Grid>
@@ -295,7 +302,9 @@ export function Home() {
                 backgroundColor={Colors.GREEN}
                 textColor={Colors.BLUE}
                 style={styles.style_createTripButton}
-              >Create trip</CustomButton>
+              >
+                Create trip
+              </CustomButton>
             </div>
           </div>
         </Grid>

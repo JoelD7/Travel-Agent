@@ -107,7 +107,7 @@ export function CustomButton({
 
   return (
     <Button
-      className={styles.button}
+      className={`${styles.button} ${className}`}
       startIcon={renderIcon()}
       onClick={onClick}
       type={submit ? "submit" : "button"}

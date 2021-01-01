@@ -27,6 +27,7 @@ import { restaurantsPlaceholder } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Slider from "react-slick";
 import Axios from "axios";
+import Helmet from "react-helmet";
 
 interface Restaurant_List {
   city: string;
@@ -229,6 +230,10 @@ export function Restaurant_List() {
 
   return (
     <div className={style.mainContainer}>
+      <Helmet>
+        <title>{`Restaurants in ${state.city}`}</title>
+      </Helmet>
+
       <Navbar />
       <ServicesToolbar />
 
@@ -236,12 +241,19 @@ export function Restaurant_List() {
         <Text
           component="h1"
           weight="bold"
-          style={{ textAlign: "center" }}
+          style={{ textAlign: "center", marginBottom: "20px" }}
         >{`Restaurants in ${state.city}`}</Text>
-        <Grid container className={style.pageContentContainer}>
+
+        <Grid container spacing={2} className={style.pageContentContainer}>
+          {/* Filters */}
           <Grid item className={style.filterGrid}>
             <div className={style.filterContainer}>
-              <Text className={style.filterTitle} component="h4" weight="bold">
+              <Text
+                color={Colors.BLUE}
+                className={style.filterTitle}
+                component="h4"
+                weight="bold"
+              >
                 Establishment
               </Text>
               <RestaurantEstablishments
@@ -251,7 +263,12 @@ export function Restaurant_List() {
 
               <Divider style={{ margin: "18px 0px 10px 0px" }} />
 
-              <Text className={style.filterTitle} component="h4" weight="bold">
+              <Text
+                color={Colors.BLUE}
+                className={style.filterTitle}
+                component="h4"
+                weight="bold"
+              >
                 Restaurant features
               </Text>
               <RestaurantFeature
@@ -261,7 +278,12 @@ export function Restaurant_List() {
 
               <Divider style={{ margin: "18px 0px 10px 0px" }} />
 
-              <Text className={style.filterTitle} component="h4" weight="bold">
+              <Text
+                color={Colors.BLUE}
+                className={style.filterTitle}
+                component="h4"
+                weight="bold"
+              >
                 Cuisines
               </Text>
               <RestaurantCuisinesSelec
@@ -271,6 +293,7 @@ export function Restaurant_List() {
             </div>
           </Grid>
 
+          {/* Filter button */}
           <Grid item className={style.filterButtonGrid}>
             <CustomButton
               icon={faFilter}
@@ -278,10 +301,11 @@ export function Restaurant_List() {
               style={{ paddingLeft: "10px", fontSize: "14px" }}
               onClick={() => setOpenDrawer(true)}
             >
-              Filter
+              Filters
             </CustomButton>
           </Grid>
 
+          {/* Restaurants */}
           <Grid item className={style.restaurantsGrid}>
             <RestaurantSlides restaurants={restaurants} title="Delivery Available" />
             <RestaurantSlides
@@ -297,6 +321,7 @@ export function Restaurant_List() {
               style={{ margin: "50px 0px 20px 0px" }}
               weight={500}
               component="h2"
+              bold
             >{`Top Restaurants in ${state.city}`}</Text>
             <div className={style.restaurantCardContainer}>
               {restaurants.map((restaurant, i) => (

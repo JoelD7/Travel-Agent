@@ -42,6 +42,7 @@ import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightListStyles } from "./flight-list-styles";
 import { FlightDetails } from "./FlightDetails";
+import Helmet from "react-helmet";
 
 export function Flight_List() {
   const style = flightListStyles();
@@ -279,6 +280,10 @@ export function Flight_List() {
 
   return (
     <div className={style.mainContainer}>
+      <Helmet>
+        <title>Flights to Dubai</title>
+      </Helmet>
+
       <Navbar />
       <ServicesToolbar />
 

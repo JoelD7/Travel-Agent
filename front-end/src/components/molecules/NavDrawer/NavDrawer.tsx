@@ -9,7 +9,15 @@ import {
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, Divider, Drawer, List, ListItem, ListItemIcon } from "@material-ui/core";
+import {
+  Avatar,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@material-ui/core";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { carlos, logoTypeWhiteFore } from "../../../assets";
@@ -114,14 +122,18 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
               rounded
               style={drawerButtonStyle}
               onClick={() => {}}
-            >Account</CustomButton>
+            >
+              Account
+            </CustomButton>
 
             <CustomButton
               backgroundColor={Colors.PURPLE}
               rounded
               style={drawerButtonStyle}
               onClick={() => {}}
-            >Make trip</CustomButton>
+            >
+              Make trip
+            </CustomButton>
           </div>
         ) : (
           <div style={{ fontFamily: Family }}>
@@ -130,7 +142,9 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
               rounded
               style={{ ...drawerButtonStyle, marginBottom: "0px" }}
               onClick={() => {}}
-            >Login</CustomButton>
+            >
+              Login
+            </CustomButton>
 
             <p style={{ color: "white", fontSize: "14px" }}>
               Or{" "}
@@ -163,24 +177,23 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
         {drawerOptions
           .filter((o) => o.user)
           .map((option, i) => (
-            <ListItem
-              selected={option.selected}
-              button
-              key={i}
-              classes={{
-                root: style.listItemRoot,
-                button: style.listItem,
-              }}
-              onClick={() => onOptionClick(option)}
-            >
-              <ListItemIcon>
-                <FontAwesomeIcon icon={option.icon} color="white" />
-              </ListItemIcon>
+            <Link key={i} style={getLinkStyle("white")} to={option.route}>
+              <ListItem
+                selected={option.selected}
+                button
+                classes={{
+                  root: style.listItemRoot,
+                  button: style.listItem,
+                }}
+                onClick={() => onOptionClick(option)}
+              >
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={option.icon} color="white" />
+                </ListItemIcon>
 
-              <Link style={getLinkStyle("white")} to={option.route}>
-                {option.label}
-              </Link>
-            </ListItem>
+                <ListItemText style={{ color: "white" }}>{option.label}</ListItemText>
+              </ListItem>
+            </Link>
           ))}
 
         <Divider style={{ backgroundColor: "#cecece" }} />
@@ -188,24 +201,24 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
         {drawerOptions
           .filter((o) => !o.user)
           .map((option, i) => (
-            <ListItem
-              selected={option.selected}
-              button
-              key={i}
-              classes={{
-                root: style.listItemRoot,
-                button: style.listItem,
-              }}
-              onClick={() => onOptionClick(option)}
-            >
-              <ListItemIcon>
-                <FontAwesomeIcon icon={option.icon} color="white" />
-              </ListItemIcon>
+            <Link style={getLinkStyle("white")} to={option.route}>
+              <ListItem
+                selected={option.selected}
+                button
+                key={i}
+                classes={{
+                  root: style.listItemRoot,
+                  button: style.listItem,
+                }}
+                onClick={() => onOptionClick(option)}
+              >
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={option.icon} color="white" />
+                </ListItemIcon>
 
-              <Link style={getLinkStyle("white")} to={option.route}>
-                {option.label}
-              </Link>
-            </ListItem>
+                <ListItemText style={{ color: "white" }}>{option.label}</ListItemText>
+              </ListItem>
+            </Link>
           ))}
       </List>
     </Drawer>

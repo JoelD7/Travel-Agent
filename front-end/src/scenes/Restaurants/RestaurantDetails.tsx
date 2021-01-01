@@ -6,6 +6,7 @@ import { Grid } from "@material-ui/core";
 import Ratings from "react-ratings-declarative";
 import { Colors, Shadow } from "../../styles";
 import { faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
+import Helmet from "react-helmet";
 
 export function RestaurantDetails() {
   const style = restaurantDetailsStyles();
@@ -61,6 +62,10 @@ export function RestaurantDetails() {
 
   return (
     <div className={style.mainContainer}>
+      <Helmet>
+        <title>{`Restaurant | ${restaurant.name}`}</title>
+      </Helmet>
+
       <Navbar />
       <ServicesToolbar />
 
@@ -85,14 +90,16 @@ export function RestaurantDetails() {
             <IconText text={restaurant.location.address} icon={faMapMarkerAlt} />
             <p style={{ margin: "auto 5px" }}>|</p>
             <IconText text={restaurant.phoneNumbers} icon={faPhone} />
-            
+
             <Grid item className={style.tripButtonGrid}>
               <CustomButton
                 style={{ boxShadow: Shadow.LIGHT }}
                 onClick={() => {}}
                 backgroundColor={Colors.GREEN}
                 rounded
-              >Include in trip</CustomButton>
+              >
+                Include in trip
+              </CustomButton>
             </Grid>
           </Grid>
         </Grid>
@@ -100,7 +107,7 @@ export function RestaurantDetails() {
         <Grid item className={style.imageGrid}>
           <Grid container style={{ height: "100%" }}>
             <img
-              src={restaurant.featuredImage}  
+              src={restaurant.featuredImage}
               className={style.restaurantImage}
               alt="restaurant image"
             />

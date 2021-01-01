@@ -3,13 +3,29 @@ import { Font } from "../../assets";
 import { Colors } from "../../styles";
 
 export const tripStyles = makeStyles((theme: Theme) => ({
-  detailsGrid: {
-    padding: "20px",
-  },
   detailsContainer: {
     borderRadius: "10px",
     border: "1px solid #CECECE",
     padding: "10px",
+  },
+  itineraryButton: {
+    fontSize: "16px",
+    alignSelf: "flex-start",
+    marginLeft: "auto",
+    [theme.breakpoints.down(706)]: {
+      display: "none",
+    },
+  },
+  itineraryIconButton: {
+    padding: "10px",
+    marginLeft: "auto",
+    backgroundColor: Colors.BLUE,
+    "&:hover": {
+      backgroundColor: Colors.BLUE_HOVER,
+    },
+    [theme.breakpoints.up(706)]: {
+      display: "none",
+    },
   },
   mainContainer: {
     fontFamily: Font.Family,
@@ -25,9 +41,27 @@ export const tripStyles = makeStyles((theme: Theme) => ({
       width: "85%",
     },
   },
+  detailsGrid: {
+    padding: "20px",
+    width: "25%",
+    [theme.breakpoints.down(1036)]: {
+      width: "30%",
+    },
+    [theme.breakpoints.down(973)]: {
+      width: "100%",
+    },
+  },
   photosGrid: {
     marginTop: "20px",
+    width: "75%",
+    [theme.breakpoints.down(1036)]: {
+      width: "70%",
+    },
+    [theme.breakpoints.down(973)]: {
+      width: "100%",
+    },
   },
+
   photoTitleContainer: {
     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/journey.jpg")`,
     backgroundSize: "cover",
@@ -49,5 +83,23 @@ export const tripStyles = makeStyles((theme: Theme) => ({
   },
   tripCardGrid: {
     marginTop: "20px",
+  },
+  tripCardContainerSlider: {
+    width: "25%",
+  },
+  tripCardContainer: {
+    width: "25%",
+    [theme.breakpoints.down(1380)]: {
+      width: "40%",
+      margin: "10px 0px",
+    },
+    [theme.breakpoints.down(813)]: {
+      width: "70%",
+      margin: "10px 0px",
+    },
+    [theme.breakpoints.down(508)]: {
+      width: "90%",
+      margin: "10px 0px",
+    },
   },
 }));

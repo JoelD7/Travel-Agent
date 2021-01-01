@@ -1154,7 +1154,7 @@ export const activitiesPlaceholder: Activity[] = [
   },
 ];
 
-export const tripPlaceholder = {
+export const tripPlaceholder: Trip = {
   id: "498650",
   name: "Journey through the alps",
   countries: ["Switzerland", "Austria", "France"],
@@ -1162,10 +1162,37 @@ export const tripPlaceholder = {
   places: 13,
   days: 30,
   startDate: new Date(2019, 6, 13),
+  albums: [
+    {
+      albumRoute: "",
+      name: "Ballon day!",
+      cover: "/Travel-Agent/globes.jpg",
+      photos: ["", "", "", ""],
+    },
+    {
+      albumRoute: "",
+      name: "Villages",
+      cover: "/Travel-Agent/country.jpg",
+      photos: ["", "", "", ""],
+    },
+    {
+      albumRoute: "",
+      name: "Ballon day!",
+      cover: "/Travel-Agent/globes.jpg",
+      photos: ["", "", "", ""],
+    },
+    {
+      albumRoute: "",
+      name: "Villages",
+      cover: "/Travel-Agent/country.jpg",
+      photos: ["", "", "", ""],
+    },
+  ],
+  coverPhoto: "",
   endDate: new Date(2019, 7, 13),
 };
 
-export const tripsPlaceholder = [
+export const tripsPlaceholder: Trip[] = [
   {
     id: "498650",
     name: "Journey through the alps",
@@ -1176,10 +1203,38 @@ export const tripsPlaceholder = [
     startDate: new Date(2019, 6, 13),
     endDate: new Date(2019, 7, 13),
     coverPhoto: "journey.jpg",
+    albums: [
+      {
+        albumRoute: "",
+        name: "Ballon day!",
+        cover: "/Travel-Agent/globes.jpg",
+        photos: ["", "", "", ""],
+      },
+      {
+        albumRoute: "",
+        name: "Villages",
+        cover: "/Travel-Agent/country.jpg",
+        photos: ["", "", "", ""],
+      },
+    ],
   },
   {
     id: "7008965",
     name: "Meso-american Tour",
+    albums: [
+      {
+        albumRoute: "",
+        name: "Ballon day!",
+        cover: "/Travel-Agent/globes.jpg",
+        photos: ["", "", "", ""],
+      },
+      {
+        albumRoute: "",
+        name: "Villages",
+        cover: "/Travel-Agent/country.jpg",
+        photos: ["", "", "", ""],
+      },
+    ],
     countries: ["Guatemala", "Mexico"],
     photos: 52,
     places: 9,
@@ -1196,6 +1251,20 @@ export const tripsPlaceholder = [
     places: 31,
     days: 30,
     startDate: new Date(2019, 4, 5),
+    albums: [
+      {
+        albumRoute: "",
+        name: "Ballon day!",
+        cover: "/Travel-Agent/globes.jpg",
+        photos: ["", "", "", ""],
+      },
+      {
+        albumRoute: "",
+        name: "Villages",
+        cover: "/Travel-Agent/country.jpg",
+        photos: ["", "", "", ""],
+      },
+    ],
     endDate: new Date(2019, 5, 5),
     coverPhoto: "country.jpg",
   },
@@ -1206,6 +1275,8 @@ export const tripsPlaceholder = [
   //   places: 13,
   //   days: 30,
   //   startDate: new Date(2019, 6, 13),
+  // albums:[],
+  // coverPhoto: '',
   //   endDate: new Date(2019, 7, 13),
   //   coverPhoto: "journey.jpg",
   // },
@@ -1216,6 +1287,8 @@ export const tripsPlaceholder = [
   //   places: 9,
   //   days: 15,
   //   startDate: new Date(2019, 8, 2),
+  // albums:[],
+  // coverPhoto: '',
   //   endDate: new Date(2019, 8, 17),
   //   coverPhoto: "globes.jpg",
   // },
@@ -1226,6 +1299,8 @@ export const tripsPlaceholder = [
   //   places: 31,
   //   days: 30,
   //   startDate: new Date(2019, 4, 5),
+  // albums:[],
+  // coverPhoto: '',
   //   endDate: new Date(2019, 5, 5),
   //   coverPhoto: "country.jpg",
   // },

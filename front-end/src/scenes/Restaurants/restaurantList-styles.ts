@@ -16,6 +16,23 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   },
   filterGrid: {
     width: "22%",
+    [theme.breakpoints.down(1040)]: {
+      display: "none",
+    },
+  },
+  restaurantsGrid: {
+    padding: "15px",
+    width: "77%",
+    [theme.breakpoints.down(1040)]: {
+      width: "100%",
+    },
+  },
+  filterButtonGrid: {
+    display: "none",
+    [theme.breakpoints.down(1040)]: {
+      display: "block",
+      width: "50%",
+    },
   },
   filterContainer: {
     boxShadow: Shadow.LIGHT,
@@ -30,10 +47,11 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
   },
-  restaurantCardContainer:{
-    borderRadius: '10px',
-    padding: '15px',
-    background: 'linear-gradient(90deg, rgb(245, 245, 245) 0%, rgb(240, 240, 240) 50%, rgb(245, 245, 245) 100%)',
+  restaurantCardContainer: {
+    borderRadius: "10px",
+    padding: "15px",
+    background:
+      "linear-gradient(90deg, rgb(245, 245, 245) 0%, rgb(240, 240, 240) 50%, rgb(245, 245, 245) 100%)",
   },
   restaurantCuisines: {
     fontSize: "13px",
@@ -42,25 +60,13 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
   },
-  restaurantsGrid: {
-    padding: "15px",
-    width: "77%",
-    marginLeft: "10px",
-  },
   browseByFoodGrid: {
     width: "60%",
     marginLeft: "41px",
   },
-  filterButtonGrid: {
-    display: "none",
-    marginBottom: "20px",
-    [theme.breakpoints.down(1040)]: {
-      display: "block",
-      width: "50%",
-    },
-  },
   filterTitle: {
     marginBottom: "0px",
+    marginTop: "5px",
     color: Colors.BLUE,
   },
   slider: {
