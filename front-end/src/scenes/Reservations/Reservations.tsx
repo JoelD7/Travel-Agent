@@ -80,9 +80,17 @@ export function Reservations() {
 
       <Grid container>
         <Grid item className={style.pageContentGrid}>
-          <Text bold style={{ marginBottom: "20px", marginTop: "10px" }} component="h1">
-            Reservations
-          </Text>
+          <IconText
+            style={{ marginBottom: "20px", marginTop: "10px" }}
+            iconStyle={{ padding: "12px" }}
+            shadow
+            size={35}
+            icon={faCalendar}
+          >
+            <Text bold component="h1">
+              Reservations
+            </Text>
+          </IconText>
 
           {/* Flights title */}
           <Grid item xs={12}>

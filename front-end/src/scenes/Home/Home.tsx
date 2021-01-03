@@ -186,7 +186,7 @@ export function Home() {
   return (
     <div className="mainContainer">
       <Helmet>
-        <title>Home</title>
+        <title>Tripper</title>
       </Helmet>
 
       <Grid id="section-1" container className={style.topContainer}>
@@ -194,6 +194,7 @@ export function Home() {
           <Navbar home />
           <ServicesToolbar home />
         </Grid>
+
         <Grid item className={style.reservationGrid}>
           <div className={style.reservationContainer}>
             <h3 style={{ textAlign: "center", color: Colors.BLUE }}>
@@ -251,7 +252,9 @@ export function Home() {
       <Grid id="section-2" container className={style.section}>
         <Grid item className={style.planTripGrid}>
           <div className={style.redirectTripContainer}>
-            <Text component="h2">Make a trip</Text>
+            <Text color="white" bold component="h2">
+              Make a trip
+            </Text>
 
             <p>Plan your trips however you want! </p>
 

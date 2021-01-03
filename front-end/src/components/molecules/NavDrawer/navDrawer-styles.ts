@@ -1,5 +1,6 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
+import { Font } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors, Shadow } from "../../../styles";
 
@@ -9,7 +10,7 @@ export const drawerButtonStyle: CreateCSSProperties<{}> = {
   marginBottom: "20px",
 };
 
-export const drawerStyles = makeStyles((theme: Theme) => ({ 
+export const drawerStyles = makeStyles((theme: Theme) => ({
   drawer: {
     width: "250px",
     backgroundColor: Colors.BLUE,
@@ -33,6 +34,11 @@ export const drawerStyles = makeStyles((theme: Theme) => ({
       "&:hover": {
         backgroundColor: Colors.GREEN_DRAWER,
       },
+    },
+  },
+  listItemText: {
+    "&.MuiTypography-body1": {
+      fontFamily: Font.Family,
     },
   },
 }));

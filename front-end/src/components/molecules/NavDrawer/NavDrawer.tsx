@@ -1,3 +1,4 @@
+import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 import {
   faCalendar,
   faCar,
@@ -11,16 +12,18 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Avatar,
+  createMuiTheme,
   Divider,
   Drawer,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  ThemeProvider,
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { carlos, logoTypeWhiteFore } from "../../../assets";
+import { carlos, Font, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors } from "../../../styles";
 import { getLinkStyle, Routes } from "../../../utils";
@@ -40,7 +43,24 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
   let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
   let page = "/" + segmentedURL[segmentedURL.length - 1];
 
+  const theme = createMuiTheme({
+    overrides: {
+      MuiTypography: {
+        body1: {
+          fontFamily: Font.Family,
+        },
+      },
+    },
+  });
+
   const [drawerOptions, setDrawerOptions] = useState<DrawerOptions[]>([
+    {
+      label: "Itinerary",
+      icon: faCalendarAlt,
+      route: Routes.ITINERARY,
+      selected: page === Routes.ITINERARY,
+      user: true,
+    },
     {
       label: "Reservations",
       icon: faCalendar,
@@ -174,52 +194,58 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
 
         <Divider style={{ backgroundColor: "#cecece" }} />
 
-        {drawerOptions
-          .filter((o) => o.user)
-          .map((option, i) => (
-            <Link key={i} style={getLinkStyle("white")} to={option.route}>
-              <ListItem
-                selected={option.selected}
-                button
-                classes={{
-                  root: style.listItemRoot,
-                  button: style.listItem,
-                }}
-                onClick={() => onOptionClick(option)}
-              >
-                <ListItemIcon>
-                  <FontAwesomeIcon icon={option.icon} color="white" />
-                </ListItemIcon>
+        <ThemeProvider theme={theme}>
+          {drawerOptions
+            .filter((o) => o.user)
+            .map((option, i) => (
+              <Link key={i} style={getLinkStyle("white")} to={option.route}>
+                <ListItem
+                  selected={option.selected}
+                  button
+                  classes={{
+                    root: style.listItemRoot,
+                    button: style.listItem,
+                  }}
+                  onClick={() => onOptionClick(option)}
+                >
+                  <ListItemIcon>
+                    <FontAwesomeIcon icon={option.icon} color="white" />
+                  </ListItemIcon>
 
-                <ListItemText style={{ color: "white" }}>{option.label}</ListItemText>
-              </ListItem>
-            </Link>
-          ))}
+                  <ListItemText style={{ color: "white" }}>{option.label}</ListItemText>
+                </ListItem>
+              </Link>
+            ))}
+        </ThemeProvider>
 
         <Divider style={{ backgroundColor: "#cecece" }} />
 
-        {drawerOptions
-          .filter((o) => !o.user)
-          .map((option, i) => (
-            <Link style={getLinkStyle("white")} to={option.route}>
-              <ListItem
-                selected={option.selected}
-                button
-                key={i}
-                classes={{
-                  root: style.listItemRoot,
-                  button: style.listItem,
-                }}
-                onClick={() => onOptionClick(option)}
-              >
-                <ListItemIcon>
-                  <FontAwesomeIcon icon={option.icon} color="white" />
-                </ListItemIcon>
+        <ThemeProvider theme={theme}>
+          {drawerOptions
+            .filter((o) => !o.user)
+            .map((option, i) => (
+              <Link style={getLinkStyle("white")} to={option.route}>
+                <ListItem
+                  selected={option.selected}
+                  button
+                  key={i}
+                  classes={{
+                    root: style.listItemRoot,
+                    button: style.listItem,
+                  }}
+                  onClick={() => onOptionClick(option)}
+                >
+                  <ListItemIcon>
+                    <FontAwesomeIcon icon={option.icon} color="white" />
+                  </ListItemIcon>
 
-                <ListItemText style={{ color: "white" }}>{option.label}</ListItemText>
-              </ListItem>
-            </Link>
-          ))}
+                  <ListItemText style={{ color: "white" }} className={style.listItemText}>
+                    {option.label}
+                  </ListItemText>
+                </ListItem>
+              </Link>
+            ))}
+        </ThemeProvider>
       </List>
     </Drawer>
   );

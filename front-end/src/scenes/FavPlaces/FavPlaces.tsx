@@ -11,7 +11,7 @@ import {
 } from "../../components";
 import { favPlacesStyles } from "./favPlaces-styles";
 import { getLinkStyle, POICategory, poisPlaceholder } from "../../utils";
-import { faCircle, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faHeart, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { Colors } from "../../styles";
 import Rating from "react-rating";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -115,9 +115,11 @@ export function FavPlaces() {
 
       <Grid container className={styles.mainGrid}>
         <Grid item xs={12} style={{ marginTop: "10px" }}>
-          <Text component="h1" bold>
-            Your favorite spots
-          </Text>
+          <IconText iconStyle={{ padding: "7px" }} shadow size={44} icon={faHeart}>
+            <Text component="h1" bold>
+              Your favorite spots
+            </Text>
+          </IconText>
           {categoryGroups && (
             <div>
               {categoryGroups
@@ -185,7 +187,6 @@ export function FavPlaces() {
 
                                   <IconText
                                     style={{ marginTop: "10px" }}
-                                    textColor={Colors.BLUE}
                                     icon={faMapMarkerAlt}
                                     text={
                                       place.location.formattedAddress

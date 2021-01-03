@@ -287,6 +287,7 @@ export function Flight_List() {
       <Navbar />
       <ServicesToolbar />
 
+      {/* Page title box */}
       <div className={style.pageTitleContainerPic}>
         <Grid container spacing={4} className={style.pageTitleContainer}>
           <Grid item xs={12}>
@@ -324,6 +325,7 @@ export function Flight_List() {
           )}
 
           <ThemeProvider theme={theme}>
+            {/* Departure and return dates */}
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid item className={style.datepickerGrid}>
                 <h5 className={style.reservationParamText}>Departure</h5>
@@ -353,6 +355,7 @@ export function Flight_List() {
               )}
             </MuiPickersUtilsProvider>
 
+            {/* Passenger quantity selectors */}
             {passengersParams.map((passenger, i) => (
               <Grid item key={i} className={style.passengerParamGrid}>
                 <h5 className={style.reservationParamText}>{passenger.label}</h5>
@@ -380,6 +383,7 @@ export function Flight_List() {
               </Grid>
             ))}
 
+            {/* Class */}
             <Grid item className={style.reservParamGrid}>
               <h5 className={style.reservationParamText}>Class</h5>
 
@@ -422,6 +426,7 @@ export function Flight_List() {
         </Grid>
       </div>
 
+      {/* Page content */}
       <div className={style.pageContentContainer}>
         <Grid container className={style.pageContentContainerGrid}>
           <Grid item className={style.filtersGrid}>
@@ -441,7 +446,7 @@ export function Flight_List() {
 
           <Grid item className={style.flightsGrid}>
             {flights.map((flight, i) => (
-              <CardFlight key={i} flight={flight} />
+              <CardFlight variant="regular" key={i} flight={flight} />
             ))}
           </Grid>
         </Grid>

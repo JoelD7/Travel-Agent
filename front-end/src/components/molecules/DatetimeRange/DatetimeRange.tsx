@@ -15,7 +15,6 @@ export function DatetimeRange({ updateState, value, max, min }: DatetimeRange) {
   let sliderValue: number[] = value.map((date) => date.valueOf());
 
   const [slider, setSlider] = useState<number[]>(sliderValue);
-  console.log(`slider`, slider);
 
   function onSliderChange(event: ChangeEvent<{}>, value: number | number[]) {
     setSlider(value as number[]);
@@ -29,9 +28,9 @@ export function DatetimeRange({ updateState, value, max, min }: DatetimeRange) {
   return (
     <div onBlur={() => updateState(slider)}>
       <div style={{ display: "flex", width: "88%", margin: "auto" }}>
-        <p
-          style={{ textAlign: "start", fontSize: "16px" }}
-        >{`${parseNumberToDateLabel(slider[0])}`}</p>
+        <p style={{ textAlign: "start", fontSize: "16px" }}>{`${parseNumberToDateLabel(
+          slider[0]
+        )}`}</p>
 
         <p
           style={{ textAlign: "end", fontSize: "16px", marginLeft: "auto" }}
@@ -43,11 +42,7 @@ export function DatetimeRange({ updateState, value, max, min }: DatetimeRange) {
           value={slider}
           step={900000}
           max={max.valueOf()}
-          min={
-            min.valueOf() < value[0].valueOf()
-              ? min.valueOf()
-              : value[0].valueOf()
-          }
+          min={min.valueOf() < value[0].valueOf() ? min.valueOf() : value[0].valueOf()}
           onChange={onSliderChange}
           classes={{
             root: style.sliderRoot,

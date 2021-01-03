@@ -1161,7 +1161,7 @@ export const tripPlaceholder: Trip = {
   photos: 184,
   places: 13,
   days: 30,
-  startDate: new Date(2019, 6, 13),
+  startDate: new Date(2021, 0, 13),
   albums: [
     {
       albumRoute: "",
@@ -1189,7 +1189,7 @@ export const tripPlaceholder: Trip = {
     },
   ],
   coverPhoto: "",
-  endDate: new Date(2019, 7, 13),
+  endDate: new Date(2021, 0, 23),
 };
 
 export const tripsPlaceholder: Trip[] = [

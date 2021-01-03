@@ -1,11 +1,12 @@
-import { Routes } from "../../../utils";
+import { getLinkStyle, Routes } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/DrawerOptionsType";
 import React, { useState } from "react";
 import { faCalendar, faHeart, faPlane } from "@fortawesome/free-solid-svg-icons";
 import { Drawer, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { dashDrawerStyles } from "./dashDrawer-styles";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 
 export function DashDrawer() {
   const style = dashDrawerStyles();
@@ -14,6 +15,13 @@ export function DashDrawer() {
   let page = "/" + segmentedURL[segmentedURL.length - 1];
 
   const [drawerOptions, setDrawerOptions] = useState<DrawerOptions[]>([
+    {
+      label: "Itinerary",
+      icon: faCalendarAlt,
+      route: Routes.ITINERARY,
+      selected: page === Routes.ITINERARY,
+      user: true,
+    },
     {
       label: "Reservations",
       icon: faCalendar,
@@ -48,7 +56,6 @@ export function DashDrawer() {
       }
     });
 
-    history.push(option.route);
     setDrawerOptions(newDrawer);
   }
 
@@ -56,24 +63,25 @@ export function DashDrawer() {
     <Drawer anchor="left" variant="permanent" classes={{ paper: style.drawer }}>
       <List style={{ marginTop: "40px" }}>
         {drawerOptions.map((option, i) => (
-          <ListItem
-            selected={option.selected}
-            button
-            key={i}
-            classes={{
-              root: style.listItemRoot,
-              button: style.listItem,
-            }}
-            onClick={() => onOptionClick(option)}
-          >
-            <ListItemIcon>
-              <FontAwesomeIcon icon={option.icon} color="white" />
-            </ListItemIcon>
-            <ListItemText
-              classes={{ primary: style.drawerText }}
-              primary={option.label}
-            />
-          </ListItem>
+          <Link key={i} style={getLinkStyle("white")} to={option.route}>
+            <ListItem
+              selected={option.selected}
+              button
+              classes={{
+                root: style.listItemRoot,
+                button: style.listItem,
+              }}
+              onClick={() => onOptionClick(option)}
+            >
+              <ListItemIcon>
+                <FontAwesomeIcon icon={option.icon} color="white" />
+              </ListItemIcon>
+              <ListItemText
+                classes={{ primary: style.drawerText }}
+                primary={option.label}
+              />
+            </ListItem>
+          </Link>
         ))}
       </List>
     </Drawer>

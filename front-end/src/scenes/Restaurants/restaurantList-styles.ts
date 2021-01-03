@@ -1,4 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
+import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
@@ -8,7 +9,7 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     margin: "auto 5px",
   },
   mainContainer: {
-    fontFamily: Family,
+    fontFamily: Font.Family,
   },
   pageContentContainer: {
     width: "90%",

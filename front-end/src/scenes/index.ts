@@ -13,3 +13,4 @@ export { Trips } from "./Trip/Trips";
 export { TripDetails } from "./Trip/TripDetails";
 export { FavPlaces } from "./FavPlaces/FavPlaces";
 export { Reservations } from "./Reservations/Reservations";
+export { Itinerary } from "./Itinerary/Itinerary";

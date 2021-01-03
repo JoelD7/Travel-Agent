@@ -6,6 +6,7 @@ import {
   Flight_List,
   Home,
   Hotels,
+  Itinerary,
   Login,
   Reservations,
   RestaurantDetails,
@@ -36,6 +37,7 @@ export default function App() {
         <Route exact path={`${Routes.TRIPS}/:id`} component={TripDetails} />
         <Route exact path={Routes.FAVORITE_PLACES} component={FavPlaces} />
         <Route exact path={Routes.RESERVATIONS} component={Reservations} />
+        <Route exact path={Routes.ITINERARY} component={Itinerary} />
       </Switch>
     </Router>
   );
