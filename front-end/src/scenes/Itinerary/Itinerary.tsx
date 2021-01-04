@@ -1,9 +1,23 @@
 import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
-import { Grid } from "@material-ui/core";
-import { addDays, eachDayOfInterval, format, getDate } from "date-fns";
+import {
+  faChevronCircleLeft,
+  faChevronCircleRight,
+  faChevronLeft,
+  faPlaneDeparture,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CardActionArea, Grid, IconButton, Slide } from "@material-ui/core";
+import {
+  addDays,
+  addMonths,
+  eachDayOfInterval,
+  format,
+  getDate,
+  subMonths,
+} from "date-fns";
 import { endOfMonth, subDays } from "date-fns/esm";
 import React, { useEffect, useState } from "react";
-import { DashDrawer, IconText, Navbar, Text } from "../../components";
+import { CustomButton, DashDrawer, IconText, Navbar, Text } from "../../components";
 import { Colors } from "../../styles";
 import { tripPlaceholder } from "../../utils";
 import { itineraryStyles } from "./itinerary-styles";
@@ -31,8 +45,16 @@ export function Itinerary() {
     "Saturday",
   ];
 
+  const [index, setIndex] = useState<number>(0);
+
   const [calendarItems, setCalendarItems] = useState<CalendarItem[]>([]);
-  const [month, setMonth] = useState<number>(new Date(Date.now()).getMonth());
+  const [month, setMonth] = useState<number>(trip.startDate.getMonth());
+
+  const [baseDate, setBaseDate] = useState<Date>(trip.startDate);
+
+  const [direction, setDirection] = useState<"left" | "right">("left");
+
+  const [slideIn, setSlideIn] = useState<boolean>(true);
 
   const tripDateInterval: Date[] = eachDayOfInterval({
     start: trip.startDate,
@@ -41,15 +63,11 @@ export function Itinerary() {
 
   useEffect(() => {
     initializeCalendarItems();
-  }, []);
+  }, [baseDate]);
 
   function initializeCalendarItems() {
-    let firstDay = getFirstDayOfMonth(new Date(Date.now()));
-    let firstDayDate = new Date(
-      trip.startDate.getFullYear(),
-      trip.startDate.getMonth(),
-      1
-    );
+    let firstDay = getFirstDayOfMonth(baseDate);
+    let firstDayDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1);
     let tempCalendarItems: CalendarItem[] = [];
     let gridCount = 0;
 
@@ -87,7 +105,7 @@ export function Itinerary() {
       curDate = addDays(curDate, 1);
     }
 
-    for (let i = lastWeekDay, j = lastDay + 1; i < 6 - lastWeekDay; i++, j++) {
+    for (let i = 0; i < 6 - lastWeekDay; i++) {
       tempCalendarItems.push({
         day: curDate.getDate(),
         active: false,
@@ -160,6 +178,51 @@ export function Itinerary() {
           </Text>
         </IconText>
 
+        {/* Date selector */}
+        <Grid container>
+          <CustomButton
+            textColor="black"
+            style={{ fontSize: "22px", fontWeight: "bold" }}
+            backgroundColor="rgba(0,0,0,0)"
+          >
+            {format(baseDate, "MMMM yyyy")}
+          </CustomButton>
+
+          <IconButton
+            onClick={() => {
+              // setSlideIn(false);
+              setBaseDate(subMonths(baseDate, 1));
+              // setTimeout(() => {
+              //   setDirection("right");
+              //   setSlideIn(true);
+              // }, 100);
+            }}
+          >
+            <FontAwesomeIcon icon={faChevronCircleLeft} color={Colors.PURPLE} />
+          </IconButton>
+
+          <IconButton
+            onClick={() => {
+              // setSlideIn(false);
+              setBaseDate(addMonths(baseDate, 1));
+              // setTimeout(() => {
+              //   setDirection("left");
+              //   setSlideIn(true);
+              // }, 100);
+            }}
+          >
+            <FontAwesomeIcon icon={faChevronCircleRight} color={Colors.PURPLE} />
+          </IconButton>
+
+          <CustomButton
+            rounded
+            style={{ fontSize: "16px", marginLeft: "auto" }}
+            backgroundColor={Colors.GREEN}
+          >
+            Legend
+          </CustomButton>
+        </Grid>
+
         {/* Days container */}
         <Grid container className={style.daysContainer}>
           {days.map((day, i) => (
@@ -172,26 +235,43 @@ export function Itinerary() {
         </Grid>
 
         {/* Calendar grid */}
-        <Grid container className={style.calendarGrid}>
-          {calendarItems.map((item, i) => (
-            <Grid
-              item
-              key={i}
-              className={`${style.calendarItem} ${getCalendarItemBorder(item)}`}
-              style={{ backgroundColor: item.tripDay ? "#002E431A" : "white" }}
-            >
-              {item.tripDay ? (
-                <Text bold color={Colors.BLUE} component="h4">
-                  {item.day}
-                </Text>
-              ) : (
-                <Text color={item.active ? "black" : "#8d8d8d"} component="h4">
-                  {item.day}
-                </Text>
-              )}
-            </Grid>
-          ))}
-        </Grid>
+        <Slide direction={direction} in={slideIn} mountOnEnter unmountOnExit>
+          <Grid container className={style.calendarGrid}>
+            {calendarItems.map((item, i) => (
+              <CardActionArea
+                disabled={!item.active}
+                style={{ backgroundColor: item.tripDay ? "#002E431A" : "white" }}
+                className={`${style.calendarItem} ${getCalendarItemBorder(item)}`}
+              >
+                <Grid container style={{ height: "100%" }}>
+                  <Grid item xs={12}>
+                    {item.tripDay ? (
+                      <Text bold color={Colors.BLUE} component="h4">
+                        {item.day}
+                      </Text>
+                    ) : (
+                      <Text color={item.active ? "black" : "#8d8d8d"} component="h4">
+                        {item.day}
+                      </Text>
+                    )}
+                  </Grid>
+
+                  {/* Icon grid */}
+                  <Grid
+                    item
+                    xs={12}
+                    style={{ alignSelf: "flex-end", marginLeft: "auto" }}
+                  >
+                    <Grid container>
+                      <IconText icon={faPlaneDeparture} />
+                      <IconText icon={faPlaneDeparture} />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </CardActionArea>
+            ))}
+          </Grid>
+        </Slide>
       </div>
     </div>
   );

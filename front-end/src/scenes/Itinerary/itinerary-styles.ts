@@ -9,6 +9,9 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
     width: "calc(80vw / 7)",
     height: "75px",
     paddingLeft: "5px",
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
   },
   calendarItemBorderTopLeft: {
     borderTop: "1px solid #cecece",
