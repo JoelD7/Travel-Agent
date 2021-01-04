@@ -4,6 +4,9 @@ import * as POICategory from "./POICategory";
 import { CSSProperties } from "@material-ui/styles";
 import { Colors } from "../styles";
 import { parseISO } from "date-fns";
+import { Trip } from "./types/Trip";
+import { EventType } from "./types";
+import { Hotel } from "./types/Hotel";
 export * from "./slices";
 export * from "./types";
 export * from "./functions/functions";
@@ -1154,6 +1157,272 @@ export const activitiesPlaceholder: Activity[] = [
   },
 ];
 
+export const flightsPlaceholder: Flight[] = [
+  {
+    price: {
+      currency: "USD",
+      total: 245,
+    },
+    class: "Economy",
+    itineraries: [
+      {
+        duration: "PT8H15M",
+        segments: [
+          {
+            departure: {
+              iata: "SIN",
+              city: "Singapore",
+              at: parseISO("2021-02-02T00:30:00"),
+              terminal: "2",
+            },
+            arrival: {
+              iata: "DMK",
+              city: "Bangkok",
+              at: parseISO("2021-02-02T23:30:00"),
+              terminal: "31",
+            },
+            carrier: "Egyptair",
+            duration: "PT8H15M",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    price: {
+      currency: "USD",
+      total: 198,
+    },
+    class: "Economy",
+    itineraries: [
+      {
+        duration: "PT6H15M",
+        segments: [
+          {
+            departure: {
+              iata: "SIN",
+              city: "Singapore",
+              at: parseISO("2021-02-02T07:15:00"),
+              terminal: "2",
+            },
+            arrival: {
+              iata: "DXB",
+              city: "Dubai",
+              at: parseISO("2021-02-02T13:39:00"),
+              terminal: "31",
+            },
+            carrier: "Egyptair",
+            duration: "PT6H15M",
+          },
+        ],
+      },
+      {
+        duration: "PT8H25M",
+        segments: [
+          {
+            departure: {
+              iata: "DXB",
+              city: "Dubai",
+              at: parseISO("2021-02-12T09:15:00"),
+              terminal: "2",
+            },
+            arrival: {
+              iata: "SIN",
+              city: "Singapore",
+              at: parseISO("2021-02-12T16:55:00"),
+              terminal: "31",
+            },
+            carrier: "Emirates",
+            duration: "PT8H25M",
+          },
+        ],
+      },
+    ],
+  },
+];
+
+export const flightPlaceholder: Flight = {
+  price: {
+    currency: "USD",
+    total: 198,
+  },
+  class: "Economy",
+  itineraries: [
+    {
+      duration: "PT6H15M",
+      segments: [
+        {
+          departure: {
+            iata: "SIN",
+            city: "Singapore",
+            at: parseISO("2021-02-02T07:15:00"),
+            terminal: "2",
+          },
+          arrival: {
+            iata: "DXB",
+            city: "Dubai",
+            at: parseISO("2021-02-02T13:39:00"),
+            terminal: "31",
+          },
+          carrier: "Egyptair",
+          duration: "PT6H15M",
+        },
+      ],
+    },
+    {
+      duration: "PT8H25M",
+      segments: [
+        {
+          departure: {
+            iata: "DXB",
+            city: "Dubai",
+            at: parseISO("2021-02-12T09:15:00"),
+            terminal: "2",
+          },
+          arrival: {
+            iata: "SIN",
+            city: "Singapore",
+            at: parseISO("2021-02-12T16:55:00"),
+            terminal: "31",
+          },
+          carrier: "Emirates",
+          duration: "PT8H25M",
+        },
+      ],
+    },
+  ],
+};
+
+export const hotelPlaceholder: Hotel = {
+  name: "Sheraton Santo Domingo",
+  address: "Calle Fco. Ramirez, #33, Santo Domingo, Rep. Dom.",
+  amenities: [
+    HotelAmenity.AIR_CONDITIONING,
+    HotelAmenity.CASINO,
+    HotelAmenity.FITNESS_CENTER,
+    HotelAmenity.PARKING,
+  ],
+  phoneNumber: "809-789-2560",
+  pricePerNight: 195,
+  stars: 5,
+  image: "sheraton.jpg",
+};
+
+const poiArray: POI[] = [
+  {
+    id: "49c54c1bf964a520ed561fe3",
+    name: "The Morgan Library & Museum",
+    attributes: {
+      groups: [],
+    },
+    bestPhoto: { height: 0, prefix: "", suffix: "", width: 0 },
+    contact: {},
+    hours: {
+      timeframes: [],
+    },
+    rating: 5,
+    url: "",
+
+    location: {
+      address: "225 Madison Ave",
+      crossStreet: "btwn E 36th & E 37th St",
+      lat: 40.74921,
+      lng: -73.98153,
+      distance: 363,
+      postalCode: "10016",
+      city: "New York",
+      state: "NY",
+      country: "United States",
+      formattedAddress: [
+        "225 Madison Ave (btwn E 36th & E 37th St)",
+        "New York, NY 10016",
+        "United States",
+      ],
+    },
+    categories: [
+      {
+        id: "4bf58dd8d48988d181941735",
+        name: "Museum",
+        pluralName: "Museums",
+        shortName: "Museum",
+      },
+    ],
+  },
+  {
+    id: "4e8c7d54e5fa774802eb9515",
+    name: "Hulu Theater",
+    attributes: {
+      groups: [],
+    },
+    bestPhoto: { height: 0, prefix: "", suffix: "", width: 0 },
+    contact: {},
+    hours: {
+      timeframes: [],
+    },
+    rating: 5,
+    url: "",
+
+    location: {
+      address: "4 Penn Plz",
+      lat: 40.750923181108604,
+      lng: -73.99407910561577,
+      distance: 760,
+      postalCode: "10121",
+      city: "New York",
+      state: "NY",
+      country: "United States",
+      formattedAddress: ["4 Penn Plz", "New York, NY 10121", "United States"],
+    },
+    categories: [
+      {
+        id: "4bf58dd8d48988d1e5931735",
+        name: "Music Venue",
+        pluralName: "Music Venues",
+        shortName: "Music Venue",
+      },
+    ],
+  },
+  {
+    id: "53866567498ea4ed73cabb0c",
+    name: "Dear Irving",
+    attributes: {
+      groups: [],
+    },
+    bestPhoto: { height: 0, prefix: "", suffix: "", width: 0 },
+    contact: {},
+    hours: {
+      timeframes: [],
+    },
+    rating: 5,
+    url: "",
+
+    location: {
+      address: "55 Irving Pl",
+      crossStreet: "at E 17th St",
+      lat: 40.736088656671825,
+      lng: -73.98732376809846,
+      distance: 1377,
+      postalCode: "10003",
+      city: "New York",
+      state: "NY",
+      country: "United States",
+      formattedAddress: [
+        "55 Irving Pl (at E 17th St)",
+        "New York, NY 10003",
+        "United States",
+      ],
+    },
+    categories: [
+      {
+        id: "4bf58dd8d48988d116941735",
+        name: "Bar",
+        pluralName: "Bars",
+        shortName: "Cocktail",
+      },
+    ],
+  },
+];
+
 export const tripPlaceholder: Trip = {
   id: "498650",
   name: "Journey through the alps",
@@ -1190,6 +1459,44 @@ export const tripPlaceholder: Trip = {
   ],
   coverPhoto: "",
   endDate: new Date(2021, 0, 23),
+  itinerary: [
+    {
+      type: EventType.Flight,
+      start: flightPlaceholder.itineraries[0].segments[0].departure.at,
+      end: flightPlaceholder.itineraries[0].segments[0].arrival.at,
+      detail: flightPlaceholder,
+    },
+    {
+      type: EventType.Flight,
+      start: flightPlaceholder.itineraries[1].segments[0].departure.at,
+      end: flightPlaceholder.itineraries[1].segments[0].arrival.at,
+      detail: flightPlaceholder,
+    },
+    {
+      type: EventType.Hotel,
+      start: new Date(2021, 0, 13, 14, 35),
+      end: new Date(2021, 0, 17, 11, 35),
+      detail: hotelPlaceholder,
+    },
+    {
+      type: EventType.POI,
+      start: new Date(2021, 0, 16, 16, 0),
+      end: new Date(2021, 0, 16, 17, 0),
+      detail: poiArray[0],
+    },
+    {
+      type: EventType.POI,
+      start: new Date(2021, 0, 19, 12, 0),
+      end: new Date(2021, 0, 19, 14, 0),
+      detail: poiArray[1],
+    },
+    {
+      type: EventType.POI,
+      start: new Date(2021, 0, 21, 0, 0),
+      end: new Date(2021, 0, 21, 3, 0),
+      detail: poiArray[2],
+    },
+  ],
 };
 
 export const tripsPlaceholder: Trip[] = [
@@ -1304,90 +1611,6 @@ export const tripsPlaceholder: Trip[] = [
   //   endDate: new Date(2019, 5, 5),
   //   coverPhoto: "country.jpg",
   // },
-];
-
-export const flightPlaceholder: Flight[] = [
-  {
-    price: {
-      currency: "USD",
-      total: 245,
-    },
-    class: "Economy",
-    itineraries: [
-      {
-        duration: "PT8H15M",
-        segments: [
-          {
-            departure: {
-              iata: "SIN",
-              city: "Singapore",
-              at: parseISO("2021-02-02T00:30:00"),
-              terminal: "2",
-            },
-            arrival: {
-              iata: "DMK",
-              city: "Bangkok",
-              at: parseISO("2021-02-02T23:30:00"),
-              terminal: "31",
-            },
-            carrier: "Egyptair",
-            duration: "PT8H15M",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    price: {
-      currency: "USD",
-      total: 198,
-    },
-    class: "Economy",
-    itineraries: [
-      {
-        duration: "PT6H15M",
-        segments: [
-          {
-            departure: {
-              iata: "SIN",
-              city: "Singapore",
-              at: parseISO("2021-02-02T07:15:00"),
-              terminal: "2",
-            },
-            arrival: {
-              iata: "DXB",
-              city: "Dubai",
-              at: parseISO("2021-02-02T13:39:00"),
-              terminal: "31",
-            },
-            carrier: "Egyptair",
-            duration: "PT6H15M",
-          },
-        ],
-      },
-      {
-        duration: "PT8H25M",
-        segments: [
-          {
-            departure: {
-              iata: "DXB",
-              city: "Dubai",
-              at: parseISO("2021-02-12T09:15:00"),
-              terminal: "2",
-            },
-            arrival: {
-              iata: "SIN",
-              city: "Singapore",
-              at: parseISO("2021-02-12T16:55:00"),
-              terminal: "31",
-            },
-            carrier: "Emirates",
-            duration: "PT8H25M",
-          },
-        ],
-      },
-    ],
-  },
 ];
 
 export const dashDrawerSeparation: CSSProperties = {

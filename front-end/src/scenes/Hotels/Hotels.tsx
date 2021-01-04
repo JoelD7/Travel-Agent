@@ -38,7 +38,7 @@ import {
 } from "../../components";
 import { HotelAmenitiesSelector } from "../../components/atoms/HotelAmenitiesSelector/HotelAmenitiesSelector";
 import { Colors, Shadow } from "../../styles";
-import { HotelAmenity, muiDateFormatter } from "../../utils";
+import { HotelAmenity, hotelPlaceholder, muiDateFormatter } from "../../utils";
 import { AmenitiesList, Amenity } from "../../utils/HotelAmenities";
 import { Hotel } from "../../utils/types/Hotel";
 import { hotelsStyles } from "./hotels-styles";
@@ -164,22 +164,7 @@ export function Hotels() {
     amenities: AmenitiesList,
   });
 
-  const hotels: Hotel[] = [
-    {
-      name: "Sheraton Santo Domingo",
-      address: "Calle Fco. Ramirez, #33, Santo Domingo, Rep. Dom.",
-      amenities: [
-        HotelAmenity.AIR_CONDITIONING,
-        HotelAmenity.CASINO,
-        HotelAmenity.FITNESS_CENTER,
-        HotelAmenity.PARKING,
-      ],
-      phoneNumber: "809-789-2560",
-      pricePerNight: 195,
-      stars: 5,
-      image: "sheraton.jpg",
-    },
-  ];
+  const hotels: Hotel[] = [hotelPlaceholder];
   const [openDrawer, setOpenDrawer] = useState(false);
 
   return (

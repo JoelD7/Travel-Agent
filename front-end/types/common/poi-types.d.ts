@@ -6,7 +6,7 @@ interface POI {
   categories: POICategory[];
   url: string;
   rating: number; //1-10
-  photos: POIPhotos;
+  photos?: POIPhotos;
   hours: POIHours;
   bestPhoto: POIPhotoItems;
   attributes: POIAttributes;

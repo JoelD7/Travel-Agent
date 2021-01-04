@@ -1,6 +1,13 @@
+import {
+  faHotel,
+  faLocationArrow,
+  faPlaneDeparture,
+  faUtensils,
+} from "@fortawesome/free-solid-svg-icons";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { CSSProperties } from "@material-ui/styles";
 import { format } from "date-fns";
+import { EventType } from "../types";
 
 export function muiDateFormatter(date: MaterialUiPickersDate, invalidLabel: string) {
   return date
@@ -113,4 +120,37 @@ export function parseFlightDuration(duration: string) {
     });
 
   return `${hours}h ${minutes}m`;
+}
+
+/**
+ * Returns an icon related to an event type.
+ * @param type type of the event.
+ */
+export function eventToIcon(type: EventType.EventType) {
+  switch (type) {
+    case EventType.Flight:
+      return faPlaneDeparture;
+
+    case EventType.Hotel:
+      return faHotel;
+
+    case EventType.Restaurant:
+      return faUtensils;
+
+    case EventType.POI:
+      return faLocationArrow;
+  }
+}
+
+/**
+ * Checks if two dates are equal ignoring the time values
+ * @param dateOne first date
+ * @param dateTwo second date
+ */
+export function areDatesEqual(dateOne: Date, dateTwo: Date) {
+  return (
+    dateOne.getFullYear() === dateTwo.getFullYear() &&
+    dateOne.getMonth() === dateTwo.getMonth() &&
+    dateOne.getDate() === dateTwo.getDate()
+  );
 }

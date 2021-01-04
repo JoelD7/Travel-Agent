@@ -1,4 +1,3 @@
-let a = 2.43;
-let s = "0.45";
-console.log(Number(s));
-let date = Date.now();
+let a = new Date(2021, 0, 13, 14, 35);
+let b = new Date(2021, 0, 13);
+console.log();

@@ -41,6 +41,7 @@
     "react-slick": "^0.27.12",
     "react-swipeable-views": "^0.13.9",
     "react-swipeable-views-utils": "^0.14.0-alpha.0",
+    "react-transition-group": "^4.4.1",
     "slick-carousel": "^1.8.1",
     "swiper": "^6.3.5",
     "typescript": "^3.7.5",

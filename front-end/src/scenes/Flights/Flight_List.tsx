@@ -37,7 +37,7 @@ import {
 } from "../../components";
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors, Shadow } from "../../styles";
-import { flightPlaceholder, muiDateFormatter } from "../../utils";
+import { flightsPlaceholder, muiDateFormatter } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightListStyles } from "./flight-list-styles";
@@ -181,7 +181,7 @@ export function Flight_List() {
     },
   ];
 
-  const flights: Flight[] = flightPlaceholder;
+  const flights: Flight[] = flightsPlaceholder;
 
   const flightClasses: FlightClassType[] = [
     "Business",

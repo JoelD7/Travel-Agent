@@ -1,4 +1,7 @@
-interface Trip {
+import { Hotel } from "./Hotel";
+import * as EventType from "./EventType";
+
+export interface Trip {
   id: string;
   name: string;
   countries: string[];
@@ -9,6 +12,14 @@ interface Trip {
   endDate: Date;
   coverPhoto: string;
   albums: TripAlbum[];
+  itinerary?: Event[];
+}
+
+interface Event {
+  type: EventType.EventType;
+  start: Date;
+  end: Date;
+  detail: Flight | Hotel | Restaurant | POI;
 }
 
 interface TripAlbum {

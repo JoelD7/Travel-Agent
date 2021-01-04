@@ -12,7 +12,7 @@ import {
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
-import { currencyFormatter, flightPlaceholder } from "../../utils";
+import { currencyFormatter, flightsPlaceholder } from "../../utils";
 import { reservationStyles } from "./reservation-styles";
 import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
 import { format } from "date-fns";
@@ -21,7 +21,7 @@ import Helmet from "react-helmet";
 export function Reservations() {
   const style = reservationStyles();
 
-  const flights: Flight[] = flightPlaceholder;
+  const flights: Flight[] = flightsPlaceholder;
 
   const hotels: HotelReservation[] = [
     {

@@ -1,2 +1,3 @@
 import * as FlightTypes from "./FlightSearchParams";
-export { FlightTypes };
+import * as EventType from "./EventType";
+export { FlightTypes, EventType };

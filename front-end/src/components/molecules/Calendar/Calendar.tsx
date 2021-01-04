@@ -3,7 +3,8 @@ import { Grid, CardActionArea } from "@material-ui/core";
 import { addDays, eachDayOfInterval, endOfMonth, subDays } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Colors } from "../../../styles";
-import { tripPlaceholder } from "../../../utils";
+import { areDatesEqual, eventToIcon, tripPlaceholder } from "../../../utils";
+import { Trip } from "../../../utils/types/Trip";
 import { IconText, Text } from "../../atoms";
 import { calendarStyles } from "./calendar-styles";
 
@@ -130,6 +131,19 @@ export function Calendar({ baseDate }: Calendar) {
     }
   }
 
+  function dayHasEvents(day: Date) {
+    let hasEvents = false;
+    if (trip.itinerary) {
+      trip.itinerary.forEach((event) => {
+        if (areDatesEqual(day, event.start) || areDatesEqual(day, event.end)) {
+          hasEvents = true;
+          return;
+        }
+      });
+    }
+    return hasEvents;
+  }
+
   return (
     <Grid container className={style.calendarGrid}>
       {calendarItems.map((item, i) => (
@@ -152,12 +166,17 @@ export function Calendar({ baseDate }: Calendar) {
             </Grid>
 
             {/* Icon grid */}
-            <Grid item xs={12} style={{ alignSelf: "flex-end", marginLeft: "auto" }}>
-              <Grid container>
-                <IconText icon={faPlaneDeparture} />
-                <IconText icon={faPlaneDeparture} />
+            {trip.itinerary && dayHasEvents(item.date) ? (
+              <Grid item xs={12} style={{ alignSelf: "flex-end", marginLeft: "auto" }}>
+                <Grid container>
+                  {trip.itinerary.map((event, i) => (
+                    <IconText icon={eventToIcon(event.type)} />
+                  ))}
+                </Grid>
               </Grid>
-            </Grid>
+            ) : (
+              <div></div>
+            )}
           </Grid>
         </CardActionArea>
       ))}

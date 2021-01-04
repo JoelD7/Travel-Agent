@@ -28,6 +28,7 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import { tripPlaceholder } from "../../utils";
+import { Trip } from "../../utils/types/Trip";
 import { itineraryStyles } from "./itinerary-styles";
 
 export function Itinerary() {
@@ -44,8 +45,6 @@ export function Itinerary() {
     "Friday",
     "Saturday",
   ];
-
-  const [index, setIndex] = useState<number>(0);
 
   const [baseDate, setBaseDate] = useState<Date>(trip.startDate);
 
