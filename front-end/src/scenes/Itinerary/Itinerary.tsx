@@ -47,15 +47,7 @@ export function Itinerary() {
 
   const [index, setIndex] = useState<number>(0);
 
-  const [month, setMonth] = useState<number>(trip.startDate.getMonth());
-
-  const [direction, setDirection] = useState<"left" | "right">("left");
-
-  const [slideIn, setSlideIn] = useState<boolean>(true);
-
   const [baseDate, setBaseDate] = useState<Date>(trip.startDate);
-
-  console.log("index: ", index);
 
   return (
     <div className={style.mainContainer}>
@@ -87,13 +79,7 @@ export function Itinerary() {
 
           <IconButton
             onClick={() => {
-              setIndex(index - 1);
-              // setSlideIn(false);
-
-              setTimeout(() => {
-                setBaseDate(subMonths(baseDate, 1));
-                setIndex(1);
-              }, 100);
+              setBaseDate(subMonths(baseDate, 1));
             }}
           >
             <FontAwesomeIcon icon={faChevronCircleLeft} color={Colors.PURPLE} />
@@ -101,13 +87,7 @@ export function Itinerary() {
 
           <IconButton
             onClick={() => {
-              setIndex(index + 1);
-              // setSlideIn(false);
-
-              setTimeout(() => {
-                setBaseDate(addMonths(baseDate, 1));
-                setIndex(1);
-              }, 100);
+              setBaseDate(addMonths(baseDate, 1));
             }}
           >
             <FontAwesomeIcon icon={faChevronCircleRight} color={Colors.PURPLE} />
@@ -134,18 +114,7 @@ export function Itinerary() {
         </Grid>
 
         {/* Calendar grid */}
-        <SwipeableViews
-          index={index}
-          onChangeIndex={(i) => {
-            // setTimeout(() => {
-            // setIndex(1);
-            // }, 500);
-          }}
-        >
-          {/* <Calendar baseDate={subMonths(baseDate, 1)} /> */}
-          <Calendar baseDate={baseDate} />
-          {/* <Calendar baseDate={addMonths(baseDate, 1)} /> */}
-        </SwipeableViews>
+        <Calendar baseDate={baseDate} />
       </div>
     </div>
   );
