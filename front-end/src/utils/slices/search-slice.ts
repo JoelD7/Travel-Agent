@@ -19,7 +19,6 @@ const searchSlice = createSlice({
     onQueryChanged(state, action: PayloadAction<PayloadType>) {
       let payload: PayloadType = action.payload;
       let value: string = payload.value;
-        
       return { ...state, query: value };
     },
   },

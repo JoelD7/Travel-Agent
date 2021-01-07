@@ -1,20 +1,16 @@
-import { faPlaneDeparture } from "@fortawesome/free-solid-svg-icons";
 import { Grid, CardActionArea } from "@material-ui/core";
 import { addDays, eachDayOfInterval, endOfMonth, subDays } from "date-fns";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../../styles";
 import { areDatesEqual, eventToIcon, tripPlaceholder } from "../../../utils";
-import { Trip } from "../../../utils/types/Trip";
+import {
+  addCalendarItems,
+  calendarItemHolderSelect,
+} from "../../../utils/slices/calendar-slice";
+import { Trip, TripEvent, CalendarItem } from "../../../utils/types/Trip";
 import { IconText, Text } from "../../atoms";
 import { calendarStyles } from "./calendar-styles";
-
-interface CalendarItem {
-  day: number;
-  active: boolean;
-  grid: number;
-  date: Date;
-  tripDay: boolean;
-}
 
 interface Calendar {
   baseDate: Date;
@@ -23,7 +19,12 @@ interface Calendar {
 export function Calendar({ baseDate }: Calendar) {
   const trip: Trip = tripPlaceholder;
 
-  const [calendarItems, setCalendarItems] = useState<CalendarItem[]>([]);
+  let calendarItemsRx = useSelector(calendarItemHolderSelect);
+  const dispatch = useDispatch();
+
+  const [calendarItems, setCalendarItems] = useState<CalendarItem[]>(
+    calendarItemsRx ? calendarItemsRx[dateToMS(baseDate)].calendarItems : []
+  );
 
   const style = calendarStyles();
 
@@ -33,10 +34,28 @@ export function Calendar({ baseDate }: Calendar) {
   });
 
   useEffect(() => {
-    initializeCalendarItems();
+    if (!areItemsCached(dateToMS(baseDate))) {
+      initializeCalendarItems();
+    } else {
+      console.log("cached :p");
+      setCalendarItems(calendarItemsRx[dateToMS(baseDate)].calendarItems);
+    }
   }, [baseDate]);
 
+  function areItemsCached(date: number) {
+    let indexes = [];
+    for (const key in calendarItemsRx) {
+      if (Object.prototype.hasOwnProperty.call(calendarItemsRx, key)) {
+        indexes.push(key);
+      }
+    }
+    console.log("State indexes: ", indexes);
+
+    return indexes.includes(date.toString());
+  }
+
   function initializeCalendarItems() {
+    console.log("get for first time");
     let firstDay = getFirstDayOfMonth(baseDate);
     let firstDayDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1);
     let tempCalendarItems: CalendarItem[] = [];
@@ -86,6 +105,12 @@ export function Calendar({ baseDate }: Calendar) {
       });
       curDate = addDays(curDate, 1);
     }
+    dispatch(
+      addCalendarItems({
+        dateIndex: dateToMS(baseDate),
+        calendarItems: tempCalendarItems,
+      })
+    );
     setCalendarItems(tempCalendarItems);
   }
 
@@ -109,28 +134,6 @@ export function Calendar({ baseDate }: Calendar) {
     return includes;
   }
 
-  function getCalendarItemBorder(item: CalendarItem) {
-    switch (item.grid) {
-      case 0:
-        return style.calendarItemBorderTopLeft;
-      case 1:
-      case 2:
-      case 3:
-      case 4:
-      case 5:
-      case 6:
-        return style.calendarItemBorderTop;
-      case 7:
-      case 14:
-      case 21:
-      case 28:
-      case 35:
-        return style.calendarItemBorderRegLeft;
-      default:
-        return style.calendarItemBorderReg;
-    }
-  }
-
   function dayHasEvents(day: Date) {
     let hasEvents = false;
     if (trip.itinerary) {
@@ -144,13 +147,44 @@ export function Calendar({ baseDate }: Calendar) {
     return hasEvents;
   }
 
+  function dateToMS(date: Date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+  }
+
+  /**
+   * Returns the events that occur on date
+   * @param events
+   * @param date
+   */
+  function getEventsOnDay(events: TripEvent[], date: Date): TripEvent[] {
+    return events.filter(
+      (event) => areDatesEqual(event.start, date) || areDatesEqual(event.end, date)
+    );
+  }
+
+  function getCalendarTextColor(item: CalendarItem) {
+    return areDatesEqual(item.date, new Date(Date.now()))
+      ? "white"
+      : item.active
+      ? "black"
+      : "#8d8d8d";
+  }
+
+  function getCalendarItemBackground(item: CalendarItem) {
+    return areDatesEqual(item.date, new Date(Date.now()))
+      ? Colors.BLUE
+      : item.tripDay
+      ? "#002E431A"
+      : "white";
+  }
+
   return (
     <Grid container className={style.calendarGrid}>
       {calendarItems.map((item, i) => (
         <CardActionArea
           disabled={!item.active}
-          style={{ backgroundColor: item.tripDay ? "#002E431A" : "white" }}
-          className={`${style.calendarItem} ${getCalendarItemBorder(item)}`}
+          style={{ backgroundColor: getCalendarItemBackground(item) }}
+          className={`${style.calendarItem}`}
         >
           <Grid container style={{ height: "100%" }}>
             <Grid item xs={12}>
@@ -159,7 +193,7 @@ export function Calendar({ baseDate }: Calendar) {
                   {item.day}
                 </Text>
               ) : (
-                <Text color={item.active ? "black" : "#8d8d8d"} component="h4">
+                <Text color={getCalendarTextColor(item)} component="h4">
                   {item.day}
                 </Text>
               )}
@@ -169,7 +203,7 @@ export function Calendar({ baseDate }: Calendar) {
             {trip.itinerary && dayHasEvents(item.date) ? (
               <Grid item xs={12} style={{ alignSelf: "flex-end", marginLeft: "auto" }}>
                 <Grid container>
-                  {trip.itinerary.map((event, i) => (
+                  {getEventsOnDay(trip.itinerary, item.date).map((event, i) => (
                     <IconText icon={eventToIcon(event.type)} />
                   ))}
                 </Grid>

@@ -12,10 +12,10 @@ export interface Trip {
   endDate: Date;
   coverPhoto: string;
   albums: TripAlbum[];
-  itinerary?: Event[];
+  itinerary?: TripEvent[];
 }
 
-interface Event {
+export interface TripEvent {
   type: EventType.EventType;
   start: Date;
   end: Date;
@@ -27,4 +27,12 @@ interface TripAlbum {
   cover: string;
   albumRoute: string;
   photos: string[];
+}
+
+export interface CalendarItem {
+  day: number;
+  active: boolean;
+  grid: number;
+  date: Date;
+  tripDay: boolean;
 }

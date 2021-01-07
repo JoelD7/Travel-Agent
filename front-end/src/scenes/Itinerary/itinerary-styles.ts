@@ -1,5 +1,6 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
+import { Colors, Shadow } from "../../styles";
 
 export const itineraryStyles = makeStyles((theme: Theme) => ({
   calendarGrid: {
@@ -30,14 +31,21 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
     borderLeft: "1px solid #cecece",
     borderBottom: "1px solid #cecece",
   },
+  contentBackgroundContainer: {
+    backgroundColor: "white",
+    boxShadow: Shadow.LIGHT,
+    padding: "10px",
+    borderRadius: "5px",
+  },
   daysContainer: {
-    width: "80vw",
+    width: "79vw",
     marginTop: "30px",
   },
   dayItem: {
-    width: "calc(80vw / 7)",
+    width: "calc(78.5vw / 7)",
   },
   mainContainer: {
+    backgroundColor: Colors.BACKGROUND,
     fontFamily: Font.Family,
   },
   pageContentContainer: {

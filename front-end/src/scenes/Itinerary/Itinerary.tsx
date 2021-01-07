@@ -66,54 +66,48 @@ export function Itinerary() {
           </Text>
         </IconText>
 
-        {/* Date selector */}
-        <Grid container>
-          <CustomButton
-            textColor="black"
-            style={{ fontSize: "22px", fontWeight: "bold" }}
-            backgroundColor="rgba(0,0,0,0)"
-          >
-            {format(baseDate, "MMMM yyyy")}
-          </CustomButton>
+        <div className={style.contentBackgroundContainer}>
+          {/* Date selector */}
+          <Grid container>
+            <CustomButton
+              textColor="black"
+              style={{ fontSize: "22px", fontWeight: "bold" }}
+              backgroundColor="rgba(0,0,0,0)"
+            >
+              {format(baseDate, "MMMM yyyy")}
+            </CustomButton>
 
-          <IconButton
-            onClick={() => {
-              setBaseDate(subMonths(baseDate, 1));
-            }}
-          >
-            <FontAwesomeIcon icon={faChevronCircleLeft} color={Colors.PURPLE} />
-          </IconButton>
+            <IconButton
+              onClick={() => {
+                setBaseDate(subMonths(baseDate, 1));
+              }}
+            >
+              <FontAwesomeIcon icon={faChevronCircleLeft} color={Colors.PURPLE} />
+            </IconButton>
 
-          <IconButton
-            onClick={() => {
-              setBaseDate(addMonths(baseDate, 1));
-            }}
-          >
-            <FontAwesomeIcon icon={faChevronCircleRight} color={Colors.PURPLE} />
-          </IconButton>
+            <IconButton
+              onClick={() => {
+                setBaseDate(addMonths(baseDate, 1));
+              }}
+            >
+              <FontAwesomeIcon icon={faChevronCircleRight} color={Colors.PURPLE} />
+            </IconButton>
+          </Grid>
 
-          <CustomButton
-            rounded
-            style={{ fontSize: "16px", marginLeft: "auto" }}
-            backgroundColor={Colors.GREEN}
-          >
-            Legend
-          </CustomButton>
-        </Grid>
+          {/* Days container */}
+          <Grid container className={style.daysContainer}>
+            {days.map((day, i) => (
+              <Grid key={i} item className={style.dayItem}>
+                <Text color={"#8d8d8d"} component="h4">
+                  {day}
+                </Text>
+              </Grid>
+            ))}
+          </Grid>
 
-        {/* Days container */}
-        <Grid container className={style.daysContainer}>
-          {days.map((day, i) => (
-            <Grid key={i} item className={style.dayItem}>
-              <Text color={"#8d8d8d"} component="h4">
-                {day}
-              </Text>
-            </Grid>
-          ))}
-        </Grid>
-
-        {/* Calendar grid */}
-        <Calendar baseDate={baseDate} />
+          {/* Calendar grid */}
+          <Calendar baseDate={baseDate} />
+        </div>
       </div>
     </div>
   );

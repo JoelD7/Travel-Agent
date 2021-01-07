@@ -1255,13 +1255,13 @@ export const flightPlaceholder: Flight = {
           departure: {
             iata: "SIN",
             city: "Singapore",
-            at: parseISO("2021-02-02T07:15:00"),
+            at: parseISO("2021-01-13T07:15:00"),
             terminal: "2",
           },
           arrival: {
             iata: "DXB",
             city: "Dubai",
-            at: parseISO("2021-02-02T13:39:00"),
+            at: parseISO("2021-01-13T13:15:00"),
             terminal: "31",
           },
           carrier: "Egyptair",
@@ -1276,13 +1276,13 @@ export const flightPlaceholder: Flight = {
           departure: {
             iata: "DXB",
             city: "Dubai",
-            at: parseISO("2021-02-12T09:15:00"),
+            at: parseISO("2021-01-23T13:39:00"),
             terminal: "2",
           },
           arrival: {
             iata: "SIN",
             city: "Singapore",
-            at: parseISO("2021-02-12T16:55:00"),
+            at: parseISO("2021-01-23T20:35:00"),
             terminal: "31",
           },
           carrier: "Emirates",

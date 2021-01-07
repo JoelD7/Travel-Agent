@@ -1,35 +1,31 @@
 import { makeStyles, Theme } from "@material-ui/core";
+import { Colors } from "../../../styles";
 
 export const calendarStyles = makeStyles((theme: Theme) => ({
   calendarGrid: {
-    width: "80vw",
+    width: "79vw",
   },
   calendarItem: {
-    width: "calc(80vw / 7)",
+    width: "calc(75.5vw / 7)",
     height: "75px",
+    margin: "3px",
     paddingLeft: "5px",
     display: "flex",
     alignItems: "flex-start",
     justifyContent: "flex-start",
+    border: "1px solid #cecece",
+    borderRadius: "5px",
   },
-  calendarItemBorderTopLeft: {
-    borderTop: "1px solid #cecece",
-    borderLeft: "1px solid #cecece",
-    borderRight: "1px solid #cecece",
-    borderBottom: "1px solid #cecece",
+  curDayContainer: {
+    padding: "3px",
+    backgroundColor: Colors.BLUE,
+    borderRadius: "50%",
+    height: "23px",
+    width: "23px",
   },
-  calendarItemBorderTop: {
-    borderTop: "1px solid #cecece",
-    borderRight: "1px solid #cecece",
-    borderBottom: "1px solid #cecece",
-  },
-  calendarItemBorderReg: {
-    borderRight: "1px solid #cecece",
-    borderBottom: "1px solid #cecece",
-  },
-  calendarItemBorderRegLeft: {
-    borderRight: "1px solid #cecece",
-    borderLeft: "1px solid #cecece",
-    borderBottom: "1px solid #cecece",
+  dayNumberContainer: {
+    height: "30px",
+    display: "flex",
+    alignItems: "center",
   },
 }));
