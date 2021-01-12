@@ -9,6 +9,7 @@ interface IconTextProps {
   text?: string;
   fontSize?: number;
   icon: IconDefinition;
+  backgroundColor?: string;
   iconColor?: string;
   size?: number;
   style?: CreateCSSProperties<{}>;
@@ -27,7 +28,8 @@ export function IconText({
   children,
   style,
   fontSize = 14,
-  iconColor = Colors.PURPLE,
+  backgroundColor = Colors.PURPLE,
+  iconColor = "white",
   size = 16,
   className,
   shadow,
@@ -44,7 +46,7 @@ export function IconText({
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: iconColor,
+      backgroundColor: backgroundColor,
       width: `${size}px`,
       height: `${size}px`,
       borderRadius: "50%",
@@ -67,7 +69,7 @@ export function IconText({
       <div className={styles.iconContainer}>
         <FontAwesomeIcon
           icon={icon}
-          color="white"
+          color={iconColor}
           style={{ width: `${size}px`, height: `${size}px` }}
         />
       </div>

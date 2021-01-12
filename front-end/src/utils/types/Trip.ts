@@ -16,9 +16,12 @@ export interface Trip {
 }
 
 export interface TripEvent {
+  name: string;
+  location: string;
   type: EventType.EventType;
   start: Date;
   end: Date;
+  time: boolean; //whether the date of the event includes time
   detail: Flight | Hotel | Restaurant | POI;
 }
 

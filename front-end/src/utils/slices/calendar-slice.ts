@@ -33,12 +33,18 @@ const calendarSlice = createSlice({
         }
       }
 
-      //   console.log("State indexes: ", keys);
-      //   console.log(
-      //     JSON.stringify({ ...state, [dateIndex]: { calendarItems: calendarItems } })
-      //   );
+      // console.log("State indexes: ", keys);
+      // console.log(
+      //   JSON.stringify({
+      //     ...state,
+      //     holder: { ...state.holder, [dateIndex]: { calendarItems: calendarItems } },
+      //   })
+      // );
 
-      return { ...state, [dateIndex]: { calendarItems: calendarItems } };
+      return {
+        ...state,
+        holder: { ...state.holder, [dateIndex]: { calendarItems: calendarItems } },
+      };
     },
   },
 });

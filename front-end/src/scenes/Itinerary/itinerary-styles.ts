@@ -4,38 +4,37 @@ import { Colors, Shadow } from "../../styles";
 
 export const itineraryStyles = makeStyles((theme: Theme) => ({
   calendarGrid: {
-    width: "80vw",
+    width: "79vw",
   },
   calendarItem: {
-    width: "calc(80vw / 7)",
+    width: "calc(75.5vw / 7)",
     height: "75px",
+    margin: "3px",
     paddingLeft: "5px",
-  },
-  calendarItemBorderTopLeft: {
-    borderTop: "1px solid #cecece",
-    borderLeft: "1px solid #cecece",
-    borderRight: "1px solid #cecece",
-    borderBottom: "1px solid #cecece",
-  },
-  calendarItemBorderTop: {
-    borderTop: "1px solid #cecece",
-    borderRight: "1px solid #cecece",
-    borderBottom: "1px solid #cecece",
-  },
-  calendarItemBorderReg: {
-    borderRight: "1px solid #cecece",
-    borderBottom: "1px solid #cecece",
-  },
-  calendarItemBorderRegLeft: {
-    borderRight: "1px solid #cecece",
-    borderLeft: "1px solid #cecece",
-    borderBottom: "1px solid #cecece",
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    border: "1px solid #cecece",
+    borderRadius: "5px",
   },
   contentBackgroundContainer: {
     backgroundColor: "white",
+    height: "611px",
     boxShadow: Shadow.LIGHT,
     padding: "10px",
     borderRadius: "5px",
+  },
+  curDayContainer: {
+    padding: "3px",
+    backgroundColor: Colors.BLUE,
+    borderRadius: "50%",
+    height: "23px",
+    width: "23px",
+  },
+  dayNumberContainer: {
+    height: "30px",
+    display: "flex",
+    alignItems: "center",
   },
   daysContainer: {
     width: "79vw",

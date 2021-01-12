@@ -3,6 +3,7 @@ import {
   faLocationArrow,
   faPlaneDeparture,
   faUtensils,
+  IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { CSSProperties } from "@material-ui/styles";
@@ -126,7 +127,7 @@ export function parseFlightDuration(duration: string) {
  * Returns an icon related to an event type.
  * @param type type of the event.
  */
-export function eventToIcon(type: EventType.EventType) {
+export function eventToIcon(type: EventType.EventType): IconDefinition {
   switch (type) {
     case EventType.Flight:
       return faPlaneDeparture;

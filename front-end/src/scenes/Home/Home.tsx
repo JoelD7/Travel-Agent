@@ -62,8 +62,31 @@ interface ServiceIconType {
   [key: string]: ServiceIconType[keyof ServiceIconType];
 }
 
+interface CalendarItem {
+  a: string;
+}
+
+interface CalendarItemHolder {
+  holder: {
+    [dateIndex: number]: { calendarItems: CalendarItem[] };
+  };
+}
+
 export function Home() {
   const style = homeStyles();
+
+  let state: CalendarItemHolder = {
+    holder: {
+      12: { calendarItems: [] },
+    },
+  };
+
+  let stateTwo = {
+    ...state,
+    holder: { ...state.holder, [45]: { calendarItems: [{ a: "klk" }] } },
+  };
+
+  console.log(JSON.stringify(stateTwo));
 
   const services = [
     {

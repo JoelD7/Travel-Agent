@@ -11,4 +11,4 @@ export { RestaurantSlides } from "./RestaurantSlides/RestaurantSlides";
 export { RestaurantCard } from "./RestaurantCard/RestaurantCard";
 export { DashDrawer } from "./DashDrawer/DashDrawer";
 export { PhotoAlbumCard } from "./PhotoAlbumCard/PhotoAlbumCard";
-export { Calendar } from "./Calendar/Calendar";
+export { DayItinerary } from "./DayItinerary/DayItinerary";

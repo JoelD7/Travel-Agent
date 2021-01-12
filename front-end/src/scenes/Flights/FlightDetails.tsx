@@ -188,8 +188,12 @@ export function FlightDetails({ open, onClose }: FlightDetails) {
               {getFlightCitiesLabel(flight, "arrival")}
             </h2>
 
-            <IconButton onClick={() => onClose()} className={style.closeButton}>
-              <FontAwesomeIcon color={Colors.BLUE} icon={faTimes} />
+            <IconButton
+              style={{ width: "45px", height: "45px" }}
+              onClick={() => onClose()}
+              className={style.closeButton}
+            >
+              <FontAwesomeIcon size="sm" color={Colors.BLUE} icon={faTimes} />
             </IconButton>
           </Grid>
         </Grid>
@@ -238,10 +242,10 @@ export function FlightDetails({ open, onClose }: FlightDetails) {
 
         <Grid item xs={12} style={{ marginTop: "20px" }}>
           <Grid container justify="flex-end">
-            <h2 style={{ fontSize: "20px", marginRight: '10px' }}>{`US${currencyFormatter(
+            <h2 style={{ fontSize: "20px", marginRight: "10px" }}>{`US${currencyFormatter(
               flight.price.total
             )}`}</h2>
-            <CustomButton onClick={() => {}} >Purchase flight</CustomButton>
+            <CustomButton onClick={() => {}}>Purchase flight</CustomButton>
           </Grid>
         </Grid>
       </Grid>
