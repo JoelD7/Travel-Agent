@@ -42,67 +42,31 @@ export function FavPlaces() {
     prevArrow: <SliderArrow direction="left" />,
   };
 
-  function getResponsiveSlider(group: POICategoryGroup) {
+  function getResponsiveSlider(places: POISearch[]) {
     return [
       {
         breakpoint: 1125,
         settings: {
-          slidesToShow: getSlidesToShow(2, group),
-          slidesToScroll: getSlidesToShow(2, group),
+          slidesToShow: getSlidesToShow(2, places),
+          slidesToScroll: getSlidesToShow(2, places),
         },
       },
       {
         breakpoint: 710,
         settings: {
-          slidesToShow: getSlidesToShow(1, group),
-          slidesToScroll: getSlidesToShow(1, group),
+          slidesToShow: getSlidesToShow(1, places),
+          slidesToScroll: getSlidesToShow(1, places),
         },
       },
     ];
   }
 
-  function getSlidesToShow(def: number, group: POICategoryGroup) {
-    return group.places.length > def ? def : group.places.length;
+  function getSlidesToShow(def: number, places: POISearch[]) {
+    return places.length > def ? def : places.length;
   }
 
-  useEffect(() => {
-    groupPOIByCategory();
-  }, []);
-
-  function groupPOIByCategory() {
-    //Create categories groups
-    poiCategories.forEach((category) => {
-      categoryGroupsMap = {
-        ...categoryGroupsMap,
-        [category.name]: {
-          name: category.name,
-          pluralName: category.pluralName,
-          places: [],
-        },
-      };
-    });
-
-    //Group pois by category
-    pois.forEach((poi) => {
-      let curGroup = categoryGroupsMap[poi.categories[0].name];
-      categoryGroupsMap = {
-        ...categoryGroupsMap,
-        [poi.categories[0].name]: {
-          ...curGroup,
-          places: [...curGroup.places, poi],
-        },
-      };
-    });
-
-    //Add groups to the array on which to iterate over
-    //in order to render the JSX elements(cards).
-    for (const category in categoryGroupsMap) {
-      if (Object.prototype.hasOwnProperty.call(categoryGroupsMap, category)) {
-        const group = categoryGroupsMap[category];
-        categoryGroupsTemp.push(group);
-      }
-    }
-    setCategoryGroups(categoryGroupsTemp);
+  function getPlacesOfCategory(category: string): POISearch[] {
+    return pois.filter((poi) => poi.categories[0].name === category);
   }
 
   return (
@@ -120,91 +84,85 @@ export function FavPlaces() {
               Your favorite spots
             </Text>
           </IconText>
-          {categoryGroups && (
-            <div>
-              {categoryGroups
-                .filter((group) => group.places.length > 0)
-                .map((group, i) => (
-                  <Grid container style={{ marginTop: "20px" }}>
-                    <Grid item xs={12}>
-                      <Grid container>
-                        <Text weight={500} component="h2">
-                          {group.pluralName}
-                        </Text>
-                        <CustomButton
-                          style={{ paddingBottom: "0px" }}
-                          iconColor="#7e7e7e"
-                          backgroundColor="rgba(0,0,0,0)"
-                          textColor="#7e7e7e"
-                        >
-                          See all
-                        </CustomButton>
-                      </Grid>
+          <div>
+            {poiCategories
+              .filter((category) => getPlacesOfCategory(category.name).length > 0)
+              .map((category, i) => (
+                <Grid container style={{ marginTop: "20px" }}>
+                  <Grid item xs={12}>
+                    <Grid container>
+                      <Text weight={500} component="h2">
+                        {category.pluralName}
+                      </Text>
+                      <CustomButton
+                        style={{ paddingBottom: "0px" }}
+                        iconColor="#7e7e7e"
+                        backgroundColor="rgba(0,0,0,0)"
+                        textColor="#7e7e7e"
+                      >
+                        See all
+                      </CustomButton>
                     </Grid>
-
-                    <Slider
-                      {...sliderSettings}
-                      responsive={getResponsiveSlider(group)}
-                      slidesToShow={getSlidesToShow(3, group)}
-                    >
-                      {group.places.map((place: POISearch, i) => (
-                        <div key={i}>
-                          <Card className={styles.favCard}>
-                            <CardActionArea>
-                              <Link style={getLinkStyle()} to="#">
-                                <CardMedia
-                                  component="img"
-                                  height="150"
-                                  src={place.photo}
-                                />
-                                <CardContent>
-                                  <Text
-                                    weight={700}
-                                    style={{ color: Colors.BLUE }}
-                                    component="h4"
-                                  >
-                                    {place.name}
-                                  </Text>
-
-                                  <Rating
-                                    initialRating={place.rating}
-                                    readonly
-                                    emptySymbol={
-                                      <FontAwesomeIcon
-                                        style={{ margin: "0px 1px" }}
-                                        icon={faCircleReg}
-                                        color={Colors.PURPLE}
-                                      />
-                                    }
-                                    fullSymbol={
-                                      <FontAwesomeIcon
-                                        style={{ margin: "0px 1px" }}
-                                        icon={faCircle}
-                                        color={Colors.PURPLE}
-                                      />
-                                    }
-                                  />
-
-                                  <IconText
-                                    style={{ marginTop: "10px" }}
-                                    icon={faMapMarkerAlt}
-                                    text={
-                                      place.location.formattedAddress
-                                        ? place.location.formattedAddress.join(", ")
-                                        : "No address"
-                                    }
-                                  />
-                                </CardContent>
-                              </Link>
-                            </CardActionArea>
-                          </Card>
-                        </div>
-                      ))}
-                    </Slider>
                   </Grid>
-                ))}
-            </div>
-          )}
+
+                  <Slider
+                    {...sliderSettings}
+                    responsive={getResponsiveSlider(getPlacesOfCategory(category.name))}
+                    slidesToShow={getSlidesToShow(4, getPlacesOfCategory(category.name))}
+                  >
+                    {getPlacesOfCategory(category.name).map((place: POISearch, i) => (
+                      <div key={i}>
+                        <Card className={styles.favCard}>
+                          <CardActionArea>
+                            <Link style={getLinkStyle()} to="#">
+                              <CardMedia component="img" height="150" src={place.photo} />
+                              <CardContent>
+                                <Text
+                                  weight={700}
+                                  style={{ color: Colors.BLUE }}
+                                  component="h4"
+                                >
+                                  {place.name}
+                                </Text>
+
+                                <Rating
+                                  initialRating={place.rating}
+                                  readonly
+                                  emptySymbol={
+                                    <FontAwesomeIcon
+                                      style={{ margin: "0px 1px" }}
+                                      icon={faCircleReg}
+                                      color={Colors.PURPLE}
+                                    />
+                                  }
+                                  fullSymbol={
+                                    <FontAwesomeIcon
+                                      style={{ margin: "0px 1px" }}
+                                      icon={faCircle}
+                                      color={Colors.PURPLE}
+                                    />
+                                  }
+                                />
+
+                                <IconText
+                                  style={{ marginTop: "10px" }}
+                                  icon={faMapMarkerAlt}
+                                  text={
+                                    place.location.formattedAddress
+                                      ? place.location.formattedAddress.join(", ")
+                                      : "No address"
+                                  }
+                                />
+                              </CardContent>
+                            </Link>
+                          </CardActionArea>
+                        </Card>
+                      </div>
+                    ))}
+                  </Slider>
+                </Grid>
+              ))}
+          </div>
         </Grid>
       </Grid>
     </div>

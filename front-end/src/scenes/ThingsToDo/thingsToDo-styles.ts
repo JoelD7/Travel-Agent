@@ -55,6 +55,9 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     boxShadow: Shadow.LIGHT3D,
     width: "25%",
   },
+  pageSubtitle: {
+    marginTop: "20px",
+  },
   poiCard: {
     borderRadius: "5px",
     margin: "10px",

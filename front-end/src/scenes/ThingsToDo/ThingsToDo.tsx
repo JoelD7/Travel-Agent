@@ -111,6 +111,7 @@ export function ThingsToDo() {
   );
 
   useEffect(() => {
+    console.log("Key: ", process.env.REACT_APP_PLACES_API_KEY);
     if (!areRatesUpdated()) {
       getExchangeRates();
     }
@@ -165,10 +166,11 @@ export function ThingsToDo() {
       <Navbar />
       <ServicesToolbar />
 
-      <Text style={{ textAlign: "center" }} component="h1">
+      <Text style={{ textAlign: "center" }} bold component="h1">
         Things to in Dubai
       </Text>
 
+      {/* Parent ategories of POIs */}
       <ThemeProvider key="categories parent menu" theme={theme}>
         <Toolbar className={style.parentCategoryBar}>
           {parentCategories.map((parentCategory, i) => (
@@ -246,8 +248,13 @@ export function ThingsToDo() {
 
           {selectedCategory !== POICategory.TOURS && (
             <>
-              <Text component="h2">{`${selectedCategory} in Dubai`}</Text>
+              <Text
+                component="h2"
+                bold
+                style={{ marginTop: "20px" }}
+              >{`${selectedCategory} in Dubai`}</Text>
 
+              {/* POIs cards */}
               <Grid key="pois cards" container>
                 {pois.slice(0, 6).map((poi, i) => (
                   <Card key={i} className={style.poiCard}>
@@ -256,6 +263,7 @@ export function ThingsToDo() {
                       onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
                     >
                       <Text
+                        bold
                         style={{
                           color: Colors.BLUE,
                           whiteSpace: "nowrap",
@@ -299,11 +307,15 @@ export function ThingsToDo() {
             </>
           )}
 
+          {/* Tours cards */}
           {(selectedCategory === initialCategory ||
             selectedCategory === POICategory.TOURS) && (
             <>
-              {" "}
-              <Text component="h2">{`Tours and activites in Dubai`}</Text>
+              <Text
+                component="h2"
+                bold
+                style={{ marginTop: "20px" }}
+              >{`Tours and activites in Dubai`}</Text>
               <Grid key="tours cards" container>
                 {activities.slice(0, 6).map((activity, i) => (
                   <Card key={i} className={style.activityCard}>
@@ -318,6 +330,7 @@ export function ThingsToDo() {
                     <CardContent>
                       <Text
                         component="h5"
+                        bold
                         style={{
                           overflow: "hidden",
                           textOverflow: "ellipsis",

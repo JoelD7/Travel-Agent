@@ -116,21 +116,34 @@ export function ThingsToDoDetails() {
 
         <Grid item className={style.detailsGrid}>
           <div className={style.detailsContainer}>
-            <Text component="h3" style={{ marginTop: "5px" }}>
+            <Text color="white" component="h3" style={{ marginTop: "5px" }}>
               Details
             </Text>
 
-            <Text component="h4">Contact</Text>
+            <Text color="white" component="h4">
+              Contact
+            </Text>
             {poi.contact.formattedPhone && (
-              <IconText icon={faPhone} fontSize={15} text={poi.contact.formattedPhone} />
+              <IconText
+                textColor="white"
+                icon={faPhone}
+                fontSize={15}
+                text={poi.contact.formattedPhone}
+              />
             )}
 
             {poi.contact.facebookName && (
-              <IconText icon={faFacebook} fontSize={15} text={poi.contact.facebookName} />
+              <IconText
+                textColor="white"
+                icon={faFacebook}
+                fontSize={15}
+                text={poi.contact.facebookName}
+              />
             )}
 
             {poi.contact.twitter && (
               <IconText
+                textColor="white"
                 style={{ marginBottom: "20px" }}
                 icon={faTwitter}
                 fontSize={15}
@@ -138,9 +151,12 @@ export function ThingsToDoDetails() {
               />
             )}
 
-            <Text component="h4">Address</Text>
+            <Text color="white" component="h4">
+              Address
+            </Text>
             {poi.location.formattedAddress && (
               <IconText
+                textColor="white"
                 style={{ marginBottom: "20px" }}
                 icon={faMapMarkerAlt}
                 fontSize={15}
@@ -148,9 +164,12 @@ export function ThingsToDoDetails() {
               />
             )}
 
-            <Text component="h4">Hours</Text>
+            <Text color="white" component="h4">
+              Hours
+            </Text>
             {poi.hours.timeframes && (
               <IconText
+                textColor="white"
                 style={{ marginBottom: "20px" }}
                 icon={faClock}
                 fontSize={15}
@@ -158,9 +177,12 @@ export function ThingsToDoDetails() {
               />
             )}
 
-            <Text component="h4">Website</Text>
+            <Text color="white" component="h4">
+              Website
+            </Text>
             {poi.url && (
               <IconText
+                textColor="white"
                 style={{ marginBottom: "20px" }}
                 icon={faGlobe}
                 fontSize={15}
@@ -168,9 +190,12 @@ export function ThingsToDoDetails() {
               />
             )}
 
-            <Text component="h4">Amenities</Text>
+            <Text color="white" component="h4">
+              Amenities
+            </Text>
             {poi.attributes && (
               <IconText
+                textColor="white"
                 style={{ marginBottom: "20px" }}
                 icon={faStar}
                 fontSize={15}

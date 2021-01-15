@@ -33,6 +33,8 @@ import { areDatesEqual, eventToIcon, tripPlaceholder } from "../../utils";
 import { calendarItemHolderSelect } from "../../utils/slices/calendar-slice";
 import { CalendarItem, Trip, TripEvent } from "../../utils/types/Trip";
 import { itineraryStyles } from "./itinerary-styles";
+import { GoogleMap, useLoadScript } from "@react-google-maps/api";
+import { Libraries } from "@react-google-maps/api/dist/utils/make-load-script-url";
 
 interface Calendar {
   baseDate: Date;
@@ -82,6 +84,10 @@ export function Itinerary() {
     });
 
     useEffect(() => {
+      // let map: google.maps.Map;
+      // let service: google.maps.places.PlacesService;
+      // let infowindow: google.maps.InfoWindow;
+
       initializeCalendarItems();
     }, [baseDate]);
 
@@ -187,6 +193,9 @@ export function Itinerary() {
     }
 
     function getCalendarTextColor(item: CalendarItem) {
+      if (item.tripDay) {
+        return areDatesEqual(item.date, new Date(Date.now())) ? "white" : Colors.BLUE;
+      }
       return areDatesEqual(item.date, new Date(Date.now()))
         ? "white"
         : item.active
@@ -230,7 +239,7 @@ export function Itinerary() {
             <Grid container style={{ height: "100%" }}>
               <Grid item xs={12}>
                 {item.tripDay ? (
-                  <Text bold color={Colors.BLUE} component="h4">
+                  <Text bold color={getCalendarTextColor(item)} component="h4">
                     {item.day}
                   </Text>
                 ) : (

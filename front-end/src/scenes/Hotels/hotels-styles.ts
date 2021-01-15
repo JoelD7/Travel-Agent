@@ -46,7 +46,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   datepickerItemGrid: {
     borderRadius: "5px",
     marginTop: "5px",
-    width: "24%",
+    width: "20%",
 
     [theme.breakpoints.down(940)]: {
       width: "35%",
@@ -59,6 +59,16 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     },
     [theme.breakpoints.down(490)]: {
       width: "100%",
+    },
+  },
+  revervationParamsGrid: {
+    width: "10%",
+
+    [theme.breakpoints.down(940)]: {
+      width: "25%",
+    },
+    [theme.breakpoints.down(620)]: {
+      width: "33%",
     },
   },
   defaultContentContainer: {
@@ -145,28 +155,23 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     fontFamily: Family,
     backgroundColor: Colors.BACKGROUND,
   },
-  pageContainer: {
-    padding: '0px 115px',
-    margin: "20px auto",
-  },
+  pageContainer: {},
   pageContentContainer: {
     marginTop: "50px",
+  },
+  pageContainerChilds: {
+    width: "85%",
+    margin: "auto",
+  },
+  pageTitleGrid: {
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
   },
   pageTitleContainer: {
     backgroundColor: Colors.BLUE,
     boxShadow: Shadow.MEDIUM,
     borderRadius: "10px",
     padding: "10px",
-  },
-  revervationParamsGrid: {
-    width: "14%",
-
-    [theme.breakpoints.down(940)]: {
-      width: "25%",
-    },
-    [theme.breakpoints.down(620)]: {
-      width: "33%",
-    },
   },
   reservationParamText: {
     color: "white",

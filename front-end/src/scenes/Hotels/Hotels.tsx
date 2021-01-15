@@ -24,7 +24,7 @@ import {
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Family } from "../../assets/fonts";
 import {
   CustomButton,
@@ -38,13 +38,22 @@ import {
 } from "../../components";
 import { HotelAmenitiesSelector } from "../../components/atoms/HotelAmenitiesSelector/HotelAmenitiesSelector";
 import { Colors, Shadow } from "../../styles";
-import { HotelAmenity, hotelPlaceholder, muiDateFormatter } from "../../utils";
+import {
+  getFindPlaceFromTextURL,
+  getPhotoFromReferenceURL,
+  GoogleAPI,
+  HotelAmenity,
+  hotelPlaceholder,
+  muiDateFormatter,
+} from "../../utils";
 import { AmenitiesList, Amenity } from "../../utils/HotelAmenities";
 import { Hotel } from "../../utils/types/Hotel";
 import { hotelsStyles } from "./hotels-styles";
 import { format } from "date-fns";
 import Rating from "react-rating";
 import Helmet from "react-helmet";
+import Axios from "axios";
+import { createStringLiteral } from "typescript";
 
 interface HotelSearch {
   checkIn: MaterialUiPickersDate;
@@ -166,6 +175,40 @@ export function Hotels() {
 
   const hotels: Hotel[] = [hotelPlaceholder];
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [image, setImage] = useState<string>("");
+
+  const city = "Paris";
+
+  useEffect(() => {
+    // getCityImage();
+  }, []);
+
+  function getCityImage() {
+    const placesRequestUrl = getFindPlaceFromTextURL(city, ["name", "photos"]);
+
+    Axios.get(GoogleAPI.proxyUrl + placesRequestUrl)
+      .then((res) => {
+        const photoRef = res.data?.candidates?.[0]?.photos?.[0]?.photo_reference;
+        // photoRef is the result of the initial Place Search query
+        if (photoRef) {
+          const imageLookupURL = getPhotoFromReferenceURL(photoRef, 700, 700);
+
+          fetch(GoogleAPI.proxyUrl + imageLookupURL)
+            .then((r) => {
+              r.blob().then((blob) => {
+                let convertedImage = URL.createObjectURL(blob);
+                setImage(convertedImage);
+              });
+            })
+            .catch((error) => {
+              console.log("Error while getting image: ", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log("Error: ", error);
+      });
+  }
 
   return (
     <div className={style.mainContainer}>
@@ -174,266 +217,296 @@ export function Hotels() {
       </Helmet>
 
       <Navbar />
-      <ServicesToolbar />
 
-      <div className={style.pageContainer}>
-        <Grid container spacing={2} className={style.pageTitleContainer}>
+      <Grid container className={style.pageContainer}>
+        {/* Page title grid*/}
+        <Grid
+          item
+          xs={12}
+          style={{
+            backgroundImage: `url("/Travel-Agent/destinations/paris.jpg")`,
+          }}
+          className={style.pageTitleGrid}
+        >
+          {/* Services toolbar */}
+          <Grid container>
+            <ServicesToolbar />
+          </Grid>
+
           <Grid item xs={12}>
             <h1 style={{ color: "white", marginBottom: "0px" }}>Hotels in Paris</h1>
           </Grid>
 
-          <ThemeProvider theme={theme}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid item className={style.datepickerItemGrid}>
-                <h5 className={style.reservationParamText}>Check-in</h5>
-                <KeyboardDatePicker
-                  value={state.checkIn}
-                  labelFunc={muiDateFormatter}
-                  className={style.datepicker}
-                  minDate={new Date()}
-                  format="dd MMM., yyyy"
-                  onChange={(d) => setState({ ...state, checkIn: d })}
-                />
-              </Grid>
+          <Grid container>
+            {/* Page title blue */}
+            <Grid item xs={10} className={style.pageContainerChilds}>
+              <Grid container spacing={2} className={style.pageTitleContainer}>
+                <ThemeProvider theme={theme}>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid item className={style.datepickerItemGrid}>
+                      <h5 className={style.reservationParamText}>Check-in</h5>
+                      <KeyboardDatePicker
+                        value={state.checkIn}
+                        labelFunc={muiDateFormatter}
+                        className={style.datepicker}
+                        minDate={new Date()}
+                        format="dd MMM., yyyy"
+                        onChange={(d) => setState({ ...state, checkIn: d })}
+                      />
+                    </Grid>
 
-              <Grid item className={style.datepickerItemGrid}>
-                <h5 className={style.reservationParamText}>Check-out</h5>
-                <KeyboardDatePicker
-                  value={state.checkOut}
-                  labelFunc={muiDateFormatter}
-                  className={style.datepicker}
-                  minDate={new Date()}
-                  format="dd MMM., yyyy"
-                  onChange={(d) => setState({ ...state, checkOut: d })}
-                />
-              </Grid>
-            </MuiPickersUtilsProvider>
-          </ThemeProvider>
+                    <Grid item className={style.datepickerItemGrid}>
+                      <h5 className={style.reservationParamText}>Check-out</h5>
+                      <KeyboardDatePicker
+                        value={state.checkOut}
+                        labelFunc={muiDateFormatter}
+                        className={style.datepicker}
+                        minDate={new Date()}
+                        format="dd MMM., yyyy"
+                        onChange={(d) => setState({ ...state, checkOut: d })}
+                      />
+                    </Grid>
+                  </MuiPickersUtilsProvider>
+                </ThemeProvider>
 
-          <ThemeProvider theme={theme}>
-            {hotelReservationParams.map((param) => (
-              <Grid item className={style.revervationParamsGrid}>
-                <h5 className={style.reservationParamText}>{param.label}</h5>
+                <ThemeProvider theme={theme}>
+                  {hotelReservationParams.map((param) => (
+                    <Grid item className={style.revervationParamsGrid}>
+                      <h5 className={style.reservationParamText}>{param.label}</h5>
 
-                <FormControl style={{ width: "100%" }}>
-                  <Select
-                    value={state[param.field]}
-                    variant="outlined"
-                    className={style.select}
-                    startAdornment={
-                      <FontAwesomeIcon icon={param.icon} color={Colors.BLUE} />
-                    }
-                    onChange={(e) =>
-                      setState({ ...state, [param.field]: e.target.value })
-                    }
-                  >
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                      <MenuItem value={n}>{n}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-            ))}
+                      <FormControl style={{ width: "100%" }}>
+                        <Select
+                          value={state[param.field]}
+                          variant="outlined"
+                          className={style.select}
+                          startAdornment={
+                            <FontAwesomeIcon icon={param.icon} color={Colors.BLUE} />
+                          }
+                          onChange={(e) =>
+                            setState({ ...state, [param.field]: e.target.value })
+                          }
+                        >
+                          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+                            <MenuItem value={n}>{n}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  ))}
 
-            <Grid item xs={12} style={{ marginLeft: "auto" }}>
-              <Grid container justify="flex-end">
-                <CustomButton
-                  backgroundColor={Colors.GREEN}
-                  style={{
-                    width: "140px",
-                    boxShadow: Shadow.DARK,
-                    color: Colors.BLUE,
-                  }}
-                  onClick={() => {
-                    state.amenities.forEach((am) => {
-                      if (am.checked) {
-                        console.log(am.value);
-                      }
-                    });
-                  }}
-                >
-                  Search
-                </CustomButton>
+                  <Grid item xs={2} style={{ marginLeft: "auto" }}>
+                    <Grid
+                      container
+                      justify="flex-end"
+                      alignItems="flex-end"
+                      style={{ height: "100%" }}
+                    >
+                      <CustomButton
+                        backgroundColor={Colors.GREEN}
+                        style={{
+                          width: "140px",
+                          boxShadow: Shadow.DARK,
+                          color: Colors.BLUE,
+                        }}
+                        onClick={() => {
+                          state.amenities.forEach((am) => {
+                            if (am.checked) {
+                              console.log(am.value);
+                            }
+                          });
+                        }}
+                      >
+                        Search
+                      </CustomButton>
+                    </Grid>
+                  </Grid>
+                </ThemeProvider>
               </Grid>
             </Grid>
-          </ThemeProvider>
+          </Grid>
         </Grid>
 
-        <Grid container className={style.pageContentContainer}>
-          <Grid item className={style.filtersGrid}>
-            <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-              Price range
-            </Text>
-            <PriceRange
-              value={state.priceRange}
-              max={200}
-              updateState={(slider) => setState({ ...state, priceRange: slider })}
-            />
+        {/* Page content */}
+        <Grid item xs={9} className={style.pageContainerChilds}>
+          <Grid container className={style.pageContentContainer}>
+            <Grid item className={style.filtersGrid}>
+              <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+                Price range
+              </Text>
+              <PriceRange
+                value={state.priceRange}
+                max={200}
+                updateState={(slider) => setState({ ...state, priceRange: slider })}
+              />
 
-            <Divider style={{ margin: "10px auto" }} />
+              <Divider style={{ margin: "10px auto" }} />
 
-            <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-              Stars
-            </Text>
-            <Rating
-              initialRating={state.stars}
-              onChange={(star) => setState({ ...state, stars: star })}
-              emptySymbol={
-                <FontAwesomeIcon
-                  style={{ margin: "0px 1px" }}
-                  size="2x"
-                  icon={faStar}
-                  color={"#cecece"}
-                />
-              }
-              fullSymbol={
-                <FontAwesomeIcon
-                  style={{ margin: "0px 1px" }}
-                  size="2x"
-                  icon={faStar}
-                  color={Colors.PURPLE}
-                />
-              }
-            />
+              <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+                Stars
+              </Text>
+              <Rating
+                initialRating={state.stars}
+                onChange={(star) => setState({ ...state, stars: star })}
+                emptySymbol={
+                  <FontAwesomeIcon
+                    style={{ margin: "0px 1px" }}
+                    size="2x"
+                    icon={faStar}
+                    color={"#cecece"}
+                  />
+                }
+                fullSymbol={
+                  <FontAwesomeIcon
+                    style={{ margin: "0px 1px" }}
+                    size="2x"
+                    icon={faStar}
+                    color={Colors.PURPLE}
+                  />
+                }
+              />
 
-            <Divider style={{ margin: "10px auto" }} />
+              <Divider style={{ margin: "10px auto" }} />
 
-            <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-              Amenities
-            </Text>
-            <HotelAmenitiesSelector
-              values={state.amenities}
-              updateState={(selected) => {
-                setState({ ...state, amenities: selected });
-              }}
-            />
-          </Grid>
+              <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+                Amenities
+              </Text>
+              <HotelAmenitiesSelector
+                values={state.amenities}
+                updateState={(selected) => {
+                  setState({ ...state, amenities: selected });
+                }}
+              />
+            </Grid>
 
-          <Grid item className={style.filterButtonGrid}>
-            <CustomButton
-              icon={faFilter}
-              backgroundColor={Colors.PURPLE}
-              style={{ paddingLeft: "10px", fontSize: "14px" }}
-              onClick={() => setOpenDrawer(true)}
-            >
-              Filter
-            </CustomButton>
-          </Grid>
+            <Grid item className={style.filterButtonGrid}>
+              <CustomButton
+                icon={faFilter}
+                backgroundColor={Colors.PURPLE}
+                style={{ paddingLeft: "10px", fontSize: "14px" }}
+                onClick={() => setOpenDrawer(true)}
+              >
+                Filter
+              </CustomButton>
+            </Grid>
 
-          <Grid item className={style.hotelsGrid}>
-            {hotels.map((hotel, i) => (
-              <Grid key={i} container id="card" className={style.hotelCard}>
-                <Grid item className={style.hotelImageGrid} id="photo">
-                  <img src={hotel.image} className={style.hotelImage} />
-                </Grid>
-
-                <Grid item className={style.hotelContentGrid} id="content">
-                  <Grid item xs={12} id="title">
-                    <Grid container alignItems="center" style={{ margin: "10px 0px" }}>
-                      <h3 style={{ margin: "0px 10px" }}>{hotel.name}</h3>
-
-                      <StarRating stars={hotel.stars} />
-                    </Grid>
+            <Grid item className={style.hotelsGrid}>
+              {hotels.map((hotel, i) => (
+                <Grid key={i} container id="card" className={style.hotelCard}>
+                  <Grid item className={style.hotelImageGrid} id="photo">
+                    <img src={hotel.image} className={style.hotelImage} />
                   </Grid>
 
-                  <Grid container className={style.defaultContentContainer}>
-                    <Grid item className={style.cardData1}>
-                      <div>
-                        <h4
-                          style={{ textAlign: "center" }}
-                        >{`$ ${hotel.pricePerNight}`}</h4>
-                        <CustomButton backgroundColor={Colors.PURPLE} onClick={() => {}}>
-                          View details
-                        </CustomButton>
-                      </div>
+                  <Grid item className={style.hotelContentGrid} id="content">
+                    <Grid item xs={12} id="title">
+                      <Grid container alignItems="center" style={{ margin: "10px 0px" }}>
+                        <h3 style={{ margin: "0px 10px" }}>{hotel.name}</h3>
+
+                        <StarRating stars={hotel.stars} />
+                      </Grid>
                     </Grid>
 
-                    <Grid item className={style.cardData1}>
-                      <div>
-                        <p className={style.cardText}>
-                          <b>Hotel info</b>
-                        </p>
+                    <Grid container className={style.defaultContentContainer}>
+                      <Grid item className={style.cardData1}>
+                        <div>
+                          <h4
+                            style={{ textAlign: "center" }}
+                          >{`$ ${hotel.pricePerNight}`}</h4>
+                          <CustomButton
+                            backgroundColor={Colors.PURPLE}
+                            onClick={() => {}}
+                          >
+                            View details
+                          </CustomButton>
+                        </div>
+                      </Grid>
 
-                        <IconText
-                          text={hotel.phoneNumber}
-                          icon={faPhone}
-                          style={{ marginBottom: "5px" }}
-                        />
+                      <Grid item className={style.cardData1}>
+                        <div>
+                          <p className={style.cardText}>
+                            <b>Hotel info</b>
+                          </p>
 
-                        <IconText text={hotel.address} icon={faMapMarkerAlt} />
-                      </div>
-                    </Grid>
-
-                    <Grid item className={style.cardData2}>
-                      <div>
-                        <p className={style.cardText}>
-                          <b>Amenities</b>
-                        </p>
-                        {hotel.amenities.map((amenity, i) => (
                           <IconText
-                            key={i}
+                            text={hotel.phoneNumber}
+                            icon={faPhone}
                             style={{ marginBottom: "5px" }}
-                            text={amenity.value}
-                            icon={amenity.icon}
                           />
-                        ))}
-                      </div>
+
+                          <IconText text={hotel.address} icon={faMapMarkerAlt} />
+                        </div>
+                      </Grid>
+
+                      <Grid item className={style.cardData2}>
+                        <div>
+                          <p className={style.cardText}>
+                            <b>Amenities</b>
+                          </p>
+                          {hotel.amenities.map((amenity, i) => (
+                            <IconText
+                              key={i}
+                              style={{ marginBottom: "5px" }}
+                              text={amenity.value}
+                              icon={amenity.icon}
+                            />
+                          ))}
+                        </div>
+                      </Grid>
                     </Grid>
-                  </Grid>
 
-                  <Grid container className={style.smContentContainer}>
-                    <Grid item xs={12} style={{ padding: "10px" }}>
-                      <div>
-                        <IconText
-                          text={hotel.phoneNumber}
-                          icon={faPhone}
-                          style={{ marginBottom: "5px" }}
-                        />
-
-                        <IconText text={hotel.address} icon={faMapMarkerAlt} />
-                      </div>
-                    </Grid>
-
-                    <Grid item xs={12} style={{ padding: "0px 10px" }}>
-                      <div>
-                        <p className={style.cardText}>
-                          <b>Amenities</b>
-                        </p>
-                        {hotel.amenities.map((amenity, i) => (
+                    <Grid container className={style.smContentContainer}>
+                      <Grid item xs={12} style={{ padding: "10px" }}>
+                        <div>
                           <IconText
-                            key={i}
+                            text={hotel.phoneNumber}
+                            icon={faPhone}
                             style={{ marginBottom: "5px" }}
-                            text={amenity.value}
-                            icon={amenity.icon}
                           />
-                        ))}
-                      </div>
-                    </Grid>
 
-                    <Grid item xs={12} style={{ padding: "10px" }}>
-                      <Grid container>
-                        <h2 style={{ textAlign: "center", marginRight: "auto" }}>
-                          {`$ ${hotel.pricePerNight}`}
-                        </h2>
-                        <CustomButton
-                          style={{
-                            margin: "auto 0px auto auto",
-                            fontSize: "16px",
-                          }}
-                          backgroundColor={Colors.PURPLE}
-                          onClick={() => {}}
-                        >
-                          View details
-                        </CustomButton>
+                          <IconText text={hotel.address} icon={faMapMarkerAlt} />
+                        </div>
+                      </Grid>
+
+                      <Grid item xs={12} style={{ padding: "0px 10px" }}>
+                        <div>
+                          <p className={style.cardText}>
+                            <b>Amenities</b>
+                          </p>
+                          {hotel.amenities.map((amenity, i) => (
+                            <IconText
+                              key={i}
+                              style={{ marginBottom: "5px" }}
+                              text={amenity.value}
+                              icon={amenity.icon}
+                            />
+                          ))}
+                        </div>
+                      </Grid>
+
+                      <Grid item xs={12} style={{ padding: "10px" }}>
+                        <Grid container>
+                          <h2 style={{ textAlign: "center", marginRight: "auto" }}>
+                            {`$ ${hotel.pricePerNight}`}
+                          </h2>
+                          <CustomButton
+                            style={{
+                              margin: "auto 0px auto auto",
+                              fontSize: "16px",
+                            }}
+                            backgroundColor={Colors.PURPLE}
+                            onClick={() => {}}
+                          >
+                            View details
+                          </CustomButton>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            ))}
+              ))}
+            </Grid>
           </Grid>
         </Grid>
-      </div>
+      </Grid>
 
       <Drawer
         open={openDrawer}
