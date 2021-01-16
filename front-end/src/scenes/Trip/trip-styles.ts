@@ -32,7 +32,6 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     marginBottom: "40px",
     backgroundColor: Colors.BACKGROUND,
   },
-  lastTripDataContainer: {},
   pageContentGrid: {
     marginLeft: "265px",
     width: "calc(100% - 300px)",

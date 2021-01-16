@@ -5,7 +5,7 @@ import { Shadow } from "../../../styles";
 export const restaurantCardStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     fontFamily: Font.Family,
-    boxShadow: Shadow.LIGHT,
+    boxShadow: Shadow.LIGHT3D,
     height: "210px",
     borderRadius: "5px",
     marginBottom: "20px",

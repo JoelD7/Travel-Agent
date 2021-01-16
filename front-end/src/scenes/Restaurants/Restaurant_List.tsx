@@ -235,14 +235,27 @@ export function Restaurant_List() {
       </Helmet>
 
       <Navbar />
-      <ServicesToolbar />
 
       <div>
-        <Text
-          component="h1"
-          weight="bold"
-          style={{ textAlign: "center", marginBottom: "20px" }}
-        >{`Restaurants in ${state.city}`}</Text>
+        <Grid container className={style.pageTitleContainer}>
+          {/* Services toolbar and title */}
+          <Grid item xs={12}>
+            <Grid container>
+              <Grid item xs={12}>
+                <ServicesToolbar style={{ boxShadow: Shadow.MEDIUM }} />
+              </Grid>
+
+              <Grid item xs={10} style={{ margin: "0px auto" }}>
+                <Text
+                  component="hm"
+                  weight="bold"
+                  color="white"
+                  style={{ marginBottom: "20px" }}
+                >{`Restaurants in ${state.city}`}</Text>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
 
         <Grid container spacing={2} className={style.pageContentContainer}>
           {/* Filters */}

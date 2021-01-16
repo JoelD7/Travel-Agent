@@ -19,7 +19,7 @@ import {
   SliderArrow,
   Text,
 } from "../../components";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 import { thingsToDoStyles as thingsToDoStyles } from "./thingsToDo-styles";
 import {
   POICategories,
@@ -110,8 +110,9 @@ export function ThingsToDo() {
     JSON.parse(String(localStorage.getItem("rates")))
   );
 
+  const [titleBackground, setTitleBackground] = useState<string>("");
+
   useEffect(() => {
-    console.log("Key: ", process.env.REACT_APP_PLACES_API_KEY);
     if (!areRatesUpdated()) {
       getExchangeRates();
     }
@@ -164,212 +165,230 @@ export function ThingsToDo() {
       </Helmet>
 
       <Navbar />
-      <ServicesToolbar />
 
-      <Text style={{ textAlign: "center" }} bold component="h1">
-        Things to in Dubai
-      </Text>
+      <Grid
+        container
+        className={style.pageTitleContainer}
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/dubai.jpg")`,
+        }}
+      >
+        {/* Services toolbar and title */}
+        <Grid item xs={12}>
+          <Grid container>
+            <Grid item xs={12}>
+              <ServicesToolbar style={{ boxShadow: Shadow.MEDIUM }} />
+            </Grid>
 
-      {/* Parent ategories of POIs */}
-      <ThemeProvider key="categories parent menu" theme={theme}>
-        <Toolbar className={style.parentCategoryBar}>
-          {parentCategories.map((parentCategory, i) => (
-            <MenuItem
-              id={parentCategory}
-              onClick={onMenuOpen}
-              classes={{ root: style.menuItemRoot }}
-              key={i}
-            >
-              {parentCategory}
-            </MenuItem>
-          ))}
-          <MenuItem
-            id={"Tours & activities"}
-            onClick={() => setSelectedCategory(POICategory.TOURS)}
-            classes={{ root: style.menuItemRoot }}
-          >
-            Tours & activities
-          </MenuItem>
-        </Toolbar>
+            <Grid item xs={10} style={{ margin: "0px auto" }}>
+              <Text bold component="hm" color="white">
+                Things to in Dubai
+              </Text>
+            </Grid>
+          </Grid>
+        </Grid>
 
-        <Menu
-          open={open}
-          onClose={() => {
-            setOpen(false);
-            setAnchorEl(null);
-          }}
-          anchorEl={anchorEl}
-        >
-          {POICategories.filter((category) => category.parent === anchorEl?.id).map(
-            (category, i) => (
-              <MenuItem
-                key={i}
-                onClick={() => {
-                  setOpen(false);
-                  setSelectedCategory(category.name);
-                  setAnchorEl(null);
-                }}
-              >
-                {category.name}
-              </MenuItem>
-            )
-          )}
-        </Menu>
-      </ThemeProvider>
-
-      <div className={style.pageContentParent}>
-        <div className={style.pageContentContainer}>
-          <Text component="h2">Browse by category</Text>
-          <Slider {...sliderSettings}>
-            {POICategories.map((category, i) => (
-              <div key={i}>
-                <Card
-                  className={
-                    selectedCategory === category.pluralName
-                      ? style.cardSelected
-                      : style.card
-                  }
+        {/* Parent ategories of POIs */}
+        <Grid item xs={12}>
+          <ThemeProvider key="categories parent menu" theme={theme}>
+            <Toolbar className={style.parentCategoryBar}>
+              {parentCategories.map((parentCategory, i) => (
+                <MenuItem
+                  id={parentCategory}
+                  onClick={onMenuOpen}
+                  classes={{ root: style.menuItemRoot }}
+                  key={i}
                 >
-                  <CardActionArea
-                    onClick={() => setSelectedCategory(category.pluralName)}
+                  {parentCategory}
+                </MenuItem>
+              ))}
+              <MenuItem
+                id={"Tours & activities"}
+                onClick={() => setSelectedCategory(POICategory.TOURS)}
+                classes={{ root: style.menuItemRoot }}
+              >
+                Tours & activities
+              </MenuItem>
+            </Toolbar>
+
+            <Menu
+              open={open}
+              onClose={() => {
+                setOpen(false);
+                setAnchorEl(null);
+              }}
+              anchorEl={anchorEl}
+            >
+              {POICategories.filter((category) => category.parent === anchorEl?.id).map(
+                (category, i) => (
+                  <MenuItem
+                    key={i}
+                    onClick={() => {
+                      setOpen(false);
+                      setSelectedCategory(category.name);
+                      setAnchorEl(null);
+                    }}
                   >
-                    <CardMedia component="img" height="150" image={category.image} />
-                  </CardActionArea>
+                    {category.name}
+                  </MenuItem>
+                )
+              )}
+            </Menu>
+          </ThemeProvider>
+        </Grid>
+      </Grid>
 
-                  <CardContent>
-                    <div style={{ color: "white", fontWeight: "bold" }}>
-                      {category.name}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </Slider>
+      <div className={style.pageContentContainer}>
+        <Text component="h2" bold>
+          Browse by category
+        </Text>
+        <Slider {...sliderSettings}>
+          {POICategories.map((category, i) => (
+            <div key={i}>
+              <Card
+                className={
+                  selectedCategory === category.pluralName
+                    ? style.cardSelected
+                    : style.card
+                }
+              >
+                <CardActionArea onClick={() => setSelectedCategory(category.pluralName)}>
+                  <CardMedia component="img" height="150" image={category.image} />
+                </CardActionArea>
 
-          {selectedCategory !== POICategory.TOURS && (
-            <>
-              <Text
-                component="h2"
-                bold
-                style={{ marginTop: "20px" }}
-              >{`${selectedCategory} in Dubai`}</Text>
+                <CardContent>
+                  <div style={{ color: "white", fontWeight: "bold" }}>
+                    {category.name}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+        </Slider>
 
-              {/* POIs cards */}
-              <Grid key="pois cards" container>
-                {pois.slice(0, 6).map((poi, i) => (
-                  <Card key={i} className={style.poiCard}>
-                    <CardActionArea
-                      style={{ padding: "10px" }}
-                      onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
+        {selectedCategory !== POICategory.TOURS && (
+          <>
+            <Text
+              component="h2"
+              bold
+              style={{ marginTop: "20px" }}
+            >{`${selectedCategory} in Dubai`}</Text>
+
+            {/* POIs cards */}
+            <Grid key="pois cards" container>
+              {pois.slice(0, 6).map((poi, i) => (
+                <Card key={i} className={style.poiCard}>
+                  <CardActionArea
+                    style={{ padding: "10px" }}
+                    onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
+                  >
+                    <Text
+                      bold
+                      style={{
+                        color: Colors.BLUE,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                      component="h4"
                     >
-                      <Text
-                        bold
-                        style={{
-                          color: Colors.BLUE,
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                        component="h4"
-                      >
-                        {poi.name}
-                      </Text>
-                      <IconText
-                        icon={faMapMarkerAlt}
-                        text={
-                          poi.location.address
-                            ? poi.location.address
-                            : poi.location.formattedAddress?.join(", ")
-                        }
-                      />
-                      <IconText
-                        icon={POICategoryMap[poi.categories[0].name].icon}
-                        text={poi.categories[0].name}
-                      />
+                      {poi.name}
+                    </Text>
+                    <IconText
+                      icon={faMapMarkerAlt}
+                      text={
+                        poi.location.address
+                          ? poi.location.address
+                          : poi.location.formattedAddress?.join(", ")
+                      }
+                    />
+                    <IconText
+                      icon={POICategoryMap[poi.categories[0].name].icon}
+                      text={poi.categories[0].name}
+                    />
 
-                      <div style={{ display: "flex" }}>
-                        <CustomButton
-                          onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
-                          backgroundColor={Colors.PURPLE}
-                          style={{
-                            borderRadius: "10px",
-                            fontSize: "16px",
-                            marginLeft: "auto",
-                          }}
-                        >
-                          Check out
-                        </CustomButton>
-                      </div>
-                    </CardActionArea>
-                  </Card>
-                ))}
-              </Grid>
-            </>
-          )}
-
-          {/* Tours cards */}
-          {(selectedCategory === initialCategory ||
-            selectedCategory === POICategory.TOURS) && (
-            <>
-              <Text
-                component="h2"
-                bold
-                style={{ marginTop: "20px" }}
-              >{`Tours and activites in Dubai`}</Text>
-              <Grid key="tours cards" container>
-                {activities.slice(0, 6).map((activity, i) => (
-                  <Card key={i} className={style.activityCard}>
-                    <CardActionArea onClick={() => goToBookingLink(activity.bookingLink)}>
-                      <CardMedia
-                        component="img"
-                        image={activity.pictures[0]}
-                        height="200"
-                      />
-                    </CardActionArea>
-
-                    <CardContent>
-                      <Text
-                        component="h5"
-                        bold
-                        style={{
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          maxHeight: "52px",
-                          marginTop: "0px",
-                        }}
-                      >
-                        {activity.name}
-                      </Text>
-                      <Ratings
-                        rating={Number(activity.rating)}
-                        widgetRatedColors={Colors.PURPLE}
-                        widgetHoverColors={Colors.PURPLE}
-                        widgetDimensions="25px"
-                        widgetSpacings="4px"
-                      >
-                        {[1, 2, 3, 4, 5].map((n) => (
-                          <Ratings.Widget key={n} />
-                        ))}
-                      </Ratings>
-
-                      <p>{`${convertCurrency(
-                        activity.price.currencyCode,
-                        activity.price.amount
-                      )}`}</p>
+                    <div style={{ display: "flex" }}>
                       <CustomButton
-                        rounded
-                        style={{ fontSize: "16px", marginTop: "auto" }}
-                        onClick={() => goToBookingLink(activity.bookingLink)}
+                        onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
+                        backgroundColor={Colors.PURPLE}
+                        style={{
+                          borderRadius: "10px",
+                          fontSize: "16px",
+                          marginLeft: "auto",
+                        }}
                       >
                         Check out
                       </CustomButton>
-                    </CardContent>
-                  </Card>
-                ))}
-              </Grid>
-            </>
-          )}
-        </div>
+                    </div>
+                  </CardActionArea>
+                </Card>
+              ))}
+            </Grid>
+          </>
+        )}
+
+        {/* Tours cards */}
+        {(selectedCategory === initialCategory ||
+          selectedCategory === POICategory.TOURS) && (
+          <>
+            <Text
+              component="h2"
+              bold
+              style={{ marginTop: "20px" }}
+            >{`Tours and activites in Dubai`}</Text>
+            <Grid key="tours cards" container>
+              {activities.slice(0, 6).map((activity, i) => (
+                <Card key={i} className={style.activityCard}>
+                  <CardActionArea onClick={() => goToBookingLink(activity.bookingLink)}>
+                    <CardMedia
+                      component="img"
+                      image={activity.pictures[0]}
+                      height="200"
+                    />
+                  </CardActionArea>
+
+                  <CardContent>
+                    <Text
+                      component="h5"
+                      bold
+                      style={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        maxHeight: "52px",
+                        marginTop: "0px",
+                      }}
+                    >
+                      {activity.name}
+                    </Text>
+                    <Ratings
+                      rating={Number(activity.rating)}
+                      widgetRatedColors={Colors.PURPLE}
+                      widgetHoverColors={Colors.PURPLE}
+                      widgetDimensions="25px"
+                      widgetSpacings="4px"
+                    >
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <Ratings.Widget key={n} />
+                      ))}
+                    </Ratings>
+
+                    <p>{`${convertCurrency(
+                      activity.price.currencyCode,
+                      activity.price.amount
+                    )}`}</p>
+                    <CustomButton
+                      rounded
+                      style={{ fontSize: "16px", marginTop: "auto" }}
+                      onClick={() => goToBookingLink(activity.bookingLink)}
+                    >
+                      Check out
+                    </CustomButton>
+                  </CardContent>
+                </Card>
+              ))}
+            </Grid>
+          </>
+        )}
       </div>
     </div>
   );

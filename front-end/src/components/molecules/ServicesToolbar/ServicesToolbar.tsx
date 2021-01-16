@@ -2,8 +2,9 @@ import React from "react";
 import { createMuiTheme, MenuItem, ThemeProvider, Toolbar } from "@material-ui/core";
 import { Colors } from "../../../styles";
 import { servicesToolbarStyles } from "../servicesToolbar-styles";
-import { useHistory } from "react-router-dom";
-import { Routes } from "../../../utils";
+import { Link, useHistory } from "react-router-dom";
+import { getLinkStyle, Routes } from "../../../utils";
+import { CreateCSSProperties, CSSProperties } from "@material-ui/styles";
 
 interface NavbarService {
   label: string;
@@ -13,9 +14,10 @@ interface NavbarService {
 
 interface ServicesToolbar {
   home?: boolean;
+  style?: CSSProperties;
 }
 
-export function ServicesToolbar({ home }: ServicesToolbar) {
+export function ServicesToolbar({ home, style }: ServicesToolbar) {
   let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
   let page = "/" + segmentedURL[segmentedURL.length - 1];
 
@@ -60,22 +62,27 @@ export function ServicesToolbar({ home }: ServicesToolbar) {
     },
   });
 
-  const style = servicesToolbarStyles();
+  const styles = servicesToolbarStyles();
 
   const history = useHistory();
 
   return (
     <ThemeProvider theme={theme}>
-      <Toolbar className={home ? style.servicesToolbarHome : style.servicesToolbar}>
+      <Toolbar
+        className={home ? styles.servicesToolbarHome : styles.servicesToolbar}
+        style={{ ...style }}
+      >
         {navbarServices.map((service, i) => (
-          <MenuItem
-            key={i}
-            selected={service.selected}
-            onClick={() => history.push(service.route)}
-            classes={{ root: home ? style.menuItemRootHome : style.menuItemRoot }}
-          >
-            {service.label}
-          </MenuItem>
+          <Link to={service.route} style={getLinkStyle(Colors.BLUE)}>
+            <MenuItem
+              key={i}
+              selected={service.selected}
+              // onClick={() => history.push(service.route)}
+              classes={{ root: home ? styles.menuItemRootHome : styles.menuItemRoot }}
+            >
+              {service.label}
+            </MenuItem>
+          </Link>
         ))}
       </Toolbar>
     </ThemeProvider>

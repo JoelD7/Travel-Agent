@@ -119,7 +119,7 @@ export function TripDetails() {
 
             {/* Trip quick info */}
             <Grid item xs={12} style={{ alignSelf: "center" }}>
-              <Grid container className={style.lastTripDataContainer}>
+              <Grid container>
                 <div style={{ width: "105px" }}>
                   <Text
                     color="white"

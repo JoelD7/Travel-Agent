@@ -18,18 +18,19 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   menuItemRoot: {
     fontFamily: Font.Family,
+    fontWeight: "bold",
     borderBottom: `2px solid rgba(0,0,0,0)`,
     margin: "0px 5px",
-    color: Colors.BLUE,
+    color: "white",
     "&.MuiListItem-root": {
       "&.Mui-selected": {
         backgroundColor: "rgba(0,0,0,0)",
-        borderBottom: `2px solid ${Colors.PURPLE_HOVER}`,
+        borderBottom: `3px solid ${Colors.GREEN}`,
       },
     },
     "&.MuiListItem-button": {
       "&:hover": {
-        borderBottom: `2px solid ${Colors.PURPLE_HOVER}`,
+        borderBottom: `3px solid ${Colors.GREEN}`,
       },
     },
   },
@@ -40,15 +41,22 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     margin: "20px auto",
     justifyContent: "center",
     boxShadow: Shadow.LIGHT,
+    backgroundColor: Colors.BLUE,
     borderRadius: "50px",
     width: "60%",
-    backgroundColor: "white",
+    position: "relative",
+    top: "75px",
   },
   pageContentContainer: {
     width: "80%",
-    margin: "auto",
+    margin: "40px auto auto auto",
   },
-  pageContentParent: {},
+  pageTitleContainer: {
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPositionY: "50%",
+    height: "300px",
+  },
   activityCard: {
     borderRadius: "10px",
     margin: "10px",

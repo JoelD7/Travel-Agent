@@ -3,10 +3,10 @@ import { CreateCSSProperties } from "@material-ui/styles";
 import React, { FunctionComponent } from "react";
 import { Font } from "../../assets";
 
-type Component = "h1" | "h2" | "h3" | "h4" | "h5" | "p";
+type Component = "hm" | "h1" | "h2" | "h3" | "h4" | "h5" | "p";
 
 export const Text: FunctionComponent<{
-  component: Component;
+  component?: Component;
   bold?: boolean;
   color?: string;
   className?: string;
@@ -16,7 +16,7 @@ export const Text: FunctionComponent<{
 }> = ({
   children,
   endParagraph,
-  component,
+  component = "p",
   style,
   className,
   bold,
@@ -24,6 +24,7 @@ export const Text: FunctionComponent<{
   weight = "normal",
 }) => {
   let componentParser = {
+    hm: "48px",
     h1: "32px",
     h2: "26px",
     h3: "22px",

@@ -6,7 +6,6 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     fontFamily: Family,
     backgroundColor: Colors.BACKGROUND,
-
   },
   datepicker: {
     backgroundColor: "white",
@@ -23,7 +22,10 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
       padding: "5px 0px 5px 10px",
     },
     "& .MuiInputBase-root": {
-      height: "37px",
+      height: "32px",
+    },
+    "& .MuiInput-underline::after": {
+      borderBottom: `2px solid ${Colors.GREEN_HOVER}`,
     },
   },
   datepickerGrid: {
@@ -40,6 +42,9 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   destinationTF: {
     width: "100%",
+    "&.MuiInputBase-root": {
+      height: "30px",
+    },
   },
   drawer: {
     width: "250px",
@@ -49,7 +54,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     padding: "10px",
   },
   filtersGrid: {
-    backgroundColor:'white',
+    backgroundColor: "white",
     boxShadow: Shadow.LIGHT,
     borderRadius: "5px",
     padding: "10px",
@@ -90,13 +95,23 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     width: "85%",
-    margin: "20px auto",
+    margin: "120px auto 20px auto",
     [theme.breakpoints.down(1318)]: {
       width: "95%",
     },
   },
   pageContentContainerGrid: {
     marginTop: "50px",
+  },
+  resevationParamsContainer: {
+    backgroundColor: Colors.BLUE,
+    boxShadow: Shadow.MEDIUM,
+    borderRadius: "10px",
+    padding: "10px",
+    width: "85%",
+    margin: "20px auto auto auto",
+    position: "relative",
+    top: "20px",
   },
   pageTitleContainer: {
     backgroundColor: Colors.BLUE,
@@ -107,11 +122,9 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   pageTitleContainerPic: {
     backgroundImage: `url('flights.jpg')`,
+    height: "300px",
     backgroundPositionY: "20%",
     backgroundSize: "cover",
-    padding: "70px",
-    display: "flex",
-    alignItems: "center",
 
     [theme.breakpoints.down(1000)]: {
       margin: "auto",
@@ -158,18 +171,20 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
-  select: {
-    "& .MuiOutlinedInput-input": {
-      padding: "10px 25px 10px 15px",
-    },
-
+  selectControl: {
     "& .MuiOutlinedInput-root": {
       "&:hover fieldset": {
-        borderColor: "#cecece",
+        borderColor: Colors.GREEN_HOVER,
       },
       "&.Mui-focused fieldset": {
-        borderColor: "#cecece",
+        borderColor: Colors.GREEN_HOVER,
       },
+    },
+  },
+  select: {
+    height: "32px",
+    "& .MuiOutlinedInput-input": {
+      padding: "10px 25px 10px 15px",
     },
 
     "& .MuiMenuItem-root": {

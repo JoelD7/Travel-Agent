@@ -67,6 +67,10 @@ interface HotelSearch {
   [key: string]: HotelSearch[keyof HotelSearch];
 }
 
+interface HotelCard {
+  hotel: Hotel;
+}
+
 export function Hotels() {
   const theme = createMuiTheme({
     overrides: {
@@ -173,7 +177,7 @@ export function Hotels() {
     amenities: AmenitiesList,
   });
 
-  const hotels: Hotel[] = [hotelPlaceholder];
+  const hotels: Hotel[] = [hotelPlaceholder, hotelPlaceholder, hotelPlaceholder];
   const [openDrawer, setOpenDrawer] = useState(false);
   const [image, setImage] = useState<string>("");
 
@@ -210,6 +214,117 @@ export function Hotels() {
       });
   }
 
+  function HotelCard({ hotel }: HotelCard) {
+    return (
+      <Grid container id="card" className={style.hotelCard}>
+        <Grid item className={style.hotelImageGrid} id="photo">
+          <img src={hotel.image} className={style.hotelImage} />
+        </Grid>
+
+        <Grid item className={style.hotelContentGrid} id="content">
+          <Grid item xs={12} id="title">
+            <Grid container alignItems="center" style={{ margin: "10px 0px" }}>
+              <h3 style={{ margin: "0px 10px" }}>{hotel.name}</h3>
+
+              <StarRating stars={hotel.stars} />
+            </Grid>
+          </Grid>
+
+          <Grid container className={style.defaultContentContainer}>
+            <Grid item className={style.cardData1}>
+              <div>
+                <h4 style={{ textAlign: "center" }}>{`$ ${hotel.pricePerNight}`}</h4>
+                <CustomButton backgroundColor={Colors.PURPLE} onClick={() => {}}>
+                  View details
+                </CustomButton>
+              </div>
+            </Grid>
+
+            <Grid item className={style.cardData1}>
+              <div>
+                <p className={style.cardText}>
+                  <b>Hotel info</b>
+                </p>
+
+                <IconText
+                  text={hotel.phoneNumber}
+                  icon={faPhone}
+                  style={{ marginBottom: "5px" }}
+                />
+
+                <IconText text={hotel.address} icon={faMapMarkerAlt} />
+              </div>
+            </Grid>
+
+            <Grid item className={style.cardData2}>
+              <div>
+                <p className={style.cardText}>
+                  <b>Amenities</b>
+                </p>
+                {hotel.amenities.map((amenity, i) => (
+                  <IconText
+                    key={i}
+                    style={{ marginBottom: "5px" }}
+                    text={amenity.value}
+                    icon={amenity.icon}
+                  />
+                ))}
+              </div>
+            </Grid>
+          </Grid>
+
+          <Grid container className={style.smContentContainer}>
+            <Grid item xs={12} style={{ padding: "10px" }}>
+              <div>
+                <IconText
+                  text={hotel.phoneNumber}
+                  icon={faPhone}
+                  style={{ marginBottom: "5px" }}
+                />
+
+                <IconText text={hotel.address} icon={faMapMarkerAlt} />
+              </div>
+            </Grid>
+
+            <Grid item xs={12} style={{ padding: "0px 10px" }}>
+              <div>
+                <p className={style.cardText}>
+                  <b>Amenities</b>
+                </p>
+                {hotel.amenities.map((amenity, i) => (
+                  <IconText
+                    key={i}
+                    style={{ marginBottom: "5px" }}
+                    text={amenity.value}
+                    icon={amenity.icon}
+                  />
+                ))}
+              </div>
+            </Grid>
+
+            <Grid item xs={12} style={{ padding: "10px" }}>
+              <Grid container>
+                <h2 style={{ textAlign: "center", marginRight: "auto" }}>
+                  {`$ ${hotel.pricePerNight}`}
+                </h2>
+                <CustomButton
+                  style={{
+                    margin: "auto 0px auto auto",
+                    fontSize: "16px",
+                  }}
+                  backgroundColor={Colors.PURPLE}
+                  onClick={() => {}}
+                >
+                  View details
+                </CustomButton>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    );
+  }
+
   return (
     <div className={style.mainContainer}>
       <Helmet>
@@ -224,23 +339,32 @@ export function Hotels() {
           item
           xs={12}
           style={{
-            backgroundImage: `url("/Travel-Agent/destinations/paris.jpg")`,
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/destinations/paris.jpg")`,
           }}
           className={style.pageTitleGrid}
         >
-          {/* Services toolbar */}
-          <Grid container>
-            <ServicesToolbar />
-          </Grid>
+          <Grid container style={{ height: "100%" }}>
+            {/* Services bar and title */}
+            <Grid item xs={12}>
+              <Grid container>
+                {/* Services toolbar */}
+                <Grid item xs={12}>
+                  <ServicesToolbar style={{ boxShadow: Shadow.MEDIUM }} />
+                </Grid>
 
-          <Grid item xs={12}>
-            <h1 style={{ color: "white", marginBottom: "0px" }}>Hotels in Paris</h1>
-          </Grid>
+                {/* Title */}
+                <Grid item xs={10} style={{ margin: "0px auto" }}>
+                  <Text component="hm" color="white" bold>
+                    Hotels in Paris
+                  </Text>
+                </Grid>
+              </Grid>
+            </Grid>
 
-          <Grid container>
-            {/* Page title blue */}
+            {/* Reservation params box*/}
             <Grid item xs={10} className={style.pageContainerChilds}>
               <Grid container spacing={2} className={style.pageTitleContainer}>
+                {/* Dates */}
                 <ThemeProvider theme={theme}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <Grid item className={style.datepickerItemGrid}>
@@ -269,6 +393,7 @@ export function Hotels() {
                   </MuiPickersUtilsProvider>
                 </ThemeProvider>
 
+                {/* Passenger params */}
                 <ThemeProvider theme={theme}>
                   {hotelReservationParams.map((param) => (
                     <Grid item className={style.revervationParamsGrid}>
@@ -277,6 +402,7 @@ export function Hotels() {
                       <FormControl style={{ width: "100%" }}>
                         <Select
                           value={state[param.field]}
+                          style={{ height: "30px" }}
                           variant="outlined"
                           className={style.select}
                           startAdornment={
@@ -303,9 +429,10 @@ export function Hotels() {
                     >
                       <CustomButton
                         backgroundColor={Colors.GREEN}
+                        rounded
                         style={{
                           width: "140px",
-                          boxShadow: Shadow.DARK,
+                          boxShadow: Shadow.MEDIUM,
                           color: Colors.BLUE,
                         }}
                         onClick={() => {
@@ -329,53 +456,56 @@ export function Hotels() {
         {/* Page content */}
         <Grid item xs={9} className={style.pageContainerChilds}>
           <Grid container className={style.pageContentContainer}>
+            {/* Filters */}
             <Grid item className={style.filtersGrid}>
-              <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-                Price range
-              </Text>
-              <PriceRange
-                value={state.priceRange}
-                max={200}
-                updateState={(slider) => setState({ ...state, priceRange: slider })}
-              />
+              <div className={style.filtersContainer}>
+                <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+                  Price range
+                </Text>
+                <PriceRange
+                  value={state.priceRange}
+                  max={200}
+                  updateState={(slider) => setState({ ...state, priceRange: slider })}
+                />
 
-              <Divider style={{ margin: "10px auto" }} />
+                <Divider style={{ margin: "10px auto" }} />
 
-              <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-                Stars
-              </Text>
-              <Rating
-                initialRating={state.stars}
-                onChange={(star) => setState({ ...state, stars: star })}
-                emptySymbol={
-                  <FontAwesomeIcon
-                    style={{ margin: "0px 1px" }}
-                    size="2x"
-                    icon={faStar}
-                    color={"#cecece"}
-                  />
-                }
-                fullSymbol={
-                  <FontAwesomeIcon
-                    style={{ margin: "0px 1px" }}
-                    size="2x"
-                    icon={faStar}
-                    color={Colors.PURPLE}
-                  />
-                }
-              />
+                <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+                  Stars
+                </Text>
+                <Rating
+                  initialRating={state.stars}
+                  onChange={(star) => setState({ ...state, stars: star })}
+                  emptySymbol={
+                    <FontAwesomeIcon
+                      style={{ margin: "0px 1px" }}
+                      size="2x"
+                      icon={faStar}
+                      color={"#cecece"}
+                    />
+                  }
+                  fullSymbol={
+                    <FontAwesomeIcon
+                      style={{ margin: "0px 1px" }}
+                      size="2x"
+                      icon={faStar}
+                      color={Colors.PURPLE}
+                    />
+                  }
+                />
 
-              <Divider style={{ margin: "10px auto" }} />
+                <Divider style={{ margin: "10px auto" }} />
 
-              <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-                Amenities
-              </Text>
-              <HotelAmenitiesSelector
-                values={state.amenities}
-                updateState={(selected) => {
-                  setState({ ...state, amenities: selected });
-                }}
-              />
+                <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+                  Amenities
+                </Text>
+                <HotelAmenitiesSelector
+                  values={state.amenities}
+                  updateState={(selected) => {
+                    setState({ ...state, amenities: selected });
+                  }}
+                />
+              </div>
             </Grid>
 
             <Grid item className={style.filterButtonGrid}>
@@ -389,119 +519,10 @@ export function Hotels() {
               </CustomButton>
             </Grid>
 
+            {/* Hotels grid */}
             <Grid item className={style.hotelsGrid}>
               {hotels.map((hotel, i) => (
-                <Grid key={i} container id="card" className={style.hotelCard}>
-                  <Grid item className={style.hotelImageGrid} id="photo">
-                    <img src={hotel.image} className={style.hotelImage} />
-                  </Grid>
-
-                  <Grid item className={style.hotelContentGrid} id="content">
-                    <Grid item xs={12} id="title">
-                      <Grid container alignItems="center" style={{ margin: "10px 0px" }}>
-                        <h3 style={{ margin: "0px 10px" }}>{hotel.name}</h3>
-
-                        <StarRating stars={hotel.stars} />
-                      </Grid>
-                    </Grid>
-
-                    <Grid container className={style.defaultContentContainer}>
-                      <Grid item className={style.cardData1}>
-                        <div>
-                          <h4
-                            style={{ textAlign: "center" }}
-                          >{`$ ${hotel.pricePerNight}`}</h4>
-                          <CustomButton
-                            backgroundColor={Colors.PURPLE}
-                            onClick={() => {}}
-                          >
-                            View details
-                          </CustomButton>
-                        </div>
-                      </Grid>
-
-                      <Grid item className={style.cardData1}>
-                        <div>
-                          <p className={style.cardText}>
-                            <b>Hotel info</b>
-                          </p>
-
-                          <IconText
-                            text={hotel.phoneNumber}
-                            icon={faPhone}
-                            style={{ marginBottom: "5px" }}
-                          />
-
-                          <IconText text={hotel.address} icon={faMapMarkerAlt} />
-                        </div>
-                      </Grid>
-
-                      <Grid item className={style.cardData2}>
-                        <div>
-                          <p className={style.cardText}>
-                            <b>Amenities</b>
-                          </p>
-                          {hotel.amenities.map((amenity, i) => (
-                            <IconText
-                              key={i}
-                              style={{ marginBottom: "5px" }}
-                              text={amenity.value}
-                              icon={amenity.icon}
-                            />
-                          ))}
-                        </div>
-                      </Grid>
-                    </Grid>
-
-                    <Grid container className={style.smContentContainer}>
-                      <Grid item xs={12} style={{ padding: "10px" }}>
-                        <div>
-                          <IconText
-                            text={hotel.phoneNumber}
-                            icon={faPhone}
-                            style={{ marginBottom: "5px" }}
-                          />
-
-                          <IconText text={hotel.address} icon={faMapMarkerAlt} />
-                        </div>
-                      </Grid>
-
-                      <Grid item xs={12} style={{ padding: "0px 10px" }}>
-                        <div>
-                          <p className={style.cardText}>
-                            <b>Amenities</b>
-                          </p>
-                          {hotel.amenities.map((amenity, i) => (
-                            <IconText
-                              key={i}
-                              style={{ marginBottom: "5px" }}
-                              text={amenity.value}
-                              icon={amenity.icon}
-                            />
-                          ))}
-                        </div>
-                      </Grid>
-
-                      <Grid item xs={12} style={{ padding: "10px" }}>
-                        <Grid container>
-                          <h2 style={{ textAlign: "center", marginRight: "auto" }}>
-                            {`$ ${hotel.pricePerNight}`}
-                          </h2>
-                          <CustomButton
-                            style={{
-                              margin: "auto 0px auto auto",
-                              fontSize: "16px",
-                            }}
-                            backgroundColor={Colors.PURPLE}
-                            onClick={() => {}}
-                          >
-                            View details
-                          </CustomButton>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
+                <HotelCard key={i} hotel={hotel} />
               ))}
             </Grid>
           </Grid>

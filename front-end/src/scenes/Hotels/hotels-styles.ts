@@ -45,7 +45,6 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   },
   datepickerItemGrid: {
     borderRadius: "5px",
-    marginTop: "5px",
     width: "20%",
 
     [theme.breakpoints.down(940)]: {
@@ -91,15 +90,17 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     padding: "10px",
   },
   filtersGrid: {
-    borderRadius: "5px",
     width: "25%",
-    boxShadow: Shadow.LIGHT,
-    backgroundColor: "white",
-    padding: "15px",
 
     [theme.breakpoints.down(1280)]: {
       display: "none",
     },
+  },
+  filtersContainer: {
+    borderRadius: "5px",
+    boxShadow: Shadow.LIGHT3D,
+    backgroundColor: "white",
+    padding: "15px",
   },
   filterButtonGrid: {
     display: "none",
@@ -116,8 +117,8 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     },
   },
   hotelCard: {
-    boxShadow: Shadow.LIGHT,
-    marginLeft: "15px",
+    boxShadow: Shadow.LIGHT3D,
+    margin: "0px 0px 15px 15px",
     borderRadius: "10px",
     display: "flex",
     width: "100%",
@@ -157,7 +158,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   },
   pageContainer: {},
   pageContentContainer: {
-    marginTop: "50px",
+    marginTop: "70px",
   },
   pageContainerChilds: {
     width: "85%",
@@ -166,12 +167,17 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   pageTitleGrid: {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
+    backgroundPositionY: "50%",
+    height: "300px",
   },
   pageTitleContainer: {
     backgroundColor: Colors.BLUE,
+    alignSelf: "flex-end",
     boxShadow: Shadow.MEDIUM,
     borderRadius: "10px",
     padding: "10px",
+    position: "relative",
+    top: "60px",
   },
   reservationParamText: {
     color: "white",

@@ -103,7 +103,7 @@ export function Flight_List() {
           backgroundColor: "white",
 
           "&:hover": {
-            borderColor: "#cecece",
+            borderColor: Colors.GREEN_HOVER,
           },
         },
       },
@@ -285,146 +285,159 @@ export function Flight_List() {
       </Helmet>
 
       <Navbar />
-      <ServicesToolbar />
 
       {/* Page title box */}
-      <div className={style.pageTitleContainerPic}>
-        <Grid container spacing={4} className={style.pageTitleContainer}>
-          <Grid item xs={12}>
-            <h1 style={{ color: "white", marginBottom: "0px" }}>Flights to Dubai</h1>
-          </Grid>
+      <Grid container className={style.pageTitleContainerPic}>
+        {/* Services toolbar and title */}
+        <Grid item xs={12}>
+          <Grid container>
+            <Grid item xs={12}>
+              <ServicesToolbar style={{ boxShadow: Shadow.MEDIUM }} />
+            </Grid>
 
-          <Grid key="destinationTF" item className={style.reservParamGrid}>
-            <h5 className={style.reservationParamText}>From</h5>
-            <CustomTF
-              value={state.from}
-              className={style.destinationTF}
-              outlineColor={Colors.BLUE}
-              updateState={(e) => setState({ ...state, from: e.target.value })}
-              placeholder="City or airport"
-              startAdornment={
-                <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
-              }
-            />
+            <Grid item xs={10} style={{ margin: "0px auto" }}>
+              <Text component="hm" bold color="white">
+                Flights to Dubai
+              </Text>
+            </Grid>
           </Grid>
+        </Grid>
 
-          {state.flightType === FlightTypes.ROUND && (
-            <Grid item className={style.reservParamGrid} key="destinationTF">
-              <h5 className={style.reservationParamText}>To</h5>
+        {/* Reservation params */}
+        <Grid item xs={12} justify="center">
+          <Grid container spacing={4} className={style.resevationParamsContainer}>
+            <Grid key="destinationTF" item className={style.reservParamGrid}>
+              <h5 className={style.reservationParamText}>From</h5>
               <CustomTF
-                value={state.to}
+                value={state.from}
                 className={style.destinationTF}
-                outlineColor={Colors.BLUE}
-                updateState={(e) => setState({ ...state, to: e.target.value })}
+                outlineColor={Colors.GREEN_HOVER}
+                updateState={(e) => setState({ ...state, from: e.target.value })}
                 placeholder="City or airport"
                 startAdornment={
                   <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
                 }
               />
             </Grid>
-          )}
 
-          <ThemeProvider theme={theme}>
-            {/* Departure and return dates */}
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid item className={style.datepickerGrid}>
-                <h5 className={style.reservationParamText}>Departure</h5>
-                <KeyboardDatePicker
-                  value={state.departure}
-                  labelFunc={muiDateFormatter}
-                  className={style.datepicker}
-                  minDate={new Date()}
-                  format="dd MMM., yyyy"
-                  onChange={(d) => setState({ ...state, departure: d })}
+            {state.flightType === FlightTypes.ROUND && (
+              <Grid item className={style.reservParamGrid} key="destinationTF">
+                <h5 className={style.reservationParamText}>To</h5>
+                <CustomTF
+                  value={state.to}
+                  className={style.destinationTF}
+                  outlineColor={Colors.GREEN_HOVER}
+                  updateState={(e) => setState({ ...state, to: e.target.value })}
+                  placeholder="City or airport"
+                  startAdornment={
+                    <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
+                  }
                 />
               </Grid>
+            )}
 
-              {state.flightType === FlightTypes.ROUND && (
+            <ThemeProvider theme={theme}>
+              {/* Departure and return dates */}
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <Grid item className={style.datepickerGrid}>
-                  <h5 className={style.reservationParamText}>Return</h5>
+                  <h5 className={style.reservationParamText}>Departure</h5>
                   <KeyboardDatePicker
-                    value={state.return}
+                    value={state.departure}
                     labelFunc={muiDateFormatter}
                     className={style.datepicker}
-                    //@ts-ignore
-                    minDate={addDays(state.departure.valueOf(), 1)}
+                    minDate={new Date()}
                     format="dd MMM., yyyy"
-                    onChange={(d) => setState({ ...state, return: d })}
+                    onChange={(d) => setState({ ...state, departure: d })}
                   />
                 </Grid>
-              )}
-            </MuiPickersUtilsProvider>
 
-            {/* Passenger quantity selectors */}
-            {passengersParams.map((passenger, i) => (
-              <Grid item key={i} className={style.passengerParamGrid}>
-                <h5 className={style.reservationParamText}>{passenger.label}</h5>
+                {state.flightType === FlightTypes.ROUND && (
+                  <Grid item className={style.datepickerGrid}>
+                    <h5 className={style.reservationParamText}>Return</h5>
+                    <KeyboardDatePicker
+                      value={state.return}
+                      labelFunc={muiDateFormatter}
+                      className={style.datepicker}
+                      //@ts-ignore
+                      minDate={addDays(state.departure.valueOf(), 1)}
+                      format="dd MMM., yyyy"
+                      onChange={(d) => setState({ ...state, return: d })}
+                    />
+                  </Grid>
+                )}
+              </MuiPickersUtilsProvider>
 
-                <FormControl style={{ width: "100%" }}>
+              {/* Passenger quantity selectors */}
+              {passengersParams.map((passenger, i) => (
+                <Grid item key={i} className={style.passengerParamGrid}>
+                  <h5 className={style.reservationParamText}>{passenger.label}</h5>
+
+                  <FormControl style={{ width: "100%" }} className={style.selectControl}>
+                    <Select
+                      value={state[passenger.variable]}
+                      variant="outlined"
+                      className={style.select}
+                      startAdornment={
+                        <FontAwesomeIcon icon={passenger.icon} color={Colors.BLUE} />
+                      }
+                      onChange={(e) =>
+                        setState({
+                          ...state,
+                          [passenger.variable]: e.target.value as string,
+                        })
+                      }
+                    >
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+                        <MenuItem value={n}>{n}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              ))}
+
+              {/* Class */}
+              <Grid item className={style.reservParamGrid}>
+                <h5 className={style.reservationParamText}>Class</h5>
+
+                <FormControl style={{ width: "100%" }} className={style.selectControl}>
                   <Select
-                    value={state[passenger.variable]}
+                    value={state.class}
                     variant="outlined"
                     className={style.select}
-                    startAdornment={
-                      <FontAwesomeIcon icon={passenger.icon} color={Colors.BLUE} />
-                    }
+                    startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
                     onChange={(e) =>
                       setState({
                         ...state,
-                        [passenger.variable]: e.target.value as string,
+                        class: e.target.value as FlightClassType,
                       })
                     }
                   >
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                      <MenuItem value={n}>{n}</MenuItem>
+                    {flightClasses.map((n, i) => (
+                      <MenuItem key={i} value={n}>
+                        {n}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
               </Grid>
-            ))}
 
-            {/* Class */}
-            <Grid item className={style.reservParamGrid}>
-              <h5 className={style.reservationParamText}>Class</h5>
-
-              <FormControl style={{ width: "100%" }}>
-                <Select
-                  value={state.class}
-                  variant="outlined"
-                  className={style.select}
-                  startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
-                  onChange={(e) =>
-                    setState({
-                      ...state,
-                      class: e.target.value as FlightClassType,
-                    })
-                  }
+              <Grid item style={{ margin: "auto 0px 0px auto" }}>
+                <CustomButton
+                  backgroundColor={Colors.GREEN}
+                  style={{
+                    width: "140px",
+                    boxShadow: Shadow.DARK,
+                    color: Colors.BLUE,
+                  }}
+                  onClick={() => {}}
                 >
-                  {flightClasses.map((n, i) => (
-                    <MenuItem key={i} value={n}>
-                      {n}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item style={{ margin: "auto 0px 0px auto" }}>
-              <CustomButton
-                backgroundColor={Colors.GREEN}
-                style={{
-                  width: "140px",
-                  boxShadow: Shadow.DARK,
-                  color: Colors.BLUE,
-                }}
-                onClick={() => {}}
-              >
-                Search
-              </CustomButton>
-            </Grid>
-          </ThemeProvider>
+                  Search
+                </CustomButton>
+              </Grid>
+            </ThemeProvider>
+          </Grid>
         </Grid>
-      </div>
+      </Grid>
 
       {/* Page content */}
       <div className={style.pageContentContainer}>

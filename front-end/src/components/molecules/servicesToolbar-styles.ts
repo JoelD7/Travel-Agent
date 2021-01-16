@@ -5,6 +5,7 @@ import { Colors, Shadow } from "../../styles";
 export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
   menuItemRoot: {
     fontFamily: Family,
+    fontWeight: "bold",
     borderBottom: `2px solid rgba(0,0,0,0)`,
     margin: "0px 5px",
     color: Colors.BLUE,
@@ -21,6 +22,7 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
   },
   menuItemRootHome: {
     fontFamily: Family,
+    fontWeight: "bold",
     borderBottom: `2px solid rgba(0,0,0,0)`,
     margin: "0px 5px",
     color: "white",
@@ -40,11 +42,11 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
     minHeight: "20px",
     height: "40px",
     boxShadow: Shadow.LIGHT,
-    margin: '20px auto',
-    borderRadius: '50px',
-    width: '38%',
+    margin: "20px auto",
+    borderRadius: "50px",
+    width: "38%",
     justifyContent: "center",
-    backgroundColor: 'white',
+    backgroundColor: "white",
 
     [theme.breakpoints.down(1000)]: {
       display: "none",

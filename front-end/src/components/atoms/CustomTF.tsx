@@ -43,8 +43,8 @@ export function CustomTF({
       backgroundColor: backgroundColor,
       borderRadius: rounded ? "20px" : "5px",
 
-      "& .MuiInputBase-root":{
-        height: '37px',
+      "& .MuiInputBase-root": {
+        height: "32px",
       },
 
       "& .MuiOutlinedInput-root": {
@@ -69,9 +69,7 @@ export function CustomTF({
 
   const style = fieldStyles();
 
-  function onTextChanged(
-    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) {
+  function onTextChanged(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     if (numeric) {
       if (Number.isFinite(Number(e.target.value)) || e.target.value === "") {
         setText(e.target.value);

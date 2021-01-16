@@ -10,6 +10,7 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
+    backgroundColor: Colors.BACKGROUND,
   },
   pageContentContainer: {
     width: "90%",
@@ -41,6 +42,14 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     borderRadius: "5px",
     padding: "15px",
   },
+  pageTitleContainer: {
+    height: "300px",
+    backgroundImage:
+      "linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/Travel-Agent/restaurant.jpg')",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPositionY: "50%",
+  },
   restaurantName: {
     fontSize: "14px",
     fontWeight: "bold",
@@ -51,8 +60,8 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   restaurantCardContainer: {
     borderRadius: "10px",
     padding: "15px",
-    background:
-      "linear-gradient(90deg, rgb(245, 245, 245) 0%, rgb(240, 240, 240) 50%, rgb(245, 245, 245) 100%)",
+    // background:
+    //   "linear-gradient(90deg, rgb(245, 245, 245) 0%, rgb(240, 240, 240) 50%, rgb(245, 245, 245) 100%)",
   },
   restaurantCuisines: {
     fontSize: "13px",

@@ -117,6 +117,7 @@ export function Trips() {
                   Your last trip
                 </Text>
 
+                {/* Trip name, countries */}
                 <Grid container alignItems="baseline">
                   <Text
                     color="white"
@@ -133,7 +134,7 @@ export function Trips() {
 
               {/* Trip quick info */}
               <Grid item xs={12} style={{ alignSelf: "center" }}>
-                <Grid container className={style.lastTripDataContainer}>
+                <Grid container>
                   <div style={{ width: "105px" }}>
                     <Text
                       color="white"
