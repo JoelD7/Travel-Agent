@@ -41,10 +41,10 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     minHeight: "20px",
     height: "40px",
+    width: "650px",
     boxShadow: Shadow.LIGHT,
     margin: "20px auto",
     borderRadius: "50px",
-    width: "38%",
     justifyContent: "center",
     backgroundColor: "white",
 
@@ -56,6 +56,7 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     minHeight: "20px",
     height: "40px",
+    width: "650px",
     marginTop: "20px",
     justifyContent: "center",
 

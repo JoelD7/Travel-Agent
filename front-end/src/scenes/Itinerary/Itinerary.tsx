@@ -84,10 +84,6 @@ export function Itinerary() {
     });
 
     useEffect(() => {
-      // let map: google.maps.Map;
-      // let service: google.maps.places.PlacesService;
-      // let infowindow: google.maps.InfoWindow;
-
       initializeCalendarItems();
     }, [baseDate]);
 

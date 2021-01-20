@@ -15,6 +15,7 @@ import {
   CustomButton,
   IconText,
   Navbar,
+  ParentCategoryToolbar,
   ServicesToolbar,
   SliderArrow,
   Text,
@@ -44,15 +45,6 @@ import Helmet from "react-helmet";
 
 export function ThingsToDo() {
   const style = thingsToDoStyles();
-  const theme = createMuiTheme({
-    overrides: {
-      MuiMenuItem: {
-        root: {
-          fontFamily: Font.Family,
-        },
-      },
-    },
-  });
 
   const sliderSettings = {
     className: style.slider,
@@ -80,26 +72,8 @@ export function ThingsToDo() {
     // ],
   };
 
-  const parentCategories = [
-    POICategoryParent.ArtsEntertainment,
-    POICategoryParent.Nightlife,
-    POICategoryParent.OutdoorsRec,
-    POICategoryParent.ShopService,
-  ];
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const [open, setOpen] = useState(false);
-
   const initialCategory = POICategory.Museum.pluralName;
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-
-  const onMenuOpen = (event: MouseEvent<HTMLElement>) => {
-    if (event.currentTarget !== anchorEl) {
-      setAnchorEl(event.currentTarget);
-      setOpen(true);
-    }
-  };
 
   const history = useHistory();
 
@@ -189,59 +163,19 @@ export function ThingsToDo() {
         </Grid>
 
         {/* Parent ategories of POIs */}
-        <Grid item xs={12}>
-          <ThemeProvider key="categories parent menu" theme={theme}>
-            <Toolbar className={style.parentCategoryBar}>
-              {parentCategories.map((parentCategory, i) => (
-                <MenuItem
-                  id={parentCategory}
-                  onClick={onMenuOpen}
-                  classes={{ root: style.menuItemRoot }}
-                  key={i}
-                >
-                  {parentCategory}
-                </MenuItem>
-              ))}
-              <MenuItem
-                id={"Tours & activities"}
-                onClick={() => setSelectedCategory(POICategory.TOURS)}
-                classes={{ root: style.menuItemRoot }}
-              >
-                Tours & activities
-              </MenuItem>
-            </Toolbar>
-
-            <Menu
-              open={open}
-              onClose={() => {
-                setOpen(false);
-                setAnchorEl(null);
-              }}
-              anchorEl={anchorEl}
-            >
-              {POICategories.filter((category) => category.parent === anchorEl?.id).map(
-                (category, i) => (
-                  <MenuItem
-                    key={i}
-                    onClick={() => {
-                      setOpen(false);
-                      setSelectedCategory(category.name);
-                      setAnchorEl(null);
-                    }}
-                  >
-                    {category.name}
-                  </MenuItem>
-                )
-              )}
-            </Menu>
-          </ThemeProvider>
-        </Grid>
+        <ParentCategoryToolbar
+          itemsToShow={3}
+          updateSelectedCategory={(category: any) => setSelectedCategory(category)}
+        />
       </Grid>
 
+      {/* Page content */}
       <div className={style.pageContentContainer}>
         <Text component="h2" bold>
           Browse by category
         </Text>
+
+        {/* Category Cards */}
         <Slider {...sliderSettings}>
           {POICategories.map((category, i) => (
             <div key={i}>

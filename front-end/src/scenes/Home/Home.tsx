@@ -86,8 +86,6 @@ export function Home() {
     holder: { ...state.holder, [45]: { calendarItems: [{ a: "klk" }] } },
   };
 
-  console.log(JSON.stringify(stateTwo));
-
   const services = [
     {
       name: "Hotel",

@@ -16,6 +16,13 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
     justifyContent: "flex-start",
     border: "1px solid #cecece",
     borderRadius: "5px",
+    transition: "all .2s ease-in-out",
+    zIndex: 1,
+    "&:hover": {
+      transform: "scale(1.1)",
+      filter: "brightness(80%)",
+      zIndex: 2,
+    },
   },
   contentBackgroundContainer: {
     backgroundColor: "white",

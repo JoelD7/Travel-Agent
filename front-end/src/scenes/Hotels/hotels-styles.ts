@@ -47,26 +47,29 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     borderRadius: "5px",
     width: "20%",
 
-    [theme.breakpoints.down(940)]: {
+    [theme.breakpoints.down(1311)]: {
+      width: "26%",
+    },
+    [theme.breakpoints.down(1060)]: {
       width: "35%",
     },
-    [theme.breakpoints.down(900)]: {
-      width: "40%",
-    },
-    [theme.breakpoints.down(620)]: {
+    [theme.breakpoints.down(791)]: {
       width: "50%",
     },
-    [theme.breakpoints.down(490)]: {
+    [theme.breakpoints.down(578)]: {
       width: "100%",
     },
   },
   revervationParamsGrid: {
     width: "10%",
 
-    [theme.breakpoints.down(940)]: {
+    [theme.breakpoints.down(1306)]: {
+      width: "15%",
+    },
+    [theme.breakpoints.down(791)]: {
       width: "25%",
     },
-    [theme.breakpoints.down(620)]: {
+    [theme.breakpoints.down(640)]: {
       width: "33%",
     },
   },
@@ -152,13 +155,30 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
+  hotelNameContainer: {
+    width: "50%",
+    margin: "10px 0px",
+    [theme.breakpoints.down(484)]: {
+      width: "100%",
+    },
+  },
+  hotelStarContainer: {
+    [theme.breakpoints.down(484)]: {
+      width: "100%",
+      margin: "3px 10px",
+    },
+  },
+
   mainContainer: {
     fontFamily: Family,
     backgroundColor: Colors.BACKGROUND,
   },
-  pageContainer: {},
   pageContentContainer: {
     marginTop: "70px",
+
+    [theme.breakpoints.down(578)]: {
+      marginTop: "110px",
+    },
   },
   pageContainerChilds: {
     width: "85%",

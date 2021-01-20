@@ -55,7 +55,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   filtersGrid: {
     backgroundColor: "white",
-    boxShadow: Shadow.LIGHT,
+    boxShadow: Shadow.MEDIUM3D,
     borderRadius: "5px",
     padding: "10px",
     width: "25%",
@@ -68,7 +68,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     },
   },
   flightsGrid: {
-    padding: "10px",
+    paddingLeft: "20px",
     width: "65%",
 
     [theme.breakpoints.down(1215)]: {

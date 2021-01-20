@@ -10,14 +10,24 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
   },
   card: {
     width: "100%",
-    margin: "10px",
 
     [theme.breakpoints.down(518)]: {
       margin: "10px 0px",
     },
   },
+  cardAnimated: {
+    width: "100%",
+    transition: "all .2s ease-in-out",
+    "&:hover": {
+      transform: "scale(1.1)",
+    },
+    [theme.breakpoints.down(518)]: {
+      margin: "10px 0px",
+    },
+  },
   dealGrid: {
-    width: "50%",
+    width: "48%",
+    margin: "10px",
     [theme.breakpoints.down(990)]: {
       width: "77%",
     },
@@ -113,7 +123,7 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     padding: "10px",
     backgroundColor: "white",
     borderRadius: "10px",
-    boxShadow: Shadow.LIGHT,
+    boxShadow: Shadow.MEDIUM3D,
   },
   timesText: {
     fontSize: "18px",

@@ -347,6 +347,7 @@ export function Flights_Home() {
 
       <Navbar />
 
+      {/* Top image container */}
       <Grid
         container
         className={style.topContainer}
@@ -355,11 +356,14 @@ export function Flights_Home() {
         <Grid item xs={12}>
           <ServicesToolbar />
         </Grid>
+
+        {/* Reservation Container */}
         <Grid container spacing={2} className={style.reservationContainer}>
           <Grid item xs={12}>
             <h2>{`Find the best flight to ${destination.name}`}</h2>
           </Grid>
 
+          {/* Flight type toolbar */}
           <Grid item xs={12} key="toolbar">
             <Toolbar classes={{ root: style.reservationOptionsToolbar }}>
               <MenuItem
@@ -526,7 +530,7 @@ export function Flights_Home() {
 
       <Grid container spacing={2} className={style.dealsContainer}>
         {deals.map((deal, i) => (
-          <CardFlight variant="deal" flight={deal} />
+          <CardFlight variant="deal" flight={deal} animate />
         ))}
       </Grid>
     </div>

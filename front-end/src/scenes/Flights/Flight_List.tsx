@@ -442,6 +442,7 @@ export function Flight_List() {
       {/* Page content */}
       <div className={style.pageContentContainer}>
         <Grid container className={style.pageContentContainerGrid}>
+          {/* Filters */}
           <Grid item className={style.filtersGrid}>
             <SearchFilters />
           </Grid>

@@ -37,7 +37,7 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     },
   },
   filterContainer: {
-    boxShadow: Shadow.LIGHT,
+    boxShadow: Shadow.MEDIUM3D,
     backgroundColor: "white",
     borderRadius: "5px",
     padding: "15px",

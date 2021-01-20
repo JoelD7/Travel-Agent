@@ -226,7 +226,9 @@ export function Hotels() {
             <Grid container alignItems="center" style={{ margin: "10px 0px" }}>
               <h3 style={{ margin: "0px 10px" }}>{hotel.name}</h3>
 
-              <StarRating stars={hotel.stars} />
+              <div className={style.hotelStarContainer}>
+                <StarRating stars={hotel.stars} />
+              </div>
             </Grid>
           </Grid>
 
@@ -333,7 +335,7 @@ export function Hotels() {
 
       <Navbar />
 
-      <Grid container className={style.pageContainer}>
+      <Grid container>
         {/* Page title grid*/}
         <Grid
           item
@@ -420,6 +422,7 @@ export function Hotels() {
                     </Grid>
                   ))}
 
+                  {/* Search Button */}
                   <Grid item xs={2} style={{ marginLeft: "auto" }}>
                     <Grid
                       container
@@ -432,6 +435,7 @@ export function Hotels() {
                         rounded
                         style={{
                           width: "140px",
+                          minWidth: "115px",
                           boxShadow: Shadow.MEDIUM,
                           color: Colors.BLUE,
                         }}
