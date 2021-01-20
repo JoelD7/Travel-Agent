@@ -61,10 +61,26 @@ export function ParentCategoryToolbar({
   const [width, height] = useWindowSize();
 
   useEffect(() => {
-    if (width <= 738) {
+    if (betweenRange(862, 955, width)) {
+      setMenusToShow(4);
+    } else if (betweenRange(670, 862, width)) {
       setMenusToShow(3);
+    } else if (width < 670) {
+      setMenusToShow(2);
+    } else {
+      setMenusToShow(5);
     }
-  }, []);
+  }, [width]);
+
+  /**
+   * Indicated whether <value> is between <start>(inclusive) and <end>(exclusive)
+   * @param start
+   * @param end
+   * @param value
+   */
+  function betweenRange(start: number, end: number, value: number): boolean {
+    return value >= start && value <= end;
+  }
 
   /**
    * Returns the current width and height of the window whenever those
@@ -83,20 +99,17 @@ export function ParentCategoryToolbar({
     return size;
   }
 
-  const onMenuOpen = (
-    event: MouseEvent<HTMLElement>,
-    menuType: "primary" | "secondary"
-  ) => {
-    if (event.currentTarget !== anchorEl) {
-      if (menuType === "primary") {
-        setAnchorEl(event.currentTarget);
-        setOpen(true);
-      } else {
-        setAnchorEl2(event.currentTarget);
-        setOpenSecondMenu(true);
-      }
+  function onMenuOpen(event: MouseEvent<HTMLElement>, menuType: "primary" | "secondary") {
+    if (event.currentTarget !== anchorEl && menuType === "primary") {
+      setAnchorEl(event.currentTarget);
+      setOpen(true);
     }
-  };
+
+    if (event.currentTarget !== anchorEl2 && menuType === "secondary") {
+      setAnchorEl2(event.currentTarget);
+      setOpenSecondMenu(true);
+    }
+  }
 
   function openPrimaryFromSecondary(event: MouseEvent<HTMLElement>) {
     if (event.currentTarget !== anchorEl) {
@@ -112,17 +125,19 @@ export function ParentCategoryToolbar({
 
   function closeSecondaryMenu() {
     setOpenSecondMenu(false);
-    setAnchorEl(null);
+    setAnchorEl2(null);
   }
 
   return (
     <Grid item xs={12}>
       <ThemeProvider key="categories parent menu" theme={theme}>
+        {/* Toolbar menu */}
         <Toolbar className={style.parentCategoryBar}>
           {parentCategories.slice(0, menusToShow).map((parentCategory, i) => (
             <MenuItem
               id={parentCategory}
               onClick={(e) => onMenuOpen(e, "primary")}
+              onMouseEnter={() => closePrimaryMenu()}
               classes={{ root: style.menuItemRoot }}
               key={i}
             >
@@ -161,7 +176,8 @@ export function ParentCategoryToolbar({
                   <Grow
                     {...TransitionProps}
                     style={{
-                      transformOrigin: "left center",
+                      transformOrigin:
+                        placement === "bottom" ? "center top" : "center bottom",
                     }}
                   >
                     <Paper>
@@ -173,11 +189,19 @@ export function ParentCategoryToolbar({
                               <MenuItem
                                 id={parentCategory}
                                 onClick={(e) => openPrimaryFromSecondary(e)}
+                                classes={{ root: style.menuItemChild }}
                                 key={i}
                               >
                                 {parentCategory}
                               </MenuItem>
                             ))}
+                          <MenuItem
+                            id={"Tours & activities"}
+                            onClick={() => updateSelectedCategory(POICategory.TOURS)}
+                            classes={{ root: style.menuItemChild }}
+                          >
+                            Tours & activities
+                          </MenuItem>
                         </MenuList>
                       </ClickAwayListener>
                     </Paper>
@@ -195,7 +219,8 @@ export function ParentCategoryToolbar({
           role={undefined}
           transition
           disablePortal
-          placement="left-start"
+          // placement="top"
+          style={{ zIndex: 2 }}
         >
           {({ TransitionProps, placement }) => (
             <Grow
@@ -212,6 +237,7 @@ export function ParentCategoryToolbar({
                     ).map((category, i) => (
                       <MenuItem
                         key={i}
+                        classes={{ root: style.menuItemChild }}
                         onClick={() => {
                           setOpen(false);
                           updateSelectedCategory(category.name);

@@ -52,24 +52,32 @@ export function ThingsToDo() {
     prevArrow: <SliderArrow direction="left" />,
     slidesToShow: 4,
     slidesToScroll: 4,
-    // responsive: [
-    //   {
-    //     breakpoint: 990,
-    //     settings: {
-    //       slidesToShow: 2,
-    //       slidesToScroll: 2,
-    //       infinite: true,
-    //     },
-    //   },
-    //   {
-    //     breakpoint: 740,
-    //     settings: {
-    //       slidesToShow: 1,
-    //       slidesToScroll: 1,
-    //       infinite: true,
-    //     },
-    //   },
-    // ],
+    responsive: [
+      {
+        breakpoint: 1198,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 1000,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 628,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+    ],
   };
 
   const initialCategory = POICategory.Museum.pluralName;

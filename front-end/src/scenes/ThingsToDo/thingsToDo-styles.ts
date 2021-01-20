@@ -27,9 +27,25 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   menuItemRoot: {
     fontFamily: Font.Family,
     fontWeight: "bold",
-    borderBottom: `2px solid rgba(0,0,0,0)`,
+    borderBottom: `3px solid rgba(0,0,0,0)`,
     margin: "0px 5px",
     color: "white",
+    "&.MuiListItem-root": {
+      "&.Mui-selected": {
+        backgroundColor: "rgba(0,0,0,0)",
+        borderBottom: `3px solid ${Colors.GREEN}`,
+      },
+    },
+    "&.MuiListItem-button": {
+      "&:hover": {
+        borderBottom: `3px solid ${Colors.GREEN}`,
+      },
+    },
+  },
+  menuItemChild: {
+    fontFamily: Font.Family,
+    borderBottom: `3px solid rgba(0,0,0,0)`,
+    margin: "0px 5px",
     "&.MuiListItem-root": {
       "&.Mui-selected": {
         backgroundColor: "rgba(0,0,0,0)",
