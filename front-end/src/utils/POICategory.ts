@@ -4,7 +4,9 @@ import {
   faFutbol,
   faGlassCheers,
   faGlassMartiniAlt,
+  faHiking,
   faLandmark,
+  faMagic,
   faMountain,
   faMusic,
   faPaw,
@@ -17,18 +19,18 @@ import {
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 
-interface POICategory {
+export interface POICategorySearch {
   name: string;
-  parent: string;
+  parent?: string;
   icon: IconDefinition;
-  code: string;
+  id: string;
   image: string;
   pluralName: string;
 }
 
 export enum POICategoryParent {
-  ArtsEntertainment = "Arts & entertainment",
-  Nightlife = "Nightlife",
+  ArtsEntertainment = "Arts & Entertainment",
+  Nightlife = "Nightlife Spot",
   OutdoorsRec = "Outdoors & recreation",
   ShopService = "Shopping & service",
 }
@@ -36,151 +38,192 @@ export enum POICategoryParent {
 export const TOURS = "Tours and activities";
 export type TOURS = typeof TOURS;
 
-export const HistoricSite: POICategory = {
+export const TOUR: POICategorySearch = {
+  pluralName: "Tours and activities",
+  name: "Tours and activities",
+  icon: faMagic,
+  id: "4d4b7104d754a06370d81259",
+  image: "",
+};
+
+export const ArtsEntertainment: POICategorySearch = {
+  pluralName: "Arts & Entertainment",
+  name: "Arts & Entertainment",
+  icon: faMagic,
+  id: "4d4b7104d754a06370d81259",
+  image: "",
+};
+export const Nightlife: POICategorySearch = {
+  pluralName: "Nightlife Spot",
+  name: "Nightlife Spot",
+  icon: faGlassMartiniAlt,
+  id: "4d4b7105d754a06376d81259",
+  image: "",
+};
+export const OutdoorsRec: POICategorySearch = {
+  pluralName: "Outdoors & Recreation",
+  name: "Outdoors & Recreation",
+  icon: faHiking,
+  id: "4d4b7105d754a06377d81259",
+  image: "",
+};
+export const ShopService: POICategorySearch = {
+  pluralName: "Shopping & Services",
+  name: "Shopping & Service",
+  icon: faShoppingBag,
+  id: "4d4b7105d754a06378d81259",
+  image: "",
+};
+export const HistoricSite: POICategorySearch = {
   pluralName: "Historic Sites",
   name: "Historic Site",
   parent: POICategoryParent.ArtsEntertainment,
   icon: faLandmark,
-  code: "4deefb944765f83613cdba6e",
+  id: "4deefb944765f83613cdba6e",
   image: "",
 };
 
-export const MovieTheater: POICategory = {
+export const MovieTheater: POICategorySearch = {
   pluralName: "Movie Theaters",
   name: "Movie Theater",
   parent: POICategoryParent.ArtsEntertainment,
   icon: faTicketAlt,
-  code: "4bf58dd8d48988d17f941735",
+  id: "4bf58dd8d48988d17f941735",
   image: "",
 };
 
-export const Museum: POICategory = {
+export const Museum: POICategorySearch = {
   pluralName: "Museums",
   name: "Museum",
   parent: POICategoryParent.ArtsEntertainment,
   icon: faLandmark,
-  code: "4bf58dd8d48988d181941735",
+  id: "4bf58dd8d48988d181941735",
   image: "",
 };
 
-export const MusicVenue: POICategory = {
+export const MusicVenue: POICategorySearch = {
   pluralName: "Music Venues",
   name: "Music Venue",
   parent: POICategoryParent.ArtsEntertainment,
   icon: faMusic,
-  code: "4bf58dd8d48988d1e5931735",
+  id: "4bf58dd8d48988d1e5931735",
   image: "",
 };
 
-export const Theater: POICategory = {
+export const Theater: POICategorySearch = {
   pluralName: "Theaters",
   name: "Theater",
   parent: POICategoryParent.ArtsEntertainment,
   icon: faTheaterMasks,
-  code: "4bf58dd8d48988d137941735",
+  id: "4bf58dd8d48988d137941735",
   image: "",
 };
 
-export const Stadium: POICategory = {
+export const Stadium: POICategorySearch = {
   pluralName: "Stadiums",
   name: "Stadium",
   parent: POICategoryParent.ArtsEntertainment,
   icon: faFutbol,
-  code: "4bf58dd8d48988d184941735",
+  id: "4bf58dd8d48988d184941735",
   image: "",
 };
 
-export const ThemePark: POICategory = {
+export const ThemePark: POICategorySearch = {
   pluralName: "Theme Parks",
   name: "Theme Park",
   parent: POICategoryParent.ArtsEntertainment,
   icon: faFortAwesome,
-  code: "4bf58dd8d48988d182941735",
+  id: "4bf58dd8d48988d182941735",
   image: "",
 };
 
-export const Zoo: POICategory = {
+export const Zoo: POICategorySearch = {
   pluralName: "Zoos",
   name: "Zoo",
   parent: POICategoryParent.ArtsEntertainment,
   icon: faPaw,
-  code: "4bf58dd8d48988d17b941735",
+  id: "4bf58dd8d48988d17b941735",
   image: "",
 };
 
-export const Bar: POICategory = {
+export const Bar: POICategorySearch = {
   pluralName: "Bars",
   name: "Bar",
   parent: POICategoryParent.Nightlife,
   icon: faGlassMartiniAlt,
-  code: "4bf58dd8d48988d116941735",
+  id: "4bf58dd8d48988d116941735",
   image: "",
 };
 
-export const Nightclub: POICategory = {
+export const Nightclub: POICategorySearch = {
   pluralName: "Nightclubs",
   name: "Nightclub",
   parent: POICategoryParent.Nightlife,
   icon: faGlassCheers,
-  code: "4bf58dd8d48988d11f941735",
+  id: "4bf58dd8d48988d11f941735",
   image: "",
 };
 
-export const GymFitness: POICategory = {
+export const GymFitness: POICategorySearch = {
   pluralName: "Gym / Fitness Centers",
   name: "Gym / Fitness Center",
   parent: POICategoryParent.OutdoorsRec,
   icon: faDumbbell,
-  code: "4bf58dd8d48988d175941735",
+  id: "4bf58dd8d48988d175941735",
   image: "",
 };
 
-export const Beach: POICategory = {
+export const Beach: POICategorySearch = {
   pluralName: "Beaches",
   name: "Beach",
   parent: POICategoryParent.OutdoorsRec,
   icon: faUmbrellaBeach,
-  code: "4bf58dd8d48988d1e2941735",
+  id: "4bf58dd8d48988d1e2941735",
   image: "",
 };
 
-export const NationalPark: POICategory = {
+export const NationalPark: POICategorySearch = {
   pluralName: "National Parks",
   name: "National Park",
   parent: POICategoryParent.OutdoorsRec,
   icon: faMountain,
-  code: "52e81612bcbc57f1066b7a21",
+  id: "52e81612bcbc57f1066b7a21",
   image: "",
 };
 
-export const SkiArea: POICategory = {
+export const SkiArea: POICategorySearch = {
   pluralName: "Ski Areas",
   name: "Ski Area",
   parent: POICategoryParent.OutdoorsRec,
   icon: faSkiing,
-  code: "4bf58dd8d48988d1e9941735",
+  id: "4bf58dd8d48988d1e9941735",
   image: "",
 };
 
-export const ClothingStore: POICategory = {
+export const ClothingStore: POICategorySearch = {
   pluralName: "Clothing Stores",
   name: "Clothing Store",
   parent: POICategoryParent.ShopService,
   icon: faTshirt,
-  code: "4bf58dd8d48988d103951735",
+  id: "4bf58dd8d48988d103951735",
   image: "",
 };
 
-export const ShoppingMall: POICategory = {
+export const ShoppingMall: POICategorySearch = {
   pluralName: "Shopping Malls",
   name: "Shopping Mall",
   parent: POICategoryParent.ShopService,
   icon: faShoppingBag,
-  code: "4bf58dd8d48988d1fd941735",
+  id: "4bf58dd8d48988d1fd941735",
   image: "",
 };
 
-export const POICategoryMap: { [index: string]: POICategory } = {
+export const POICategoryMap: { [index: string]: POICategorySearch } = {
+  "Arts & Entertainment": ArtsEntertainment,
+  "Nightlife Spot": Nightlife,
+  "Outdoors & Recreation": OutdoorsRec,
+  "Shopping & Service": ShopService,
+
   "Historic Site": HistoricSite,
   "Movie Theater": MovieTheater,
   Museum: Museum,
@@ -199,7 +242,7 @@ export const POICategoryMap: { [index: string]: POICategory } = {
   "Shopping Mall": ShoppingMall,
 };
 
-export const POICategories: POICategory[] = [
+export const POICategories: POICategorySearch[] = [
   HistoricSite,
   MovieTheater,
   Museum,

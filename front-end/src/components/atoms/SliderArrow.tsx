@@ -10,11 +10,23 @@ import { Colors } from "../../styles";
 
 interface SliderArrowProps {
   direction: "right" | "left";
+  iconSize?:
+    | "xs"
+    | "lg"
+    | "sm"
+    | "1x"
+    | "2x"
+    | "3x"
+    | "4x"
+    | "5x"
+    | "6x"
+    | "7x"
+    | "8x"
+    | "9x"
+    | "10x";
   className?: string;
   style?: CreateCSSProperties<{}>;
-  onClick?: (
-    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-  ) => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 }
 
 export function SliderArrow({
@@ -22,13 +34,13 @@ export function SliderArrow({
   direction,
   style,
   className,
+  iconSize = "1x",
 }: SliderArrowProps) {
   return (
     <IconButton onClick={onClick}>
       <FontAwesomeIcon
-        icon={
-          direction === "right" ? faChevronCircleRight : faChevronCircleLeft
-        }
+        size={iconSize}
+        icon={direction === "right" ? faChevronCircleRight : faChevronCircleLeft}
         color={Colors.BLUE}
       />
     </IconButton>

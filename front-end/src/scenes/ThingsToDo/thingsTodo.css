@@ -1,0 +1,22 @@
+.MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0) !important;
+}
+.MuiSelect-icon {
+  color: #fff !important;
+}
+.MuiInputLabel-root {
+  color: #fff !important;
+}
+.slick-initialized .slick-slide {
+  display: inline-grid;
+  align-content: space-between;
+}
+.slick-slide {
+  float: none;
+}
+/* .slick-list {
+  height: 100%;
+}
+.slick-track {
+  height: 97%;
+} */

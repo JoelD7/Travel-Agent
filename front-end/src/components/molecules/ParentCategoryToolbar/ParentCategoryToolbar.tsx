@@ -148,7 +148,7 @@ export function ParentCategoryToolbar({
           {menusToShow >= 5 && (
             <MenuItem
               id={"Tours & activities"}
-              onClick={() => updateSelectedCategory(POICategory.TOURS)}
+              onClick={() => updateSelectedCategory(POICategory.TOUR)}
               classes={{ root: style.menuItemRoot }}
             >
               Tours & activities

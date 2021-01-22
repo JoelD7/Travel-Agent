@@ -51,7 +51,7 @@ interface POIPhotoItems {
 interface POISearch {
   id: string;
   name: string;
-  contact: POIContact;
+  contact?: POIContact;
   location: POILocation;
   categories: POICategory[];
   photo?: string;

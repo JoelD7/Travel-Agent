@@ -57,7 +57,7 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
     minHeight: "20px",
     height: "40px",
     width: "650px",
-    marginTop: "20px",
+    margin: "20px auto auto auto",
     justifyContent: "center",
 
     [theme.breakpoints.down(1000)]: {
