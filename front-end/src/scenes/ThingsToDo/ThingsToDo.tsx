@@ -6,18 +6,21 @@ import {
   createMuiTheme,
   FormControl,
   Grid,
+  makeStyles,
   Menu,
   MenuItem,
   Select,
+  Theme,
   ThemeProvider,
   Toolbar,
 } from "@material-ui/core";
-import React, { MouseEvent, useEffect, useState } from "react";
+import React, { MouseEvent, useEffect, useRef, useState } from "react";
 import {
   CustomButton,
   IconText,
   Navbar,
   ParentCategoryToolbar,
+  POICategorySlider,
   ServicesToolbar,
   SliderArrow,
   Text,
@@ -60,10 +63,45 @@ type SortOption = "" | "Name | A - Z" | "Name | Z - A";
 
 interface POICard {
   poi: POISearch;
+  slider?: boolean;
+}
+
+interface POICategoryAvailable {
+  name: string;
+  parent?: string;
+  icon: IconDefinition;
+  id: string;
+  image: string;
+  pluralName: string;
+  available: boolean;
 }
 
 export function ThingsToDo() {
   const style = thingsToDoStyles();
+
+  const [pois, setPois] = useState<POISearch[]>(poisPlaceholderAPI);
+  const [allPois, setAllPois] = useState<POISearch[]>(poisPlaceholderAPI);
+
+  /**
+   * ID used by an <a> to scroll to
+   * this title, once the Tours category
+   * is selected.
+   */
+  const toursTitleID = "tours-activities";
+  const toursTitleAnchorEl = useRef(null);
+
+  const poiCardStyels = makeStyles((theme: Theme) => ({
+    poiCardItem: {
+      width: getPOICardWidth(3),
+      [theme.breakpoints.down(1126)]: {
+        width: getPOICardWidth(2),
+      },
+      [theme.breakpoints.down(796)]: {
+        width: "100%",
+      },
+    },
+  }));
+  const cardStyle = poiCardStyels();
 
   const initialCategory = POICategory.Museum;
   const [selectedCategory, setSelectedCategory] = useState<POICategorySearch>(
@@ -71,44 +109,6 @@ export function ThingsToDo() {
   );
 
   const history = useHistory();
-
-  // const pois: POISearch[] = poisPlaceholder;
-  const [pois, setPois] = useState<POISearch[]>(poisPlaceholderAPI);
-  const [allPois, setAllPois] = useState<POISearch[]>(poisPlaceholderAPI);
-
-  const categorySliderSettings = {
-    className: style.slider,
-    nextArrow: <SliderArrow direction="right" />,
-    prevArrow: <SliderArrow direction="left" />,
-    slidesToShow: 4,
-    slidesToScroll: 4,
-    responsive: [
-      {
-        breakpoint: 1198,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-        },
-      },
-      {
-        breakpoint: 1000,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          infinite: true,
-        },
-      },
-      {
-        breakpoint: 628,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          infinite: true,
-        },
-      },
-    ],
-  };
 
   const [poiSliderRows, setPoiSliderRows] = useState(2);
 
@@ -119,6 +119,20 @@ export function ThingsToDo() {
     slidesToShow: 1,
     rows: pois.length > 3 ? poiSliderRows : 1,
     slidesPerRow: pois.length > 3 ? 3 : 1,
+    responsive: [
+      {
+        breakpoint: 1126,
+        settings: {
+          slidesPerRow: pois.length > 3 ? 2 : 1,
+        },
+      },
+      {
+        breakpoint: 796,
+        settings: {
+          slidesPerRow: 1,
+        },
+      },
+    ],
   };
 
   const activities: Activity[] = activitiesPlaceholder;
@@ -129,16 +143,43 @@ export function ThingsToDo() {
   const [sortOption, setSortOption] = useState<SortOption>("");
   const sortOptions: SortOption[] = ["Name | A - Z", "Name | Z - A"];
 
-  // console.log("Boutique parent: ", getPOICategoryParent("4bf58dd8d48988d104951735"));
+  const [availableCategories, setAvailableCategories] = useState<POICategorySearch[]>([]);
 
   useEffect(() => {
     if (!areRatesUpdated()) {
       getExchangeRates();
     }
-
+    getAvailableCategories();
     setPois(poisPlaceholderAPI);
     // getPOIs();
   }, []);
+
+  function getAvailableCategories() {
+    let availableCatsFromPois: any[] = [];
+    let availableCategoriesTemp: any[] = [];
+
+    allPois.forEach((poi) => {
+      let name = getPOICategoryParent(poi.categories[0].id);
+      if (!availableCatsFromPois.includes(name)) {
+        availableCatsFromPois.push(name);
+      }
+    });
+
+    POICategories.forEach((poiCategory) => {
+      let name = getPOICategoryParent(poiCategory.id);
+      if (availableCatsFromPois.includes(name)) {
+        availableCategoriesTemp.push(poiCategory);
+      }
+    });
+    setAvailableCategories(availableCategoriesTemp);
+  }
+
+  useEffect(() => {
+    if (selectedCategory === POICategory.TOUR) {
+      //@ts-ignore
+      toursTitleAnchorEl.current.click();
+    }
+  }, [selectedCategory]);
 
   function getPOIs() {
     Axios.get("https://api.foursquare.com/v2/venues/search", {
@@ -217,93 +258,91 @@ export function ThingsToDo() {
   }
 
   function getPoisOfCategory(category: POICategorySearch): POISearch[] {
-    // allPois.forEach((poi) => {
-    //   console.log(
-    //     `Poi category parent: ${getPOICategoryParent(
-    //       poi.categories[0].id
-    //     )} | Selected category parent: ${getPOICategoryParent(category.id)}`
-    //   );
-    // });
     return allPois.filter(
       (poi) =>
         getPOICategoryParent(poi.categories[0].id) === getPOICategoryParent(category.id)
     );
   }
 
-  function getPOICardWidth() {
-    return pois.length === 1 ? "33%" : pois.length === 2 ? "48%" : "100%";
+  function getPOICardWidth(cardsInRow: number) {
+    switch (cardsInRow) {
+      case 2:
+        return pois.length < 2 ? `${100 / pois.length}%` : "50%";
+      case 3:
+        return pois.length < 3 ? `${100 / pois.length}%` : "31%";
+      default:
+        return;
+    }
   }
 
   function POICard({ poi }: POICard) {
     return (
-      <div style={{ height: "100%", width: getPOICardWidth() }}>
-        <Card className={style.poiCard}>
-          <CardActionArea
-            style={{ padding: "10px" }}
-            onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
+      <Card className={style.poiCard}>
+        <CardActionArea
+          style={{ padding: "10px" }}
+          onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
+        >
+          <Text
+            bold
+            style={{
+              color: Colors.BLUE,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+            component="h4"
           >
-            <Text
-              bold
-              style={{
-                color: Colors.BLUE,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-              component="h4"
-            >
-              {poi.name}
-            </Text>
+            {poi.name}
+          </Text>
 
-            {/* POI Rating */}
-            {poi.rating && (
-              <Rating
-                className={style.rating}
-                initialRating={poi.rating}
-                readonly
-                emptySymbol={
-                  <FontAwesomeIcon
-                    style={{ margin: "0px 1px" }}
-                    icon={faCircleReg}
-                    color={Colors.PURPLE}
-                  />
-                }
-                fullSymbol={
-                  <FontAwesomeIcon
-                    style={{ margin: "0px 1px" }}
-                    icon={faCircle}
-                    color={Colors.PURPLE}
-                  />
-                }
-              />
-            )}
-
-            <IconText
-              icon={faMapMarkerAlt}
-              text={
-                poi.location.address
-                  ? poi.location.address
-                  : poi.location.formattedAddress?.join(", ")
+          {/* POI Rating */}
+          {poi.rating && (
+            <Rating
+              className={style.rating}
+              initialRating={poi.rating}
+              readonly
+              emptySymbol={
+                <FontAwesomeIcon
+                  style={{ margin: "0px 1px" }}
+                  icon={faCircleReg}
+                  color={Colors.PURPLE}
+                />
+              }
+              fullSymbol={
+                <FontAwesomeIcon
+                  style={{ margin: "0px 1px" }}
+                  icon={faCircle}
+                  color={Colors.PURPLE}
+                />
               }
             />
-            <IconText icon={getPOICategoryIcon(poi)} text={poi.categories[0].name} />
+          )}
 
-            <div style={{ display: "flex" }}>
-              <CustomButton
-                onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
-                backgroundColor={Colors.PURPLE}
-                style={{
-                  borderRadius: "10px",
-                  fontSize: "16px",
-                  marginLeft: "auto",
-                }}
-              >
-                Check out
-              </CustomButton>
-            </div>
-          </CardActionArea>
-        </Card>
-      </div>
+          <IconText
+            icon={faMapMarkerAlt}
+            text={
+              poi.location.address
+                ? poi.location.address
+                : poi.location.formattedAddress?.join(", ")
+            }
+          />
+          <IconText icon={getPOICategoryIcon(poi)} text={poi.categories[0].name} />
+
+          <div style={{ display: "flex" }}>
+            <CustomButton
+              onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
+              backgroundColor={Colors.PURPLE}
+              style={{
+                borderRadius: "10px",
+                fontSize: "16px",
+                marginLeft: "auto",
+              }}
+            >
+              Check out
+            </CustomButton>
+          </div>
+        </CardActionArea>
+      </Card>
     );
   }
 
@@ -315,8 +354,22 @@ export function ThingsToDo() {
     setPoiSliderRows(2);
   }
 
+  function onSortOptionChange(option: SortOption) {
+    setSortOption(option);
+    let sortedPois: POISearch[] = [];
+
+    if (option === "Name | A - Z") {
+      sortedPois = pois.sort((a, b) => a.name.localeCompare(b.name));
+    } else {
+      sortedPois = pois.sort((a, b) => b.name.localeCompare(a.name));
+    }
+    setPois(sortedPois);
+  }
+
   return (
     <div className={style.mainContainer}>
+      <a ref={toursTitleAnchorEl} href={`#${toursTitleID}`} hidden></a>
+
       <Helmet>
         <title>Things to do in Dubai</title>
       </Helmet>
@@ -346,10 +399,10 @@ export function ThingsToDo() {
           </Grid>
         </Grid>
 
-        {/* Parent ategories of POIs */}
+        {/* Parent categories of POIs */}
         <ParentCategoryToolbar
           itemsToShow={3}
-          updateSelectedCategory={(category: any) => setSelectedCategory(category)}
+          updateSelectedCategory={(category: any) => onCategorySelected(category)}
         />
       </Grid>
 
@@ -360,29 +413,11 @@ export function ThingsToDo() {
         </Text>
 
         {/* Category Cards */}
-        <Slider {...categorySliderSettings}>
-          {POICategories.map((category, i) => (
-            <div key={i}>
-              <Card
-                className={
-                  selectedCategory.pluralName === category.pluralName
-                    ? style.cardSelected
-                    : style.card
-                }
-              >
-                <CardActionArea onClick={() => onCategorySelected(category)}>
-                  <CardMedia component="img" height="150" image={category.image} />
-                </CardActionArea>
-
-                <CardContent>
-                  <div style={{ color: "white", fontWeight: "bold" }}>
-                    {category.name}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
-        </Slider>
+        <POICategorySlider
+          availableCategories={availableCategories}
+          selectedCategory={selectedCategory}
+          onCategorySelected={onCategorySelected}
+        />
 
         {selectedCategory.pluralName !== POICategory.TOURS && (
           <>
@@ -426,7 +461,7 @@ export function ThingsToDo() {
                       value={sortOption}
                       variant="outlined"
                       className={style.select}
-                      onChange={(e) => setSortOption(e.target.value as SortOption)}
+                      onChange={(e) => onSortOptionChange(e.target.value as SortOption)}
                     >
                       {sortOptions.map((option, i) => (
                         <MenuItem
@@ -450,88 +485,18 @@ export function ThingsToDo() {
                   <Slider {...poiSliderSettings} dots>
                     {pois.map((poi, i) => (
                       <div key={i} style={{ height: "100%" }}>
-                        <Card className={style.poiCard}>
-                          <CardActionArea
-                            style={{ padding: "10px" }}
-                            onClick={() =>
-                              history.push(`${Routes.THINGS_TODO}/${poi.id}`)
-                            }
-                          >
-                            <Text
-                              bold
-                              style={{
-                                color: Colors.BLUE,
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                              }}
-                              component="h4"
-                            >
-                              {poi.name}
-                            </Text>
-
-                            {/* POI Rating */}
-                            {poi.rating && (
-                              <Rating
-                                className={style.rating}
-                                initialRating={poi.rating}
-                                readonly
-                                emptySymbol={
-                                  <FontAwesomeIcon
-                                    style={{ margin: "0px 1px" }}
-                                    icon={faCircleReg}
-                                    color={Colors.PURPLE}
-                                  />
-                                }
-                                fullSymbol={
-                                  <FontAwesomeIcon
-                                    style={{ margin: "0px 1px" }}
-                                    icon={faCircle}
-                                    color={Colors.PURPLE}
-                                  />
-                                }
-                              />
-                            )}
-
-                            <IconText
-                              icon={faMapMarkerAlt}
-                              text={
-                                poi.location.address
-                                  ? poi.location.address
-                                  : poi.location.formattedAddress?.join(", ")
-                              }
-                            />
-                            <IconText
-                              icon={getPOICategoryIcon(poi)}
-                              text={poi.categories[0].name}
-                            />
-
-                            <div style={{ display: "flex" }}>
-                              <CustomButton
-                                onClick={() =>
-                                  history.push(`${Routes.THINGS_TODO}/${poi.id}`)
-                                }
-                                backgroundColor={Colors.PURPLE}
-                                style={{
-                                  borderRadius: "10px",
-                                  fontSize: "16px",
-                                  marginLeft: "auto",
-                                }}
-                              >
-                                Check out
-                              </CustomButton>
-                            </div>
-                          </CardActionArea>
-                        </Card>
+                        <POICard key={i} slider poi={poi} />
                       </div>
                     ))}
                   </Slider>
                 ) : (
-                  <div className={style.poiCardContainer}>
+                  <Grid container className={style.poiCardContainer}>
                     {pois.map((poi, i) => (
-                      <POICard key={i} poi={poi} />
+                      <Grid item className={cardStyle.poiCardItem}>
+                        <POICard key={i} poi={poi} />
+                      </Grid>
                     ))}
-                  </div>
+                  </Grid>
                 )}
               </Grid>
             )}
@@ -541,6 +506,7 @@ export function ThingsToDo() {
         {/* Tours cards */}
         <>
           <Text
+            id={toursTitleID}
             component="h2"
             bold
             style={{ marginTop: "20px" }}

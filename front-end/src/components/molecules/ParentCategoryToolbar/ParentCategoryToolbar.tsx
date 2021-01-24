@@ -240,7 +240,7 @@ export function ParentCategoryToolbar({
                         classes={{ root: style.menuItemChild }}
                         onClick={() => {
                           setOpen(false);
-                          updateSelectedCategory(category.name);
+                          updateSelectedCategory(category);
                           setAnchorEl(null);
                         }}
                       >

@@ -4,20 +4,23 @@ import { Colors, Shadow } from "../../styles";
 
 export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   card: {
-    backgroundColor: Colors.BLUE,
-    transition: "background-color .2s ease-in-out",
-    "&:hover": {
-      backgroundColor: Colors.BLUE_HOVER,
-    },
-    width: "95%",
+    transition: "all .2s ease-in-out",
+    width: "92%",
+    borderRadius: "15px",
+    boxShadow: Shadow.MEDIUM,
   },
   cardSelected: {
-    backgroundColor: Colors.BLUE_HOVER,
-    transition: "background-color .2s ease-in-out",
-    "&:hover": {
-      backgroundColor: Colors.BLUE,
-    },
-    width: "95%",
+    transition: "all .2s ease-in-out",
+    width: "87%",
+    borderRadius: "15px",
+    transform: "scale(1.1)",
+    marginLeft: "8px",
+    boxShadow: Shadow.MEDIUM,
+  },
+
+  categoryNameContainer: {
+    height: "auto",
+    marginTop: "auto",
   },
   mainContainer: {
     fontFamily: Font.Family,
@@ -117,38 +120,46 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     marginTop: "20px",
   },
   poiCard: {
-    borderRadius: "5px",
+    borderRadius: "10px",
     margin: "auto",
     marginBottom: "10px",
     boxShadow: Shadow.LIGHT3D,
-    width: "95%",
-
-    // [theme.breakpoints.down(1238)]: {
-    //   width: "48.7%",
-    // },
-    // [theme.breakpoints.down(771)]: {
-    //   width: "90%",
-    // },
-
+    width: "87%",
     transition: "all .2s ease-in-out",
     "&:hover": {
       transform: "scale(1.1)",
+      width: "82%",
     },
   },
   poiCardGrid: {
     marginTop: "10px",
+    [theme.breakpoints.down(965)]: {
+      width: "110%",
+      position: "relative",
+      right: "36px",
+    },
+    [theme.breakpoints.down(906)]: {
+      width: "120%",
+      right: "70px",
+    },
     [theme.breakpoints.down(824)]: {
       marginTop: "20px",
     },
+    [theme.breakpoints.down(796)]: {
+      width: "100%",
+      position: "initial",
+    },
   },
   poiCardContainer: {
-    display: "flex",
-    width: "100%",
+    // display: "flex",
+    // width: "100%",
   },
   poiSlider: {
-    width: "100%",
+    width: "108%",
     display: "flex",
     alignItems: "center",
+    position: "relative",
+    right: "57px",
   },
   rating: {
     marginBottom: "15px",

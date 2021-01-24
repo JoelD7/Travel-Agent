@@ -7,6 +7,7 @@ type Component = "hm" | "h1" | "h2" | "h3" | "h4" | "h5" | "p";
 
 export const Text: FunctionComponent<{
   component?: Component;
+  id?: string;
   bold?: boolean;
   color?: string;
   className?: string;
@@ -15,6 +16,7 @@ export const Text: FunctionComponent<{
   endParagraph?: boolean;
 }> = ({
   children,
+  id,
   endParagraph,
   component = "p",
   style,
@@ -46,5 +48,9 @@ export const Text: FunctionComponent<{
 
   const styles = textStyles();
 
-  return <p className={`${styles.text} ${className}`}>{children}</p>;
+  return (
+    <p id={id} className={`${styles.text} ${className}`}>
+      {children}
+    </p>
+  );
 };

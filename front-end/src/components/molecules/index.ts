@@ -13,3 +13,4 @@ export { DashDrawer } from "./DashDrawer/DashDrawer";
 export { PhotoAlbumCard } from "./PhotoAlbumCard/PhotoAlbumCard";
 export { DayItinerary } from "./DayItinerary/DayItinerary";
 export { ParentCategoryToolbar } from "./ParentCategoryToolbar/ParentCategoryToolbar";
+export { POICategorySlider } from "./POICategorySlider/POICategorySlider";

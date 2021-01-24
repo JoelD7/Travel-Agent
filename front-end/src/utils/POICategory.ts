@@ -51,28 +51,28 @@ export const ArtsEntertainment: POICategorySearch = {
   name: "Arts & Entertainment",
   icon: faMagic,
   id: "4d4b7104d754a06370d81259",
-  image: "",
+  image: "/Travel-Agent/poi-categories/agra.webp",
 };
 export const Nightlife: POICategorySearch = {
   pluralName: "Nightlife Spot",
   name: "Nightlife Spot",
   icon: faGlassMartiniAlt,
   id: "4d4b7105d754a06376d81259",
-  image: "",
+  image: "/Travel-Agent/poi-categories/new-york.webp",
 };
 export const OutdoorsRec: POICategorySearch = {
   pluralName: "Outdoors & Recreation",
   name: "Outdoors & Recreation",
   icon: faHiking,
   id: "4d4b7105d754a06377d81259",
-  image: "",
+  image: "/Travel-Agent/poi-categories/paris.webp",
 };
 export const ShopService: POICategorySearch = {
   pluralName: "Shopping & Services",
   name: "Shopping & Service",
   icon: faShoppingBag,
   id: "4d4b7105d754a06378d81259",
-  image: "",
+  image: ".webp",
 };
 export const HistoricSite: POICategorySearch = {
   pluralName: "Historic Sites",
@@ -80,7 +80,7 @@ export const HistoricSite: POICategorySearch = {
   parent: POICategoryParent.ArtsEntertainment,
   icon: faLandmark,
   id: "4deefb944765f83613cdba6e",
-  image: "",
+  image: "/Travel-Agent/poi-categories/historic.webp",
 };
 
 export const MovieTheater: POICategorySearch = {
@@ -89,7 +89,7 @@ export const MovieTheater: POICategorySearch = {
   parent: POICategoryParent.ArtsEntertainment,
   icon: faTicketAlt,
   id: "4bf58dd8d48988d17f941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/movie.webp",
 };
 
 export const Museum: POICategorySearch = {
@@ -98,7 +98,7 @@ export const Museum: POICategorySearch = {
   parent: POICategoryParent.ArtsEntertainment,
   icon: faLandmark,
   id: "4bf58dd8d48988d181941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/museum.webp",
 };
 
 export const MusicVenue: POICategorySearch = {
@@ -107,7 +107,7 @@ export const MusicVenue: POICategorySearch = {
   parent: POICategoryParent.ArtsEntertainment,
   icon: faMusic,
   id: "4bf58dd8d48988d1e5931735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/music.webp",
 };
 
 export const Theater: POICategorySearch = {
@@ -116,7 +116,7 @@ export const Theater: POICategorySearch = {
   parent: POICategoryParent.ArtsEntertainment,
   icon: faTheaterMasks,
   id: "4bf58dd8d48988d137941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/theater.webp",
 };
 
 export const Stadium: POICategorySearch = {
@@ -125,7 +125,7 @@ export const Stadium: POICategorySearch = {
   parent: POICategoryParent.ArtsEntertainment,
   icon: faFutbol,
   id: "4bf58dd8d48988d184941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/stadium.webp",
 };
 
 export const ThemePark: POICategorySearch = {
@@ -134,7 +134,7 @@ export const ThemePark: POICategorySearch = {
   parent: POICategoryParent.ArtsEntertainment,
   icon: faFortAwesome,
   id: "4bf58dd8d48988d182941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/theme-park.webp",
 };
 
 export const Zoo: POICategorySearch = {
@@ -143,7 +143,7 @@ export const Zoo: POICategorySearch = {
   parent: POICategoryParent.ArtsEntertainment,
   icon: faPaw,
   id: "4bf58dd8d48988d17b941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/zoo.webp",
 };
 
 export const Bar: POICategorySearch = {
@@ -152,7 +152,7 @@ export const Bar: POICategorySearch = {
   parent: POICategoryParent.Nightlife,
   icon: faGlassMartiniAlt,
   id: "4bf58dd8d48988d116941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/bar.webp",
 };
 
 export const Nightclub: POICategorySearch = {
@@ -161,7 +161,7 @@ export const Nightclub: POICategorySearch = {
   parent: POICategoryParent.Nightlife,
   icon: faGlassCheers,
   id: "4bf58dd8d48988d11f941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/nightclub.webp",
 };
 
 export const GymFitness: POICategorySearch = {
@@ -170,7 +170,7 @@ export const GymFitness: POICategorySearch = {
   parent: POICategoryParent.OutdoorsRec,
   icon: faDumbbell,
   id: "4bf58dd8d48988d175941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/gym.webp",
 };
 
 export const Beach: POICategorySearch = {
@@ -179,7 +179,7 @@ export const Beach: POICategorySearch = {
   parent: POICategoryParent.OutdoorsRec,
   icon: faUmbrellaBeach,
   id: "4bf58dd8d48988d1e2941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/beach.webp",
 };
 
 export const NationalPark: POICategorySearch = {
@@ -188,7 +188,7 @@ export const NationalPark: POICategorySearch = {
   parent: POICategoryParent.OutdoorsRec,
   icon: faMountain,
   id: "52e81612bcbc57f1066b7a21",
-  image: "",
+  image: "/Travel-Agent/poi-categories/national-park.webp",
 };
 
 export const SkiArea: POICategorySearch = {
@@ -197,7 +197,7 @@ export const SkiArea: POICategorySearch = {
   parent: POICategoryParent.OutdoorsRec,
   icon: faSkiing,
   id: "4bf58dd8d48988d1e9941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/ski.webp",
 };
 
 export const ClothingStore: POICategorySearch = {
@@ -206,7 +206,7 @@ export const ClothingStore: POICategorySearch = {
   parent: POICategoryParent.ShopService,
   icon: faTshirt,
   id: "4bf58dd8d48988d103951735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/clothing.webp",
 };
 
 export const ShoppingMall: POICategorySearch = {
@@ -215,7 +215,7 @@ export const ShoppingMall: POICategorySearch = {
   parent: POICategoryParent.ShopService,
   icon: faShoppingBag,
   id: "4bf58dd8d48988d1fd941735",
-  image: "",
+  image: "/Travel-Agent/poi-categories/shopping.webp",
 };
 
 export const POICategoryMap: { [index: string]: POICategorySearch } = {

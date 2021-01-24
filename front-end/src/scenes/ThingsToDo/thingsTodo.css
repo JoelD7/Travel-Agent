@@ -14,9 +14,6 @@
 .slick-slide {
   float: none;
 }
-/* .slick-list {
-  height: 100%;
+.slick-list {
+  padding: 10px;
 }
-.slick-track {
-  height: 97%;
-} */
