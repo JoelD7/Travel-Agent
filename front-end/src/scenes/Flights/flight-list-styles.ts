@@ -95,14 +95,14 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     width: "85%",
-    margin: "120px auto 20px auto",
+    margin: "auto",
+    position: "relative",
+    bottom: "10px",
     [theme.breakpoints.down(1318)]: {
       width: "95%",
     },
   },
-  pageContentContainerGrid: {
-    marginTop: "50px",
-  },
+  pageContentContainerGrid: {},
   resevationParamsContainer: {
     backgroundColor: Colors.BLUE,
     boxShadow: Shadow.MEDIUM,
@@ -111,7 +111,6 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     width: "85%",
     margin: "20px auto auto auto",
     position: "relative",
-    top: "20px",
   },
   pageTitleContainer: {
     backgroundColor: Colors.BLUE,
@@ -122,7 +121,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   pageTitleContainerPic: {
     backgroundImage: `url('flights.jpg')`,
-    height: "300px",
+    height: "55vh",
     backgroundPositionY: "20%",
     backgroundSize: "cover",
 

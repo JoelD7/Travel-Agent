@@ -3,7 +3,7 @@ import { Colors, Shadow } from "../../../styles";
 
 export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
   card: {
-    width: "95%",
+    width: "91%",
     margin: "auto 5px",
     boxShadow: Shadow.LIGHT,
   },
@@ -26,7 +26,9 @@ export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
   },
   slideshowGrid: {
     width: "100%",
-    // background: Colors.PAGE_BACKG,
+    backgroundColor: Colors.BACKGROUND,
+    borderRadius: " 10px",
+    padding: "10px",
   },
   textButton: {
     padding: "0px",

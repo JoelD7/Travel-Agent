@@ -408,7 +408,7 @@ export function ThingsToDo() {
 
       {/* Page content */}
       <div className={style.pageContentContainer}>
-        <Text component="h2" bold>
+        <Text component="h2" bold color="white">
           Browse by category
         </Text>
 

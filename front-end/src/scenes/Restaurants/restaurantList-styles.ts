@@ -15,6 +15,8 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   pageContentContainer: {
     width: "90%",
     margin: "auto",
+    position: "relative",
+    bottom: "155px",
   },
   filterGrid: {
     width: "22%",
@@ -43,7 +45,7 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     padding: "15px",
   },
   pageTitleContainer: {
-    height: "300px",
+    height: "55vh",
     backgroundImage:
       "linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/Travel-Agent/restaurant.jpg')",
     backgroundSize: "cover",

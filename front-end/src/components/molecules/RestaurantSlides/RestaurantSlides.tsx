@@ -62,7 +62,7 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
   }
 
   return (
-    <div style={{ marginTop: "20px" }}>
+    <div>
       <Grid item className={style.slideshowGrid}>
         <Grid container>
           <Text style={{ marginLeft: "53px" }} weight={500} component="h2">
@@ -85,45 +85,46 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
           >
             {restaurants.map((restaurant, i) => (
               <div key={i}>
-                <Card className={style.card}>
-                  <CardActionArea
-                    onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
-                  >
+                <CardActionArea
+                  className={style.card}
+                  onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
+                >
+                  <Card>
                     <CardMedia
                       component="img"
                       height="150"
                       image={restaurant.featuredImage}
                     />
-                  </CardActionArea>
 
-                  <CardContent>
-                    <Text
-                      component="h4"
-                      className={style.restaurantName}
-                    >{`${restaurant.name}`}</Text>
+                    <CardContent>
+                      <Text
+                        component="h4"
+                        className={style.restaurantName}
+                      >{`${restaurant.name}`}</Text>
 
-                    <Rating
-                      initialRating={restaurant.rating}
-                      readonly
-                      emptySymbol={
-                        <FontAwesomeIcon
-                          style={{ margin: "0px 1px" }}
-                          icon={faCircleReg}
-                          color={Colors.PURPLE}
-                        />
-                      }
-                      fullSymbol={
-                        <FontAwesomeIcon
-                          style={{ margin: "0px 1px" }}
-                          icon={faCircle}
-                          color={Colors.PURPLE}
-                        />
-                      }
-                    />
+                      <Rating
+                        initialRating={restaurant.rating}
+                        readonly
+                        emptySymbol={
+                          <FontAwesomeIcon
+                            style={{ margin: "0px 1px" }}
+                            icon={faCircleReg}
+                            color={Colors.PURPLE}
+                          />
+                        }
+                        fullSymbol={
+                          <FontAwesomeIcon
+                            style={{ margin: "0px 1px" }}
+                            icon={faCircle}
+                            color={Colors.PURPLE}
+                          />
+                        }
+                      />
 
-                    <p className={style.restaurantCuisines}>{restaurant.cuisines}</p>
-                  </CardContent>
-                </Card>
+                      <p className={style.restaurantCuisines}>{restaurant.cuisines}</p>
+                    </CardContent>
+                  </Card>
+                </CardActionArea>
               </div>
             ))}
           </Slider>

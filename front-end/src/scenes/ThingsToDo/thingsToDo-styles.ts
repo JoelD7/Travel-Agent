@@ -8,6 +8,11 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     width: "92%",
     borderRadius: "15px",
     boxShadow: Shadow.MEDIUM,
+    "&:hover": {
+      transform: "scale(1.1)",
+      width: "87%",
+      marginLeft: "8px",
+    },
   },
   cardSelected: {
     transition: "all .2s ease-in-out",
@@ -88,7 +93,7 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     borderRadius: "50px",
     width: "60%",
     position: "relative",
-    top: "75px",
+    bottom: "10px",
 
     [theme.breakpoints.down(1447)]: {
       width: "70%",
@@ -103,12 +108,14 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   pageContentContainer: {
     width: "80%",
     margin: "40px auto auto auto",
+    position: "relative",
+    bottom: "137px",
   },
   pageTitleContainer: {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPositionY: "50%",
-    height: "300px",
+    height: "55vh",
   },
   activityCard: {
     borderRadius: "10px",

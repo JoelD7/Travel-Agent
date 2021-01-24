@@ -124,6 +124,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     margin: "0px 0px 15px 15px",
     borderRadius: "10px",
     display: "flex",
+    backgroundColor: "white",
     width: "100%",
 
     [theme.breakpoints.down(1280)]: {
@@ -174,8 +175,6 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     backgroundColor: Colors.BACKGROUND,
   },
   pageContentContainer: {
-    marginTop: "70px",
-
     [theme.breakpoints.down(578)]: {
       marginTop: "110px",
     },
@@ -183,12 +182,14 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   pageContainerChilds: {
     width: "85%",
     margin: "auto",
+    position: "relative",
+    bottom: "100px",
   },
   pageTitleGrid: {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPositionY: "50%",
-    height: "300px",
+    height: "55vh",
   },
   pageTitleContainer: {
     backgroundColor: Colors.BLUE,
@@ -197,7 +198,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     borderRadius: "10px",
     padding: "10px",
     position: "relative",
-    top: "60px",
+    top: "15px",
   },
   reservationParamText: {
     color: "white",
