@@ -14,6 +14,13 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
       marginLeft: "8px",
     },
   },
+  cardPlaceholder: {
+    transition: "all .2s ease-in-out",
+    width: "92%",
+    borderRadius: "15px",
+    boxShadow: Shadow.MEDIUM,
+    filter: "blur(4px)",
+  },
   cardSelected: {
     transition: "all .2s ease-in-out",
     width: "87%",
@@ -26,6 +33,12 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   categoryNameContainer: {
     height: "auto",
     marginTop: "auto",
+  },
+  categoryIcon: {
+    backgroundColor: Colors.PURPLE,
+    borderRadius: "50px",
+    height: "26px",
+    marginRight: "5px",
   },
   mainContainer: {
     fontFamily: Font.Family,
@@ -110,6 +123,10 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     margin: "40px auto auto auto",
     position: "relative",
     bottom: "137px",
+
+    [theme.breakpoints.down(1035)]: {
+      width: "90%",
+    },
   },
   pageTitleContainer: {
     backgroundSize: "cover",
@@ -117,11 +134,28 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     backgroundPositionY: "50%",
     height: "55vh",
   },
+  pageTitleTextGrid: {
+    margin: "0px auto",
+    [theme.breakpoints.down(1000)]: {
+      margin: "55px auto",
+    },
+  },
   activityCard: {
     borderRadius: "10px",
     margin: "10px",
     boxShadow: Shadow.LIGHT3D,
-    width: "25%",
+    width: "29%",
+
+    [theme.breakpoints.down(1300)]: {
+      width: "31%",
+    },
+    [theme.breakpoints.down(1160)]: {
+      width: "47%",
+    },
+    [theme.breakpoints.down(763)]: {
+      width: "75%",
+      margin: "10px auto",
+    },
   },
   pageSubtitle: {
     marginTop: "20px",
@@ -140,33 +174,26 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   poiCardGrid: {
     marginTop: "10px",
-    [theme.breakpoints.down(965)]: {
-      width: "110%",
-      position: "relative",
-      right: "36px",
-    },
-    [theme.breakpoints.down(906)]: {
-      width: "120%",
-      right: "70px",
-    },
+    height: "332px",
     [theme.breakpoints.down(824)]: {
       marginTop: "20px",
     },
-    [theme.breakpoints.down(796)]: {
-      width: "100%",
-      position: "initial",
-    },
   },
   poiCardContainer: {
-    // display: "flex",
-    // width: "100%",
+    height: "332px",
   },
   poiSlider: {
-    width: "108%",
+    width: "100%",
     display: "flex",
     alignItems: "center",
-    position: "relative",
-    right: "57px",
+    position: "absolute",
+  },
+  poiSliderPlaceholder: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    position: "absolute",
+    filter: "blur(4px)",
   },
   rating: {
     marginBottom: "15px",
@@ -205,5 +232,12 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     display: "flex",
     alignItems: "center",
+    position: "absolute",
+  },
+  toursTitle: {
+    marginTop: "40px !important",
+    [theme.breakpoints.down(960)]: {
+      marginTop: "60px !important",
+    },
   },
 }));

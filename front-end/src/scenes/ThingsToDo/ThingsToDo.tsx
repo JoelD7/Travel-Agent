@@ -3,18 +3,15 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
-  createMuiTheme,
+  CircularProgress,
   FormControl,
   Grid,
   makeStyles,
-  Menu,
   MenuItem,
   Select,
   Theme,
-  ThemeProvider,
-  Toolbar,
 } from "@material-ui/core";
-import React, { MouseEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   CustomButton,
   IconText,
@@ -23,14 +20,15 @@ import {
   POICategorySlider,
   ServicesToolbar,
   SliderArrow,
+  POICard,
   Text,
+  ProgressCircle,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import { thingsToDoStyles as thingsToDoStyles } from "./thingsToDo-styles";
 import {
   POICategories,
   POICategoryMap,
-  POICategoryParent,
   POICategorySearch,
 } from "../../utils/POICategory";
 import { Font } from "../../assets";
@@ -38,49 +36,39 @@ import Slider from "react-slick";
 import {
   activitiesPlaceholder,
   POICategory,
-  poisPlaceholder,
-  Routes,
   currencyFormatter,
   getPOICategoryParent,
   poisPlaceholderAPI,
 } from "../../utils";
-import {
-  faMapMarkerAlt,
-  faCircle,
-  IconDefinition,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
 import Ratings from "react-ratings-declarative";
 import Axios from "axios";
 import { differenceInHours } from "date-fns";
 import Helmet from "react-helmet";
-import Rating from "react-rating";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
 import "./thingsTodo.css";
+import { nanoid } from "nanoid";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getPoisThunk,
+  selectPOIs,
+  selectLoadingPOICard,
+  selectAllPOIs,
+} from "../../utils/slices/poi-slice";
 
 type SortOption = "" | "Name | A - Z" | "Name | Z - A";
-
-interface POICard {
-  poi: POISearch;
-  slider?: boolean;
-}
-
-interface POICategoryAvailable {
-  name: string;
-  parent?: string;
-  icon: IconDefinition;
-  id: string;
-  image: string;
-  pluralName: string;
-  available: boolean;
-}
 
 export function ThingsToDo() {
   const style = thingsToDoStyles();
 
-  const [pois, setPois] = useState<POISearch[]>(poisPlaceholderAPI);
-  const [allPois, setAllPois] = useState<POISearch[]>(poisPlaceholderAPI);
+  // const [pois, setPois] = useState<POISearch[]>([]);
+  // const [allPois, setAllPois] = useState<POISearch[]>([]);
+
+  const pois = useSelector(selectPOIs);
+  console.log("Pois: ", JSON.stringify(pois));
+  const allPois = useSelector(selectAllPOIs);
+
+  const reduxPOIs = useSelector(selectPOIs);
 
   /**
    * ID used by an <a> to scroll to
@@ -103,17 +91,33 @@ export function ThingsToDo() {
   }));
   const cardStyle = poiCardStyels();
 
-  const initialCategory = POICategory.Museum;
+  /**
+   * This serves the purpose of not having selectedCategory undefined
+   * on the first render.
+   * If I iniatilize selectedCategory to one of the
+   * categories it'll be more complicated to handle the behaviour of the
+   * program before the user has selected any.
+   */
+  const categoryPlaceholder: POICategorySearch = {
+    name: "categoryPlaceholder",
+    icon: faCircle,
+    id: "",
+    image: "",
+    pluralName: "",
+  };
   const [selectedCategory, setSelectedCategory] = useState<POICategorySearch>(
-    initialCategory
+    categoryPlaceholder
   );
-
-  const history = useHistory();
 
   const [poiSliderRows, setPoiSliderRows] = useState(2);
 
+  const loadingPOICard = useSelector(selectLoadingPOICard);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  // const [loadingPOICard, setLoadingPOICard] = useState(false);
+  // const [loadingCategories, setLoadingCategories] = useState(false);
+
   const poiSliderSettings = {
-    className: `${style.poiSlider} center`,
+    className: style.poiSlider,
     nextArrow: <SliderArrow iconSize="2x" direction="right" />,
     prevArrow: <SliderArrow iconSize="2x" direction="left" />,
     slidesToShow: 1,
@@ -121,13 +125,36 @@ export function ThingsToDo() {
     slidesPerRow: pois.length > 3 ? 3 : 1,
     responsive: [
       {
-        breakpoint: 1126,
+        breakpoint: 1260,
         settings: {
           slidesPerRow: pois.length > 3 ? 2 : 1,
         },
       },
       {
-        breakpoint: 796,
+        breakpoint: 800,
+        settings: {
+          slidesPerRow: 1,
+        },
+      },
+    ],
+  };
+
+  const poiSliderSettingsPlaceholder = {
+    className: style.poiSliderPlaceholder,
+    nextArrow: <SliderArrow iconSize="2x" direction="right" />,
+    prevArrow: <SliderArrow iconSize="2x" direction="left" />,
+    slidesToShow: 1,
+    rows: 2,
+    slidesPerRow: 3,
+    responsive: [
+      {
+        breakpoint: 1260,
+        settings: {
+          slidesPerRow: poisPlaceholderAPI.length > 3 ? 2 : 1,
+        },
+      },
+      {
+        breakpoint: 800,
         settings: {
           slidesPerRow: 1,
         },
@@ -140,6 +167,8 @@ export function ThingsToDo() {
     JSON.parse(String(localStorage.getItem("rates")))
   );
 
+  const dispatch = useDispatch();
+
   const [sortOption, setSortOption] = useState<SortOption>("");
   const sortOptions: SortOption[] = ["Name | A - Z", "Name | Z - A"];
 
@@ -149,12 +178,51 @@ export function ThingsToDo() {
     if (!areRatesUpdated()) {
       getExchangeRates();
     }
-    getAvailableCategories();
-    setPois(poisPlaceholderAPI);
+
     // getPOIs();
+    dispatch(getPoisThunk("51.5074, 0.1278"));
   }, []);
 
-  function getAvailableCategories() {
+  useEffect(() => {
+    goToToursTitle();
+  }, [selectedCategory]);
+
+  /**
+   * Clicks on the anchor element with a ref to
+   * the Tours title so that the screen scrolls
+   * down to it.
+   */
+  function goToToursTitle() {
+    if (selectedCategory === POICategory.TOUR) {
+      //@ts-ignore
+      toursTitleAnchorEl.current.click();
+    }
+  }
+
+  function getPOIs() {
+    Axios.get("https://api.foursquare.com/v2/venues/search", {
+      params: {
+        ll: "51.5074, 0.1278",
+        categoryId:
+          "4deefb944765f83613cdba6e,4bf58dd8d48988d17f941735,4bf58dd8d48988d181941735,4bf58dd8d48988d1e5931735,4bf58dd8d48988d137941735,4bf58dd8d48988d184941735,4bf58dd8d48988d182941735,4bf58dd8d48988d17b941735,4bf58dd8d48988d116941735,4bf58dd8d48988d11f941735,4bf58dd8d48988d175941735,4bf58dd8d48988d1e2941735,52e81612bcbc57f1066b7a21,4bf58dd8d48988d1e9941735,4bf58dd8d48988d103951735,4bf58dd8d48988d1fd941735",
+        client_id: process.env.REACT_APP_FOURSQUARE_CLIENT_ID,
+        client_secret: process.env.REACT_APP_FOURSQUARE_CLIENT_SECRET,
+        v: "20210104",
+        radius: "100000",
+      },
+    })
+      .then((res) => {
+        // setPois(res.data.response.venues);
+        // setAllPois(res.data.response.venues);
+        let allPois: POISearch[] = res.data.response.venues;
+        getAvailableCategories(allPois);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function getAvailableCategories(allPois: POISearch[]) {
     let availableCatsFromPois: any[] = [];
     let availableCategoriesTemp: any[] = [];
 
@@ -172,33 +240,7 @@ export function ThingsToDo() {
       }
     });
     setAvailableCategories(availableCategoriesTemp);
-  }
-
-  useEffect(() => {
-    if (selectedCategory === POICategory.TOUR) {
-      //@ts-ignore
-      toursTitleAnchorEl.current.click();
-    }
-  }, [selectedCategory]);
-
-  function getPOIs() {
-    Axios.get("https://api.foursquare.com/v2/venues/search", {
-      params: {
-        ll: "25.2048, 55.2708",
-        categoryId:
-          "4deefb944765f83613cdba6e,4bf58dd8d48988d17f941735,4bf58dd8d48988d181941735,4bf58dd8d48988d1e5931735,4bf58dd8d48988d137941735,4bf58dd8d48988d184941735,4bf58dd8d48988d182941735,4bf58dd8d48988d17b941735,4bf58dd8d48988d116941735,4bf58dd8d48988d11f941735,4bf58dd8d48988d175941735,4bf58dd8d48988d1e2941735,52e81612bcbc57f1066b7a21,4bf58dd8d48988d1e9941735,4bf58dd8d48988d103951735,4bf58dd8d48988d1fd941735",
-        client_id: "D2KZP5LQRWPEFKPA0PQLOIC3Z0CYDGYGR3UVIP4DOF2T0FWZ",
-        client_secret: "HLUNYVTHZS2DB4THW2ZV0AFRIPG2HQNMM3V44NBOIMZX1C32",
-        v: "20210104",
-      },
-    })
-      .then((res) => {
-        setPois(res.data.response.venues);
-        setAllPois(res.data.response.venues);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setLoadingCategories(false);
   }
 
   function areRatesUpdated() {
@@ -241,27 +283,38 @@ export function ThingsToDo() {
     }
   }
 
-  function getPOICategoryIcon(poi: POISearch): IconDefinition {
-    if (POICategoryMap[poi.categories[0].name]) {
-      return POICategoryMap[poi.categories[0].name].icon;
-    } else if (!getPOICategoryParent(poi.categories[0].id)) {
-      return faCircle;
-    }
-    return POICategoryMap[getPOICategoryParent(poi.categories[0].id)].icon;
-  }
-
   function onCategorySelected(category: POICategorySearch) {
+    // setLoadingPOICard(true);
     seeLessPOIs();
-    setSelectedCategory(category);
-    let filteredPois: POISearch[] = getPoisOfCategory(category);
-    setPois(filteredPois);
+    //Unselect category and show all pois
+    if (category.name === selectedCategory.name) {
+      setSelectedCategory(categoryPlaceholder);
+      // setPois(allPois);
+    } else {
+      setSelectedCategory(category);
+      getPoisOfCategory(category);
+    }
   }
 
-  function getPoisOfCategory(category: POICategorySearch): POISearch[] {
-    return allPois.filter(
-      (poi) =>
-        getPOICategoryParent(poi.categories[0].id) === getPOICategoryParent(category.id)
-    );
+  function getPoisOfCategory(category: POICategorySearch) {
+    Axios.get("https://api.foursquare.com/v2/venues/search", {
+      params: {
+        ll: "51.5074, 0.1278",
+        categoryId: `${category.id}`,
+        client_id: process.env.REACT_APP_FOURSQUARE_CLIENT_ID,
+        client_secret: process.env.REACT_APP_FOURSQUARE_CLIENT_SECRET,
+        v: "20210104",
+        radius: "100000",
+      },
+    })
+      .then((res) => {
+        // setLoadingPOICard(false);
+        let pois: POISearch[] = res.data.response.venues;
+        // setPois(pois);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function getPOICardWidth(cardsInRow: number) {
@@ -273,77 +326,6 @@ export function ThingsToDo() {
       default:
         return;
     }
-  }
-
-  function POICard({ poi }: POICard) {
-    return (
-      <Card className={style.poiCard}>
-        <CardActionArea
-          style={{ padding: "10px" }}
-          onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
-        >
-          <Text
-            bold
-            style={{
-              color: Colors.BLUE,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-            component="h4"
-          >
-            {poi.name}
-          </Text>
-
-          {/* POI Rating */}
-          {poi.rating && (
-            <Rating
-              className={style.rating}
-              initialRating={poi.rating}
-              readonly
-              emptySymbol={
-                <FontAwesomeIcon
-                  style={{ margin: "0px 1px" }}
-                  icon={faCircleReg}
-                  color={Colors.PURPLE}
-                />
-              }
-              fullSymbol={
-                <FontAwesomeIcon
-                  style={{ margin: "0px 1px" }}
-                  icon={faCircle}
-                  color={Colors.PURPLE}
-                />
-              }
-            />
-          )}
-
-          <IconText
-            icon={faMapMarkerAlt}
-            text={
-              poi.location.address
-                ? poi.location.address
-                : poi.location.formattedAddress?.join(", ")
-            }
-          />
-          <IconText icon={getPOICategoryIcon(poi)} text={poi.categories[0].name} />
-
-          <div style={{ display: "flex" }}>
-            <CustomButton
-              onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
-              backgroundColor={Colors.PURPLE}
-              style={{
-                borderRadius: "10px",
-                fontSize: "16px",
-                marginLeft: "auto",
-              }}
-            >
-              Check out
-            </CustomButton>
-          </div>
-        </CardActionArea>
-      </Card>
-    );
   }
 
   function seeMorePOIs() {
@@ -359,11 +341,11 @@ export function ThingsToDo() {
     let sortedPois: POISearch[] = [];
 
     if (option === "Name | A - Z") {
-      sortedPois = pois.sort((a, b) => a.name.localeCompare(b.name));
+      sortedPois = pois.sort((a: any, b: any) => a.name.localeCompare(b.name));
     } else {
-      sortedPois = pois.sort((a, b) => b.name.localeCompare(a.name));
+      sortedPois = pois.sort((a: any, b: any) => b.name.localeCompare(a.name));
     }
-    setPois(sortedPois);
+    // setPois(sortedPois);
   }
 
   return (
@@ -371,7 +353,7 @@ export function ThingsToDo() {
       <a ref={toursTitleAnchorEl} href={`#${toursTitleID}`} hidden></a>
 
       <Helmet>
-        <title>Things to do in Dubai</title>
+        <title>Things to do in London</title>
       </Helmet>
 
       <Navbar />
@@ -391,9 +373,9 @@ export function ThingsToDo() {
               <ServicesToolbar style={{ boxShadow: Shadow.MEDIUM }} />
             </Grid>
 
-            <Grid item xs={10} style={{ margin: "0px auto" }}>
+            <Grid item xs={10} className={style.pageTitleTextGrid}>
               <Text bold component="hm" color="white">
-                Things to in Dubai
+                Things to in London
               </Text>
             </Grid>
           </Grid>
@@ -416,92 +398,108 @@ export function ThingsToDo() {
         <POICategorySlider
           availableCategories={availableCategories}
           selectedCategory={selectedCategory}
+          loading={loadingCategories}
           onCategorySelected={onCategorySelected}
         />
 
-        {selectedCategory.pluralName !== POICategory.TOURS && (
-          <>
-            {/* POI cards header and sort */}
-            <Grid container alignContent="flex-end" style={{ marginTop: "20px" }}>
-              <Text component="h2" bold>{`${selectedCategory.pluralName} in Dubai`}</Text>
+        <>
+          {/* POI cards header and sort */}
+          <Grid container alignContent="flex-end" style={{ marginTop: "20px" }}>
+            <Text component="h2" bold>{`${
+              selectedCategory.name === categoryPlaceholder.name
+                ? "Places to go"
+                : selectedCategory.pluralName
+            } in London`}</Text>
 
-              {poiSliderRows === 2 ? (
-                <CustomButton
-                  iconColor="#7e7e7e"
-                  backgroundColor="rgba(0,0,0,0)"
-                  textColor="#7e7e7e"
-                  onClick={() => seeMorePOIs()}
-                >
-                  See More
-                </CustomButton>
-              ) : (
-                <CustomButton
-                  iconColor="#7e7e7e"
-                  backgroundColor="rgba(0,0,0,0)"
-                  textColor="#7e7e7e"
-                  onClick={() => seeLessPOIs()}
-                >
-                  See Less
-                </CustomButton>
-              )}
+            {poiSliderRows === 2 ? (
+              <CustomButton
+                iconColor="#7e7e7e"
+                backgroundColor="rgba(0,0,0,0)"
+                textColor="#7e7e7e"
+                onClick={() => seeMorePOIs()}
+              >
+                See More
+              </CustomButton>
+            ) : (
+              <CustomButton
+                iconColor="#7e7e7e"
+                backgroundColor="rgba(0,0,0,0)"
+                textColor="#7e7e7e"
+                onClick={() => seeLessPOIs()}
+              >
+                See Less
+              </CustomButton>
+            )}
 
-              {/* Sort selector */}
-              <Grid item className={style.sortGrid}>
-                <Grid container>
-                  <Text
-                    bold
-                    style={{ alignSelf: "end", marginBottom: "5px" }}
-                    color={Colors.BLUE}
+            {/* Sort selector */}
+            <Grid item className={style.sortGrid}>
+              <Grid container>
+                <Text
+                  bold
+                  style={{ alignSelf: "end", marginBottom: "5px" }}
+                  color={Colors.BLUE}
+                >
+                  Sort by
+                </Text>
+
+                <FormControl className={style.selectControl}>
+                  <Select
+                    value={sortOption}
+                    variant="outlined"
+                    className={style.select}
+                    onChange={(e) => onSortOptionChange(e.target.value as SortOption)}
                   >
-                    Sort by
-                  </Text>
-
-                  <FormControl className={style.selectControl}>
-                    <Select
-                      value={sortOption}
-                      variant="outlined"
-                      className={style.select}
-                      onChange={(e) => onSortOptionChange(e.target.value as SortOption)}
-                    >
-                      {sortOptions.map((option, i) => (
-                        <MenuItem
-                          classes={{ root: style.menuItemSelect }}
-                          key={i}
-                          value={option}
-                        >
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
+                    {sortOptions.map((option, i) => (
+                      <MenuItem
+                        classes={{ root: style.menuItemSelect }}
+                        key={i}
+                        value={option}
+                      >
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
+          </Grid>
 
-            {/* POIs cards */}
-            {pois.length > 0 && (
-              <Grid key="pois cards" container className={style.poiCardGrid}>
+          {/* POIs cards */}
+          <Grid key="pois cards" container className={style.poiCardGrid}>
+            {loadingPOICard ? (
+              <>
+                <ProgressCircle />
+                <Slider {...poiSliderSettingsPlaceholder} dots>
+                  {poisPlaceholderAPI.map((poi) => (
+                    <div key={poi.id} style={{ height: "100%" }}>
+                      <POICard poi={poi} />
+                    </div>
+                  ))}
+                </Slider>
+              </>
+            ) : (
+              <Grid container>
                 {pois.length > 3 ? (
                   <Slider {...poiSliderSettings} dots>
-                    {pois.map((poi, i) => (
-                      <div key={i} style={{ height: "100%" }}>
-                        <POICard key={i} slider poi={poi} />
+                    {pois.map((poi: any) => (
+                      <div key={poi.id} style={{ height: "100%" }}>
+                        <POICard poi={poi} />
                       </div>
                     ))}
                   </Slider>
                 ) : (
                   <Grid container className={style.poiCardContainer}>
-                    {pois.map((poi, i) => (
-                      <Grid item className={cardStyle.poiCardItem}>
-                        <POICard key={i} poi={poi} />
+                    {pois.map((poi: any) => (
+                      <Grid key={poi.id} item className={cardStyle.poiCardItem}>
+                        <POICard poi={poi} />
                       </Grid>
                     ))}
                   </Grid>
                 )}
               </Grid>
             )}
-          </>
-        )}
+          </Grid>
+        </>
 
         {/* Tours cards */}
         <>
@@ -509,8 +507,9 @@ export function ThingsToDo() {
             id={toursTitleID}
             component="h2"
             bold
-            style={{ marginTop: "20px" }}
-          >{`Tours and activites in Dubai`}</Text>
+            className={style.toursTitle}
+          >{`Tours and activites in London`}</Text>
+
           <Grid key="tours cards" container>
             {activities.slice(0, 6).map((activity, i) => (
               <Card key={i} className={style.activityCard}>

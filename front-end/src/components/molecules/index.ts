@@ -14,3 +14,4 @@ export { PhotoAlbumCard } from "./PhotoAlbumCard/PhotoAlbumCard";
 export { DayItinerary } from "./DayItinerary/DayItinerary";
 export { ParentCategoryToolbar } from "./ParentCategoryToolbar/ParentCategoryToolbar";
 export { POICategorySlider } from "./POICategorySlider/POICategorySlider";
+export { POICard } from "./POICard/POICard";

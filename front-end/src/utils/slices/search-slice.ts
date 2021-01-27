@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
+import Axios from "axios";
+import { useDispatch } from "react-redux";
 
 interface SearchType {
   query: string;

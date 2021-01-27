@@ -139,7 +139,7 @@ export function ParentCategoryToolbar({
               onClick={(e) => onMenuOpen(e, "primary")}
               onMouseEnter={() => closePrimaryMenu()}
               classes={{ root: style.menuItemRoot }}
-              key={i}
+              key={parentCategory}
             >
               {parentCategory}
             </MenuItem>
@@ -190,7 +190,7 @@ export function ParentCategoryToolbar({
                                 id={parentCategory}
                                 onClick={(e) => openPrimaryFromSecondary(e)}
                                 classes={{ root: style.menuItemChild }}
-                                key={i}
+                                key={parentCategory}
                               >
                                 {parentCategory}
                               </MenuItem>
@@ -236,7 +236,7 @@ export function ParentCategoryToolbar({
                       (category) => category.parent === anchorEl?.id
                     ).map((category, i) => (
                       <MenuItem
-                        key={i}
+                        key={category.id}
                         classes={{ root: style.menuItemChild }}
                         onClick={() => {
                           setOpen(false);

@@ -83,6 +83,12 @@ interface POICategory {
   name: string;
   pluralName: string;
   shortName: string;
+  icon: POICategoryIcon;
+}
+
+interface POICategoryIcon {
+  prefix: string;
+  suffix: string;
 }
 
 interface Activity {

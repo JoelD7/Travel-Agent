@@ -496,6 +496,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Clothing Store",
         pluralName: "Clothing Stores",
         shortName: "Apparel",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -522,6 +526,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Movie Theater",
         pluralName: "Steakhouses",
         shortName: "Steakhouse",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -554,6 +562,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Gym / Fitness Center",
         pluralName: "Physical Therapists",
         shortName: "Physical Therapist",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -585,6 +597,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Clothing Store",
         pluralName: "Clothing Stores",
         shortName: "Apparel",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -611,6 +627,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Movie Theater",
         pluralName: "Steakhouses",
         shortName: "Steakhouse",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -643,6 +663,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Gym / Fitness Center",
         pluralName: "Physical Therapists",
         shortName: "Physical Therapist",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -674,6 +698,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Clothing Store",
         pluralName: "Clothing Stores",
         shortName: "Apparel",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -700,6 +728,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Movie Theater",
         pluralName: "Steakhouses",
         shortName: "Steakhouse",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -732,6 +764,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Gym / Fitness Center",
         pluralName: "Physical Therapists",
         shortName: "Physical Therapist",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -763,6 +799,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Clothing Store",
         pluralName: "Clothing Stores",
         shortName: "Apparel",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -789,6 +829,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Movie Theater",
         pluralName: "Steakhouses",
         shortName: "Steakhouse",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -821,6 +865,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Gym / Fitness Center",
         pluralName: "Physical Therapists",
         shortName: "Physical Therapist",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -852,6 +900,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Clothing Store",
         pluralName: "Clothing Stores",
         shortName: "Apparel",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -878,6 +930,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Movie Theater",
         pluralName: "Steakhouses",
         shortName: "Steakhouse",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -910,6 +966,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Gym / Fitness Center",
         pluralName: "Physical Therapists",
         shortName: "Physical Therapist",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -941,6 +1001,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Clothing Store",
         pluralName: "Clothing Stores",
         shortName: "Apparel",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -967,6 +1031,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Movie Theater",
         pluralName: "Steakhouses",
         shortName: "Steakhouse",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -999,6 +1067,10 @@ export const poisPlaceholder: POISearch[] = [
         name: "Gym / Fitness Center",
         pluralName: "Physical Therapists",
         shortName: "Physical Therapist",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -2201,12 +2273,20 @@ export const poiPlaceholder: POI = {
       name: "Dumpling Restaurant",
       pluralName: "Dumpling Restaurants",
       shortName: "Dumplings",
+      icon: {
+        prefix: "",
+        suffix: "",
+      },
     },
     {
       id: "4bf58dd8d48988d145941735",
       name: "Chinese Restaurant",
       pluralName: "Chinese Restaurants",
       shortName: "Chinese",
+      icon: {
+        prefix: "",
+        suffix: "",
+      },
     },
   ],
   url: "http://vanessas.com",
@@ -2268,6 +2348,54 @@ export const poiPlaceholder: POI = {
 };
 
 export const activitiesPlaceholder: Activity[] = [
+  {
+    name: "9-11 Memorial and Museum tickets",
+    shortDescription:
+      "Book your tickets to the 9/11 Memorial & Museum on Musement today. Visit the touching memorial, and learn about the events of that fateful day.",
+
+    rating: "4.700000",
+    // pictures: [""],
+    pictures: [
+      "https://images.musement.com/cover/0001/19/9-11-memorial-museum-tickets_header-18896.jpeg?w=500",
+    ],
+    bookingLink: "https://b2c.mla.cloud/c/pv4WuKnR?c=2WxbgL36",
+    price: {
+      currencyCode: "EUR",
+      amount: "26.00",
+    },
+  },
+  {
+    name: "Big Apple Helicopter Tour of New York",
+    shortDescription:
+      "See New York's famous landmarks from the air on an exhilarating 15-minute helicopter tour. You'll come face-to-face with the Statue of Liberty as you fly above the Hudson River. Admire the iconic Empire State Building, the silver Art Deco brilliance of the Chrysler Building, and the sprawling green expanse of Central Park. A must for any visitor to New York City!",
+
+    rating: "4.400000",
+    // pictures: [""],
+    pictures: [
+      "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/70/61/53.jpg",
+    ],
+    bookingLink: "https://b2c.mla.cloud/c/ZAEPrRDM?c=2WxbgL36",
+    price: {
+      currencyCode: "EUR",
+      amount: "195.00",
+    },
+  },
+  {
+    name: "NYC One World Observatory Skip-the-Line Ticket",
+    shortDescription:
+      "There are a million things to experience in New York City, but this is one in a million. Located at the top three floors of the One World Trade Center, which is now the tallest building in the western hemisphere, the observatory boasts jaw-dropping views of Manhattan and its surrounds. With this admission ticket, you'll have access to all three Observatory floors for a memorable experience that offers fabulous photo ops, New York City history, and dining options to buy food or drinks high in the sky. Choose to upgrade to the priority combo ticket to skip all the lines with Priority Access security line and Express elevator to the top, Priority exit from the Observatory and access to the One World Explorer - the virtual guide iPad. For the ultimate experience, upgrade to the All-Inclusive Flex Admission to arrive anytime on your selected travel date, receive all the upgrades of a Priority Combo ticket plus $15 to Eat, Drink, or Shop.",
+
+    rating: "4.600000",
+    // pictures: [""],
+    pictures: [
+      "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/75/92/7d.jpg",
+    ],
+    bookingLink: "https://b2c.mla.cloud/c/nppqFU4f?c=2WxbgL36",
+    price: {
+      currencyCode: "EUR",
+      amount: "36.00",
+    },
+  },
   {
     name: "9-11 Memorial and Museum tickets",
     shortDescription:
@@ -2506,6 +2634,10 @@ const poiArray: POI[] = [
         name: "Museum",
         pluralName: "Museums",
         shortName: "Museum",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -2540,6 +2672,10 @@ const poiArray: POI[] = [
         name: "Music Venue",
         pluralName: "Music Venues",
         shortName: "Music Venue",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
@@ -2579,6 +2715,10 @@ const poiArray: POI[] = [
         name: "Bar",
         pluralName: "Bars",
         shortName: "Cocktail",
+        icon: {
+          prefix: "",
+          suffix: "",
+        },
       },
     ],
   },
