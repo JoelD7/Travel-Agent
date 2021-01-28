@@ -39,6 +39,14 @@ import {
   currencyFormatter,
   getPOICategoryParent,
   poisPlaceholderAPI,
+  selectPOIs,
+  selectAllPOIs,
+  selectLoadingPOICard,
+  selectLoadingCategories,
+  selectAvailableCategories,
+  setAvailableCategories,
+  getPOIs,
+  useAppDispatch,
 } from "../../utils";
 import { faCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
@@ -50,11 +58,11 @@ import "./thingsTodo.css";
 import { nanoid } from "nanoid";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getPoisThunk,
-  selectPOIs,
-  selectLoadingPOICard,
-  selectAllPOIs,
-} from "../../utils/slices/poi-slice";
+  getPOIsOfCategory,
+  onLoadingPOICardChange,
+  setPOIs,
+  setPOIByCategory,
+} from "../../utils/store/poi-slice";
 
 type SortOption = "" | "Name | A - Z" | "Name | Z - A";
 
@@ -65,10 +73,7 @@ export function ThingsToDo() {
   // const [allPois, setAllPois] = useState<POISearch[]>([]);
 
   const pois = useSelector(selectPOIs);
-  console.log("Pois: ", JSON.stringify(pois));
   const allPois = useSelector(selectAllPOIs);
-
-  const reduxPOIs = useSelector(selectPOIs);
 
   /**
    * ID used by an <a> to scroll to
@@ -112,9 +117,9 @@ export function ThingsToDo() {
   const [poiSliderRows, setPoiSliderRows] = useState(2);
 
   const loadingPOICard = useSelector(selectLoadingPOICard);
-  const [loadingCategories, setLoadingCategories] = useState(true);
-  // const [loadingPOICard, setLoadingPOICard] = useState(false);
-  // const [loadingCategories, setLoadingCategories] = useState(false);
+  const loadingCategories = useSelector(selectLoadingCategories);
+  // const [loadingPOICard, setLoadingPOICard] = useState(true);
+  // const [loadingCategories, setLoadingCategories] = useState(true);
 
   const poiSliderSettings = {
     className: style.poiSlider,
@@ -167,20 +172,22 @@ export function ThingsToDo() {
     JSON.parse(String(localStorage.getItem("rates")))
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [sortOption, setSortOption] = useState<SortOption>("");
   const sortOptions: SortOption[] = ["Name | A - Z", "Name | Z - A"];
 
-  const [availableCategories, setAvailableCategories] = useState<POICategorySearch[]>([]);
+  const availableCategories: POICategorySearch[] = useSelector(selectAvailableCategories);
 
   useEffect(() => {
     if (!areRatesUpdated()) {
       getExchangeRates();
     }
 
-    // getPOIs();
-    dispatch(getPoisThunk("51.5074, 0.1278"));
+    dispatch(getPOIs("51.5074, 0.1278")).then((res) => {
+      let pois: POISearch[] = res.payload.response.venues;
+      dispatch(setAvailableCategories(pois));
+    });
   }, []);
 
   useEffect(() => {
@@ -197,50 +204,6 @@ export function ThingsToDo() {
       //@ts-ignore
       toursTitleAnchorEl.current.click();
     }
-  }
-
-  function getPOIs() {
-    Axios.get("https://api.foursquare.com/v2/venues/search", {
-      params: {
-        ll: "51.5074, 0.1278",
-        categoryId:
-          "4deefb944765f83613cdba6e,4bf58dd8d48988d17f941735,4bf58dd8d48988d181941735,4bf58dd8d48988d1e5931735,4bf58dd8d48988d137941735,4bf58dd8d48988d184941735,4bf58dd8d48988d182941735,4bf58dd8d48988d17b941735,4bf58dd8d48988d116941735,4bf58dd8d48988d11f941735,4bf58dd8d48988d175941735,4bf58dd8d48988d1e2941735,52e81612bcbc57f1066b7a21,4bf58dd8d48988d1e9941735,4bf58dd8d48988d103951735,4bf58dd8d48988d1fd941735",
-        client_id: process.env.REACT_APP_FOURSQUARE_CLIENT_ID,
-        client_secret: process.env.REACT_APP_FOURSQUARE_CLIENT_SECRET,
-        v: "20210104",
-        radius: "100000",
-      },
-    })
-      .then((res) => {
-        // setPois(res.data.response.venues);
-        // setAllPois(res.data.response.venues);
-        let allPois: POISearch[] = res.data.response.venues;
-        getAvailableCategories(allPois);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  function getAvailableCategories(allPois: POISearch[]) {
-    let availableCatsFromPois: any[] = [];
-    let availableCategoriesTemp: any[] = [];
-
-    allPois.forEach((poi) => {
-      let name = getPOICategoryParent(poi.categories[0].id);
-      if (!availableCatsFromPois.includes(name)) {
-        availableCatsFromPois.push(name);
-      }
-    });
-
-    POICategories.forEach((poiCategory) => {
-      let name = getPOICategoryParent(poiCategory.id);
-      if (availableCatsFromPois.includes(name)) {
-        availableCategoriesTemp.push(poiCategory);
-      }
-    });
-    setAvailableCategories(availableCategoriesTemp);
-    setLoadingCategories(false);
   }
 
   function areRatesUpdated() {
@@ -284,15 +247,26 @@ export function ThingsToDo() {
   }
 
   function onCategorySelected(category: POICategorySearch) {
-    // setLoadingPOICard(true);
+    dispatch(onLoadingPOICardChange(true));
     seeLessPOIs();
+
     //Unselect category and show all pois
     if (category.name === selectedCategory.name) {
       setSelectedCategory(categoryPlaceholder);
-      // setPois(allPois);
+      dispatch(setPOIs(allPois));
     } else {
       setSelectedCategory(category);
-      getPoisOfCategory(category);
+      dispatch(getPOIsOfCategory({ category, ll: "51.5074, 0.1278" })).then((res) => {
+        let categoryParent: string = getPOICategoryParent(category.id);
+        dispatch(
+          setPOIByCategory({
+            category: categoryParent,
+            ll: "51.5074, 0.1278",
+            pois: res.payload as POISearch[],
+          })
+        );
+      });
+      // getPoisOfCategory(category);
     }
   }
 

@@ -29,7 +29,6 @@ export const Navbar: FunctionComponent<Navbar> = ({
 }: Navbar) => {
   const style = navbarStyles();
   const searchQuery = useSelector(selectSearchQuery);
-  console.log("Search query: ", searchQuery);
   const dispatch = useDispatch();
   const history = useHistory();
 

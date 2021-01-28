@@ -4,7 +4,7 @@ import * as POICategory from "./POICategory";
 import { CSSProperties } from "@material-ui/styles";
 import * as GoogleAPI from "./external-apis";
 export * from "./placeholders";
-export * from "./slices";
+export * from "./store";
 export * from "./types";
 export * from "./functions/functions";
 export { getFindPlaceFromTextURL, getPhotoFromReferenceURL } from "./external-apis";

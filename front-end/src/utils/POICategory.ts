@@ -28,6 +28,16 @@ export interface POICategorySearch {
   pluralName: string;
 }
 
+/**
+ * Type of the object passed to the
+ * thunk that fetches POIs of a category.
+ */
+export interface POICategoryFetch {
+  category: POICategorySearch;
+  //Coordinates of the location to get POIs from.
+  ll: string;
+}
+
 export enum POICategoryParent {
   ArtsEntertainment = "Arts & Entertainment",
   Nightlife = "Nightlife Spot",

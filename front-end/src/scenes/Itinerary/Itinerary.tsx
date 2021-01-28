@@ -30,7 +30,7 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import { areDatesEqual, eventToIcon, tripPlaceholder } from "../../utils";
-import { calendarItemHolderSelect } from "../../utils/slices/calendar-slice";
+import { calendarItemHolderSelect } from "../../utils/store/calendar-slice";
 import { CalendarItem, Trip, TripEvent } from "../../utils/types/Trip";
 import { itineraryStyles } from "./itinerary-styles";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
