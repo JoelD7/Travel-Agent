@@ -3,6 +3,15 @@ import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
 export const hotelsStyles = makeStyles((theme: Theme) => ({
+  background: {
+    height: "55vh",
+    width: "100%",
+    position: "absolute",
+    zIndex: 0,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPositionY: "50%",
+  },
   cardData1: {
     display: "flex",
     justifyContent: "center",
@@ -176,20 +185,18 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     [theme.breakpoints.down(578)]: {
-      marginTop: "110px",
+      // marginTop: "110px",
     },
   },
   pageContainerChilds: {
     width: "85%",
-    margin: "auto",
+    margin: "25px auto",
     position: "relative",
-    bottom: "100px",
   },
   pageTitleGrid: {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPositionY: "50%",
-    height: "55vh",
   },
   pageTitleContainer: {
     backgroundColor: Colors.BLUE,
@@ -198,13 +205,17 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     borderRadius: "10px",
     padding: "10px",
     position: "relative",
-    top: "15px",
   },
   reservationParamText: {
     color: "white",
     marginLeft: "5px",
     marginBottom: "3px",
     marginTop: "5px",
+  },
+  reservationParamBox: {
+    width: "85%",
+    margin: "40px auto",
+    position: "relative",
   },
   select: {
     "& .MuiOutlinedInput-input": {

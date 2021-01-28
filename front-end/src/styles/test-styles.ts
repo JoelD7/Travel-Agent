@@ -1,8 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import {
-  PURPLE,
-  PURPLE_HOVER,
-} from "./colors";
+import { PURPLE, PURPLE_HOVER } from "./colors";
 
 export const testStyles = makeStyles((theme: Theme) => ({
   button: {

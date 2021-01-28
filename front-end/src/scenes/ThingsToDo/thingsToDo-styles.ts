@@ -3,6 +3,15 @@ import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
 
 export const thingsToDoStyles = makeStyles((theme: Theme) => ({
+  background: {
+    height: "55vh",
+    width: "100%",
+    position: "absolute",
+    zIndex: 0,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPositionY: "50%",
+  },
   card: {
     transition: "all .2s ease-in-out",
     width: "92%",
@@ -120,9 +129,9 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     width: "80%",
-    margin: "40px auto auto auto",
+    margin: "25px auto auto auto",
     position: "relative",
-    bottom: "137px",
+    // bottom: "137px",
 
     [theme.breakpoints.down(1035)]: {
       width: "90%",
@@ -132,7 +141,7 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPositionY: "50%",
-    height: "55vh",
+    height: "35vh",
   },
   pageTitleTextGrid: {
     margin: "0px auto",

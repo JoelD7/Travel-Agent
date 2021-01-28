@@ -25,8 +25,16 @@ export const selectPOIs = (state: RootState) => state.poiReducer.pois;
 export const selectAllPOIs = (state: RootState) => state.poiReducer.allPois;
 export const selectAvailableCategories = (state: RootState) =>
   state.poiReducer.availableCategories;
+
 export const selectLoadingPOICard = (state: RootState) => state.poiReducer.loadingPOICard;
+
 export const selectLoadingCategories = (state: RootState) =>
   state.poiReducer.loadingCategories;
+
+export const selectConsultedCategories = (state: RootState) =>
+  state.poiReducer.consultedCategories;
+
+export const selectConsultedCoordinates = (state: RootState) =>
+  state.poiReducer.consultedCoordinates;
 
 export default store;

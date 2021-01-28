@@ -335,16 +335,15 @@ export function Hotels() {
 
       <Navbar />
 
+      <div
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/destinations/paris.jpg")`,
+        }}
+        className={style.background}
+      ></div>
       <Grid container>
         {/* Page title grid*/}
-        <Grid
-          item
-          xs={12}
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/destinations/paris.jpg")`,
-          }}
-          className={style.pageTitleGrid}
-        >
+        <Grid item xs={12} className={style.pageTitleGrid}>
           <Grid container style={{ height: "100%" }}>
             {/* Services bar and title */}
             <Grid item xs={12}>
@@ -356,7 +355,12 @@ export function Hotels() {
 
                 {/* Title */}
                 <Grid item xs={10} style={{ margin: "0px auto" }}>
-                  <Text component="hm" color="white" bold>
+                  <Text
+                    style={{ position: "relative" }}
+                    component="hm"
+                    color="white"
+                    bold
+                  >
                     Hotels in Paris
                   </Text>
                 </Grid>
@@ -364,7 +368,7 @@ export function Hotels() {
             </Grid>
 
             {/* Reservation params box*/}
-            <Grid item xs={10} className={style.pageContainerChilds}>
+            <Grid item xs={10} className={style.reservationParamBox}>
               <Grid container spacing={2} className={style.pageTitleContainer}>
                 {/* Dates */}
                 <ThemeProvider theme={theme}>

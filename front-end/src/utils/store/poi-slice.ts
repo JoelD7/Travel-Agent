@@ -122,7 +122,7 @@ const poiSlice = createSlice({
       return { ...state, loadingPOICard: false, pois: action.payload };
     },
 
-    setPOIByCategory(state, action: PayloadAction<POICategoryGroup>) {
+    addPOIsByCategoryGroup(state, action: PayloadAction<POICategoryGroup>) {
       let category = action.payload.category;
       let coordinate = action.payload.ll;
 
@@ -194,7 +194,9 @@ const poiSlice = createSlice({
 
     builder.addCase(getPOIsOfCategory.fulfilled, (state, action) => {
       let filteredPois: POISearch[] = action.payload;
+      console.log("Setting state of pois...");
       state.pois = filteredPois;
+      console.log("State of POIs set: ", JSON.stringify(state.pois));
       state.loadingPOICard = false;
     });
   },
@@ -204,6 +206,6 @@ export const {
   setAvailableCategories,
   onLoadingPOICardChange,
   setPOIs,
-  setPOIByCategory,
+  addPOIsByCategoryGroup,
 } = poiSlice.actions;
 export default poiSlice.reducer;

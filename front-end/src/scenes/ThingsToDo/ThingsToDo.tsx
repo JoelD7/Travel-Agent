@@ -28,6 +28,7 @@ import { Colors, Shadow } from "../../styles";
 import { thingsToDoStyles as thingsToDoStyles } from "./thingsToDo-styles";
 import {
   POICategories,
+  POICategoryFetch,
   POICategoryMap,
   POICategorySearch,
 } from "../../utils/POICategory";
@@ -47,6 +48,9 @@ import {
   setAvailableCategories,
   getPOIs,
   useAppDispatch,
+  selectConsultedCategories,
+  selectConsultedCoordinates,
+  poisPlaceholder,
 } from "../../utils";
 import { faCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
@@ -61,7 +65,7 @@ import {
   getPOIsOfCategory,
   onLoadingPOICardChange,
   setPOIs,
-  setPOIByCategory,
+  addPOIsByCategoryGroup,
 } from "../../utils/store/poi-slice";
 
 type SortOption = "" | "Name | A - Z" | "Name | Z - A";
@@ -121,10 +125,14 @@ export function ThingsToDo() {
   // const [loadingPOICard, setLoadingPOICard] = useState(true);
   // const [loadingCategories, setLoadingCategories] = useState(true);
 
+  const consultedCategories = useSelector(selectConsultedCategories);
+  const consultedCoordinates = useSelector(selectConsultedCoordinates);
+
   const poiSliderSettings = {
     className: style.poiSlider,
     nextArrow: <SliderArrow iconSize="2x" direction="right" />,
     prevArrow: <SliderArrow iconSize="2x" direction="left" />,
+    infinite: false,
     slidesToShow: 1,
     rows: pois.length > 3 ? poiSliderRows : 1,
     slidesPerRow: pois.length > 3 ? 3 : 1,
@@ -184,10 +192,14 @@ export function ThingsToDo() {
       getExchangeRates();
     }
 
-    dispatch(getPOIs("51.5074, 0.1278")).then((res) => {
-      let pois: POISearch[] = res.payload.response.venues;
-      dispatch(setAvailableCategories(pois));
-    });
+    if (JSON.stringify(allPois) === JSON.stringify(poisPlaceholder)) {
+      dispatch(getPOIs("51.5074, 0.1278")).then((res) => {
+        let pois: POISearch[] = res.payload.response.venues;
+        dispatch(setAvailableCategories(pois));
+      });
+    } else {
+      dispatch(setPOIs(allPois));
+    }
   }, []);
 
   useEffect(() => {
@@ -255,19 +267,32 @@ export function ThingsToDo() {
       setSelectedCategory(categoryPlaceholder);
       dispatch(setPOIs(allPois));
     } else {
+      let params: POICategoryFetch = { category, ll: "51.5074, 0.1278" };
       setSelectedCategory(category);
-      dispatch(getPOIsOfCategory({ category, ll: "51.5074, 0.1278" })).then((res) => {
-        let categoryParent: string = getPOICategoryParent(category.id);
-        dispatch(
-          setPOIByCategory({
-            category: categoryParent,
-            ll: "51.5074, 0.1278",
-            pois: res.payload as POISearch[],
-          })
-        );
+
+      dispatch(getPOIsOfCategory(params)).then((res) => {
+        if (!arePOIsOfCategoryCached(params)) {
+          let categoryParent: string = getPOICategoryParent(category.id);
+
+          dispatch(
+            addPOIsByCategoryGroup({
+              category: categoryParent,
+              ll: "51.5074, 0.1278",
+              pois: res.payload as POISearch[],
+            })
+          );
+        }
       });
-      // getPoisOfCategory(category);
     }
+  }
+
+  function arePOIsOfCategoryCached(params: POICategoryFetch) {
+    let categoryParent: string = getPOICategoryParent(params.category.id);
+
+    return (
+      consultedCategories.includes(categoryParent) &&
+      consultedCoordinates.includes(params.ll)
+    );
   }
 
   function getPoisOfCategory(category: POICategorySearch) {
@@ -332,14 +357,14 @@ export function ThingsToDo() {
 
       <Navbar />
 
-      {/* Page Title Container */}
-      <Grid
-        container
-        className={style.pageTitleContainer}
+      <div
         style={{
           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/dubai.jpg")`,
         }}
-      >
+        className={style.background}
+      ></div>
+      {/* Page Title Container */}
+      <Grid container className={style.pageTitleContainer}>
         {/* Services toolbar and title */}
         <Grid item xs={12}>
           <Grid container>
@@ -348,7 +373,7 @@ export function ThingsToDo() {
             </Grid>
 
             <Grid item xs={10} className={style.pageTitleTextGrid}>
-              <Text bold component="hm" color="white">
+              <Text style={{ position: "relative" }} bold component="hm" color="white">
                 Things to in London
               </Text>
             </Grid>
@@ -356,10 +381,12 @@ export function ThingsToDo() {
         </Grid>
 
         {/* Parent categories of POIs */}
-        <ParentCategoryToolbar
-          itemsToShow={3}
-          updateSelectedCategory={(category: any) => onCategorySelected(category)}
-        />
+        <Grid container style={{ alignSelf: "flex-end" }}>
+          <ParentCategoryToolbar
+            itemsToShow={3}
+            updateSelectedCategory={(category: any) => onCategorySelected(category)}
+          />
+        </Grid>
       </Grid>
 
       {/* Page content */}
@@ -454,7 +481,7 @@ export function ThingsToDo() {
             ) : (
               <Grid container>
                 {pois.length > 3 ? (
-                  <Slider {...poiSliderSettings} dots>
+                  <Slider lazyLoad="ondemand" {...poiSliderSettings} dots>
                     {pois.map((poi: any) => (
                       <div key={poi.id} style={{ height: "100%" }}>
                         <POICard poi={poi} />
