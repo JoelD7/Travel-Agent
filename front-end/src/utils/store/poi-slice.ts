@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Axios from "axios";
 import { getPOICategoryParent } from "../functions/functions";
 import { poisPlaceholder } from "../placeholders";
@@ -9,11 +9,6 @@ interface POICategoryGroup {
   category: string;
   ll: string;
   pois: POISearch[];
-}
-
-interface ConsultedQuery {
-  category: string;
-  coordinate: string;
 }
 
 interface POIState {
@@ -46,7 +41,7 @@ const initialState: POIState = {
   consultedCoordinates: [],
 };
 
-export const getPOIs = createAsyncThunk(
+export const fetchPOIs = createAsyncThunk(
   "poiReducer/getPoisThunk",
   async (ll: string, thunkAPI) => {
     const response = await Axios.get("https://api.foursquare.com/v2/venues/search", {
@@ -70,20 +65,13 @@ type thunkAPITypeObject = {
   state: RootState;
 };
 
-export const getPOIsOfCategory = createAsyncThunk<
+export const fetchPOIsOfCategory = createAsyncThunk<
   POISearch[],
   POICategoryFetch,
   thunkAPITypeObject
 >("poiReducer/getPOIsofCategoryThunk", (params: POICategoryFetch, thunkAPI) => {
   let category: POICategorySearch = params.category;
   let ll: string = params.ll;
-  let state = thunkAPI.getState().poiReducer;
-
-  if (isQueryCached(params, state)) {
-    console.log("Query cached");
-    let categoryParent: string = getPOICategoryParent(params.category.id);
-    return state.poisByCategory[categoryParent][params.ll];
-  }
 
   return Axios.get("https://api.foursquare.com/v2/venues/search", {
     params: {
@@ -103,55 +91,38 @@ export const getPOIsOfCategory = createAsyncThunk<
     });
 });
 
-function isQueryCached(params: POICategoryFetch, state: POIState) {
-  let categoryParent: string = getPOICategoryParent(params.category.id);
-  let consultedCategories: string[] = state.consultedCategories;
-  let consultedCoordinates: string[] = state.consultedCoordinates;
-
-  return (
-    consultedCategories.includes(categoryParent) &&
-    consultedCoordinates.includes(params.ll)
-  );
-}
-
 const poiSlice = createSlice({
   name: "poiReducer",
   initialState,
   reducers: {
     setPOIs(state, action: PayloadAction<POISearch[]>) {
-      return { ...state, loadingPOICard: false, pois: action.payload };
+      state.loadingPOICard = false;
+      state.pois = action.payload;
     },
 
     addPOIsByCategoryGroup(state, action: PayloadAction<POICategoryGroup>) {
       let category = action.payload.category;
       let coordinate = action.payload.ll;
 
-      let poisByCategory = {
-        ...state.poisByCategory,
-        [category]: {
-          [coordinate]: action.payload.pois,
-        },
+      state.poisByCategory[category] = {
+        [coordinate]: action.payload.pois,
       };
 
-      return {
-        ...state,
-        poisByCategory: poisByCategory,
-        consultedCategories: [...state.consultedCategories, category],
-        consultedCoordinates: [...state.consultedCoordinates, coordinate],
-      };
+      state.consultedCategories = [...state.consultedCategories, category];
+
+      if (!state.consultedCoordinates.includes(coordinate)) {
+        state.consultedCoordinates = [...state.consultedCoordinates, coordinate];
+      }
     },
 
     onLoadingPOICardChange(state, action: PayloadAction<boolean>) {
-      return { ...state, loadingPOICard: action.payload };
+      state.loadingPOICard = action.payload;
     },
 
     setAvailableCategories: {
       reducer(state, action) {
-        return {
-          ...state,
-          loadingCategories: false,
-          availableCategories: action.payload,
-        };
+        state.loadingCategories = false;
+        state.availableCategories = action.payload;
       },
       /**
        * Returns the categories included in allPois.
@@ -186,18 +157,15 @@ const poiSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getPOIs.fulfilled, (state, action) => {
+    builder.addCase(fetchPOIs.fulfilled, (state, action) => {
       let pois: POISearch[] = action.payload.response.venues;
       state.pois = pois;
       state.loadingPOICard = false;
     });
 
-    builder.addCase(getPOIsOfCategory.fulfilled, (state, action) => {
+    builder.addCase(fetchPOIsOfCategory.fulfilled, (state, action) => {
       let filteredPois: POISearch[] = action.payload;
-      console.log("Setting state of pois...");
       state.pois = filteredPois;
-      console.log("State of POIs set: ", JSON.stringify(state.pois));
-      state.loadingPOICard = false;
     });
   },
 });

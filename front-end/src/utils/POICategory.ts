@@ -34,8 +34,10 @@ export interface POICategorySearch {
  */
 export interface POICategoryFetch {
   category: POICategorySearch;
+  categoryParent: string;
   //Coordinates of the location to get POIs from.
   ll: string;
+  cached: boolean;
 }
 
 export enum POICategoryParent {

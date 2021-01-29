@@ -46,11 +46,12 @@ import {
   selectLoadingCategories,
   selectAvailableCategories,
   setAvailableCategories,
-  getPOIs,
+  fetchPOIs,
   useAppDispatch,
   selectConsultedCategories,
   selectConsultedCoordinates,
   poisPlaceholder,
+  selectPOIsByCategory,
 } from "../../utils";
 import { faCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
@@ -62,7 +63,7 @@ import "./thingsTodo.css";
 import { nanoid } from "nanoid";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getPOIsOfCategory,
+  fetchPOIsOfCategory,
   onLoadingPOICardChange,
   setPOIs,
   addPOIsByCategoryGroup,
@@ -122,6 +123,7 @@ export function ThingsToDo() {
 
   const loadingPOICard = useSelector(selectLoadingPOICard);
   const loadingCategories = useSelector(selectLoadingCategories);
+
   // const [loadingPOICard, setLoadingPOICard] = useState(true);
   // const [loadingCategories, setLoadingCategories] = useState(true);
 
@@ -181,11 +183,13 @@ export function ThingsToDo() {
   );
 
   const dispatch = useAppDispatch();
+  const regDispatch = useDispatch();
 
   const [sortOption, setSortOption] = useState<SortOption>("");
   const sortOptions: SortOption[] = ["Name | A - Z", "Name | Z - A"];
 
   const availableCategories: POICategorySearch[] = useSelector(selectAvailableCategories);
+  const poisByCategory = useSelector(selectPOIsByCategory);
 
   useEffect(() => {
     if (!areRatesUpdated()) {
@@ -193,7 +197,7 @@ export function ThingsToDo() {
     }
 
     if (JSON.stringify(allPois) === JSON.stringify(poisPlaceholder)) {
-      dispatch(getPOIs("51.5074, 0.1278")).then((res) => {
+      dispatch(fetchPOIs("51.5074, 0.1278")).then((res) => {
         let pois: POISearch[] = res.payload.response.venues;
         dispatch(setAvailableCategories(pois));
       });
@@ -259,7 +263,6 @@ export function ThingsToDo() {
   }
 
   function onCategorySelected(category: POICategorySearch) {
-    dispatch(onLoadingPOICardChange(true));
     seeLessPOIs();
 
     //Unselect category and show all pois
@@ -267,13 +270,26 @@ export function ThingsToDo() {
       setSelectedCategory(categoryPlaceholder);
       dispatch(setPOIs(allPois));
     } else {
-      let params: POICategoryFetch = { category, ll: "51.5074, 0.1278" };
       setSelectedCategory(category);
 
-      dispatch(getPOIsOfCategory(params)).then((res) => {
-        if (!arePOIsOfCategoryCached(params)) {
-          let categoryParent: string = getPOICategoryParent(category.id);
+      // setTimeout(() => {
+      let params: POICategoryFetch = {
+        category,
+        categoryParent: "",
+        ll: "51.5074, 0.1278",
+        cached: false,
+      };
 
+      let categoryParent: string = getPOICategoryParent(category.id);
+
+      let cached: boolean = arePOIsOfCategoryCached("51.5074, 0.1278", categoryParent);
+      params = { ...params, cached, categoryParent };
+
+      if (cached) {
+        let filteredPois: POISearch[] = poisByCategory[categoryParent][params.ll];
+        dispatch(setPOIs(filteredPois));
+      } else {
+        dispatch(fetchPOIsOfCategory(params)).then((res) => {
           dispatch(
             addPOIsByCategoryGroup({
               category: categoryParent,
@@ -281,17 +297,15 @@ export function ThingsToDo() {
               pois: res.payload as POISearch[],
             })
           );
-        }
-      });
+        });
+      }
+      // }, 1000);
     }
   }
 
-  function arePOIsOfCategoryCached(params: POICategoryFetch) {
-    let categoryParent: string = getPOICategoryParent(params.category.id);
-
+  function arePOIsOfCategoryCached(ll: string, categoryParent: string) {
     return (
-      consultedCategories.includes(categoryParent) &&
-      consultedCoordinates.includes(params.ll)
+      consultedCategories.includes(categoryParent) && consultedCoordinates.includes(ll)
     );
   }
 
@@ -384,7 +398,9 @@ export function ThingsToDo() {
         <Grid container style={{ alignSelf: "flex-end" }}>
           <ParentCategoryToolbar
             itemsToShow={3}
-            updateSelectedCategory={(category: any) => onCategorySelected(category)}
+            updateSelectedCategory={(category: any) => {
+              onCategorySelected(category);
+            }}
           />
         </Grid>
       </Grid>
@@ -482,7 +498,7 @@ export function ThingsToDo() {
               <Grid container>
                 {pois.length > 3 ? (
                   <Slider lazyLoad="ondemand" {...poiSliderSettings} dots>
-                    {pois.map((poi: any) => (
+                    {pois.map((poi: POISearch) => (
                       <div key={poi.id} style={{ height: "100%" }}>
                         <POICard poi={poi} />
                       </div>
@@ -490,7 +506,7 @@ export function ThingsToDo() {
                   </Slider>
                 ) : (
                   <Grid container className={style.poiCardContainer}>
-                    {pois.map((poi: any) => (
+                    {pois.map((poi: POISearch) => (
                       <Grid key={poi.id} item className={cardStyle.poiCardItem}>
                         <POICard poi={poi} />
                       </Grid>

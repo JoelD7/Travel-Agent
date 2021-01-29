@@ -37,4 +37,6 @@ export const selectConsultedCategories = (state: RootState) =>
 export const selectConsultedCoordinates = (state: RootState) =>
   state.poiReducer.consultedCoordinates;
 
+export const selectPOIsByCategory = (state: RootState) => state.poiReducer.poisByCategory;
+
 export default store;
