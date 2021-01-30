@@ -3,6 +3,17 @@ import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
 export const hotelsStyles = makeStyles((theme: Theme) => ({
+  addressContactGrid: {
+    display: "flex",
+    justifyContent: "center",
+    padding: "0px 10px 10px 10px",
+    borderRight: "1px solid #cecece",
+    width: "33%",
+
+    [theme.breakpoints.down(715)]: {
+      width: "50%",
+    },
+  },
   background: {
     height: "55vh",
     width: "100%",
@@ -11,18 +22,6 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPositionY: "50%",
-  },
-  cardData1: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "0px 10px 10px 10px",
-    borderRight: "1px solid #cecece",
-    width: "33%",
-
-    [theme.breakpoints.down(715)]: {
-      width: "50%",
-    },
   },
   cardData2: {
     display: "flex",
@@ -156,6 +155,11 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
 
     [theme.breakpoints.down(950)]: {
       width: "100%",
+      height: "250px",
+    },
+
+    [theme.breakpoints.down(621)]: {
+      display: "none",
     },
   },
   hotelContentGrid: {
@@ -163,6 +167,9 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
 
     [theme.breakpoints.down(950)]: {
       width: "100%",
+    },
+    [theme.breakpoints.down(621)]: {
+      padding: "10px",
     },
   },
   hotelNameContainer: {
@@ -205,6 +212,18 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     borderRadius: "10px",
     padding: "10px",
     position: "relative",
+  },
+  priceAndDetailsGrid: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "0px 10px 10px 10px",
+    borderRight: "1px solid #cecece",
+    width: "33%",
+
+    [theme.breakpoints.down(715)]: {
+      width: "50%",
+    },
   },
   reservationParamText: {
     color: "white",

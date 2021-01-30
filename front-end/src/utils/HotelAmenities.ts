@@ -5,6 +5,7 @@ import {
   faBeer,
   faChild,
   faCity,
+  faComments,
   faDice,
   faDumbbell,
   faEye,
@@ -12,6 +13,7 @@ import {
   faGolfBall,
   faHandshake,
   faHotTub,
+  faIgloo,
   faParking,
   faPaw,
   faShieldAlt,
@@ -26,6 +28,13 @@ import {
   faUtensils,
   faWheelchair,
   faWifi,
+  faToilet,
+  faCar,
+  faArrowCircleUp,
+  faHandHoldingUsd,
+  faSoap,
+  faCut,
+  faPiggyBank,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -99,6 +108,12 @@ export const BUSINESS_CENTER: Amenity = {
 };
 export const DISABLED_FACILITIES: Amenity = {
   key: "DISABLED_FACILITIES",
+  value: "Disabled facilities",
+  checked: false,
+  icon: faWheelchair,
+};
+export const HANDICAP_FAC: Amenity = {
+  key: "HANDICAP_FAC",
   value: "Disabled facilities",
   checked: false,
   icon: faWheelchair,
@@ -248,6 +263,97 @@ export const SERV_SPEC_MEN: Amenity = {
   icon: faUtensils,
 };
 
+export const CONVENTION_CTR: Amenity = {
+  key: "CONVENTION_CTR",
+  value: "Convention center",
+  checked: false,
+  icon: faComments,
+};
+
+export const ICE_MACHINES: Amenity = {
+  key: "ICE_MACHINES",
+  value: "Ice machines",
+  checked: false,
+  icon: faIgloo,
+};
+
+export const ACC_TOILETS: Amenity = {
+  key: "ACC_TOILETS",
+  value: "Accesible toilets",
+  checked: false,
+  icon: faToilet,
+};
+
+export const DIS_PARKG: Amenity = {
+  key: "DIS_PARKG",
+  value: "Parking for disabled",
+  checked: false,
+  icon: faWheelchair,
+};
+
+export const BEAUTY_PARLOUR: Amenity = {
+  key: "BEAUTY_PARLOUR",
+  value: "Beauty parlour",
+  checked: false,
+  icon: faCut,
+};
+
+export const CAR_RENTAL: Amenity = {
+  key: "CAR_RENTAL",
+  value: "Car rental",
+  checked: false,
+  icon: faCar,
+};
+
+export const ELEVATOR: Amenity = {
+  key: "ELEVATOR",
+  value: "Elevator",
+  checked: false,
+  icon: faArrowCircleUp,
+};
+
+export const EXCHANGE_FAC: Amenity = {
+  key: "EXCHANGE_FAC",
+  value: "Exchange facility",
+  checked: false,
+  icon: faHandHoldingUsd,
+};
+
+export const LAUNDRY_SVC: Amenity = {
+  key: "LAUNDRY_SVC",
+  value: "Laundry service",
+  checked: false,
+  icon: faSoap,
+};
+
+export const HAIRDRESSER: Amenity = {
+  key: "HAIRDRESSER",
+  value: "Hairdresser",
+  checked: false,
+  icon: faCut,
+};
+
+export const HAIR_DRYER: Amenity = {
+  key: "HAIR_DRYER",
+  value: "Hair dryer",
+  checked: false,
+  icon: faCut,
+};
+
+export const MOVIE_CHANNELS: Amenity = {
+  key: "MOVIE_CHANNELS",
+  value: "Movie channels",
+  checked: false,
+  icon: faTv,
+};
+
+export const SAFE_DEP_BOX: Amenity = {
+  key: "SAFE_DEP_BOX",
+  value: "Safe box",
+  checked: false,
+  icon: faPiggyBank,
+};
+
 export const AmenitiesList: Amenity[] = [
   SPA,
   SWIMMING_POOL,
@@ -283,4 +389,17 @@ export const AmenitiesList: Amenity[] = [
   ROOM_SERVICE,
   GUARDED_PARKG,
   SERV_SPEC_MEN,
+  CONVENTION_CTR,
+  ICE_MACHINES,
+  ACC_TOILETS,
+  DIS_PARKG,
+  BEAUTY_PARLOUR,
+  CAR_RENTAL,
+  ELEVATOR,
+  EXCHANGE_FAC,
+  LAUNDRY_SVC,
+  HAIRDRESSER,
+  HAIR_DRYER,
+  MOVIE_CHANNELS,
+  SAFE_DEP_BOX,
 ];

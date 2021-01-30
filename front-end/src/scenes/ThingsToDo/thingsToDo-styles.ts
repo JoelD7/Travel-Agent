@@ -183,21 +183,39 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   poiCardGrid: {
     marginTop: "10px",
+    [theme.breakpoints.down(824)]: {
+      marginTop: "20px",
+    },
+  },
+  poiCardGridLoading: {
+    marginTop: "10px",
     height: "332px",
+    [theme.breakpoints.down(824)]: {
+      marginTop: "20px",
+    },
+  },
+  poiCardGridLoadingMore: {
+    marginTop: "10px",
+    height: "644px",
     [theme.breakpoints.down(824)]: {
       marginTop: "20px",
     },
   },
   poiCardContainer: {
     height: "332px",
+    position: "absolute",
+  },
+  poiCardContainerLoading: {
+    height: "332px",
+    position: "absolute",
+    filter: "blur(4px)",
   },
   poiSlider: {
     width: "100%",
     display: "flex",
     alignItems: "center",
-    position: "absolute",
   },
-  poiSliderPlaceholder: {
+  poiSliderLoading: {
     width: "100%",
     display: "flex",
     alignItems: "center",

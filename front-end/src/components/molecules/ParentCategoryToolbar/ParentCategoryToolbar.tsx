@@ -15,15 +15,21 @@ import React, { MouseEvent, useEffect, useLayoutEffect, useState } from "react";
 import { Font } from "../../../assets";
 import { thingsToDoStyles } from "../../../scenes/ThingsToDo/thingsToDo-styles";
 import { POICategory } from "../../../utils";
-import { POICategories, POICategoryParent } from "../../../utils/POICategory";
+import {
+  POICategories,
+  POICategoryParent,
+  POICategorySearch,
+} from "../../../utils/POICategory";
 
 interface ParentCategoryToolbar {
   itemsToShow: number;
+  selectedCategory: POICategorySearch;
   updateSelectedCategory: (category: any) => void;
 }
 
 export function ParentCategoryToolbar({
   itemsToShow,
+  selectedCategory,
   updateSelectedCategory,
 }: ParentCategoryToolbar) {
   const style = thingsToDoStyles();
@@ -237,6 +243,7 @@ export function ParentCategoryToolbar({
                     ).map((category, i) => (
                       <MenuItem
                         key={category.id}
+                        selected={category.name === selectedCategory.name}
                         classes={{ root: style.menuItemChild }}
                         onClick={() => {
                           setOpen(false);

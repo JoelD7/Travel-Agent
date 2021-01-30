@@ -1,7 +1,7 @@
 import { parseISO } from "date-fns";
 import { HotelAmenity } from "..";
 import { EventType } from "../types";
-import { Hotel } from "../types/Hotel";
+import { Hotel, HotelOffer } from "../types/Hotel";
 import { Trip } from "../types/Trip";
 
 export const restaurantsPlaceholder: Restaurant[] = [
@@ -2582,19 +2582,113 @@ export const flightPlaceholder: Flight = {
   ],
 };
 
-export const hotelPlaceholder: Hotel = {
-  name: "Sheraton Santo Domingo",
-  address: "Calle Fco. Ramirez, #33, Santo Domingo, Rep. Dom.",
-  amenities: [
-    HotelAmenity.AIR_CONDITIONING,
-    HotelAmenity.CASINO,
-    HotelAmenity.FITNESS_CENTER,
-    HotelAmenity.PARKING,
+export const hotelPlaceholder: HotelOffer = {
+  hotel: {
+    hotelId: "BGMILBGB",
+    dupeId: "700025106",
+    name: "BULGARI HOTELS RESORTS MILANO",
+    rating: "5",
+    cityCode: "MIL",
+    latitude: 45.47253,
+    longitude: 9.18805,
+    address: {
+      lines: ["VIA PRIVATA FRATELLI GABBA 7B"],
+      postalCode: "20121",
+      cityName: "MILAN",
+      countryCode: "IT",
+    },
+    contact: {
+      phone: "39-02-8058051",
+      fax: "39-02-805805222",
+    },
+    amenities: [
+      HotelAmenity.CONVENTION_CTR,
+      HotelAmenity.MEETING_ROOMS,
+      HotelAmenity.ICE_MACHINES,
+      HotelAmenity.RESTAURANT,
+      HotelAmenity.HANDICAP_FAC,
+      HotelAmenity.ACC_TOILETS,
+      HotelAmenity.DIS_PARKG,
+      HotelAmenity.BABY_SITTING,
+      HotelAmenity.BEAUTY_PARLOUR,
+      HotelAmenity.CAR_RENTAL,
+      HotelAmenity.ELEVATOR,
+      HotelAmenity.EXCHANGE_FAC,
+      HotelAmenity.WIFI,
+      HotelAmenity.LAUNDRY_SVC,
+      HotelAmenity.SPA,
+      HotelAmenity.VALET_PARKING,
+      HotelAmenity.HAIRDRESSER,
+      HotelAmenity.SWIMMING_POOL,
+      HotelAmenity.AIR_CONDITIONING,
+      HotelAmenity.HAIR_DRYER,
+      HotelAmenity.MINIBAR,
+      HotelAmenity.MOVIE_CHANNELS,
+      HotelAmenity.ROOM_SERVICE,
+      HotelAmenity.TELEVISION,
+      HotelAmenity.SAFE_DEP_BOX,
+      HotelAmenity.FITNESS_CENTER,
+    ],
+    media: [
+      {
+        uri:
+          "http://pdt.multimediarepository.testing.amadeus.com/cmr/retrieve/hotel/B6AA0C7920214C49AAFBCFFF32A15300",
+        category: "EXTERIOR",
+      },
+      {
+        uri:
+          "http://pdt.multimediarepository.testing.amadeus.com/cmr/retrieve/hotel/0B9245555964410B97E958128EB3DE52",
+        category: "LOBBY",
+      },
+      {
+        uri:
+          "http://pdt.multimediarepository.testing.amadeus.com/cmr/retrieve/hotel/DDFD5AD22B134110BCDBE64186FE860A",
+        category: "SUITE",
+      },
+    ],
+  },
+  offers: [
+    {
+      id: "8BB1F89D377409FEFACB3E73654A5D765CD812920802E5976BFBB060BAF23AD7",
+      room: {
+        typeEstimated: {
+          category: "SUPERIOR_ROOM",
+          beds: 1,
+          bedType: "KING",
+        },
+        description: {
+          text:
+            "Regular Rate\nSuperior Room garden or patio view, large bathr\noom, 1 King, 35sqm/377sqft, Wireless internet,",
+        },
+      },
+      guests: {
+        adults: 2,
+      },
+      price: {
+        currency: "EUR",
+        total: "857.00",
+      },
+    },
+    {
+      id: "2E5650829E01B8BD88085B597266F15EF03E6E23BC8DB1A470A6D03F8E2BA1A8",
+      room: {
+        typeEstimated: {
+          category: "DELUXE_ROOM",
+        },
+        description: {
+          text:
+            "Regular Rate\nDeluxe Room garden or patio view, walk-in close\nt, large bathroom, 1 King or 2 Queen, 40sqm/430",
+        },
+      },
+      guests: {
+        adults: 2,
+      },
+      price: {
+        currency: "EUR",
+        total: "912.00",
+      },
+    },
   ],
-  phoneNumber: "809-789-2560",
-  pricePerNight: 195,
-  stars: 5,
-  image: "sheraton.jpg",
 };
 
 const poiArray: POI[] = [

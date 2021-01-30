@@ -166,6 +166,7 @@ const poiSlice = createSlice({
     builder.addCase(fetchPOIsOfCategory.fulfilled, (state, action) => {
       let filteredPois: POISearch[] = action.payload;
       state.pois = filteredPois;
+      state.loadingPOICard = false;
     });
   },
 });

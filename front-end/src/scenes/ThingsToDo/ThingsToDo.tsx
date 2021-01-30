@@ -131,7 +131,7 @@ export function ThingsToDo() {
   const consultedCoordinates = useSelector(selectConsultedCoordinates);
 
   const poiSliderSettings = {
-    className: style.poiSlider,
+    className: loadingPOICard ? style.poiSliderLoading : style.poiSlider,
     nextArrow: <SliderArrow iconSize="2x" direction="right" />,
     prevArrow: <SliderArrow iconSize="2x" direction="left" />,
     infinite: false,
@@ -154,36 +154,12 @@ export function ThingsToDo() {
     ],
   };
 
-  const poiSliderSettingsPlaceholder = {
-    className: style.poiSliderPlaceholder,
-    nextArrow: <SliderArrow iconSize="2x" direction="right" />,
-    prevArrow: <SliderArrow iconSize="2x" direction="left" />,
-    slidesToShow: 1,
-    rows: 2,
-    slidesPerRow: 3,
-    responsive: [
-      {
-        breakpoint: 1260,
-        settings: {
-          slidesPerRow: poisPlaceholderAPI.length > 3 ? 2 : 1,
-        },
-      },
-      {
-        breakpoint: 800,
-        settings: {
-          slidesPerRow: 1,
-        },
-      },
-    ],
-  };
-
   const activities: Activity[] = activitiesPlaceholder;
   const [rates, setRates] = useState<ExchangeRate>(
     JSON.parse(String(localStorage.getItem("rates")))
   );
 
   const dispatch = useAppDispatch();
-  const regDispatch = useDispatch();
 
   const [sortOption, setSortOption] = useState<SortOption>("");
   const sortOptions: SortOption[] = ["Name | A - Z", "Name | Z - A"];
@@ -263,7 +239,7 @@ export function ThingsToDo() {
   }
 
   function onCategorySelected(category: POICategorySearch) {
-    seeLessPOIs();
+    dispatch(onLoadingPOICardChange(true));
 
     //Unselect category and show all pois
     if (category.name === selectedCategory.name) {
@@ -272,7 +248,6 @@ export function ThingsToDo() {
     } else {
       setSelectedCategory(category);
 
-      // setTimeout(() => {
       let params: POICategoryFetch = {
         category,
         categoryParent: "",
@@ -299,7 +274,6 @@ export function ThingsToDo() {
           );
         });
       }
-      // }, 1000);
     }
   }
 
@@ -307,27 +281,6 @@ export function ThingsToDo() {
     return (
       consultedCategories.includes(categoryParent) && consultedCoordinates.includes(ll)
     );
-  }
-
-  function getPoisOfCategory(category: POICategorySearch) {
-    Axios.get("https://api.foursquare.com/v2/venues/search", {
-      params: {
-        ll: "51.5074, 0.1278",
-        categoryId: `${category.id}`,
-        client_id: process.env.REACT_APP_FOURSQUARE_CLIENT_ID,
-        client_secret: process.env.REACT_APP_FOURSQUARE_CLIENT_SECRET,
-        v: "20210104",
-        radius: "100000",
-      },
-    })
-      .then((res) => {
-        // setLoadingPOICard(false);
-        let pois: POISearch[] = res.data.response.venues;
-        // setPois(pois);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   function getPOICardWidth(cardsInRow: number) {
@@ -359,6 +312,14 @@ export function ThingsToDo() {
       sortedPois = pois.sort((a: any, b: any) => b.name.localeCompare(a.name));
     }
     // setPois(sortedPois);
+  }
+
+  function getPOICardGridClass() {
+    return loadingPOICard
+      ? poiSliderRows === 4
+        ? style.poiCardGridLoadingMore
+        : style.poiCardGridLoading
+      : style.poiCardGrid;
   }
 
   return (
@@ -398,6 +359,7 @@ export function ThingsToDo() {
         <Grid container style={{ alignSelf: "flex-end" }}>
           <ParentCategoryToolbar
             itemsToShow={3}
+            selectedCategory={selectedCategory}
             updateSelectedCategory={(category: any) => {
               onCategorySelected(category);
             }}
@@ -482,39 +444,35 @@ export function ThingsToDo() {
           </Grid>
 
           {/* POIs cards */}
-          <Grid key="pois cards" container className={style.poiCardGrid}>
-            {loadingPOICard ? (
-              <>
-                <ProgressCircle />
-                <Slider {...poiSliderSettingsPlaceholder} dots>
-                  {poisPlaceholderAPI.map((poi) => (
+          <Grid container className={getPOICardGridClass()}>
+            <Grid container>
+              {loadingPOICard && <ProgressCircle />}
+
+              {pois.length > 3 ? (
+                <Slider lazyLoad="ondemand" {...poiSliderSettings} dots>
+                  {pois.map((poi: POISearch) => (
                     <div key={poi.id} style={{ height: "100%" }}>
                       <POICard poi={poi} />
                     </div>
                   ))}
                 </Slider>
-              </>
-            ) : (
-              <Grid container>
-                {pois.length > 3 ? (
-                  <Slider lazyLoad="ondemand" {...poiSliderSettings} dots>
-                    {pois.map((poi: POISearch) => (
-                      <div key={poi.id} style={{ height: "100%" }}>
-                        <POICard poi={poi} />
-                      </div>
-                    ))}
-                  </Slider>
-                ) : (
-                  <Grid container className={style.poiCardContainer}>
-                    {pois.map((poi: POISearch) => (
-                      <Grid key={poi.id} item className={cardStyle.poiCardItem}>
-                        <POICard poi={poi} />
-                      </Grid>
-                    ))}
-                  </Grid>
-                )}
-              </Grid>
-            )}
+              ) : (
+                <Grid
+                  container
+                  className={
+                    loadingPOICard
+                      ? style.poiCardContainerLoading
+                      : style.poiCardContainer
+                  }
+                >
+                  {pois.map((poi: POISearch) => (
+                    <Grid key={poi.id} item className={cardStyle.poiCardItem}>
+                      <POICard poi={poi} />
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+            </Grid>
           </Grid>
         </>
 

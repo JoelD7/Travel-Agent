@@ -40,6 +40,7 @@ import { HotelAmenitiesSelector } from "../../components/atoms/HotelAmenitiesSel
 import { Colors, Shadow } from "../../styles";
 import {
   getFindPlaceFromTextURL,
+  getLocalStorageConsumption,
   getPhotoFromReferenceURL,
   GoogleAPI,
   HotelAmenity,
@@ -47,7 +48,7 @@ import {
   muiDateFormatter,
 } from "../../utils";
 import { AmenitiesList, Amenity } from "../../utils/HotelAmenities";
-import { Hotel } from "../../utils/types/Hotel";
+import { Hotel, HotelOffer } from "../../utils/types/Hotel";
 import { hotelsStyles } from "./hotels-styles";
 import { format } from "date-fns";
 import Rating from "react-rating";
@@ -68,7 +69,7 @@ interface HotelSearch {
 }
 
 interface HotelCard {
-  hotel: Hotel;
+  hotelOffer: HotelOffer;
 }
 
 export function Hotels() {
@@ -177,9 +178,10 @@ export function Hotels() {
     amenities: AmenitiesList,
   });
 
-  const hotels: Hotel[] = [hotelPlaceholder, hotelPlaceholder, hotelPlaceholder];
+  const hotels: HotelOffer[] = [hotelPlaceholder, hotelPlaceholder, hotelPlaceholder];
   const [openDrawer, setOpenDrawer] = useState(false);
   const [image, setImage] = useState<string>("");
+  getLocalStorageConsumption("kB");
 
   const city = "Paris";
 
@@ -214,47 +216,87 @@ export function Hotels() {
       });
   }
 
-  function HotelCard({ hotel }: HotelCard) {
+  function getMinorPrice(hotel: HotelOffer) {
+    let minorPrice = Number(hotel.offers[0].price.total);
+    hotel.offers.forEach((offer) => {
+      let offerPrice = Number(offer.price.total);
+
+      if (offerPrice < minorPrice) {
+        minorPrice = Number(offer.price.total);
+      }
+    });
+    return minorPrice;
+  }
+
+  function capitalizeString(value: string, type: "each word" | "full sentence") {
+    value = value.toLowerCase();
+
+    if (type === "each word") {
+      let words = value.split(" ");
+      return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+    } else {
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+  }
+
+  function getFormattedAddress(hotelOffer: HotelOffer) {
+    return hotelOffer.hotel.address.lines.join("");
+  }
+
+  function HotelCard({ hotelOffer }: HotelCard) {
     return (
       <Grid container id="card" className={style.hotelCard}>
         <Grid item className={style.hotelImageGrid} id="photo">
-          <img src={hotel.image} className={style.hotelImage} />
+          <img src={"/Travel-Agent/h1.jpg"} className={style.hotelImage} />
         </Grid>
 
         <Grid item className={style.hotelContentGrid} id="content">
           <Grid item xs={12} id="title">
             <Grid container alignItems="center" style={{ margin: "10px 0px" }}>
-              <h3 style={{ margin: "0px 10px" }}>{hotel.name}</h3>
+              <h3 style={{ margin: "0px 10px" }}>
+                {capitalizeString(hotelOffer.hotel.name, "each word")}
+              </h3>
 
               <div className={style.hotelStarContainer}>
-                <StarRating stars={hotel.stars} />
+                <StarRating stars={Number(hotelOffer.hotel.rating)} />
               </div>
             </Grid>
           </Grid>
 
+          {/* Card content */}
           <Grid container className={style.defaultContentContainer}>
-            <Grid item className={style.cardData1}>
+            {/* Price and details button */}
+            <Grid item className={style.priceAndDetailsGrid}>
               <div>
-                <h4 style={{ textAlign: "center" }}>{`$ ${hotel.pricePerNight}`}</h4>
+                <h4 style={{ textAlign: "center" }}>{`From $ ${getMinorPrice(
+                  hotelOffer
+                )}`}</h4>
                 <CustomButton backgroundColor={Colors.PURPLE} onClick={() => {}}>
                   View details
                 </CustomButton>
               </div>
             </Grid>
 
-            <Grid item className={style.cardData1}>
+            {/* Contact and address */}
+            <Grid item className={style.addressContactGrid}>
               <div>
                 <p className={style.cardText}>
                   <b>Hotel info</b>
                 </p>
 
                 <IconText
-                  text={hotel.phoneNumber}
+                  text={hotelOffer.hotel.contact.phone}
                   icon={faPhone}
                   style={{ marginBottom: "5px" }}
                 />
 
-                <IconText text={hotel.address} icon={faMapMarkerAlt} />
+                <IconText
+                  text={capitalizeString(
+                    getFormattedAddress(hotelOffer),
+                    "full sentence"
+                  )}
+                  icon={faMapMarkerAlt}
+                />
               </div>
             </Grid>
 
@@ -263,7 +305,7 @@ export function Hotels() {
                 <p className={style.cardText}>
                   <b>Amenities</b>
                 </p>
-                {hotel.amenities.map((amenity, i) => (
+                {hotelOffer.hotel.amenities.slice(0, 5).map((amenity, i) => (
                   <IconText
                     key={i}
                     style={{ marginBottom: "5px" }}
@@ -275,39 +317,51 @@ export function Hotels() {
             </Grid>
           </Grid>
 
+          {/* Card content for SM size */}
           <Grid container className={style.smContentContainer}>
+            {/* Contact and address */}
             <Grid item xs={12} style={{ padding: "10px" }}>
               <div>
                 <IconText
-                  text={hotel.phoneNumber}
+                  text={hotelOffer.hotel.contact.phone}
                   icon={faPhone}
                   style={{ marginBottom: "5px" }}
                 />
 
-                <IconText text={hotel.address} icon={faMapMarkerAlt} />
+                <IconText
+                  text={capitalizeString(
+                    getFormattedAddress(hotelOffer),
+                    "full sentence"
+                  )}
+                  icon={faMapMarkerAlt}
+                />
               </div>
             </Grid>
 
+            {/* Amenities */}
             <Grid item xs={12} style={{ padding: "0px 10px" }}>
               <div>
                 <p className={style.cardText}>
                   <b>Amenities</b>
                 </p>
-                {hotel.amenities.map((amenity, i) => (
-                  <IconText
-                    key={i}
-                    style={{ marginBottom: "5px" }}
-                    text={amenity.value}
-                    icon={amenity.icon}
-                  />
-                ))}
+                <Grid container>
+                  {hotelOffer.hotel.amenities.slice(0, 5).map((amenity) => (
+                    <IconText
+                      key={amenity.key}
+                      style={{ margin: "0px 5px 5px 5px" }}
+                      text={amenity.value}
+                      icon={amenity.icon}
+                    />
+                  ))}
+                </Grid>
               </div>
             </Grid>
 
+            {/* Price and details button */}
             <Grid item xs={12} style={{ padding: "10px" }}>
               <Grid container>
                 <h2 style={{ textAlign: "center", marginRight: "auto" }}>
-                  {`$ ${hotel.pricePerNight}`}
+                  {`$ From ${getMinorPrice(hotelOffer)}`}
                 </h2>
                 <CustomButton
                   style={{
@@ -530,7 +584,7 @@ export function Hotels() {
             {/* Hotels grid */}
             <Grid item className={style.hotelsGrid}>
               {hotels.map((hotel, i) => (
-                <HotelCard key={i} hotel={hotel} />
+                <HotelCard key={i} hotelOffer={hotel} />
               ))}
             </Grid>
           </Grid>
