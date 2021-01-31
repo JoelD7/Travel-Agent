@@ -23,7 +23,7 @@ import {
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { addDays } from "date-fns";
+import { addDays, compareAsc, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Family } from "../../assets/fonts";
 import {
@@ -55,6 +55,7 @@ import Rating from "react-rating";
 import Helmet from "react-helmet";
 import Axios from "axios";
 import { createStringLiteral } from "typescript";
+import { addSeconds } from "date-fns/esm";
 
 interface HotelSearch {
   checkIn: MaterialUiPickersDate;
@@ -187,7 +188,79 @@ export function Hotels() {
 
   useEffect(() => {
     // getCityImage();
+
+    if (isNewAccessTokenRequired()) {
+      console.log("Fetching new access token...");
+      fetchAccessToken()
+        .then((res) => {
+          const accessToken = res.data.access_token;
+          const expiresIn = res.data.expires_in;
+
+          const newAccessToken = {
+            token: accessToken,
+            expiration: addSeconds(Date.now(), expiresIn),
+          };
+          localStorage.setItem("accessToken", JSON.stringify(newAccessToken));
+
+          fetchHotelOffers(accessToken);
+        })
+        .catch((error) => {
+          console.log("Error in POST request from Amadeus: ", error);
+        });
+    } else {
+      console.log("Using stored access token...");
+      const accessTokenRaw = localStorage.getItem("accessToken");
+      let curAccessToken = {
+        token: 0,
+      };
+      if (accessTokenRaw !== null) {
+        curAccessToken = JSON.parse(accessTokenRaw);
+      }
+
+      fetchHotelOffers(curAccessToken.token);
+    }
   }, []);
+
+  function isNewAccessTokenRequired() {
+    const accessTokenRaw = localStorage.getItem("accessToken");
+    if (accessTokenRaw === null) {
+      return true;
+    }
+    let curAccessToken = JSON.parse(accessTokenRaw);
+
+    return compareAsc(new Date(Date.now()), parseISO(curAccessToken.expiration)) > -1;
+  }
+
+  function fetchAccessToken() {
+    const amadeusTokenRequest = `grant_type=client_credentials&client_id=${process.env.REACT_APP_AMADEUS_KEY}&client_secret=${process.env.REACT_APP_AMADEUS_SECRET}`;
+
+    return Axios.post(
+      "https://test.api.amadeus.com/v1/security/oauth2/token",
+      amadeusTokenRequest,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+  }
+
+  function fetchHotelOffers(accessToken: number) {
+    Axios.get(
+      "https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=NYC&checkInDate=2021-02-25&roomQuantity=1&adults=2&radius=5&radiusUnit=KM&ratings=5&paymentPolicy=NONE&includeClosed=false&bestRateOnly=true&view=FULL&sort=NONE",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+      .then((res) => {
+        console.log(JSON.stringify(res.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   function getCityImage() {
     const placesRequestUrl = getFindPlaceFromTextURL(city, ["name", "photos"]);
