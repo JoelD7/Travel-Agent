@@ -90,7 +90,7 @@ export function HotelAmenitiesSelector({
         <Grid container spacing={2} style={{ marginTop: "20px" }}>
           <Grid item xs={4}>
             <FormGroup>
-              {selectedAmenities.slice(0, 13).map((amenity, i) => (
+              {selectedAmenities.slice(0, 16).map((amenity, i) => (
                 <FormControlLabel
                   key={i}
                   label={amenity.value}
@@ -114,7 +114,7 @@ export function HotelAmenitiesSelector({
 
           <Grid item xs={4}>
             <FormGroup>
-              {selectedAmenities.slice(13, 25).map((amenity, i) => (
+              {selectedAmenities.slice(16, 32).map((amenity, i) => (
                 <FormControlLabel
                   key={i}
                   label={amenity.value}
@@ -138,7 +138,7 @@ export function HotelAmenitiesSelector({
 
           <Grid item xs={4}>
             <FormGroup>
-              {selectedAmenities.slice(25).map((amenity, i) => (
+              {selectedAmenities.slice(32).map((amenity, i) => (
                 <FormControlLabel
                   key={i}
                   label={amenity.value}

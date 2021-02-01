@@ -7,3 +7,4 @@ export { ProgressCircle } from "./ProgressCircle";
 export { IconText } from "./IconText/IconText";
 export { StarRating } from "./StarRating";
 export { Text } from "./Text";
+export { AmenityIcon } from "./AmenityIcon";

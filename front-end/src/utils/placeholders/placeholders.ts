@@ -1,7 +1,7 @@
 import { parseISO } from "date-fns";
 import { HotelAmenity } from "..";
 import { EventType } from "../types";
-import { Hotel, HotelOffer } from "../types/Hotel";
+import { HotelBooking, HotelAvailability } from "../types/HotelTypes";
 import { Trip } from "../types/Trip";
 
 export const restaurantsPlaceholder: Restaurant[] = [
@@ -2582,111 +2582,130 @@ export const flightPlaceholder: Flight = {
   ],
 };
 
-export const hotelPlaceholder: HotelOffer = {
-  hotel: {
-    hotelId: "BGMILBGB",
-    dupeId: "700025106",
-    name: "BULGARI HOTELS RESORTS MILANO",
-    rating: "5",
-    cityCode: "MIL",
-    latitude: 45.47253,
-    longitude: 9.18805,
-    address: {
-      lines: ["VIA PRIVATA FRATELLI GABBA 7B"],
-      postalCode: "20121",
-      cityName: "MILAN",
-      countryCode: "IT",
-    },
-    contact: {
-      phone: "39-02-8058051",
-      fax: "39-02-805805222",
-    },
-    amenities: [
-      HotelAmenity.CONVENTION_CTR,
-      HotelAmenity.MEETING_ROOMS,
-      HotelAmenity.ICE_MACHINES,
-      HotelAmenity.RESTAURANT,
-      HotelAmenity.HANDICAP_FAC,
-      HotelAmenity.ACC_TOILETS,
-      HotelAmenity.DIS_PARKG,
-      HotelAmenity.BABY_SITTING,
-      HotelAmenity.BEAUTY_PARLOUR,
-      HotelAmenity.CAR_RENTAL,
-      HotelAmenity.ELEVATOR,
-      HotelAmenity.EXCHANGE_FAC,
-      HotelAmenity.WIFI,
-      HotelAmenity.LAUNDRY_SVC,
-      HotelAmenity.SPA,
-      HotelAmenity.VALET_PARKING,
-      HotelAmenity.HAIRDRESSER,
-      HotelAmenity.SWIMMING_POOL,
-      HotelAmenity.AIR_CONDITIONING,
-      HotelAmenity.HAIR_DRYER,
-      HotelAmenity.MINIBAR,
-      HotelAmenity.MOVIE_CHANNELS,
-      HotelAmenity.ROOM_SERVICE,
-      HotelAmenity.TELEVISION,
-      HotelAmenity.SAFE_DEP_BOX,
-      HotelAmenity.FITNESS_CENTER,
-    ],
-    media: [
-      {
-        uri:
-          "http://pdt.multimediarepository.testing.amadeus.com/cmr/retrieve/hotel/B6AA0C7920214C49AAFBCFFF32A15300",
-        category: "EXTERIOR",
-      },
-      {
-        uri:
-          "http://pdt.multimediarepository.testing.amadeus.com/cmr/retrieve/hotel/0B9245555964410B97E958128EB3DE52",
-        category: "LOBBY",
-      },
-      {
-        uri:
-          "http://pdt.multimediarepository.testing.amadeus.com/cmr/retrieve/hotel/DDFD5AD22B134110BCDBE64186FE860A",
-        category: "SUITE",
-      },
-    ],
-  },
-  offers: [
+export const hotelsPlaceholder: HotelAvailability = {
+  checkIn: "2021-06-15",
+  checkOut: "2021-06-16",
+  hotels: [
     {
-      id: "8BB1F89D377409FEFACB3E73654A5D765CD812920802E5976BFBB060BAF23AD7",
-      room: {
-        typeEstimated: {
-          category: "SUPERIOR_ROOM",
-          beds: 1,
-          bedType: "KING",
+      code: 128537,
+      name: {
+        content: "Coco Key Hotel and Water Park Resort",
+      },
+      destinationName: "Orlando Area - Florida - FL",
+      latitude: "28.45423",
+      longitude: "-81.472135",
+      categoryName: "",
+      images: [
+        {
+          order: 1,
+          path: "",
+          visualOrder: 1,
         },
-        description: {
-          text:
-            "Regular Rate\nSuperior Room garden or patio view, large bathr\noom, 1 King, 35sqm/377sqft, Wireless internet,",
+      ],
+      rooms: [
+        {
+          code: "DBL.GR",
+          name: "DOUBLE GUEST ROOM EXTERIOR CORRIDORS",
+          rates: [
+            {
+              net: "46.44",
+              taxes: {
+                taxes: [
+                  {
+                    amount: "25.00",
+                    currency: "USD",
+                    clientAmount: "20.57",
+                    clientCurrency: "EUR",
+                  },
+                ],
+              },
+              rooms: 1,
+              adults: 1,
+              children: 0,
+            },
+            {
+              net: "46.44",
+              taxes: {
+                taxes: [
+                  {
+                    amount: "25.00",
+                    currency: "USD",
+                    clientAmount: "20.57",
+                    clientCurrency: "EUR",
+                  },
+                ],
+              },
+              rooms: 1,
+              adults: 1,
+              children: 0,
+            },
+            {
+              net: "52.70",
+              taxes: {
+                taxes: [
+                  {
+                    amount: "25.00",
+                    currency: "USD",
+                    clientAmount: "20.57",
+                    clientCurrency: "EUR",
+                  },
+                ],
+              },
+              rooms: 1,
+              adults: 1,
+              children: 0,
+            },
+            {
+              net: "52.70",
+              taxes: {
+                taxes: [
+                  {
+                    amount: "25.00",
+                    currency: "USD",
+                    clientAmount: "20.57",
+                    clientCurrency: "EUR",
+                  },
+                ],
+              },
+              rooms: 1,
+              adults: 1,
+              children: 0,
+            },
+            {
+              net: "67.85",
+              rooms: 1,
+              adults: 1,
+              children: 0,
+            },
+            {
+              net: "73.70",
+              rooms: 1,
+              adults: 1,
+              children: 0,
+            },
+          ],
         },
+      ],
+      minRate: 46.44,
+      maxRate: 73.7,
+      currency: "EUR",
+      description: {
+        content: "description",
       },
-      guests: {
-        adults: 2,
+      countryCode: "US",
+      city: {
+        content: "NYC",
       },
-      price: {
-        currency: "EUR",
-        total: "857.00",
+      categoryCode: "SUK",
+      address: {
+        content: "address",
       },
-    },
-    {
-      id: "2E5650829E01B8BD88085B597266F15EF03E6E23BC8DB1A470A6D03F8E2BA1A8",
-      room: {
-        typeEstimated: {
-          category: "DELUXE_ROOM",
+      email: "email",
+      phones: [
+        {
+          phoneNumber: "809-456-7895",
         },
-        description: {
-          text:
-            "Regular Rate\nDeluxe Room garden or patio view, walk-in close\nt, large bathroom, 1 King or 2 Queen, 40sqm/430",
-        },
-      },
-      guests: {
-        adults: 2,
-      },
-      price: {
-        currency: "EUR",
-        total: "912.00",
-      },
+      ],
     },
   ],
 };
@@ -2878,7 +2897,7 @@ export const tripPlaceholder: Trip = {
       type: EventType.Hotel,
       start: new Date(2021, 0, 13, 14, 35),
       end: new Date(2021, 0, 17, 11, 35),
-      detail: hotelPlaceholder,
+      detail: hotelsPlaceholder,
       location: "Santo Domingo, Dominican Republic",
       time: true,
     },

@@ -590,3 +590,14 @@ export function getLocalStorageConsumption(unit: "MB" | "kB") {
     return console.log(`Local storage: ${decimalFormatter(length / 1024)} kB`);
   }
 }
+
+export function capitalizeString(value: string, type: "each word" | "full sentence") {
+  value = value.toLowerCase();
+
+  if (type === "each word") {
+    let words = value.split(" ");
+    return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+  } else {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+}

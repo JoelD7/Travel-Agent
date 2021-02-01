@@ -14,13 +14,6 @@ export type GoogleFindPlaceField =
   | "types";
 
 /**
- * To use Google Places API on the client side, a proxy is required to add the
- * "Access-Control-Allow-Origin" header(which is not included in the response
- * of the Google's API, but required from the client).
- */
-export const proxyUrl = "https://stormy-gorge-33469.herokuapp.com/";
-
-/**
  * Returns the URL for calling the Google Places' Find Place API
  * @param input Text input that identifies the search target, such as a name, address, or phone number.
  * @param fields fields to return in the response.
@@ -31,7 +24,7 @@ export function getFindPlaceFromTextURL(input: string, fields: GoogleFindPlaceFi
   }&inputtype=textquery&fields=${fields.join(",")}`;
 }
 
-export function getPhotoFromReferenceURL(
+export function getPhotoURLFromReference(
   photoReference: string,
   maxWidth: number = 1600,
   maxHeight: number = 1600

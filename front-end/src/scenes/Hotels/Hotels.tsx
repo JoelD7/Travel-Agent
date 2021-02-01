@@ -3,7 +3,6 @@ import {
   faBed,
   faChild,
   faFilter,
-  faMapMarker,
   faMapMarkerAlt,
   faPhone,
   faStar,
@@ -18,7 +17,6 @@ import {
   Grid,
   MenuItem,
   Select,
-  Slider,
   ThemeProvider,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -35,6 +33,7 @@ import {
   ServicesToolbar,
   StarRating,
   Text,
+  AmenityIcon,
 } from "../../components";
 import { HotelAmenitiesSelector } from "../../components/atoms/HotelAmenitiesSelector/HotelAmenitiesSelector";
 import { Colors, Shadow } from "../../styles";
@@ -44,18 +43,19 @@ import {
   getPhotoFromReferenceURL,
   GoogleAPI,
   HotelAmenity,
-  hotelPlaceholder,
+  hotelsPlaceholder,
   muiDateFormatter,
+  HotelBedAPI,
 } from "../../utils";
-import { AmenitiesList, Amenity } from "../../utils/HotelAmenities";
-import { Hotel, HotelOffer } from "../../utils/types/Hotel";
+import { AmenitiesList, amenitiesMap, Amenity } from "../../utils/HotelAmenities";
+import { HotelBooking, HotelAvailability } from "../../utils/types/HotelTypes";
 import { hotelsStyles } from "./hotels-styles";
-import { format } from "date-fns";
 import Rating from "react-rating";
 import Helmet from "react-helmet";
-import Axios from "axios";
-import { createStringLiteral } from "typescript";
+import Axios, { AxiosResponse } from "axios";
 import { addSeconds } from "date-fns/esm";
+import { sha256 } from "js-sha256";
+import { proxyUrl } from "../../utils/external-apis";
 
 interface HotelSearch {
   checkIn: MaterialUiPickersDate;
@@ -69,8 +69,14 @@ interface HotelSearch {
   [key: string]: HotelSearch[keyof HotelSearch];
 }
 
+interface AvailabilityParams {
+  availabilityRes: AxiosResponse<any>;
+  availability: any;
+  hotelsInOffer: any[];
+}
+
 interface HotelCard {
-  hotelOffer: HotelOffer;
+  hotel: HotelBooking;
 }
 
 export function Hotels() {
@@ -179,100 +185,115 @@ export function Hotels() {
     amenities: AmenitiesList,
   });
 
-  const hotels: HotelOffer[] = [hotelPlaceholder, hotelPlaceholder, hotelPlaceholder];
+  const [hotelAvailability, setHotelAvailability] = useState<HotelAvailability>(
+    hotelsPlaceholder
+  );
+  const [availableHotels, setAvailableHotels] = useState<HotelBooking[]>(
+    hotelsPlaceholder.hotels
+  );
   const [openDrawer, setOpenDrawer] = useState(false);
   const [image, setImage] = useState<string>("");
+
+  const apiKey = process.env.REACT_APP_HOTELBEDS_KEY;
+  const secret = process.env.REACT_APP_HOTELBEDS_SECRET;
+
   getLocalStorageConsumption("kB");
 
   const city = "Paris";
 
   useEffect(() => {
-    // getCityImage();
+    fetchHotelAvailability()
+      .then((availabilityRes) => {
+        let availability = availabilityRes.data.hotels;
+        // let topRankingHotels
 
-    if (isNewAccessTokenRequired()) {
-      console.log("Fetching new access token...");
-      fetchAccessToken()
-        .then((res) => {
-          const accessToken = res.data.access_token;
-          const expiresIn = res.data.expires_in;
+        let hotelsInOffer = availability.hotels.sort((a: any, b: any) => a.code - b.code);
 
-          const newAccessToken = {
-            token: accessToken,
-            expiration: addSeconds(Date.now(), expiresIn),
-          };
-          localStorage.setItem("accessToken", JSON.stringify(newAccessToken));
-
-          fetchHotelOffers(accessToken);
-        })
-        .catch((error) => {
-          console.log("Error in POST request from Amadeus: ", error);
-        });
-    } else {
-      console.log("Using stored access token...");
-      const accessTokenRaw = localStorage.getItem("accessToken");
-      let curAccessToken = {
-        token: 0,
-      };
-      if (accessTokenRaw !== null) {
-        curAccessToken = JSON.parse(accessTokenRaw);
-      }
-
-      fetchHotelOffers(curAccessToken.token);
-    }
-  }, []);
-
-  function isNewAccessTokenRequired() {
-    const accessTokenRaw = localStorage.getItem("accessToken");
-    if (accessTokenRaw === null) {
-      return true;
-    }
-    let curAccessToken = JSON.parse(accessTokenRaw);
-
-    return compareAsc(new Date(Date.now()), parseISO(curAccessToken.expiration)) > -1;
-  }
-
-  function fetchAccessToken() {
-    const amadeusTokenRequest = `grant_type=client_credentials&client_id=${process.env.REACT_APP_AMADEUS_KEY}&client_secret=${process.env.REACT_APP_AMADEUS_SECRET}`;
-
-    return Axios.post(
-      "https://test.api.amadeus.com/v1/security/oauth2/token",
-      amadeusTokenRequest,
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-  }
-
-  function fetchHotelOffers(accessToken: number) {
-    Axios.get(
-      "https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=NYC&checkInDate=2021-02-25&roomQuantity=1&adults=2&radius=5&radiusUnit=KM&ratings=5&paymentPolicy=NONE&includeClosed=false&bestRateOnly=true&view=FULL&sort=NONE",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
-      .then((res) => {
-        console.log(JSON.stringify(res.data));
+        fetchHotels({ availabilityRes, availability, hotelsInOffer });
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Error in fetchHotelAvailability(): ", error);
       });
+  }, []);
+
+  function fetchHotelAvailability() {
+    const bookingParams = {
+      stay: {
+        checkIn: "2021-06-15",
+        checkOut: "2021-06-16",
+      },
+      occupancies: [
+        {
+          rooms: 1,
+          adults: 1,
+          children: 0,
+        },
+      ],
+      destination: {
+        code: "MCO",
+      },
+      filter: {
+        maxHotels: 20,
+        minCategory: 4, //stars
+      },
+    };
+
+    return Axios.post(proxyUrl + HotelBedAPI.hotelAvailabilityURL, bookingParams, {
+      headers: HotelBedAPI.headers,
+    });
+  }
+
+  function fetchHotels(availabilityParams: AvailabilityParams) {
+    const { availability, availabilityRes, hotelsInOffer } = availabilityParams;
+
+    //Codes of the hotels to get details from
+    let hotelCodes = availability.hotels.map((hotel: HotelBooking) => hotel.code);
+
+    Axios.get(proxyUrl + HotelBedAPI.hotelContentURL, {
+      headers: HotelBedAPI.headers,
+      params: {
+        fields: "all",
+        codes: hotelCodes.join(","),
+        language: "ENG",
+        from: "1",
+        to: "20",
+        useSecondaryLanguage: false,
+      },
+    }).then((res) => {
+      let hotelsDetails = res.data.hotels.sort((a: any, b: any) => a.code - b.code);
+      let hotelAvailabilityTemp: HotelAvailability = {
+        checkIn: availability.checkIn,
+        checkOut: availability.checkOut,
+        hotels: [],
+      };
+
+      let hotelsBuffer: any[] = [];
+      for (let i = 0; i < hotelsDetails.length; i++) {
+        const hotelDetail = hotelsDetails[i];
+        const hotelAvailability = hotelsInOffer[i];
+
+        hotelsBuffer.push({ ...hotelAvailability, ...hotelDetail });
+      }
+
+      hotelAvailabilityTemp = { ...hotelAvailabilityTemp, hotels: hotelsBuffer };
+
+      console.log("Final: ", JSON.stringify(hotelAvailabilityTemp.hotels));
+      setHotelAvailability(hotelAvailabilityTemp);
+      setAvailableHotels(hotelAvailabilityTemp.hotels);
+    });
   }
 
   function getCityImage() {
     const placesRequestUrl = getFindPlaceFromTextURL(city, ["name", "photos"]);
 
-    Axios.get(GoogleAPI.proxyUrl + placesRequestUrl)
+    Axios.get(proxyUrl + placesRequestUrl)
       .then((res) => {
         const photoRef = res.data?.candidates?.[0]?.photos?.[0]?.photo_reference;
         // photoRef is the result of the initial Place Search query
         if (photoRef) {
           const imageLookupURL = getPhotoFromReferenceURL(photoRef, 700, 700);
 
-          fetch(GoogleAPI.proxyUrl + imageLookupURL)
+          fetch(proxyUrl + imageLookupURL)
             .then((r) => {
               r.blob().then((blob) => {
                 let convertedImage = URL.createObjectURL(blob);
@@ -289,49 +310,42 @@ export function Hotels() {
       });
   }
 
-  function getMinorPrice(hotel: HotelOffer) {
-    let minorPrice = Number(hotel.offers[0].price.total);
-    hotel.offers.forEach((offer) => {
-      let offerPrice = Number(offer.price.total);
-
-      if (offerPrice < minorPrice) {
-        minorPrice = Number(offer.price.total);
-      }
-    });
-    return minorPrice;
+  function getHotelImage(hotel: HotelBooking) {
+    /**
+     * Sort by visualOrder to get the best image to use it
+     * as cover.
+     */
+    let image = hotel.images.sort((a, b) => a.visualOrder - b.visualOrder)[0];
+    return HotelBedAPI.imageURL.bigger + image.path;
   }
 
-  function capitalizeString(value: string, type: "each word" | "full sentence") {
-    value = value.toLowerCase();
+  function getFormattedAddress(hotel: HotelBooking) {
+    return hotel.address.content;
+  }
 
-    if (type === "each word") {
-      let words = value.split(" ");
-      return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-    } else {
-      return value.charAt(0).toUpperCase() + value.slice(1);
+  function getHotelStars(hotel: HotelBooking) {
+    if (hotel.categoryName) {
+      return Number(hotel.categoryName.split(" ")[0]);
     }
+    return Number(hotel.categoryCode.split("EST")[0]);
   }
 
-  function getFormattedAddress(hotelOffer: HotelOffer) {
-    return hotelOffer.hotel.address.lines.join("");
-  }
-
-  function HotelCard({ hotelOffer }: HotelCard) {
+  function HotelCard({ hotel }: HotelCard) {
     return (
       <Grid container id="card" className={style.hotelCard}>
         <Grid item className={style.hotelImageGrid} id="photo">
-          <img src={"/Travel-Agent/h1.jpg"} className={style.hotelImage} />
+          {hotel.images.length > 1 && (
+            <img src={`${getHotelImage(hotel)}`} className={style.hotelImage} />
+          )}
         </Grid>
 
         <Grid item className={style.hotelContentGrid} id="content">
           <Grid item xs={12} id="title">
             <Grid container alignItems="center" style={{ margin: "10px 0px" }}>
-              <h3 style={{ margin: "0px 10px" }}>
-                {capitalizeString(hotelOffer.hotel.name, "each word")}
-              </h3>
+              <h3 style={{ margin: "0px 10px" }}>{hotel.name.content}</h3>
 
               <div className={style.hotelStarContainer}>
-                <StarRating stars={Number(hotelOffer.hotel.rating)} />
+                <StarRating stars={getHotelStars(hotel)} />
               </div>
             </Grid>
           </Grid>
@@ -341,9 +355,7 @@ export function Hotels() {
             {/* Price and details button */}
             <Grid item className={style.priceAndDetailsGrid}>
               <div>
-                <h4 style={{ textAlign: "center" }}>{`From $ ${getMinorPrice(
-                  hotelOffer
-                )}`}</h4>
+                <h4 style={{ textAlign: "center" }}>{`From $ ${hotel.minRate}`}</h4>
                 <CustomButton backgroundColor={Colors.PURPLE} onClick={() => {}}>
                   View details
                 </CustomButton>
@@ -358,83 +370,26 @@ export function Hotels() {
                 </p>
 
                 <IconText
-                  text={hotelOffer.hotel.contact.phone}
+                  text={hotel.phones[0].phoneNumber}
                   icon={faPhone}
                   style={{ marginBottom: "5px" }}
                 />
 
                 <IconText
-                  text={capitalizeString(
-                    getFormattedAddress(hotelOffer),
-                    "full sentence"
-                  )}
+                  text={(getFormattedAddress(hotel), "full sentence")}
                   icon={faMapMarkerAlt}
                 />
-              </div>
-            </Grid>
-
-            <Grid item className={style.cardData2}>
-              <div>
-                <p className={style.cardText}>
-                  <b>Amenities</b>
-                </p>
-                {hotelOffer.hotel.amenities.slice(0, 5).map((amenity, i) => (
-                  <IconText
-                    key={i}
-                    style={{ marginBottom: "5px" }}
-                    text={amenity.value}
-                    icon={amenity.icon}
-                  />
-                ))}
               </div>
             </Grid>
           </Grid>
 
           {/* Card content for SM size */}
           <Grid container className={style.smContentContainer}>
-            {/* Contact and address */}
-            <Grid item xs={12} style={{ padding: "10px" }}>
-              <div>
-                <IconText
-                  text={hotelOffer.hotel.contact.phone}
-                  icon={faPhone}
-                  style={{ marginBottom: "5px" }}
-                />
-
-                <IconText
-                  text={capitalizeString(
-                    getFormattedAddress(hotelOffer),
-                    "full sentence"
-                  )}
-                  icon={faMapMarkerAlt}
-                />
-              </div>
-            </Grid>
-
-            {/* Amenities */}
-            <Grid item xs={12} style={{ padding: "0px 10px" }}>
-              <div>
-                <p className={style.cardText}>
-                  <b>Amenities</b>
-                </p>
-                <Grid container>
-                  {hotelOffer.hotel.amenities.slice(0, 5).map((amenity) => (
-                    <IconText
-                      key={amenity.key}
-                      style={{ margin: "0px 5px 5px 5px" }}
-                      text={amenity.value}
-                      icon={amenity.icon}
-                    />
-                  ))}
-                </Grid>
-              </div>
-            </Grid>
-
             {/* Price and details button */}
             <Grid item xs={12} style={{ padding: "10px" }}>
               <Grid container>
                 <h2 style={{ textAlign: "center", marginRight: "auto" }}>
-                  {`$ From ${getMinorPrice(hotelOffer)}`}
+                  {`$ From ${hotel.minRate}`}
                 </h2>
                 <CustomButton
                   style={{
@@ -656,8 +611,8 @@ export function Hotels() {
 
             {/* Hotels grid */}
             <Grid item className={style.hotelsGrid}>
-              {hotels.map((hotel, i) => (
-                <HotelCard key={i} hotelOffer={hotel} />
+              {availableHotels.map((hotel, i) => (
+                <HotelCard key={i} hotel={hotel} />
               ))}
             </Grid>
           </Grid>
