@@ -1,3 +1,5 @@
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { Amenity } from "../HotelAmenities";
 
 export interface HotelBookingRequest {
@@ -88,6 +90,24 @@ export interface HotelRateOffer {
   amount: string;
 }
 
+export interface HotelPax {
+  type: "AD" | "CH";
+  age: number;
+}
+
+export interface HotelSearch {
+  checkIn: MaterialUiPickersDate;
+  checkOut: MaterialUiPickersDate;
+  adults: number;
+  children: number;
+  paxes: HotelPax[];
+  rooms: number;
+  priceRange: number[];
+  stars: number;
+  occupancyParamsChanged: boolean;
+  [key: string]: HotelSearch[keyof HotelSearch];
+}
+
 export interface HotelDetails {
   code: number;
   name: {
@@ -118,7 +138,12 @@ export interface HotelDetails {
   images: HotelImage[];
 }
 
-export interface HotelDetailsBooking {}
+export interface Occupancy {
+  label: string;
+  field: string;
+  icon: IconDefinition;
+  values: number[];
+}
 
 export interface Offer {
   id: string;

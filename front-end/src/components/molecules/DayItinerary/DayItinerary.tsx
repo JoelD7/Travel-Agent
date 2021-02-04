@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import React from "react";
 import { Colors } from "../../../styles";
 import { eventToIcon, EventType } from "../../../utils";
-import { TripEvent } from "../../../utils/types/Trip";
+import { TripEvent } from "../../../utils/types/trip-types";
 import { CustomButton, IconText, Text } from "../../atoms";
 import { dayItineraryStyles } from "./dayItinerary-styles";
 

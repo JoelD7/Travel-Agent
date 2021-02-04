@@ -243,6 +243,9 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
       color: "white",
     },
   },
+  selectIcon: {
+    color: "white",
+  },
   selectControl: {
     width: "230px",
     marginLeft: "10px",

@@ -27,7 +27,7 @@ import { carlos, Font, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors } from "../../../styles";
 import { getLinkStyle, Routes } from "../../../utils";
-import { DrawerOptions } from "../../../utils/types/DrawerOptionsType";
+import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 import { CustomButton } from "../../atoms";
 import { drawerButtonStyle, drawerStyles } from "./navDrawer-styles";
 

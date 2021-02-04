@@ -1,5 +1,5 @@
 import { getLinkStyle, Routes } from "../../../utils";
-import { DrawerOptions } from "../../../utils/types/DrawerOptionsType";
+import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 import React, { useState } from "react";
 import {
   faCalendar,

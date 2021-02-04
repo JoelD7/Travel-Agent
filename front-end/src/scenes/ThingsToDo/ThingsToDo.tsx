@@ -425,6 +425,7 @@ export function ThingsToDo() {
                   <Select
                     value={sortOption}
                     variant="outlined"
+                    classes={{ icon: style.selectIcon }}
                     className={style.select}
                     onChange={(e) => onSortOptionChange(e.target.value as SortOption)}
                   >

@@ -1,8 +1,8 @@
 import { parseISO } from "date-fns";
 import { HotelAmenity } from "..";
 import { EventType } from "../types";
-import { HotelBooking, HotelAvailability } from "../types/HotelTypes";
-import { Trip } from "../types/Trip";
+import { HotelBooking, HotelAvailability } from "../types/hotel-types";
+import { Trip } from "../types/trip-types";
 
 export const restaurantsPlaceholder: Restaurant[] = [
   {

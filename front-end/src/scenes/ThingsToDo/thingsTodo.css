@@ -1,8 +1,5 @@
 .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(255, 255, 255, 0) !important;
-}
-.MuiSelect-icon {
-  color: #fff !important;
+  border-color: #cecece !important;
 }
 .MuiInputLabel-root {
   color: #fff !important;

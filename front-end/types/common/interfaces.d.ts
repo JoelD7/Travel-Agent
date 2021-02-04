@@ -57,3 +57,11 @@ interface HotelReservation {
   rooms: number;
   cost: number;
 }
+
+/**
+ * Type of event of the select element.
+ */
+interface SelectEvent {
+  name?: string | undefined;
+  value: unknown;
+}

@@ -19,7 +19,7 @@ import { Link, useHistory } from "react-router-dom";
 import { DashDrawer, IconText, Navbar, SliderArrow, Text } from "../../components";
 import { Colors } from "../../styles";
 import { getLinkStyle, Routes, tripPlaceholder, tripsPlaceholder } from "../../utils";
-import { DrawerOptions } from "../../utils/types/DrawerOptionsType";
+import { DrawerOptions } from "../../utils/types/drawerOption-types";
 import { tripStyles } from "./trip-styles";
 import Slider from "react-slick";
 import Helmet from "react-helmet";

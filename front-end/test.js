@@ -9,4 +9,4 @@ let b = {
   },
 };
 let ar = "4est";
-console.log(ar.split("est"));
+console.log(new Date().toISOString());

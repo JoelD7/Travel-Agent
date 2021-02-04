@@ -7,9 +7,8 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     justifyContent: "center",
     padding: "0px 10px 10px 10px",
-    borderRight: "1px solid #cecece",
-    width: "33%",
-
+    width: "49%",
+    alignItems: "center",
     [theme.breakpoints.down(715)]: {
       width: "50%",
     },
@@ -48,7 +47,8 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     },
 
     "& .MuiInputBase-input": {
-      padding: "5px 0px 5px 10px",
+      padding: "6px 7px 7px",
+      // padding: "5px 0px 5px 10px",
     },
   },
   datepickerItemGrid: {
@@ -68,6 +68,12 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
+  occupancyGrid: {
+    width: "300px",
+    [theme.breakpoints.down(550)]: {
+      width: "100%",
+    },
+  },
   revervationParamsGrid: {
     width: "10%",
 
@@ -82,6 +88,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     },
   },
   defaultContentContainer: {
+    height: "73%",
     [theme.breakpoints.down(950)]: {
       display: "none",
     },
@@ -218,15 +225,19 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     justifyContent: "center",
     alignItems: "center",
     padding: "0px 10px 10px 10px",
-    borderRight: "1px solid #cecece",
-    width: "33%",
+    width: "49%",
 
     [theme.breakpoints.down(715)]: {
       width: "50%",
     },
   },
-  reservationParamText: {
-    color: "white",
+  popoverPaper: {
+    width: "265px",
+    maxHeight: "280px",
+    padding: "10px",
+  },
+  occupancyParamText: {
+    color: Colors.BLUE,
     marginLeft: "5px",
     marginBottom: "3px",
     marginTop: "5px",
@@ -255,6 +266,26 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       fontFamily: Family,
     },
   },
+  selectIcon: {
+    color: Colors.BLUE,
+  },
+  searchButton: {
+    minWidth: "115px",
+    boxShadow: Shadow.MEDIUM,
+    color: Colors.BLUE,
+    width: "100%",
+  },
+  searchButtonGrid: {
+    width: "20%",
+    marginLeft: "auto",
+
+    [theme.breakpoints.down(755)]: {
+      width: "30%",
+    },
+    [theme.breakpoints.down(670)]: {
+      width: "100%",
+    },
+  },
   textButton: {
     padding: "0px",
     fontWeight: "bold",
@@ -262,5 +293,11 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       backgroundColor: "rgba(0,0,0,0)",
       textDecoration: "underline black solid",
     },
+  },
+  whiteParamText: {
+    color: "white",
+    marginLeft: "5px",
+    marginBottom: "3px",
+    marginTop: "5px",
   },
 }));

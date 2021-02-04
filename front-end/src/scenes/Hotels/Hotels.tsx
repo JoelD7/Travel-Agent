@@ -16,63 +16,50 @@ import {
   FormControl,
   Grid,
   MenuItem,
+  Popover,
   Select,
   ThemeProvider,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { addDays, compareAsc, parseISO } from "date-fns";
-import React, { useEffect, useState } from "react";
+import Axios, { AxiosResponse } from "axios";
+import { addDays } from "date-fns";
+import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
+import Helmet from "react-helmet";
+import Rating from "react-rating";
 import { Family } from "../../assets/fonts";
 import {
   CustomButton,
-  PriceRange,
   HotelStarSelector,
   IconText,
   Navbar,
+  PriceRange,
   ServicesToolbar,
   StarRating,
   Text,
-  AmenityIcon,
 } from "../../components";
-import { HotelAmenitiesSelector } from "../../components/atoms/HotelAmenitiesSelector/HotelAmenitiesSelector";
 import { Colors, Shadow } from "../../styles";
 import {
+  capitalizeString,
   getFindPlaceFromTextURL,
   getLocalStorageConsumption,
   getPhotoFromReferenceURL,
-  GoogleAPI,
-  HotelAmenity,
+  HotelBedAPI,
   hotelsPlaceholder,
   muiDateFormatter,
-  HotelBedAPI,
 } from "../../utils";
-import { AmenitiesList, amenitiesMap, Amenity } from "../../utils/HotelAmenities";
-import { HotelBooking, HotelAvailability } from "../../utils/types/HotelTypes";
-import { hotelsStyles } from "./hotels-styles";
-import Rating from "react-rating";
-import Helmet from "react-helmet";
-import Axios, { AxiosResponse } from "axios";
-import { addSeconds } from "date-fns/esm";
-import { sha256 } from "js-sha256";
 import { proxyUrl } from "../../utils/external-apis";
-
-interface HotelSearch {
-  checkIn: MaterialUiPickersDate;
-  checkOut: MaterialUiPickersDate;
-  adults: unknown;
-  children: unknown;
-  rooms: unknown;
-  priceRange: number[];
-  stars: number;
-  amenities: Amenity[];
-  [key: string]: HotelSearch[keyof HotelSearch];
-}
+import {
+  HotelAvailability,
+  HotelBooking,
+  HotelSearch,
+  HotelPax,
+  Occupancy,
+} from "../../utils/types/hotel-types";
+import { hotelsStyles } from "./hotels-styles";
 
 interface AvailabilityParams {
-  availabilityRes: AxiosResponse<any>;
   availability: any;
-  hotelsInOffer: any[];
+  hotelsForBooking: any[];
 }
 
 interface HotelCard {
@@ -156,84 +143,105 @@ export function Hotels() {
 
   const style = hotelsStyles();
 
-  const hotelReservationParams = [
+  const occupanciesParams: Occupancy[] = [
+    {
+      label: "Rooms",
+      field: "rooms",
+      icon: faBed,
+      values: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    },
     {
       label: "Adults",
       field: "adults",
       icon: faUser,
+      values: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     },
     {
       label: "Children",
       field: "children",
       icon: faChild,
-    },
-    {
-      label: "Rooms",
-      field: "rooms",
-      icon: faBed,
+      values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     },
   ];
 
   const [state, setState] = useState<HotelSearch>({
-    checkIn: new Date(),
-    checkOut: addDays(new Date(), 2),
-    adults: "",
-    children: "",
-    rooms: "",
+    checkIn: addDays(new Date(), 1),
+    checkOut: addDays(new Date(), 3),
+    adults: 2,
+    children: 0,
+    paxes: [],
+    rooms: 1,
     priceRange: [0, 100],
     stars: 0,
-    amenities: AmenitiesList,
+    occupancyParamsChanged: false,
   });
 
   const [hotelAvailability, setHotelAvailability] = useState<HotelAvailability>(
     hotelsPlaceholder
   );
-  const [availableHotels, setAvailableHotels] = useState<HotelBooking[]>(
-    hotelsPlaceholder.hotels
-  );
+
   const [openDrawer, setOpenDrawer] = useState(false);
   const [image, setImage] = useState<string>("");
 
-  const apiKey = process.env.REACT_APP_HOTELBEDS_KEY;
-  const secret = process.env.REACT_APP_HOTELBEDS_SECRET;
+  const [openOccupancies, setOpenOccupancies] = useState<boolean>(false);
+  const [occupanciesAnchor, setOccupanciesAnchor] = useState<HTMLButtonElement | null>(
+    null
+  );
 
   getLocalStorageConsumption("kB");
 
   const city = "Paris";
 
   useEffect(() => {
+    searchHotels();
+  }, []);
+
+  function searchHotels() {
     fetchHotelAvailability()
       .then((availabilityRes) => {
         let availability = availabilityRes.data.hotels;
         // let topRankingHotels
 
-        let hotelsInOffer = availability.hotels.sort((a: any, b: any) => a.code - b.code);
+        console.log("Hotel availability fetched: ", availability.hotels.length);
+        /**
+         * This array should be sorted the same way as "hotelsDetails"
+         * in order to referencing the same hotels while iterating
+         * over both of these arrays.
+         */
+        let hotelsForBooking = availability.hotels.sort(
+          (a: any, b: any) => a.code - b.code
+        );
 
-        fetchHotels({ availabilityRes, availability, hotelsInOffer });
+        fetchHotels({ availability, hotelsForBooking });
       })
       .catch((error) => {
         console.log("Error in fetchHotelAvailability(): ", error);
       });
-  }, []);
+  }
 
   function fetchHotelAvailability() {
     const bookingParams = {
       stay: {
-        checkIn: "2021-06-15",
-        checkOut: "2021-06-16",
+        checkIn: state.checkIn,
+        checkOut: state.checkOut,
       },
       occupancies: [
         {
-          rooms: 1,
-          adults: 1,
-          children: 0,
+          rooms: state.rooms,
+          adults: state.adults,
+          children: state.children,
+          paxes: state.paxes,
         },
       ],
-      destination: {
-        code: "MCO",
+
+      geolocation: {
+        longitude: 2.3522,
+        latitude: 48.8566,
+        radius: 15,
+        unit: "km",
       },
       filter: {
-        maxHotels: 20,
+        // maxHotels: 20,
         minCategory: 4, //stars
       },
     };
@@ -244,10 +252,11 @@ export function Hotels() {
   }
 
   function fetchHotels(availabilityParams: AvailabilityParams) {
-    const { availability, availabilityRes, hotelsInOffer } = availabilityParams;
+    const { availability } = availabilityParams;
 
     //Codes of the hotels to get details from
     let hotelCodes = availability.hotels.map((hotel: HotelBooking) => hotel.code);
+    let maxHotels = availability.hotels.length;
 
     Axios.get(proxyUrl + HotelBedAPI.hotelContentURL, {
       headers: HotelBedAPI.headers,
@@ -256,31 +265,51 @@ export function Hotels() {
         codes: hotelCodes.join(","),
         language: "ENG",
         from: "1",
-        to: "20",
+        to: maxHotels,
         useSecondaryLanguage: false,
       },
     }).then((res) => {
-      let hotelsDetails = res.data.hotels.sort((a: any, b: any) => a.code - b.code);
-      let hotelAvailabilityTemp: HotelAvailability = {
-        checkIn: availability.checkIn,
-        checkOut: availability.checkOut,
-        hotels: [],
-      };
-
-      let hotelsBuffer: any[] = [];
-      for (let i = 0; i < hotelsDetails.length; i++) {
-        const hotelDetail = hotelsDetails[i];
-        const hotelAvailability = hotelsInOffer[i];
-
-        hotelsBuffer.push({ ...hotelAvailability, ...hotelDetail });
-      }
-
-      hotelAvailabilityTemp = { ...hotelAvailabilityTemp, hotels: hotelsBuffer };
-
-      console.log("Final: ", JSON.stringify(hotelAvailabilityTemp.hotels));
-      setHotelAvailability(hotelAvailabilityTemp);
-      setAvailableHotels(hotelAvailabilityTemp.hotels);
+      console.log("Hotel details fetched: ", res.data.hotels.length);
+      setHotels(res, availabilityParams);
     });
+  }
+
+  function setHotels(
+    fetchHotelsRes: AxiosResponse<any>,
+    availabilityParams: AvailabilityParams
+  ) {
+    const { availability, hotelsForBooking } = availabilityParams;
+
+    /**
+     * This array should be sorted the same way as "hotelsForBooking"
+     * in order to referencing the same hotels while iterating
+     * over both of these arrays.
+     */
+    let hotelsDetails = fetchHotelsRes.data.hotels.sort(
+      (a: any, b: any) => a.code - b.code
+    );
+    let hotelAvailabilityTemp: HotelAvailability = {
+      checkIn: availability.checkIn,
+      checkOut: availability.checkOut,
+      hotels: [],
+    };
+
+    let hotelsBuffer: any[] = [];
+    for (let i = 0; i < hotelsDetails.length; i++) {
+      const hotelDetail = hotelsDetails[i];
+      const hotelForBooking = hotelsForBooking[i];
+
+      hotelsBuffer.push({ ...hotelForBooking, ...hotelDetail });
+    }
+
+    hotelsBuffer = hotelsBuffer.sort(
+      (a: HotelBooking, b: HotelBooking) => getHotelStars(b) - getHotelStars(a)
+    );
+
+    hotelAvailabilityTemp = { ...hotelAvailabilityTemp, hotels: hotelsBuffer };
+
+    // console.log("Hotels: ", JSON.stringify(hotelAvailabilityTemp));
+    setHotelAvailability(hotelAvailabilityTemp);
   }
 
   function getCityImage() {
@@ -333,12 +362,14 @@ export function Hotels() {
   function HotelCard({ hotel }: HotelCard) {
     return (
       <Grid container id="card" className={style.hotelCard}>
+        {/* Image */}
         <Grid item className={style.hotelImageGrid} id="photo">
           {hotel.images.length > 1 && (
             <img src={`${getHotelImage(hotel)}`} className={style.hotelImage} />
           )}
         </Grid>
 
+        {/* Content */}
         <Grid item className={style.hotelContentGrid} id="content">
           <Grid item xs={12} id="title">
             <Grid container alignItems="center" style={{ margin: "10px 0px" }}>
@@ -362,6 +393,10 @@ export function Hotels() {
               </div>
             </Grid>
 
+            <Grid item style={{ height: "90%" }}>
+              <Divider orientation="vertical" />
+            </Grid>
+
             {/* Contact and address */}
             <Grid item className={style.addressContactGrid}>
               <div>
@@ -376,7 +411,7 @@ export function Hotels() {
                 />
 
                 <IconText
-                  text={(getFormattedAddress(hotel), "full sentence")}
+                  text={capitalizeString(getFormattedAddress(hotel), "full sentence")}
                   icon={faMapMarkerAlt}
                 />
               </div>
@@ -407,6 +442,61 @@ export function Hotels() {
         </Grid>
       </Grid>
     );
+  }
+
+  function onOccupanciesParamChange(e: ChangeEvent<SelectEvent>, param: Occupancy) {
+    let value: number = e.target.value as number;
+
+    if (param.field === "children") {
+      let paxes: HotelPax[] = [];
+
+      for (let i = 0; i < value; i++) {
+        paxes.push({ type: "CH", age: 4 });
+      }
+
+      setState({
+        ...state,
+        children: value,
+        paxes: paxes,
+        occupancyParamsChanged: true,
+      });
+    } else {
+      setState({ ...state, [param.field]: value, occupancyParamsChanged: true });
+    }
+  }
+
+  function onChildAgeChanged(e: ChangeEvent<SelectEvent>, index: number) {
+    let newPaxes: HotelPax[] = [];
+
+    newPaxes = state.paxes.map((pax, i) => {
+      if (i === index) {
+        return { ...pax, age: e.target.value as number };
+      }
+      return pax;
+    });
+
+    setState({ ...state, paxes: newPaxes, occupancyParamsChanged: true });
+  }
+
+  function onOccupancyDateChange(date: any, param: "checkIn" | "checkOut") {
+    setState({ ...state, [param]: date, occupancyParamsChanged: true });
+  }
+
+  function onOccupanciesPopoverChange(event: MouseEvent<HTMLButtonElement>) {
+    setOccupanciesAnchor(event.currentTarget);
+    setOpenOccupancies(true);
+  }
+
+  function onPopoverClose() {
+    setOccupanciesAnchor(null);
+    setOpenOccupancies(false);
+  }
+
+  function getOccupancyText() {
+    let roomQty = state.rooms > 1 ? "rooms" : "room";
+    let adultQty = state.adults > 1 ? "adults" : "adult";
+
+    return `${state.rooms} ${roomQty}, ${state.adults} ${adultQty}, ${state.children} children`;
   }
 
   return (
@@ -456,88 +546,67 @@ export function Hotels() {
                 <ThemeProvider theme={theme}>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <Grid item className={style.datepickerItemGrid}>
-                      <h5 className={style.reservationParamText}>Check-in</h5>
+                      <h5 className={style.whiteParamText}>Check-in</h5>
                       <KeyboardDatePicker
                         value={state.checkIn}
                         labelFunc={muiDateFormatter}
                         className={style.datepicker}
                         minDate={new Date()}
                         format="dd MMM., yyyy"
-                        onChange={(d) => setState({ ...state, checkIn: d })}
+                        onChange={(date) => onOccupancyDateChange(date, "checkIn")}
                       />
                     </Grid>
 
                     <Grid item className={style.datepickerItemGrid}>
-                      <h5 className={style.reservationParamText}>Check-out</h5>
+                      <h5 className={style.whiteParamText}>Check-out</h5>
                       <KeyboardDatePicker
                         value={state.checkOut}
                         labelFunc={muiDateFormatter}
                         className={style.datepicker}
                         minDate={new Date()}
                         format="dd MMM., yyyy"
-                        onChange={(d) => setState({ ...state, checkOut: d })}
+                        onChange={(date) => onOccupancyDateChange(date, "checkOut")}
                       />
                     </Grid>
                   </MuiPickersUtilsProvider>
                 </ThemeProvider>
 
-                {/* Passenger params */}
-                <ThemeProvider theme={theme}>
-                  {hotelReservationParams.map((param) => (
-                    <Grid item className={style.revervationParamsGrid}>
-                      <h5 className={style.reservationParamText}>{param.label}</h5>
-
-                      <FormControl style={{ width: "100%" }}>
-                        <Select
-                          value={state[param.field]}
-                          style={{ height: "30px" }}
-                          variant="outlined"
-                          className={style.select}
-                          startAdornment={
-                            <FontAwesomeIcon icon={param.icon} color={Colors.BLUE} />
-                          }
-                          onChange={(e) =>
-                            setState({ ...state, [param.field]: e.target.value })
-                          }
-                        >
-                          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                            <MenuItem value={n}>{n}</MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </Grid>
-                  ))}
-
-                  {/* Search Button */}
-                  <Grid item xs={2} style={{ marginLeft: "auto" }}>
-                    <Grid
-                      container
-                      justify="flex-end"
-                      alignItems="flex-end"
-                      style={{ height: "100%" }}
+                {/* Occupancy params */}
+                <Grid item className={style.occupancyGrid}>
+                  <Grid container alignItems="flex-end" style={{ height: "100%" }}>
+                    <h5 className={style.whiteParamText}>Occupancy</h5>
+                    <CustomButton
+                      backgroundColor={"white"}
+                      style={{ height: "32px", width: "100%" }}
+                      textColor={Colors.BLUE}
+                      onClick={(e) => onOccupanciesPopoverChange(e)}
                     >
-                      <CustomButton
-                        backgroundColor={Colors.GREEN}
-                        rounded
-                        style={{
-                          width: "140px",
-                          minWidth: "115px",
-                          boxShadow: Shadow.MEDIUM,
-                          color: Colors.BLUE,
-                        }}
-                        onClick={() => {
-                          state.amenities.forEach((am) => {
-                            if (am.checked) {
-                              console.log(am.value);
-                            }
-                          });
-                        }}
-                      >
-                        Search
-                      </CustomButton>
-                    </Grid>
+                      {getOccupancyText()}
+                    </CustomButton>
                   </Grid>
-                </ThemeProvider>
+                </Grid>
+
+                {/* Search Button */}
+                <Grid item className={style.searchButtonGrid}>
+                  <Grid
+                    container
+                    justify="flex-end"
+                    alignItems="flex-end"
+                    style={{ height: "100%" }}
+                  >
+                    <CustomButton
+                      backgroundColor={Colors.GREEN}
+                      rounded
+                      className={style.searchButton}
+                      onClick={() => {
+                        searchHotels();
+                        setState({ ...state, occupancyParamsChanged: false });
+                      }}
+                    >
+                      {`${state.occupancyParamsChanged ? "Update search" : "Search"}`}
+                    </CustomButton>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -583,18 +652,6 @@ export function Hotels() {
                     />
                   }
                 />
-
-                <Divider style={{ margin: "10px auto" }} />
-
-                <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-                  Amenities
-                </Text>
-                <HotelAmenitiesSelector
-                  values={state.amenities}
-                  updateState={(selected) => {
-                    setState({ ...state, amenities: selected });
-                  }}
-                />
               </div>
             </Grid>
 
@@ -611,7 +668,7 @@ export function Hotels() {
 
             {/* Hotels grid */}
             <Grid item className={style.hotelsGrid}>
-              {availableHotels.map((hotel, i) => (
+              {hotelAvailability.hotels.slice(0, 20).map((hotel, i) => (
                 <HotelCard key={i} hotel={hotel} />
               ))}
             </Grid>
@@ -619,6 +676,7 @@ export function Hotels() {
         </Grid>
       </Grid>
 
+      {/* Drawer filter */}
       <Drawer
         open={openDrawer}
         anchor="left"
@@ -641,18 +699,93 @@ export function Hotels() {
           value={state.stars}
           updateState={(star) => setState({ ...state, stars: star })}
         />
-
-        <Divider style={{ margin: "10px auto" }} />
-
-        <h3>Amenities</h3>
-        <HotelAmenitiesSelector
-          values={state.amenities}
-          buttonColor="white"
-          updateState={(selected) => {
-            setState({ ...state, amenities: selected });
-          }}
-        />
       </Drawer>
+
+      {/* Occupancies popover  */}
+      <Popover
+        open={openOccupancies}
+        anchorEl={occupanciesAnchor}
+        onClose={() => onPopoverClose()}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        classes={{ paper: style.popoverPaper }}
+      >
+        {/* Passenger params */}
+        <ThemeProvider theme={theme}>
+          {occupanciesParams.map((param) => (
+            <Grid item style={{ marginBottom: "10px" }}>
+              {/* Icon */}
+              <Grid container>
+                <Grid container alignItems="center" style={{ width: "auto" }}>
+                  <FontAwesomeIcon icon={param.icon} color={Colors.BLUE} />
+                  <h5 className={style.occupancyParamText}>{param.label}</h5>
+                </Grid>
+
+                {/* Select */}
+                <FormControl
+                  className="formControl"
+                  style={{ width: "45%", marginLeft: "auto" }}
+                >
+                  <Select
+                    value={state[param.field]}
+                    style={{ height: "30px" }}
+                    classes={{ icon: style.selectIcon }}
+                    variant="outlined"
+                    className={style.select}
+                    onChange={(e) => onOccupanciesParamChange(e, param)}
+                  >
+                    {param.values.map((n) => (
+                      <MenuItem value={n}>{n}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          ))}
+
+          {/* Children ages */}
+          <div>
+            {state.paxes.length > 0 && <Divider style={{ margin: "15px auto" }} />}
+
+            {state.paxes.map((pax, i) => (
+              <Grid key={i} item style={{ marginBottom: "10px" }}>
+                <Grid container>
+                  {/* Icon */}
+                  <Grid container alignItems="center" style={{ width: "auto" }}>
+                    <FontAwesomeIcon icon={faChild} color={Colors.BLUE} />
+                    <h5 className={style.occupancyParamText}>{`Child ${i + 1} age`}</h5>
+                  </Grid>
+
+                  {/* Select */}
+                  <FormControl
+                    className="formControl"
+                    style={{ width: "45%", marginLeft: "auto" }}
+                  >
+                    <Select
+                      value={pax.age}
+                      style={{ height: "30px" }}
+                      classes={{ icon: style.selectIcon }}
+                      variant="outlined"
+                      className={style.select}
+                      onChange={(e) => onChildAgeChanged(e, i)}
+                    >
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+                        <MenuItem value={n}>{n}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            ))}
+          </div>
+        </ThemeProvider>
+      </Popover>
     </div>
   );
 }
