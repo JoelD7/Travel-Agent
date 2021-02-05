@@ -1,4 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
+import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
@@ -134,6 +135,14 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
+  hotelsGridLoading: {
+    width: "75%",
+    height: "45vh",
+    display: "flex",
+    [theme.breakpoints.down(1280)]: {
+      width: "100%",
+    },
+  },
   hotelCard: {
     boxShadow: Shadow.LIGHT3D,
     margin: "0px 0px 15px 15px",
@@ -152,6 +161,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     borderBottomLeftRadius: "10px",
     height: "100%",
     width: "100%",
+    maxHeight: "193px",
 
     [theme.breakpoints.down(950)]: {
       borderRadius: "10px 10px 0px 0px",
@@ -197,10 +207,28 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     fontFamily: Family,
     backgroundColor: Colors.BACKGROUND,
   },
-  pageContentContainer: {
-    [theme.breakpoints.down(578)]: {
-      // marginTop: "110px",
+  menuItemSelect: {
+    borderBottom: `3px solid rgba(0,0,0,0)`,
+    margin: "0px 5px",
+
+    "&.MuiMenuItem-root": {
+      fontFamily: Font.Family,
     },
+
+    "&.MuiListItem-root": {
+      "&.Mui-selected": {
+        backgroundColor: "rgba(0,0,0,0)",
+        borderBottom: `3px solid ${Colors.GREEN}`,
+      },
+    },
+    "&.MuiListItem-button": {
+      "&:hover": {
+        borderBottom: `3px solid ${Colors.GREEN}`,
+      },
+    },
+  },
+  pageContentContainer: {
+    [theme.breakpoints.down(578)]: {},
   },
   pageContainerChilds: {
     width: "85%",
@@ -285,6 +313,27 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(670)]: {
       width: "100%",
     },
+  },
+  sortGrid: {
+    marginLeft: "15px",
+    marginBottom: "10px",
+    width: "100%",
+    [theme.breakpoints.down(824)]: {
+      width: "100%",
+    },
+  },
+  sortFormControl: {
+    backgroundColor: "white",
+    marginLeft: "15px",
+    borderRadius: "10px",
+  },
+  sortContainer: {
+    padding: "10px",
+    backgroundColor: Colors.BLUE,
+    boxShadow: Shadow.MEDIUM,
+    borderRadius: "10px",
+    marginLeft: "auto",
+    width: "31%",
   },
   textButton: {
     padding: "0px",

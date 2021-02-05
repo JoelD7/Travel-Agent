@@ -1,5 +1,5 @@
 import { Slider } from "@material-ui/core";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { priceRangeStyles } from "./priceRange-styles";
 
 interface PriceRange {
@@ -13,7 +13,12 @@ export function PriceRange({ updateState, value, max }: PriceRange) {
 
   const [slider, setSlider] = useState<number[]>(value);
 
+  useEffect(() => {
+    setSlider(value);
+  }, [value]);
+
   function onSliderChange(event: ChangeEvent<{}>, value: number | number[]) {
+    console.log(value);
     setSlider(value as number[]);
   }
 
@@ -21,7 +26,7 @@ export function PriceRange({ updateState, value, max }: PriceRange) {
     <div onBlur={() => updateState(slider)}>
       <p
         style={{ textAlign: "center", fontSize: "16px" }}
-      >{`$ ${slider[0]} - $ ${slider[1]}`}</p>
+      >{`$ ${slider[0]} - $ ${slider[1]}+`}</p>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Slider

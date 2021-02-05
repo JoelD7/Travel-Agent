@@ -33,6 +33,7 @@ import {
   IconText,
   Navbar,
   PriceRange,
+  ProgressCircle,
   ServicesToolbar,
   StarRating,
   Text,
@@ -45,6 +46,7 @@ import {
   getPhotoFromReferenceURL,
   HotelBedAPI,
   hotelsPlaceholder,
+  decimalFormatter,
   muiDateFormatter,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
@@ -65,6 +67,12 @@ interface AvailabilityParams {
 interface HotelCard {
   hotel: HotelBooking;
 }
+
+type SortOption =
+  | "Name | A - Z"
+  | "Name | Z - A"
+  | "Stars | more - less"
+  | "Stars | less - more";
 
 export function Hotels() {
   const theme = createMuiTheme({
@@ -120,9 +128,9 @@ export function Hotels() {
       MuiOutlinedInput: {
         root: {
           backgroundColor: "white",
-
+          borderRadius: "10px",
           "&:hover": {
-            borderColor: "#cecece",
+            borderColor: `"#cecece"`,
           },
         },
       },
@@ -135,6 +143,20 @@ export function Hotels() {
 
           "&:hover": {
             backgroundColor: Colors.BLUE_HOVER,
+          },
+        },
+      },
+      MuiInput: {
+        underline: {
+          "&:hover": {
+            "&:not(.Mui-disabled)": {
+              "&::before": {
+                borderBottom: `2px solid ${Colors.GREEN}`,
+              },
+            },
+          },
+          "&::after": {
+            borderBottom: `2px solid ${Colors.PURPLE}`,
           },
         },
       },
@@ -171,8 +193,8 @@ export function Hotels() {
     children: 0,
     paxes: [],
     rooms: 1,
-    priceRange: [0, 100],
-    stars: 0,
+    priceRange: [0, 500],
+    stars: 1,
     occupancyParamsChanged: false,
   });
 
@@ -188,7 +210,18 @@ export function Hotels() {
     null
   );
 
-  getLocalStorageConsumption("kB");
+  const sortOptions: SortOption[] = [
+    "Name | A - Z",
+    "Name | Z - A",
+    "Stars | more - less",
+    "Stars | less - more",
+  ];
+
+  const [sortOption, setSortOption] = useState<SortOption>("Stars | more - less");
+
+  const [loading, setLoading] = useState(true);
+
+  // getLocalStorageConsumption("kB");
 
   const city = "Paris";
 
@@ -202,15 +235,18 @@ export function Hotels() {
         let availability = availabilityRes.data.hotels;
         // let topRankingHotels
 
-        console.log("Hotel availability fetched: ", availability.hotels.length);
+        // console.log("Hotel availability fetched: ", availability.hotels.length);
+        console.log("Response: ", JSON.stringify(availabilityRes.data));
         /**
          * This array should be sorted the same way as "hotelsDetails"
          * in order to referencing the same hotels while iterating
          * over both of these arrays.
          */
-        let hotelsForBooking = availability.hotels.sort(
+        let hotelsForBooking: any[] = availability.hotels.sort(
           (a: any, b: any) => a.code - b.code
         );
+
+        setMaximumPriceInRange(hotelsForBooking);
 
         fetchHotels({ availability, hotelsForBooking });
       })
@@ -241,8 +277,8 @@ export function Hotels() {
         unit: "km",
       },
       filter: {
-        // maxHotels: 20,
-        minCategory: 4, //stars
+        maxHotels: 250,
+        minCategory: state.stars, //stars
       },
     };
 
@@ -310,6 +346,16 @@ export function Hotels() {
 
     // console.log("Hotels: ", JSON.stringify(hotelAvailabilityTemp));
     setHotelAvailability(hotelAvailabilityTemp);
+    setLoading(false);
+  }
+
+  function setMaximumPriceInRange(hotelsForBooking: any[]) {
+    let sortedRates = hotelsForBooking
+      .sort((a, b) => Number(a.minRate) - Number(b.minRate))
+      .map((hotel) => Number(hotel.minRate));
+
+    let mediumPrice = Math.floor(sortedRates[Math.round(sortedRates.length / 2) - 1]);
+    setState({ ...state, priceRange: [0, mediumPrice] });
   }
 
   function getCityImage() {
@@ -492,11 +538,21 @@ export function Hotels() {
     setOpenOccupancies(false);
   }
 
+  function onSearchButtonPress() {
+    setLoading(true);
+    searchHotels();
+    setState({ ...state, occupancyParamsChanged: false });
+  }
+
   function getOccupancyText() {
     let roomQty = state.rooms > 1 ? "rooms" : "room";
     let adultQty = state.adults > 1 ? "adults" : "adult";
 
     return `${state.rooms} ${roomQty}, ${state.adults} ${adultQty}, ${state.children} children`;
+  }
+
+  function onSortOptionChange(option: SortOption) {
+    setSortOption(option);
   }
 
   return (
@@ -598,10 +654,7 @@ export function Hotels() {
                       backgroundColor={Colors.GREEN}
                       rounded
                       className={style.searchButton}
-                      onClick={() => {
-                        searchHotels();
-                        setState({ ...state, occupancyParamsChanged: false });
-                      }}
+                      onClick={() => onSearchButtonPress()}
                     >
                       {`${state.occupancyParamsChanged ? "Update search" : "Search"}`}
                     </CustomButton>
@@ -623,7 +676,7 @@ export function Hotels() {
                 </Text>
                 <PriceRange
                   value={state.priceRange}
-                  max={200}
+                  max={state.priceRange[1]}
                   updateState={(slider) => setState({ ...state, priceRange: slider })}
                 />
 
@@ -667,10 +720,58 @@ export function Hotels() {
             </Grid>
 
             {/* Hotels grid */}
-            <Grid item className={style.hotelsGrid}>
-              {hotelAvailability.hotels.slice(0, 20).map((hotel, i) => (
-                <HotelCard key={i} hotel={hotel} />
-              ))}
+            <Grid item className={loading ? style.hotelsGridLoading : style.hotelsGrid}>
+              <Grid container>
+                {/* Sort by */}
+                <Grid item className={style.sortGrid}>
+                  <Grid container className={style.sortContainer} alignItems="center">
+                    <Text
+                      bold
+                      style={{ alignSelf: "end", margin: "auto" }}
+                      color={"white"}
+                    >
+                      Sort by
+                    </Text>
+
+                    <ThemeProvider theme={theme}>
+                      <FormControl className={style.sortFormControl}>
+                        <Select
+                          value={sortOption}
+                          variant="outlined"
+                          classes={{ icon: style.selectIcon }}
+                          className={style.select}
+                          onChange={(e) =>
+                            onSortOptionChange(e.target.value as SortOption)
+                          }
+                        >
+                          {sortOptions.map((option, i) => (
+                            <MenuItem
+                              classes={{ root: style.menuItemSelect }}
+                              key={i}
+                              value={option}
+                            >
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </ThemeProvider>
+                  </Grid>
+                </Grid>
+
+                {/* Hotel cards */}
+                <div style={{ margin: "auto" }}>
+                  {loading && <ProgressCircle />}
+
+                  {!loading && (
+                    <div>
+                      {hotelAvailability.hotels.slice(0, 20).map((hotel) => (
+                        <HotelCard key={hotel.code} hotel={hotel} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
