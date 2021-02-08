@@ -10,22 +10,26 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  Card,
+  CardContent,
   createMuiTheme,
   Divider,
   Drawer,
   FormControl,
   Grid,
+  GridList,
   MenuItem,
   Popover,
   Select,
   ThemeProvider,
+  Tooltip,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Axios, { AxiosResponse } from "axios";
 import { addDays } from "date-fns";
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import Rating from "react-rating";
+import { useHistory } from "react-router-dom";
 import { Family } from "../../assets/fonts";
 import {
   CustomButton,
@@ -35,7 +39,7 @@ import {
   PriceRange,
   ProgressCircle,
   ServicesToolbar,
-  StarRating,
+  Rating,
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
@@ -48,6 +52,8 @@ import {
   hotelsPlaceholder,
   decimalFormatter,
   muiDateFormatter,
+  Routes,
+  getHotelStars,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
 import {
@@ -71,8 +77,10 @@ interface HotelCard {
 type SortOption =
   | "Name | A - Z"
   | "Name | Z - A"
-  | "Stars | more - less"
-  | "Stars | less - more";
+  | "Stars | desc"
+  | "Stars | asc"
+  | "Price | desc"
+  | "Price | asc";
 
 export function Hotels() {
   const theme = createMuiTheme({
@@ -128,7 +136,6 @@ export function Hotels() {
       MuiOutlinedInput: {
         root: {
           backgroundColor: "white",
-          borderRadius: "10px",
           "&:hover": {
             borderColor: `"#cecece"`,
           },
@@ -194,13 +201,15 @@ export function Hotels() {
     paxes: [],
     rooms: 1,
     priceRange: [0, 500],
-    stars: 1,
+    stars: 0,
     occupancyParamsChanged: false,
   });
 
   const [hotelAvailability, setHotelAvailability] = useState<HotelAvailability>(
     hotelsPlaceholder
   );
+
+  const [allHotels, setAllHotels] = useState<HotelBooking[]>([]);
 
   const [openDrawer, setOpenDrawer] = useState(false);
   const [image, setImage] = useState<string>("");
@@ -213,15 +222,25 @@ export function Hotels() {
   const sortOptions: SortOption[] = [
     "Name | A - Z",
     "Name | Z - A",
-    "Stars | more - less",
-    "Stars | less - more",
+    "Stars | desc",
+    "Stars | asc",
+    "Price | desc",
+    "Price | asc",
   ];
 
-  const [sortOption, setSortOption] = useState<SortOption>("Stars | more - less");
+  const [sortOption, setSortOption] = useState<SortOption>("Stars | desc");
 
-  const [loading, setLoading] = useState(true);
+  const [loadingOnMount, setLoadingOnMount] = useState(true);
+  // const [loadingOnMount, setLoadingOnMount] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [hotelsMounted, setHotelsMounted] = useState(false);
 
-  // getLocalStorageConsumption("kB");
+  const [maxRate, setMaxRate] = useState<number>(500);
+
+  const [noHotels, setNoHotels] = useState(false);
+  // const [noHotels, setNoHotels] = useState(true);
+
+  const history = useHistory();
 
   const city = "Paris";
 
@@ -233,22 +252,25 @@ export function Hotels() {
     fetchHotelAvailability()
       .then((availabilityRes) => {
         let availability = availabilityRes.data.hotels;
-        // let topRankingHotels
+        let hotelsForBooking: any[] = [];
 
-        // console.log("Hotel availability fetched: ", availability.hotels.length);
-        console.log("Response: ", JSON.stringify(availabilityRes.data));
-        /**
-         * This array should be sorted the same way as "hotelsDetails"
-         * in order to referencing the same hotels while iterating
-         * over both of these arrays.
-         */
-        let hotelsForBooking: any[] = availability.hotels.sort(
-          (a: any, b: any) => a.code - b.code
-        );
+        // console.log("Response: ", JSON.stringify(availabilityRes.data));
+
+        if (availability.hotels) {
+          /**
+           * This array should be sorted the same way as "hotelsDetails"
+           * in order to referencing the same hotels while iterating
+           * over both of these arrays.
+           */
+          hotelsForBooking = availability.hotels.sort(
+            (a: any, b: any) => a.code - b.code
+          );
+          fetchHotels({ availability, hotelsForBooking });
+        } else {
+          setNoHotelsAvailable(availability);
+        }
 
         setMaximumPriceInRange(hotelsForBooking);
-
-        fetchHotels({ availability, hotelsForBooking });
       })
       .catch((error) => {
         console.log("Error in fetchHotelAvailability(): ", error);
@@ -256,6 +278,13 @@ export function Hotels() {
   }
 
   function fetchHotelAvailability() {
+    const filter = {
+      maxHotels: 250,
+      //stars
+      minCategory: state.stars === 0 ? 1 : state.stars,
+      minRate: state.priceRange[0],
+    };
+
     const bookingParams = {
       stay: {
         checkIn: state.checkIn,
@@ -276,10 +305,10 @@ export function Hotels() {
         radius: 15,
         unit: "km",
       },
-      filter: {
-        maxHotels: 250,
-        minCategory: state.stars, //stars
-      },
+      filter:
+        state.priceRange[1] === maxRate
+          ? filter
+          : { ...filter, maxRate: state.priceRange[1] },
     };
 
     return Axios.post(proxyUrl + HotelBedAPI.hotelAvailabilityURL, bookingParams, {
@@ -330,23 +359,59 @@ export function Hotels() {
       hotels: [],
     };
 
-    let hotelsBuffer: any[] = [];
-    for (let i = 0; i < hotelsDetails.length; i++) {
-      const hotelDetail = hotelsDetails[i];
-      const hotelForBooking = hotelsForBooking[i];
-
-      hotelsBuffer.push({ ...hotelForBooking, ...hotelDetail });
-    }
-
-    hotelsBuffer = hotelsBuffer.sort(
-      (a: HotelBooking, b: HotelBooking) => getHotelStars(b) - getHotelStars(a)
-    );
+    let hotelsBuffer: any[] = sortHotelsByStarsDesc(hotelsForBooking, hotelsDetails);
 
     hotelAvailabilityTemp = { ...hotelAvailabilityTemp, hotels: hotelsBuffer };
 
     // console.log("Hotels: ", JSON.stringify(hotelAvailabilityTemp));
     setHotelAvailability(hotelAvailabilityTemp);
-    setLoading(false);
+
+    if (hotelsMounted) {
+      setLoading(false);
+    } else {
+      setLoadingOnMount(false);
+      setHotelsMounted(true);
+    }
+
+    if (allHotels.length === 0) {
+      setAllHotels(hotelsBuffer);
+    }
+  }
+
+  function sortHotelsByStarsDesc(hotelsForBooking: any[], hotelsDetails: any): any[] {
+    let unsortedHotels: any[] = [];
+
+    for (let i = 0; i < hotelsDetails.length; i++) {
+      const hotelDetail = hotelsDetails[i];
+      const hotelForBooking = hotelsForBooking[i];
+
+      unsortedHotels.push({ ...hotelForBooking, ...hotelDetail });
+    }
+
+    return unsortedHotels.sort(
+      (a: HotelBooking, b: HotelBooking) => getHotelStars(b) - getHotelStars(a)
+    );
+  }
+
+  /**
+   * Sets hotels to an empty array in case there
+   * isn't any that matches the search criteria.
+   */
+  function setNoHotelsAvailable(availability: any) {
+    setNoHotels(true);
+
+    setHotelAvailability({
+      checkIn: availability.checkIn,
+      checkOut: availability.checkOut,
+      hotels: [],
+    });
+
+    if (hotelsMounted) {
+      setLoading(false);
+    } else {
+      setLoadingOnMount(false);
+      setHotelsMounted(true);
+    }
   }
 
   function setMaximumPriceInRange(hotelsForBooking: any[]) {
@@ -355,6 +420,7 @@ export function Hotels() {
       .map((hotel) => Number(hotel.minRate));
 
     let mediumPrice = Math.floor(sortedRates[Math.round(sortedRates.length / 2) - 1]);
+    setMaxRate(mediumPrice);
     setState({ ...state, priceRange: [0, mediumPrice] });
   }
 
@@ -398,13 +464,6 @@ export function Hotels() {
     return hotel.address.content;
   }
 
-  function getHotelStars(hotel: HotelBooking) {
-    if (hotel.categoryName) {
-      return Number(hotel.categoryName.split(" ")[0]);
-    }
-    return Number(hotel.categoryCode.split("EST")[0]);
-  }
-
   function HotelCard({ hotel }: HotelCard) {
     return (
       <Grid container id="card" className={style.hotelCard}>
@@ -418,11 +477,17 @@ export function Hotels() {
         {/* Content */}
         <Grid item className={style.hotelContentGrid} id="content">
           <Grid item xs={12} id="title">
-            <Grid container alignItems="center" style={{ margin: "10px 0px" }}>
-              <h3 style={{ margin: "0px 10px" }}>{hotel.name.content}</h3>
+            <Grid
+              container
+              alignItems="center"
+              style={{ margin: "10px 0px", paddingLeft: "10px" }}
+            >
+              <Text component="h3" style={{ marginRight: "10px" }} bold>
+                {hotel.name.content}
+              </Text>
 
-              <div className={style.hotelStarContainer}>
-                <StarRating stars={getHotelStars(hotel)} />
+              <div>
+                <Rating type="star" score={getHotelStars(hotel)} />
               </div>
             </Grid>
           </Grid>
@@ -433,7 +498,10 @@ export function Hotels() {
             <Grid item className={style.priceAndDetailsGrid}>
               <div>
                 <h4 style={{ textAlign: "center" }}>{`From $ ${hotel.minRate}`}</h4>
-                <CustomButton backgroundColor={Colors.PURPLE} onClick={() => {}}>
+                <CustomButton
+                  backgroundColor={Colors.PURPLE}
+                  onClick={() => history.push(`${Routes.HOTELS}/${hotel.code}`)}
+                >
                   View details
                 </CustomButton>
               </div>
@@ -467,18 +535,31 @@ export function Hotels() {
           {/* Card content for SM size */}
           <Grid container className={style.smContentContainer}>
             {/* Price and details button */}
+            <Grid item xs={12}>
+              <div style={{ paddingLeft: "10px" }}>
+                <IconText
+                  text={hotel.phones[0].phoneNumber}
+                  icon={faPhone}
+                  style={{ marginBottom: "5px" }}
+                />
+
+                <IconText
+                  text={capitalizeString(getFormattedAddress(hotel), "full sentence")}
+                  icon={faMapMarkerAlt}
+                />
+              </div>
+            </Grid>
+
             <Grid item xs={12} style={{ padding: "10px" }}>
               <Grid container>
-                <h2 style={{ textAlign: "center", marginRight: "auto" }}>
-                  {`$ From ${hotel.minRate}`}
-                </h2>
+                <Text component="h3" bold>{`$ From ${hotel.minRate}`}</Text>
                 <CustomButton
                   style={{
                     margin: "auto 0px auto auto",
                     fontSize: "16px",
                   }}
                   backgroundColor={Colors.PURPLE}
-                  onClick={() => {}}
+                  onClick={() => history.push(`${Routes.HOTELS}/${hotel.code}`)}
                 >
                   View details
                 </CustomButton>
@@ -540,6 +621,7 @@ export function Hotels() {
 
   function onSearchButtonPress() {
     setLoading(true);
+
     searchHotels();
     setState({ ...state, occupancyParamsChanged: false });
   }
@@ -553,6 +635,76 @@ export function Hotels() {
 
   function onSortOptionChange(option: SortOption) {
     setSortOption(option);
+    sortHotels(option);
+  }
+
+  function sortHotels(option: SortOption) {
+    let buffer: any[] = [];
+
+    switch (option) {
+      case "Name | A - Z":
+        buffer = hotelAvailability.hotels.sort((a: HotelBooking, b: HotelBooking) =>
+          a.name.content.localeCompare(b.name.content)
+        );
+        break;
+
+      case "Name | Z - A":
+        buffer = hotelAvailability.hotels.sort((a: HotelBooking, b: HotelBooking) =>
+          b.name.content.localeCompare(a.name.content)
+        );
+        break;
+
+      case "Stars | asc":
+        buffer = hotelAvailability.hotels.sort(
+          (a: HotelBooking, b: HotelBooking) => getHotelStars(a) - getHotelStars(b)
+        );
+        break;
+
+      case "Stars | desc":
+        buffer = hotelAvailability.hotels.sort(
+          (a: HotelBooking, b: HotelBooking) => getHotelStars(b) - getHotelStars(a)
+        );
+        break;
+
+      case "Price | asc":
+        buffer = hotelAvailability.hotels.sort(
+          (a: HotelBooking, b: HotelBooking) => a.minRate - b.minRate
+        );
+        break;
+
+      case "Price | desc":
+        buffer = hotelAvailability.hotels.sort(
+          (a: HotelBooking, b: HotelBooking) => b.minRate - a.minRate
+        );
+        break;
+
+      default:
+        buffer = hotelAvailability.hotels;
+    }
+
+    setHotelAvailability({ ...hotelAvailability, hotels: buffer });
+  }
+
+  function areCardsLoading() {
+    return loadingOnMount || loading;
+  }
+
+  function onPriceRangeChange(range: number[]) {
+    setState({ ...state, priceRange: range });
+    let min = range[0];
+    let max = range[1];
+
+    let buffer = allHotels.filter(
+      (hotel) => hotel.minRate >= min && hotel.minRate <= max
+    );
+    setHotelAvailability({ ...hotelAvailability, hotels: buffer });
+  }
+
+  function onStarChange(star: number) {
+    setState({ ...state, stars: star });
+    let buffer = allHotels.filter((hotel) => getHotelStars(hotel) >= star);
+
+    setHotelAvailability({ ...hotelAvailability, hotels: buffer });
   }
 
   return (
@@ -666,7 +818,7 @@ export function Hotels() {
         </Grid>
 
         {/* Page content */}
-        <Grid item xs={9} className={style.pageContainerChilds}>
+        <Grid item className={style.pageContainerChilds}>
           <Grid container className={style.pageContentContainer}>
             {/* Filters */}
             <Grid item className={style.filtersGrid}>
@@ -676,8 +828,8 @@ export function Hotels() {
                 </Text>
                 <PriceRange
                   value={state.priceRange}
-                  max={state.priceRange[1]}
-                  updateState={(slider) => setState({ ...state, priceRange: slider })}
+                  max={maxRate}
+                  updateState={onPriceRangeChange}
                 />
 
                 <Divider style={{ margin: "10px auto" }} />
@@ -686,91 +838,127 @@ export function Hotels() {
                   Stars
                 </Text>
                 <Rating
-                  initialRating={state.stars}
-                  onChange={(star) => setState({ ...state, stars: star })}
-                  emptySymbol={
-                    <FontAwesomeIcon
-                      style={{ margin: "0px 1px" }}
-                      size="2x"
-                      icon={faStar}
-                      color={"#cecece"}
-                    />
-                  }
-                  fullSymbol={
-                    <FontAwesomeIcon
-                      style={{ margin: "0px 1px" }}
-                      size="2x"
-                      icon={faStar}
-                      color={Colors.PURPLE}
-                    />
-                  }
+                  type="star"
+                  score={state.stars}
+                  onChange={onStarChange}
+                  size="2x"
                 />
               </div>
             </Grid>
 
-            <Grid item className={style.filterButtonGrid}>
-              <CustomButton
-                icon={faFilter}
-                backgroundColor={Colors.PURPLE}
-                style={{ paddingLeft: "10px", fontSize: "14px" }}
-                onClick={() => setOpenDrawer(true)}
-              >
-                Filter
-              </CustomButton>
-            </Grid>
-
             {/* Hotels grid */}
-            <Grid item className={loading ? style.hotelsGridLoading : style.hotelsGrid}>
+            <Grid
+              item
+              className={loadingOnMount ? style.hotelsGridLoading : style.hotelsGrid}
+            >
               <Grid container>
-                {/* Sort by */}
-                <Grid item className={style.sortGrid}>
-                  <Grid container className={style.sortContainer} alignItems="center">
-                    <Text
-                      bold
-                      style={{ alignSelf: "end", margin: "auto" }}
-                      color={"white"}
-                    >
-                      Sort by
-                    </Text>
-
-                    <ThemeProvider theme={theme}>
-                      <FormControl className={style.sortFormControl}>
-                        <Select
-                          value={sortOption}
-                          variant="outlined"
-                          classes={{ icon: style.selectIcon }}
-                          className={style.select}
-                          onChange={(e) =>
-                            onSortOptionChange(e.target.value as SortOption)
-                          }
+                {/* Sort by and filter button */}
+                <Grid item className={style.sortFilterGrid}>
+                  <Grid container>
+                    <Grid item className={style.filterButtonGrid}>
+                      <Grid container alignItems="center" style={{ height: "100%" }}>
+                        <CustomButton
+                          icon={faFilter}
+                          backgroundColor={Colors.PURPLE}
+                          style={{ paddingLeft: "10px", fontSize: "14px" }}
+                          onClick={() => setOpenDrawer(true)}
                         >
-                          {sortOptions.map((option, i) => (
-                            <MenuItem
-                              classes={{ root: style.menuItemSelect }}
-                              key={i}
-                              value={option}
+                          Filter
+                        </CustomButton>
+                      </Grid>
+                    </Grid>
+
+                    <Grid item className={style.sortGrid}>
+                      <Grid container className={style.sortContainer} alignItems="center">
+                        <Text
+                          bold
+                          style={{ alignSelf: "end", margin: "auto" }}
+                          color={"white"}
+                        >
+                          Sort by
+                        </Text>
+
+                        <ThemeProvider theme={theme}>
+                          <FormControl className={style.sortFormControl}>
+                            <Select
+                              value={sortOption}
+                              variant="outlined"
+                              classes={{ icon: style.selectIcon }}
+                              className={style.select}
+                              onChange={(e) =>
+                                onSortOptionChange(e.target.value as SortOption)
+                              }
                             >
-                              {option}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </ThemeProvider>
+                              {sortOptions.map((option, i) => (
+                                <MenuItem
+                                  classes={{ root: style.menuItemSelect }}
+                                  key={i}
+                                  value={option}
+                                >
+                                  {option}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </ThemeProvider>
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Grid>
 
                 {/* Hotel cards */}
-                <div style={{ margin: "auto" }}>
-                  {loading && <ProgressCircle />}
+                <Grid item style={{ margin: "auto" }}>
+                  {areCardsLoading() && (
+                    <ProgressCircle className={loading ? style.loadingCircle : ""} />
+                  )}
 
-                  {!loading && (
-                    <div>
+                  {!loadingOnMount && (
+                    <div
+                      className={
+                        loading
+                          ? style.hotelCardContainerLoading
+                          : style.hotelCardContainer
+                      }
+                    >
                       {hotelAvailability.hotels.slice(0, 20).map((hotel) => (
                         <HotelCard key={hotel.code} hotel={hotel} />
                       ))}
                     </div>
                   )}
-                </div>
+
+                  {/* No hotels */}
+                  {noHotels && (
+                    <Grid container className={style.noHotelsContainer}>
+                      {/* Message */}
+                      <Grid item xs={8}>
+                        <Text component="h1" bold color={Colors.BLUE}>
+                          Oops...
+                        </Text>
+
+                        <Text component="h4">
+                          Hey! It looks like no hotels match the search criteria. Try with
+                          different dates or occupancy
+                        </Text>
+                      </Grid>
+
+                      {/* Image */}
+                      <Grid item xs={4}>
+                        <Grid
+                          alignItems="center"
+                          justify="center"
+                          container
+                          style={{ height: "100%" }}
+                        >
+                          <img
+                            src="/Travel-Agent/not-found.png"
+                            className={style.notFoundImg}
+                            alt="no hotels found"
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  )}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -788,9 +976,9 @@ export function Hotels() {
 
         <h3>Price range</h3>
         <PriceRange
-          max={200}
           value={state.priceRange}
-          updateState={(slider) => setState({ ...state, priceRange: slider })}
+          max={maxRate}
+          updateState={onPriceRangeChange}
         />
 
         <Divider style={{ margin: "10px auto" }} />

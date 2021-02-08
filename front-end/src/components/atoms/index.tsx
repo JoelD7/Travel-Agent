@@ -5,6 +5,6 @@ export { PriceRange } from "./PriceRange/PriceRange";
 export { HotelStarSelector } from "./HotelStarSelector/HotelStarSelector";
 export { ProgressCircle } from "./ProgressCircle";
 export { IconText } from "./IconText/IconText";
-export { StarRating } from "./StarRating";
+export { Rating } from "./Rating";
 export { Text } from "./Text";
 export { AmenityIcon } from "./AmenityIcon";

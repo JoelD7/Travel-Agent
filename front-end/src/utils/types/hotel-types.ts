@@ -70,6 +70,7 @@ export interface HotelRooms {
 
 export interface HotelRoomRate {
   net: string;
+  boardName: string;
   taxes?: {
     taxes: {
       amount: string;

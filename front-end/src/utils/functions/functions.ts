@@ -9,6 +9,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { CSSProperties } from "@material-ui/styles";
 import { format } from "date-fns";
 import { EventType } from "../types";
+import { HotelBooking } from "../types/hotel-types";
 
 export function muiDateFormatter(date: MaterialUiPickersDate, invalidLabel: string) {
   return date
@@ -600,4 +601,8 @@ export function capitalizeString(value: string, type: "each word" | "full senten
   } else {
     return value.charAt(0).toUpperCase() + value.slice(1);
   }
+}
+
+export function getHotelStars(hotel: HotelBooking) {
+  return Number(hotel.categoryCode.split("EST")[0]);
 }

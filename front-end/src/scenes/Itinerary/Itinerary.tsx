@@ -60,7 +60,7 @@ export function Itinerary() {
     "Saturday",
   ];
 
-  const [baseDate, setBaseDate] = useState<Date>(trip.startDate);
+  const [baseDate, setBaseDate] = useState<Date>(new Date());
 
   const [openDialog, setOpenDialog] = useState(false);
 

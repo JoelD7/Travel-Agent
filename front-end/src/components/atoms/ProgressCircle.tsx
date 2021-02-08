@@ -5,9 +5,10 @@ import { Colors } from "../../styles";
 
 interface ProgressCircle {
   style?: CSSProperties;
+  className?: string;
 }
 
-export function ProgressCircle({ style }: ProgressCircle) {
+export function ProgressCircle({ style, className }: ProgressCircle) {
   const circleStyles = makeStyles({
     circleColor: {
       color: Colors.PURPLE,
@@ -16,7 +17,10 @@ export function ProgressCircle({ style }: ProgressCircle) {
   const styles = circleStyles();
 
   return (
-    <div style={{ margin: "auto", position: "relative", zIndex: 2 }}>
+    <div
+      style={{ margin: "auto", position: "relative", zIndex: 2 }}
+      className={className}
+    >
       <CircularProgress
         classes={{ colorPrimary: styles.circleColor }}
         size={80}

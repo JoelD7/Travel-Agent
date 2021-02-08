@@ -49,7 +49,6 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
 
     "& .MuiInputBase-input": {
       padding: "6px 7px 7px",
-      // padding: "5px 0px 5px 10px",
     },
   },
   datepickerItemGrid: {
@@ -68,6 +67,21 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(578)]: {
       width: "100%",
     },
+  },
+  loadingCircle: {
+    top: "125px",
+    width: "80px",
+  },
+  noHotelsContainer: {
+    borderRadius: "10px",
+    marginLeft: "15px",
+    boxShadow: Shadow.LIGHT,
+    backgroundColor: "white",
+    padding: "15px",
+  },
+  notFoundImg: {
+    objectFit: "cover",
+    height: "250px",
   },
   occupancyGrid: {
     width: "300px",
@@ -120,13 +134,43 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     boxShadow: Shadow.LIGHT3D,
     backgroundColor: "white",
     padding: "15px",
+    marginTop: "70px",
   },
   filterButtonGrid: {
     display: "none",
-    marginBottom: "20px",
     [theme.breakpoints.down(1280)]: {
       display: "block",
-      width: "50%",
+      width: "30%",
+    },
+    [theme.breakpoints.down(876)]: {
+      width: "20%",
+    },
+    [theme.breakpoints.down(548)]: {
+      width: "100%",
+    },
+  },
+  sortGrid: {
+    width: "70%",
+    marginLeft: "auto",
+    [theme.breakpoints.down(876)]: {
+      width: "80%",
+    },
+    [theme.breakpoints.down(548)]: {
+      width: "100%",
+      marginLeft: "0px",
+      marginTop: "10px",
+    },
+  },
+  sortContainer: {
+    padding: "10px",
+    backgroundColor: Colors.BLUE,
+    boxShadow: Shadow.MEDIUM,
+    borderRadius: "10px",
+    marginLeft: "auto",
+    width: "245px",
+    [theme.breakpoints.down(548)]: {
+      marginLeft: "0px",
+      marginRight: "auto",
     },
   },
   hotelsGrid: {
@@ -145,7 +189,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   },
   hotelCard: {
     boxShadow: Shadow.LIGHT3D,
-    margin: "0px 0px 15px 15px",
+    margin: "0px 0px 15px 0px",
     borderRadius: "10px",
     display: "flex",
     backgroundColor: "white",
@@ -154,6 +198,12 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(1280)]: {
       marginLeft: "0px",
     },
+  },
+  hotelCardContainer: {
+    marginLeft: "15px",
+  },
+  hotelCardContainerLoading: {
+    filter: "blur(4px)",
   },
   hotelImage: {
     objectFit: "cover",
@@ -165,6 +215,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
 
     [theme.breakpoints.down(950)]: {
       borderRadius: "10px 10px 0px 0px",
+      maxHeight: "100%",
     },
   },
   hotelImageGrid: {
@@ -172,11 +223,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
 
     [theme.breakpoints.down(950)]: {
       width: "100%",
-      height: "250px",
-    },
-
-    [theme.breakpoints.down(621)]: {
-      display: "none",
+      height: "210px",
     },
   },
   hotelContentGrid: {
@@ -196,13 +243,6 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
-  hotelStarContainer: {
-    [theme.breakpoints.down(484)]: {
-      width: "100%",
-      margin: "3px 10px",
-    },
-  },
-
   mainContainer: {
     fontFamily: Family,
     backgroundColor: Colors.BACKGROUND,
@@ -234,6 +274,9 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     width: "85%",
     margin: "25px auto",
     position: "relative",
+    [theme.breakpoints.down(621)]: {
+      width: "95%",
+    },
   },
   pageTitleGrid: {
     backgroundSize: "cover",
@@ -279,6 +322,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     "& .MuiOutlinedInput-input": {
       padding: "10px 25px 10px 15px",
       borderRadius: "10px",
+      margin: "0px 5px",
     },
 
     "& .MuiOutlinedInput-root": {
@@ -314,7 +358,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
-  sortGrid: {
+  sortFilterGrid: {
     marginLeft: "15px",
     marginBottom: "10px",
     width: "100%",
@@ -322,18 +366,11 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
+
   sortFormControl: {
     backgroundColor: "white",
     marginLeft: "15px",
-    borderRadius: "10px",
-  },
-  sortContainer: {
-    padding: "10px",
-    backgroundColor: Colors.BLUE,
-    boxShadow: Shadow.MEDIUM,
-    borderRadius: "10px",
-    marginLeft: "auto",
-    width: "31%",
+    borderRadius: "5px",
   },
   textButton: {
     padding: "0px",

@@ -8,11 +8,10 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CardActionArea, Grid } from "@material-ui/core";
 import React from "react";
-import Rating from "react-rating";
 import { Link, useHistory } from "react-router-dom";
 import { Colors } from "../../../styles";
 import { getLinkStyle, Routes } from "../../../utils";
-import { CustomButton, IconText, StarRating, Text } from "../../atoms";
+import { CustomButton, IconText, Rating, Text } from "../../atoms";
 import { restaurantCardStyles } from "./restaurantCard-styles";
 
 interface RestaurantCard {
@@ -43,24 +42,7 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
           </Grid>
 
           <Grid item xs={12}>
-            <Rating
-              initialRating={restaurant.rating}
-              readonly
-              emptySymbol={
-                <FontAwesomeIcon
-                  style={{ margin: "0px 1px" }}
-                  icon={faStarReg}
-                  color={Colors.PURPLE}
-                />
-              }
-              fullSymbol={
-                <FontAwesomeIcon
-                  style={{ margin: "0px 1px" }}
-                  icon={faStar}
-                  color={Colors.PURPLE}
-                />
-              }
-            />
+            <Rating score={restaurant.rating} readonly type="star" />
           </Grid>
 
           <Grid item xs={12} style={{ marginTop: "15px" }}>

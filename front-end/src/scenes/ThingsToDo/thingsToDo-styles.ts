@@ -17,10 +17,11 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     width: "92%",
     borderRadius: "15px",
     boxShadow: Shadow.MEDIUM,
+    margin: "20px 15px",
     "&:hover": {
       transform: "scale(1.1)",
       width: "87%",
-      marginLeft: "8px",
+      margin: "20px auto 20px 23px",
     },
   },
   cardPlaceholder: {
@@ -171,8 +172,7 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   poiCard: {
     borderRadius: "10px",
-    margin: "auto",
-    marginBottom: "10px",
+    margin: "10px auto",
     boxShadow: Shadow.LIGHT3D,
     width: "87%",
     transition: "all .2s ease-in-out",

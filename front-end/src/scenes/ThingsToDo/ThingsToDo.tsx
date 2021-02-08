@@ -304,14 +304,14 @@ export function ThingsToDo() {
 
   function onSortOptionChange(option: SortOption) {
     setSortOption(option);
-    let sortedPois: POISearch[] = [];
+    let sortedPois: POISearch[] = [...pois];
 
     if (option === "Name | A - Z") {
-      sortedPois = pois.sort((a: any, b: any) => a.name.localeCompare(b.name));
+      sortedPois = sortedPois.sort((a: any, b: any) => a.name.localeCompare(b.name));
     } else {
-      sortedPois = pois.sort((a: any, b: any) => b.name.localeCompare(a.name));
+      sortedPois = sortedPois.sort((a: any, b: any) => b.name.localeCompare(a.name));
     }
-    // setPois(sortedPois);
+    dispatch(setPOIs(sortedPois));
   }
 
   function getPOICardGridClass() {

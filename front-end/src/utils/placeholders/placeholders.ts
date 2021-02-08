@@ -2588,6 +2588,328 @@ export const hotelsPlaceholder: HotelAvailability = {
   hotels: [],
 };
 
+export const hotelPlaceholder: HotelBooking = {
+  code: 128537,
+  name: {
+    content: "Coco Key Hotel and Water Park Resort",
+  },
+  description: {
+    content:
+      "The Hilton Garden Inn Lake Buena Vista/Orlando is a state-of-the-art, Green lodging hotel located just off I-4 and CR 535 and directly across the highway from Orlando's Premium Outlet Mall. Strategically situated just one mile from the entrance to Walt Disney World Resort and the entrance to SeaWorld, the Hilton Garden Inn Lake Buena Vista hotel offers easy access to the spectacular theme parks, unique restaurants, abundant shops, and exciting entertainment that have made this region one of the world's most popular. This new Hilton Garden Inn is just minutes from the downtown Orlando business center and city night life. A 5,400 sq.ft. conference facility was designed to accommodate the most discerning of meeting travelers and leisure vacationers alike.\n\nThis modern 7 story hotel was designed with the high-tech features to ensure the corporate traveler of the most modern conveniences. Radio Frequency room key technology affords travelers easy access into their rooms without fumbling for a room key. A spacious workout facility overlooking the Caribbean pool beach and spa area is available to all hotel guests. For your convenience, wireless HSIA is accessible throughout the hotel, complimentary. Modern designed guest rooms with 32\" Plasma HDTVs afford the very best of in-room entertainment.\n\nAll interior decorator designed rooms afford elegant, executive styled quarters with rich feeling of cherry wood and granite accents.\n\nComplimentary in-room HSIA, wired and wireless, is available throughout the hotel and conference rooms.\n\nA heated Caribbean style outdoor pool and whirlpool await guests after a long day of meetings or park hopping.\n\nA full size Fitness Center facility overlooking the spa and pool beach area is available for all guests 24/7, complimentary.\n\nThe Hilton Garden Inn LBV conference facilities include 5,400 square feet of flexible meeting and banquet facilities, abound in natural light. A 3,200 sq. ft.",
+  },
+  address: {
+    content: "11400 Marbella Palm Ct.",
+  },
+  city: {
+    content: " ORLANDO",
+  },
+  email: "MCOBV_GM@hilton.com",
+  phones: [
+    {
+      phoneNumber: "+14072399550",
+    },
+    {
+      phoneNumber: "+14072399550",
+    },
+    {
+      phoneNumber: "14072399550",
+    },
+    {
+      phoneNumber: "+14072389605",
+    },
+  ],
+  categoryCode: "3EST",
+  categoryName: "3 STARS",
+  destinationName: "Orlando Area - Florida - FL",
+  countryCode: "US",
+  latitude: "28.45423",
+  longitude: "-81.472135",
+  rooms: [
+    {
+      code: "DBL.GR",
+      name: "DOUBLE GUEST ROOM EXTERIOR CORRIDORS",
+      rates: [
+        {
+          net: "153.48",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "153.48",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "159.94",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "159.94",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "190.24",
+          boardName: "ROOM ONLY",
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "208.00",
+          boardName: "ROOM ONLY",
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+      ],
+    },
+  ],
+  minRate: 153.48,
+  maxRate: 208.0,
+  currency: "EUR",
+  images: [
+    {
+      path: "13/130786/130786a_hb_r_001.jpg",
+      order: 1,
+      visualOrder: 601,
+    },
+    {
+      path: "13/130786/130786a_hb_r_002.jpg",
+      order: 2,
+      visualOrder: 602,
+    },
+    {
+      path: "13/130786/130786a_hb_r_004.jpg",
+      order: 4,
+      visualOrder: 603,
+    },
+    {
+      path: "13/130786/130786a_hb_f_011.jpg",
+      order: 11,
+      visualOrder: 902,
+    },
+    {
+      path: "13/130786/130786a_hb_f_012.jpg",
+      order: 12,
+      visualOrder: 903,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_007.jpg",
+      order: 7,
+      visualOrder: 405,
+    },
+    {
+      path: "13/130786/130786a_hb_f_010.jpg",
+      order: 10,
+      visualOrder: 901,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_009.jpg",
+      order: 9,
+      visualOrder: 407,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_006.jpg",
+      order: 6,
+      visualOrder: 404,
+    },
+    {
+      path: "13/130786/130786a_hb_r_005.jpg",
+      order: 5,
+      visualOrder: 604,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_010.jpg",
+      order: 10,
+      visualOrder: 10,
+    },
+    {
+      path: "13/130786/130786a_hb_r_006.jpg",
+      order: 6,
+      visualOrder: 605,
+    },
+    {
+      path: "13/130786/130786a_hb_r_007.jpg",
+      order: 7,
+      visualOrder: 606,
+    },
+    {
+      path: "13/130786/130786a_hb_l_001.jpg",
+      order: 1,
+      visualOrder: 201,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_012.jpg",
+      order: 12,
+      visualOrder: 12,
+    },
+    {
+      path: "13/130786/130786a_hb_k_002.jpg",
+      order: 2,
+      visualOrder: 802,
+    },
+    {
+      path: "13/130786/130786a_hb_l_003.jpg",
+      order: 3,
+      visualOrder: 203,
+    },
+    {
+      path: "13/130786/130786a_hb_k_001.jpg",
+      order: 1,
+      visualOrder: 801,
+    },
+    {
+      path: "13/130786/130786a_hb_l_002.jpg",
+      order: 2,
+      visualOrder: 202,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_013.jpg",
+      order: 13,
+      visualOrder: 13,
+    },
+    {
+      path: "13/130786/130786a_hb_p_002.jpg",
+      order: 2,
+      visualOrder: 502,
+    },
+    {
+      path: "13/130786/130786a_hb_ba_001.jpg",
+      order: 1,
+      visualOrder: 701,
+    },
+    {
+      path: "13/130786/130786a_hb_p_001.jpg",
+      order: 1,
+      visualOrder: 501,
+    },
+    {
+      path: "13/130786/130786a_hb_ba_002.jpg",
+      order: 2,
+      visualOrder: 702,
+    },
+    {
+      path: "13/130786/130786a_hb_w_001.jpg",
+      order: 1,
+      visualOrder: 301,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_003.jpg",
+      order: 3,
+      visualOrder: 401,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_004.jpg",
+      order: 4,
+      visualOrder: 402,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_005.jpg",
+      order: 5,
+      visualOrder: 403,
+    },
+    {
+      path: "13/130786/130786a_hb_l_005.jpg",
+      order: 5,
+      visualOrder: 205,
+    },
+    {
+      path: "13/130786/130786a_hb_a_001.jpg",
+      order: 1,
+      visualOrder: 101,
+    },
+    {
+      path: "13/130786/130786a_hb_k_003.jpg",
+      order: 3,
+      visualOrder: 803,
+    },
+    {
+      path: "13/130786/130786a_hb_l_004.jpg",
+      order: 4,
+      visualOrder: 204,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_008.jpg",
+      order: 8,
+      visualOrder: 406,
+    },
+    {
+      path: "13/130786/130786a_hb_t_001.jpg",
+      order: 1,
+      visualOrder: 1001,
+    },
+    {
+      path: "13/130786/130786a_hb_p_003.jpg",
+      order: 3,
+      visualOrder: 503,
+    },
+    {
+      path: "13/130786/130786a_hb_ro_011.jpg",
+      order: 11,
+      visualOrder: 11,
+    },
+  ],
+};
+
+export const hotelPhotos = [
+  "/Travel-Agent/george1.jpg",
+  "/Travel-Agent/george2.jpg",
+  "/Travel-Agent/george3.jpg",
+  "/Travel-Agent/george4.jpg",
+  "/Travel-Agent/george5.jpg",
+  "/Travel-Agent/george6.jpg",
+];
+
 const poiArray: POI[] = [
   {
     id: "49c54c1bf964a520ed561fe3",

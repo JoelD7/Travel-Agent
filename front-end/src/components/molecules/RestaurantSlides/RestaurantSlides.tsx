@@ -81,7 +81,8 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
           <Slider
             {...sliderSettings}
             slidesToScroll={1}
-            slidesToShow={getSlidesToShow(4)}
+            slidesToShow={3}
+            // slidesToShow={getSlidesToShow(4)}
           >
             {restaurants.map((restaurant, i) => (
               <div key={i}>

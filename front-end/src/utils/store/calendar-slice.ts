@@ -28,19 +28,9 @@ const calendarSlice = createSlice({
       let keys = [];
       for (const key in state) {
         if (Object.prototype.hasOwnProperty.call(state, key)) {
-          //   const element = state[key];
           keys.push(key);
         }
       }
-
-      // console.log("State indexes: ", keys);
-      // console.log(
-      //   JSON.stringify({
-      //     ...state,
-      //     holder: { ...state.holder, [dateIndex]: { calendarItems: calendarItems } },
-      //   })
-      // );
-
       return {
         ...state,
         holder: { ...state.holder, [dateIndex]: { calendarItems: calendarItems } },

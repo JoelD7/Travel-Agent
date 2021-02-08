@@ -18,7 +18,6 @@ export function PriceRange({ updateState, value, max }: PriceRange) {
   }, [value]);
 
   function onSliderChange(event: ChangeEvent<{}>, value: number | number[]) {
-    console.log(value);
     setSlider(value as number[]);
   }
 
