@@ -1,13 +1,16 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays } from "date-fns";
-import { HotelPax, HotelSearch } from "../types/hotel-types";
+import { hotelPlaceholder } from "../placeholders";
+import { HotelBooking, HotelPax, HotelSearch } from "../types/hotel-types";
 
 interface HotelReducer {
   reservationParams: HotelSearch;
+  hotelDetail: HotelBooking;
 }
 
 const initialState: HotelReducer = {
+  hotelDetail: hotelPlaceholder,
   reservationParams: {
     checkIn: addDays(new Date(), 1),
     checkOut: addDays(new Date(), 3),
@@ -25,12 +28,16 @@ const hotelSlice = createSlice({
   name: "hotelReducer",
   initialState,
   reducers: {
+    setHotelDetail(state, action: PayloadAction<HotelBooking>) {
+      state.hotelDetail = action.payload;
+    },
+
     updateReservationParams(state, action: PayloadAction<any>) {
       state.reservationParams = { ...state.reservationParams, ...action.payload };
     },
   },
 });
 
-export const { updateReservationParams } = hotelSlice.actions;
+export const { updateReservationParams, setHotelDetail } = hotelSlice.actions;
 
 export default hotelSlice.reducer;

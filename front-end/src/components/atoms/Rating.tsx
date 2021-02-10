@@ -39,8 +39,8 @@ export function Rating({ score, onChange, type, size = "1x", readonly }: Rating)
       emptySymbol={
         <FontAwesomeIcon
           style={{ margin: "0px 1px" }}
-          icon={type === "circle" ? faCircleReg : faStarReg}
-          color={Colors.PURPLE}
+          icon={type === "circle" ? faCircle : faStar}
+          color={"#cecece"}
           size={size}
         />
       }

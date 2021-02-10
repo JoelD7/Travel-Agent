@@ -155,9 +155,10 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(876)]: {
       width: "80%",
     },
-    [theme.breakpoints.down(548)]: {
+    [theme.breakpoints.down(600)]: {
       width: "100%",
       marginLeft: "0px",
+      marginRight: "auto",
       marginTop: "10px",
     },
   },
@@ -167,8 +168,8 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     boxShadow: Shadow.MEDIUM,
     borderRadius: "10px",
     marginLeft: "auto",
-    width: "245px",
-    [theme.breakpoints.down(548)]: {
+    width: "420px",
+    [theme.breakpoints.down(600)]: {
       marginLeft: "0px",
       marginRight: "auto",
     },

@@ -1,13 +1,8 @@
-import React, { MouseEvent } from "react";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconButton, makeStyles, Theme } from "@material-ui/core";
-import { CreateCSSProperties, CSSProperties } from "@material-ui/styles";
-import {
-  faChevronCircleLeft,
-  faChevronCircleRight,
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { CSSProperties } from "@material-ui/styles";
+import React, { MouseEvent } from "react";
 import { Colors } from "../../styles";
 
 interface SliderArrowProps {

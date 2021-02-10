@@ -7,6 +7,7 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
     accordionRoot: {
       backgroundColor: Colors.BLUE,
       boxShadow: Shadow.MEDIUM3D,
+      marginBottom: "10px",
 
       "&.Mui-expanded:last-child": {
         marginBottom: "40px",

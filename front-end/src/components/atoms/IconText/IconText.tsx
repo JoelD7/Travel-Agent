@@ -2,7 +2,7 @@ import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { makeStyles, Theme } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import { Colors, Shadow } from "../../../styles";
 
 interface IconTextProps {

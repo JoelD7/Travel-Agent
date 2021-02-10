@@ -41,7 +41,11 @@ export const selectConsultedCoordinates = (state: RootState) =>
 export const selectPOIsByCategory = (state: RootState) => state.poiReducer.poisByCategory;
 //#endregion
 
+//#region Hotel
 export const selectHotelReservationParams = (state: RootState) =>
   state.hotelReducer.reservationParams;
 
+export const selectHotelDetail = (state: RootState) => state.hotelReducer.hotelDetail;
+
+//#endregion
 export default store;

@@ -24,6 +24,7 @@ import {
   ThemeProvider,
   Tooltip,
 } from "@material-ui/core";
+import { Pagination } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Axios, { AxiosResponse } from "axios";
 import { addDays } from "date-fns";
@@ -56,9 +57,10 @@ import {
   Routes,
   getHotelStars,
   selectHotelReservationParams,
+  getHotelImages,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
-import { updateReservationParams } from "../../utils/store/hotel-slice";
+import { setHotelDetail, updateReservationParams } from "../../utils/store/hotel-slice";
 import {
   HotelAvailability,
   HotelBooking,
@@ -235,6 +237,10 @@ export function Hotels() {
   const [noHotels, setNoHotels] = useState(false);
   // const [noHotels, setNoHotels] = useState(true);
 
+  const pageSizeOptions = [20, 30, 40];
+  const [pageSize, setPageSize] = useState(20);
+  const [page, setPage] = useState(0);
+
   const history = useHistory();
 
   const city = "Paris";
@@ -242,6 +248,10 @@ export function Hotels() {
   useEffect(() => {
     searchHotels();
   }, []);
+
+  useEffect(() => {
+    searchHotels();
+  }, [state.stars]);
 
   function searchHotels() {
     fetchHotelAvailability()
@@ -279,7 +289,6 @@ export function Hotels() {
       minCategory: state.stars === 0 ? 1 : state.stars,
       minRate: state.priceRange[0],
     };
-
     const bookingParams = {
       stay: {
         checkIn: state.checkIn,
@@ -377,7 +386,18 @@ export function Hotels() {
     let unsortedHotels: any[] = [];
 
     for (let i = 0; i < hotelsDetails.length; i++) {
-      const hotelDetail = hotelsDetails[i];
+      const hotelDetailBuffer = hotelsDetails[i];
+      /**
+       * I don't want the "rooms" key of hotelDetail to
+       * override the key with the same name of
+       * hotelForBooking, because the "rooms" key of
+       * hotelDetail doesn't contain info about the
+       * reservation and the rates of the different
+       * rooms. Therefore, I extract the "rooms" key and
+       * copy all other properties in the variable
+       * "hotelDetail".
+       */
+      const { rooms, ...hotelDetail } = hotelDetailBuffer;
       const hotelForBooking = hotelsForBooking[i];
 
       unsortedHotels.push({ ...hotelForBooking, ...hotelDetail });
@@ -446,17 +466,13 @@ export function Hotels() {
       });
   }
 
-  function getHotelImage(hotel: HotelBooking) {
-    /**
-     * Sort by visualOrder to get the best image to use it
-     * as cover.
-     */
-    let image = hotel.images.sort((a, b) => a.visualOrder - b.visualOrder)[0];
-    return HotelBedAPI.imageURL.bigger + image.path;
-  }
-
   function getFormattedAddress(hotel: HotelBooking) {
     return hotel.address.content;
+  }
+
+  function onHotelCardClick(hotel: HotelBooking) {
+    dispatch(setHotelDetail(hotel));
+    history.push(`${Routes.HOTELS}/${hotel.code}`);
   }
 
   function HotelCard({ hotel }: HotelCard) {
@@ -465,7 +481,7 @@ export function Hotels() {
         {/* Image */}
         <Grid item className={style.hotelImageGrid} id="photo">
           {hotel.images.length > 1 && (
-            <img src={`${getHotelImage(hotel)}`} className={style.hotelImage} />
+            <img src={`${getHotelImages(hotel)[0]}`} className={style.hotelImage} />
           )}
         </Grid>
 
@@ -495,7 +511,7 @@ export function Hotels() {
                 <h4 style={{ textAlign: "center" }}>{`From $ ${hotel.minRate}`}</h4>
                 <CustomButton
                   backgroundColor={Colors.PURPLE}
-                  onClick={() => history.push(`${Routes.HOTELS}/${hotel.code}`)}
+                  onClick={() => onHotelCardClick(hotel)}
                 >
                   View details
                 </CustomButton>
@@ -702,10 +718,21 @@ export function Hotels() {
   }
 
   function onStarChange(star: number) {
+    setLoading(true);
     dispatch(updateReservationParams({ stars: star }));
-    let buffer = allHotels.filter((hotel) => getHotelStars(hotel) >= star);
+  }
 
-    setHotelAvailability({ ...hotelAvailability, hotels: buffer });
+  function onPageSizeChange(value: number) {
+    setPageSize(value);
+    setPage(0);
+  }
+
+  function onPageChange(newPage: number) {
+    setPage(newPage);
+  }
+
+  function getPageCount() {
+    return Math.ceil(hotelAvailability.hotels.length / pageSize);
   }
 
   return (
@@ -856,6 +883,7 @@ export function Hotels() {
                 {/* Sort by and filter button */}
                 <Grid item className={style.sortFilterGrid}>
                   <Grid container>
+                    {/* Filter button */}
                     <Grid item className={style.filterButtonGrid}>
                       <Grid container alignItems="center" style={{ height: "100%" }}>
                         <CustomButton
@@ -869,39 +897,91 @@ export function Hotels() {
                       </Grid>
                     </Grid>
 
+                    {/* Sort and paging grid */}
                     <Grid item className={style.sortGrid}>
                       <Grid container className={style.sortContainer} alignItems="center">
-                        <Text
-                          bold
-                          style={{ alignSelf: "end", margin: "auto" }}
-                          color={"white"}
-                        >
-                          Sort by
-                        </Text>
-
-                        <ThemeProvider theme={theme}>
-                          <FormControl className={style.sortFormControl}>
-                            <Select
-                              value={sortOption}
-                              variant="outlined"
-                              classes={{ icon: style.selectIcon }}
-                              className={style.select}
-                              onChange={(e) =>
-                                onSortOptionChange(e.target.value as SortOption)
-                              }
+                        {/* Sort grid */}
+                        <Grid item xs={8}>
+                          <Grid container>
+                            <Text
+                              bold
+                              style={{ alignSelf: "end", margin: "auto" }}
+                              color={"white"}
                             >
-                              {sortOptions.map((option, i) => (
-                                <MenuItem
-                                  classes={{ root: style.menuItemSelect }}
-                                  key={i}
-                                  value={option}
+                              Sort by
+                            </Text>
+
+                            <ThemeProvider theme={theme}>
+                              <FormControl
+                                className={style.sortFormControl}
+                                style={{ width: "145px" }}
+                              >
+                                <Select
+                                  value={sortOption}
+                                  variant="outlined"
+                                  classes={{ icon: style.selectIcon }}
+                                  className={style.select}
+                                  onChange={(e) =>
+                                    onSortOptionChange(e.target.value as SortOption)
+                                  }
                                 >
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                          </FormControl>
-                        </ThemeProvider>
+                                  {sortOptions.map((option, i) => (
+                                    <MenuItem
+                                      classes={{ root: style.menuItemSelect }}
+                                      key={i}
+                                      value={option}
+                                    >
+                                      {option}
+                                    </MenuItem>
+                                  ))}
+                                </Select>
+                              </FormControl>
+
+                              <Divider
+                                orientation="vertical"
+                                style={{ background: "white", margin: "0px 10px" }}
+                              />
+                            </ThemeProvider>
+                          </Grid>
+                        </Grid>
+
+                        {/* Paging grid */}
+                        <Grid item xs={4}>
+                          <Grid container>
+                            <Text
+                              bold
+                              style={{ alignSelf: "end", margin: "auto 0px auto auto" }}
+                              color={"white"}
+                            >
+                              See
+                            </Text>
+
+                            <FormControl
+                              className={style.sortFormControl}
+                              style={{ width: "70px" }}
+                            >
+                              <Select
+                                value={pageSize}
+                                variant="outlined"
+                                classes={{ icon: style.selectIcon }}
+                                className={style.select}
+                                onChange={(e) =>
+                                  onPageSizeChange(e.target.value as number)
+                                }
+                              >
+                                {pageSizeOptions.map((option, i) => (
+                                  <MenuItem
+                                    classes={{ root: style.menuItemSelect }}
+                                    key={i}
+                                    value={option}
+                                  >
+                                    {option}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </FormControl>
+                          </Grid>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
@@ -921,9 +1001,11 @@ export function Hotels() {
                           : style.hotelCardContainer
                       }
                     >
-                      {hotelAvailability.hotels.slice(0, 20).map((hotel) => (
-                        <HotelCard key={hotel.code} hotel={hotel} />
-                      ))}
+                      {hotelAvailability.hotels
+                        .slice(page * pageSize, page * pageSize + pageSize)
+                        .map((hotel) => (
+                          <HotelCard key={hotel.code} hotel={hotel} />
+                        ))}
                     </div>
                   )}
 
@@ -961,6 +1043,14 @@ export function Hotels() {
                   )}
                 </Grid>
               </Grid>
+
+              {!loadingOnMount && (
+                <Pagination
+                  count={getPageCount()}
+                  shape="rounded"
+                  onChange={(e, page) => onPageChange(page)}
+                />
+              )}
             </Grid>
           </Grid>
         </Grid>

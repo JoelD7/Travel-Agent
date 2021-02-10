@@ -1,24 +1,12 @@
-import React, { useRef, useState } from "react";
-import { Helmet } from "react-helmet";
 import {
-  Navbar,
-  ServicesToolbar,
-  SliderArrow,
-  Rating,
-  Text,
-  IconText,
-  CustomButton,
-} from "../../components";
-import { hotelDetailsStyles } from "./hotelDetails-styles";
-import Slider from "react-slick";
-import {
-  capitalizeString,
-  currencyFormatter,
-  getHotelStars,
-  hotelPhotos,
-  scrollToBottom,
-  selectHotelReservationParams,
-} from "../../utils";
+  faBed,
+  faCalendar,
+  faChevronDown,
+  faChild,
+  faMapMarkerAlt,
+  faPhone,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Accordion,
   AccordionDetails,
@@ -29,31 +17,36 @@ import {
   Divider,
   Grid,
 } from "@material-ui/core";
-import { HotelBooking } from "../../utils/types/hotel-types";
-import { Colors } from "../../styles";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBed,
-  faCalendar,
-  faChevronDown,
-  faChild,
-  faCircle,
-  faMapMarkerAlt,
-  faPhone,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
-import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
-import { hotelPlaceholder } from "../../utils";
 import { format, parseISO } from "date-fns";
+import React, { useRef, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
+import Slider from "react-slick";
+import {
+  CustomButton,
+  IconText,
+  Navbar,
+  Rating,
+  ServicesToolbar,
+  SliderArrow,
+  Text,
+} from "../../components";
+import { Colors } from "../../styles";
+import {
+  capitalizeString,
+  currencyFormatter,
+  getHotelImages,
+  getHotelStars,
+  scrollToBottom,
+  selectHotelDetail,
+  selectHotelReservationParams,
+} from "../../utils";
+import { hotelDetailsStyles } from "./hotelDetails-styles";
 
-interface HotelDetails {
-  hotel: HotelBooking;
-}
-
-export function HotelDetails({}: HotelDetails) {
+export function HotelDetails() {
   const style = hotelDetailsStyles();
-  const hotel = hotelPlaceholder;
+  const hotel = useSelector(selectHotelDetail);
+  const hotelPhotos = getHotelImages(hotel);
 
   const roomTitleId = "rooms";
   const roomAnchorEl = useRef(null);
@@ -71,6 +64,7 @@ export function HotelDetails({}: HotelDetails) {
     nextArrow: <SliderArrow iconSize="2x" direction="right" />,
     prevArrow: <SliderArrow iconSize="2x" direction="left" />,
     slidesToShow: 3,
+    slidesToScroll: 3,
     responsive: [
       {
         breakpoint: 1374,
@@ -133,7 +127,7 @@ export function HotelDetails({}: HotelDetails) {
       <a href={`#${roomTitleId}`} ref={roomAnchorEl} hidden></a>
 
       <Helmet>
-        <title>Hotel George V</title>
+        <title>{hotel.name.content}</title>
       </Helmet>
 
       <Navbar />
