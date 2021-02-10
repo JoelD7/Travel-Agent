@@ -1,44 +1,111 @@
-import { makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
 
-export const hotelDetailsStyles = makeStyles((theme: Theme) => ({
-  aboutHotelGrid: {
-    width: "70%",
-  },
-  aboutHotelContainer: {
-    borderRadius: "10px",
-    backgroundColor: "white",
-    padding: "35px",
-    boxShadow: Shadow.MEDIUM,
-  },
-  mainContainer: {
-    fontFamily: Font.Family,
-    backgroundColor: Colors.BACKGROUND,
-  },
-  pageContainer: {
-    width: "85%",
-    margin: "auto",
-  },
-  photoContainer: {
-    height: "400px",
-    margin: "50px 0px",
-  },
-  photo: {
-    objectFit: "cover",
-    height: "100%",
-    borderRadius: "10px",
-    width: "97%",
-    margin: "auto 5px",
+export const hotelDetailsStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    accordionRoot: {
+      backgroundColor: Colors.BLUE,
+      boxShadow: Shadow.MEDIUM3D,
 
-    [theme.breakpoints.down(1140)]: {
-      width: "auto",
+      "&.Mui-expanded:last-child": {
+        marginBottom: "40px",
+        borderRadius: "10px",
+      },
+    },
+    accordionRounded: {
+      borderRadius: "10px",
+      "&:last-child": {
+        borderRadius: "10px",
+      },
+    },
+    aboutHotelGrid: {
+      width: "65%",
+    },
+    arrowLeft: {
+      position: "absolute",
+      zIndex: 2,
+    },
+    arrowRight: {
+      position: "absolute",
+      zIndex: 2,
+      left: "1096px",
+    },
+    aboutHotelContainer: {
+      borderRadius: "10px",
+      backgroundColor: "white",
+      padding: "35px",
+      boxShadow: Shadow.MEDIUM,
+    },
+    imageSlider: {
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+      height: "100%",
+    },
+    limitedAboutText: {
+      display: "-webkit-box",
+      WebkitLineClamp: 6,
+      WebkitBoxOrient: "vertical",
+      overflow: "hidden",
+    },
+    mainContainer: {
+      fontFamily: Font.Family,
+      backgroundColor: Colors.BACKGROUND,
+    },
+    paperImage: {
+      maxWidth: "1100px",
+      width: "1100px",
+      height: "694px",
+      minWidth: "525px",
+      backgroundColor: "black",
+    },
+    pageContainer: {
+      width: "85%",
       margin: "auto",
     },
-  },
-  slider: {
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-  },
-}));
+    photoContainer: {
+      height: "400px",
+      margin: "50px 0px",
+    },
+    photoContainerImage: {
+      height: "80vh",
+    },
+    photo: {
+      objectFit: "cover",
+      height: "100%",
+      borderRadius: "10px",
+      width: "97%",
+      margin: "auto 5px",
+
+      [theme.breakpoints.down(1140)]: {
+        width: "auto",
+        margin: "auto",
+      },
+    },
+    photoInSlider: {
+      objectFit: "cover",
+      height: "100%",
+      width: "100%",
+    },
+    reservationInfoContainer: {
+      padding: "20px",
+      marginLeft: "auto",
+      width: "85%",
+      borderRadius: "10px",
+      backgroundColor: "white",
+      boxShadow: Shadow.MEDIUM,
+    },
+    reservationInfoGrid: {
+      width: "35%",
+    },
+    roomsGrid: {
+      width: "40%",
+    },
+    slider: {
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+    },
+  })
+);

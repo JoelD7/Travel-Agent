@@ -2589,6 +2589,8 @@ export const hotelsPlaceholder: HotelAvailability = {
 };
 
 export const hotelPlaceholder: HotelBooking = {
+  checkIn: "2021-06-15",
+  checkOut: "2021-06-16",
   code: 128537,
   name: {
     content: "Coco Key Hotel and Water Park Resort",

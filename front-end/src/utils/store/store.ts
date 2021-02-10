@@ -3,6 +3,7 @@ import signUpReducer from "./signUpSlice";
 import searchNavbarReducer from "./search-slice";
 import calendarReducer from "./calendar-slice";
 import poiReducer from "./poi-slice";
+import hotelReducer from "./hotel-slice";
 import { useDispatch } from "react-redux";
 
 const store = configureStore({
@@ -11,6 +12,7 @@ const store = configureStore({
     searchNavbar: searchNavbarReducer,
     calendarSlice: calendarReducer,
     poiReducer: poiReducer,
+    hotelReducer: hotelReducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
@@ -19,8 +21,7 @@ export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 //Selectors
-
-//POI
+//#region POI
 export const selectPOIs = (state: RootState) => state.poiReducer.pois;
 export const selectAllPOIs = (state: RootState) => state.poiReducer.allPois;
 export const selectAvailableCategories = (state: RootState) =>
@@ -38,5 +39,9 @@ export const selectConsultedCoordinates = (state: RootState) =>
   state.poiReducer.consultedCoordinates;
 
 export const selectPOIsByCategory = (state: RootState) => state.poiReducer.poisByCategory;
+//#endregion
+
+export const selectHotelReservationParams = (state: RootState) =>
+  state.hotelReducer.reservationParams;
 
 export default store;

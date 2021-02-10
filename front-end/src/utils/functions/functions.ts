@@ -606,3 +606,7 @@ export function capitalizeString(value: string, type: "each word" | "full senten
 export function getHotelStars(hotel: HotelBooking) {
   return Number(hotel.categoryCode.split("EST")[0]);
 }
+
+export function scrollToBottom() {
+  window.scrollTo(0, document.body.scrollHeight);
+}

@@ -29,6 +29,7 @@ import Axios, { AxiosResponse } from "axios";
 import { addDays } from "date-fns";
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Family } from "../../assets/fonts";
 import {
@@ -54,8 +55,10 @@ import {
   muiDateFormatter,
   Routes,
   getHotelStars,
+  selectHotelReservationParams,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
+import { updateReservationParams } from "../../utils/store/hotel-slice";
 import {
   HotelAvailability,
   HotelBooking,
@@ -193,17 +196,9 @@ export function Hotels() {
     },
   ];
 
-  const [state, setState] = useState<HotelSearch>({
-    checkIn: addDays(new Date(), 1),
-    checkOut: addDays(new Date(), 3),
-    adults: 2,
-    children: 0,
-    paxes: [],
-    rooms: 1,
-    priceRange: [0, 500],
-    stars: 0,
-    occupancyParamsChanged: false,
-  });
+  const state = useSelector(selectHotelReservationParams);
+
+  const dispatch = useDispatch();
 
   const [hotelAvailability, setHotelAvailability] = useState<HotelAvailability>(
     hotelsPlaceholder
@@ -421,7 +416,7 @@ export function Hotels() {
 
     let mediumPrice = Math.floor(sortedRates[Math.round(sortedRates.length / 2) - 1]);
     setMaxRate(mediumPrice);
-    setState({ ...state, priceRange: [0, mediumPrice] });
+    dispatch(updateReservationParams({ priceRange: [0, mediumPrice] }));
   }
 
   function getCityImage() {
@@ -581,14 +576,20 @@ export function Hotels() {
         paxes.push({ type: "CH", age: 4 });
       }
 
-      setState({
-        ...state,
-        children: value,
-        paxes: paxes,
-        occupancyParamsChanged: true,
-      });
+      dispatch(
+        updateReservationParams({
+          children: value,
+          paxes: paxes,
+          occupancyParamsChanged: true,
+        })
+      );
     } else {
-      setState({ ...state, [param.field]: value, occupancyParamsChanged: true });
+      dispatch(
+        updateReservationParams({
+          [param.field]: value,
+          occupancyParamsChanged: true,
+        })
+      );
     }
   }
 
@@ -602,11 +603,11 @@ export function Hotels() {
       return pax;
     });
 
-    setState({ ...state, paxes: newPaxes, occupancyParamsChanged: true });
+    dispatch(updateReservationParams({ paxes: newPaxes, occupancyParamsChanged: true }));
   }
 
   function onOccupancyDateChange(date: any, param: "checkIn" | "checkOut") {
-    setState({ ...state, [param]: date, occupancyParamsChanged: true });
+    dispatch(updateReservationParams({ [param]: date, occupancyParamsChanged: true }));
   }
 
   function onOccupanciesPopoverChange(event: MouseEvent<HTMLButtonElement>) {
@@ -623,7 +624,7 @@ export function Hotels() {
     setLoading(true);
 
     searchHotels();
-    setState({ ...state, occupancyParamsChanged: false });
+    dispatch(updateReservationParams({ occupancyParamsChanged: false }));
   }
 
   function getOccupancyText() {
@@ -690,7 +691,7 @@ export function Hotels() {
   }
 
   function onPriceRangeChange(range: number[]) {
-    setState({ ...state, priceRange: range });
+    dispatch(updateReservationParams({ priceRange: range }));
     let min = range[0];
     let max = range[1];
 
@@ -701,7 +702,7 @@ export function Hotels() {
   }
 
   function onStarChange(star: number) {
-    setState({ ...state, stars: star });
+    dispatch(updateReservationParams({ stars: star }));
     let buffer = allHotels.filter((hotel) => getHotelStars(hotel) >= star);
 
     setHotelAvailability({ ...hotelAvailability, hotels: buffer });
@@ -986,7 +987,7 @@ export function Hotels() {
         <h3 style={{ marginBottom: "10px" }}>Stars</h3>
         <HotelStarSelector
           value={state.stars}
-          updateState={(star) => setState({ ...state, stars: star })}
+          updateState={(star) => dispatch(updateReservationParams({ stars: star }))}
         />
       </Drawer>
 

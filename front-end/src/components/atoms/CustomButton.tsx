@@ -19,6 +19,7 @@ interface CustomButtonProps {
   submit: boolean;
   children?: ReactNode;
   textColor: string;
+  type?: "text" | "rounded";
   onClick: (event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 }
 
@@ -39,7 +40,7 @@ type CustomButtonType = PartialBy<
 
 export function CustomButton({
   avatar,
-  backgroundColor = Colors.BLUE,
+  backgroundColor,
   label,
   rounded,
   children,
@@ -49,21 +50,30 @@ export function CustomButton({
   submit,
   textColor = "white",
   iconColor,
+  type,
   size = 16,
   className,
 }: CustomButtonType) {
   const buttonStyles = makeStyles({
     button: {
-      backgroundColor: backgroundColor ? backgroundColor : Colors.BLUE,
+      backgroundColor:
+        type === "text" ? "inherit" : backgroundColor ? backgroundColor : Colors.BLUE,
+      textDecoration: type === "text" ? "underline" : "",
       fontFamily: Family,
       padding: `5px ${icon ? "16px" : "10px"} 5px 10px`,
       borderRadius: rounded ? "50px" : "",
       "&:hover": {
         backgroundColor: getHoverColor(backgroundColor),
+        color: type === "text" ? getHoverColor(textColor) : "",
       },
       fontSize: `${size}px`,
       textTransform: "capitalize",
-      color: backgroundColor === Colors.GREEN ? Colors.BLUE : textColor,
+      color:
+        type === "text"
+          ? textColor
+          : backgroundColor === Colors.GREEN
+          ? Colors.BLUE
+          : textColor,
       cursor: "pointer",
       ...style,
     },
@@ -83,7 +93,7 @@ export function CustomButton({
       case Colors.WHITE_TRANSPARENT:
         return Colors.WHITE_TRANSPARENT_HOVER;
       default:
-        return color ? color : "";
+        return color ? color : "inherit";
     }
   }
 
