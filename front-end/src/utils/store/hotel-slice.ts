@@ -7,10 +7,12 @@ import { HotelBooking, HotelPax, HotelSearch } from "../types/hotel-types";
 interface HotelReducer {
   reservationParams: HotelSearch;
   hotelDetail: HotelBooking;
+  allRoomAccordionsExpanded: boolean;
 }
 
 const initialState: HotelReducer = {
   hotelDetail: hotelPlaceholder,
+  allRoomAccordionsExpanded: false,
   reservationParams: {
     checkIn: addDays(new Date(), 1),
     checkOut: addDays(new Date(), 3),
@@ -35,9 +37,17 @@ const hotelSlice = createSlice({
     updateReservationParams(state, action: PayloadAction<any>) {
       state.reservationParams = { ...state.reservationParams, ...action.payload };
     },
+
+    setRoomAccordionExpanded(state, action: PayloadAction<boolean>) {
+      state.allRoomAccordionsExpanded = action.payload;
+    },
   },
 });
 
-export const { updateReservationParams, setHotelDetail } = hotelSlice.actions;
+export const {
+  updateReservationParams,
+  setHotelDetail,
+  setRoomAccordionExpanded,
+} = hotelSlice.actions;
 
 export default hotelSlice.reducer;

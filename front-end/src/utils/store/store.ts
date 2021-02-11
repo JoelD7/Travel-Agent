@@ -47,5 +47,8 @@ export const selectHotelReservationParams = (state: RootState) =>
 
 export const selectHotelDetail = (state: RootState) => state.hotelReducer.hotelDetail;
 
+export const selectRoomAccordionExpanded = (state: RootState) =>
+  state.hotelReducer.allRoomAccordionsExpanded;
+
 //#endregion
 export default store;

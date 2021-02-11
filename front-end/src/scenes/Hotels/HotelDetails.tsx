@@ -20,13 +20,14 @@ import {
 import { format, parseISO } from "date-fns";
 import React, { useRef, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
 import {
   CustomButton,
   IconText,
   Navbar,
   Rating,
+  RoomAccordion,
   ServicesToolbar,
   SliderArrow,
   Text,
@@ -41,6 +42,7 @@ import {
   selectHotelDetail,
   selectHotelReservationParams,
 } from "../../utils";
+import { setRoomAccordionExpanded } from "../../utils/store/hotel-slice";
 import { HotelBooking } from "../../utils/types/hotel-types";
 import { hotelDetailsStyles } from "./hotelDetails-styles";
 
@@ -55,6 +57,8 @@ export function HotelDetails() {
 
   const roomTitleId = "rooms";
   const roomAnchorEl = useRef(null);
+
+  const dispatch = useDispatch();
 
   const reservationParams = useSelector(selectHotelReservationParams);
 
@@ -127,7 +131,8 @@ export function HotelDetails() {
   }
 
   function seeRoomOptions() {
-    expandAllRoomAccordions();
+    // expandAllRoomAccordions();
+    dispatch(setRoomAccordionExpanded(true));
     if (roomsExpanded) {
       //@ts-ignore
       roomAnchorEl.current.click();
@@ -355,57 +360,7 @@ export function HotelDetails() {
             </Text>
 
             {hotel.rooms.map((room) => (
-              <Accordion
-                key={room.code}
-                onChange={(e, expanded) => onAccordionChange(room.code, expanded)}
-                expanded={roomsExpanded[room.code].expanded}
-                classes={{ root: style.accordionRoot, rounded: style.accordionRounded }}
-              >
-                <AccordionSummary expandIcon={<IconText icon={faChevronDown}></IconText>}>
-                  <Text component="h3" color="white" bold>
-                    {capitalizeString(room.name, "full sentence")}
-                  </Text>
-                </AccordionSummary>
-
-                <AccordionDetails style={{ background: "white" }}>
-                  <Grid container>
-                    {room.rates.map((rate, i) => (
-                      <>
-                        <Grid item xs={12}>
-                          <Grid container alignItems="center">
-                            <Text bold>Board name: </Text>
-                            <Text style={{ marginLeft: "3px" }}>
-                              {capitalizeString(rate.boardName, "each word")}
-                            </Text>
-                          </Grid>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                          <Grid container alignItems="center">
-                            <Text bold>Total: </Text>
-                            <Text style={{ marginLeft: "3px" }}>
-                              {currencyFormatter(Number(rate.net))}
-                            </Text>
-
-                            <CustomButton
-                              style={{ marginLeft: "auto" }}
-                              backgroundColor={Colors.PURPLE}
-                            >
-                              Book room
-                            </CustomButton>
-                          </Grid>
-                        </Grid>
-
-                        {i < room.rates.length - 1 && (
-                          <Grid item xs={12} style={{ margin: "15px" }}>
-                            <Divider style={{ backgroundColor: "#cecece" }} />
-                          </Grid>
-                        )}
-                      </>
-                    ))}
-                  </Grid>
-                </AccordionDetails>
-              </Accordion>
+              <RoomAccordion key={room.code} room={room} />
             ))}
           </Grid>
         </Grid>
