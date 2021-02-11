@@ -24,7 +24,7 @@ import {
   ThemeProvider,
   Tooltip,
 } from "@material-ui/core";
-import { Pagination } from "@material-ui/lab";
+import { Pagination, PaginationItem } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Axios, { AxiosResponse } from "axios";
 import { addDays } from "date-fns";
@@ -1041,16 +1041,26 @@ export function Hotels() {
                       </Grid>
                     </Grid>
                   )}
+
+                  {!loadingOnMount && (
+                    <Pagination
+                      count={getPageCount()}
+                      className={style.pagination}
+                      renderItem={(item) => (
+                        <PaginationItem
+                          {...item}
+                          classes={{
+                            root: style.paginationItemRoot,
+                            page: style.paginationItemPage,
+                          }}
+                        />
+                      )}
+                      shape="rounded"
+                      onChange={(e, page) => onPageChange(page)}
+                    />
+                  )}
                 </Grid>
               </Grid>
-
-              {!loadingOnMount && (
-                <Pagination
-                  count={getPageCount()}
-                  shape="rounded"
-                  onChange={(e, page) => onPageChange(page)}
-                />
-              )}
             </Grid>
           </Grid>
         </Grid>

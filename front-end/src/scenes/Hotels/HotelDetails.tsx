@@ -41,11 +41,16 @@ import {
   selectHotelDetail,
   selectHotelReservationParams,
 } from "../../utils";
+import { HotelBooking } from "../../utils/types/hotel-types";
 import { hotelDetailsStyles } from "./hotelDetails-styles";
+
+interface RoomAccordion {
+  [x: string]: { expanded: boolean };
+}
 
 export function HotelDetails() {
   const style = hotelDetailsStyles();
-  const hotel = useSelector(selectHotelDetail);
+  const hotel: HotelBooking = useSelector(selectHotelDetail);
   const hotelPhotos = getHotelImages(hotel);
 
   const roomTitleId = "rooms";
@@ -54,7 +59,9 @@ export function HotelDetails() {
   const reservationParams = useSelector(selectHotelReservationParams);
 
   const [limitedAbout, setLimitedAbout] = useState(true);
-  const [roomsExpanded, setRoomsExpanded] = useState(false);
+  const [roomsExpanded, setRoomsExpanded] = useState<{
+    [x: string]: { expanded: boolean };
+  }>(constructRoomsExpanded());
 
   const [viewerOpen, setViewerOpen] = useState(false);
   const [initialImageSlide, setInitialImageSlide] = useState(0);
@@ -89,6 +96,23 @@ export function HotelDetails() {
     initialSlide: initialImageSlide,
   };
 
+  function constructRoomsExpanded() {
+    let buffer = {};
+    hotel.rooms.forEach((room) => {
+      buffer = { ...buffer, [room.code]: { expanded: false } };
+    });
+    return buffer;
+  }
+
+  function expandAllRoomAccordions() {
+    let buffer = {};
+    hotel.rooms.forEach((room) => {
+      buffer = { ...buffer, [room.code]: { expanded: true } };
+    });
+
+    setRoomsExpanded(buffer);
+  }
+
   function getPhoneList() {
     return hotel.phones.map((phone) => phone.phoneNumber).join(" | ");
   }
@@ -103,7 +127,7 @@ export function HotelDetails() {
   }
 
   function seeRoomOptions() {
-    setRoomsExpanded(true);
+    expandAllRoomAccordions();
     if (roomsExpanded) {
       //@ts-ignore
       roomAnchorEl.current.click();
@@ -120,6 +144,28 @@ export function HotelDetails() {
   function openFullScreenImageSlider(initialSlide: number) {
     setInitialImageSlide(initialSlide);
     setViewerOpen(true);
+  }
+
+  function onAccordionChange(accordion: string, isExpanded: boolean) {
+    let buffer = {};
+    for (const room in roomsExpanded) {
+      if (Object.prototype.hasOwnProperty.call(roomsExpanded, room)) {
+        const element = roomsExpanded[room];
+        if (accordion === room) {
+          buffer = {
+            ...buffer,
+            [room]: { expanded: isExpanded },
+          };
+        } else {
+          buffer = {
+            ...buffer,
+            [room]: { expanded: roomsExpanded[room].expanded },
+          };
+        }
+      }
+    }
+
+    setRoomsExpanded(buffer);
   }
 
   return (
@@ -311,7 +357,8 @@ export function HotelDetails() {
             {hotel.rooms.map((room) => (
               <Accordion
                 key={room.code}
-                expanded={roomsExpanded}
+                onChange={(e, expanded) => onAccordionChange(room.code, expanded)}
+                expanded={roomsExpanded[room.code].expanded}
                 classes={{ root: style.accordionRoot, rounded: style.accordionRounded }}
               >
                 <AccordionSummary expandIcon={<IconText icon={faChevronDown}></IconText>}>

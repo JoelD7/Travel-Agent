@@ -279,6 +279,21 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       width: "95%",
     },
   },
+  pagination: {
+    margin: "40px auto",
+  },
+  paginationItemRoot: {
+    fontFamily: Font.Family,
+  },
+  paginationItemPage: {
+    "&.Mui-selected": {
+      backgroundColor: Colors.BLUE,
+      color: "white",
+      "&:hover": {
+        backgroundColor: Colors.BLUE_HOVER,
+      },
+    },
+  },
   pageTitleGrid: {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
