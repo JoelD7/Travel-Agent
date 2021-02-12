@@ -51,4 +51,9 @@ export const selectRoomAccordionExpanded = (state: RootState) =>
   state.hotelReducer.allRoomAccordionsExpanded;
 
 //#endregion
+
+//#region City search
+export const selectSearchQuery = (state: RootState) => state.searchNavbar.query;
+export const selectCityPredictions = (state: RootState) =>
+  state.searchNavbar.cityPredictions;
 export default store;

@@ -31,3 +31,7 @@ export function getPhotoURLFromReference(
 ) {
   return `https://maps.googleapis.com/maps/api/place/photo?photoreference=${photoReference}&key=${process.env.REACT_APP_PLACES_API_KEY}&maxwidth=${maxWidth}&maxheight=${maxHeight}`;
 }
+
+export function getPlaceAutocompleteURL(input: string) {
+  return `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${process.env.REACT_APP_PLACES_API_KEY}`;
+}

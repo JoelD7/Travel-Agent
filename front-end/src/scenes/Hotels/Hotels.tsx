@@ -5,29 +5,23 @@ import {
   faFilter,
   faMapMarkerAlt,
   faPhone,
-  faStar,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Card,
-  CardContent,
   createMuiTheme,
   Divider,
   Drawer,
   FormControl,
   Grid,
-  GridList,
   MenuItem,
   Popover,
   Select,
   ThemeProvider,
-  Tooltip,
 } from "@material-ui/core";
 import { Pagination, PaginationItem } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Axios, { AxiosResponse } from "axios";
-import { addDays } from "date-fns";
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,31 +34,29 @@ import {
   Navbar,
   PriceRange,
   ProgressCircle,
-  ServicesToolbar,
   Rating,
+  ServicesToolbar,
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
   capitalizeString,
+  getCityImage,
   getFindPlaceFromTextURL,
-  getLocalStorageConsumption,
+  getHotelImages,
+  getHotelStars,
   getPhotoFromReferenceURL,
   HotelBedAPI,
   hotelsPlaceholder,
-  decimalFormatter,
   muiDateFormatter,
   Routes,
-  getHotelStars,
   selectHotelReservationParams,
-  getHotelImages,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
 import { setHotelDetail, updateReservationParams } from "../../utils/store/hotel-slice";
 import {
   HotelAvailability,
   HotelBooking,
-  HotelSearch,
   HotelPax,
   Occupancy,
 } from "../../utils/types/hotel-types";
@@ -246,7 +238,10 @@ export function Hotels() {
   const city = "Paris";
 
   useEffect(() => {
-    searchHotels();
+    // searchHotels();
+    getCityImage(city).then((res) => {
+      setImage(String(res));
+    });
   }, []);
 
   useEffect(() => {
@@ -437,33 +432,6 @@ export function Hotels() {
     let mediumPrice = Math.floor(sortedRates[Math.round(sortedRates.length / 2) - 1]);
     setMaxRate(mediumPrice);
     dispatch(updateReservationParams({ priceRange: [0, mediumPrice] }));
-  }
-
-  function getCityImage() {
-    const placesRequestUrl = getFindPlaceFromTextURL(city, ["name", "photos"]);
-
-    Axios.get(proxyUrl + placesRequestUrl)
-      .then((res) => {
-        const photoRef = res.data?.candidates?.[0]?.photos?.[0]?.photo_reference;
-        // photoRef is the result of the initial Place Search query
-        if (photoRef) {
-          const imageLookupURL = getPhotoFromReferenceURL(photoRef, 700, 700);
-
-          fetch(proxyUrl + imageLookupURL)
-            .then((r) => {
-              r.blob().then((blob) => {
-                let convertedImage = URL.createObjectURL(blob);
-                setImage(convertedImage);
-              });
-            })
-            .catch((error) => {
-              console.log("Error while getting image: ", error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.log("Error: ", error);
-      });
   }
 
   function getFormattedAddress(hotel: HotelBooking) {
@@ -745,7 +713,7 @@ export function Hotels() {
 
       <div
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/destinations/paris.jpg")`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${image})`,
         }}
         className={style.background}
       ></div>

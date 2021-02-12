@@ -4,6 +4,17 @@ import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 
 export const navbarStyles = makeStyles((theme: Theme) => ({
+  autocompleteAdornment: {
+    position: "absolute",
+    top: "-5px",
+  },
+  autocompelteListbox: {
+    fontFamily: Font.Family,
+  },
+  autocompleteOption: {
+    color: Colors.BLUE,
+    fontWeight: "bold",
+  },
   appbar: {
     height: "60px",
     boxShadow: "0px 0px red",
@@ -17,8 +28,8 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
   },
   defaultHomeNav: {
     display: "flex",
-    marginRight: '30px',
-    alignItems: 'center',
+    marginRight: "30px",
+    alignItems: "center",
     [theme.breakpoints.down(1000)]: {
       display: "none",
     },
@@ -32,7 +43,7 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     fontFamily: Font.Family,
     borderBottom: `2px solid rgba(0,0,0,0)`,
     margin: "0px 5px",
-    fontSize: '18px',
+    fontSize: "18px",
     color: Colors.BLUE,
     "&.MuiListItem-root": {
       "&.Mui-selected": {
@@ -46,16 +57,20 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
+  popupIndicatorOpen: {
+    transform: "rotate(0deg)",
+  },
   rightChildrenContainer: {
     marginLeft: "auto",
     display: "flex",
-    alignItems: 'center',
+    alignItems: "center",
   },
   searchBar: {
     marginLeft: "10px",
     width: "300px",
     borderRadius: "10px",
     "& .MuiOutlinedInput-root": {
+      borderRadius: "10px",
       "&:hover fieldset": {
         borderColor: "#cecece",
       },
@@ -66,6 +81,7 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
   },
   searchBarInput: {
     backgroundColor: "rgba(0,0,0,0)",
+    color: Colors.GRAY,
   },
   searchBarText: {
     fontFamily: Family,
@@ -73,6 +89,7 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
   },
   searchBarInputHome: {
     backgroundColor: "rgba(0,0,0,0)",
+    color: "white",
   },
   searchBarTextHome: {
     fontFamily: Family,

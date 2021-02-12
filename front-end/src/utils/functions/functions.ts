@@ -7,7 +7,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { CSSProperties } from "@material-ui/styles";
+import Axios from "axios";
 import { format } from "date-fns";
+import { getPhotoFromReferenceURL } from "..";
+import { getFindPlaceFromTextURL, proxyUrl } from "../external-apis";
 import { EventType } from "../types";
 import { HotelBooking } from "../types/hotel-types";
 export * from "./hotel";
@@ -516,4 +519,39 @@ export function capitalizeString(value: string, type: "each word" | "full senten
 
 export function scrollToBottom() {
   window.scrollTo(0, document.body.scrollHeight);
+}
+
+/**
+ * Returns a cover image for a city.
+ * @param city
+ */
+export function getCityImage(city: string) {
+  const placesRequestUrl = getFindPlaceFromTextURL(city, ["name", "photos"]);
+
+  return Axios.get(proxyUrl + placesRequestUrl)
+    .then((res) => {
+      const photoRef = res.data?.candidates?.[0]?.photos?.[0]?.photo_reference;
+      let convertedImage = "";
+      // photoRef is the result of the initial Place Search query
+      if (photoRef) {
+        const imageLookupURL = getPhotoFromReferenceURL(photoRef, 700, 700);
+
+        let fetchImagePromise = fetch(proxyUrl + imageLookupURL)
+          .then((r) => {
+            let blobPromise = r.blob().then((blob) => {
+              convertedImage = URL.createObjectURL(blob);
+              return convertedImage;
+            });
+            return blobPromise;
+          })
+          .catch((error) => {
+            console.log("Error while getting image: ", error);
+          });
+
+        return fetchImagePromise;
+      }
+    })
+    .catch((error) => {
+      console.log("Error: ", error);
+    });
 }

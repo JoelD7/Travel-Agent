@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import Axios from "axios";
 import { useDispatch } from "react-redux";
+import { CitySearch } from "../types/location-types";
 
 interface SearchType {
   query: string;
+  cityPredictions: CitySearch[];
 }
 
 interface PayloadType {
@@ -11,7 +13,8 @@ interface PayloadType {
 }
 
 const initialState: SearchType = {
-  query: "",
+  query: " ",
+  cityPredictions: [],
 };
 
 const searchSlice = createSlice({
@@ -23,9 +26,11 @@ const searchSlice = createSlice({
       let value: string = payload.value;
       return { ...state, query: value };
     },
+    updateCityPredictions(state, action: PayloadAction<CitySearch[]>) {
+      state.cityPredictions = action.payload;
+    },
   },
 });
 
-export const selectSearchQuery = (state: SearchType) => state.query;
-export const { onQueryChanged } = searchSlice.actions;
+export const { onQueryChanged, updateCityPredictions } = searchSlice.actions;
 export default searchSlice.reducer;

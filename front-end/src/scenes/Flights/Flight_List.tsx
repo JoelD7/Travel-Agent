@@ -23,7 +23,7 @@ import {
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays, parseISO, isBefore } from "date-fns";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Family } from "../../assets/fonts";
 import {
   CardFlight,
@@ -37,12 +37,18 @@ import {
 } from "../../components";
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors, Shadow } from "../../styles";
-import { flightsPlaceholder, muiDateFormatter } from "../../utils";
+import {
+  flightsPlaceholder,
+  getPlaceAutocompleteURL,
+  muiDateFormatter,
+  proxyUrl,
+} from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { flightListStyles } from "./flight-list-styles";
 import { FlightDetails } from "./FlightDetails";
 import Helmet from "react-helmet";
+import Axios from "axios";
 
 export function Flight_List() {
   const style = flightListStyles();
@@ -189,6 +195,14 @@ export function Flight_List() {
     "First",
     "Premium Economy",
   ];
+
+  useEffect(() => {
+    // Axios.get(proxyUrl + getPlaceAutocompleteURL("Paris"))
+    //   .then((res) => {
+    //     console.log("City autocomplete response: ", JSON.stringify(res.data));
+    //   })
+    //   .catch((error) => console.log(error));
+  }, []);
 
   function onDateRangeChanged(
     arr: number[],

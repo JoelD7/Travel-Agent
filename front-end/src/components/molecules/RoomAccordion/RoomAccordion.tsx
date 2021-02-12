@@ -77,7 +77,6 @@ export function RoomAccordion({ room }: RoomAccordion) {
             <>
               <Grid item xs={12}>
                 <Grid container alignItems="center">
-                  {/* <Text bold>Board name: </Text> */}
                   <Text style={{ marginLeft: "3px" }}>
                     {capitalizeString(rate.boardName, "each word")}
                   </Text>

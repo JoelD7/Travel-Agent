@@ -1,22 +1,12 @@
 import {
   faBed,
   faCalendar,
-  faChevronDown,
   faChild,
   faMapMarkerAlt,
   faPhone,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Backdrop,
-  CardActionArea,
-  Dialog,
-  Divider,
-  Grid,
-} from "@material-ui/core";
+import { Backdrop, CardActionArea, Dialog, Divider, Grid } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useRef, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -34,13 +24,13 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
-  capitalizeString,
   currencyFormatter,
   getHotelImages,
   getHotelStars,
   scrollToBottom,
   selectHotelDetail,
   selectHotelReservationParams,
+  selectRoomAccordionExpanded,
 } from "../../utils";
 import { setRoomAccordionExpanded } from "../../utils/store/hotel-slice";
 import { HotelBooking } from "../../utils/types/hotel-types";
@@ -63,9 +53,8 @@ export function HotelDetails() {
   const reservationParams = useSelector(selectHotelReservationParams);
 
   const [limitedAbout, setLimitedAbout] = useState(true);
-  const [roomsExpanded, setRoomsExpanded] = useState<{
-    [x: string]: { expanded: boolean };
-  }>(constructRoomsExpanded());
+
+  const allRoomAccordionsExpanded = useSelector(selectRoomAccordionExpanded);
 
   const [viewerOpen, setViewerOpen] = useState(false);
   const [initialImageSlide, setInitialImageSlide] = useState(0);
@@ -100,23 +89,6 @@ export function HotelDetails() {
     initialSlide: initialImageSlide,
   };
 
-  function constructRoomsExpanded() {
-    let buffer = {};
-    hotel.rooms.forEach((room) => {
-      buffer = { ...buffer, [room.code]: { expanded: false } };
-    });
-    return buffer;
-  }
-
-  function expandAllRoomAccordions() {
-    let buffer = {};
-    hotel.rooms.forEach((room) => {
-      buffer = { ...buffer, [room.code]: { expanded: true } };
-    });
-
-    setRoomsExpanded(buffer);
-  }
-
   function getPhoneList() {
     return hotel.phones.map((phone) => phone.phoneNumber).join(" | ");
   }
@@ -130,10 +102,9 @@ export function HotelDetails() {
       : `${reservationParams.adults} ${adultQty}`;
   }
 
-  function seeRoomOptions() {
-    // expandAllRoomAccordions();
+  function goToRoomOptions() {
     dispatch(setRoomAccordionExpanded(true));
-    if (roomsExpanded) {
+    if (allRoomAccordionsExpanded) {
       //@ts-ignore
       roomAnchorEl.current.click();
       scrollToBottom();
@@ -149,28 +120,6 @@ export function HotelDetails() {
   function openFullScreenImageSlider(initialSlide: number) {
     setInitialImageSlide(initialSlide);
     setViewerOpen(true);
-  }
-
-  function onAccordionChange(accordion: string, isExpanded: boolean) {
-    let buffer = {};
-    for (const room in roomsExpanded) {
-      if (Object.prototype.hasOwnProperty.call(roomsExpanded, room)) {
-        const element = roomsExpanded[room];
-        if (accordion === room) {
-          buffer = {
-            ...buffer,
-            [room]: { expanded: isExpanded },
-          };
-        } else {
-          buffer = {
-            ...buffer,
-            [room]: { expanded: roomsExpanded[room].expanded },
-          };
-        }
-      }
-    }
-
-    setRoomsExpanded(buffer);
   }
 
   return (
@@ -342,7 +291,7 @@ export function HotelDetails() {
                     type="text"
                     style={{ marginLeft: "auto" }}
                     textColor={Colors.BLUE}
-                    onClick={() => seeRoomOptions()}
+                    onClick={() => goToRoomOptions()}
                   >
                     See room options
                   </CustomButton>
@@ -366,6 +315,7 @@ export function HotelDetails() {
         </Grid>
       </div>
 
+      {/* Fullscreen images */}
       <Dialog
         open={viewerOpen}
         onClose={() => setViewerOpen(false)}
