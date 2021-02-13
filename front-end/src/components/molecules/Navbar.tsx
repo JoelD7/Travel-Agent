@@ -210,6 +210,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
           <img src={home ? logoTypeWhiteFore : logoType} className={style.logotype} />
         </Link>
 
+        {/* Search box */}
         <Autocomplete
           options={cityPredictions}
           loading={cityPredictions.length !== 0}
