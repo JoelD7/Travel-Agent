@@ -34,7 +34,7 @@ import {
   updateAccessToken,
 } from "../../utils/external-apis/amadeus-apis";
 import { CitySearch } from "../../utils/types/location-types";
-import { IconText } from "../atoms";
+import { Finder, IconText } from "../atoms";
 import { ButtonIcon } from "../atoms/ButtonIcon";
 import { NavDrawer } from "./NavDrawer/NavDrawer";
 
@@ -211,7 +211,8 @@ export const Navbar: FunctionComponent<Navbar> = ({
         </Link>
 
         {/* Search box */}
-        <Autocomplete
+        <Finder home />
+        {/* <Autocomplete
           options={cityPredictions}
           loading={cityPredictions.length !== 0}
           getOptionLabel={(option) =>
@@ -240,7 +241,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
               size="small"
             />
           )}
-        />
+        /> */}
 
         <div className={style.rightChildrenContainer}>
           <div className={style.defaultHomeNav}>
