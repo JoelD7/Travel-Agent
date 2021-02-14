@@ -2,6 +2,7 @@ import { parseISO } from "date-fns";
 import { HotelAmenity } from "..";
 import { EventType } from "../types";
 import { HotelBooking, HotelAvailability } from "../types/hotel-types";
+import { AirportCitySearch } from "../types/location-types";
 import { Trip } from "../types/trip-types";
 
 export const restaurantsPlaceholder: Restaurant[] = [
@@ -3246,3 +3247,26 @@ export const tripsPlaceholder: Trip[] = [
   //   coverPhoto: "country.jpg",
   // },
 ];
+
+export const airportPlaceholder: AirportCitySearch = {
+  address: {
+    cityCode: "",
+    cityName: "",
+    countryCode: "",
+    countryName: "",
+  },
+  analytics: {
+    travelers: {
+      score: 0,
+    },
+  },
+  subType: "",
+  name: "",
+  id: "",
+  timeZoneOffset: "",
+  iataCode: "",
+  geoCode: {
+    latitude: 0,
+    longitude: 0,
+  },
+};

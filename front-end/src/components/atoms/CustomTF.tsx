@@ -1,4 +1,5 @@
 import { TextField } from "@material-ui/core";
+import { AutocompleteRenderInputParams } from "@material-ui/lab";
 import { CreateCSSProperties, makeStyles } from "@material-ui/styles";
 import React, { ChangeEvent, ReactNode, useState } from "react";
 import { Family } from "../../assets/fonts";
@@ -17,11 +18,14 @@ interface CustomTFProps {
   width?: string;
   placeholder?: string;
   rounded?: boolean;
+  params?: AutocompleteRenderInputParams;
   numeric?: boolean;
+  onFocus?: () => void;
 }
 
 export function CustomTF({
   containerStyle,
+  onFocus,
   updateState,
   textStyle,
   value,
@@ -33,6 +37,7 @@ export function CustomTF({
   placeholder,
   rounded,
   numeric,
+  params,
   className,
 }: CustomTFProps) {
   const [text, setText] = useState(value);
@@ -81,17 +86,12 @@ export function CustomTF({
 
   return (
     <TextField
+      {...params}
       value={text}
       size={size}
       placeholder={placeholder}
       className={`${style.textField} ${className}`}
-      InputProps={{
-        classes: {
-          root: style.text,
-          inputAdornedStart: style.inputAdornedStart,
-        },
-        startAdornment: startAdornment,
-      }}
+      onFocus={onFocus}
       variant={"outlined"}
       onChange={onTextChanged}
       onBlur={updateState}

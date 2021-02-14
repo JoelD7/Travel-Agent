@@ -4,6 +4,7 @@ import searchNavbarReducer from "./search-slice";
 import calendarReducer from "./calendar-slice";
 import poiReducer from "./poi-slice";
 import hotelReducer from "./hotel-slice";
+import flightSlice from "./flight-slice";
 import { useDispatch } from "react-redux";
 
 const store = configureStore({
@@ -13,6 +14,7 @@ const store = configureStore({
     calendarSlice: calendarReducer,
     poiReducer: poiReducer,
     hotelReducer: hotelReducer,
+    flightSlice: flightSlice,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
@@ -52,8 +54,17 @@ export const selectRoomAccordionExpanded = (state: RootState) =>
 
 //#endregion
 
-//#region City search
+//#region AirportCity search
 export const selectSearchQuery = (state: RootState) => state.searchNavbar.query;
 export const selectCityPredictions = (state: RootState) =>
   state.searchNavbar.cityPredictions;
+export const selectAirportPredictions = (state: RootState) =>
+  state.searchNavbar.airportPredictions;
+
+export const selectFlightParams = (state: RootState) => state.flightSlice;
+export const selectFlightFromAutocomplete = (state: RootState) =>
+  state.flightSlice.flightFromAutocomplete;
+export const selectFlightToAutocomplete = (state: RootState) =>
+  state.flightSlice.flightToAutocomplete;
+
 export default store;

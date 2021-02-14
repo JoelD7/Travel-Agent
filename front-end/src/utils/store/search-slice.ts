@@ -1,11 +1,10 @@
-import { createAsyncThunk, createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
-import Axios from "axios";
-import { useDispatch } from "react-redux";
-import { CitySearch } from "../types/location-types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AirportCitySearch } from "../types/location-types";
 
 interface SearchType {
   query: string;
-  cityPredictions: CitySearch[];
+  cityPredictions: AirportCitySearch[];
+  airportPredictions: AirportCitySearch[];
 }
 
 interface PayloadType {
@@ -15,6 +14,7 @@ interface PayloadType {
 const initialState: SearchType = {
   query: " ",
   cityPredictions: [],
+  airportPredictions: [],
 };
 
 const searchSlice = createSlice({
@@ -26,11 +26,19 @@ const searchSlice = createSlice({
       let value: string = payload.value;
       return { ...state, query: value };
     },
-    updateCityPredictions(state, action: PayloadAction<CitySearch[]>) {
+    updateCityPredictions(state, action: PayloadAction<AirportCitySearch[]>) {
       state.cityPredictions = action.payload;
+    },
+
+    updateAirportPredictions(state, action: PayloadAction<AirportCitySearch[]>) {
+      state.airportPredictions = action.payload;
     },
   },
 });
 
-export const { onQueryChanged, updateCityPredictions } = searchSlice.actions;
+export const {
+  onQueryChanged,
+  updateCityPredictions,
+  updateAirportPredictions,
+} = searchSlice.actions;
 export default searchSlice.reducer;

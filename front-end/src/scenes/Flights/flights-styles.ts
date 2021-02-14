@@ -1,8 +1,16 @@
 import { makeStyles, Theme } from "@material-ui/core";
+import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
 export const flightStyles = makeStyles((theme: Theme) => ({
+  autocompelteListbox: {
+    fontFamily: Font.Family,
+  },
+  autocompleteOption: {
+    color: Colors.BLUE,
+    fontWeight: "bold",
+  },
   card: {
     width: "100%",
     margin: "10px",
@@ -159,6 +167,15 @@ export const flightStyles = makeStyles((theme: Theme) => ({
 
     "& .MuiMenuItem-root": {
       fontFamily: Family,
+    },
+  },
+  searchBarInput: {
+    width: "100%",
+    backgroundColor: "rgba(0,0,0,0)",
+    color: Colors.BLUE,
+    "& .MuiInputBase-input": {
+      position: "relative",
+      bottom: "4px",
     },
   },
   topContainer: {

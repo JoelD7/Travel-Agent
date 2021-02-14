@@ -1,7 +1,7 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import { Colors, Shadow } from "..";
-import { home, homeItinerary } from "../../assets";
+import { Font, home, homeItinerary } from "../../assets";
 import { Family } from "../../assets/fonts";
 
 export const home_explore_button: CreateCSSProperties<{}> = {
@@ -21,6 +21,13 @@ export const style_createTripButton: CreateCSSProperties<{}> = {
 };
 
 export const homeStyles = makeStyles((theme: Theme) => ({
+  autocompelteListbox: {
+    fontFamily: Font.Family,
+  },
+  autocompleteOption: {
+    color: Colors.BLUE,
+    fontWeight: "bold",
+  },
   card: {
     width: "95%",
   },
@@ -156,6 +163,9 @@ export const homeStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
+  popupIndicatorOpen: {
+    transform: "rotate(0deg)",
+  },
   planTripGrid: {
     width: "50%",
     [theme.breakpoints.down(990)]: {
@@ -276,7 +286,14 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     color: Colors.BLUE,
     fontSize: "14px",
   },
-
+  searchBarInput: {
+    backgroundColor: "rgba(0,0,0,0)",
+    color: Colors.BLUE,
+    "& .MuiInputBase-input": {
+      position: "relative",
+      bottom: "4px",
+    },
+  },
   slider: {
     width: "100%",
     display: "flex",

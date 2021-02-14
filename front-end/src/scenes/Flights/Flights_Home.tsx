@@ -23,7 +23,7 @@ import {
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { addDays, format, parseISO } from "date-fns";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Family } from "../../assets/fonts";
 import {
   CardFlight,
@@ -37,10 +37,17 @@ import {
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors } from "../../styles";
 import {
+  airportPlaceholder,
+  capitalizeString,
   formatFlightDateTime,
   getFlightCitiesLabel,
   muiDateFormatter,
   Routes,
+  selectAirportPredictions,
+  selectFlightFromAutocomplete,
+  selectFlightParams,
+  selectFlightToAutocomplete,
+  updateAirportPredictions,
 } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
@@ -48,6 +55,31 @@ import { flightStyles } from "./flights-styles";
 import axios, { AxiosRequestConfig } from "axios";
 import Helmet from "react-helmet";
 import { useHistory } from "react-router-dom";
+import {
+  fetchAirportCitiesByInput,
+  fetchNewAccessToken,
+  isAccessTokenUpdatable,
+  startAirportCityPrediction,
+  updateAccessToken,
+} from "../../utils/external-apis/amadeus-apis";
+import { useDispatch, useSelector } from "react-redux";
+import { Autocomplete } from "@material-ui/lab";
+import { AirportCitySearch } from "../../utils/types/location-types";
+import {
+  FlightSearch,
+  setFlightFromAutocomplete,
+  setFlightToAutocomplete,
+} from "../../utils/store/flight-slice";
+import {
+  setFlightDeparture,
+  setFlightReturn,
+  setFlightFrom,
+  setFlightTo,
+  setFlightAdults,
+  setFlightClass,
+  setFlightChildren,
+  setFlightInfants,
+} from "../../utils/store/flight-slice";
 
 export function Flights_Home() {
   const style = flightStyles();
@@ -170,6 +202,7 @@ export function Flights_Home() {
   };
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [state, setState] = useState<FlightSearchParams>({
     adults: "",
@@ -183,6 +216,7 @@ export function Flights_Home() {
     infants: "",
     priceRange: [0, 500],
   });
+  const flight: FlightSearch = useSelector(selectFlightParams);
 
   const passengersParams = [
     {
@@ -338,6 +372,47 @@ export function Flights_Home() {
       ],
     },
   ];
+  const airportPredictions: AirportCitySearch[] = useSelector(selectAirportPredictions);
+
+  const [focusedAutocomplete, setFocusedAutocomplete] = useState<string>("");
+
+  const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
+  const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
+
+  useEffect(() => {
+    if (focusedAutocomplete === "From") {
+      startAirportCityPrediction(flight.from, getAirportPredictions);
+    } else {
+      startAirportCityPrediction(flight.to, getAirportPredictions);
+    }
+  }, [flight.from, flight.to]);
+
+  function getAirportPredictions(searchQuery: string) {
+    if (searchQuery === "") {
+      return;
+    }
+    fetchAirportCitiesByInput(searchQuery, "AIRPORT")
+      .then((res) => {
+        dispatch(updateAirportPredictions(res.data.data));
+      })
+      .catch((error) => console.log(error));
+  }
+
+  function onPassengerParamsChange(
+    e: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>,
+    param: string
+  ) {
+    if (param === "adults") {
+      dispatch(setFlightAdults(e.target.value as string));
+    } else if (param === "children") {
+      dispatch(setFlightChildren(e.target.value as string));
+    } else {
+      dispatch(setFlightInfants(e.target.value as string));
+    }
+  }
 
   return (
     <div className={style.mainContainer}>
@@ -394,30 +469,71 @@ export function Flights_Home() {
             }
           >
             <h5 className={style.reservationParamText}>From</h5>
-            <CustomTF
-              value={state.from}
-              className={style.destinationTF}
-              outlineColor={Colors.BLUE}
-              updateState={(e) => setState({ ...state, from: e.target.value })}
-              placeholder="City or airport"
-              startAdornment={
-                <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
+
+            <Autocomplete
+              value={flightFromAutocomplete}
+              onChange={(e, value) => dispatch(setFlightFromAutocomplete(value))}
+              options={airportPredictions}
+              loading={airportPredictions.length !== 0}
+              getOptionLabel={(option) =>
+                `${capitalizeString(`${option.name}`, "full sentence")}, ${
+                  option.iataCode
+                }`
               }
+              classes={{
+                input: style.searchBarInput,
+                listbox: style.autocompelteListbox,
+                option: style.autocompleteOption,
+              }}
+              renderInput={(params) => (
+                <CustomTF
+                  className={style.searchBarInput}
+                  onFocus={() => setFocusedAutocomplete("From")}
+                  params={params}
+                  value={flight.from}
+                  outlineColor={Colors.BLUE}
+                  updateState={(e) => dispatch(setFlightFrom(e.target.value))}
+                  placeholder="City or airport"
+                  startAdornment={
+                    <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
+                  }
+                />
+              )}
             />
           </Grid>
 
           {state.flightType === FlightTypes.ROUND && (
             <Grid item className={style.largeGrid} key="destinationTF">
               <h5 className={style.reservationParamText}>To</h5>
-              <CustomTF
-                value={state.to}
-                className={style.destinationTF}
-                outlineColor={Colors.BLUE}
-                updateState={(e) => setState({ ...state, to: e.target.value })}
-                placeholder="City or airport"
-                startAdornment={
-                  <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
+              <Autocomplete
+                value={flightToAutocomplete}
+                onChange={(e, value) => dispatch(setFlightToAutocomplete(value))}
+                options={airportPredictions}
+                loading={airportPredictions.length !== 0}
+                getOptionLabel={(option) =>
+                  `${capitalizeString(`${option.name}`, "full sentence")}, ${
+                    option.iataCode
+                  }`
                 }
+                classes={{
+                  input: style.searchBarInput,
+                  listbox: style.autocompelteListbox,
+                  option: style.autocompleteOption,
+                }}
+                renderInput={(params) => (
+                  <CustomTF
+                    className={style.searchBarInput}
+                    params={params}
+                    onFocus={() => setFocusedAutocomplete("To")}
+                    value={flight.to}
+                    outlineColor={Colors.BLUE}
+                    updateState={(e) => dispatch(setFlightTo(e.target.value))}
+                    placeholder="City or airport"
+                    startAdornment={
+                      <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
+                    }
+                  />
+                )}
               />
             </Grid>
           )}
@@ -434,12 +550,12 @@ export function Flights_Home() {
               >
                 <h5 className={style.reservationParamText}>Departure</h5>
                 <KeyboardDatePicker
-                  value={state.departure}
+                  value={flight.departure}
                   labelFunc={muiDateFormatter}
                   className={style.datepicker}
                   minDate={new Date()}
                   format="dd MMM., yyyy"
-                  onChange={(d) => setState({ ...state, departure: d })}
+                  onChange={(d) => dispatch(setFlightDeparture(d))}
                 />
               </Grid>
 
@@ -447,12 +563,12 @@ export function Flights_Home() {
                 <Grid item className={style.largeGrid}>
                   <h5 className={style.reservationParamText}>Return</h5>
                   <KeyboardDatePicker
-                    value={state.return}
+                    value={flight.return}
                     labelFunc={muiDateFormatter}
                     className={style.datepicker}
                     minDate={new Date()}
                     format="dd MMM., yyyy"
-                    onChange={(d) => setState({ ...state, return: d })}
+                    onChange={(d) => dispatch(setFlightReturn(d))}
                   />
                 </Grid>
               )}
@@ -466,18 +582,13 @@ export function Flights_Home() {
 
                 <FormControl style={{ width: "100%" }}>
                   <Select
-                    value={state[passenger.variable]}
+                    value={flight[passenger.variable]}
                     variant="outlined"
                     className={style.select}
                     startAdornment={
                       <FontAwesomeIcon icon={passenger.icon} color={Colors.BLUE} />
                     }
-                    onChange={(e) =>
-                      setState({
-                        ...state,
-                        [passenger.variable]: e.target.value as string,
-                      })
-                    }
+                    onChange={(e) => onPassengerParamsChange(e, passenger.variable)}
                   >
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
                       <MenuItem value={n}>{n}</MenuItem>
@@ -492,16 +603,11 @@ export function Flights_Home() {
 
               <FormControl style={{ width: "100%" }}>
                 <Select
-                  value={state.class}
+                  value={flight.class}
                   variant="outlined"
                   className={style.select}
                   startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
-                  onChange={(e) =>
-                    setState({
-                      ...state,
-                      class: e.target.value as FlightClassType,
-                    })
-                  }
+                  onChange={(e) => dispatch(setFlightClass(e.target.value as string))}
                 >
                   {classes.map((n, i) => (
                     <MenuItem key={i} value={n}>

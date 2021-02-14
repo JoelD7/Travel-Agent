@@ -28,12 +28,12 @@ import {
   updateCityPredictions,
 } from "../../utils";
 import {
-  fetchCitiesByInput,
+  fetchAirportCitiesByInput,
   fetchNewAccessToken,
   isAccessTokenUpdatable,
   updateAccessToken,
 } from "../../utils/external-apis/amadeus-apis";
-import { CitySearch } from "../../utils/types/location-types";
+import { AirportCitySearch } from "../../utils/types/location-types";
 import { IconText } from "../atoms";
 import { ButtonIcon } from "../atoms/ButtonIcon";
 import { NavDrawer } from "./NavDrawer/NavDrawer";
@@ -44,7 +44,7 @@ interface Navbar {
 }
 
 interface AutocompleteOption {
-  option: CitySearch;
+  option: AirportCitySearch;
 }
 
 export const Navbar: FunctionComponent<Navbar> = ({
@@ -56,7 +56,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const cityPredictions: CitySearch[] = useSelector(selectCityPredictions);
+  const cityPredictions: AirportCitySearch[] = useSelector(selectCityPredictions);
 
   const top100Films = [
     { title: "The Shawshank Redemption", year: 1994 },
@@ -181,7 +181,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
     if (searchQuery === "") {
       return;
     }
-    fetchCitiesByInput(searchQuery)
+    fetchAirportCitiesByInput(searchQuery, "CITY")
       .then((res) => {
         dispatch(updateCityPredictions(res.data.data));
       })

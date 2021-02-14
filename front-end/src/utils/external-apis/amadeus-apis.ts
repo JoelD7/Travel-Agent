@@ -4,6 +4,22 @@ import { addSeconds, compareAsc, parseISO } from "date-fns";
 export const airportCitySearchURL =
   "https://test.api.amadeus.com/v1/reference-data/locations";
 
+export function startAirportCityPrediction(
+  query: string,
+  getPrediction: (query: string) => void
+) {
+  if (isAccessTokenUpdatable()) {
+    fetchNewAccessToken()
+      .then((res) => {
+        updateAccessToken(res.data);
+        getPrediction(query);
+      })
+      .catch((error) => console.log(error));
+  } else {
+    getPrediction(query);
+  }
+}
+
 export function fetchNewAccessToken(): Promise<AxiosResponse<any>> {
   let client_id = process.env.REACT_APP_AMADEUS_KEY;
   let client_secret = process.env.REACT_APP_AMADEUS_SECRET;
@@ -22,7 +38,7 @@ export function fetchNewAccessToken(): Promise<AxiosResponse<any>> {
 export function updateAccessToken(data: any) {
   let newAccessToken = {
     token: data.access_token,
-    expiration: addSeconds(new Date(), data.expiresIn),
+    expiration: addSeconds(new Date(), data.expires_in),
   };
 
   localStorage.setItem("accessToken", JSON.stringify(newAccessToken));
@@ -42,10 +58,10 @@ export function isAccessTokenUpdatable() {
   return compareAsc(tokenExpiration, new Date()) !== 1;
 }
 
-export function fetchCitiesByInput(input: string) {
+export function fetchAirportCitiesByInput(input: string, type: "CITY" | "AIRPORT") {
   let accessToken = getAccessToken();
   return Axios.get(
-    "https://test.api.amadeus.com/v1/reference-data/locations?subType=CITY",
+    `https://test.api.amadeus.com/v1/reference-data/locations?subType=${type}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken.token}`,

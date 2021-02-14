@@ -9,14 +9,39 @@ import {
   Select,
   ThemeProvider,
 } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { addDays } from "date-fns";
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
-import { muiDateFormatter } from "../../utils";
+import {
+  capitalizeString,
+  muiDateFormatter,
+  selectAirportPredictions,
+  selectFlightFromAutocomplete,
+  selectFlightParams,
+  selectFlightToAutocomplete,
+  updateAirportPredictions,
+} from "../../utils";
+import {
+  fetchAirportCitiesByInput,
+  startAirportCityPrediction,
+} from "../../utils/external-apis/amadeus-apis";
+import {
+  FlightSearch,
+  setFlightAdults,
+  setFlightClass,
+  setFlightDeparture,
+  setFlightFrom,
+  setFlightFromAutocomplete,
+  setFlightReturn,
+  setFlightTo,
+  setFlightToAutocomplete,
+} from "../../utils/store/flight-slice";
+import { AirportCitySearch } from "../../utils/types/location-types";
 import { CustomButton } from "../atoms";
 import { CustomTF } from "../atoms/CustomTF";
 
@@ -109,15 +134,34 @@ export default function HomeFlightReservation() {
       },
     },
   });
+  const dispatch = useDispatch();
 
-  const [flight, setFlight] = useState<FlightType>({
-    departure: new Date(),
-    return: addDays(new Date(), 2),
-    from: "",
-    to: "",
-    passengers: "",
-    class: "",
-  });
+  const flight: FlightSearch = useSelector(selectFlightParams);
+  const [focusedAutocomplete, setFocusedAutocomplete] = useState<string>("");
+
+  const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
+  const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
+
+  const airportPredictions: AirportCitySearch[] = useSelector(selectAirportPredictions);
+
+  useEffect(() => {
+    if (focusedAutocomplete === "From") {
+      startAirportCityPrediction(flight.from, getAirportPredictions);
+    } else {
+      startAirportCityPrediction(flight.to, getAirportPredictions);
+    }
+  }, [flight.from, flight.to]);
+
+  function getAirportPredictions(searchQuery: string) {
+    if (searchQuery === "") {
+      return;
+    }
+    fetchAirportCitiesByInput(searchQuery, "AIRPORT")
+      .then((res) => {
+        dispatch(updateAirportPredictions(res.data.data));
+      })
+      .catch((error) => console.log(error));
+  }
 
   const locationParms = [
     {
@@ -133,10 +177,37 @@ export default function HomeFlightReservation() {
   const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
 
   const style = homeStyles();
+
+  function updateLocationParams(
+    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    param: string
+  ) {
+    if (param === "from") {
+      dispatch(setFlightFrom(e.target.value));
+    } else {
+      dispatch(setFlightTo(e.target.value));
+    }
+  }
+
+  function getAutocompleteValue(param: string) {
+    return param === "from" ? flightFromAutocomplete : flightToAutocomplete;
+  }
+
+  function onAutomcompleteValueChange(
+    e: ChangeEvent<{}>,
+    value: AirportCitySearch | null,
+    param: string
+  ) {
+    param === "from"
+      ? dispatch(setFlightFromAutocomplete(value))
+      : dispatch(setFlightToAutocomplete(value));
+  }
+
   return (
     <div>
       <Grid container className={style.reservationParamsGrid} spacing={2}>
         <ThemeProvider theme={theme}>
+          {/* Dates */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid item className={style.datepickerItemGridFlight}>
               <h5 className={style.reservationParamText}>Departure</h5>
@@ -146,7 +217,7 @@ export default function HomeFlightReservation() {
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"
-                onChange={(d) => setFlight({ ...flight, departure: d })}
+                onChange={(d) => dispatch(setFlightDeparture(d))}
               />
             </Grid>
 
@@ -158,24 +229,46 @@ export default function HomeFlightReservation() {
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"
-                onChange={(d) => setFlight({ ...flight, return: d })}
+                onChange={(d) => dispatch(setFlightReturn(d))}
               />
             </Grid>
           </MuiPickersUtilsProvider>
 
+          {/* Locations */}
           {locationParms.map((param) => (
             <Grid item className={style.locationParamsGrid}>
               <h5 className={style.reservationParamText}>{param.label}</h5>
-              <CustomTF
-                value={flight[param.prop] as string}
-                rounded
-                width="100%"
-                updateState={(e) =>
-                  setFlight({ ...flight, [param.prop]: e.target.value })
+              <Autocomplete
+                value={getAutocompleteValue(param.prop)}
+                onChange={(e, value) => onAutomcompleteValueChange(e, value, param.prop)}
+                options={airportPredictions}
+                loading={airportPredictions.length !== 0}
+                getOptionLabel={(option) =>
+                  `${capitalizeString(`${option.name}`, "full sentence")}, ${
+                    option.iataCode
+                  }`
                 }
-                startAdornment={
-                  <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
-                }
+                classes={{
+                  input: style.searchBarInput,
+                  popupIndicatorOpen: style.popupIndicatorOpen,
+                  listbox: style.autocompelteListbox,
+                  option: style.autocompleteOption,
+                }}
+                renderInput={(params) => (
+                  <CustomTF
+                    className={style.searchBarInput}
+                    params={params}
+                    onFocus={() => setFocusedAutocomplete(param.label)}
+                    placeholder={param.label}
+                    value={flight[param.prop] as string}
+                    rounded
+                    width="100%"
+                    updateState={(e) => updateLocationParams(e, param.prop)}
+                    startAdornment={
+                      <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
+                    }
+                  />
+                )}
               />
             </Grid>
           ))}
@@ -187,13 +280,11 @@ export default function HomeFlightReservation() {
 
             <FormControl style={{ width: "100%" }}>
               <Select
-                value={flight.passengers}
+                value={flight.adults}
                 variant="outlined"
                 className={style.select}
                 startAdornment={<FontAwesomeIcon icon={faUsers} color={Colors.BLUE} />}
-                onChange={(e) =>
-                  setFlight({ ...flight, passengers: e.target.value as string })
-                }
+                onChange={(e) => dispatch(setFlightAdults(e.target.value as string))}
               >
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
                   <MenuItem value={n}>{n}</MenuItem>
@@ -212,10 +303,7 @@ export default function HomeFlightReservation() {
                 className={style.select}
                 startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
                 onChange={(e) =>
-                  setFlight({
-                    ...flight,
-                    class: e.target.value as FlightClassType,
-                  })
+                  dispatch(setFlightClass(e.target.value as FlightClassType))
                 }
               >
                 {classes.map((n, i) => (
@@ -233,7 +321,9 @@ export default function HomeFlightReservation() {
                 rounded
                 style={{ width: "90%", boxShadow: Shadow.MEDIUM }}
                 onClick={() => {}}
-              >Search</CustomButton>
+              >
+                Search
+              </CustomButton>
             </Grid>
           </Grid>
         </ThemeProvider>

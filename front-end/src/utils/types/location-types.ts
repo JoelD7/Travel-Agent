@@ -1,4 +1,4 @@
-export interface CitySearch {
+export interface AirportCitySearch {
   subType: string;
   name: string;
   id: string;
