@@ -53,11 +53,13 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     color: "white",
     padding: "10px",
   },
-  filtersGrid: {
+  filtersContainer: {
     backgroundColor: "white",
     boxShadow: Shadow.MEDIUM3D,
     borderRadius: "5px",
     padding: "10px",
+  },
+  filtersGrid: {
     width: "25%",
 
     [theme.breakpoints.down(1215)]: {
@@ -121,7 +123,8 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   pageTitleContainerPic: {
     backgroundImage: `url('flights.jpg')`,
-    height: "55vh",
+    minHeight: "55vh",
+    marginBottom: "25px",
     backgroundPositionY: "20%",
     backgroundSize: "cover",
 

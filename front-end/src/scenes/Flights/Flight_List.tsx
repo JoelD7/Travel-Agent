@@ -218,9 +218,42 @@ export function Flight_List() {
     })
       .then((res) => {
         dispatch(setFlightDictionaries(res.data.dictionaries));
-        setFlights(res.data.data);
+        filterSimilarFlights(res.data.data);
       })
       .catch((error) => console.log(error));
+  }
+
+  /**
+   * Similar flights have the exact same price. The only
+   * things that varies a little is the schedule.
+   *
+   * By using the price, this function filters out
+   * flights that have similar characteristics in order
+   * to give the user a non-repetitive variety of flights.
+   * @param flights
+   */
+  function filterSimilarFlights(flights: any[]) {
+    let buffer: any[] = [];
+    let count = 0;
+    let curPrice = "0";
+
+    flights.forEach((flight) => {
+      if (count === 2 && flight.price.total !== curPrice) {
+        curPrice = flight.price.total;
+        buffer.push(flight);
+        count = 0;
+        count++;
+      } else if (flight.price.total === curPrice && count < 2) {
+        buffer.push(flight);
+        count++;
+      } else if (count < 2) {
+        curPrice = flight.price.total;
+        buffer.push(flight);
+        count++;
+      }
+    });
+
+    setFlights(buffer);
   }
 
   function onDateRangeChanged(
@@ -477,7 +510,9 @@ export function Flight_List() {
         <Grid container className={style.pageContentContainerGrid}>
           {/* Filters */}
           <Grid item className={style.filtersGrid}>
-            <SearchFilters />
+            <div className={style.filtersContainer}>
+              <SearchFilters />
+            </div>
           </Grid>
 
           <Grid item className={style.filterButtonGrid}>
