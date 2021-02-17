@@ -2,7 +2,7 @@ import { parseISO } from "date-fns";
 import { HotelAmenity } from "..";
 import { EventType } from "../types";
 import { HotelBooking, HotelAvailability } from "../types/hotel-types";
-import { AirportCitySearch } from "../types/location-types";
+import { AirportCity } from "../types/location-types";
 import { Trip } from "../types/trip-types";
 
 export const restaurantsPlaceholder: Restaurant[] = [
@@ -2460,18 +2460,18 @@ export const flightsPlaceholder: Flight[] = [
         segments: [
           {
             departure: {
-              iata: "SIN",
+              iataCode: "SIN",
               city: "Singapore",
-              at: parseISO("2021-02-02T00:30:00"),
+              at: "2021-02-02T00:30:00",
               terminal: "2",
             },
             arrival: {
-              iata: "DMK",
+              iataCode: "DMK",
               city: "Bangkok",
-              at: parseISO("2021-02-02T23:30:00"),
+              at: "2021-02-02T23:30:00",
               terminal: "31",
             },
-            carrier: "Egyptair",
+            carrierCode: "Egyptair",
             duration: "PT8H15M",
           },
         ],
@@ -2490,18 +2490,18 @@ export const flightsPlaceholder: Flight[] = [
         segments: [
           {
             departure: {
-              iata: "SIN",
+              iataCode: "SIN",
               city: "Singapore",
-              at: parseISO("2021-02-02T07:15:00"),
+              at: "2021-02-02T07:15:00",
               terminal: "2",
             },
             arrival: {
-              iata: "DXB",
+              iataCode: "DXB",
               city: "Dubai",
-              at: parseISO("2021-02-02T13:39:00"),
+              at: "2021-02-02T13:39:00",
               terminal: "31",
             },
-            carrier: "Egyptair",
+            carrierCode: "Egyptair",
             duration: "PT6H15M",
           },
         ],
@@ -2511,18 +2511,18 @@ export const flightsPlaceholder: Flight[] = [
         segments: [
           {
             departure: {
-              iata: "DXB",
+              iataCode: "DXB",
               city: "Dubai",
-              at: parseISO("2021-02-12T09:15:00"),
+              at: "2021-02-12T09:15:00",
               terminal: "2",
             },
             arrival: {
-              iata: "SIN",
+              iataCode: "SIN",
               city: "Singapore",
-              at: parseISO("2021-02-12T16:55:00"),
+              at: "2021-02-12T16:55:00",
               terminal: "31",
             },
-            carrier: "Emirates",
+            carrierCode: "Emirates",
             duration: "PT8H25M",
           },
         ],
@@ -2543,18 +2543,18 @@ export const flightPlaceholder: Flight = {
       segments: [
         {
           departure: {
-            iata: "SIN",
+            iataCode: "SIN",
             city: "Singapore",
-            at: parseISO("2021-01-13T07:15:00"),
+            at: "2021-01-13T07:15:00",
             terminal: "2",
           },
           arrival: {
-            iata: "DXB",
+            iataCode: "DXB",
             city: "Dubai",
-            at: parseISO("2021-01-13T13:15:00"),
+            at: "2021-01-13T13:15:00",
             terminal: "31",
           },
-          carrier: "Egyptair",
+          carrierCode: "Egyptair",
           duration: "PT6H15M",
         },
       ],
@@ -2564,18 +2564,18 @@ export const flightPlaceholder: Flight = {
       segments: [
         {
           departure: {
-            iata: "DXB",
+            iataCode: "DXB",
             city: "Dubai",
-            at: parseISO("2021-01-23T13:39:00"),
+            at: "2021-01-23T13:39:00",
             terminal: "2",
           },
           arrival: {
-            iata: "SIN",
+            iataCode: "SIN",
             city: "Singapore",
-            at: parseISO("2021-01-23T20:35:00"),
+            at: "2021-01-23T20:35:00",
             terminal: "31",
           },
-          carrier: "Emirates",
+          carrierCode: "Emirates",
           duration: "PT8H25M",
         },
       ],
@@ -3080,8 +3080,8 @@ export const tripPlaceholder: Trip = {
     {
       name: "Flight to Dubai",
       type: EventType.Flight,
-      start: flightPlaceholder.itineraries[0].segments[0].departure.at,
-      end: flightPlaceholder.itineraries[0].segments[0].arrival.at,
+      start: new Date(flightPlaceholder.itineraries[0].segments[0].departure.at),
+      end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at),
       detail: flightPlaceholder,
       location: "SIN, Singapore",
       time: true,
@@ -3089,8 +3089,8 @@ export const tripPlaceholder: Trip = {
     {
       name: "Flight to Singapore",
       type: EventType.Flight,
-      start: flightPlaceholder.itineraries[1].segments[0].departure.at,
-      end: flightPlaceholder.itineraries[1].segments[0].arrival.at,
+      start: new Date(flightPlaceholder.itineraries[1].segments[0].departure.at),
+      end: new Date(flightPlaceholder.itineraries[1].segments[0].arrival.at),
       detail: flightPlaceholder,
       location: "DXB, Dubai",
       time: true,
@@ -3248,25 +3248,25 @@ export const tripsPlaceholder: Trip[] = [
   // },
 ];
 
-export const airportPlaceholder: AirportCitySearch = {
+export const airportCityPlaceholder: AirportCity = {
+  subType: "CITY",
+  name: "MIAMI",
+  id: "CMIA",
+  timeZoneOffset: "-05:00",
+  iataCode: "MIA",
+  geoCode: {
+    latitude: 25.79343,
+    longitude: -80.29005,
+  },
   address: {
-    cityCode: "",
-    cityName: "",
-    countryCode: "",
-    countryName: "",
+    cityName: "MIAMI",
+    cityCode: "MIA",
+    countryName: "UNITED STATES OF AMERICA",
+    countryCode: "US",
   },
   analytics: {
     travelers: {
-      score: 0,
+      score: 30,
     },
-  },
-  subType: "",
-  name: "",
-  id: "",
-  timeZoneOffset: "",
-  iataCode: "",
-  geoCode: {
-    latitude: 0,
-    longitude: 0,
   },
 };

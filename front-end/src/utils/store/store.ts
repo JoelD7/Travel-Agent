@@ -58,13 +58,22 @@ export const selectRoomAccordionExpanded = (state: RootState) =>
 export const selectSearchQuery = (state: RootState) => state.searchNavbar.query;
 export const selectCityPredictions = (state: RootState) =>
   state.searchNavbar.cityPredictions;
+
 export const selectAirportPredictions = (state: RootState) =>
   state.searchNavbar.airportPredictions;
 
+export const selectCurrentCity = (state: RootState) => state.searchNavbar.currentCity;
+
+////#endregion
 export const selectFlightParams = (state: RootState) => state.flightSlice;
 export const selectFlightFromAutocomplete = (state: RootState) =>
   state.flightSlice.flightFromAutocomplete;
 export const selectFlightToAutocomplete = (state: RootState) =>
   state.flightSlice.flightToAutocomplete;
+
+export const selectFlightListURL = (state: RootState) => state.flightSlice.flightListURL;
+export const selectFlightDictionaries = (state: RootState) =>
+  state.flightSlice.dictionaries;
+////#region Flight
 
 export default store;

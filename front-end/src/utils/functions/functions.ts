@@ -10,9 +10,11 @@ import { CSSProperties } from "@material-ui/styles";
 import Axios from "axios";
 import { format } from "date-fns";
 import { getPhotoFromReferenceURL } from "..";
+import { iataCodes } from "../constants/iataCodes";
 import { getFindPlaceFromTextURL, proxyUrl } from "../external-apis";
 import { EventType } from "../types";
 import { HotelBooking } from "../types/hotel-types";
+import { IATALocation } from "../types/location-types";
 export * from "./hotel";
 export * from "./flight";
 
@@ -554,4 +556,8 @@ export function getCityImage(city: string) {
     .catch((error) => {
       console.log("Error: ", error);
     });
+}
+
+export function getIataLocation(code: string) {
+  return iataCodes.find((iata) => iata.code === code);
 }

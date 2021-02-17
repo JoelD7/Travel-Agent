@@ -7,7 +7,7 @@ import { Colors } from "../../styles";
 
 interface CustomTFProps {
   value: string;
-  updateState: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  updateState?: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   containerStyle?: CreateCSSProperties<{}>;
   className?: string;
   textStyle?: string;
@@ -20,12 +20,14 @@ interface CustomTFProps {
   rounded?: boolean;
   params?: AutocompleteRenderInputParams;
   numeric?: boolean;
+  onChange?: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   onFocus?: () => void;
 }
 
 export function CustomTF({
   containerStyle,
   onFocus,
+  onChange,
   updateState,
   textStyle,
   value,
@@ -93,7 +95,7 @@ export function CustomTF({
       className={`${style.textField} ${className}`}
       onFocus={onFocus}
       variant={"outlined"}
-      onChange={onTextChanged}
+      onChange={onChange ? onChange : onTextChanged}
       onBlur={updateState}
     />
   );

@@ -27,6 +27,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { Family } from "../../assets/fonts";
 import {
   CardFlight,
+  CardDealFlight,
   CustomButton,
   IconText,
   Navbar,
@@ -37,17 +38,21 @@ import {
 import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors } from "../../styles";
 import {
-  airportPlaceholder,
+  airportCityPlaceholder,
   capitalizeString,
   formatFlightDateTime,
   getFlightCitiesLabel,
   muiDateFormatter,
   Routes,
   selectAirportPredictions,
+  selectCurrentCity,
   selectFlightFromAutocomplete,
   selectFlightParams,
   selectFlightToAutocomplete,
+  getSavedAccessToken,
   updateAirportPredictions,
+  iataCodes,
+  selectFlightDictionaries,
 } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
@@ -57,6 +62,7 @@ import Helmet from "react-helmet";
 import { useHistory } from "react-router-dom";
 import {
   fetchAirportCitiesByInput,
+  fetchGreatFlightDeals,
   fetchNewAccessToken,
   isAccessTokenUpdatable,
   startAirportCityPrediction,
@@ -64,11 +70,12 @@ import {
 } from "../../utils/external-apis/amadeus-apis";
 import { useDispatch, useSelector } from "react-redux";
 import { Autocomplete } from "@material-ui/lab";
-import { AirportCitySearch } from "../../utils/types/location-types";
+import { AirportCity } from "../../utils/types/location-types";
 import {
   FlightSearch,
   setFlightFromAutocomplete,
   setFlightToAutocomplete,
+  setFlightDictionaries,
 } from "../../utils/store/flight-slice";
 import {
   setFlightDeparture,
@@ -80,6 +87,7 @@ import {
   setFlightChildren,
   setFlightInfants,
 } from "../../utils/store/flight-slice";
+import Axios from "axios";
 
 export function Flights_Home() {
   const style = flightStyles();
@@ -237,8 +245,9 @@ export function Flights_Home() {
   ];
 
   const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
+  const maxDealsCount = 4;
 
-  const deals: Flight[] = [
+  const [flights, setFlights] = useState<Flight[]>([
     {
       price: {
         currency: "USD",
@@ -251,18 +260,18 @@ export function Flights_Home() {
           segments: [
             {
               departure: {
-                iata: "SIN",
+                iataCode: "SIN",
                 city: "Singapore",
-                at: parseISO("2021-02-02T07:15:00"),
+                at: "2021-02-02T07:15:00",
                 terminal: "2",
               },
               arrival: {
-                iata: "DXB",
+                iataCode: "DXB",
                 city: "Dubai",
-                at: parseISO("2021-02-02T13:39:00"),
+                at: "2021-02-02T13:39:00",
                 terminal: "31",
               },
-              carrier: "Egyptair",
+              carrierCode: "Egyptair",
               duration: "PT6H15M",
             },
           ],
@@ -272,18 +281,18 @@ export function Flights_Home() {
           segments: [
             {
               departure: {
-                iata: "DXB",
+                iataCode: "DXB",
                 city: "Dubai",
-                at: parseISO("2021-02-12T09:15:00"),
+                at: "2021-02-12T09:15:00",
                 terminal: "2",
               },
               arrival: {
-                iata: "SIN",
+                iataCode: "SIN",
                 city: "Singapore",
-                at: parseISO("2021-02-12T16:55:00"),
+                at: "2021-02-12T16:55:00",
                 terminal: "31",
               },
-              carrier: "Emirates",
+              carrierCode: "Emirates",
               duration: "PT8H25M",
             },
           ],
@@ -302,18 +311,18 @@ export function Flights_Home() {
           segments: [
             {
               departure: {
-                iata: "SIN",
+                iataCode: "SIN",
                 city: "Singapore",
-                at: parseISO("2021-02-02T07:15:00"),
+                at: "2021-02-02T07:15:00",
                 terminal: "2",
               },
               arrival: {
-                iata: "DXB",
+                iataCode: "DXB",
                 city: "Dubai",
-                at: parseISO("2021-02-02T13:39:00"),
+                at: "2021-02-02T13:39:00",
                 terminal: "31",
               },
-              carrier: "Egyptair",
+              carrierCode: "Egyptair",
               duration: "PT6H15M",
             },
           ],
@@ -332,18 +341,18 @@ export function Flights_Home() {
           segments: [
             {
               departure: {
-                iata: "SIN",
+                iataCode: "SIN",
                 city: "Singapore",
-                at: parseISO("2021-02-02T07:15:00"),
+                at: "2021-02-02T07:15:00",
                 terminal: "2",
               },
               arrival: {
-                iata: "DXB",
+                iataCode: "DXB",
                 city: "Dubai",
-                at: parseISO("2021-02-02T13:39:00"),
+                at: "2021-02-02T13:39:00",
                 terminal: "31",
               },
-              carrier: "Egyptair",
+              carrierCode: "Egyptair",
               duration: "PT6H15M",
             },
           ],
@@ -353,26 +362,36 @@ export function Flights_Home() {
           segments: [
             {
               departure: {
-                iata: "DXB",
+                iataCode: "DXB",
                 city: "Dubai",
-                at: parseISO("2021-02-12T09:15:00"),
+                at: "2021-02-12T09:15:00",
                 terminal: "2",
               },
               arrival: {
-                iata: "SIN",
+                iataCode: "SIN",
                 city: "Singapore",
-                at: parseISO("2021-02-12T16:55:00"),
+                at: "2021-02-12T16:55:00",
                 terminal: "31",
               },
-              carrier: "Emirates",
+              carrierCode: "Emirates",
               duration: "PT8H25M",
             },
           ],
         },
       ],
     },
-  ];
-  const airportPredictions: AirportCitySearch[] = useSelector(selectAirportPredictions);
+  ]);
+
+  const [deals, setDeals] = useState<FlightDeal[]>([]);
+
+  const dictionaries: FlightDictionary = useSelector(selectFlightDictionaries);
+  const [currency, setCurrency] = useState<string>("");
+
+  const currentCity: AirportCity = useSelector(selectCurrentCity);
+
+  const airportPredictions: AirportCity[] = useSelector(selectAirportPredictions);
+
+  const amadeusAccessToken = getSavedAccessToken();
 
   const [focusedAutocomplete, setFocusedAutocomplete] = useState<string>("");
 
@@ -386,6 +405,16 @@ export function Flights_Home() {
       startAirportCityPrediction(flight.to, getAirportPredictions);
     }
   }, [flight.from, flight.to]);
+
+  useEffect(() => {
+    fetchGreatFlightDeals(currentCity, flight.departure)
+      .then((res) => {
+        setCurrency(res.data.meta.currency);
+        let deals = res.data.data;
+        setDeals(deals);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   function getAirportPredictions(searchQuery: string) {
     if (searchQuery === "") {
@@ -459,15 +488,8 @@ export function Flights_Home() {
             </Toolbar>
           </Grid>
 
-          <Grid
-            item
-            key="destinationTF"
-            className={
-              state.flightType === FlightTypes.ROUND
-                ? style.largeGrid
-                : style.largeGridFull
-            }
-          >
+          {/* From grid */}
+          <Grid item key="destinationTF" xs={12}>
             <h5 className={style.reservationParamText}>From</h5>
 
             <Autocomplete
@@ -476,9 +498,7 @@ export function Flights_Home() {
               options={airportPredictions}
               loading={airportPredictions.length !== 0}
               getOptionLabel={(option) =>
-                `${capitalizeString(`${option.name}`, "full sentence")}, ${
-                  option.iataCode
-                }`
+                `${capitalizeString(`${option.name}`, "each word")}, ${option.iataCode}`
               }
               classes={{
                 input: style.searchBarInput,
@@ -492,7 +512,7 @@ export function Flights_Home() {
                   params={params}
                   value={flight.from}
                   outlineColor={Colors.BLUE}
-                  updateState={(e) => dispatch(setFlightFrom(e.target.value))}
+                  onChange={(e) => dispatch(setFlightFrom(e.target.value))}
                   placeholder="City or airport"
                   startAdornment={
                     <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
@@ -502,8 +522,9 @@ export function Flights_Home() {
             />
           </Grid>
 
+          {/* To Grid */}
           {state.flightType === FlightTypes.ROUND && (
-            <Grid item className={style.largeGrid} key="destinationTF">
+            <Grid item xs={12} key="destinationTF">
               <h5 className={style.reservationParamText}>To</h5>
               <Autocomplete
                 value={flightToAutocomplete}
@@ -511,9 +532,7 @@ export function Flights_Home() {
                 options={airportPredictions}
                 loading={airportPredictions.length !== 0}
                 getOptionLabel={(option) =>
-                  `${capitalizeString(`${option.name}`, "full sentence")}, ${
-                    option.iataCode
-                  }`
+                  `${capitalizeString(`${option.name}`, "each word")}, ${option.iataCode}`
                 }
                 classes={{
                   input: style.searchBarInput,
@@ -527,7 +546,7 @@ export function Flights_Home() {
                     onFocus={() => setFocusedAutocomplete("To")}
                     value={flight.to}
                     outlineColor={Colors.BLUE}
-                    updateState={(e) => dispatch(setFlightTo(e.target.value))}
+                    onChange={(e) => dispatch(setFlightTo(e.target.value))}
                     placeholder="City or airport"
                     startAdornment={
                       <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
@@ -635,8 +654,13 @@ export function Flights_Home() {
       <PageSubtitle label="Great deals" containerStyle={{ margin: "20px auto" }} />
 
       <Grid container spacing={2} className={style.dealsContainer}>
-        {deals.map((deal, i) => (
-          <CardFlight variant="deal" flight={deal} animate />
+        {deals.slice(0, 6).map((deal) => (
+          <CardDealFlight
+            key={deal.links.flightOffers}
+            currency={currency}
+            deal={deal}
+            animate
+          />
         ))}
       </Grid>
     </div>

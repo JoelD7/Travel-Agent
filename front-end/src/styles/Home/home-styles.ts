@@ -112,10 +112,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     width: "100%",
   },
   locationParamsGrid: {
-    width: "50%",
-    [theme.breakpoints.down(595)]: {
-      width: "100%",
-    },
+    width: "100%",
   },
   locationQueryTF: {
     maxHeight: "30px",

@@ -1,4 +1,5 @@
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
+import { capitalizeString, getIataLocation } from "./functions";
 
 /**
  * Returns the city name of the place on which the flight takes off or lands.
@@ -13,9 +14,31 @@ export function getFlightCitiesLabel(
   itinerary: number = 0,
   segment: number = 0
 ) {
-  return placeRel === "departure"
-    ? `${flight.itineraries[itinerary].segments[segment].departure.city} (${flight.itineraries[itinerary].segments[segment].departure.iata})`
-    : `${flight.itineraries[itinerary].segments[segment].arrival.city} (${flight.itineraries[segment].segments[segment].arrival.iata})`;
+  let city = "";
+
+  if (placeRel === "departure") {
+    let location = getIataLocation(
+      `${flight.itineraries[itinerary].segments[segment].departure.iataCode}`
+    );
+
+    if (location) {
+      city = location.city;
+    } else {
+      city = "Not available";
+    }
+    return `${city} (${flight.itineraries[itinerary].segments[segment].departure.iataCode})`;
+  } else {
+    let location = getIataLocation(
+      `${flight.itineraries[itinerary].segments[segment].arrival.iataCode}`
+    );
+
+    if (location) {
+      city = location.city;
+    } else {
+      city = "Not available";
+    }
+    return `${city} (${flight.itineraries[itinerary].segments[segment].arrival.iataCode})`;
+  }
 }
 
 /**
@@ -32,8 +55,8 @@ export function formatFlightDateTime(
   let arrivalTime = flight.itineraries[itinerary].segments[0].arrival.at;
 
   return point === "departure"
-    ? `${format(departureTime, "d/MMM, hh:mm aaa")}`
-    : `${format(arrivalTime, "d/MMM,  hh:mm aaa")}`;
+    ? `${format(parseISO(departureTime), "d/MMM, hh:mm aaa")}`
+    : `${format(parseISO(arrivalTime), "d/MMM,  hh:mm aaa")}`;
 }
 
 /**
@@ -51,8 +74,8 @@ export function formatFlightDate(
   let arrivalTime = flight.itineraries[itinerary].segments[segment].arrival.at;
 
   return point === "departure"
-    ? `${format(departureTime, "EEE, d/MMM")}`
-    : `${format(arrivalTime, "EEE, d/MMM")}`;
+    ? `${format(new Date(departureTime), "EEE, d/MMM")}`
+    : `${format(new Date(arrivalTime), "EEE, d/MMM")}`;
 }
 
 export function formatFlightTime(
@@ -65,8 +88,20 @@ export function formatFlightTime(
   let arrivalTime = flight.itineraries[itinerary].segments[segment].arrival.at;
 
   return point === "departure"
-    ? `${format(departureTime, "hh:mm aa")}`
-    : `${format(arrivalTime, "hh:mm aa")}`;
+    ? `${format(new Date(departureTime), "hh:mm aa")}`
+    : `${format(new Date(arrivalTime), "hh:mm aa")}`;
+}
+
+export function formatFlightSegmentTime(
+  segment: FlightSegment,
+  point: "departure" | "arrival"
+) {
+  let departureTime = segment.departure.at;
+  let arrivalTime = segment.arrival.at;
+
+  return point === "departure"
+    ? `${format(new Date(departureTime), "hh:mm aa")}`
+    : `${format(new Date(arrivalTime), "hh:mm aa")}`;
 }
 
 /**
@@ -89,4 +124,24 @@ export function parseFlightDuration(duration: string) {
     });
 
   return `${hours}h ${minutes}m`;
+}
+
+/**
+ * Returns the last segment of a flight.
+ * The last segment is the part of the flight
+ * that takes the passenger to the ultimate destination.
+ * @param flight
+ */
+export function getLastSegment(flight: FlightItinerary) {
+  return flight.segments[flight.segments.length - 1];
+}
+
+export function getFlightSegmentCarrier(
+  segment: FlightSegment,
+  dictionaries: FlightDictionary
+) {
+  if (dictionaries.carriers[segment.carrierCode]) {
+    return capitalizeString(dictionaries.carriers[segment.carrierCode], "each word");
+  }
+  return "Not available";
 }

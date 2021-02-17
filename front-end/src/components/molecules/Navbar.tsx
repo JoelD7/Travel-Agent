@@ -33,7 +33,7 @@ import {
   isAccessTokenUpdatable,
   updateAccessToken,
 } from "../../utils/external-apis/amadeus-apis";
-import { AirportCitySearch } from "../../utils/types/location-types";
+import { AirportCity } from "../../utils/types/location-types";
 import { IconText } from "../atoms";
 import { ButtonIcon } from "../atoms/ButtonIcon";
 import { NavDrawer } from "./NavDrawer/NavDrawer";
@@ -44,7 +44,7 @@ interface Navbar {
 }
 
 interface AutocompleteOption {
-  option: AirportCitySearch;
+  option: AirportCity;
 }
 
 export const Navbar: FunctionComponent<Navbar> = ({
@@ -56,7 +56,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const cityPredictions: AirportCitySearch[] = useSelector(selectCityPredictions);
+  const cityPredictions: AirportCity[] = useSelector(selectCityPredictions);
 
   const top100Films = [
     { title: "The Shawshank Redemption", year: 1994 },

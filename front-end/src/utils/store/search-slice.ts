@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AirportCitySearch } from "../types/location-types";
+import { AirportCity } from "../types/location-types";
+import { airportCityPlaceholder } from "../../utils";
 
 interface SearchType {
   query: string;
-  cityPredictions: AirportCitySearch[];
-  airportPredictions: AirportCitySearch[];
+  cityPredictions: AirportCity[];
+  airportPredictions: AirportCity[];
+  currentCity: AirportCity;
 }
 
 interface PayloadType {
@@ -15,6 +17,7 @@ const initialState: SearchType = {
   query: " ",
   cityPredictions: [],
   airportPredictions: [],
+  currentCity: airportCityPlaceholder,
 };
 
 const searchSlice = createSlice({
@@ -26,12 +29,15 @@ const searchSlice = createSlice({
       let value: string = payload.value;
       return { ...state, query: value };
     },
-    updateCityPredictions(state, action: PayloadAction<AirportCitySearch[]>) {
+    updateCityPredictions(state, action: PayloadAction<AirportCity[]>) {
       state.cityPredictions = action.payload;
     },
 
-    updateAirportPredictions(state, action: PayloadAction<AirportCitySearch[]>) {
+    updateAirportPredictions(state, action: PayloadAction<AirportCity[]>) {
       state.airportPredictions = action.payload;
+    },
+    setCurrentCity(state, action: PayloadAction<AirportCity>) {
+      state.currentCity = action.payload;
     },
   },
 });
@@ -39,6 +45,7 @@ const searchSlice = createSlice({
 export const {
   onQueryChanged,
   updateCityPredictions,
+  setCurrentCity,
   updateAirportPredictions,
 } = searchSlice.actions;
 export default searchSlice.reducer;

@@ -41,7 +41,11 @@ import {
   flightsPlaceholder,
   getPlaceAutocompleteURL,
   muiDateFormatter,
+  getSavedAccessToken,
   proxyUrl,
+  selectFlightListURL,
+  startFlightFetching,
+  selectFlightDictionaries,
 } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
@@ -49,6 +53,8 @@ import { flightListStyles } from "./flight-list-styles";
 import { FlightDetails } from "./FlightDetails";
 import Helmet from "react-helmet";
 import Axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setFlightDictionaries } from "../../utils/store/flight-slice";
 
 export function Flight_List() {
   const style = flightListStyles();
@@ -168,6 +174,7 @@ export function Flight_List() {
   });
 
   const [openDrawer, setOpenDrawer] = useState(false);
+  const dispatch = useDispatch();
 
   const passengersParams = [
     {
@@ -187,7 +194,8 @@ export function Flight_List() {
     },
   ];
 
-  const flights: Flight[] = flightsPlaceholder;
+  const [flights, setFlights] = useState<Flight[]>(flightsPlaceholder);
+  const flightListURL: string = useSelector(selectFlightListURL);
 
   const flightClasses: FlightClassType[] = [
     "Business",
@@ -197,12 +205,23 @@ export function Flight_List() {
   ];
 
   useEffect(() => {
-    // Axios.get(proxyUrl + getPlaceAutocompleteURL("Paris"))
-    //   .then((res) => {
-    //     console.log("City autocomplete response: ", JSON.stringify(res.data));
-    //   })
-    //   .catch((error) => console.log(error));
+    startFlightFetching(flightListURL, fetchFlights);
   }, []);
+
+  function fetchFlights(flightListURL: string) {
+    let accessToken = getSavedAccessToken();
+
+    Axios.get(flightListURL, {
+      headers: {
+        Authorization: `Bearer ${accessToken.token}`,
+      },
+    })
+      .then((res) => {
+        dispatch(setFlightDictionaries(res.data.dictionaries));
+        setFlights(res.data.data);
+      })
+      .catch((error) => console.log(error));
+  }
 
   function onDateRangeChanged(
     arr: number[],

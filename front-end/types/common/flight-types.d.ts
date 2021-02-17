@@ -47,15 +47,15 @@ interface FlightItinerary {
 interface FlightSegment {
   departure: PlaceRelation;
   arrival: PlaceRelation;
-  carrier: string;
+  carrierCode: string;
   duration: string;
 }
 
 interface PlaceRelation {
-  iata: string;
+  iataCode: string;
   city: string;
   terminal: string;
-  at: Date;
+  at: string;
 }
 
 interface FlightPrice {
@@ -70,6 +70,23 @@ interface DatetimeRange {
   minArrival: Date;
   departureDatetimeRange?: Date[];
   arrivalDatetimeRange?: Date[];
+}
+
+interface FlightDeal {
+  origin: string;
+  destination: string;
+  departureDate: string;
+  returnDate: string;
+  price: {
+    total: string;
+  };
+  links: {
+    flightOffers: string;
+  };
+}
+
+interface FlightDictionary {
+  carriers: { [x: string]: string };
 }
 
 const ROUND = "Round trip";

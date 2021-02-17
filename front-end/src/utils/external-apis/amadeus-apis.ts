@@ -1,8 +1,16 @@
 import Axios, { AxiosResponse } from "axios";
-import { addSeconds, compareAsc, parseISO } from "date-fns";
+import { addSeconds, compareAsc, formatISO, parseISO } from "date-fns";
+import { AirportCity } from "../types/location-types";
 
 export const airportCitySearchURL =
   "https://test.api.amadeus.com/v1/reference-data/locations";
+
+interface AccessToken {
+  token: string;
+  expiration: string;
+}
+
+let emptyAccessToken = { token: "", expiration: new Date().toISOString() };
 
 export function startAirportCityPrediction(
   query: string,
@@ -20,11 +28,10 @@ export function startAirportCityPrediction(
   }
 }
 
-export function fetchNewAccessToken(): Promise<AxiosResponse<any>> {
+export async function fetchNewAccessToken() {
   let client_id = process.env.REACT_APP_AMADEUS_KEY;
   let client_secret = process.env.REACT_APP_AMADEUS_SECRET;
-
-  return Axios.post(
+  let axiosResponse = await Axios.post(
     `https://test.api.amadeus.com/v1/security/oauth2/token`,
     `grant_type=client_credentials&client_id=${client_id}&client_secret=${client_secret}`,
     {
@@ -33,6 +40,8 @@ export function fetchNewAccessToken(): Promise<AxiosResponse<any>> {
       },
     }
   );
+
+  return new Promise<AxiosResponse<any>>((resolve) => resolve(axiosResponse));
 }
 
 export function updateAccessToken(data: any) {
@@ -44,27 +53,53 @@ export function updateAccessToken(data: any) {
   localStorage.setItem("accessToken", JSON.stringify(newAccessToken));
 }
 
-function getAccessToken() {
+/**
+ * Returns the currently saved access token in localStorage,
+ * or if expiration time is up, requests a new one.
+ */
+async function getAccessToken() {
+  let curAccessToken = getSavedAccessToken();
+
+  if (isAccessTokenUpdatable()) {
+    let accessTokenResponse = await fetchNewAccessToken();
+    updateAccessToken(accessTokenResponse.data);
+
+    let newAccessToken = JSON.parse(localStorage.getItem("accessToken") || "");
+    return new Promise<AccessToken>((resolve) => {
+      resolve(newAccessToken);
+    });
+  } else {
+    return new Promise<AccessToken>((resolve) => {
+      resolve(curAccessToken);
+    });
+  }
+}
+
+/**
+ * Returns the currently saved access token in localStorage.
+ */
+export function getSavedAccessToken() {
   return localStorage.getItem("accessToken") === null
-    ? { token: "", expiration: new Date().toISOString() }
+    ? emptyAccessToken
     : JSON.parse(localStorage.getItem("accessToken") || "");
 }
 
 export function isAccessTokenUpdatable() {
-  let accessToken = getAccessToken();
+  let curDate = new Date();
+  let accessToken = getSavedAccessToken();
 
   let tokenExpiration = parseISO(accessToken.expiration);
-
-  return compareAsc(tokenExpiration, new Date()) !== 1;
+  return compareAsc(tokenExpiration, curDate) <= 0;
 }
 
-export function fetchAirportCitiesByInput(input: string, type: "CITY" | "AIRPORT") {
-  let accessToken = getAccessToken();
+export async function fetchAirportCitiesByInput(input: string, type: "CITY" | "AIRPORT") {
+  let accessToken = await getAccessToken();
+
   return Axios.get(
     `https://test.api.amadeus.com/v1/reference-data/locations?subType=${type}`,
     {
       headers: {
-        Authorization: `Bearer ${accessToken.token}`,
+        Authorization: `Bearer ${accessToken ? accessToken.token : ""}`,
       },
       params: {
         keyword: input,
@@ -72,4 +107,31 @@ export function fetchAirportCitiesByInput(input: string, type: "CITY" | "AIRPORT
       },
     }
   );
+}
+
+export async function fetchGreatFlightDeals(city: AirportCity, departureDate: Date) {
+  let accessToken = await getAccessToken();
+
+  return Axios.get(`https://test.api.amadeus.com/v1/shopping/flight-destinations`, {
+    headers: {
+      Authorization: `Bearer ${accessToken ? accessToken.token : ""}`,
+    },
+    params: {
+      origin: `${city.iataCode}`,
+      departureDate: `${formatISO(departureDate, { representation: "date" })}`,
+    },
+  });
+}
+
+export function startFlightFetching(url: string, fetchFlights: (url: string) => void) {
+  if (isAccessTokenUpdatable()) {
+    fetchNewAccessToken()
+      .then((res) => {
+        updateAccessToken(res.data);
+        fetchFlights(url);
+      })
+      .catch((error) => console.log(error));
+  } else {
+    fetchFlights(url);
+  }
 }

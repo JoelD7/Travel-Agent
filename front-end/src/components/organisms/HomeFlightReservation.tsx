@@ -41,7 +41,7 @@ import {
   setFlightTo,
   setFlightToAutocomplete,
 } from "../../utils/store/flight-slice";
-import { AirportCitySearch } from "../../utils/types/location-types";
+import { AirportCity } from "../../utils/types/location-types";
 import { CustomButton } from "../atoms";
 import { CustomTF } from "../atoms/CustomTF";
 
@@ -142,7 +142,7 @@ export default function HomeFlightReservation() {
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
-  const airportPredictions: AirportCitySearch[] = useSelector(selectAirportPredictions);
+  const airportPredictions: AirportCity[] = useSelector(selectAirportPredictions);
 
   useEffect(() => {
     if (focusedAutocomplete === "From") {
@@ -195,7 +195,7 @@ export default function HomeFlightReservation() {
 
   function onAutomcompleteValueChange(
     e: ChangeEvent<{}>,
-    value: AirportCitySearch | null,
+    value: AirportCity | null,
     param: string
   ) {
     param === "from"
@@ -244,9 +244,7 @@ export default function HomeFlightReservation() {
                 options={airportPredictions}
                 loading={airportPredictions.length !== 0}
                 getOptionLabel={(option) =>
-                  `${capitalizeString(`${option.name}`, "full sentence")}, ${
-                    option.iataCode
-                  }`
+                  `${capitalizeString(`${option.name}`, "each word")}, ${option.iataCode}`
                 }
                 classes={{
                   input: style.searchBarInput,
@@ -263,7 +261,7 @@ export default function HomeFlightReservation() {
                     value={flight[param.prop] as string}
                     rounded
                     width="100%"
-                    updateState={(e) => updateLocationParams(e, param.prop)}
+                    onChange={(e) => updateLocationParams(e, param.prop)}
                     startAdornment={
                       <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
                     }

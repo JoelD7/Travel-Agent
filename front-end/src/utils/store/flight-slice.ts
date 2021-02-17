@@ -1,7 +1,7 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays } from "date-fns";
-import { AirportCitySearch } from "../types/location-types";
+import { AirportCity } from "../types/location-types";
 
 export interface FlightSearch {
   departure: Date;
@@ -12,15 +12,23 @@ export interface FlightSearch {
   class: string;
   children?: string;
   infants?: string;
-  flightFromAutocomplete?: AirportCitySearch | null;
-  flightToAutocomplete?: AirportCitySearch | null;
+  dictionaries: FlightDictionary;
+  flightFromAutocomplete?: AirportCity | null;
+  flightToAutocomplete?: AirportCity | null;
+  flightListURL: string;
   [key: string]: FlightSearch[keyof FlightSearch];
 }
 
 const initialState: FlightSearch = {
-  departure: new Date(),
-  return: addDays(new Date(), 2),
+  departure: addDays(new Date(), 1),
+  return: addDays(new Date(), 3),
   from: "",
+  flightListURL: "",
+  dictionaries: {
+    carriers: {
+      a: "",
+    },
+  },
   to: "",
   adults: "",
   class: "",
@@ -58,11 +66,17 @@ const flightSlice = createSlice({
     setFlightInfants(state, action: PayloadAction<string>) {
       state.infants = action.payload;
     },
-    setFlightFromAutocomplete(state, action: PayloadAction<AirportCitySearch | null>) {
+    setFlightFromAutocomplete(state, action: PayloadAction<AirportCity | null>) {
       state.flightFromAutocomplete = action.payload;
     },
-    setFlightToAutocomplete(state, action: PayloadAction<AirportCitySearch | null>) {
+    setFlightToAutocomplete(state, action: PayloadAction<AirportCity | null>) {
       state.flightToAutocomplete = action.payload;
+    },
+    setFlightListURL(state, action: PayloadAction<string>) {
+      state.flightListURL = action.payload;
+    },
+    setFlightDictionaries(state, action: PayloadAction<FlightDictionary>) {
+      state.dictionaries = action.payload;
     },
   },
 });
@@ -73,7 +87,9 @@ export const {
   setFlightFrom,
   setFlightTo,
   setFlightAdults,
+  setFlightListURL,
   setFlightClass,
+  setFlightDictionaries,
   setFlightChildren,
   setFlightInfants,
   setFlightFromAutocomplete,

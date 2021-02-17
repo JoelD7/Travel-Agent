@@ -12,20 +12,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Backdrop, Dialog, Divider, Grid, IconButton, Modal } from "@material-ui/core";
 import { parseISO } from "date-fns";
 import React from "react";
+import { useSelector } from "react-redux";
 import { CustomButton } from "../../components";
 import { Colors } from "../../styles";
 import {
   currencyFormatter,
+  flightPlaceholder,
   formatFlightDate,
+  formatFlightSegmentTime,
   formatFlightTime,
   getFlightCitiesLabel,
+  getFlightSegmentCarrier,
+  getIataLocation,
+  getLastSegment,
   parseFlightDuration,
+  selectFlightDictionaries,
 } from "../../utils";
 import { flightDetailsStyles } from "./flightDetails-styles";
 
 interface FlightDetails {
   open: boolean;
-  //   flight: Flight;
+  flight: Flight;
   onClose: () => void;
   //   passengers: number;
 }
@@ -34,64 +41,23 @@ interface FlightCard {
   itinerary: number;
 }
 
-export function FlightDetails({ open, onClose }: FlightDetails) {
+export function FlightDetails({ flight, open, onClose }: FlightDetails) {
   const style = flightDetailsStyles();
   const passengers = 3;
-  const flight: Flight = {
-    price: {
-      currency: "USD",
-      total: 198,
-    },
-    class: "Economy",
-    itineraries: [
-      {
-        duration: "PT6H15M",
-        segments: [
-          {
-            departure: {
-              iata: "SIN",
-              city: "Singapore",
-              at: parseISO("2021-02-02T19:15:00"),
-              terminal: "2",
-            },
-            arrival: {
-              iata: "DXB",
-              city: "Dubai",
-              at: parseISO("2021-02-02T13:39:00"),
-              terminal: "31",
-            },
-            carrier: "Egyptair",
-            duration: "PT6H15M",
-          },
-        ],
-      },
-      {
-        duration: "PT8H25M",
-        segments: [
-          {
-            departure: {
-              iata: "DXB",
-              city: "Dubai",
-              at: parseISO("2021-02-12T09:15:00"),
-              terminal: "2",
-            },
-            arrival: {
-              iata: "SIN",
-              city: "Singapore",
-              at: parseISO("2021-02-12T16:55:00"),
-              terminal: "31",
-            },
-            carrier: "Emirates",
-            duration: "PT8H25M",
-          },
-        ],
-      },
-    ],
-  };
+
+  const dictionaries: FlightDictionary = useSelector(selectFlightDictionaries);
 
   function FlightCard({ itinerary }: FlightCard) {
+    function getCityFromIata(iata: string) {
+      let iataLocation = getIataLocation(iata);
+      return iataLocation ? iataLocation.city : " ";
+    }
+
+    const flightItinerary: FlightItinerary = flight.itineraries[itinerary];
+
     return (
       <Grid key="flight card" item xs={12} className={style.flightCard}>
+        {/* Card title */}
         <Grid key="title" container alignItems="center">
           <h2 style={{ fontSize: "20px", color: Colors.BLUE }}>
             {itinerary === 0 ? "Depart" : "Return"}
@@ -100,63 +66,60 @@ export function FlightDetails({ open, onClose }: FlightDetails) {
             {formatFlightDate(flight, "departure", itinerary)}
           </p>
           <p className={style.flightCardCities}>
-            {`${flight.itineraries[itinerary].segments[0].departure.city} -` +
-              ` ${flight.itineraries[itinerary].segments[0].arrival.city}`}
+            {`${getCityFromIata(flightItinerary.segments[0].departure.iataCode)} -` +
+              ` ${getCityFromIata(getLastSegment(flightItinerary).arrival.iataCode)}`}
           </p>
           <Grid key="second line" item xs={12}></Grid>
         </Grid>
 
         <Divider />
+        {flightItinerary.segments.map((segment, i) => (
+          <Grid key={i} container style={{ paddingTop: "20px" }}>
+            <Grid key="airline" item xs={2}>
+              <Grid container alignItems="center">
+                <Grid item xs={12} style={{ display: "flex" }}>
+                  <FontAwesomeIcon
+                    size="2x"
+                    style={{ margin: "auto" }}
+                    color={Colors.PURPLE}
+                    icon={faPlane}
+                  />
+                </Grid>
 
-        <Grid key="card content" container style={{ paddingTop: "20px" }}>
-          <Grid key="airline" item xs={2}>
-            <Grid container alignItems="center">
-              <Grid item xs={12} style={{ display: "flex" }}>
-                <FontAwesomeIcon
-                  size="2x"
-                  style={{ margin: "auto" }}
-                  color={Colors.PURPLE}
-                  icon={faPlane}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <p style={{ textAlign: "center" }}>
-                  {flight.itineraries[itinerary].segments[0].carrier}
-                </p>
+                <Grid item xs={12}>
+                  <p style={{ textAlign: "center" }}>
+                    {getFlightSegmentCarrier(segment, dictionaries)}
+                  </p>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
 
-          <Grid key="first time" item xs={2}>
-            <p className={style.firstTime}>
-              {formatFlightTime(flight, "departure", itinerary)}
-            </p>
-            <p className={style.firstIata}>
-              {flight.itineraries[itinerary].segments[0].departure.iata}
-            </p>
-          </Grid>
+            <Grid key="first time" item xs={2}>
+              <p className={style.firstTime}>
+                {formatFlightSegmentTime(segment, "departure")}
+              </p>
+              <p className={style.firstIata}>{segment.departure.iataCode}</p>
+            </Grid>
 
-          <Grid key="line" item xs={2} style={{ padding: "5px 10px" }}>
-            <Divider className={style.timeDivider} />
-          </Grid>
+            <Grid key="line" item xs={2} style={{ padding: "5px 10px" }}>
+              <Divider className={style.timeDivider} />
+            </Grid>
 
-          <Grid key="second time" item xs={2}>
-            <p className={style.secondTime}>
-              {formatFlightTime(flight, "arrival", itinerary)}
-            </p>
-            <p className={style.secondIata}>
-              {flight.itineraries[itinerary].segments[0].arrival.iata}
-            </p>
-          </Grid>
+            <Grid key="second time" item xs={2}>
+              <p className={style.secondTime}>
+                {formatFlightSegmentTime(segment, "arrival")}
+              </p>
+              <p className={style.secondIata}>{segment.arrival.iataCode}</p>
+            </Grid>
 
-          <Grid item xs={4}>
-            <p style={{ fontSize: "14px", textAlign: "end" }}>
-              <b>Duration</b>
-              {`: ${parseFlightDuration(flight.itineraries[itinerary].duration)}`}
-            </p>
+            <Grid item xs={4}>
+              <p style={{ fontSize: "14px", textAlign: "end" }}>
+                <b>Duration</b>
+                {`: ${parseFlightDuration(segment.duration)}`}
+              </p>
+            </Grid>
           </Grid>
-        </Grid>
+        ))}
       </Grid>
     );
   }
@@ -172,6 +135,7 @@ export function FlightDetails({ open, onClose }: FlightDetails) {
       onClose={onClose}
     >
       <Grid container className={style.mainContainer}>
+        {/* Top title */}
         <Grid key="topTitle" item xs={12}>
           <Grid container alignItems="center">
             <h2 style={{ fontSize: "28px" }}>
@@ -197,13 +161,20 @@ export function FlightDetails({ open, onClose }: FlightDetails) {
             </IconButton>
           </Grid>
         </Grid>
-
+        {/* Dates, flight params */}
         <Grid key="subtitle" item xs={12}>
           <Grid container alignItems="center">
-            <p className={style.subtitle}>{`${formatFlightDate(
-              flight,
-              "departure"
-            )} - ${formatFlightDate(flight, "departure", 1)}`}</p>
+            {flight.itineraries.length > 1 ? (
+              <p className={style.subtitle}>{`${formatFlightDate(
+                flight,
+                "departure"
+              )} - ${formatFlightDate(flight, "departure", 1)}`}</p>
+            ) : (
+              <p className={style.subtitle}>{`${formatFlightDate(
+                flight,
+                "departure"
+              )}`}</p>
+            )}
 
             <FontAwesomeIcon
               size="xs"
@@ -237,8 +208,9 @@ export function FlightDetails({ open, onClose }: FlightDetails) {
             <p className={style.subtitle}>{flight.class}</p>
           </Grid>
         </Grid>
+
         <FlightCard itinerary={0} />
-        <FlightCard itinerary={1} />
+        {flight.itineraries.length > 1 && <FlightCard itinerary={1} />}
 
         <Grid item xs={12} style={{ marginTop: "20px" }}>
           <Grid container justify="flex-end">

@@ -40,7 +40,7 @@ type CustomButtonType = PartialBy<
 
 export function CustomButton({
   avatar,
-  backgroundColor,
+  backgroundColor = Colors.BLUE,
   label,
   rounded,
   children,

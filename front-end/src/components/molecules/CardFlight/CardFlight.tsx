@@ -3,6 +3,7 @@ import { Grid, Card, CardHeader, CardContent, CardActionArea } from "@material-u
 import { CSSProperties } from "@material-ui/styles";
 import { format } from "date-fns";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Font } from "../../../assets";
 import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
@@ -11,6 +12,11 @@ import {
   parseFlightDuration,
   getFlightCitiesLabel,
   formatFlightDateTime,
+  formatFlightDate,
+  selectFlightDictionaries,
+  capitalizeString,
+  getLastSegment,
+  getFlightSegmentCarrier,
 } from "../../../utils";
 import { CustomButton, IconText, Text } from "../../atoms";
 import { cardFlightStyles } from "./cardFlightStyles";
@@ -28,10 +34,13 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
   const returnFlight: FlightItinerary | undefined =
     flight.itineraries.length > 1 ? flight.itineraries[1] : undefined;
 
+  const dictionaries: FlightDictionary = useSelector(selectFlightDictionaries);
+
   const [flightDetailsModal, setFlightDetailsModal] = useState(false);
 
   function parseStops(segments: FlightSegment[]) {
-    let stopsSegments: FlightSegment[] = segments.slice(1, segments.length - 1);
+    let stopsSegments: FlightSegment[] = segments.slice(0, segments.length - 1);
+    // let stopsSegments: FlightSegment[] = segments.slice(1, segments.length - 1);
     let stops = "";
     let quant = 0;
 
@@ -39,9 +48,9 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
       quant++;
 
       if (i > 0) {
-        stops += `\\${value.departure.iata}`;
+        stops += `\\${value.departure.iataCode}`;
       } else {
-        stops += value.departure.iata;
+        stops += value.departure.iataCode;
       }
     });
 
@@ -75,10 +84,10 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
 
                   <div>
                     <p className={style.dealSubtitle}>
-                      {`${formatFlightDateTime(
+                      {`${formatFlightDate(flight, "departure")} - ${formatFlightDate(
                         flight,
-                        "departure"
-                      )} - ${formatFlightDateTime(flight, "arrival")}`}
+                        "arrival"
+                      )}`}
                     </p>
                   </div>
 
@@ -102,11 +111,11 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
                       </div>
                       <div>
                         <p className={style.dealSubtitle}>
-                          {`${formatFlightDateTime(
+                          {`${formatFlightDate(
                             flight,
                             "departure",
                             1
-                          )} - ${formatFlightDateTime(flight, "arrival", 1)}`}
+                          )} - ${formatFlightDate(flight, "arrival", 1)}`}
                         </p>
                       </div>
                     </div>
@@ -128,7 +137,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
             <div style={{ display: "flex" }}>
               <IconText
                 icon={faPlaneDeparture}
-                text={`${flight.itineraries[0].segments[0].carrier}, ${flight.class}`}
+                text={`${flight.itineraries[0].segments[0].carrierCode}, ${flight.class}`}
               />
 
               <CustomButton
@@ -145,23 +154,31 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
     </Grid>
   ) : (
     <Grid container className={style.mainContainer}>
+      {/* Outgoing flight */}
       <Grid key="outgoing flight" item xs={12}>
         <Grid container>
+          {/* Plane icon */}
           <Grid item className={style.planeIconGrid}>
             <IconText text="" icon={faPlane} size={22} />
           </Grid>
+
+          {/* Departure-arrival times and airports */}
           <Grid item className={style.timesIataGrid}>
             <p className={style.timesText}>{`${format(
-              exitFlight.segments[0].departure.at,
+              new Date(exitFlight.segments[0].departure.at),
               "h:mm aa"
-            )} - ${format(exitFlight.segments[0].arrival.at, "h:mm aa")}`}</p>
+            )} - ${format(new Date(exitFlight.segments[0].arrival.at), "h:mm aa")}`}</p>
 
-            <p
-              className={style.airportsText}
-            >{`${exitFlight.segments[0].departure.iata} - 
-          ${exitFlight.segments[0].arrival.iata}, ${exitFlight.segments[0].carrier}`}</p>
+            <p className={style.airportsText}>{`${
+              exitFlight.segments[0].departure.iataCode
+            } - 
+          ${exitFlight.segments[0].arrival.iataCode}, ${getFlightSegmentCarrier(
+              exitFlight.segments[0],
+              dictionaries
+            )}`}</p>
           </Grid>
 
+          {/* Flight duration and stops */}
           <Grid item className={style.timeStopsGrid}>
             <p className={style.durationText}>{`${parseFlightDuration(
               exitFlight.duration
@@ -173,6 +190,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
             </p>
           </Grid>
 
+          {/* Flight price */}
           <Grid item className={style.priceButtonGrid}>
             <h2 style={{ marginTop: "12px" }}>{`${currencyFormatter(
               flight.price.total
@@ -181,6 +199,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
         </Grid>
       </Grid>
 
+      {/* Return flight */}
       <Grid key="return flight" item xs={12}>
         <Grid container>
           {returnFlight && (
@@ -190,14 +209,20 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
               </Grid>
               <Grid item className={style.timesIataGrid}>
                 <p className={style.timesText}>{`${format(
-                  returnFlight.segments[0].departure.at,
+                  new Date(getLastSegment(returnFlight).departure.at),
                   "h:mm aa"
-                )} - ${format(returnFlight.segments[0].arrival.at, "h:mm aa")}`}</p>
+                )} - ${format(
+                  new Date(getLastSegment(returnFlight).arrival.at),
+                  "h:mm aa"
+                )}`}</p>
 
-                <p
-                  className={style.airportsText}
-                >{`${returnFlight.segments[0].departure.iata} - 
-            ${returnFlight.segments[0].arrival.iata}, ${returnFlight.segments[0].carrier}`}</p>
+                <p className={style.airportsText}>{`${
+                  getLastSegment(returnFlight).departure.iataCode
+                } - 
+            ${getLastSegment(returnFlight).arrival.iataCode}, ${getFlightSegmentCarrier(
+                  getLastSegment(returnFlight),
+                  dictionaries
+                )}`}</p>
               </Grid>
 
               <Grid item className={style.timeStopsGrid}>
@@ -239,6 +264,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
       </Grid>
 
       <FlightDetails
+        flight={flight}
         onClose={() => setFlightDetailsModal(false)}
         open={flightDetailsModal}
       />
