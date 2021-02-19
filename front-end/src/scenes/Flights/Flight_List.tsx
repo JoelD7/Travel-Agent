@@ -22,30 +22,41 @@ import {
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { addDays, parseISO, isBefore } from "date-fns";
-import React, { useEffect, useState } from "react";
+import { addDays, parseISO, isBefore, format } from "date-fns";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Family } from "../../assets/fonts";
 import {
   CardFlight,
   CustomButton,
   DatetimeRange,
   FlightTimesRange,
+  IataAutocomplete,
   Navbar,
   PriceRange,
   ServicesToolbar,
   Text,
 } from "../../components";
-import { CustomTF } from "../../components/atoms/CustomTF";
+import { CustomTF, ProgressCircle } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
   flightsPlaceholder,
   getPlaceAutocompleteURL,
   muiDateFormatter,
   getSavedAccessToken,
+  getAccessToken,
   proxyUrl,
   selectFlightListURL,
   startFlightFetching,
   selectFlightDictionaries,
+  selectFlightToAutocomplete,
+  selectFlightFromAutocomplete,
+  selectAirportPredictions,
+  capitalizeString,
+  startAirportCityPrediction,
+  fetchAirportCitiesByInput,
+  updateAirportPredictions,
+  selectFlightParams,
+  iataCodes,
 } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
@@ -54,7 +65,23 @@ import { FlightDetails } from "./FlightDetails";
 import Helmet from "react-helmet";
 import Axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setFlightDictionaries } from "../../utils/store/flight-slice";
+import {
+  FlightSearch,
+  setFlightAdults,
+  setFlightChildren,
+  setFlightClass,
+  setFlightDeparture,
+  setFlightDictionaries,
+  setFlightFrom,
+  setFlightFromAutocomplete,
+  setFlightInfants,
+  setFlightReturn,
+  setFlightTo,
+  setFlightToAutocomplete,
+} from "../../utils/store/flight-slice";
+import { Autocomplete } from "@material-ui/lab";
+import { AirportCity, IATALocation } from "../../utils/types/location-types";
+import { CSSProperties } from "@material-ui/styles";
 
 export function Flight_List() {
   const style = flightListStyles();
@@ -134,16 +161,18 @@ export function Flight_List() {
     },
   });
 
+  const flight: FlightSearch = useSelector(selectFlightParams);
+
   const [state, setState] = useState<FlightSearchParams>({
-    adults: "",
-    children: "",
-    class: "Economy",
-    departure: new Date(),
-    return: addDays(new Date(), 2),
-    from: "",
-    to: "",
+    // adults: "",
+    // children: "",
+    // class: "Economy",
+    // departure: new Date(),
+    // return: addDays(new Date(), 2),
+    // from: "",
+    // to: "",
     flightType: "Round trip",
-    infants: "",
+    // infants: "",
     priceRange: [0, 500],
     exitFlightDates: {
       minDeparture: new Date(2020, 10, 9, 10, 0),
@@ -173,7 +202,13 @@ export function Flight_List() {
     },
   });
 
+  const airportPredictions: IATALocation[] = useSelector(selectAirportPredictions);
+  // const [airportPredictions, setAirportPredictions] = useState<IATALocation[]>([]);
+
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [loadingOnMount, setLoadingOnMount] = useState(true);
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
 
   const passengersParams = [
@@ -197,6 +232,11 @@ export function Flight_List() {
   const [flights, setFlights] = useState<Flight[]>(flightsPlaceholder);
   const flightListURL: string = useSelector(selectFlightListURL);
 
+  const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
+  const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
+
+  const [focusedAutocomplete, setFocusedAutocomplete] = useState<string>("");
+
   const flightClasses: FlightClassType[] = [
     "Business",
     "Economy",
@@ -207,6 +247,17 @@ export function Flight_List() {
   useEffect(() => {
     startFlightFetching(flightListURL, fetchFlights);
   }, []);
+
+  function getAirportPredictions(searchQuery: string) {
+    if (searchQuery === "") {
+      return;
+    }
+    fetchAirportCitiesByInput(searchQuery, "AIRPORT")
+      .then((res) => {
+        dispatch(updateAirportPredictions(res.data.data));
+      })
+      .catch((error) => console.log(error));
+  }
 
   function fetchFlights(flightListURL: string) {
     let accessToken = getSavedAccessToken();
@@ -219,6 +270,7 @@ export function Flight_List() {
       .then((res) => {
         dispatch(setFlightDictionaries(res.data.dictionaries));
         filterSimilarFlights(res.data.data);
+        setLoadingOnMount(false);
       })
       .catch((error) => console.log(error));
   }
@@ -297,7 +349,7 @@ export function Flight_List() {
           </Text>
 
           <FlightTimesRange
-            city={state.from}
+            city={flight.from}
             label="Take-off"
             max={state.exitFlightDates?.maxDeparture}
             min={state.exitFlightDates?.minDeparture}
@@ -308,7 +360,7 @@ export function Flight_List() {
           />
 
           <FlightTimesRange
-            city={state.to}
+            city={flight.to}
             label="Landing"
             max={state.exitFlightDates?.maxArrival}
             min={state.exitFlightDates?.minArrival}
@@ -319,7 +371,7 @@ export function Flight_List() {
           />
 
           <FlightTimesRange
-            city={state.to}
+            city={flight.to}
             label="Take-off"
             max={state.returnFlightDates?.maxDeparture}
             min={state.returnFlightDates?.minDeparture}
@@ -330,7 +382,7 @@ export function Flight_List() {
           />
 
           <FlightTimesRange
-            city={state.from}
+            city={flight.from}
             label="Landing"
             max={state.returnFlightDates?.maxArrival}
             min={state.returnFlightDates?.minArrival}
@@ -342,6 +394,63 @@ export function Flight_List() {
         </div>
       </>
     );
+  }
+
+  function onSearchFlightsClick() {
+    setLoading(true);
+    getAccessToken()
+      .then((res) => {
+        let accessToken = res;
+        Axios.get(`https://test.api.amadeus.com/v2/shopping/flight-offers`, {
+          headers: {
+            Authorization: `Bearer ${accessToken.token}`,
+          },
+          params: {
+            originLocationCode: flightFromAutocomplete?.code,
+            destinationLocationCode: flightToAutocomplete?.code,
+            departureDate: format(flight.departure, "yyyy-MM-dd"),
+            returnDate: format(flight.return, "yyyy-MM-dd"),
+            adults: flight.adults,
+            children: flight.children,
+            infants: flight.infants,
+          },
+        })
+          .then((res) => {
+            dispatch(setFlightDictionaries(res.data.dictionaries));
+            filterSimilarFlights(res.data.data);
+            setLoading(false);
+          })
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
+  }
+
+  function onPassengerParamsChange(
+    e: ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>,
+    param: string
+  ) {
+    if (param === "adults") {
+      dispatch(setFlightAdults(e.target.value as string));
+    } else if (param === "children") {
+      dispatch(setFlightChildren(e.target.value as string));
+    } else {
+      dispatch(setFlightInfants(e.target.value as string));
+    }
+  }
+
+  function isLoadingEnabled() {
+    return loadingOnMount || loading;
+  }
+
+  function getLoadingCircleStyle() {
+    let style: CSSProperties = loading
+      ? { display: "flex", position: "absolute", top: "100px", left: "47px" }
+      : { display: "flex" };
+
+    return style;
   }
 
   return (
@@ -370,35 +479,19 @@ export function Flight_List() {
         </Grid>
 
         {/* Reservation params */}
-        <Grid item xs={12} justify="center">
+        <Grid item xs={12}>
           <Grid container spacing={4} className={style.resevationParamsContainer}>
-            <Grid key="destinationTF" item className={style.reservParamGrid}>
+            {/* From */}
+            <Grid id="destinationTF" item className={style.reservParamGrid}>
               <h5 className={style.reservationParamText}>From</h5>
-              <CustomTF
-                value={state.from}
-                className={style.destinationTF}
-                outlineColor={Colors.GREEN_HOVER}
-                updateState={(e) => setState({ ...state, from: e.target.value })}
-                placeholder="City or airport"
-                startAdornment={
-                  <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
-                }
-              />
+              <IataAutocomplete type="airport" flightDirection="from" />
             </Grid>
 
+            {/* To */}
             {state.flightType === FlightTypes.ROUND && (
-              <Grid item className={style.reservParamGrid} key="destinationTF">
+              <Grid item className={style.reservParamGrid} id="destinationTF">
                 <h5 className={style.reservationParamText}>To</h5>
-                <CustomTF
-                  value={state.to}
-                  className={style.destinationTF}
-                  outlineColor={Colors.GREEN_HOVER}
-                  updateState={(e) => setState({ ...state, to: e.target.value })}
-                  placeholder="City or airport"
-                  startAdornment={
-                    <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
-                  }
-                />
+                <IataAutocomplete type="airport" flightDirection="to" />
               </Grid>
             )}
 
@@ -408,12 +501,12 @@ export function Flight_List() {
                 <Grid item className={style.datepickerGrid}>
                   <h5 className={style.reservationParamText}>Departure</h5>
                   <KeyboardDatePicker
-                    value={state.departure}
+                    value={flight.departure}
                     labelFunc={muiDateFormatter}
                     className={style.datepicker}
                     minDate={new Date()}
                     format="dd MMM., yyyy"
-                    onChange={(d) => setState({ ...state, departure: d })}
+                    onChange={(d) => dispatch(setFlightDeparture(d))}
                   />
                 </Grid>
 
@@ -421,13 +514,13 @@ export function Flight_List() {
                   <Grid item className={style.datepickerGrid}>
                     <h5 className={style.reservationParamText}>Return</h5>
                     <KeyboardDatePicker
-                      value={state.return}
+                      value={flight.return}
                       labelFunc={muiDateFormatter}
                       className={style.datepicker}
                       //@ts-ignore
-                      minDate={addDays(state.departure.valueOf(), 1)}
+                      minDate={addDays(flight.departure.valueOf(), 1)}
                       format="dd MMM., yyyy"
-                      onChange={(d) => setState({ ...state, return: d })}
+                      onChange={(d) => dispatch(setFlightReturn(d))}
                     />
                   </Grid>
                 )}
@@ -446,15 +539,12 @@ export function Flight_List() {
                       startAdornment={
                         <FontAwesomeIcon icon={passenger.icon} color={Colors.BLUE} />
                       }
-                      onChange={(e) =>
-                        setState({
-                          ...state,
-                          [passenger.variable]: e.target.value as string,
-                        })
-                      }
+                      onChange={(e) => onPassengerParamsChange(e, passenger.variable)}
                     >
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                        <MenuItem value={n}>{n}</MenuItem>
+                        <MenuItem key={n} value={n}>
+                          {n}
+                        </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
@@ -462,7 +552,7 @@ export function Flight_List() {
               ))}
 
               {/* Class */}
-              <Grid item className={style.reservParamGrid}>
+              <Grid item className={style.classParamGrid}>
                 <h5 className={style.reservationParamText}>Class</h5>
 
                 <FormControl style={{ width: "100%" }} className={style.selectControl}>
@@ -471,12 +561,7 @@ export function Flight_List() {
                     variant="outlined"
                     className={style.select}
                     startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
-                    onChange={(e) =>
-                      setState({
-                        ...state,
-                        class: e.target.value as FlightClassType,
-                      })
-                    }
+                    onChange={(e) => dispatch(setFlightClass(e.target.value as string))}
                   >
                     {flightClasses.map((n, i) => (
                       <MenuItem key={i} value={n}>
@@ -487,6 +572,7 @@ export function Flight_List() {
                 </FormControl>
               </Grid>
 
+              {/* Search button */}
               <Grid item style={{ margin: "auto 0px 0px auto" }}>
                 <CustomButton
                   backgroundColor={Colors.GREEN}
@@ -495,7 +581,7 @@ export function Flight_List() {
                     boxShadow: Shadow.DARK,
                     color: Colors.BLUE,
                   }}
-                  onClick={() => {}}
+                  onClick={() => onSearchFlightsClick()}
                 >
                   Search
                 </CustomButton>
@@ -526,11 +612,23 @@ export function Flight_List() {
             </CustomButton>
           </Grid>
 
-          <Grid item className={style.flightsGrid}>
-            {flights.map((flight, i) => (
-              <CardFlight variant="regular" key={i} flight={flight} />
-            ))}
-          </Grid>
+          {isLoadingEnabled() && (
+            <Grid item className={style.flightsGrid} style={getLoadingCircleStyle()}>
+              <ProgressCircle />
+            </Grid>
+          )}
+
+          {!loadingOnMount && (
+            <Grid
+              item
+              className={style.flightsGrid}
+              style={loading ? { filter: "blur(4px)" } : {}}
+            >
+              {flights.map((flight, i) => (
+                <CardFlight variant="regular" key={i} flight={flight} />
+              ))}
+            </Grid>
+          )}
         </Grid>
       </div>
 

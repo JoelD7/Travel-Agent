@@ -29,7 +29,7 @@ export function getFlightCitiesLabel(
     return `${city} (${flight.itineraries[itinerary].segments[segment].departure.iataCode})`;
   } else {
     let location = getIataLocation(
-      `${flight.itineraries[itinerary].segments[segment].arrival.iataCode}`
+      `${getLastSegment(flight.itineraries[itinerary]).arrival.iataCode}`
     );
 
     if (location) {
@@ -37,7 +37,7 @@ export function getFlightCitiesLabel(
     } else {
       city = "Not available";
     }
-    return `${city} (${flight.itineraries[itinerary].segments[segment].arrival.iataCode})`;
+    return `${city} (${getLastSegment(flight.itineraries[itinerary]).arrival.iataCode})`;
   }
 }
 

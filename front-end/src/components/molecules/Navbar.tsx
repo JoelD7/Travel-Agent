@@ -1,30 +1,17 @@
-import { faBars, faMapMarkerAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  AppBar,
-  IconButton,
-  TextField,
-  Toolbar,
-  Avatar,
-  MenuItem,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-} from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
-import React, { FunctionComponent, ReactNode, useEffect, useState } from "react";
+import { AppBar, Avatar, IconButton, MenuItem, Toolbar } from "@material-ui/core";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { carlos, logoType, logoTypeWhiteFore } from "../../assets";
 import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
 import {
-  selectSearchQuery,
-  onQueryChanged,
-  Routes,
   getLinkStyle,
+  Routes,
   selectCityPredictions,
-  capitalizeString,
+  selectSearchQuery,
   updateCityPredictions,
 } from "../../utils";
 import {
@@ -33,9 +20,8 @@ import {
   isAccessTokenUpdatable,
   updateAccessToken,
 } from "../../utils/external-apis/amadeus-apis";
-import { AirportCity } from "../../utils/types/location-types";
-import { IconText } from "../atoms";
-import { ButtonIcon } from "../atoms/ButtonIcon";
+import { AirportCity, IATALocation } from "../../utils/types/location-types";
+import { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 import { NavDrawer } from "./NavDrawer/NavDrawer";
 
 interface Navbar {
@@ -56,7 +42,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const cityPredictions: AirportCity[] = useSelector(selectCityPredictions);
+  const cityPredictions: IATALocation[] = useSelector(selectCityPredictions);
 
   const top100Films = [
     { title: "The Shawshank Redemption", year: 1994 },
@@ -211,36 +197,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
         </Link>
 
         {/* Search box */}
-        <Autocomplete
-          options={cityPredictions}
-          loading={cityPredictions.length !== 0}
-          getOptionLabel={(option) =>
-            capitalizeString(option.address.cityName, "full sentence")
-          }
-          classes={{
-            endAdornment: style.autocompleteAdornment,
-            inputRoot: home ? style.searchBarInputHome : style.searchBarInput,
-            popupIndicatorOpen: style.popupIndicatorOpen,
-            listbox: style.autocompelteListbox,
-            option: style.autocompleteOption,
-          }}
-          popupIcon={
-            <IconButton>
-              <FontAwesomeIcon icon={faSearch} color={home ? "white" : "#cecece"} />
-            </IconButton>
-          }
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              value={searchQuery}
-              variant="outlined"
-              placeholder="Search locations"
-              className={style.searchBar}
-              onChange={(e) => dispatch(onQueryChanged({ value: e.target.value }))}
-              size="small"
-            />
-          )}
-        />
+        <IataAutocomplete type="city" home={home} />
 
         <div className={style.rightChildrenContainer}>
           <div className={style.defaultHomeNav}>

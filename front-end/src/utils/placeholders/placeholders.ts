@@ -2,7 +2,7 @@ import { parseISO } from "date-fns";
 import { HotelAmenity } from "..";
 import { EventType } from "../types";
 import { HotelBooking, HotelAvailability } from "../types/hotel-types";
-import { AirportCity } from "../types/location-types";
+import { AirportCity, IATALocation } from "../types/location-types";
 import { Trip } from "../types/trip-types";
 
 export const restaurantsPlaceholder: Restaurant[] = [
@@ -3248,25 +3248,44 @@ export const tripsPlaceholder: Trip[] = [
   // },
 ];
 
-export const airportCityPlaceholder: AirportCity = {
-  subType: "CITY",
-  name: "MIAMI",
-  id: "CMIA",
-  timeZoneOffset: "-05:00",
-  iataCode: "MIA",
-  geoCode: {
-    latitude: 25.79343,
-    longitude: -80.29005,
-  },
-  address: {
-    cityName: "MIAMI",
-    cityCode: "MIA",
-    countryName: "UNITED STATES OF AMERICA",
-    countryCode: "US",
-  },
-  analytics: {
-    travelers: {
-      score: 30,
-    },
-  },
+export const airportCityPlaceholder: IATALocation = {
+  code: "MIA",
+  lat: "25.7953",
+  lon: "-80.2727",
+  name: "Miami International Airport",
+  city: "Miami",
+  state: "Florida",
+  country: "United States",
+  woeid: "12520923",
+  tz: "America/New_York",
+  phone: "(305) 876-7000",
+  type: "Airports",
+  email: "customerservice@miami-airport.com",
+  url: "http://www.miami-airport.com",
+  runway_length: "13000",
+  elev: "11",
+  icao: "KMIA",
+  direct_flights: "167",
+  carriers: "91",
+};
+
+export const airportCityPlaceholderTwo: IATALocation = {
+  code: "MUC",
+  lat: "48.354",
+  lon: "11.7816",
+  name: "Franz-Josef-Strauss Airport",
+  city: "Oberding",
+  state: "Bavaria",
+  country: "Germany",
+  woeid: "22923040",
+  tz: "Europe/Berlin",
+  phone: "",
+  type: "Airports",
+  email: "",
+  url: "http://www.munich-airport.de/",
+  runway_length: "13100",
+  elev: "1737",
+  icao: "EDDM",
+  direct_flights: "213",
+  carriers: "95",
 };

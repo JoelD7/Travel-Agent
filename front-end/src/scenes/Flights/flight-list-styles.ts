@@ -1,8 +1,28 @@
 import { makeStyles, Theme } from "@material-ui/core";
+import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
 export const flightListStyles = makeStyles((theme: Theme) => ({
+  autocompelteListbox: {
+    fontFamily: Font.Family,
+  },
+  classParamGrid: {
+    width: "25%",
+    [theme.breakpoints.down(1245)]: {
+      width: "33%",
+    },
+    [theme.breakpoints.down(1083)]: {
+      width: "50%",
+    },
+    [theme.breakpoints.down(640)]: {
+      width: "100%",
+    },
+  },
+  autocompleteOption: {
+    color: Colors.BLUE,
+    fontWeight: "bold",
+  },
   mainContainer: {
     fontFamily: Family,
     backgroundColor: Colors.BACKGROUND,
@@ -160,7 +180,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
       width: "33%",
     },
     [theme.breakpoints.down(1083)]: {
-      width: "50%",
+      width: "100%",
     },
     [theme.breakpoints.down(640)]: {
       width: "100%",
@@ -171,6 +191,15 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
       "&:hover": {
         borderColor: "#cecece",
       },
+    },
+  },
+  searchBarInput: {
+    width: "100%",
+    backgroundColor: "rgba(0,0,0,0)",
+    color: Colors.BLUE,
+    "& .MuiInputBase-input": {
+      position: "relative",
+      bottom: "4px",
     },
   },
   selectControl: {

@@ -1,6 +1,7 @@
 import Axios, { AxiosResponse } from "axios";
 import { addSeconds, compareAsc, formatISO, parseISO } from "date-fns";
-import { AirportCity } from "../types/location-types";
+import { proxyUrl } from ".";
+import { AirportCity, IATALocation } from "../types/location-types";
 
 export const airportCitySearchURL =
   "https://test.api.amadeus.com/v1/reference-data/locations";
@@ -11,6 +12,8 @@ interface AccessToken {
 }
 
 let emptyAccessToken = { token: "", expiration: new Date().toISOString() };
+
+export const toCityDefaultId = "CMUC";
 
 export function startAirportCityPrediction(
   query: string,
@@ -57,7 +60,7 @@ export function updateAccessToken(data: any) {
  * Returns the currently saved access token in localStorage,
  * or if expiration time is up, requests a new one.
  */
-async function getAccessToken() {
+export async function getAccessToken(): Promise<AccessToken> {
   let curAccessToken = getSavedAccessToken();
 
   if (isAccessTokenUpdatable()) {
@@ -109,16 +112,33 @@ export async function fetchAirportCitiesByInput(input: string, type: "CITY" | "A
   );
 }
 
-export async function fetchGreatFlightDeals(city: AirportCity, departureDate: Date) {
+export async function fetchGreatFlightDeals(city: IATALocation, departureDate: Date) {
   let accessToken = await getAccessToken();
 
-  return Axios.get(`https://test.api.amadeus.com/v1/shopping/flight-destinations`, {
+  return Axios.get(
+    proxyUrl + `https://test.api.amadeus.com/v1/shopping/flight-destinations`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken ? accessToken.token : ""}`,
+      },
+      params: {
+        origin: `${city.code}`,
+        departureDate: `${formatISO(departureDate, { representation: "date" })}`,
+      },
+    }
+  );
+}
+
+/**
+ * Returns city data based on its id.
+ * @param id
+ */
+export async function fetchCity(id: string) {
+  let accessToken = await getAccessToken();
+
+  return Axios.get(`https://test.api.amadeus.com/v1/reference-data/locations/${id}`, {
     headers: {
       Authorization: `Bearer ${accessToken ? accessToken.token : ""}`,
-    },
-    params: {
-      origin: `${city.iataCode}`,
-      departureDate: `${formatISO(departureDate, { representation: "date" })}`,
     },
   });
 }

@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AirportCity } from "../types/location-types";
+import { AirportCity, IATALocation } from "../types/location-types";
 import { airportCityPlaceholder } from "../../utils";
 
 interface SearchType {
   query: string;
-  cityPredictions: AirportCity[];
-  airportPredictions: AirportCity[];
-  currentCity: AirportCity;
+  cityPredictions: IATALocation[];
+  airportPredictions: IATALocation[];
+  currentCity: IATALocation;
 }
 
 interface PayloadType {
@@ -29,14 +29,14 @@ const searchSlice = createSlice({
       let value: string = payload.value;
       return { ...state, query: value };
     },
-    updateCityPredictions(state, action: PayloadAction<AirportCity[]>) {
+    updateCityPredictions(state, action: PayloadAction<IATALocation[]>) {
       state.cityPredictions = action.payload;
     },
 
-    updateAirportPredictions(state, action: PayloadAction<AirportCity[]>) {
+    updateAirportPredictions(state, action: PayloadAction<IATALocation[]>) {
       state.airportPredictions = action.payload;
     },
-    setCurrentCity(state, action: PayloadAction<AirportCity>) {
+    setCurrentCity(state, action: PayloadAction<IATALocation>) {
       state.currentCity = action.payload;
     },
   },

@@ -1,7 +1,8 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addDays } from "date-fns";
-import { AirportCity } from "../types/location-types";
+import { addDays, format } from "date-fns";
+import { airportCityPlaceholder, airportCityPlaceholderTwo } from "../placeholders";
+import { AirportCity, IATALocation } from "../types/location-types";
 
 export interface FlightSearch {
   departure: Date;
@@ -13,8 +14,8 @@ export interface FlightSearch {
   children?: string;
   infants?: string;
   dictionaries: FlightDictionary;
-  flightFromAutocomplete?: AirportCity | null;
-  flightToAutocomplete?: AirportCity | null;
+  flightFromAutocomplete?: IATALocation | null;
+  flightToAutocomplete?: IATALocation | null;
   flightListURL: string;
   [key: string]: FlightSearch[keyof FlightSearch];
 }
@@ -22,24 +23,32 @@ export interface FlightSearch {
 const initialState: FlightSearch = {
   departure: addDays(new Date(), 1),
   return: addDays(new Date(), 3),
-  from: "",
-  flightListURL: "",
+  from: airportCityPlaceholder.code,
+  flightListURL: `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=MIA&destinationLocationCode=MUC&departureDate=${format(
+    addDays(new Date(), 1),
+    "yyyy-MM-dd"
+  )}&returnDate=${format(addDays(new Date(), 3), "yyyy-MM-dd")}&adults=${2}`,
+  flightFromAutocomplete: airportCityPlaceholder,
+  flightToAutocomplete: airportCityPlaceholderTwo,
   dictionaries: {
     carriers: {
       a: "",
     },
   },
-  to: "",
-  adults: "",
-  class: "",
-  children: "",
-  infants: "",
+  to: airportCityPlaceholderTwo.code,
+  adults: "2",
+  class: "Economy",
+  children: "1",
+  infants: "1",
 };
 
 const flightSlice = createSlice({
   name: "flightSlice",
   initialState,
   reducers: {
+    setFlightParams(state, action: PayloadAction<FlightSearch>) {
+      return { ...state, ...action.payload };
+    },
     setFlightDeparture(state, action: PayloadAction<MaterialUiPickersDate>) {
       //@ts-ignore
       state.departure = new Date(action.payload.getTime());
@@ -66,10 +75,16 @@ const flightSlice = createSlice({
     setFlightInfants(state, action: PayloadAction<string>) {
       state.infants = action.payload;
     },
-    setFlightFromAutocomplete(state, action: PayloadAction<AirportCity | null>) {
+    setFlightFromAutocomplete(
+      state,
+      action: PayloadAction<IATALocation | null | undefined>
+    ) {
       state.flightFromAutocomplete = action.payload;
     },
-    setFlightToAutocomplete(state, action: PayloadAction<AirportCity | null>) {
+    setFlightToAutocomplete(
+      state,
+      action: PayloadAction<IATALocation | null | undefined>
+    ) {
       state.flightToAutocomplete = action.payload;
     },
     setFlightListURL(state, action: PayloadAction<string>) {
@@ -82,6 +97,7 @@ const flightSlice = createSlice({
 });
 
 export const {
+  setFlightParams,
   setFlightDeparture,
   setFlightReturn,
   setFlightFrom,

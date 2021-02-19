@@ -1,16 +1,7 @@
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  faBaby,
-  faChild,
-  faMapMarkerAlt,
-  faPlane,
-  faPlaneDeparture,
-  faStar,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBaby, faChild, faStar, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Card,
   createMuiTheme,
   FormControl,
   Grid,
@@ -18,76 +9,51 @@ import {
   Select,
   ThemeProvider,
   Toolbar,
-  CardHeader,
-  CardContent,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { addDays, format, parseISO } from "date-fns";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import Helmet from "react-helmet";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { Family } from "../../assets/fonts";
 import {
-  CardFlight,
   CardDealFlight,
   CustomButton,
-  IconText,
+  IataAutocomplete,
   Navbar,
   PageSubtitle,
   ServicesToolbar,
-  Text,
 } from "../../components";
-import { CustomTF } from "../../components/atoms/CustomTF";
 import { Colors } from "../../styles";
 import {
-  airportCityPlaceholder,
-  capitalizeString,
-  formatFlightDateTime,
-  getFlightCitiesLabel,
+  getSavedAccessToken,
   muiDateFormatter,
   Routes,
   selectAirportPredictions,
   selectCurrentCity,
+  selectFlightDictionaries,
   selectFlightFromAutocomplete,
   selectFlightParams,
   selectFlightToAutocomplete,
-  getSavedAccessToken,
   updateAirportPredictions,
-  iataCodes,
-  selectFlightDictionaries,
 } from "../../utils";
-import { FlightTypes } from "../../utils/types";
-import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
-import { flightStyles } from "./flights-styles";
-import axios, { AxiosRequestConfig } from "axios";
-import Helmet from "react-helmet";
-import { useHistory } from "react-router-dom";
 import {
   fetchAirportCitiesByInput,
   fetchGreatFlightDeals,
-  fetchNewAccessToken,
-  isAccessTokenUpdatable,
-  startAirportCityPrediction,
-  updateAccessToken,
 } from "../../utils/external-apis/amadeus-apis";
-import { useDispatch, useSelector } from "react-redux";
-import { Autocomplete } from "@material-ui/lab";
-import { AirportCity } from "../../utils/types/location-types";
 import {
   FlightSearch,
-  setFlightFromAutocomplete,
-  setFlightToAutocomplete,
-  setFlightDictionaries,
-} from "../../utils/store/flight-slice";
-import {
-  setFlightDeparture,
-  setFlightReturn,
-  setFlightFrom,
-  setFlightTo,
   setFlightAdults,
-  setFlightClass,
   setFlightChildren,
+  setFlightClass,
+  setFlightDeparture,
   setFlightInfants,
+  setFlightReturn,
 } from "../../utils/store/flight-slice";
-import Axios from "axios";
+import { FlightTypes } from "../../utils/types";
+import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
+import { IATALocation } from "../../utils/types/location-types";
+import { flightStyles } from "./flights-styles";
 
 export function Flights_Home() {
   const style = flightStyles();
@@ -213,15 +179,15 @@ export function Flights_Home() {
   const dispatch = useDispatch();
 
   const [state, setState] = useState<FlightSearchParams>({
-    adults: "",
-    children: "",
-    class: "Economy",
-    departure: new Date(),
-    return: addDays(new Date(), 2),
-    from: "",
-    to: "",
+    // adults: "",
+    // children: "",
+    // class: "Economy",
+    // departure: new Date(),
+    // return: addDays(new Date(), 2),
+    // from: "",
+    // to: "",
     flightType: "Round trip",
-    infants: "",
+    // infants: "",
     priceRange: [0, 500],
   });
   const flight: FlightSearch = useSelector(selectFlightParams);
@@ -387,9 +353,9 @@ export function Flights_Home() {
   const dictionaries: FlightDictionary = useSelector(selectFlightDictionaries);
   const [currency, setCurrency] = useState<string>("");
 
-  const currentCity: AirportCity = useSelector(selectCurrentCity);
+  const currentCity: IATALocation = useSelector(selectCurrentCity);
 
-  const airportPredictions: AirportCity[] = useSelector(selectAirportPredictions);
+  const airportPredictions: IATALocation[] = useSelector(selectAirportPredictions);
 
   const amadeusAccessToken = getSavedAccessToken();
 
@@ -397,14 +363,6 @@ export function Flights_Home() {
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
-
-  useEffect(() => {
-    if (focusedAutocomplete === "From") {
-      startAirportCityPrediction(flight.from, getAirportPredictions);
-    } else {
-      startAirportCityPrediction(flight.to, getAirportPredictions);
-    }
-  }, [flight.from, flight.to]);
 
   useEffect(() => {
     fetchGreatFlightDeals(currentCity, flight.departure)
@@ -441,6 +399,10 @@ export function Flights_Home() {
     } else {
       dispatch(setFlightInfants(e.target.value as string));
     }
+  }
+
+  function onFindFlightsClicked() {
+    history.push(Routes.FLIGHT_LIST);
   }
 
   return (
@@ -492,71 +454,18 @@ export function Flights_Home() {
           <Grid item key="destinationTF" xs={12}>
             <h5 className={style.reservationParamText}>From</h5>
 
-            <Autocomplete
-              value={flightFromAutocomplete}
-              onChange={(e, value) => dispatch(setFlightFromAutocomplete(value))}
-              options={airportPredictions}
-              loading={airportPredictions.length !== 0}
-              getOptionLabel={(option) =>
-                `${capitalizeString(`${option.name}`, "each word")}, ${option.iataCode}`
-              }
-              classes={{
-                input: style.searchBarInput,
-                listbox: style.autocompelteListbox,
-                option: style.autocompleteOption,
-              }}
-              renderInput={(params) => (
-                <CustomTF
-                  className={style.searchBarInput}
-                  onFocus={() => setFocusedAutocomplete("From")}
-                  params={params}
-                  value={flight.from}
-                  outlineColor={Colors.BLUE}
-                  onChange={(e) => dispatch(setFlightFrom(e.target.value))}
-                  placeholder="City or airport"
-                  startAdornment={
-                    <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
-                  }
-                />
-              )}
-            />
+            <IataAutocomplete type="airport" flightDirection="from" />
           </Grid>
 
           {/* To Grid */}
           {state.flightType === FlightTypes.ROUND && (
             <Grid item xs={12} key="destinationTF">
               <h5 className={style.reservationParamText}>To</h5>
-              <Autocomplete
-                value={flightToAutocomplete}
-                onChange={(e, value) => dispatch(setFlightToAutocomplete(value))}
-                options={airportPredictions}
-                loading={airportPredictions.length !== 0}
-                getOptionLabel={(option) =>
-                  `${capitalizeString(`${option.name}`, "each word")}, ${option.iataCode}`
-                }
-                classes={{
-                  input: style.searchBarInput,
-                  listbox: style.autocompelteListbox,
-                  option: style.autocompleteOption,
-                }}
-                renderInput={(params) => (
-                  <CustomTF
-                    className={style.searchBarInput}
-                    params={params}
-                    onFocus={() => setFocusedAutocomplete("To")}
-                    value={flight.to}
-                    outlineColor={Colors.BLUE}
-                    onChange={(e) => dispatch(setFlightTo(e.target.value))}
-                    placeholder="City or airport"
-                    startAdornment={
-                      <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
-                    }
-                  />
-                )}
-              />
+              <IataAutocomplete type="airport" flightDirection="to" />
             </Grid>
           )}
 
+          {/* Dates */}
           <ThemeProvider theme={theme}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Grid
@@ -594,6 +503,7 @@ export function Flights_Home() {
             </MuiPickersUtilsProvider>
           </ThemeProvider>
 
+          {/* Passengers */}
           <ThemeProvider theme={reservationParamsTheme}>
             {passengersParams.map((passenger, i) => (
               <Grid item key={i} className={style.passengerParamGrid}>
@@ -643,7 +553,7 @@ export function Flights_Home() {
               rounded
               backgroundColor={Colors.PURPLE}
               style={{ width: "100%" }}
-              onClick={() => history.push(Routes.FLIGHT_LIST)}
+              onClick={() => onFindFlightsClicked()}
             >
               Find flights
             </CustomButton>

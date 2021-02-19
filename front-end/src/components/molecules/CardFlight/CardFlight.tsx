@@ -167,12 +167,15 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
             <p className={style.timesText}>{`${format(
               new Date(exitFlight.segments[0].departure.at),
               "h:mm aa"
-            )} - ${format(new Date(exitFlight.segments[0].arrival.at), "h:mm aa")}`}</p>
+            )} - ${format(
+              new Date(getLastSegment(exitFlight).arrival.at),
+              "h:mm aa"
+            )}`}</p>
 
             <p className={style.airportsText}>{`${
               exitFlight.segments[0].departure.iataCode
             } - 
-          ${exitFlight.segments[0].arrival.iataCode}, ${getFlightSegmentCarrier(
+          ${getLastSegment(exitFlight).arrival.iataCode}, ${getFlightSegmentCarrier(
               exitFlight.segments[0],
               dictionaries
             )}`}</p>

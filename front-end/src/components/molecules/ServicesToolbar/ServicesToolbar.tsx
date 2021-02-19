@@ -73,7 +73,7 @@ export function ServicesToolbar({ home, style }: ServicesToolbar) {
         style={{ ...style }}
       >
         {navbarServices.map((service, i) => (
-          <Link to={service.route} style={getLinkStyle(Colors.BLUE)}>
+          <Link key={service.route} to={service.route} style={getLinkStyle(Colors.BLUE)}>
             <MenuItem
               key={i}
               selected={service.selected}

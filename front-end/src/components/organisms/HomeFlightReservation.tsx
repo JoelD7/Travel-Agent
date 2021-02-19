@@ -41,8 +41,9 @@ import {
   setFlightTo,
   setFlightToAutocomplete,
 } from "../../utils/store/flight-slice";
-import { AirportCity } from "../../utils/types/location-types";
+import { AirportCity, IATALocation } from "../../utils/types/location-types";
 import { CustomButton } from "../atoms";
+import { IataAutocomplete } from "../molecules";
 import { CustomTF } from "../atoms/CustomTF";
 
 interface FlightType {
@@ -142,7 +143,7 @@ export default function HomeFlightReservation() {
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
-  const airportPredictions: AirportCity[] = useSelector(selectAirportPredictions);
+  const airportPredictions: IATALocation[] = useSelector(selectAirportPredictions);
 
   useEffect(() => {
     if (focusedAutocomplete === "From") {
@@ -163,7 +164,7 @@ export default function HomeFlightReservation() {
       .catch((error) => console.log(error));
   }
 
-  const locationParms = [
+  const locationParms: { label: string; prop: "from" | "to" }[] = [
     {
       label: "From",
       prop: "from",
@@ -195,7 +196,7 @@ export default function HomeFlightReservation() {
 
   function onAutomcompleteValueChange(
     e: ChangeEvent<{}>,
-    value: AirportCity | null,
+    value: IATALocation | null,
     param: string
   ) {
     param === "from"
@@ -238,36 +239,7 @@ export default function HomeFlightReservation() {
           {locationParms.map((param) => (
             <Grid item className={style.locationParamsGrid}>
               <h5 className={style.reservationParamText}>{param.label}</h5>
-              <Autocomplete
-                value={getAutocompleteValue(param.prop)}
-                onChange={(e, value) => onAutomcompleteValueChange(e, value, param.prop)}
-                options={airportPredictions}
-                loading={airportPredictions.length !== 0}
-                getOptionLabel={(option) =>
-                  `${capitalizeString(`${option.name}`, "each word")}, ${option.iataCode}`
-                }
-                classes={{
-                  input: style.searchBarInput,
-                  popupIndicatorOpen: style.popupIndicatorOpen,
-                  listbox: style.autocompelteListbox,
-                  option: style.autocompleteOption,
-                }}
-                renderInput={(params) => (
-                  <CustomTF
-                    className={style.searchBarInput}
-                    params={params}
-                    onFocus={() => setFocusedAutocomplete(param.label)}
-                    placeholder={param.label}
-                    value={flight[param.prop] as string}
-                    rounded
-                    width="100%"
-                    onChange={(e) => updateLocationParams(e, param.prop)}
-                    startAdornment={
-                      <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
-                    }
-                  />
-                )}
-              />
+              <IataAutocomplete type="airport" flightDirection={param.prop} />
             </Grid>
           ))}
         </ThemeProvider>

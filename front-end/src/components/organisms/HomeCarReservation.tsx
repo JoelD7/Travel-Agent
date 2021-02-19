@@ -2,10 +2,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createMuiTheme, Grid, ThemeProvider } from "@material-ui/core";
-import {
-  KeyboardDateTimePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
@@ -126,7 +123,6 @@ export default function HomeCarReservation() {
 
   const style = homeStyles();
 
-  console.log(`hotel car`);
   return (
     <div>
       <Grid container className={style.reservationParamsGrid} spacing={2}>
@@ -155,9 +151,7 @@ export default function HomeCarReservation() {
                 value={car[param.prop] as string}
                 rounded
                 width="100%"
-                updateState={(e) =>
-                  setCar({ ...car, [param.prop]: e.target.value })
-                }
+                updateState={(e) => setCar({ ...car, [param.prop]: e.target.value })}
                 startAdornment={
                   <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
                 }
@@ -171,7 +165,9 @@ export default function HomeCarReservation() {
                 rounded
                 style={{ width: "90%", boxShadow: Shadow.MEDIUM }}
                 onClick={() => {}}
-              >Search</CustomButton>
+              >
+                Search
+              </CustomButton>
             </Grid>
           </Grid>
         </ThemeProvider>

@@ -1,27 +1,12 @@
-import {
-  faCalendar,
-  faFlag,
-  faPlane,
-  faPlaneDeparture,
-} from "@fortawesome/free-solid-svg-icons";
-import { Grid, Card, CardHeader, CardContent, CardActionArea } from "@material-ui/core";
-import { CSSProperties } from "@material-ui/styles";
+import { faCalendar, faFlag, faPlane } from "@fortawesome/free-solid-svg-icons";
+import { Card, CardActionArea, CardContent, CardHeader, Grid } from "@material-ui/core";
 import { format } from "date-fns";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Font } from "../../../assets";
-import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
-import {
-  currencyFormatter,
-  parseFlightDuration,
-  getFlightCitiesLabel,
-  formatFlightDateTime,
-  formatFlightDate,
-  getIataLocation,
-  Routes,
-} from "../../../utils";
+import { getIataLocation, Routes } from "../../../utils";
 import { setFlightListURL } from "../../../utils/store/flight-slice";
 import { IATALocation } from "../../../utils/types/location-types";
 import { CustomButton, IconText, Text } from "../../atoms";

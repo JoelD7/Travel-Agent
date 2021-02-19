@@ -224,7 +224,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
           {drawerOptions
             .filter((o) => !o.user)
             .map((option, i) => (
-              <Link style={getLinkStyle("white")} to={option.route}>
+              <Link key={option.route} style={getLinkStyle("white")} to={option.route}>
                 <ListItem
                   selected={option.selected}
                   button

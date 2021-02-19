@@ -8,3 +8,4 @@ export { IconText } from "./IconText/IconText";
 export { Rating } from "./Rating";
 export { Text } from "./Text";
 export { AmenityIcon } from "./AmenityIcon";
+export { CustomTF } from "./CustomTF";
