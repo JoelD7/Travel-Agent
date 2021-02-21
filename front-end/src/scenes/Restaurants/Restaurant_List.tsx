@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import {
   CustomButton,
   Navbar,
+  ProgressCircle,
   RestaurantCard,
   RestaurantCuisinesSelec,
   RestaurantEstablishments,
@@ -23,11 +24,26 @@ import {
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import { restaurantListStyles } from "./restaurantList-styles";
-import { restaurantsPlaceholder } from "../../utils";
+import {
+  filterByFeature,
+  restaurantsPlaceholder,
+  selectCurrentCity,
+  selectRestaurantCuisines,
+  selectRestaurantFeatures,
+  selectRestaurants,
+} from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Slider from "react-slick";
 import Axios from "axios";
 import Helmet from "react-helmet";
+import { fetchRestaurants } from "../../utils/external-apis/yelp-apis";
+import { useDispatch, useSelector } from "react-redux";
+import { IATALocation } from "../../utils/types/location-types";
+import {
+  addRestaurantCuisines,
+  addRestaurantFeatures,
+  setRestaurants,
+} from "../../utils/store/restaurant-slice";
 
 interface Restaurant_List {
   city: string;
@@ -42,191 +58,177 @@ export function Restaurant_List() {
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
+  const currentCity: IATALocation = useSelector(selectCurrentCity);
+  const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
+
+  const cuisines: RestaurantFilter[] = useSelector(selectRestaurantCuisines);
+  const features: RestaurantFilter[] = useSelector(selectRestaurantFeatures);
+
+  const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    // test();
+    fetchRestaurants(currentCity.lat, currentCity.lon)
+      .then((res) => {
+        dispatch(setRestaurants(res.data.businesses));
+        dispatch(addRestaurantCuisines(cuisines, res.data.businesses));
+        dispatch(addRestaurantFeatures(features, res.data.businesses));
+
+        setLoading(false);
+      })
+      .catch((error) => console.log(error));
   }, []);
 
   const [state, setState] = useState<Restaurant_List>({
     city: "Santo Domingo",
     establishments: [
-      { id: 31, name: "Bakery", checked: false },
-      { id: 7, name: "Bar", checked: false },
-      { id: 91, name: "Bistro", checked: false },
-      { id: 283, name: "Brewery", checked: false },
-      { id: 1, name: "Café", checked: false },
-      { id: 16, name: "Casual Dining", checked: false },
-      { id: 8, name: "Club", checked: false },
-      { id: 286, name: "Coffee Shop", checked: false },
-      { id: 24, name: "Deli", checked: false },
-      { id: 23, name: "Dessert Parlour", checked: false },
-      { id: 101, name: "Diner", checked: false },
-      { id: 285, name: "Fast Casual", checked: false },
-      { id: 281, name: "Fast Food", checked: false },
-      { id: 18, name: "Fine Dining", checked: false },
-      { id: 5, name: "Lounge", checked: false },
-      { id: 275, name: "Pizzeria", checked: false },
-      { id: 6, name: "Pub", checked: false },
-      { id: 21, name: "Quick Bites", checked: false },
-      { id: 271, name: "Sandwich Shop", checked: false },
-      { id: 278, name: "Wine Bar", checked: false },
+      { name: "Bakery", checked: false },
+      { name: "Bar", checked: false },
+      { name: "Bistro", checked: false },
+      { name: "Brewery", checked: false },
+      { name: "Café", checked: false },
+      { name: "Casual Dining", checked: false },
+      { name: "Club", checked: false },
+      { name: "Coffee Shop", checked: false },
+      { name: "Deli", checked: false },
+      { name: "Dessert Parlour", checked: false },
+      { name: "Diner", checked: false },
+      { name: "Fast Casual", checked: false },
+      { name: "Fast Food", checked: false },
+      { name: "Fine Dining", checked: false },
+      { name: "Lounge", checked: false },
+      { name: "Pizzeria", checked: false },
+      { name: "Pub", checked: false },
+      { name: "Quick Bites", checked: false },
+      { name: "Sandwich Shop", checked: false },
+      { name: "Wine Bar", checked: false },
     ],
     cuisines: [
       {
-        id: 1035,
         name: "Afghan",
         checked: false,
       },
       {
-        id: 6,
         name: "Afghani",
         checked: false,
       },
       {
-        id: 152,
         name: "African",
         checked: false,
       },
       {
-        id: 1,
         name: "American",
         checked: false,
       },
       {
-        id: 954,
         name: "Amish",
         checked: false,
       },
       {
-        id: 151,
         name: "Argentine",
         checked: false,
       },
       {
-        id: 175,
         name: "Armenian",
         checked: false,
       },
       {
-        id: 3,
         name: "Asian",
         checked: false,
       },
       {
-        id: 131,
         name: "Australian",
         checked: false,
       },
       {
-        id: 201,
         name: "Austrian",
         checked: false,
       },
       {
-        id: 247,
         name: "Bubble Tea",
         checked: false,
       },
       {
-        id: 168,
         name: "Burger",
         checked: false,
       },
       {
-        id: 22,
         name: "Burmese",
         checked: false,
       },
       {
-        id: 956,
         name: "California",
         checked: false,
       },
       {
-        id: 111,
         name: "Cambodian",
         checked: false,
       },
       {
-        id: 75,
         name: "Mughlai",
         checked: false,
       },
       {
-        id: 117,
         name: "Nepalese",
         checked: false,
       },
     ],
     features: [
       {
-        id: 1,
         name: "Delivery",
         checked: false,
       },
       {
-        id: 2,
         name: "Dine-out",
         checked: false,
       },
       {
-        id: 3,
         name: "Nightlife",
         checked: false,
       },
       {
-        id: 4,
         name: "Catching-up",
         checked: false,
       },
       {
-        id: 5,
         name: "Takeaway",
         checked: false,
       },
       {
-        id: 6,
         name: "Cafes",
         checked: false,
       },
       {
-        id: 7,
         name: "Daily Menus",
         checked: false,
       },
       {
-        id: 8,
         name: "Breakfast",
         checked: false,
       },
       {
-        id: 9,
         name: "Lunch",
         checked: false,
       },
       {
-        id: 10,
         name: "Dinner",
         checked: false,
       },
       {
-        id: 11,
         name: "Pubs & Bars",
         checked: false,
       },
       {
-        id: 13,
         name: "Pocket Friendly Delivery",
         checked: false,
       },
       {
-        id: 14,
         name: "Clubs & Lounges",
         checked: false,
       },
     ],
   });
-
-  const restaurants: RestaurantSearch[] = restaurantsPlaceholder;
 
   return (
     <div className={style.mainContainer}>
@@ -267,27 +269,9 @@ export function Restaurant_List() {
                 component="h4"
                 weight="bold"
               >
-                Establishment
+                Features
               </Text>
-              <RestaurantEstablishments
-                values={state.establishments}
-                updateState={(values) => setState({ ...state, establishments: values })}
-              />
-
-              <Divider style={{ margin: "18px 0px 10px 0px" }} />
-
-              <Text
-                color={Colors.BLUE}
-                className={style.filterTitle}
-                component="h4"
-                weight="bold"
-              >
-                Restaurant features
-              </Text>
-              <RestaurantFeature
-                values={state.features}
-                updateState={(values) => setState({ ...state, features: values })}
-              />
+              <RestaurantFeature />
 
               <Divider style={{ margin: "18px 0px 10px 0px" }} />
 
@@ -299,10 +283,7 @@ export function Restaurant_List() {
               >
                 Cuisines
               </Text>
-              <RestaurantCuisinesSelec
-                values={state.cuisines}
-                updateState={(values) => setState({ ...state, cuisines: values })}
-              />
+              <RestaurantCuisinesSelec />
             </div>
           </Grid>
 
@@ -320,15 +301,22 @@ export function Restaurant_List() {
 
           {/* Restaurants */}
           <Grid item className={style.restaurantsGrid}>
-            <RestaurantSlides restaurants={restaurants} title="Delivery Available" />
             <RestaurantSlides
-              restaurants={restaurants}
-              title="Outdoor Seating Available"
+              loading={loading}
+              restaurants={filterByFeature("delivery", restaurants)}
+              title="Delivery Available"
             />
 
-            <RestaurantSlides restaurants={restaurants} title="Fine Dining" />
-            <RestaurantSlides restaurants={restaurants} title="Cheap Eats" />
-            <RestaurantSlides restaurants={restaurants} title="Local Cuisine" />
+            <RestaurantSlides
+              loading={loading}
+              restaurants={filterByFeature("pickup", restaurants)}
+              title="Pickup"
+            />
+            <RestaurantSlides
+              loading={loading}
+              restaurants={filterByFeature("restaurant_reservation", restaurants)}
+              title="Reservation"
+            />
 
             <Text
               style={{ margin: "50px 0px 20px 0px" }}
@@ -337,9 +325,20 @@ export function Restaurant_List() {
               bold
             >{`Top Restaurants in ${state.city}`}</Text>
             <div className={style.restaurantCardContainer}>
-              {restaurants.map((restaurant, i) => (
-                <RestaurantCard key={i} restaurant={restaurant} />
-              ))}
+              {loading && (
+                <Grid
+                  container
+                  justify="center"
+                  style={{ position: "absolute", left: "150px" }}
+                >
+                  <ProgressCircle />
+                </Grid>
+              )}
+              <div style={loading ? { filter: "blur(4px)" } : {}}>
+                {restaurants.map((restaurant, i) => (
+                  <RestaurantCard key={i} restaurant={restaurant} />
+                ))}
+              </div>
             </div>
           </Grid>
         </Grid>

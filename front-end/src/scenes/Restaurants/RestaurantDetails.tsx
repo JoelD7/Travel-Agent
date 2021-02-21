@@ -1,5 +1,5 @@
 import { restaurantDetailsStyles } from "./restaurantDetails-styles";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CustomButton, IconText, Navbar, ServicesToolbar } from "../../components";
 import { useParams } from "react-router-dom";
 import { Grid } from "@material-ui/core";
@@ -10,14 +10,24 @@ import Helmet from "react-helmet";
 import {
   getRestaurantCategoriesList,
   getRestaurantHours,
+  getRestaurantTransactions,
   restaurantPlaceholder,
 } from "../../utils";
+import { fetchRestaurant } from "../../utils/external-apis/yelp-apis";
 
 export function RestaurantDetails() {
   const style = restaurantDetailsStyles();
   const { id } = useParams<any>();
 
-  const restaurant: Restaurant = restaurantPlaceholder;
+  const [restaurant, setRestaurant] = useState<Restaurant>(restaurantPlaceholder);
+
+  useEffect(() => {
+    fetchRestaurant(id)
+      .then((res) => {
+        setRestaurant(res.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   return (
     <div className={style.mainContainer}>
@@ -98,6 +108,11 @@ export function RestaurantDetails() {
             <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
               Click here
             </a>
+
+            <h4 style={{ marginBottom: "0px" }}>Amenities</h4>
+            <p style={{ marginTop: "5px", fontSize: "15px" }}>
+              {getRestaurantTransactions(restaurant)}
+            </p>
           </div>
         </Grid>
       </Grid>

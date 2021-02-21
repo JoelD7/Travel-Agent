@@ -1,10 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, createSelector } from "@reduxjs/toolkit";
 import signUpReducer from "./signUpSlice";
 import searchNavbarReducer from "./search-slice";
 import calendarReducer from "./calendar-slice";
 import poiReducer from "./poi-slice";
 import hotelReducer from "./hotel-slice";
 import flightSlice from "./flight-slice";
+import restaurantSlice from "./restaurant-slice";
 import { useDispatch } from "react-redux";
 
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
     poiReducer: poiReducer,
     hotelReducer: hotelReducer,
     flightSlice: flightSlice,
+    restaurantSlice: restaurantSlice,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
@@ -63,8 +65,9 @@ export const selectAirportPredictions = (state: RootState) =>
   state.searchNavbar.airportPredictions;
 
 export const selectCurrentCity = (state: RootState) => state.searchNavbar.currentCity;
+//#endregion
 
-////#endregion
+//#region Flight
 export const selectFlightParams = (state: RootState) => state.flightSlice;
 export const selectFlightFromAutocomplete = (state: RootState) =>
   state.flightSlice.flightFromAutocomplete;
@@ -74,6 +77,18 @@ export const selectFlightToAutocomplete = (state: RootState) =>
 export const selectFlightListURL = (state: RootState) => state.flightSlice.flightListURL;
 export const selectFlightDictionaries = (state: RootState) =>
   state.flightSlice.dictionaries;
-////#region Flight
+//#endregion
+
+//#region Restaurant
+export const selectRestaurantFeatures = createSelector(
+  (state: RootState) => state.restaurantSlice.features,
+  (features) => features
+);
+export const selectRestaurantCuisines = createSelector(
+  (state: RootState) => state.restaurantSlice.cuisines,
+  (cuisines) => cuisines
+);
+export const selectRestaurants = (state: RootState) => state.restaurantSlice.restaurants;
+//#endregion
 
 export default store;

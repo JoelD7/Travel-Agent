@@ -1,3 +1,5 @@
+import Axios from "axios";
+import { proxyUrl } from ".";
 import { RestaurantCategories } from "../types/restaurant-types";
 export {};
 export const restaurantCategories: RestaurantCategories[] = [
@@ -1479,3 +1481,24 @@ export const restaurantCategories: RestaurantCategories[] = [
     country_blacklist: [],
   },
 ];
+
+export function fetchRestaurants(latitude: string, longitude: string) {
+  return Axios.get(proxyUrl + "https://api.yelp.com/v3/businesses/search", {
+    headers: {
+      Authorization: `Bearer ${process.env.REACT_APP_YELP_KEY}`,
+    },
+    params: {
+      term: "restaurants",
+      latitude,
+      longitude,
+    },
+  });
+}
+
+export function fetchRestaurant(id: string) {
+  return Axios.get(proxyUrl + `https://api.yelp.com/v3/businesses/${id}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.REACT_APP_YELP_KEY}`,
+    },
+  });
+}

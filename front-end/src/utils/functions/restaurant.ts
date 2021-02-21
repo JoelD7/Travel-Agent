@@ -1,12 +1,17 @@
-export function getRestaurantCategoriesList(restaurant: Restaurant | RestaurantSearch) {
+import { capitalizeString } from "./functions";
+
+export function getRestaurantCategoriesList(
+  restaurant: Restaurant | RestaurantSearch
+): string {
   return restaurant.categories.map((c) => c.title).join(", ");
 }
 
 export function getRestaurantHours(restaurant: Restaurant) {
   const weekDays = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
-  let timing = "";
+  let timing = [];
 
   let openHours = restaurant.hours[0].open;
+  console.log("openHours: ", JSON.stringify(openHours));
   //Group by timing
   let ranges: { [index: string]: Object[] } = {};
   //Hours objects that belong to the current timing
@@ -25,6 +30,13 @@ export function getRestaurantHours(restaurant: Restaurant) {
       //The hours objects have the same timing and are consecutive days
       if (curHoursRange === prevHoursRange && curHour.day === prevHour.day + 1) {
         curRange.push(curHour);
+
+        if (i === openHours.length - 1) {
+          ranges = {
+            ...ranges,
+            [curHoursRange]: curRange,
+          };
+        }
       } else {
         /**
          * In the opposite case, add all the hours objects that belong
@@ -66,18 +78,37 @@ export function getRestaurantHours(restaurant: Restaurant) {
     if (Object.prototype.hasOwnProperty.call(ranges, range)) {
       const hour: RestaurantHour[] = ranges[range] as RestaurantHour[];
       if (hour.length > 1) {
-        timing += `${weekDays[hour[0].day]} - ${
-          weekDays[hour[hour.length - 1].day]
-        } from ${parseHour(range)}, `;
+        timing.push(
+          `${weekDays[hour[0].day]} - ${
+            weekDays[hour[hour.length - 1].day]
+          } from ${parseHour(range)}`
+        );
       } else {
-        timing += `${weekDays[hour[0].day]} from ${parseHour(range)}, `;
+        timing.push(`${weekDays[hour[0].day]} from ${parseHour(range)}`);
       }
     }
   }
-
-  return timing;
+  return timing.join(", ");
 }
 
 function parseHour(value: string) {
   return `${value[0]}${value[1]}:${value[2]}${value[3]} to ${value[5]}${value[6]}:${value[7]}${value[8]}`;
+}
+
+export function getRestaurantTransactions(
+  restaurant: Restaurant | RestaurantSearch
+): string {
+  return restaurant.transactions
+    .map((tr) => {
+      if (tr.split("_").length > 1) {
+        return capitalizeString(tr.split("_").join(" "), "full sentence");
+      } else {
+        return capitalizeString(tr, "full sentence");
+      }
+    })
+    .join(", ");
+}
+
+export function filterByFeature(feature: string, restaurants: RestaurantSearch[]) {
+  return restaurants.filter((res) => res.transactions.includes(feature));
 }

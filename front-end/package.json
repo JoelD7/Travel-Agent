@@ -47,6 +47,7 @@
     "react-swipeable-views-utils": "^0.14.0-alpha.0",
     "react-transition-group": "^4.4.1",
     "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
     "slick-carousel": "^1.8.1",
     "swiper": "^6.3.5",
     "typescript": "^3.7.5",

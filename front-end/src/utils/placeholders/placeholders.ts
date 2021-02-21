@@ -26,6 +26,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
         title: "Bars",
       },
     ],
+    transactions: ["pickup", "delivery", "restaurant_reservation"],
     rating: 4.5,
     coordinates: {
       latitude: 40.715498,
@@ -61,6 +62,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
         title: "Asian Fusion",
       },
     ],
+    transactions: ["pickup", "delivery"],
     rating: 4.0,
     coordinates: {
       latitude: 40.7115099,
@@ -97,6 +99,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
       },
     ],
     rating: 4.5,
+    transactions: ["pickup", "delivery"],
     coordinates: {
       latitude: 40.72104,
       longitude: -73.98804,
@@ -128,6 +131,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
       latitude: 40.714282,
       longitude: -74.008675,
     },
+    transactions: ["pickup", "delivery", "restaurant_reservation"],
     location: {
       city: "New York",
       zip_code: "10007",
@@ -159,6 +163,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
       latitude: 40.71087,
       longitude: -74.00753,
     },
+    transactions: ["pickup", "restaurant_reservation"],
     location: {
       city: "New York",
       zip_code: "10038",
@@ -186,6 +191,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
       latitude: 40.716906,
       longitude: -74.008587,
     },
+    transactions: ["delivery", "restaurant_reservation"],
     location: {
       city: "New York",
       zip_code: "10013",
@@ -220,6 +226,7 @@ export const restaurantPlaceholder: Restaurant = {
       title: "Bars",
     },
   ],
+  transactions: ["pickup", "delivery", "restaurant_reservation"],
   rating: 4.5,
   location: {
     city: "New York",

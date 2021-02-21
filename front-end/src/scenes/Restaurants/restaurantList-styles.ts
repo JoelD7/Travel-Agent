@@ -62,8 +62,6 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   restaurantCardContainer: {
     borderRadius: "10px",
     padding: "15px",
-    // background:
-    //   "linear-gradient(90deg, rgb(245, 245, 245) 0%, rgb(240, 240, 240) 50%, rgb(245, 245, 245) 100%)",
   },
   restaurantCuisines: {
     fontSize: "13px",

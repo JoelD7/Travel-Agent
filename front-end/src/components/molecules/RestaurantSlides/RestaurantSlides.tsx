@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
-import { SliderArrow, Text } from "../../atoms";
+import { ProgressCircle, SliderArrow, Text } from "../../atoms";
 import { restaurantSlidesStyles } from "./restaurantSlides-styles";
 import Slider from "react-slick";
 import { Colors } from "../../../styles";
@@ -22,9 +22,10 @@ import { getRestaurantCategoriesList } from "../../../utils/functions/restaurant
 interface RestaurantSlides {
   restaurants: RestaurantSearch[];
   title: string;
+  loading: boolean;
 }
 
-export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
+export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlides) {
   const style = restaurantSlidesStyles();
 
   const history = useHistory();
@@ -33,6 +34,8 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
     className: style.slider,
     nextArrow: <SliderArrow direction="right" />,
     prevArrow: <SliderArrow direction="left" />,
+    slidesToShow: getSlidesToShow(3),
+    slidesToScroll: getSlidesToShow(3),
     responsive: [
       {
         breakpoint: 1388,
@@ -64,7 +67,16 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
 
   return (
     <div>
-      <Grid item className={style.slideshowGrid}>
+      {loading && (
+        <Grid container justify="center" style={{ position: "relative", top: "215px" }}>
+          <ProgressCircle />
+        </Grid>
+      )}
+      <Grid
+        item
+        className={style.slideshowGrid}
+        style={loading ? { filter: "blur(4px)" } : {}}
+      >
         <Grid container>
           <Text style={{ marginLeft: "53px" }} weight={500} component="h2">
             {title}
@@ -79,12 +91,7 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
         </Grid>
 
         <Grid container>
-          <Slider
-            {...sliderSettings}
-            slidesToScroll={1}
-            slidesToShow={3}
-            // slidesToShow={getSlidesToShow(4)}
-          >
+          <Slider {...sliderSettings}>
             {restaurants.map((restaurant, i) => (
               <div key={i}>
                 <CardActionArea

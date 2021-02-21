@@ -11,8 +11,11 @@ import {
   FormGroup,
   Grid,
 } from "@material-ui/core";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../../styles";
+import { selectRestaurantCuisines } from "../../../utils";
+import { updateRestaurantCuisines } from "../../../utils/store/restaurant-slice";
 import { CustomButton } from "../../atoms";
 import { checkboxSelectorDialog } from "../../atoms/checkboxSelectorDialog-styles";
 
@@ -21,15 +24,19 @@ interface RestaurantCuisinesSelec {
   updateState: (selectedCuisines: RestaurantFilter[]) => void;
 }
 
-export function RestaurantCuisinesSelec({
-  values,
-  updateState,
-}: RestaurantCuisinesSelec) {
+export function RestaurantCuisinesSelec() {
   const style = checkboxSelectorDialog();
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const [cuisines, setCuisines] = useState<RestaurantFilter[]>(values);
+  const [cuisines, setCuisines] = useState<RestaurantFilter[]>([]);
+  const cuisinesRedux: RestaurantFilter[] = useSelector(selectRestaurantCuisines);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setCuisines(cuisinesRedux);
+  }, [cuisinesRedux]);
 
   const size = cuisines.length;
 
@@ -49,15 +56,11 @@ export function RestaurantCuisinesSelec({
 
   function closeDialog() {
     setOpenDialog(false);
-    updateState(cuisines);
+    dispatch(updateRestaurantCuisines(cuisines));
   }
 
   return (
-    <div
-      onMouseLeave={() => {
-        updateState(cuisines);
-      }}
-    >
+    <div onMouseLeave={() => dispatch(updateRestaurantCuisines(cuisines))}>
       <FormGroup>
         {cuisines.slice(0, 4).map((cuisine, i) => (
           <FormControlLabel
@@ -151,7 +154,9 @@ export function RestaurantCuisinesSelec({
               backgroundColor={Colors.PURPLE}
               rounded
               onClick={() => closeDialog()}
-            >Ok</CustomButton>
+            >
+              Ok
+            </CustomButton>
           </Grid>
         </Grid>
       </Dialog>

@@ -561,3 +561,20 @@ export function getCityImage(city: string) {
 export function getIataLocation(code: string) {
   return iataCodes.find((iata) => iata.code === code);
 }
+
+/**
+ * Checks if arr1 contains any of the elements in arr2
+ * @param arr1
+ * @param arr2
+ */
+export function hasAny(arr1: any[], arr2: any[]) {
+  let has = false;
+  arr2.forEach((e) => {
+    if (arr1.includes(e)) {
+      has = true;
+      return;
+    }
+  });
+
+  return has;
+}

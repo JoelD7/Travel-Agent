@@ -22,6 +22,7 @@ interface Restaurant {
   phone: string;
   display_phone: string;
   photos: string[];
+  transactions: string[];
   hours: {
     open: RestaurantHour[];
   }[];
@@ -56,6 +57,7 @@ interface RestaurantSearch {
     display_address: string[];
   };
   phone: string;
+  transactions: string[];
   display_phone: string;
 }
 
@@ -79,7 +81,6 @@ interface ResLocation {
 }
 
 interface RestaurantFilter {
-  id: number;
   name: string;
   checked: boolean;
 }

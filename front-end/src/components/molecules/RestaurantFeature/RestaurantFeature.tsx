@@ -11,32 +11,39 @@ import {
   FormGroup,
   Grid,
 } from "@material-ui/core";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../../styles";
+import { selectRestaurantFeatures } from "../../../utils";
+import {
+  updateRestaurantCuisines,
+  updateRestaurantFeatures,
+} from "../../../utils/store/restaurant-slice";
 import { CustomButton } from "../../atoms";
 import { checkboxSelectorDialog } from "../../atoms/checkboxSelectorDialog-styles";
 
-interface RestaurantFeature {
-  values: RestaurantFilter[];
-  updateState: (selectedCuisines: RestaurantFilter[]) => void;
-}
+interface RestaurantFeature {}
 
-export function RestaurantFeature({
-  values,
-  updateState,
-}: RestaurantFeature) {
+export function RestaurantFeature() {
   const style = checkboxSelectorDialog();
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const [feature, setCuisines] = useState<RestaurantFilter[]>(values);
+  const dispatch = useDispatch();
 
-  const size = feature.length;
+  const [features, setFeatures] = useState<RestaurantFilter[]>([]);
+  const featuresRedux: RestaurantFilter[] = useSelector(selectRestaurantFeatures);
+
+  useEffect(() => {
+    setFeatures(featuresRedux);
+  }, [featuresRedux]);
+
+  const size = features.length;
 
   function onFeatureChange(event: ChangeEvent<HTMLInputElement>) {
     let changedCheck = event.target.name;
 
-    let newSelectedCuisines = feature.map((feature) => {
+    let newSelectedFeatures: RestaurantFilter[] = features.map((feature) => {
       if (feature.name === changedCheck) {
         return { ...feature, checked: event.target.checked };
       } else {
@@ -44,22 +51,22 @@ export function RestaurantFeature({
       }
     });
 
-    setCuisines(newSelectedCuisines);
+    setFeatures(newSelectedFeatures);
   }
 
   function closeDialog() {
     setOpenDialog(false);
-    updateState(feature);
+    dispatch(updateRestaurantFeatures(features));
   }
 
   return (
     <div
       onMouseLeave={() => {
-        updateState(feature);
+        dispatch(updateRestaurantFeatures(features));
       }}
     >
       <FormGroup>
-        {feature.slice(0, 4).map((feature, i) => (
+        {features.slice(0, 4).map((feature, i) => (
           <FormControlLabel
             key={i}
             label={feature.name}
@@ -93,13 +100,15 @@ export function RestaurantFeature({
         onClose={() => closeDialog()}
         classes={{ paper: style.paper }}
       >
-        <DialogTitle classes={{ root: style.dialogTitle }}>Restaurant features</DialogTitle>
+        <DialogTitle classes={{ root: style.dialogTitle }}>
+          Restaurant features
+        </DialogTitle>
         <Divider />
 
         <Grid container spacing={2} style={{ marginTop: "20px" }}>
           <Grid item xs={6}>
             <FormGroup>
-              {feature.slice(0, size / 2 + 1).map((feature, i) => (
+              {features.slice(0, size / 2 + 1).map((feature, i) => (
                 <FormControlLabel
                   key={i}
                   label={feature.name}
@@ -123,7 +132,7 @@ export function RestaurantFeature({
 
           <Grid item xs={6}>
             <FormGroup>
-              {feature.slice(size / 2 + 1).map((feature, i) => (
+              {features.slice(size / 2 + 1).map((feature, i) => (
                 <FormControlLabel
                   key={i}
                   label={feature.name}
@@ -151,7 +160,9 @@ export function RestaurantFeature({
               backgroundColor={Colors.PURPLE}
               rounded
               onClick={() => closeDialog()}
-            >Ok</CustomButton>
+            >
+              Ok
+            </CustomButton>
           </Grid>
         </Grid>
       </Dialog>

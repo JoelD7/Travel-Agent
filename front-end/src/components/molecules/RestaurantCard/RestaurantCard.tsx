@@ -1,15 +1,12 @@
-import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
 import {
   faChevronRight,
   faMapMarkerAlt,
   faUtensils,
-  faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CardActionArea, Grid } from "@material-ui/core";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { Colors } from "../../../styles";
 import { getLinkStyle, Routes } from "../../../utils";
 import { getRestaurantCategoriesList } from "../../../utils/functions/restaurant";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
@@ -23,13 +20,16 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
   const style = restaurantCardStyles();
   const history = useHistory();
 
+  const dispatch = useDispatch();
+
+  function onRestaurantClick() {
+    history.push(`${Routes.RESTAURANTS}/${restaurant.id}`);
+  }
+
   return (
     <Grid container className={style.mainContainer}>
       <Grid item className={style.photoGrid}>
-        <CardActionArea
-          style={{ height: "100%" }}
-          onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
-        >
+        <CardActionArea style={{ height: "100%" }} onClick={() => onRestaurantClick()}>
           <img src={restaurant.image_url} className={style.cardImage} />
         </CardActionArea>
       </Grid>
