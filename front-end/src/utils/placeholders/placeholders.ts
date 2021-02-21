@@ -5,468 +5,287 @@ import { HotelBooking, HotelAvailability } from "../types/hotel-types";
 import { AirportCity, IATALocation } from "../types/location-types";
 import { Trip } from "../types/trip-types";
 
-export const restaurantsPlaceholder: Restaurant[] = [
+export const restaurantsPlaceholder: RestaurantSearch[] = [
   {
-    id: "16769546",
-    name: "Katz's Delicatessen",
+    id: "3xTQT7qjZJIxc-eBiFMerQ",
+    name: "1803",
+    image_url: "https://s3-media3.fl.yelpcdn.com/bphoto/f6_ZYxoZGbyGsCn6m_auog/o.jpg",
     url:
-      "https://www.zomato.com/new-york-city/katzs-delicatessen-lower-east-side?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "205 East Houston Street, New York 10002",
-      locality: "Lower East Side",
-      city: "New York City",
-      cityID: 280,
-      latitude: "40.7223277778",
-      longitude: "-73.9873500000",
-      zipcode: "10002",
-      countryID: 216,
-    },
-    cuisines: "Sandwich",
-    timings:
-      "8 AM to 10:30 PM (Mon, Tue, Wed, Sun), 8 AM to 2:30 AM (Thu),24 Hours (Fri-Sat)",
-    avgCostForTwo: 30,
-    priceRange: 2,
-    currency: "$",
-    highlights: [
-      "Lunch",
-      "Serves Alcohol",
-      "Cash",
-      "Dinner",
-      "Credit Card",
-      "Takeaway Available",
-      "Breakfast",
-      "Wine",
-      "Indoor Seating",
-      "Kosher",
-      "Beer",
+      "https://www.yelp.com/biz/1803-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    categories: [
+      {
+        alias: "cajun",
+        title: "Cajun/Creole",
+      },
+      {
+        alias: "seafood",
+        title: "Seafood",
+      },
+      {
+        alias: "bars",
+        title: "Bars",
+      },
     ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/6/16769546/48ab9901ddf191d13ade07221b43ba93.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-    photosURL:
-      "https://www.zomato.com/new-york-city/katzs-delicatessen-lower-east-side/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    menuURL:
-      "https://www.zomato.com/new-york-city/katzs-delicatessen-lower-east-side/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    featuredImage:
-      "https://b.zmtcdn.com/data/pictures/6/16769546/48ab9901ddf191d13ade07221b43ba93.jpg",
-    phoneNumbers: "(212) 254-2246",
-    establishment: ["Deli"],
-    rating: 4.6,
-    ratingText: "Excellent",
+    rating: 4.5,
+    coordinates: {
+      latitude: 40.715498,
+      longitude: -74.007178,
+    },
+    location: {
+      city: "New York",
+      zip_code: "10007",
+      country: "US",
+      state: "NY",
+      display_address: ["82 Reade St", "New York, NY 10007"],
+    },
+    phone: "+12122673000",
+    display_phone: "(212) 267-3000",
   },
   {
-    id: "16771079",
-    name: "Lombardi's Pizza",
+    id: "A0saPXtRGKl-SVJGQyQAOw",
+    name: "Brooklyn Chop House",
+    image_url: "https://s3-media1.fl.yelpcdn.com/bphoto/v_C5TFckFT2rfH-DXIousw/o.jpg",
     url:
-      "https://www.zomato.com/new-york-city/lombardis-pizza-lower-east-side?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "32 Spring Street, New York 10012",
-      locality: "Spring Street, Lower East Side",
-      city: "New York City",
-      cityID: 280,
-      latitude: "40.7215730000",
-      longitude: "-73.9956350000",
-      zipcode: "10012",
-      countryID: 216,
-    },
-    cuisines: "Pizza, Italian",
-    timings:
-      "11:30 AM to 11 PM (Mon, Tue, Wed, Thu, Sun), 11:30 AM to 12 Midnight (Fri-Sat)",
-    avgCostForTwo: 50,
-    priceRange: 3,
-    currency: "$",
-    highlights: [
-      "Lunch",
-      "Delivery",
-      "Dinner",
-      "Cash",
-      "Takeaway Available",
-      "Wine",
-      "Private Parking",
-      "Street Parking",
-      "ATM",
-      "Beer",
-      "Indoor Seating",
-      "Casual Attire",
+      "https://www.yelp.com/biz/brooklyn-chop-house-new-york-3?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    categories: [
+      {
+        alias: "dimsum",
+        title: "Dim Sum",
+      },
+      {
+        alias: "steak",
+        title: "Steakhouses",
+      },
+      {
+        alias: "asianfusion",
+        title: "Asian Fusion",
+      },
     ],
-    thumb:
-      "https://b.zmtcdn.com/data/res_imagery/16771079_RESTAURANT_da60c9abb32fa64cddc148a2795ae43c_c.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-    photosURL:
-      "https://www.zomato.com/new-york-city/lombardis-pizza-lower-east-side/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    menuURL:
-      "https://www.zomato.com/new-york-city/lombardis-pizza-lower-east-side/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    featuredImage:
-      "https://b.zmtcdn.com/data/res_imagery/16771079_RESTAURANT_da60c9abb32fa64cddc148a2795ae43c_c.jpg",
-    phoneNumbers: "(212) 941-7994",
-    establishment: ["Pizzeria"],
-    rating: 4.2,
-    ratingText: "Very good",
+    rating: 4.0,
+    coordinates: {
+      latitude: 40.7115099,
+      longitude: -74.00597,
+    },
+    location: {
+      city: "New York",
+      zip_code: "10038",
+      country: "US",
+      state: "NY",
+      display_address: ["150 Nassau St", "New York, NY 10038"],
+    },
+    phone: "+12126191200",
+    display_phone: "(212) 619-1200",
   },
   {
-    id: "16781904",
-    name: "Momofuku Noodle Bar",
+    id: "rCS4w1A24k33FFTzZ52Vog",
+    name: "Oh K-Dog",
+    image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/GHVdc3P2hEO0TknfI2O8Tg/o.jpg",
     url:
-      "https://www.zomato.com/new-york-city/momofuku-noodle-bar-east-village?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "171 1st Avenue 10003",
-      locality: "East Village",
-      city: "New York City",
-      cityID: 280,
-      latitude: "40.7291000000",
-      longitude: "-73.9843200000",
-      zipcode: "10003",
-      countryID: 216,
-    },
-    cuisines: "Asian, Ramen",
-    timings:
-      "12 Noon to 4:30 PM, 5:30 PM to 11 PM (Mon-Thu),12 Noon to 4:30 PM, 5:30 PM to 1 AM (Fri),12 Noon to 4 PM, 5:30 PM to 1 AM (Sat),12 Noon to 4 PM, 5:30 PM to 11 PM (Sun)",
-    avgCostForTwo: 70,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Lunch",
-      "Serves Alcohol",
-      "Delivery",
-      "Credit Card",
-      "Dinner",
-      "Takeaway Available",
-      "Lunch Menu",
-      "Beer",
-      "Wine",
-      "Indoor Seating",
-      "Table booking recommended",
+      "https://www.yelp.com/biz/oh-k-dog-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    categories: [
+      {
+        alias: "korean",
+        title: "Korean",
+      },
+      {
+        alias: "hotdog",
+        title: "Hot Dogs",
+      },
+      {
+        alias: "hotdogs",
+        title: "Fast Food",
+      },
     ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/chains/3/16772773/032b860c175202ad63c7a5ae1add1f99.png?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-    photosURL:
-      "https://www.zomato.com/new-york-city/momofuku-noodle-bar-east-village/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    menuURL:
-      "https://www.zomato.com/new-york-city/momofuku-noodle-bar-east-village/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    featuredImage:
-      "https://b.zmtcdn.com/data/pictures/chains/3/16772773/032b860c175202ad63c7a5ae1add1f99.png?output-format=webp",
-    phoneNumbers: "(212) 777-7773",
-    establishment: ["Casual Dining"],
-    rating: 3.6,
-    ratingText: "Excellent",
+    rating: 4.5,
+    coordinates: {
+      latitude: 40.72104,
+      longitude: -73.98804,
+    },
+    location: {
+      city: "New York",
+      zip_code: "10002",
+      country: "US",
+      state: "NY",
+      display_address: ["159 Ludlow St", "New York, NY 10002"],
+    },
+    phone: "+16464484836",
+    display_phone: "(646) 448-4836",
   },
   {
-    id: "16777961",
-    name: "The Spotted Pig",
+    id: "8uuMkezIN1c8zGEWkaMRqg",
+    name: "Los Tacos No. 1",
+    image_url: "https://s3-media3.fl.yelpcdn.com/bphoto/Ug-RpXxf5dWvhGBkO85eIw/o.jpg",
     url:
-      "https://www.zomato.com/new-york-city/the-spotted-pig-greenwich-village?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "314 West 11th Street 10014",
-      locality: "Greenwich Village",
-      city: "New York City",
-      cityID: 280,
-      latitude: "40.7355900000",
-      longitude: "-74.0065000000",
-      zipcode: "10014",
-      countryID: 216,
-    },
-    cuisines: "Burger, Bar Food",
-    timings: "12 Noon to 2 AM (Mon-Fri),11 AM to 2 AM (Sat-Sun)",
-    avgCostForTwo: 70,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Dinner",
-      "Credit Card",
-      "Lunch",
-      "Serves Alcohol",
-      "Michelin Starred",
-      "Fullbar",
-      "Indoor Seating",
-      "Nightlife",
-      "Gastro Pub",
-      "Brunch",
+      "https://www.yelp.com/biz/los-tacos-no-1-new-york-5?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    categories: [
+      {
+        alias: "tacos",
+        title: "Tacos",
+      },
     ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/chains/1/16777961/1c02d5846ed641b4a9d096b1486f30e2.png?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-    photosURL:
-      "https://www.zomato.com/new-york-city/the-spotted-pig-greenwich-village/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    menuURL:
-      "https://www.zomato.com/new-york-city/the-spotted-pig-greenwich-village/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    featuredImage:
-      "https://b.zmtcdn.com/data/pictures/chains/1/16777961/1c02d5846ed641b4a9d096b1486f30e2.png?output-format=webp",
-    phoneNumbers: "(212) 937-8518, (212) 620-0393, (212) 937-8518",
-    establishment: ["Casual Dining"],
-    rating: 4.7,
-    ratingText: "Very good",
+    rating: 4.5,
+    coordinates: {
+      latitude: 40.714282,
+      longitude: -74.008675,
+    },
+    location: {
+      city: "New York",
+      zip_code: "10007",
+      country: "US",
+      state: "NY",
+      display_address: ["136 Church St", "New York, NY 10007"],
+    },
+    phone: "",
+    display_phone: "",
   },
   {
-    id: "16760100",
-    name: "Balthazar",
+    id: "f8ipr8Wdy1_wHhw7JgNqPQ",
+    name: "Da Claudio",
+    image_url: "https://s3-media1.fl.yelpcdn.com/bphoto/OUy0ve7CHI2x7_bMb0wAEw/o.jpg",
     url:
-      "https://www.zomato.com/new-york-city/balthazar-soho?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "80 Spring Street 10012",
-      locality: "Soho",
-      city: "New York City",
-      cityID: 280,
-      latitude: "40.7225900000",
-      longitude: "-73.9980500000",
-      zipcode: "10012",
-      countryID: 216,
-    },
-    cuisines: "French, Seafood, Bakery",
-    timings:
-      "7:30 AM to 11:30 AM, 12 Noon to 5 PM, 6 PM to 12 Midnight (Mon-Fri),9 AM to 4 PM, 6 PM to 1 AM (Sat),9 AM to 4 PM, 5:30 PM to 1 AM (Sun)",
-    avgCostForTwo: 140,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Dinner",
-      "Takeaway Available",
-      "Credit Card",
-      "Lunch",
-      "Serves Alcohol",
-      "Breakfast",
-      "Lunch Menu",
-      "Indoor Seating",
-      "Brunch",
-      "Fullbar",
-      "Vegan Options",
-      "Desserts and Bakes",
+      "https://www.yelp.com/biz/da-claudio-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    categories: [
+      {
+        alias: "italian",
+        title: "Italian",
+      },
+      {
+        alias: "cocktailbars",
+        title: "Cocktail Bars",
+      },
     ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/0/16760100/2cee8640b74a1e53fde146c9c90f5213.png?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-    photosURL:
-      "https://www.zomato.com/new-york-city/balthazar-soho/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    menuURL:
-      "https://www.zomato.com/new-york-city/balthazar-soho/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    featuredImage:
-      "https://b.zmtcdn.com/data/pictures/0/16760100/2cee8640b74a1e53fde146c9c90f5213.png?output-format=webp",
-    phoneNumbers: "(212) 965-1414",
-    establishment: ["Casual Dining"],
-    rating: 4.2,
-    ratingText: "Excellent",
+    rating: 4.5,
+    coordinates: {
+      latitude: 40.71087,
+      longitude: -74.00753,
+    },
+    location: {
+      city: "New York",
+      zip_code: "10038",
+      country: "US",
+      state: "NY",
+      display_address: ["21 Ann St", "New York, NY 10038"],
+    },
+    phone: "+12122852668",
+    display_phone: "(212) 285-2668",
   },
   {
-    id: "16777384",
-    name: "Shake Shack",
+    id: "BKMCAYb9EAivUm3p-vrC9w",
+    name: "Khe-Yo",
+    image_url: "https://s3-media3.fl.yelpcdn.com/bphoto/Ars_y_Fis_3n-H4neUv9Fw/o.jpg",
     url:
-      "https://www.zomato.com/new-york-city/shake-shack-gramercy-flatiron?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "Madison Square Park, 23rd & Madison, New York 10010",
-      locality: "Gramercy-Flatiron",
-      city: "New York City",
-      cityID: 280,
-      latitude: "40.7408681000",
-      longitude: "-73.9879841000",
-      zipcode: "10010",
-      countryID: 216,
-    },
-    cuisines: "American, Burger",
-    timings: "7 AM to 11 PM (Mon-Fri), 8 AM to 11 PM (Sat-Sun)",
-    avgCostForTwo: 30,
-    priceRange: 2,
-    currency: "$",
-    highlights: [
-      "Lunch",
-      "Serves Alcohol",
-      "Breakfast",
-      "Dinner",
-      "Cash",
-      "Takeaway Available",
-      "Credit Card",
-      "Debit Card",
-      "Outdoor Seating",
-      "Beer",
-      "Dog Friendly",
-      "Gluten Free Options",
-      "Wine",
-      "Indoor Seating",
+      "https://www.yelp.com/biz/khe-yo-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    categories: [
+      {
+        alias: "laotian",
+        title: "Laotian",
+      },
     ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/4/16777384/2a989275f117f6bf1f63919c66cbc2cc.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-    photosURL:
-      "https://www.zomato.com/new-york-city/shake-shack-gramercy-flatiron/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    menuURL:
-      "https://www.zomato.com/new-york-city/shake-shack-gramercy-flatiron/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    featuredImage:
-      "https://b.zmtcdn.com/data/pictures/4/16777384/2a989275f117f6bf1f63919c66cbc2cc.jpg?output-format=webp",
-    phoneNumbers: "(212) 889-6600",
-    establishment: ["Fast Food"],
-    rating: 3.5,
-    ratingText: "Very good",
-  },
-  {
-    id: "16781875",
-    name: "Ippudo",
-    url:
-      "https://www.zomato.com/new-york-city/ippudo-east-village?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "65 4th Avenue, New York 10003",
-      locality: "East Village",
-      city: "New York City",
-      cityID: 280,
-      latitude: "40.7307361111",
-      longitude: "-73.9906833333",
-      zipcode: "10003",
-      countryID: 216,
+    rating: 4.0,
+    coordinates: {
+      latitude: 40.716906,
+      longitude: -74.008587,
     },
-    cuisines: "Ramen",
-    timings:
-      "11 AM to 3:30 PM, 5 PM to 12:30 AM (Mon-Fri),11 AM to 11:30 PM (Sat),11 AM to 8:30 PM (Sun)",
-    avgCostForTwo: 40,
-    priceRange: 3,
-    currency: "$",
-    highlights: [
-      "Dinner",
-      "Lunch",
-      "Credit Card",
-      "Lunch Menu",
-      "Indoor Seating",
-      "Fullbar",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/5/16781875/1a72663426d6e780f6363b6b7da6d48b.png?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-    photosURL:
-      "https://www.zomato.com/new-york-city/ippudo-east-village/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    menuURL:
-      "https://www.zomato.com/new-york-city/ippudo-east-village/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    featuredImage:
-      "https://b.zmtcdn.com/data/pictures/5/16781875/1a72663426d6e780f6363b6b7da6d48b.png?output-format=webp",
-    phoneNumbers: "(212) 388-0088",
-    establishment: ["Casual Dining"],
-    rating: 4.65,
-    ratingText: "Excellent",
-  },
-  {
-    id: "16775039",
-    name: "Peter Luger Steak House",
-    url:
-      "https://www.zomato.com/new-york-city/peter-luger-steak-house-south-side?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
     location: {
-      address: "178 Broadway, Brooklyn 11211",
-      locality: "South Side",
-      city: "New York City",
-      cityID: 280,
-      latitude: "40.7098777778",
-      longitude: "-73.9623416667",
-      zipcode: "11211",
-      countryID: 216,
+      city: "New York",
+      zip_code: "10013",
+      country: "US",
+      state: "NY",
+      display_address: ["157 Duane St", "New York, NY 10013"],
     },
-    cuisines: "Steak, American, German, Burger",
-    timings:
-      "11:30 AM to 9:30 PM (Mon-Thu),12 Noon to 10:30 PM (Fri-Sat),1 PM to 9:30 PM (Sun)",
-    avgCostForTwo: 150,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Lunch",
-      "Serves Alcohol",
-      "Cash",
-      "Dinner",
-      "Debit Card",
-      "Fullbar",
-      "Michelin Starred",
-      "Indoor Seating",
-      "Table booking recommended",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/reviews_photos/ea9/ed66f37a5492836605ec71582db68ea9_1441919144.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-    photosURL:
-      "https://www.zomato.com/new-york-city/peter-luger-steak-house-south-side/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    menuURL:
-      "https://www.zomato.com/new-york-city/peter-luger-steak-house-south-side/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    featuredImage:
-      "https://b.zmtcdn.com/data/reviews_photos/ea9/ed66f37a5492836605ec71582db68ea9_1441919144.jpg?output-format=webp",
-    phoneNumbers: "(718) 387-7400",
-    establishment: ["Fine Dining"],
-    rating: 4,
-    ratingText: "Very good",
-  },
-  {
-    id: "16761344",
-    name: "Buddakan",
-    url:
-      "https://www.zomato.com/new-york-city/buddakan-greenwich-village?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "75 9th Avenue 10011",
-      locality: "9th Avenue, Greenwich Village",
-      city: "New York City",
-      cityID: 280,
-      latitude: "40.7422762672",
-      longitude: "-74.0048000962",
-      zipcode: "10011",
-      countryID: 216,
-    },
-    cuisines: "Chinese, Fusion, Asian",
-    timings:
-      "5:30 PM to 11 PM (Mon-Tue), 5:30 PM to 12 Midnight (Wed-Thu), 5 PM to 1 AM (Fri-Sat), 5 PM to 11 PM (Sun)",
-    avgCostForTwo: 130,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Serves Alcohol",
-      "Credit Card",
-      "Dinner",
-      "Nightlife",
-      "Indoor Seating",
-      "Fullbar",
-      "Table booking recommended",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/4/16761344/5535198640b49778b948e916d392ebb8.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-    photosURL:
-      "https://www.zomato.com/new-york-city/buddakan-greenwich-village/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    menuURL:
-      "https://www.zomato.com/new-york-city/buddakan-greenwich-village/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    featuredImage:
-      "https://b.zmtcdn.com/data/pictures/4/16761344/5535198640b49778b948e916d392ebb8.jpg?output-format=webp",
-    phoneNumbers: "(212) 989-6699, (212) 989-6699",
-    establishment: ["Fine Dining"],
-    rating: 5,
-    ratingText: "Excellent",
-  },
-  {
-    id: "16767139",
-    name: "Gramercy Tavern",
-    url:
-      "https://www.zomato.com/new-york-city/gramercy-tavern-gramercy-flatiron?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1",
-    location: {
-      address: "42 E 20th Street 10003",
-      locality: "East 20th Street, Gramercy-Flatiron",
-      city: "New York City",
-      cityID: 280,
-      latitude: "40.7387166667",
-      longitude: "-73.9883888889",
-      zipcode: "10003",
-      countryID: 216,
-    },
-    cuisines: "American",
-    timings: "11:30 AM to 11 PM (Mon-Thu, Sun), 11:30 AM to 12 Midnight (Fri-Sat)",
-    avgCostForTwo: 200,
-    priceRange: 4,
-    currency: "$",
-    highlights: [
-      "Dinner",
-      "Takeaway Available",
-      "Lunch",
-      "Serves Alcohol",
-      "Cash",
-      "Credit Card",
-      "Michelin Starred",
-      "Indoor Seating",
-      "Table booking recommended",
-      "Lunch Menu",
-      "Fullbar",
-    ],
-    thumb:
-      "https://b.zmtcdn.com/data/pictures/9/16767139/8e3fae144133ba709852d6eec7280397.jpg?fit=around%7C200%3A200&crop=200%3A200%3B%2A%2C%2A",
-    photosURL:
-      "https://www.zomato.com/new-york-city/gramercy-tavern-gramercy-flatiron/photos?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1#tabtop",
-    menuURL:
-      "https://www.zomato.com/new-york-city/gramercy-tavern-gramercy-flatiron/menu?utm_source=api_basic_user&utm_medium=api&utm_campaign=v2.1&openSwipeBox=menu&showMinimal=1#tabtop",
-    featuredImage:
-      "https://b.zmtcdn.com/data/pictures/9/16767139/8e3fae144133ba709852d6eec7280397.jpg?output-format=webp",
-    phoneNumbers: "(212) 477-0777",
-    establishment: ["Fine Dining"],
-    rating: 4,
-    ratingText: "Very good",
+    phone: "+12125871089",
+    display_phone: "(212) 587-1089",
   },
 ];
+
+export const restaurantPlaceholder: Restaurant = {
+  id: "3xTQT7qjZJIxc-eBiFMerQ",
+  name: "1803",
+  image_url: "https://s3-media3.fl.yelpcdn.com/bphoto/f6_ZYxoZGbyGsCn6m_auog/o.jpg",
+  url:
+    "https://www.yelp.com/biz/1803-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_lookup&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+  phone: "+12122673000",
+  display_phone: "(212) 267-3000",
+  categories: [
+    {
+      alias: "cajun",
+      title: "Cajun/Creole",
+    },
+    {
+      alias: "seafood",
+      title: "Seafood",
+    },
+    {
+      alias: "bars",
+      title: "Bars",
+    },
+  ],
+  rating: 4.5,
+  location: {
+    city: "New York",
+    zip_code: "10007",
+    country: "US",
+    state: "NY",
+    display_address: ["82 Reade St", "New York, NY 10007"],
+  },
+  coordinates: {
+    latitude: 40.715498,
+    longitude: -74.007178,
+  },
+  photos: [
+    "https://s3-media3.fl.yelpcdn.com/bphoto/f6_ZYxoZGbyGsCn6m_auog/o.jpg",
+    "https://s3-media2.fl.yelpcdn.com/bphoto/WwUWYeiQoleN1aVd7QKbSg/o.jpg",
+    "https://s3-media3.fl.yelpcdn.com/bphoto/V1-_214Vuijh5t__vGtyxw/o.jpg",
+  ],
+  hours: [
+    {
+      open: [
+        {
+          is_overnight: false,
+          start: "1600",
+          end: "2200",
+          day: 0,
+        },
+        {
+          is_overnight: false,
+          start: "1600",
+          end: "2200",
+          day: 1,
+        },
+        {
+          is_overnight: false,
+          start: "1600",
+          end: "2200",
+          day: 2,
+        },
+        {
+          is_overnight: false,
+          start: "1600",
+          end: "2200",
+          day: 3,
+        },
+        {
+          is_overnight: false,
+          start: "1200",
+          end: "2200",
+          day: 4,
+        },
+        {
+          is_overnight: false,
+          start: "1200",
+          end: "2200",
+          day: 5,
+        },
+        {
+          is_overnight: false,
+          start: "1200",
+          end: "2000",
+          day: 6,
+        },
+      ],
+    },
+  ],
+};
 
 export const poisPlaceholder: POISearch[] = [
   {

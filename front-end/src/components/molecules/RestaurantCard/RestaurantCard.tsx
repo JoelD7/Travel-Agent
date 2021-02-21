@@ -11,11 +11,12 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Colors } from "../../../styles";
 import { getLinkStyle, Routes } from "../../../utils";
+import { getRestaurantCategoriesList } from "../../../utils/functions/restaurant";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
 import { restaurantCardStyles } from "./restaurantCard-styles";
 
 interface RestaurantCard {
-  restaurant: Restaurant;
+  restaurant: RestaurantSearch;
 }
 
 export function RestaurantCard({ restaurant }: RestaurantCard) {
@@ -29,7 +30,7 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
           style={{ height: "100%" }}
           onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
         >
-          <img src={restaurant.featuredImage} className={style.cardImage} />
+          <img src={restaurant.image_url} className={style.cardImage} />
         </CardActionArea>
       </Grid>
 
@@ -50,7 +51,7 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
               shadow
               className={style.bodyText}
               icon={faUtensils}
-              text={restaurant.cuisines}
+              text={getRestaurantCategoriesList(restaurant)}
             />
           </Grid>
 
@@ -59,7 +60,7 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
               shadow
               className={style.bodyText}
               icon={faMapMarkerAlt}
-              text={restaurant.location.address}
+              text={restaurant.location.display_address.join(", ")}
             />
           </Grid>
 

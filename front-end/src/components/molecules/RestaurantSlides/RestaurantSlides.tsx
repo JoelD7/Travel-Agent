@@ -17,9 +17,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom";
 import { Routes } from "../../../utils";
 import Rating from "react-rating";
+import { getRestaurantCategoriesList } from "../../../utils/functions/restaurant";
 
 interface RestaurantSlides {
-  restaurants: Restaurant[];
+  restaurants: RestaurantSearch[];
   title: string;
 }
 
@@ -94,7 +95,7 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
                     <CardMedia
                       component="img"
                       height="150"
-                      image={restaurant.featuredImage}
+                      image={restaurant.image_url}
                     />
 
                     <CardContent>
@@ -122,7 +123,9 @@ export function RestaurantSlides({ restaurants, title }: RestaurantSlides) {
                         }
                       />
 
-                      <p className={style.restaurantCuisines}>{restaurant.cuisines}</p>
+                      <p className={style.restaurantCuisines}>
+                        {getRestaurantCategoriesList(restaurant)}
+                      </p>
                     </CardContent>
                   </Card>
                 </CardActionArea>

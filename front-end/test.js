@@ -1,2 +1,8 @@
-const { formatISO, format, parseISO } = require("date-fns");
-console.log(format(parseISO("2021-02-15T17:10:00"), "d/MMM, hh:mm aaa"));
+let a = [1, 2, 3, 4, 4];
+let b = {
+  array: ["a", "b", "v"],
+};
+console.log(JSON.stringify(b));
+b = { ...b, new: a };
+a = [];
+console.log(JSON.stringify(b));

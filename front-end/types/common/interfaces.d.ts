@@ -1,22 +1,70 @@
 interface Restaurant {
   id: string;
   name: string;
+  image_url: string;
   url: string;
-  location: ResLocation;
-  cuisines: string;
-  timings: string;
-  avgCostForTwo: number;
-  priceRange: number;
-  currency: string;
-  highlights: string[]; //Amenities
-  thumb: string;
+  categories: {
+    alias: string;
+    title: string;
+  }[];
   rating: number;
-  ratingText: string;
-  photosURL: string; //Url to Zomato page with photos
-  menuURL: string; //Url to Zomato page with menu
-  featuredImage: string; //Main pic
-  phoneNumbers: string;
-  establishment: string[]; //Establisment types
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  location: {
+    city: string;
+    zip_code: string;
+    country: string;
+    state: string;
+    display_address: string[];
+  };
+  phone: string;
+  display_phone: string;
+  photos: string[];
+  hours: {
+    open: RestaurantHour[];
+  }[];
+}
+
+interface RestaurantHour {
+  is_overnight: boolean;
+  start: string;
+  end: string;
+  day: number;
+}
+
+interface RestaurantSearch {
+  id: string;
+  name: string;
+  image_url: string;
+  url: string;
+  categories: {
+    alias: string;
+    title: string;
+  }[];
+  rating: number;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  location: {
+    city: string;
+    zip_code: string;
+    country: string;
+    state: string;
+    display_address: string[];
+  };
+  phone: string;
+  display_phone: string;
+}
+
+interface RestaurantCategories {
+  alias: string;
+  title: string;
+  parent_aliases: string[];
+  country_whitelist: string[];
+  country_blacklist: string[];
 }
 
 interface ResLocation {

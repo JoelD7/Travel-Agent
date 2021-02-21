@@ -54,6 +54,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Helmet from "react-helmet";
+import { getRestaurantHours } from "../../utils/functions/restaurant";
+import { restaurantPlaceholder } from "../../utils";
 
 interface ServiceIconType {
   hotel: boolean;
@@ -85,6 +87,8 @@ export function Home() {
     ...state,
     holder: { ...state.holder, [45]: { calendarItems: [{ a: "klk" }] } },
   };
+
+  getRestaurantHours(restaurantPlaceholder);
 
   const services = [
     {

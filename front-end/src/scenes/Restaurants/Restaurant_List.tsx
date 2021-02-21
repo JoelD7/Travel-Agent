@@ -226,7 +226,7 @@ export function Restaurant_List() {
     ],
   });
 
-  const restaurants: Restaurant[] = restaurantsPlaceholder;
+  const restaurants: RestaurantSearch[] = restaurantsPlaceholder;
 
   return (
     <div className={style.mainContainer}>

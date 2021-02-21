@@ -7,7 +7,7 @@ export * from "./external-apis";
 export * from "./placeholders";
 export * from "./store";
 export * from "./types";
-export * from "./functions/functions";
+export * from "./functions";
 export { iataCodes } from "./constants/iataCodes";
 export {
   getFindPlaceFromTextURL,
