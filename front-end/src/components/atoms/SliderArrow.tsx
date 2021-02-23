@@ -39,8 +39,8 @@ export function SliderArrow({
     iconContainer: {
       backgroundColor: Colors.BLUE,
       borderRadius: "50%",
-      height: "56px",
-      width: "56px",
+      height: iconSize === "1x" ? "40px" : "56px",
+      width: iconSize === "1x" ? "40px" : "56px",
 
       "&:hover": {
         backgroundColor: Colors.BLUE_HOVER,

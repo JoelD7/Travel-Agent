@@ -85,6 +85,12 @@ interface RestaurantFilter {
   checked: boolean;
 }
 
+interface RestaurantCuisine {
+  title: string;
+  alias: string;
+  checked: boolean;
+}
+
 interface ExchangeRate {
   lastUpdated: number;
   base: string;

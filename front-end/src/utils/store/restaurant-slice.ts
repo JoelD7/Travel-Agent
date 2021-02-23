@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  getDistinctCuisines,
   getRestaurantCategoriesList,
   getRestaurantTransactions,
   hasAny,
@@ -8,13 +9,21 @@ import { restaurantPlaceholder, restaurantsPlaceholder } from "../placeholders";
 
 interface RestaurantSlice {
   features: RestaurantFilter[];
-  cuisines: RestaurantFilter[];
+  cuisines: RestaurantCuisine[];
+  checkedFeatures: RestaurantFilter[];
+  checkedCuisines: RestaurantCuisine[];
   restaurants: RestaurantSearch[];
+  allRestaurants: RestaurantSearch[];
+  loadingRestaurants: boolean;
 }
 
 const initialState: RestaurantSlice = {
   features: [],
   cuisines: [],
+  checkedFeatures: [],
+  checkedCuisines: [],
+  allRestaurants: [],
+  loadingRestaurants: true,
   restaurants: restaurantsPlaceholder,
 };
 
@@ -32,7 +41,7 @@ const restaurantSlice = createSlice({
       prepare(curFeatures: RestaurantFilter[], restaurants: RestaurantSearch[]) {
         let features: any[] = [];
         restaurants.forEach((r) => {
-          let arr = getRestaurantTransactions(r).split(", ");
+          let arr = r.transactions.filter((e) => e !== "");
           features = [...features, ...arr];
         });
 
@@ -53,27 +62,27 @@ const restaurantSlice = createSlice({
       },
     },
     addRestaurantCuisines: {
-      reducer(state, action: PayloadAction<RestaurantFilter[]>) {
+      reducer(state, action: PayloadAction<RestaurantCuisine[]>) {
         state.cuisines = [...state.cuisines, ...action.payload].sort((a, b) =>
-          a.name.localeCompare(b.name)
+          a.title.localeCompare(b.title)
         );
       },
       //Add feature if it isn's included already
-      prepare(curCuisines: RestaurantFilter[], restaurants: RestaurantSearch[]) {
+      prepare(curCuisines: RestaurantCuisine[], restaurants: RestaurantSearch[]) {
         let cuisines: any[] = [];
         restaurants.forEach((r) => {
-          let arr = getRestaurantCategoriesList(r).split(", ");
+          let arr = r.categories;
           cuisines = [...cuisines, ...arr];
         });
 
-        let curCuisinesString = curCuisines.map((ft) => ft.name);
-        let newCuisines: RestaurantFilter[] = [];
+        let curCuisinesString = curCuisines.map((ft) => ft.title);
+        let newCuisines: RestaurantCuisine[] = [];
 
-        let cuisinesSet = new Set([...cuisines]);
+        let cuisinesSet = getDistinctCuisines(cuisines);
 
         cuisinesSet.forEach((ft) => {
-          if (!curCuisinesString.includes(ft)) {
-            newCuisines.push({ name: ft, checked: false });
+          if (!curCuisinesString.includes(ft.title)) {
+            newCuisines.push({ title: ft.title, alias: ft.alias, checked: false });
           }
         });
 
@@ -82,24 +91,32 @@ const restaurantSlice = createSlice({
         };
       },
     },
-    updateRestaurantFeatures(state, action: PayloadAction<RestaurantFilter[]>) {
-      state.features = action.payload;
+    updateRestaurantCheckedFeatures(state, action: PayloadAction<RestaurantFilter[]>) {
+      state.checkedFeatures = action.payload;
     },
-    updateRestaurantCuisines(state, action: PayloadAction<RestaurantFilter[]>) {
-      state.cuisines = action.payload;
+    updateRestaurantCheckedCuisines(state, action: PayloadAction<RestaurantCuisine[]>) {
+      state.checkedCuisines = action.payload;
     },
     setRestaurants(state, action: PayloadAction<RestaurantSearch[]>) {
       state.restaurants = action.payload;
+    },
+    setAllRestaurants(state, action: PayloadAction<RestaurantSearch[]>) {
+      state.allRestaurants = action.payload;
+    },
+    setLoadingRestaurants(state, action: PayloadAction<boolean>) {
+      state.loadingRestaurants = action.payload;
     },
   },
 });
 
 export const {
   addRestaurantFeatures,
+  setLoadingRestaurants,
   setRestaurants,
+  setAllRestaurants,
   addRestaurantCuisines,
-  updateRestaurantFeatures,
-  updateRestaurantCuisines,
+  updateRestaurantCheckedFeatures,
+  updateRestaurantCheckedCuisines,
 } = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;

@@ -89,6 +89,15 @@ export const selectRestaurantCuisines = createSelector(
   (cuisines) => cuisines
 );
 export const selectRestaurants = (state: RootState) => state.restaurantSlice.restaurants;
+export const selectAllRestaurants = (state: RootState) =>
+  state.restaurantSlice.allRestaurants;
+export const selectCheckedRestaurantCuisines = (state: RootState) =>
+  state.restaurantSlice.checkedCuisines;
+export const selectCheckedRestaurantFeatures = (state: RootState) =>
+  state.restaurantSlice.checkedFeatures;
+
+export const selectLoadingRestaurants = (state: RootState) =>
+  state.restaurantSlice.loadingRestaurants;
 //#endregion
 
 export default store;

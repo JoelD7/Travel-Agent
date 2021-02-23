@@ -11,32 +11,21 @@ import {
   FormGroup,
   Grid,
 } from "@material-ui/core";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { ChangeEvent, useState } from "react";
 import { Colors } from "../../../styles";
-import { selectRestaurantFeatures } from "../../../utils";
-import {
-  updateRestaurantCuisines,
-  updateRestaurantFeatures,
-} from "../../../utils/store/restaurant-slice";
+import { capitalizeString } from "../../../utils";
 import { CustomButton } from "../../atoms";
 import { checkboxSelectorDialog } from "../../atoms/checkboxSelectorDialog-styles";
 
-interface RestaurantFeature {}
+interface RestaurantFeature {
+  features: RestaurantFilter[];
+  updateState: (selectedFeatures: RestaurantFilter[]) => void;
+}
 
-export function RestaurantFeature() {
+export function RestaurantFeature({ features, updateState }: RestaurantFeature) {
   const style = checkboxSelectorDialog();
 
   const [openDialog, setOpenDialog] = useState(false);
-
-  const dispatch = useDispatch();
-
-  const [features, setFeatures] = useState<RestaurantFilter[]>([]);
-  const featuresRedux: RestaurantFilter[] = useSelector(selectRestaurantFeatures);
-
-  useEffect(() => {
-    setFeatures(featuresRedux);
-  }, [featuresRedux]);
 
   const size = features.length;
 
@@ -51,25 +40,27 @@ export function RestaurantFeature() {
       }
     });
 
-    setFeatures(newSelectedFeatures);
+    updateState(newSelectedFeatures);
   }
 
   function closeDialog() {
     setOpenDialog(false);
-    dispatch(updateRestaurantFeatures(features));
+  }
+
+  function formatFeatureName(feature: string) {
+    if (feature.split("_").length > 1) {
+      return capitalizeString(feature.split("_").join(" "), "full sentence");
+    }
+    return capitalizeString(feature, "full sentence");
   }
 
   return (
-    <div
-      onMouseLeave={() => {
-        dispatch(updateRestaurantFeatures(features));
-      }}
-    >
+    <div>
       <FormGroup>
         {features.slice(0, 4).map((feature, i) => (
           <FormControlLabel
             key={i}
-            label={feature.name}
+            label={formatFeatureName(feature.name)}
             classes={{ label: style.formLabel }}
             control={
               <Checkbox

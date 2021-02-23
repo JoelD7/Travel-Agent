@@ -1,49 +1,41 @@
-import { faCircle, faFilter } from "@fortawesome/free-solid-svg-icons";
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Divider,
-  Grid,
-} from "@material-ui/core";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
+import { Divider, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+import Helmet from "react-helmet";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CustomButton,
   Navbar,
   ProgressCircle,
   RestaurantCard,
   RestaurantCuisinesSelec,
-  RestaurantEstablishments,
   RestaurantFeature,
+  RestaurantFilters,
   RestaurantSlides,
   ServicesToolbar,
-  SliderArrow,
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import { restaurantListStyles } from "./restaurantList-styles";
 import {
   filterByFeature,
-  restaurantsPlaceholder,
+  hasAny,
+  selectAllRestaurants,
+  selectCheckedRestaurantCuisines,
+  selectCheckedRestaurantFeatures,
   selectCurrentCity,
   selectRestaurantCuisines,
   selectRestaurantFeatures,
   selectRestaurants,
 } from "../../utils";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Slider from "react-slick";
-import Axios from "axios";
-import Helmet from "react-helmet";
 import { fetchRestaurants } from "../../utils/external-apis/yelp-apis";
-import { useDispatch, useSelector } from "react-redux";
-import { IATALocation } from "../../utils/types/location-types";
 import {
   addRestaurantCuisines,
   addRestaurantFeatures,
+  setAllRestaurants,
   setRestaurants,
 } from "../../utils/store/restaurant-slice";
+import { IATALocation } from "../../utils/types/location-types";
+import { restaurantListStyles } from "./restaurantList-styles";
 
 interface Restaurant_List {
   city: string;
@@ -60,9 +52,13 @@ export function Restaurant_List() {
 
   const currentCity: IATALocation = useSelector(selectCurrentCity);
   const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
+  const allRestaurants: RestaurantSearch[] = useSelector(selectAllRestaurants);
 
-  const cuisines: RestaurantFilter[] = useSelector(selectRestaurantCuisines);
+  const cuisines: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
   const features: RestaurantFilter[] = useSelector(selectRestaurantFeatures);
+
+  const checkedRestaurantFeatures = useSelector(selectCheckedRestaurantFeatures);
+  const checkedRestaurantCuisines = useSelector(selectCheckedRestaurantCuisines);
 
   const [loading, setLoading] = useState(true);
 
@@ -72,6 +68,7 @@ export function Restaurant_List() {
     fetchRestaurants(currentCity.lat, currentCity.lon)
       .then((res) => {
         dispatch(setRestaurants(res.data.businesses));
+        dispatch(setAllRestaurants(res.data.businesses));
         dispatch(addRestaurantCuisines(cuisines, res.data.businesses));
         dispatch(addRestaurantFeatures(features, res.data.businesses));
 
@@ -262,29 +259,7 @@ export function Restaurant_List() {
         <Grid container spacing={2} className={style.pageContentContainer}>
           {/* Filters */}
           <Grid item className={style.filterGrid}>
-            <div className={style.filterContainer}>
-              <Text
-                color={Colors.BLUE}
-                className={style.filterTitle}
-                component="h4"
-                weight="bold"
-              >
-                Features
-              </Text>
-              <RestaurantFeature />
-
-              <Divider style={{ margin: "18px 0px 10px 0px" }} />
-
-              <Text
-                color={Colors.BLUE}
-                className={style.filterTitle}
-                component="h4"
-                weight="bold"
-              >
-                Cuisines
-              </Text>
-              <RestaurantCuisinesSelec />
-            </div>
+            <RestaurantFilters setLoading={(value) => setLoading(value)} />
           </Grid>
 
           {/* Filter button */}

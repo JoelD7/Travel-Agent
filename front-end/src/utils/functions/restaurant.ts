@@ -109,6 +109,19 @@ export function getRestaurantTransactions(
     .join(", ");
 }
 
+export function getDistinctCuisines(cuisines: { title: string; alias: string }[]) {
+  let buffer: { title: string; alias: string }[] = [];
+  let record: string[] = [];
+
+  cuisines.forEach((c) => {
+    if (!record.includes(c.alias)) {
+      buffer.push(c);
+      record.push(c.alias);
+    }
+  });
+  return buffer;
+}
+
 export function filterByFeature(feature: string, restaurants: RestaurantSearch[]) {
   return restaurants.filter((res) => res.transactions.includes(feature));
 }

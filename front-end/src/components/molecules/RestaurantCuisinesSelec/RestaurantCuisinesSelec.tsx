@@ -11,32 +11,23 @@ import {
   FormGroup,
   Grid,
 } from "@material-ui/core";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { ChangeEvent, useState } from "react";
 import { Colors } from "../../../styles";
-import { selectRestaurantCuisines } from "../../../utils";
-import { updateRestaurantCuisines } from "../../../utils/store/restaurant-slice";
 import { CustomButton } from "../../atoms";
 import { checkboxSelectorDialog } from "../../atoms/checkboxSelectorDialog-styles";
 
 interface RestaurantCuisinesSelec {
-  values: RestaurantFilter[];
-  updateState: (selectedCuisines: RestaurantFilter[]) => void;
+  cuisines: RestaurantCuisine[];
+  updateState: (selectedCuisines: RestaurantCuisine[]) => void;
 }
 
-export function RestaurantCuisinesSelec() {
+export function RestaurantCuisinesSelec({
+  cuisines,
+  updateState,
+}: RestaurantCuisinesSelec) {
   const style = checkboxSelectorDialog();
 
   const [openDialog, setOpenDialog] = useState(false);
-
-  const [cuisines, setCuisines] = useState<RestaurantFilter[]>([]);
-  const cuisinesRedux: RestaurantFilter[] = useSelector(selectRestaurantCuisines);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setCuisines(cuisinesRedux);
-  }, [cuisinesRedux]);
 
   const size = cuisines.length;
 
@@ -44,28 +35,27 @@ export function RestaurantCuisinesSelec() {
     let changedCheck = event.target.name;
 
     let newSelectedCuisines = cuisines.map((cuisine) => {
-      if (cuisine.name === changedCheck) {
+      if (cuisine.title === changedCheck) {
         return { ...cuisine, checked: event.target.checked };
       } else {
         return { ...cuisine };
       }
     });
 
-    setCuisines(newSelectedCuisines);
+    updateState(newSelectedCuisines);
   }
 
   function closeDialog() {
     setOpenDialog(false);
-    dispatch(updateRestaurantCuisines(cuisines));
   }
 
   return (
-    <div onMouseLeave={() => dispatch(updateRestaurantCuisines(cuisines))}>
+    <div>
       <FormGroup>
         {cuisines.slice(0, 4).map((cuisine, i) => (
           <FormControlLabel
             key={i}
-            label={cuisine.name}
+            label={cuisine.title}
             classes={{ label: style.formLabel }}
             control={
               <Checkbox
@@ -76,7 +66,7 @@ export function RestaurantCuisinesSelec() {
                   <FontAwesomeIcon icon={faCheckCircle} color={Colors.PURPLE} />
                 }
                 onChange={onCuisineChange}
-                name={cuisine.name}
+                name={cuisine.title}
               />
             }
           />
@@ -105,7 +95,7 @@ export function RestaurantCuisinesSelec() {
               {cuisines.slice(0, size / 2 + 1).map((cuisine, i) => (
                 <FormControlLabel
                   key={i}
-                  label={cuisine.name}
+                  label={cuisine.title}
                   classes={{ label: style.formLabel }}
                   control={
                     <Checkbox
@@ -116,7 +106,7 @@ export function RestaurantCuisinesSelec() {
                         <FontAwesomeIcon icon={faCheckCircle} color={Colors.PURPLE} />
                       }
                       onChange={onCuisineChange}
-                      name={cuisine.name}
+                      name={cuisine.title}
                     />
                   }
                 />
@@ -129,7 +119,7 @@ export function RestaurantCuisinesSelec() {
               {cuisines.slice(size / 2 + 1).map((cuisine, i) => (
                 <FormControlLabel
                   key={i}
-                  label={cuisine.name}
+                  label={cuisine.title}
                   classes={{ label: style.formLabel }}
                   control={
                     <Checkbox
@@ -140,7 +130,7 @@ export function RestaurantCuisinesSelec() {
                         <FontAwesomeIcon icon={faCheckCircle} color={Colors.PURPLE} />
                       }
                       onChange={onCuisineChange}
-                      name={cuisine.name}
+                      name={cuisine.title}
                     />
                   }
                 />

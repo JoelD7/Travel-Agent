@@ -1482,13 +1482,24 @@ export const restaurantCategories: RestaurantCategories[] = [
   },
 ];
 
-export function fetchRestaurants(latitude: string, longitude: string) {
+export function fetchRestaurants(
+  latitude: string,
+  longitude: string,
+  cuisines?: RestaurantCuisine[]
+) {
+  let cuisinesList = "";
+
+  if (cuisines) {
+    cuisinesList = cuisines.map((c) => c.alias).join(",");
+  }
+
   return Axios.get(proxyUrl + "https://api.yelp.com/v3/businesses/search", {
     headers: {
       Authorization: `Bearer ${process.env.REACT_APP_YELP_KEY}`,
     },
     params: {
       term: "restaurants",
+      categories: cuisinesList,
       latitude,
       longitude,
     },
