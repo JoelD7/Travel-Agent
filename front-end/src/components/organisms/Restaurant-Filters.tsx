@@ -5,13 +5,10 @@ import { restaurantListStyles } from "../../scenes/Restaurants/restaurantList-st
 import { Colors } from "../../styles";
 import {
   hasAny,
+  selectAllRestaurants,
+  selectCurrentCity,
   selectRestaurantCuisines,
   selectRestaurantFeatures,
-  selectRestaurants,
-  selectAllRestaurants,
-  selectCheckedRestaurantFeatures,
-  selectCheckedRestaurantCuisines,
-  selectCurrentCity,
 } from "../../utils";
 import { fetchRestaurants } from "../../utils/external-apis/yelp-apis";
 import {
