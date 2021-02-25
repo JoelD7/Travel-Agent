@@ -91,7 +91,7 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
         </Grid>
 
         <Grid container>
-          <Slider {...sliderSettings}>
+          <Slider {...sliderSettings} lazyLoad="ondemand">
             {restaurants.map((restaurant, i) => (
               <div key={i}>
                 <CardActionArea

@@ -32,6 +32,7 @@ import {
   HotelStarSelector,
   IconText,
   Navbar,
+  NotAvailableCard,
   PriceRange,
   ProgressCircle,
   Rating,
@@ -979,35 +980,10 @@ export function Hotels() {
 
                   {/* No hotels */}
                   {noHotels && (
-                    <Grid container className={style.noHotelsContainer}>
-                      {/* Message */}
-                      <Grid item xs={8}>
-                        <Text component="h1" bold color={Colors.BLUE}>
-                          Oops...
-                        </Text>
-
-                        <Text component="h4">
-                          Hey! It looks like no hotels match the search criteria. Try with
-                          different dates or occupancy
-                        </Text>
-                      </Grid>
-
-                      {/* Image */}
-                      <Grid item xs={4}>
-                        <Grid
-                          alignItems="center"
-                          justify="center"
-                          container
-                          style={{ height: "100%" }}
-                        >
-                          <img
-                            src="/Travel-Agent/not-found.png"
-                            className={style.notFoundImg}
-                            alt="no hotels found"
-                          />
-                        </Grid>
-                      </Grid>
-                    </Grid>
+                    <NotAvailableCard title="Oops...">
+                      Hey! It looks like no hotels match the search criteria. Try with
+                      different dates or occupancy
+                    </NotAvailableCard>
                   )}
 
                   {!loadingOnMount && (

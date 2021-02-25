@@ -7,6 +7,7 @@ import hotelReducer from "./hotel-slice";
 import flightSlice from "./flight-slice";
 import restaurantSlice from "./restaurant-slice";
 import { useDispatch } from "react-redux";
+export * from "./flight-slice";
 
 const store = configureStore({
   reducer: {

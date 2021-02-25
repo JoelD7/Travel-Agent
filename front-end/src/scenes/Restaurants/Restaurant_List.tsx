@@ -1,15 +1,14 @@
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { Divider, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CustomButton,
   Navbar,
+  NotAvailableCard,
   ProgressCircle,
   RestaurantCard,
-  RestaurantCuisinesSelec,
-  RestaurantFeature,
   RestaurantFilters,
   RestaurantSlides,
   ServicesToolbar,
@@ -18,10 +17,7 @@ import {
 import { Colors, Shadow } from "../../styles";
 import {
   filterByFeature,
-  hasAny,
   selectAllRestaurants,
-  selectCheckedRestaurantCuisines,
-  selectCheckedRestaurantFeatures,
   selectCurrentCity,
   selectRestaurantCuisines,
   selectRestaurantFeatures,
@@ -46,7 +42,6 @@ interface Restaurant_List {
 
 export function Restaurant_List() {
   const style = restaurantListStyles();
-  let poiDetail: POI;
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -54,28 +49,68 @@ export function Restaurant_List() {
   const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
   const allRestaurants: RestaurantSearch[] = useSelector(selectAllRestaurants);
 
+  const [deliveryRestaurants, setDeliveryRestaurants] = useState<RestaurantSearch[]>(
+    filterByFeature("delivery", restaurants)
+  );
+  const [pickupRestaurants, setPickupRestaurants] = useState<RestaurantSearch[]>(
+    filterByFeature("pickup", restaurants)
+  );
+  const [reservationRestaurants, setReservationRestaurants] = useState<
+    RestaurantSearch[]
+  >(filterByFeature("restaurant_reservation", restaurants));
+
   const cuisines: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
   const features: RestaurantFilter[] = useSelector(selectRestaurantFeatures);
 
-  const checkedRestaurantFeatures = useSelector(selectCheckedRestaurantFeatures);
-  const checkedRestaurantCuisines = useSelector(selectCheckedRestaurantCuisines);
-
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [noRestaurants, setNoRestaurants] = useState(false);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchRestaurants(currentCity.lat, currentCity.lon)
-      .then((res) => {
-        dispatch(setRestaurants(res.data.businesses));
-        dispatch(setAllRestaurants(res.data.businesses));
-        dispatch(addRestaurantCuisines(cuisines, res.data.businesses));
-        dispatch(addRestaurantFeatures(features, res.data.businesses));
+    if (!areRestaurantsAlreadyFetched(currentCity.city)) {
+      if (!loading) {
+        setLoading(true);
+      }
 
-        setLoading(false);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+      fetchRestaurants(currentCity.lat, currentCity.lon)
+        .then((res) => {
+          let restaurantsRes: RestaurantSearch[] = res.data.businesses;
+
+          dispatch(setRestaurants(restaurantsRes));
+          dispatch(setAllRestaurants(restaurantsRes));
+          dispatch(addRestaurantCuisines(cuisines, restaurantsRes));
+          dispatch(addRestaurantFeatures(features, restaurantsRes));
+
+          if (restaurantsRes.length === 0) {
+            setNoRestaurants(true);
+          } else if (noRestaurants) {
+            setNoRestaurants(false);
+          }
+
+          setDeliveryRestaurants(filterByFeature("delivery", restaurantsRes));
+          setPickupRestaurants(filterByFeature("pickup", restaurantsRes));
+          setReservationRestaurants(
+            filterByFeature("restaurant_reservation", restaurantsRes)
+          );
+
+          setLoading(false);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [currentCity]);
+
+  function areRestaurantsAlreadyFetched(city: string) {
+    if (allRestaurants.length === 0) {
+      return false;
+    }
+
+    let fetchedCity: string = restaurants[0].location.city;
+    if (fetchedCity === city) {
+      console.log("true");
+      return true;
+    }
+  }
 
   const [state, setState] = useState<Restaurant_List>({
     city: "Santo Domingo",
@@ -227,10 +262,24 @@ export function Restaurant_List() {
     ],
   });
 
+  /**
+   * Returns 'white' if none of the restaurant slides
+   * has any restaurants. This is because it's the only
+   * ocassion on which this title will have the top
+   * image as background.
+   */
+  function getTitleColor() {
+    return deliveryRestaurants.length === 0 &&
+      pickupRestaurants.length === 0 &&
+      reservationRestaurants.length === 0
+      ? "white"
+      : "black";
+  }
+
   return (
     <div className={style.mainContainer}>
       <Helmet>
-        <title>{`Restaurants in ${state.city}`}</title>
+        <title>{`Restaurants in ${currentCity.city}`}</title>
       </Helmet>
 
       <Navbar />
@@ -250,7 +299,7 @@ export function Restaurant_List() {
                   weight="bold"
                   color="white"
                   style={{ marginBottom: "20px" }}
-                >{`Restaurants in ${state.city}`}</Text>
+                >{`Restaurants in ${currentCity.city}`}</Text>
               </Grid>
             </Grid>
           </Grid>
@@ -276,45 +325,61 @@ export function Restaurant_List() {
 
           {/* Restaurants */}
           <Grid item className={style.restaurantsGrid}>
-            <RestaurantSlides
-              loading={loading}
-              restaurants={filterByFeature("delivery", restaurants)}
-              title="Delivery Available"
-            />
+            {noRestaurants ? (
+              <NotAvailableCard title="Oops...">
+                Sorry! Our database seems to have no restaurants in this city.
+              </NotAvailableCard>
+            ) : (
+              <>
+                {deliveryRestaurants.length > 0 && (
+                  <RestaurantSlides
+                    loading={loading}
+                    restaurants={deliveryRestaurants}
+                    title="Delivery Available"
+                  />
+                )}
 
-            <RestaurantSlides
-              loading={loading}
-              restaurants={filterByFeature("pickup", restaurants)}
-              title="Pickup"
-            />
-            <RestaurantSlides
-              loading={loading}
-              restaurants={filterByFeature("restaurant_reservation", restaurants)}
-              title="Reservation"
-            />
+                {pickupRestaurants.length > 0 && (
+                  <RestaurantSlides
+                    loading={loading}
+                    restaurants={filterByFeature("pickup", restaurants)}
+                    title="Pickup"
+                  />
+                )}
 
-            <Text
-              style={{ margin: "50px 0px 20px 0px" }}
-              weight={500}
-              component="h2"
-              bold
-            >{`Top Restaurants in ${state.city}`}</Text>
-            <div className={style.restaurantCardContainer}>
-              {loading && (
-                <Grid
-                  container
-                  justify="center"
-                  style={{ position: "absolute", left: "150px" }}
-                >
-                  <ProgressCircle />
-                </Grid>
-              )}
-              <div style={loading ? { filter: "blur(4px)" } : {}}>
-                {restaurants.map((restaurant, i) => (
-                  <RestaurantCard key={i} restaurant={restaurant} />
-                ))}
-              </div>
-            </div>
+                {reservationRestaurants.length > 0 && (
+                  <RestaurantSlides
+                    loading={loading}
+                    restaurants={filterByFeature("restaurant_reservation", restaurants)}
+                    title="Reservation"
+                  />
+                )}
+
+                <Text
+                  style={{ margin: "50px 0px 20px 0px" }}
+                  weight={500}
+                  component="h2"
+                  bold
+                  color={getTitleColor()}
+                >{`Top Restaurants in ${currentCity.city}`}</Text>
+                <div className={style.restaurantCardContainer}>
+                  {loading && (
+                    <Grid
+                      container
+                      justify="center"
+                      style={{ position: "absolute", left: "150px" }}
+                    >
+                      <ProgressCircle />
+                    </Grid>
+                  )}
+                  <div style={loading ? { filter: "blur(4px)" } : {}}>
+                    {restaurants.map((restaurant, i) => (
+                      <RestaurantCard key={i} restaurant={restaurant} />
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </Grid>
         </Grid>
       </div>

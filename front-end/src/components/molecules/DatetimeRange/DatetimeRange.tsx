@@ -22,7 +22,7 @@ export function DatetimeRange({ updateState, value, max, min }: DatetimeRange) {
 
   function parseNumberToDateLabel(value: number) {
     let date: Date = new Date(value);
-    return format(date, "EEE h:mm aa");
+    return format(date, "dd/MM 'at' h:mm aa");
   }
 
   return (

@@ -34,8 +34,13 @@ import {
   selectFlightDictionaries,
   selectFlightFromAutocomplete,
   selectFlightParams,
+  setFlightListURL,
   selectFlightToAutocomplete,
+  getRandomArbitrary,
   updateAirportPredictions,
+  iataCodes,
+  getCityImage,
+  selectFlightListURL,
 } from "../../utils";
 import {
   fetchAirportCitiesByInput,
@@ -49,6 +54,7 @@ import {
   setFlightDeparture,
   setFlightInfants,
   setFlightReturn,
+  setFlightToAutocomplete,
 } from "../../utils/store/flight-slice";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
@@ -179,15 +185,33 @@ export function Flights_Home() {
   const dispatch = useDispatch();
 
   const [state, setState] = useState<FlightSearchParams>({
-    // adults: "",
-    // children: "",
-    // class: "Economy",
-    // departure: new Date(),
-    // return: addDays(new Date(), 2),
-    // from: "",
-    // to: "",
+    exitFlightDates: {
+      minDeparture: new Date(2020, 10, 9, 10, 0),
+      maxDeparture: new Date(2020, 10, 10, 10, 0),
+
+      minArrival: new Date(2020, 10, 10, 17, 0),
+      maxArrival: new Date(2020, 10, 11, 5, 0),
+
+      departureDatetimeRange: [
+        new Date(2020, 10, 9, 10, 0),
+        new Date(2020, 10, 10, 10, 0),
+      ],
+      arrivalDatetimeRange: [new Date(2020, 10, 10, 17, 0), new Date(2020, 10, 11, 5, 0)],
+    },
+    returnFlightDates: {
+      minDeparture: new Date(2020, 10, 20, 10, 0),
+      maxDeparture: new Date(2020, 10, 20, 15, 0),
+
+      minArrival: new Date(2020, 10, 21, 8, 0),
+      maxArrival: new Date(2020, 10, 21, 15, 0),
+
+      departureDatetimeRange: [
+        new Date(2020, 10, 20, 10, 0),
+        new Date(2020, 10, 20, 15, 0),
+      ],
+      arrivalDatetimeRange: [new Date(2020, 10, 21, 8, 0), new Date(2020, 10, 21, 15, 0)],
+    },
     flightType: "Round trip",
-    // infants: "",
     priceRange: [0, 500],
   });
   const flight: FlightSearch = useSelector(selectFlightParams);
@@ -211,160 +235,23 @@ export function Flights_Home() {
   ];
 
   const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
-  const maxDealsCount = 4;
-
-  const [flights, setFlights] = useState<Flight[]>([
-    {
-      price: {
-        currency: "USD",
-        total: 198,
-      },
-      class: "Economy",
-      itineraries: [
-        {
-          duration: "PT6H15M",
-          segments: [
-            {
-              departure: {
-                iataCode: "SIN",
-                city: "Singapore",
-                at: "2021-02-02T07:15:00",
-                terminal: "2",
-              },
-              arrival: {
-                iataCode: "DXB",
-                city: "Dubai",
-                at: "2021-02-02T13:39:00",
-                terminal: "31",
-              },
-              carrierCode: "Egyptair",
-              duration: "PT6H15M",
-            },
-          ],
-        },
-        {
-          duration: "PT8H25M",
-          segments: [
-            {
-              departure: {
-                iataCode: "DXB",
-                city: "Dubai",
-                at: "2021-02-12T09:15:00",
-                terminal: "2",
-              },
-              arrival: {
-                iataCode: "SIN",
-                city: "Singapore",
-                at: "2021-02-12T16:55:00",
-                terminal: "31",
-              },
-              carrierCode: "Emirates",
-              duration: "PT8H25M",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      price: {
-        currency: "USD",
-        total: 198,
-      },
-      class: "Economy",
-      itineraries: [
-        {
-          duration: "PT6H15M",
-          segments: [
-            {
-              departure: {
-                iataCode: "SIN",
-                city: "Singapore",
-                at: "2021-02-02T07:15:00",
-                terminal: "2",
-              },
-              arrival: {
-                iataCode: "DXB",
-                city: "Dubai",
-                at: "2021-02-02T13:39:00",
-                terminal: "31",
-              },
-              carrierCode: "Egyptair",
-              duration: "PT6H15M",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      price: {
-        currency: "USD",
-        total: 198,
-      },
-      class: "Economy",
-      itineraries: [
-        {
-          duration: "PT6H15M",
-          segments: [
-            {
-              departure: {
-                iataCode: "SIN",
-                city: "Singapore",
-                at: "2021-02-02T07:15:00",
-                terminal: "2",
-              },
-              arrival: {
-                iataCode: "DXB",
-                city: "Dubai",
-                at: "2021-02-02T13:39:00",
-                terminal: "31",
-              },
-              carrierCode: "Egyptair",
-              duration: "PT6H15M",
-            },
-          ],
-        },
-        {
-          duration: "PT8H25M",
-          segments: [
-            {
-              departure: {
-                iataCode: "DXB",
-                city: "Dubai",
-                at: "2021-02-12T09:15:00",
-                terminal: "2",
-              },
-              arrival: {
-                iataCode: "SIN",
-                city: "Singapore",
-                at: "2021-02-12T16:55:00",
-                terminal: "31",
-              },
-              carrierCode: "Emirates",
-              duration: "PT8H25M",
-            },
-          ],
-        },
-      ],
-    },
-  ]);
+  const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
+  const flightListURL: string = useSelector(selectFlightListURL);
 
   const [deals, setDeals] = useState<FlightDeal[]>([]);
 
-  const dictionaries: FlightDictionary = useSelector(selectFlightDictionaries);
+  const dictionaies: FlightDictionary = useSelector(selectFlightDictionaries);
   const [currency, setCurrency] = useState<string>("");
 
   const currentCity: IATALocation = useSelector(selectCurrentCity);
 
-  const airportPredictions: IATALocation[] = useSelector(selectAirportPredictions);
-
-  const amadeusAccessToken = getSavedAccessToken();
-
-  const [focusedAutocomplete, setFocusedAutocomplete] = useState<string>("");
-
-  const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
-  const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
+  const [image, setImage] = useState<string>("");
 
   useEffect(() => {
+    getCityImage(currentCity.city).then((res) => {
+      setImage(String(res));
+    });
+
     fetchGreatFlightDeals(currentCity, flight.departure)
       .then((res) => {
         setCurrency(res.data.meta.currency);
@@ -403,12 +290,22 @@ export function Flights_Home() {
 
   function onFindFlightsClicked() {
     history.push(Routes.FLIGHT_LIST);
+
+    // if (!flightToAutocomplete) {
+    //   let r = getRandomArbitrary(0, iataCodes.length);
+
+    //   console.log(`r: ${r} | iataCodes length: ${iataCodes.length}`);
+    //   let randomCity: IATALocation = iataCodes[r];
+    //   dispatch(setFlightToAutocomplete(randomCity));
+    //   let newurl = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=MIA&destinationLocationCode=${randomCity.code}&departureDate=2021-02-25&returnDate=2021-02-27&adults=2`;
+    //   dispatch(setFlightListURL(newurl));
+    // }
   }
 
   return (
     <div className={style.mainContainer}>
       <Helmet>
-        <title>Flights</title>
+        <title>{`Flights to ${currentCity.city}`}</title>
       </Helmet>
 
       <Navbar />
@@ -417,7 +314,7 @@ export function Flights_Home() {
       <Grid
         container
         className={style.topContainer}
-        style={{ backgroundImage: `url(${destination.image})` }}
+        style={{ backgroundImage: `url(${image})` }}
       >
         <Grid item xs={12}>
           <ServicesToolbar />
@@ -426,7 +323,7 @@ export function Flights_Home() {
         {/* Reservation Container */}
         <Grid container spacing={2} className={style.reservationContainer}>
           <Grid item xs={12}>
-            <h2>{`Find the best flight to ${destination.name}`}</h2>
+            <h2>{`Find the best flight to ${currentCity.city}`}</h2>
           </Grid>
 
           {/* Flight type toolbar */}

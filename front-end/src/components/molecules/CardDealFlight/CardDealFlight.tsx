@@ -7,7 +7,10 @@ import { useHistory } from "react-router-dom";
 import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
 import { getIataLocation, Routes } from "../../../utils";
-import { setFlightListURL } from "../../../utils/store/flight-slice";
+import {
+  setFlightListURL,
+  setFlightToAutocomplete,
+} from "../../../utils/store/flight-slice";
 import { IATALocation } from "../../../utils/types/location-types";
 import { CustomButton, IconText, Text } from "../../atoms";
 import { cardFlightStyles } from "../CardFlight/cardFlightStyles";
@@ -51,6 +54,13 @@ export function CardDealFlight({ deal, className, animate, currency }: CardDealF
   function onCardDealClick() {
     history.push(Routes.FLIGHT_LIST);
     dispatch(setFlightListURL(deal.links.flightOffers));
+
+    let destinationIataLocation: IATALocation | undefined = getIataLocation(
+      deal.destination
+    );
+    if (destinationIataLocation) {
+      dispatch(setFlightToAutocomplete(destinationIataLocation));
+    }
   }
 
   return (

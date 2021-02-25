@@ -8,7 +8,7 @@ import {
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { CSSProperties } from "@material-ui/styles";
 import Axios from "axios";
-import { format } from "date-fns";
+import { compareAsc, format } from "date-fns";
 import { getPhotoFromReferenceURL } from "..";
 import { iataCodes } from "../constants/iataCodes";
 import { getFindPlaceFromTextURL, proxyUrl } from "../external-apis";
@@ -523,42 +523,7 @@ export function scrollToBottom() {
   window.scrollTo(0, document.body.scrollHeight);
 }
 
-/**
- * Returns a cover image for a city.
- * @param city
- */
-export function getCityImage(city: string) {
-  const placesRequestUrl = getFindPlaceFromTextURL(city, ["name", "photos"]);
-
-  return Axios.get(proxyUrl + placesRequestUrl)
-    .then((res) => {
-      const photoRef = res.data?.candidates?.[0]?.photos?.[0]?.photo_reference;
-      let convertedImage = "";
-      // photoRef is the result of the initial Place Search query
-      if (photoRef) {
-        const imageLookupURL = getPhotoFromReferenceURL(photoRef, 700, 700);
-
-        let fetchImagePromise = fetch(proxyUrl + imageLookupURL)
-          .then((r) => {
-            let blobPromise = r.blob().then((blob) => {
-              convertedImage = URL.createObjectURL(blob);
-              return convertedImage;
-            });
-            return blobPromise;
-          })
-          .catch((error) => {
-            console.log("Error while getting image: ", error);
-          });
-
-        return fetchImagePromise;
-      }
-    })
-    .catch((error) => {
-      console.log("Error: ", error);
-    });
-}
-
-export function getIataLocation(code: string) {
+export function getIataLocation(code: string): IATALocation | undefined {
   return iataCodes.find((iata) => iata.code === code);
 }
 
@@ -577,4 +542,26 @@ export function hasAny(arr1: any[], arr2: any[]) {
   });
 
   return has;
+}
+
+/**
+ * Returns a random number between min (inclusive) and max (exclusive)
+ */
+export function getRandomArbitrary(min: number, max: number) {
+  return Math.round(Math.random() * (max - min) + min);
+}
+
+export function getMinDate(date1: Date, date2: Date) {
+  return compareAsc(date1, date2) === 1 ? date2 : date1;
+}
+
+export function getMaxDate(date1: Date, date2: Date) {
+  return compareAsc(date1, date2) === 1 ? date1 : date2;
+}
+
+export function isDateBetweenRange(date: Date, range: Date[] | undefined) {
+  if (!range) {
+    return false;
+  }
+  return compareAsc(date, range[0]) >= 0 && compareAsc(date, range[1]) <= 0;
 }

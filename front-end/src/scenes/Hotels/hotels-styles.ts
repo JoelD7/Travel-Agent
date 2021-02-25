@@ -72,17 +72,6 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     top: "125px",
     width: "80px",
   },
-  noHotelsContainer: {
-    borderRadius: "10px",
-    marginLeft: "15px",
-    boxShadow: Shadow.LIGHT,
-    backgroundColor: "white",
-    padding: "15px",
-  },
-  notFoundImg: {
-    objectFit: "cover",
-    height: "250px",
-  },
   occupancyGrid: {
     width: "300px",
     [theme.breakpoints.down(550)]: {

@@ -1,4 +1,5 @@
 import { format, parseISO } from "date-fns";
+import { IATALocation } from "../types/location-types";
 import { capitalizeString, getIataLocation } from "./functions";
 
 /**
@@ -144,4 +145,16 @@ export function getFlightSegmentCarrier(
     return capitalizeString(dictionaries.carriers[segment.carrierCode], "each word");
   }
   return "Not available";
+}
+
+export function getAutocompleteLabel(
+  option: IATALocation | null | undefined,
+  type: "city" | "airport"
+): string {
+  if (option) {
+    return type === "city"
+      ? `${option.city}, ${option.country}`
+      : `${capitalizeString(`${option.name}`, "each word")}, ${option.code}`;
+  }
+  return "";
 }

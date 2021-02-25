@@ -35,11 +35,11 @@ const initialState: FlightSearch = {
       a: "",
     },
   },
-  to: airportCityPlaceholderTwo.code,
-  adults: "2",
-  class: "Economy",
-  children: "1",
-  infants: "1",
+  to: "",
+  adults: "1",
+  class: "",
+  children: "",
+  infants: "",
 };
 
 const flightSlice = createSlice({

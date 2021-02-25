@@ -18,3 +18,4 @@ export { POICard } from "./POICard/POICard";
 export { RoomAccordion } from "./RoomAccordion/RoomAccordion";
 export { CardDealFlight } from "./CardDealFlight/CardDealFlight";
 export { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
+export { NotAvailableCard } from "./NotAvailableCard/NotAvailableCard";

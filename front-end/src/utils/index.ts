@@ -8,6 +8,7 @@ export * from "./placeholders";
 export * from "./store";
 export * from "./types";
 export * from "./functions";
+export * from "./constants";
 export { iataCodes } from "./constants/iataCodes";
 export {
   getFindPlaceFromTextURL,

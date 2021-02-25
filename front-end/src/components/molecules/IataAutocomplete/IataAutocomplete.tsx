@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../../styles";
 import {
   capitalizeString,
+  getAutocompleteLabel,
   iataCodes,
   onQueryChanged,
   selectFlightFromAutocomplete,
@@ -93,7 +94,6 @@ export function IataAutocomplete({ flightDirection, type, home }: IataAutocomple
   }
 
   function updateState() {
-    console.log("updating state...");
     if (type === "city") {
       dispatch(updateCityPredictions(predictions));
 
@@ -113,12 +113,6 @@ export function IataAutocomplete({ flightDirection, type, home }: IataAutocomple
     }
   }
 
-  function getAutocompleteLabel(option: IATALocation) {
-    return type === "city"
-      ? `${option.city}, ${option.country}`
-      : `${capitalizeString(`${option.name}`, "each word")}, ${option.code}`;
-  }
-
   return (
     <Autocomplete
       onBlur={() => updateState()}
@@ -126,7 +120,7 @@ export function IataAutocomplete({ flightDirection, type, home }: IataAutocomple
       onChange={(e, value) => onAutomcompleteValueChange(value)}
       options={predictions}
       loading={predictions.length !== 0}
-      getOptionLabel={(option) => getAutocompleteLabel(option)}
+      getOptionLabel={(option) => getAutocompleteLabel(option, type)}
       popupIcon={
         type === "city" ? (
           <IconButton>

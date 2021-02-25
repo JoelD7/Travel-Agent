@@ -19,6 +19,7 @@ import {
   Modal,
   Select,
   ThemeProvider,
+  Tooltip,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
@@ -57,6 +58,10 @@ import {
   updateAirportPredictions,
   selectFlightParams,
   iataCodes,
+  getAutocompleteLabel,
+  getMinDate,
+  getMaxDate,
+  isDateBetweenRange,
 } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
@@ -164,15 +169,7 @@ export function Flight_List() {
   const flight: FlightSearch = useSelector(selectFlightParams);
 
   const [state, setState] = useState<FlightSearchParams>({
-    // adults: "",
-    // children: "",
-    // class: "Economy",
-    // departure: new Date(),
-    // return: addDays(new Date(), 2),
-    // from: "",
-    // to: "",
     flightType: "Round trip",
-    // infants: "",
     priceRange: [0, 500],
     exitFlightDates: {
       minDeparture: new Date(2020, 10, 9, 10, 0),
@@ -230,6 +227,7 @@ export function Flight_List() {
   ];
 
   const [flights, setFlights] = useState<Flight[]>(flightsPlaceholder);
+  const [allFlights, setAllFlights] = useState<Flight[]>([]);
   const flightListURL: string = useSelector(selectFlightListURL);
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
@@ -248,15 +246,45 @@ export function Flight_List() {
     startFlightFetching(flightListURL, fetchFlights);
   }, []);
 
-  function getAirportPredictions(searchQuery: string) {
-    if (searchQuery === "") {
-      return;
-    }
-    fetchAirportCitiesByInput(searchQuery, "AIRPORT")
-      .then((res) => {
-        dispatch(updateAirportPredictions(res.data.data));
-      })
-      .catch((error) => console.log(error));
+  useEffect(() => {
+    filterByDates();
+  }, [
+    state.exitFlightDates?.departureDatetimeRange,
+    state.exitFlightDates?.arrivalDatetimeRange,
+    state.returnFlightDates?.departureDatetimeRange,
+    state.returnFlightDates?.arrivalDatetimeRange,
+  ]);
+
+  function filterByDates() {
+    console.log("hoela");
+    let filteredFlights: Flight[] = allFlights.filter((flight) => {
+      let lastSegmentIndexOut: number = flight.itineraries[0].segments.length - 1;
+      let lastSegmentIndexReturn: number = flight.itineraries[1].segments.length - 1;
+
+      let outDeparture: Date = new Date(flight.itineraries[0].segments[0].departure.at);
+      let outArrival: Date = new Date(
+        flight.itineraries[0].segments[lastSegmentIndexOut].arrival.at
+      );
+
+      let returnDeparture: Date = new Date(
+        flight.itineraries[1].segments[0].departure.at
+      );
+      let returnArrival: Date = new Date(
+        flight.itineraries[1].segments[lastSegmentIndexReturn].arrival.at
+      );
+
+      return (
+        isDateBetweenRange(outDeparture, state.exitFlightDates.departureDatetimeRange) &&
+        isDateBetweenRange(outArrival, state.exitFlightDates.arrivalDatetimeRange) &&
+        isDateBetweenRange(
+          returnDeparture,
+          state.returnFlightDates.departureDatetimeRange
+        ) &&
+        isDateBetweenRange(returnArrival, state.returnFlightDates.arrivalDatetimeRange)
+      );
+    });
+
+    setFlights(filteredFlights);
   }
 
   function fetchFlights(flightListURL: string) {
@@ -284,28 +312,171 @@ export function Flight_List() {
    * to give the user a non-repetitive variety of flights.
    * @param flights
    */
-  function filterSimilarFlights(flights: any[]) {
-    let buffer: any[] = [];
+  function filterSimilarFlights(flights: Flight[]) {
+    let buffer: Flight[] = [];
     let count = 0;
     let curPrice = "0";
 
     flights.forEach((flight) => {
-      if (count === 2 && flight.price.total !== curPrice) {
-        curPrice = flight.price.total;
+      let flightPrice = String(flight.price.total);
+
+      if (count === 2 && flightPrice !== curPrice) {
+        curPrice = flightPrice;
         buffer.push(flight);
         count = 0;
         count++;
-      } else if (flight.price.total === curPrice && count < 2) {
+      } else if (flightPrice === curPrice && count < 2) {
         buffer.push(flight);
         count++;
       } else if (count < 2) {
-        curPrice = flight.price.total;
+        curPrice = flightPrice;
         buffer.push(flight);
         count++;
       }
     });
 
+    getDatimeSliderValues(buffer);
     setFlights(buffer);
+    setAllFlights(buffer);
+  }
+
+  function getDatimeSliderValues(flights: Flight[]) {
+    let outDepartureDatetimes: Date[] = [];
+    let minOutDepartureDatetime: Date;
+    let maxOutDepartureDatetime: Date;
+
+    let outArrivalDatetimes: Date[] = [];
+    let minOutArrivalDatetime: Date;
+    let maxOutArrivalDatetime: Date;
+
+    let returnDepartureDatetimes: Date[] = [];
+    let minReturnDepartureDatetime: Date;
+    let maxReturnDepartureDatetime: Date;
+
+    let returnArrivalDatetimes: Date[] = [];
+    let minReturnArrivalDatetime: Date;
+    let maxReturnArrivalDatetime: Date;
+
+    flights.forEach((flight) => {
+      //#region Outgoing flight
+      let lastSegmentIndex: number = flight.itineraries[0].segments.length - 1;
+
+      outDepartureDatetimes.push(
+        new Date(flight.itineraries[0].segments[0].departure.at)
+      );
+      outArrivalDatetimes.push(
+        new Date(flight.itineraries[0].segments[lastSegmentIndex].arrival.at)
+      );
+      //#endregion
+      let lastSegmentIndexReturn: number = flight.itineraries[1].segments.length - 1;
+      returnDepartureDatetimes.push(
+        new Date(flight.itineraries[1].segments[0].departure.at)
+      );
+      returnArrivalDatetimes.push(
+        new Date(flight.itineraries[1].segments[lastSegmentIndexReturn].arrival.at)
+      );
+    });
+
+    //Outgoing
+    minOutDepartureDatetime = outDepartureDatetimes.reduce((prev, cur) =>
+      getMinDate(prev, cur)
+    );
+    maxOutDepartureDatetime = outDepartureDatetimes.reduce((prev, cur) =>
+      getMaxDate(prev, cur)
+    );
+
+    minOutArrivalDatetime = outArrivalDatetimes.reduce((prev, cur) =>
+      getMinDate(prev, cur)
+    );
+    maxOutArrivalDatetime = outArrivalDatetimes.reduce((prev, cur) =>
+      getMaxDate(prev, cur)
+    );
+
+    //Return
+    minReturnDepartureDatetime = returnDepartureDatetimes.reduce((prev, cur) =>
+      getMinDate(prev, cur)
+    );
+    maxReturnDepartureDatetime = returnDepartureDatetimes.reduce((prev, cur) =>
+      getMaxDate(prev, cur)
+    );
+
+    minReturnArrivalDatetime = returnArrivalDatetimes.reduce((prev, cur) =>
+      getMinDate(prev, cur)
+    );
+    maxReturnArrivalDatetime = returnArrivalDatetimes.reduce((prev, cur) =>
+      getMaxDate(prev, cur)
+    );
+
+    console.log(
+      `minOutDepartureDatetime: ${format(
+        minOutDepartureDatetime,
+        "dd/MM/yyyy 'at' hh:mm aaa"
+      )}`
+    );
+    console.log(
+      `maxOutDepartureDatetime: ${format(
+        maxOutDepartureDatetime,
+        "dd/MM/yyyy 'at' hh:mm aaa"
+      )}`
+    );
+    console.log(
+      `minOutArrivalDatetime: ${format(
+        minOutArrivalDatetime,
+        "dd/MM/yyyy 'at' hh:mm aaa"
+      )}`
+    );
+    console.log(
+      `maxOutArrivalDatetime: ${format(
+        maxOutArrivalDatetime,
+        "dd/MM/yyyy 'at' hh:mm aaa"
+      )}`
+    );
+    console.log(
+      `minReturnDepartureDatetime: ${format(
+        minReturnDepartureDatetime,
+        "dd/MM/yyyy 'at' hh:mm aaa"
+      )}`
+    );
+    console.log(
+      `maxReturnDepartureDatetime: ${format(
+        maxReturnDepartureDatetime,
+        "dd/MM/yyyy 'at' hh:mm aaa"
+      )}`
+    );
+    console.log(
+      `minReturnArrivalDatetime: ${format(
+        minReturnArrivalDatetime,
+        "dd/MM/yyyy 'at' hh:mm aaa"
+      )}`
+    );
+    console.log(
+      `maxReturnArrivalDatetime: ${format(
+        maxReturnArrivalDatetime,
+        "dd/MM/yyyy 'at' hh:mm aaa"
+      )}`
+    );
+
+    setState({
+      ...state,
+      exitFlightDates: {
+        minDeparture: minOutDepartureDatetime,
+        maxDeparture: maxOutDepartureDatetime,
+        departureDatetimeRange: [minOutDepartureDatetime, maxOutDepartureDatetime],
+
+        minArrival: minOutArrivalDatetime,
+        maxArrival: maxOutArrivalDatetime,
+        arrivalDatetimeRange: [minOutArrivalDatetime, maxOutArrivalDatetime],
+      },
+      returnFlightDates: {
+        minDeparture: minReturnDepartureDatetime,
+        maxDeparture: maxReturnDepartureDatetime,
+        departureDatetimeRange: [minReturnDepartureDatetime, maxReturnDepartureDatetime],
+
+        minArrival: minReturnArrivalDatetime,
+        maxArrival: maxReturnArrivalDatetime,
+        arrivalDatetimeRange: [minReturnArrivalDatetime, maxReturnArrivalDatetime],
+      },
+    });
   }
 
   function onDateRangeChanged(
@@ -329,10 +500,18 @@ export function Flight_List() {
   function SearchFilters() {
     return (
       <>
-        <Text style={{ color: Colors.BLUE }} weight="bold" component="h3">
+        <Text
+          style={{ color: openDrawer ? "white" : Colors.BLUE }}
+          weight="bold"
+          component="h3"
+        >
           Search filters
         </Text>
-        <Text style={{ color: Colors.BLUE }} weight="bold" component="h4">
+        <Text
+          style={{ color: openDrawer ? "white" : Colors.BLUE }}
+          weight="bold"
+          component="h4"
+        >
           Price range
         </Text>
         <PriceRange
@@ -345,11 +524,11 @@ export function Flight_List() {
 
         <div key="flight times">
           <Text style={{ color: Colors.BLUE }} weight="bold" component="h4">
-            Flight times
+            Outgoing flight
           </Text>
 
           <FlightTimesRange
-            city={flight.from}
+            city={flightFromAutocomplete ? flightFromAutocomplete?.code : ""}
             label="Take-off"
             max={state.exitFlightDates?.maxDeparture}
             min={state.exitFlightDates?.minDeparture}
@@ -359,30 +538,41 @@ export function Flight_List() {
             onDateRangeChanged={onDateRangeChanged}
           />
 
-          <FlightTimesRange
-            city={flight.to}
-            label="Landing"
-            max={state.exitFlightDates?.maxArrival}
-            min={state.exitFlightDates?.minArrival}
-            destinationDateRangeField="arrivalDatetimeRange"
-            flightDateRangeField="exitFlightDates"
-            destinationDateRangeValue={state.exitFlightDates?.arrivalDatetimeRange}
-            onDateRangeChanged={onDateRangeChanged}
-          />
+          {flightToAutocomplete && (
+            <FlightTimesRange
+              city={flightToAutocomplete.code}
+              label="Landing"
+              max={state.exitFlightDates?.maxArrival}
+              min={state.exitFlightDates?.minArrival}
+              destinationDateRangeField="arrivalDatetimeRange"
+              flightDateRangeField="exitFlightDates"
+              destinationDateRangeValue={state.exitFlightDates?.arrivalDatetimeRange}
+              onDateRangeChanged={onDateRangeChanged}
+            />
+          )}
+
+          <Text
+            style={{ color: Colors.BLUE, marginTop: "20px" }}
+            weight="bold"
+            component="h4"
+          >
+            Return flight
+          </Text>
+          {flightToAutocomplete && (
+            <FlightTimesRange
+              city={flightToAutocomplete.code}
+              label="Take-off"
+              max={state.returnFlightDates?.maxDeparture}
+              min={state.returnFlightDates?.minDeparture}
+              destinationDateRangeField="departureDatetimeRange"
+              flightDateRangeField="returnFlightDates"
+              destinationDateRangeValue={state.returnFlightDates?.departureDatetimeRange}
+              onDateRangeChanged={onDateRangeChanged}
+            />
+          )}
 
           <FlightTimesRange
-            city={flight.to}
-            label="Take-off"
-            max={state.returnFlightDates?.maxDeparture}
-            min={state.returnFlightDates?.minDeparture}
-            destinationDateRangeField="departureDatetimeRange"
-            flightDateRangeField="returnFlightDates"
-            destinationDateRangeValue={state.returnFlightDates?.departureDatetimeRange}
-            onDateRangeChanged={onDateRangeChanged}
-          />
-
-          <FlightTimesRange
-            city={flight.from}
+            city={flightFromAutocomplete ? flightFromAutocomplete?.code : ""}
             label="Landing"
             max={state.returnFlightDates?.maxArrival}
             min={state.returnFlightDates?.minArrival}
@@ -533,7 +723,7 @@ export function Flight_List() {
 
                   <FormControl style={{ width: "100%" }} className={style.selectControl}>
                     <Select
-                      value={state[passenger.variable]}
+                      value={flight[passenger.variable]}
                       variant="outlined"
                       className={style.select}
                       startAdornment={
@@ -557,7 +747,7 @@ export function Flight_List() {
 
                 <FormControl style={{ width: "100%" }} className={style.selectControl}>
                   <Select
-                    value={state.class}
+                    value={flight.class}
                     variant="outlined"
                     className={style.select}
                     startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}

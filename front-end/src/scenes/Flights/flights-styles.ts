@@ -181,5 +181,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
   topContainer: {
     padding: "30px",
     fontFamily: Family,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
   },
 }));
