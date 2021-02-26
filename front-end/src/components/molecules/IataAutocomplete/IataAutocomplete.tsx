@@ -64,12 +64,6 @@ export function IataAutocomplete({ flightDirection, type, home }: IataAutocomple
     }
   }
 
-  const PopupIcon = (
-    <IconButton>
-      <FontAwesomeIcon icon={faSearch} color={home ? "white" : "#cecece"} />
-    </IconButton>
-  );
-
   useEffect(() => {
     getPredictions(text);
   }, [text]);

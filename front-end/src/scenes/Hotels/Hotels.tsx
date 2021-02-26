@@ -19,7 +19,6 @@ import {
   Select,
   ThemeProvider,
 } from "@material-ui/core";
-import { Pagination, PaginationItem } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Axios, { AxiosResponse } from "axios";
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
@@ -33,10 +32,12 @@ import {
   IconText,
   Navbar,
   NotAvailableCard,
+  Pagination,
   PriceRange,
   ProgressCircle,
   Rating,
   ServicesToolbar,
+  SortPageSize,
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
@@ -209,7 +210,7 @@ export function Hotels() {
     null
   );
 
-  const sortOptions: SortOption[] = [
+  const sortOptions: string[] = [
     "Name | A - Z",
     "Name | Z - A",
     "Stars | desc",
@@ -218,7 +219,7 @@ export function Hotels() {
     "Price | asc",
   ];
 
-  const [sortOption, setSortOption] = useState<SortOption>("Stars | desc");
+  const [sortOption, setSortOption] = useState<string>("Stars | desc");
 
   const [loadingOnMount, setLoadingOnMount] = useState(true);
   // const [loadingOnMount, setLoadingOnMount] = useState(false);
@@ -619,12 +620,12 @@ export function Hotels() {
     return `${state.rooms} ${roomQty}, ${state.adults} ${adultQty}, ${state.children} children`;
   }
 
-  function onSortOptionChange(option: SortOption) {
+  function onSortOptionChange(option: string) {
     setSortOption(option);
     sortHotels(option);
   }
 
-  function sortHotels(option: SortOption) {
+  function sortHotels(option: string) {
     let buffer: any[] = [];
 
     switch (option) {
@@ -697,7 +698,8 @@ export function Hotels() {
   }
 
   function onPageChange(newPage: number) {
-    setPage(newPage);
+    window.scrollTo(0, 0);
+    setTimeout(() => setPage(newPage), 250);
   }
 
   function getPageCount() {
@@ -868,90 +870,18 @@ export function Hotels() {
 
                     {/* Sort and paging grid */}
                     <Grid item className={style.sortGrid}>
-                      <Grid container className={style.sortContainer} alignItems="center">
-                        {/* Sort grid */}
-                        <Grid item xs={8}>
-                          <Grid container>
-                            <Text
-                              bold
-                              style={{ alignSelf: "end", margin: "auto" }}
-                              color={"white"}
-                            >
-                              Sort by
-                            </Text>
-
-                            <ThemeProvider theme={theme}>
-                              <FormControl
-                                className={style.sortFormControl}
-                                style={{ width: "145px" }}
-                              >
-                                <Select
-                                  value={sortOption}
-                                  variant="outlined"
-                                  classes={{ icon: style.selectIcon }}
-                                  className={style.select}
-                                  onChange={(e) =>
-                                    onSortOptionChange(e.target.value as SortOption)
-                                  }
-                                >
-                                  {sortOptions.map((option, i) => (
-                                    <MenuItem
-                                      classes={{ root: style.menuItemSelect }}
-                                      key={i}
-                                      value={option}
-                                    >
-                                      {option}
-                                    </MenuItem>
-                                  ))}
-                                </Select>
-                              </FormControl>
-
-                              <Divider
-                                orientation="vertical"
-                                style={{ background: "white", margin: "0px 10px" }}
-                              />
-                            </ThemeProvider>
-                          </Grid>
-                        </Grid>
-
-                        {/* Paging grid */}
-                        <Grid item xs={4}>
-                          <Grid container>
-                            <Text
-                              bold
-                              style={{ alignSelf: "end", margin: "auto 0px auto auto" }}
-                              color={"white"}
-                            >
-                              See
-                            </Text>
-
-                            <FormControl
-                              className={style.sortFormControl}
-                              style={{ width: "70px" }}
-                            >
-                              <Select
-                                value={pageSize}
-                                variant="outlined"
-                                classes={{ icon: style.selectIcon }}
-                                className={style.select}
-                                onChange={(e) =>
-                                  onPageSizeChange(e.target.value as number)
-                                }
-                              >
-                                {pageSizeOptions.map((option, i) => (
-                                  <MenuItem
-                                    classes={{ root: style.menuItemSelect }}
-                                    key={i}
-                                    value={option}
-                                  >
-                                    {option}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            </FormControl>
-                          </Grid>
-                        </Grid>
-                      </Grid>
+                      <SortPageSize
+                        pageSize={pageSize}
+                        pageSizeOptions={pageSizeOptions}
+                        sortOption={sortOption}
+                        sortOptions={sortOptions}
+                        onPageSizeChange={(e) =>
+                          onPageSizeChange(e.target.value as number)
+                        }
+                        onSortOptionChange={(e) =>
+                          onSortOptionChange(e.target.value as string)
+                        }
+                      />
                     </Grid>
                   </Grid>
                 </Grid>
@@ -986,20 +916,11 @@ export function Hotels() {
                     </NotAvailableCard>
                   )}
 
+                  {/* Pagination */}
                   {!loadingOnMount && (
                     <Pagination
-                      count={getPageCount()}
+                      pageCount={getPageCount()}
                       className={style.pagination}
-                      renderItem={(item) => (
-                        <PaginationItem
-                          {...item}
-                          classes={{
-                            root: style.paginationItemRoot,
-                            page: style.paginationItemPage,
-                          }}
-                        />
-                      )}
-                      shape="rounded"
                       onChange={(e, page) => onPageChange(page)}
                     />
                   )}

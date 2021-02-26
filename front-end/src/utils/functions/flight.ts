@@ -154,7 +154,36 @@ export function getAutocompleteLabel(
   if (option) {
     return type === "city"
       ? `${option.city}, ${option.country}`
-      : `${capitalizeString(`${option.name}`, "each word")}, ${option.code}`;
+      : `${capitalizeString(`${option.city}`, "each word")}, (${option.code})`;
   }
   return "";
+}
+
+/**
+ * Returns the sum of the duration of flights
+ * (outgoing and return) in minutes. This is
+ * used to sort flights by duration.
+ * @param d1
+ * @param d2
+ */
+export function addFlightDuration(flight: Flight) {
+  let d1: string = flight.itineraries[0].duration;
+  let d2: string = flight.itineraries[1].duration;
+
+  //PT13H50M
+  let hourOne = Number(d1.substring(2).split("H")[0]);
+  let minuteOne = Number(d1.substring(2).split("H")[1].split("M")[0]);
+
+  let hourTwo = Number(d2.substring(2).split("H")[0]);
+  let minuteTwo = Number(d2.substring(2).split("H")[1].split("M")[0]);
+
+  let hours = hourOne + hourTwo;
+  let minutes = minuteOne + minuteTwo;
+
+  if (minutes >= 60) {
+    hours += Math.floor(minutes / 60);
+    minutes = minutes % 60;
+  }
+
+  return hours * 60 + minutes;
 }

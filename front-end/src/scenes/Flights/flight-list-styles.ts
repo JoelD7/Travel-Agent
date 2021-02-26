@@ -124,6 +124,27 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
       width: "95%",
     },
   },
+  progressCircleGridLoading: {
+    display: "flex",
+    position: "absolute",
+    top: "100px",
+    left: "26%",
+    [theme.breakpoints.down(1215)]: {
+      left: "30%",
+    },
+    [theme.breakpoints.down(1040)]: {
+      left: "12%",
+    },
+    [theme.breakpoints.down(783)]: {
+      left: "9%",
+    },
+    [theme.breakpoints.down(736)]: {
+      left: "0%",
+    },
+  },
+  progressCircleGrid: {
+    display: "flex",
+  },
   pageContentContainerGrid: {},
   resevationParamsContainer: {
     backgroundColor: Colors.BLUE,

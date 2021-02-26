@@ -1,75 +1,58 @@
 import DateFnsUtils from "@date-io/date-fns";
 import {
-  faMapMarkerAlt,
-  faUsers,
   faBaby,
   faChild,
-  faStar,
   faFilter,
+  faStar,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Backdrop,
   createMuiTheme,
   Divider,
   Drawer,
   FormControl,
   Grid,
   MenuItem,
-  Modal,
   Select,
   ThemeProvider,
-  Tooltip,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { addDays, parseISO, isBefore, format } from "date-fns";
+import Axios from "axios";
+import { addDays, compareDesc, format } from "date-fns";
+import { compareAsc } from "date-fns/esm";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import Helmet from "react-helmet";
+import { useDispatch, useSelector } from "react-redux";
 import { Family } from "../../assets/fonts";
 import {
   CardFlight,
   CustomButton,
-  DatetimeRange,
   FlightTimesRange,
   IataAutocomplete,
   Navbar,
   PriceRange,
+  ProgressCircle,
   ServicesToolbar,
+  SortPageSize,
   Text,
 } from "../../components";
-import { CustomTF, ProgressCircle } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
+  addFlightDuration,
   flightsPlaceholder,
-  getPlaceAutocompleteURL,
-  muiDateFormatter,
-  getSavedAccessToken,
   getAccessToken,
-  proxyUrl,
-  selectFlightListURL,
-  startFlightFetching,
-  selectFlightDictionaries,
-  selectFlightToAutocomplete,
-  selectFlightFromAutocomplete,
-  selectAirportPredictions,
-  capitalizeString,
-  startAirportCityPrediction,
-  fetchAirportCitiesByInput,
-  updateAirportPredictions,
-  selectFlightParams,
-  iataCodes,
-  getAutocompleteLabel,
-  getMinDate,
   getMaxDate,
+  getMinDate,
+  getSavedAccessToken,
   isDateBetweenRange,
+  muiDateFormatter,
+  selectFlightFromAutocomplete,
+  selectFlightListURL,
+  selectFlightParams,
+  selectFlightToAutocomplete,
+  startFlightFetching,
 } from "../../utils";
-import { FlightTypes } from "../../utils/types";
-import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
-import { flightListStyles } from "./flight-list-styles";
-import { FlightDetails } from "./FlightDetails";
-import Helmet from "react-helmet";
-import Axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
 import {
   FlightSearch,
   setFlightAdults,
@@ -77,16 +60,12 @@ import {
   setFlightClass,
   setFlightDeparture,
   setFlightDictionaries,
-  setFlightFrom,
-  setFlightFromAutocomplete,
   setFlightInfants,
   setFlightReturn,
-  setFlightTo,
-  setFlightToAutocomplete,
 } from "../../utils/store/flight-slice";
-import { Autocomplete } from "@material-ui/lab";
-import { AirportCity, IATALocation } from "../../utils/types/location-types";
-import { CSSProperties } from "@material-ui/styles";
+import { FlightTypes } from "../../utils/types";
+import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
+import { flightListStyles } from "./flight-list-styles";
 
 export function Flight_List() {
   const style = flightListStyles();
@@ -199,9 +178,6 @@ export function Flight_List() {
     },
   });
 
-  const airportPredictions: IATALocation[] = useSelector(selectAirportPredictions);
-  // const [airportPredictions, setAirportPredictions] = useState<IATALocation[]>([]);
-
   const [openDrawer, setOpenDrawer] = useState(false);
   const [loadingOnMount, setLoadingOnMount] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -233,7 +209,26 @@ export function Flight_List() {
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
-  const [focusedAutocomplete, setFocusedAutocomplete] = useState<string>("");
+  const sortOptions: string[] = [
+    "Price | desc",
+    "Price | asc",
+    "Duration | desc",
+    "Duration | asc",
+    "Earliest outbound departure",
+    "Earliest outbound arrival",
+    "Earliest return departure",
+    "Earliest return arrival",
+    "Latest outbound departure",
+    "Latest outbound arrival",
+    "Latest return departure",
+    "Latest return arrival",
+  ];
+  const [sortOption, setSortOption] = useState<string>("Price");
+
+  const [page, setPage] = useState<number>(0);
+
+  const [pageSize, setPageSize] = useState<number>(20);
+  const pageSizeOptions = [20, 30, 40];
 
   const flightClasses: FlightClassType[] = [
     "Business",
@@ -247,17 +242,122 @@ export function Flight_List() {
   }, []);
 
   useEffect(() => {
-    filterByDates();
+    filterByDates(allFlights);
+    setLoading(false);
   }, [
+    allFlights,
     state.exitFlightDates?.departureDatetimeRange,
     state.exitFlightDates?.arrivalDatetimeRange,
     state.returnFlightDates?.departureDatetimeRange,
     state.returnFlightDates?.arrivalDatetimeRange,
   ]);
 
-  function filterByDates() {
-    console.log("hoela");
-    let filteredFlights: Flight[] = allFlights.filter((flight) => {
+  function sortFlightsBy(value: string) {
+    let sortedFlights: Flight[] = [];
+
+    switch (value) {
+      case "Price | desc":
+        sortedFlights = allFlights.sort((a, b) => b.price.total - a.price.total);
+        break;
+      case "Price | asc":
+        sortedFlights = allFlights.sort((a, b) => a.price.total - b.price.total);
+        break;
+      case "Duration | desc":
+        sortedFlights = allFlights.sort((a, b) => {
+          return addFlightDuration(b) - addFlightDuration(a);
+        });
+        break;
+      case "Duration | asc":
+        sortedFlights = allFlights.sort((a, b) => {
+          return addFlightDuration(a) - addFlightDuration(b);
+        });
+        break;
+      case "Earliest outbound departure":
+        sortedFlights = allFlights.sort((a, b) => {
+          let one = new Date(a.itineraries[0].segments[0].departure.at);
+          let two = new Date(b.itineraries[0].segments[0].departure.at);
+
+          return compareAsc(one, two);
+        });
+        break;
+
+      case "Earliest outbound arrival":
+        sortedFlights = allFlights.sort((a, b) => {
+          let lastSegmentA = a.itineraries[0].segments.length - 1;
+          let lastSegmentB = b.itineraries[0].segments.length - 1;
+
+          let one = new Date(a.itineraries[0].segments[lastSegmentA].arrival.at);
+          let two = new Date(b.itineraries[0].segments[lastSegmentB].arrival.at);
+
+          return compareAsc(one, two);
+        });
+        break;
+      case "Earliest return departure":
+        sortedFlights = allFlights.sort((a, b) => {
+          let one = new Date(a.itineraries[1].segments[0].departure.at);
+          let two = new Date(b.itineraries[1].segments[0].departure.at);
+
+          return compareAsc(one, two);
+        });
+        break;
+      case "Earliest return arrival":
+        sortedFlights = allFlights.sort((a, b) => {
+          let lastSegmentA = a.itineraries[1].segments.length - 1;
+          let lastSegmentB = b.itineraries[1].segments.length - 1;
+
+          let one = new Date(a.itineraries[1].segments[lastSegmentA].arrival.at);
+          let two = new Date(b.itineraries[1].segments[lastSegmentB].arrival.at);
+
+          return compareAsc(one, two);
+        });
+        break;
+      //========================================
+      case "Latest outbound departure":
+        sortedFlights = allFlights.sort((a, b) => {
+          let one = new Date(a.itineraries[0].segments[0].departure.at);
+          let two = new Date(b.itineraries[0].segments[0].departure.at);
+
+          return compareDesc(one, two);
+        });
+        break;
+
+      case "Latest outbound arrival":
+        sortedFlights = allFlights.sort((a, b) => {
+          let lastSegmentA = a.itineraries[0].segments.length - 1;
+          let lastSegmentB = b.itineraries[0].segments.length - 1;
+
+          let one = new Date(a.itineraries[0].segments[lastSegmentA].arrival.at);
+          let two = new Date(b.itineraries[0].segments[lastSegmentB].arrival.at);
+
+          return compareDesc(one, two);
+        });
+        break;
+      case "Latest return departure":
+        sortedFlights = allFlights.sort((a, b) => {
+          let one = new Date(a.itineraries[1].segments[0].departure.at);
+          let two = new Date(b.itineraries[1].segments[0].departure.at);
+
+          return compareDesc(one, two);
+        });
+        break;
+      case "Latest return arrival":
+        sortedFlights = allFlights.sort((a, b) => {
+          let lastSegmentA = a.itineraries[1].segments.length - 1;
+          let lastSegmentB = b.itineraries[1].segments.length - 1;
+
+          let one = new Date(a.itineraries[1].segments[lastSegmentA].arrival.at);
+          let two = new Date(b.itineraries[1].segments[lastSegmentB].arrival.at);
+
+          return compareDesc(one, two);
+        });
+        break;
+    }
+
+    setFlights(sortedFlights);
+  }
+
+  function filterByDates(flights: Flight[]) {
+    let filteredFlights: Flight[] = flights.filter((flight) => {
       let lastSegmentIndexOut: number = flight.itineraries[0].segments.length - 1;
       let lastSegmentIndexReturn: number = flight.itineraries[1].segments.length - 1;
 
@@ -407,55 +507,6 @@ export function Flight_List() {
       getMaxDate(prev, cur)
     );
 
-    console.log(
-      `minOutDepartureDatetime: ${format(
-        minOutDepartureDatetime,
-        "dd/MM/yyyy 'at' hh:mm aaa"
-      )}`
-    );
-    console.log(
-      `maxOutDepartureDatetime: ${format(
-        maxOutDepartureDatetime,
-        "dd/MM/yyyy 'at' hh:mm aaa"
-      )}`
-    );
-    console.log(
-      `minOutArrivalDatetime: ${format(
-        minOutArrivalDatetime,
-        "dd/MM/yyyy 'at' hh:mm aaa"
-      )}`
-    );
-    console.log(
-      `maxOutArrivalDatetime: ${format(
-        maxOutArrivalDatetime,
-        "dd/MM/yyyy 'at' hh:mm aaa"
-      )}`
-    );
-    console.log(
-      `minReturnDepartureDatetime: ${format(
-        minReturnDepartureDatetime,
-        "dd/MM/yyyy 'at' hh:mm aaa"
-      )}`
-    );
-    console.log(
-      `maxReturnDepartureDatetime: ${format(
-        maxReturnDepartureDatetime,
-        "dd/MM/yyyy 'at' hh:mm aaa"
-      )}`
-    );
-    console.log(
-      `minReturnArrivalDatetime: ${format(
-        minReturnArrivalDatetime,
-        "dd/MM/yyyy 'at' hh:mm aaa"
-      )}`
-    );
-    console.log(
-      `maxReturnArrivalDatetime: ${format(
-        maxReturnArrivalDatetime,
-        "dd/MM/yyyy 'at' hh:mm aaa"
-      )}`
-    );
-
     setState({
       ...state,
       exitFlightDates: {
@@ -487,6 +538,8 @@ export function Flight_List() {
     let curFlightTypeRange: DatetimeRange | undefined = state[flightDateRangeField];
 
     if (curFlightTypeRange) {
+      setLoading(true);
+
       setState({
         ...state,
         [flightDateRangeField]: {
@@ -635,12 +688,14 @@ export function Flight_List() {
     return loadingOnMount || loading;
   }
 
-  function getLoadingCircleStyle() {
-    let style: CSSProperties = loading
-      ? { display: "flex", position: "absolute", top: "100px", left: "47px" }
-      : { display: "flex" };
+  function onSortOptionChange(option: string) {
+    setSortOption(option);
+    sortFlightsBy(option);
+  }
 
-    return style;
+  function onPageSizeChange(value: number) {
+    setPageSize(value);
+    setPage(0);
   }
 
   return (
@@ -802,23 +857,40 @@ export function Flight_List() {
             </CustomButton>
           </Grid>
 
-          {isLoadingEnabled() && (
-            <Grid item className={style.flightsGrid} style={getLoadingCircleStyle()}>
-              <ProgressCircle />
-            </Grid>
-          )}
+          <Grid item className={style.flightsGrid}>
+            <Grid container>
+              <Grid item xs={12} style={{ marginBottom: "30px" }}>
+                <SortPageSize
+                  pageSize={pageSize}
+                  pageSizeOptions={pageSizeOptions}
+                  sortOption={sortOption}
+                  sortOptions={sortOptions}
+                  onPageSizeChange={(e) => onPageSizeChange(e.target.value as number)}
+                  onSortOptionChange={(e) => onSortOptionChange(e.target.value as string)}
+                />
+              </Grid>
 
-          {!loadingOnMount && (
-            <Grid
-              item
-              className={style.flightsGrid}
-              style={loading ? { filter: "blur(4px)" } : {}}
-            >
-              {flights.map((flight, i) => (
-                <CardFlight variant="regular" key={i} flight={flight} />
-              ))}
+              {isLoadingEnabled() && (
+                <Grid
+                  item
+                  style={{ width: "100%" }}
+                  className={` ${
+                    loading ? style.progressCircleGridLoading : style.progressCircleGrid
+                  }`}
+                >
+                  <ProgressCircle />
+                </Grid>
+              )}
+
+              {!loadingOnMount && (
+                <Grid item xs={12} style={loading ? { filter: "blur(4px)" } : {}}>
+                  {flights.map((flight, i) => (
+                    <CardFlight variant="regular" key={i} flight={flight} />
+                  ))}
+                </Grid>
+              )}
             </Grid>
-          )}
+          </Grid>
         </Grid>
       </div>
 

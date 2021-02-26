@@ -19,3 +19,4 @@ export { RoomAccordion } from "./RoomAccordion/RoomAccordion";
 export { CardDealFlight } from "./CardDealFlight/CardDealFlight";
 export { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 export { NotAvailableCard } from "./NotAvailableCard/NotAvailableCard";
+export { Pagination } from "./Pagination/Pagination";
