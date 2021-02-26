@@ -154,7 +154,7 @@ export function getAutocompleteLabel(
   if (option) {
     return type === "city"
       ? `${option.city}, ${option.country}`
-      : `${capitalizeString(`${option.city}`, "each word")}, (${option.code})`;
+      : `${capitalizeString(`${option.city}`, "each word")} (${option.code})`;
   }
   return "";
 }

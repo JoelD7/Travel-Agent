@@ -7,11 +7,12 @@ import { Colors } from "../../../styles";
 
 interface Pagination {
   pageCount: number;
-  className: string;
+  page: number;
+  className?: string;
   onChange: (event: ChangeEvent<unknown>, page: number) => void;
 }
 
-export function Pagination({ pageCount, className, onChange }: Pagination) {
+export function Pagination({ pageCount, page, className, onChange }: Pagination) {
   const paginationStyles = makeStyles(() => ({
     paginationItemRoot: {
       fontFamily: Font.Family,
@@ -30,6 +31,7 @@ export function Pagination({ pageCount, className, onChange }: Pagination) {
   const style = paginationStyles();
   return (
     <MUIPagination
+      page={page + 1}
       count={pageCount}
       className={className}
       renderItem={(item) => (

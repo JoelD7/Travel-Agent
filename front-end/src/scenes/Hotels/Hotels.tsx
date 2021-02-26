@@ -699,7 +699,7 @@ export function Hotels() {
 
   function onPageChange(newPage: number) {
     window.scrollTo(0, 0);
-    setTimeout(() => setPage(newPage), 250);
+    setTimeout(() => setPage(newPage - 2), 250);
   }
 
   function getPageCount() {
@@ -919,6 +919,7 @@ export function Hotels() {
                   {/* Pagination */}
                   {!loadingOnMount && (
                     <Pagination
+                    page={page}
                       pageCount={getPageCount()}
                       className={style.pagination}
                       onChange={(e, page) => onPageChange(page)}

@@ -10,7 +10,6 @@ export interface FlightSearchParams {
   // infants: string;
   flightType: FlightType;
   // class: FlightClassType;
-  priceRange: number[];
   exitFlightDates: DatetimeRange;
   returnFlightDates: DatetimeRange;
 

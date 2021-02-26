@@ -212,7 +212,6 @@ export function Flights_Home() {
       arrivalDatetimeRange: [new Date(2020, 10, 21, 8, 0), new Date(2020, 10, 21, 15, 0)],
     },
     flightType: "Round trip",
-    priceRange: [0, 500],
   });
   const flight: FlightSearch = useSelector(selectFlightParams);
 

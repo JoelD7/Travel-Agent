@@ -31,6 +31,7 @@ import {
   FlightTimesRange,
   IataAutocomplete,
   Navbar,
+  Pagination,
   PriceRange,
   ProgressCircle,
   ServicesToolbar,
@@ -149,7 +150,6 @@ export function Flight_List() {
 
   const [state, setState] = useState<FlightSearchParams>({
     flightType: "Round trip",
-    priceRange: [0, 500],
     exitFlightDates: {
       minDeparture: new Date(2020, 10, 9, 10, 0),
       maxDeparture: new Date(2020, 10, 10, 10, 0),
@@ -177,6 +177,9 @@ export function Flight_List() {
       arrivalDatetimeRange: [new Date(2020, 10, 21, 8, 0), new Date(2020, 10, 21, 15, 0)],
     },
   });
+
+  const [priceRange, setPriceRange] = useState<number[]>([0, 500]);
+  const [maxPrice, setMaxPrice] = useState<number>(500);
 
   const [openDrawer, setOpenDrawer] = useState(false);
   const [loadingOnMount, setLoadingOnMount] = useState(true);
@@ -226,7 +229,7 @@ export function Flight_List() {
   const [sortOption, setSortOption] = useState<string>("Price");
 
   const [page, setPage] = useState<number>(0);
-
+  console.log("Page: ", page);
   const [pageSize, setPageSize] = useState<number>(20);
   const pageSizeOptions = [20, 30, 40];
 
@@ -252,28 +255,34 @@ export function Flight_List() {
     state.returnFlightDates?.arrivalDatetimeRange,
   ]);
 
+  function getPageCount() {
+    return Math.ceil(flights.length / pageSize);
+  }
+
   function sortFlightsBy(value: string) {
     let sortedFlights: Flight[] = [];
+    let unsortedFlights: Flight[] = isAnyFilterApplied() ? flights : allFlights;
+    console.log(`isAnyFilterApplied(): ${isAnyFilterApplied()}`);
 
     switch (value) {
       case "Price | desc":
-        sortedFlights = allFlights.sort((a, b) => b.price.total - a.price.total);
+        sortedFlights = unsortedFlights.sort((a, b) => b.price.total - a.price.total);
         break;
       case "Price | asc":
-        sortedFlights = allFlights.sort((a, b) => a.price.total - b.price.total);
+        sortedFlights = unsortedFlights.sort((a, b) => a.price.total - b.price.total);
         break;
       case "Duration | desc":
-        sortedFlights = allFlights.sort((a, b) => {
+        sortedFlights = unsortedFlights.sort((a, b) => {
           return addFlightDuration(b) - addFlightDuration(a);
         });
         break;
       case "Duration | asc":
-        sortedFlights = allFlights.sort((a, b) => {
+        sortedFlights = unsortedFlights.sort((a, b) => {
           return addFlightDuration(a) - addFlightDuration(b);
         });
         break;
       case "Earliest outbound departure":
-        sortedFlights = allFlights.sort((a, b) => {
+        sortedFlights = unsortedFlights.sort((a, b) => {
           let one = new Date(a.itineraries[0].segments[0].departure.at);
           let two = new Date(b.itineraries[0].segments[0].departure.at);
 
@@ -282,7 +291,7 @@ export function Flight_List() {
         break;
 
       case "Earliest outbound arrival":
-        sortedFlights = allFlights.sort((a, b) => {
+        sortedFlights = unsortedFlights.sort((a, b) => {
           let lastSegmentA = a.itineraries[0].segments.length - 1;
           let lastSegmentB = b.itineraries[0].segments.length - 1;
 
@@ -293,7 +302,7 @@ export function Flight_List() {
         });
         break;
       case "Earliest return departure":
-        sortedFlights = allFlights.sort((a, b) => {
+        sortedFlights = unsortedFlights.sort((a, b) => {
           let one = new Date(a.itineraries[1].segments[0].departure.at);
           let two = new Date(b.itineraries[1].segments[0].departure.at);
 
@@ -301,7 +310,7 @@ export function Flight_List() {
         });
         break;
       case "Earliest return arrival":
-        sortedFlights = allFlights.sort((a, b) => {
+        sortedFlights = unsortedFlights.sort((a, b) => {
           let lastSegmentA = a.itineraries[1].segments.length - 1;
           let lastSegmentB = b.itineraries[1].segments.length - 1;
 
@@ -313,7 +322,7 @@ export function Flight_List() {
         break;
       //========================================
       case "Latest outbound departure":
-        sortedFlights = allFlights.sort((a, b) => {
+        sortedFlights = unsortedFlights.sort((a, b) => {
           let one = new Date(a.itineraries[0].segments[0].departure.at);
           let two = new Date(b.itineraries[0].segments[0].departure.at);
 
@@ -322,7 +331,7 @@ export function Flight_List() {
         break;
 
       case "Latest outbound arrival":
-        sortedFlights = allFlights.sort((a, b) => {
+        sortedFlights = unsortedFlights.sort((a, b) => {
           let lastSegmentA = a.itineraries[0].segments.length - 1;
           let lastSegmentB = b.itineraries[0].segments.length - 1;
 
@@ -333,7 +342,7 @@ export function Flight_List() {
         });
         break;
       case "Latest return departure":
-        sortedFlights = allFlights.sort((a, b) => {
+        sortedFlights = unsortedFlights.sort((a, b) => {
           let one = new Date(a.itineraries[1].segments[0].departure.at);
           let two = new Date(b.itineraries[1].segments[0].departure.at);
 
@@ -341,7 +350,7 @@ export function Flight_List() {
         });
         break;
       case "Latest return arrival":
-        sortedFlights = allFlights.sort((a, b) => {
+        sortedFlights = unsortedFlights.sort((a, b) => {
           let lastSegmentA = a.itineraries[1].segments.length - 1;
           let lastSegmentB = b.itineraries[1].segments.length - 1;
 
@@ -354,6 +363,26 @@ export function Flight_List() {
     }
 
     setFlights(sortedFlights);
+  }
+
+  function isAnyFilterApplied() {
+    return (
+      priceRange[0] > 0 ||
+      state.exitFlightDates.departureDatetimeRange[0] !=
+        state.exitFlightDates.minDeparture ||
+      state.exitFlightDates.departureDatetimeRange[1] !=
+        state.exitFlightDates.maxDeparture ||
+      state.exitFlightDates.arrivalDatetimeRange[0] != state.exitFlightDates.minArrival ||
+      state.exitFlightDates.arrivalDatetimeRange[1] != state.exitFlightDates.maxArrival ||
+      state.returnFlightDates.departureDatetimeRange[0] !=
+        state.returnFlightDates.minDeparture ||
+      state.returnFlightDates.departureDatetimeRange[1] !=
+        state.returnFlightDates.maxDeparture ||
+      state.returnFlightDates.arrivalDatetimeRange[0] !=
+        state.returnFlightDates.minArrival ||
+      state.returnFlightDates.arrivalDatetimeRange[1] !=
+        state.returnFlightDates.maxArrival
+    );
   }
 
   function filterByDates(flights: Flight[]) {
@@ -416,8 +445,11 @@ export function Flight_List() {
     let buffer: Flight[] = [];
     let count = 0;
     let curPrice = "0";
+    let prices: number[] = [];
 
     flights.forEach((flight) => {
+      prices.push(flight.price.total);
+
       let flightPrice = String(flight.price.total);
 
       if (count === 2 && flightPrice !== curPrice) {
@@ -434,6 +466,10 @@ export function Flight_List() {
         count++;
       }
     });
+
+    prices.sort((a, b) => a - b);
+    setPriceRange([0, Math.floor(prices[prices.length - 1])]);
+    setMaxPrice(Math.floor(prices[prices.length - 1]));
 
     getDatimeSliderValues(buffer);
     setFlights(buffer);
@@ -538,7 +574,7 @@ export function Flight_List() {
     let curFlightTypeRange: DatetimeRange | undefined = state[flightDateRangeField];
 
     if (curFlightTypeRange) {
-      setLoading(true);
+      setPage(0);
 
       setState({
         ...state,
@@ -548,6 +584,19 @@ export function Flight_List() {
         },
       });
     }
+  }
+
+  function onPriceSliderChange(slider: number[]) {
+    setPriceRange(slider);
+    let filteredFlights: Flight[] = allFlights.filter((flight) =>
+      isNumberInRange(flight.price.total, slider)
+    );
+    setPage(0);
+    setFlights(filteredFlights);
+  }
+
+  function isNumberInRange(value: number, range: number[]) {
+    return value >= range[0] && value <= range[1];
   }
 
   function SearchFilters() {
@@ -568,9 +617,9 @@ export function Flight_List() {
           Price range
         </Text>
         <PriceRange
-          value={state.priceRange ? state.priceRange : [0, 100]}
-          max={500}
-          updateState={(slider) => setState({ ...state, priceRange: slider })}
+          value={priceRange}
+          max={maxPrice}
+          updateState={(slider) => onPriceSliderChange(slider)}
         />
 
         <Divider style={{ margin: "10px auto" }} />
@@ -691,11 +740,17 @@ export function Flight_List() {
   function onSortOptionChange(option: string) {
     setSortOption(option);
     sortFlightsBy(option);
+    setPage(0);
   }
 
   function onPageSizeChange(value: number) {
     setPageSize(value);
     setPage(0);
+  }
+
+  function onPageChange(newPage: number) {
+    window.scrollTo(0, 0);
+    setTimeout(() => setPage(newPage - 1), 250);
   }
 
   return (
@@ -882,13 +937,24 @@ export function Flight_List() {
                 </Grid>
               )}
 
-              {!loadingOnMount && (
+              {!loadingOnMount && (  
                 <Grid item xs={12} style={loading ? { filter: "blur(4px)" } : {}}>
-                  {flights.map((flight, i) => (
-                    <CardFlight variant="regular" key={i} flight={flight} />
-                  ))}
+                  {flights 
+                    .slice(page * pageSize, page * pageSize + pageSize)
+                    .map((flight, i) => (
+                      <CardFlight variant="regular" key={i} flight={flight} />
+                    ))}
                 </Grid>
               )}
+
+              <Grid item xs={12}>
+                <Pagination
+                  page={page}
+                  className={style.pagination}
+                  pageCount={getPageCount()}
+                  onChange={(e, pageNo) => onPageChange(pageNo)}
+                />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

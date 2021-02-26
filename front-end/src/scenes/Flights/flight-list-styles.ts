@@ -91,11 +91,8 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   flightsGrid: {
     paddingLeft: "20px",
-    width: "65%",
+    width: "70%",
 
-    [theme.breakpoints.down(1215)]: {
-      width: "70%",
-    },
     [theme.breakpoints.down(1040)]: {
       margin: "auto",
       width: "75%",
@@ -114,6 +111,9 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
       display: "block",
       width: "50%",
     },
+  },
+  pagination: {
+    margin: "20px 0px 40px 0px",
   },
   pageContentContainer: {
     width: "85%",

@@ -68,8 +68,8 @@ interface DatetimeRange {
   minDeparture: Date;
   maxArrival: Date;
   minArrival: Date;
-  departureDatetimeRange?: Date[];
-  arrivalDatetimeRange?: Date[];
+  departureDatetimeRange: Date[];
+  arrivalDatetimeRange: Date[];
 }
 
 interface FlightDeal {
