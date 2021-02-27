@@ -90,6 +90,11 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   slideshowGrid: {
     width: "100%",
   },
+  titleAndToolbarContainer: {
+    [theme.breakpoints.down(1000)]: {
+      height: "60%",
+    },
+  },
   textButton: {
     padding: "0px",
     fontWeight: "bold",

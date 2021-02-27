@@ -582,7 +582,7 @@ export function Hotels() {
   function onChildAgeChanged(e: ChangeEvent<SelectEvent>, index: number) {
     let newPaxes: HotelPax[] = [];
 
-    newPaxes = state.paxes.map((pax, i) => {
+    newPaxes = state.paxes.map((pax: any, i) => {
       if (i === index) {
         return { ...pax, age: e.target.value as number };
       }

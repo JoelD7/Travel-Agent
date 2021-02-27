@@ -7,17 +7,18 @@ import hotelReducer from "./hotel-slice";
 import flightSlice from "./flight-slice";
 import restaurantSlice from "./restaurant-slice";
 import { useDispatch } from "react-redux";
+import { enableBatching } from "redux-batched-actions";
 export * from "./flight-slice";
 
 const store = configureStore({
   reducer: {
-    signUp: signUpReducer,
-    searchNavbar: searchNavbarReducer,
-    calendarSlice: calendarReducer,
-    poiReducer: poiReducer,
+    signUp: enableBatching(signUpReducer),
+    searchNavbar: enableBatching(searchNavbarReducer),
+    calendarSlice: enableBatching(calendarReducer),
+    poiReducer: enableBatching(poiReducer),
     hotelReducer: hotelReducer,
-    flightSlice: flightSlice,
-    restaurantSlice: restaurantSlice,
+    flightSlice: enableBatching(flightSlice),
+    restaurantSlice: enableBatching(restaurantSlice),
   },
 });
 export type RootState = ReturnType<typeof store.getState>;

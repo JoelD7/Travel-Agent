@@ -25,6 +25,10 @@ interface RestaurantSlides {
   loading: boolean;
 }
 
+interface SlideContent {
+  restaurant: RestaurantSearch;
+}
+
 export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlides) {
   const style = restaurantSlidesStyles();
 
@@ -34,7 +38,7 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
     className: style.slider,
     nextArrow: <SliderArrow direction="right" />,
     prevArrow: <SliderArrow direction="left" />,
-    slidesToShow: getSlidesToShow(3),
+    // slidesToShow: getSlidesToShow(3),
     slidesToScroll: getSlidesToShow(3),
     responsive: [
       {
@@ -45,14 +49,14 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
         },
       },
       {
-        breakpoint: 782,
+        breakpoint: 1125,
         settings: {
           slidesToShow: getSlidesToShow(2),
           slidesToScroll: getSlidesToShow(2),
         },
       },
       {
-        breakpoint: 578,
+        breakpoint: 628,
         settings: {
           slidesToShow: getSlidesToShow(1),
           slidesToScroll: getSlidesToShow(1),
@@ -60,6 +64,55 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
       },
     ],
   };
+
+  function SlideContent({ restaurant }: SlideContent) {
+    return (
+      <div className={restaurants.length > 3 ? style.cardParent : ""}>
+        <CardActionArea
+          className={style.card}
+          onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
+        >
+          <Card>
+            <CardMedia component="img" height="150" image={restaurant.image_url} />
+
+            <CardContent>
+              <Text
+                component="h4"
+                className={style.restaurantName}
+              >{`${restaurant.name}`}</Text>
+
+              <Rating
+                initialRating={restaurant.rating}
+                readonly
+                emptySymbol={
+                  <FontAwesomeIcon
+                    style={{ margin: "0px 1px" }}
+                    icon={faCircleReg}
+                    color={Colors.PURPLE}
+                  />
+                }
+                fullSymbol={
+                  <FontAwesomeIcon
+                    style={{ margin: "0px 1px" }}
+                    icon={faCircle}
+                    color={Colors.PURPLE}
+                  />
+                }
+              />
+
+              <p className={style.restaurantCuisines}>
+                {getRestaurantCategoriesList(restaurant)}
+              </p>
+            </CardContent>
+          </Card>
+        </CardActionArea>
+      </div>
+    );
+  }
+
+  function getNoSliderWidth(): string {
+    return `${100 / restaurants.length - 4}%`;
+  }
 
   function getSlidesToShow(def: number) {
     return restaurants.length > def ? def : restaurants.length;
@@ -90,55 +143,25 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
           </Button>
         </Grid>
 
-        <Grid container>
-          <Slider {...sliderSettings} lazyLoad="ondemand">
-            {restaurants.map((restaurant, i) => (
-              <div key={i}>
-                <CardActionArea
-                  className={style.card}
-                  onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
-                >
-                  <Card>
-                    <CardMedia
-                      component="img"
-                      height="150"
-                      image={restaurant.image_url}
-                    />
-
-                    <CardContent>
-                      <Text
-                        component="h4"
-                        className={style.restaurantName}
-                      >{`${restaurant.name}`}</Text>
-
-                      <Rating
-                        initialRating={restaurant.rating}
-                        readonly
-                        emptySymbol={
-                          <FontAwesomeIcon
-                            style={{ margin: "0px 1px" }}
-                            icon={faCircleReg}
-                            color={Colors.PURPLE}
-                          />
-                        }
-                        fullSymbol={
-                          <FontAwesomeIcon
-                            style={{ margin: "0px 1px" }}
-                            icon={faCircle}
-                            color={Colors.PURPLE}
-                          />
-                        }
-                      />
-
-                      <p className={style.restaurantCuisines}>
-                        {getRestaurantCategoriesList(restaurant)}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </CardActionArea>
-              </div>
-            ))}
-          </Slider>
+        <Grid
+          container
+          style={restaurants.length > 3 ? {} : { margin: "auto", width: "96%" }}
+        >
+          {restaurants.length > 3 ? (
+            <Slider {...sliderSettings} slidesToShow={getSlidesToShow(3)}>
+              {restaurants.map((restaurant, i) => (
+                <SlideContent key={restaurant.id} restaurant={restaurant} />
+              ))}
+            </Slider>
+          ) : (
+            <Grid container justify="center">
+              {restaurants.map((restaurant) => (
+                <div key={restaurant.id} style={{ width: `${getNoSliderWidth()}` }}>
+                  <SlideContent restaurant={restaurant} />
+                </div>
+              ))}
+            </Grid>
+          )}
         </Grid>
       </Grid>
     </div>

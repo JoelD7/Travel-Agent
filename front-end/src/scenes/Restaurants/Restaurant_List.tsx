@@ -2,7 +2,8 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { Grid } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch, useSelector } from "react-redux";
+import { batchActions } from "redux-batched-actions";
 import {
   CustomButton,
   Navbar,
@@ -19,6 +20,7 @@ import {
 import { Colors, Shadow } from "../../styles";
 import {
   filterByFeature,
+  restaurantsPlaceholder,
   selectAllRestaurants,
   selectCurrentCity,
   selectRestaurantCuisines,
@@ -49,7 +51,6 @@ export function Restaurant_List() {
 
   const currentCity: IATALocation = useSelector(selectCurrentCity);
   const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
-  const allRestaurants: RestaurantSearch[] = useSelector(selectAllRestaurants);
 
   const [deliveryRestaurants, setDeliveryRestaurants] = useState<RestaurantSearch[]>(
     filterByFeature("delivery", restaurants)
@@ -89,10 +90,13 @@ export function Restaurant_List() {
 
         setTotal(resTotal > 1000 ? 1000 : resTotal);
 
-        dispatch(setRestaurants(restaurantsRes));
-        // dispatch(setAllRestaurants(restaurantsRes));
-        dispatch(addRestaurantCuisines(cuisines, restaurantsRes));
-        dispatch(addRestaurantFeatures(features, restaurantsRes));
+        dispatch(
+          batchActions([
+            setRestaurants(restaurantsRes),
+            addRestaurantCuisines(cuisines, restaurantsRes),
+            addRestaurantFeatures(features, restaurantsRes),
+          ])
+        );
 
         if (restaurantsRes.length === 0) {
           setNoRestaurants(true);
@@ -101,11 +105,7 @@ export function Restaurant_List() {
         }
 
         if (page === 0) {
-          setDeliveryRestaurants(filterByFeature("delivery", restaurantsRes));
-          setPickupRestaurants(filterByFeature("pickup", restaurantsRes));
-          setReservationRestaurants(
-            filterByFeature("restaurant_reservation", restaurantsRes)
-          );
+          setRestaurantSlides(restaurantsRes);
         }
 
         setLoading(false);
@@ -113,15 +113,28 @@ export function Restaurant_List() {
       .catch((error) => console.log(error));
   }, [currentCity, page, pageSize]);
 
-  function areRestaurantsAlreadyFetched(city: string) {
-    if (allRestaurants.length === 0) {
-      return false;
-    }
+  function setRestaurantSlides(restaurantsRes: RestaurantSearch[]) {
+    let deliveryRestaurantsBuf: RestaurantSearch[] = [];
+    let pickupRestaurantsBuf: RestaurantSearch[] = [];
+    let reservationRestaurantsBuf: RestaurantSearch[] = [];
 
-    let fetchedCity: string = restaurants[0].location.city;
-    if (fetchedCity === city) {
-      return true;
-    }
+    restaurantsRes.forEach((restaurant) => {
+      if (restaurant.transactions.includes("delivery")) {
+        deliveryRestaurantsBuf.push(restaurant);
+      }
+
+      if (restaurant.transactions.includes("pickup")) {
+        pickupRestaurantsBuf.push(restaurant);
+      }
+
+      if (restaurant.transactions.includes("restaurant_reservation")) {
+        reservationRestaurantsBuf.push(restaurant);
+      }
+    });
+
+    setDeliveryRestaurants(deliveryRestaurantsBuf);
+    setPickupRestaurants(pickupRestaurantsBuf);
+    setReservationRestaurants(reservationRestaurantsBuf);
   }
 
   /**
@@ -165,7 +178,7 @@ export function Restaurant_List() {
         <Grid container className={style.pageTitleContainer}>
           {/* Services toolbar and title */}
           <Grid item xs={12}>
-            <Grid container>
+            <Grid container className={style.titleAndToolbarContainer}>
               <Grid item xs={12}>
                 <ServicesToolbar style={{ boxShadow: Shadow.MEDIUM }} />
               </Grid>

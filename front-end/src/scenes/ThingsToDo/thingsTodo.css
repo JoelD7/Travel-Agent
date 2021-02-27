@@ -8,6 +8,9 @@
   display: inline-grid;
   align-content: space-between;
 }
+.slick-initialized .slick-slide > div {
+  width: inherit;
+}
 .slick-slide {
   float: none;
 }

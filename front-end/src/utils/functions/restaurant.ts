@@ -11,7 +11,6 @@ export function getRestaurantHours(restaurant: Restaurant) {
   let timing = [];
 
   let openHours = restaurant.hours[0].open;
-  console.log("openHours: ", JSON.stringify(openHours));
   //Group by timing
   let ranges: { [index: string]: Object[] } = {};
   //Hours objects that belong to the current timing

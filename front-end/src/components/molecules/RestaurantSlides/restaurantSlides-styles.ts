@@ -7,6 +7,12 @@ export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
     margin: "auto 5px",
     boxShadow: Shadow.LIGHT,
   },
+  cardImage: {
+    maxWidth: "100%",
+  },
+  cardParent: {
+    width: "inherit",
+  },
   restaurantName: {
     whiteSpace: "nowrap",
     overflow: "hidden",
