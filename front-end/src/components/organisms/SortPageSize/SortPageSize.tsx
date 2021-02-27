@@ -14,33 +14,32 @@ import { Colors, Shadow } from "../../../styles";
 import { Text } from "../../atoms";
 
 interface SortPageSize {
-  onPageSizeChange: (
+  onPageSizeChange?: (value: number) => void;
+  onSortOptionChange?: (
     event: React.ChangeEvent<{
       name?: string | undefined;
       value: unknown;
     }>,
     child: React.ReactNode
   ) => void;
-  onSortOptionChange: (
-    event: React.ChangeEvent<{
-      name?: string | undefined;
-      value: unknown;
-    }>,
-    child: React.ReactNode
-  ) => void;
-  sortOption: string;
-  sortOptions: string[];
-  pageSize: number;
-  pageSizeOptions: number[];
+  sortOption?: string;
+  sortOptions?: string[];
+  pageSize?: number;
+  pageSizeOptions?: number[];
+  includeSort?: boolean;
+  className?: string;
+  includePaging?: boolean;
 }
 
 export function SortPageSize({
   onPageSizeChange,
   onSortOptionChange,
   sortOption,
-  sortOptions,
+  sortOptions = [],className,
+  includeSort = true,
+  includePaging = true,
   pageSize,
-  pageSizeOptions,
+  pageSizeOptions = [],
 }: SortPageSize) {
   const theme = createMuiTheme({
     overrides: {
@@ -103,7 +102,7 @@ export function SortPageSize({
       boxShadow: Shadow.MEDIUM,
       borderRadius: "10px",
       marginLeft: "auto",
-      width: "420px",
+      width: "max-content",
       [theme.breakpoints.down(600)]: {
         marginLeft: "0px",
         marginRight: "auto",
@@ -162,24 +161,68 @@ export function SortPageSize({
   const style = sortPageStyles();
 
   return (
-    <Grid container className={style.sortContainer} alignItems="center">
+    <Grid container className={`${style.sortContainer} ${className}`} alignItems="center">
       {/* Sort grid */}
-      <Grid item xs={8}>
-        <Grid container>
-          <Text bold style={{ alignSelf: "end", margin: "auto" }} color={"white"}>
-            Sort by
-          </Text>
+      {includeSort && (
+        <Grid item xs={8}>
+          <Grid container>
+            <Text bold style={{ alignSelf: "end", margin: "auto" }} color={"white"}>
+              Sort by
+            </Text>
 
-          <ThemeProvider theme={theme}>
-            <FormControl className={style.sortFormControl} style={{ width: "145px" }}>
+            <ThemeProvider theme={theme}>
+              <FormControl className={style.sortFormControl} style={{ width: "145px" }}>
+                <Select
+                  value={sortOption}
+                  variant="outlined"
+                  classes={{ icon: style.selectIcon }}
+                  className={style.select}
+                  onChange={onSortOptionChange}
+                >
+                  {sortOptions.map((option, i) => (
+                    <MenuItem
+                      classes={{ root: style.menuItemSelect }}
+                      key={i}
+                      value={option}
+                    >
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <Divider
+                orientation="vertical"
+                style={{ background: "white", margin: "0px 10px" }}
+              />
+            </ThemeProvider>
+          </Grid>
+        </Grid>
+      )}
+
+      {/* Paging grid */}
+      {includePaging && (
+        <Grid item xs={includeSort ? 4 : 12}>
+          <Grid container>
+            <Text
+              bold
+              style={{ alignSelf: "end", margin: "auto 0px auto 5px" }}
+              color={"white"}
+            >
+              See
+            </Text>
+
+            <FormControl className={style.sortFormControl} style={{ width: "70px" }}>
               <Select
-                value={sortOption}
+                value={pageSize}
                 variant="outlined"
                 classes={{ icon: style.selectIcon }}
                 className={style.select}
-                onChange={onSortOptionChange}
+                onChange={(e, value) =>
+                  onPageSizeChange ? onPageSizeChange(e.target.value as number) : {}
+                }
               >
-                {sortOptions.map((option, i) => (
+                {pageSizeOptions.map((option, i) => (
                   <MenuItem
                     classes={{ root: style.menuItemSelect }}
                     key={i}
@@ -190,43 +233,9 @@ export function SortPageSize({
                 ))}
               </Select>
             </FormControl>
-
-            <Divider
-              orientation="vertical"
-              style={{ background: "white", margin: "0px 10px" }}
-            />
-          </ThemeProvider>
+          </Grid>
         </Grid>
-      </Grid>
-
-      {/* Paging grid */}
-      <Grid item xs={4}>
-        <Grid container>
-          <Text
-            bold
-            style={{ alignSelf: "end", margin: "auto 0px auto auto" }}
-            color={"white"}
-          >
-            See
-          </Text>
-
-          <FormControl className={style.sortFormControl} style={{ width: "70px" }}>
-            <Select
-              value={pageSize}
-              variant="outlined"
-              classes={{ icon: style.selectIcon }}
-              className={style.select}
-              onChange={onPageSizeChange}
-            >
-              {pageSizeOptions.map((option, i) => (
-                <MenuItem classes={{ root: style.menuItemSelect }} key={i} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+      )}
     </Grid>
   );
 }

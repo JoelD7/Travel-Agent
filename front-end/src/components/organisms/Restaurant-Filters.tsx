@@ -79,7 +79,7 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
   }
 
   function filterByCuisines(filteredCuisines: RestaurantCuisine[]) {
-    fetchRestaurants(currentCity.lat, currentCity.lon, filteredCuisines)
+    fetchRestaurants(currentCity.lat, currentCity.lon, undefined,undefined ,filteredCuisines)
       .then((res) => {
         dispatch(setRestaurants(res.data.businesses));
         dispatch(updateRestaurantCheckedCuisines(filteredCuisines));

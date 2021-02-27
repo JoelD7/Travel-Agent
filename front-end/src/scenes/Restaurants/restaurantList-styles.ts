@@ -44,6 +44,9 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     borderRadius: "5px",
     padding: "15px",
   },
+  pagination: {
+    margin: "20px 0px 40px auto",
+  },
   pageTitleContainer: {
     height: "55vh",
     backgroundImage:
@@ -94,5 +97,9 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
       backgroundColor: "rgba(0,0,0,0)",
       textDecoration: "underline black solid",
     },
+  },
+  topSorter: {
+    margin: "0px auto 0px 0px !important",
+    height: "max-content",
   },
 }));

@@ -1485,7 +1485,9 @@ export const restaurantCategories: RestaurantCategories[] = [
 export function fetchRestaurants(
   latitude: string,
   longitude: string,
-  cuisines?: RestaurantCuisine[]
+  limit: number = 0,
+  offset: number = 0,
+  cuisines?: RestaurantCuisine[],
 ) {
   let cuisinesList = "";
 
@@ -1502,6 +1504,8 @@ export function fetchRestaurants(
       categories: cuisinesList,
       latitude,
       longitude,
+      limit,
+offset,
     },
   });
 }

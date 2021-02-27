@@ -229,7 +229,6 @@ export function Flight_List() {
   const [sortOption, setSortOption] = useState<string>("Price");
 
   const [page, setPage] = useState<number>(0);
-  console.log("Page: ", page);
   const [pageSize, setPageSize] = useState<number>(20);
   const pageSizeOptions = [20, 30, 40];
 
@@ -920,7 +919,7 @@ export function Flight_List() {
                   pageSizeOptions={pageSizeOptions}
                   sortOption={sortOption}
                   sortOptions={sortOptions}
-                  onPageSizeChange={(e) => onPageSizeChange(e.target.value as number)}
+                  onPageSizeChange={(value) => onPageSizeChange(value)}
                   onSortOptionChange={(e) => onSortOptionChange(e.target.value as string)}
                 />
               </Grid>
@@ -937,9 +936,9 @@ export function Flight_List() {
                 </Grid>
               )}
 
-              {!loadingOnMount && (  
+              {!loadingOnMount && (
                 <Grid item xs={12} style={loading ? { filter: "blur(4px)" } : {}}>
-                  {flights 
+                  {flights
                     .slice(page * pageSize, page * pageSize + pageSize)
                     .map((flight, i) => (
                       <CardFlight variant="regular" key={i} flight={flight} />

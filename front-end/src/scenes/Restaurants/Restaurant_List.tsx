@@ -1,17 +1,19 @@
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { Grid } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CustomButton,
   Navbar,
   NotAvailableCard,
+  Pagination,
   ProgressCircle,
   RestaurantCard,
   RestaurantFilters,
   RestaurantSlides,
   ServicesToolbar,
+  SortPageSize,
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
@@ -65,40 +67,51 @@ export function Restaurant_List() {
   const [loading, setLoading] = useState(false);
   const [noRestaurants, setNoRestaurants] = useState(false);
 
+  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(20);
+  const pageSizeOptions = [20, 30, 40];
+
   const dispatch = useDispatch();
 
+  const topRestaurantAnchorEl = useRef(null);
+  const topRestaurantId = "topRestaurantId";
+
   useEffect(() => {
-    if (!areRestaurantsAlreadyFetched(currentCity.city)) {
-      if (!loading) {
-        setLoading(true);
-      }
+    if (!loading) {
+      setLoading(true);
+    }
 
-      fetchRestaurants(currentCity.lat, currentCity.lon)
-        .then((res) => {
-          let restaurantsRes: RestaurantSearch[] = res.data.businesses;
+    fetchRestaurants(currentCity.lat, currentCity.lon, pageSize, page * pageSize)
+      .then((res) => {
+        let restaurantsRes: RestaurantSearch[] = res.data.businesses;
+        let resTotal = Number(res.data.total);
 
-          dispatch(setRestaurants(restaurantsRes));
-          dispatch(setAllRestaurants(restaurantsRes));
-          dispatch(addRestaurantCuisines(cuisines, restaurantsRes));
-          dispatch(addRestaurantFeatures(features, restaurantsRes));
+        setTotal(resTotal > 1000 ? 1000 : resTotal);
 
-          if (restaurantsRes.length === 0) {
-            setNoRestaurants(true);
-          } else if (noRestaurants) {
-            setNoRestaurants(false);
-          }
+        dispatch(setRestaurants(restaurantsRes));
+        // dispatch(setAllRestaurants(restaurantsRes));
+        dispatch(addRestaurantCuisines(cuisines, restaurantsRes));
+        dispatch(addRestaurantFeatures(features, restaurantsRes));
 
+        if (restaurantsRes.length === 0) {
+          setNoRestaurants(true);
+        } else if (noRestaurants) {
+          setNoRestaurants(false);
+        }
+
+        if (page === 0) {
           setDeliveryRestaurants(filterByFeature("delivery", restaurantsRes));
           setPickupRestaurants(filterByFeature("pickup", restaurantsRes));
           setReservationRestaurants(
             filterByFeature("restaurant_reservation", restaurantsRes)
           );
+        }
 
-          setLoading(false);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, [currentCity]);
+        setLoading(false);
+      })
+      .catch((error) => console.log(error));
+  }, [currentCity, page, pageSize]);
 
   function areRestaurantsAlreadyFetched(city: string) {
     if (allRestaurants.length === 0) {
@@ -107,160 +120,9 @@ export function Restaurant_List() {
 
     let fetchedCity: string = restaurants[0].location.city;
     if (fetchedCity === city) {
-      console.log("true");
       return true;
     }
   }
-
-  const [state, setState] = useState<Restaurant_List>({
-    city: "Santo Domingo",
-    establishments: [
-      { name: "Bakery", checked: false },
-      { name: "Bar", checked: false },
-      { name: "Bistro", checked: false },
-      { name: "Brewery", checked: false },
-      { name: "Café", checked: false },
-      { name: "Casual Dining", checked: false },
-      { name: "Club", checked: false },
-      { name: "Coffee Shop", checked: false },
-      { name: "Deli", checked: false },
-      { name: "Dessert Parlour", checked: false },
-      { name: "Diner", checked: false },
-      { name: "Fast Casual", checked: false },
-      { name: "Fast Food", checked: false },
-      { name: "Fine Dining", checked: false },
-      { name: "Lounge", checked: false },
-      { name: "Pizzeria", checked: false },
-      { name: "Pub", checked: false },
-      { name: "Quick Bites", checked: false },
-      { name: "Sandwich Shop", checked: false },
-      { name: "Wine Bar", checked: false },
-    ],
-    cuisines: [
-      {
-        name: "Afghan",
-        checked: false,
-      },
-      {
-        name: "Afghani",
-        checked: false,
-      },
-      {
-        name: "African",
-        checked: false,
-      },
-      {
-        name: "American",
-        checked: false,
-      },
-      {
-        name: "Amish",
-        checked: false,
-      },
-      {
-        name: "Argentine",
-        checked: false,
-      },
-      {
-        name: "Armenian",
-        checked: false,
-      },
-      {
-        name: "Asian",
-        checked: false,
-      },
-      {
-        name: "Australian",
-        checked: false,
-      },
-      {
-        name: "Austrian",
-        checked: false,
-      },
-      {
-        name: "Bubble Tea",
-        checked: false,
-      },
-      {
-        name: "Burger",
-        checked: false,
-      },
-      {
-        name: "Burmese",
-        checked: false,
-      },
-      {
-        name: "California",
-        checked: false,
-      },
-      {
-        name: "Cambodian",
-        checked: false,
-      },
-      {
-        name: "Mughlai",
-        checked: false,
-      },
-      {
-        name: "Nepalese",
-        checked: false,
-      },
-    ],
-    features: [
-      {
-        name: "Delivery",
-        checked: false,
-      },
-      {
-        name: "Dine-out",
-        checked: false,
-      },
-      {
-        name: "Nightlife",
-        checked: false,
-      },
-      {
-        name: "Catching-up",
-        checked: false,
-      },
-      {
-        name: "Takeaway",
-        checked: false,
-      },
-      {
-        name: "Cafes",
-        checked: false,
-      },
-      {
-        name: "Daily Menus",
-        checked: false,
-      },
-      {
-        name: "Breakfast",
-        checked: false,
-      },
-      {
-        name: "Lunch",
-        checked: false,
-      },
-      {
-        name: "Dinner",
-        checked: false,
-      },
-      {
-        name: "Pubs & Bars",
-        checked: false,
-      },
-      {
-        name: "Pocket Friendly Delivery",
-        checked: false,
-      },
-      {
-        name: "Clubs & Lounges",
-        checked: false,
-      },
-    ],
-  });
 
   /**
    * Returns 'white' if none of the restaurant slides
@@ -269,11 +131,25 @@ export function Restaurant_List() {
    * image as background.
    */
   function getTitleColor() {
-    return deliveryRestaurants.length === 0 &&
+    return (deliveryRestaurants.length === 0 &&
       pickupRestaurants.length === 0 &&
-      reservationRestaurants.length === 0
+      reservationRestaurants.length === 0) ||
+      page > 0
       ? "white"
       : "black";
+  }
+
+  function onPageChange(newPage: number) {
+    //@ts-ignore
+    topRestaurantAnchorEl.current.click();
+    setTimeout(() => setPage(newPage - 1), 250);
+  }
+
+  function onPageSizeChange(value: number) {
+    setPageSize(value);
+    //@ts-ignore
+    topRestaurantAnchorEl.current.click();
+    setTimeout(() => setPage(0), 250);
   }
 
   return (
@@ -283,6 +159,7 @@ export function Restaurant_List() {
       </Helmet>
 
       <Navbar />
+      <a ref={topRestaurantAnchorEl} href={`#${topRestaurantId}`} hidden></a>
 
       <div>
         <Grid container className={style.pageTitleContainer}>
@@ -331,7 +208,7 @@ export function Restaurant_List() {
               </NotAvailableCard>
             ) : (
               <>
-                {deliveryRestaurants.length > 0 && (
+                {deliveryRestaurants.length > 0 && page === 0 && (
                   <RestaurantSlides
                     loading={loading}
                     restaurants={deliveryRestaurants}
@@ -339,7 +216,7 @@ export function Restaurant_List() {
                   />
                 )}
 
-                {pickupRestaurants.length > 0 && (
+                {pickupRestaurants.length > 0 && page === 0 && (
                   <RestaurantSlides
                     loading={loading}
                     restaurants={filterByFeature("pickup", restaurants)}
@@ -347,7 +224,7 @@ export function Restaurant_List() {
                   />
                 )}
 
-                {reservationRestaurants.length > 0 && (
+                {reservationRestaurants.length > 0 && page === 0 && (
                   <RestaurantSlides
                     loading={loading}
                     restaurants={filterByFeature("restaurant_reservation", restaurants)}
@@ -356,6 +233,7 @@ export function Restaurant_List() {
                 )}
 
                 <Text
+                  id={topRestaurantId}
                   style={{ margin: "50px 0px 20px 0px" }}
                   weight={500}
                   component="h2"
@@ -363,6 +241,24 @@ export function Restaurant_List() {
                   color={getTitleColor()}
                 >{`Top Restaurants in ${currentCity.city}`}</Text>
                 <div className={style.restaurantCardContainer}>
+                  <Grid container>
+                    <SortPageSize
+                      includeSort={false}
+                      pageSize={pageSize}
+                      className={style.topSorter}
+                      pageSizeOptions={pageSizeOptions}
+                      onPageSizeChange={(value) => onPageSizeChange(value)}
+                    />
+
+                    <Pagination
+                      className={style.pagination}
+                      page={page}
+                      onChange={(e, page) => onPageChange(page)}
+                      pageCount={Math.ceil(total / pageSize)}
+                    />
+                  </Grid>
+
+                  {/* ProgressCircle */}
                   {loading && (
                     <Grid
                       container
@@ -372,11 +268,21 @@ export function Restaurant_List() {
                       <ProgressCircle />
                     </Grid>
                   )}
+
                   <div style={loading ? { filter: "blur(4px)" } : {}}>
                     {restaurants.map((restaurant, i) => (
                       <RestaurantCard key={i} restaurant={restaurant} />
                     ))}
                   </div>
+
+                  <Grid container>
+                    <Pagination
+                      className={style.pagination}
+                      page={page}
+                      onChange={(e, page) => onPageChange(page)}
+                      pageCount={Math.ceil(total / pageSize)}
+                    />
+                  </Grid>
                 </div>
               </>
             )}

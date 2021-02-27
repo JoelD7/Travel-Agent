@@ -24,7 +24,7 @@ const initialState: RestaurantSlice = {
   checkedCuisines: [],
   allRestaurants: [],
   loadingRestaurants: true,
-  restaurants: restaurantsPlaceholder,
+  restaurants: [],
 };
 
 const restaurantSlice = createSlice({

@@ -875,9 +875,7 @@ export function Hotels() {
                         pageSizeOptions={pageSizeOptions}
                         sortOption={sortOption}
                         sortOptions={sortOptions}
-                        onPageSizeChange={(e) =>
-                          onPageSizeChange(e.target.value as number)
-                        }
+                        onPageSizeChange={(value) => onPageSizeChange(value)}
                         onSortOptionChange={(e) =>
                           onSortOptionChange(e.target.value as string)
                         }
@@ -919,7 +917,7 @@ export function Hotels() {
                   {/* Pagination */}
                   {!loadingOnMount && (
                     <Pagination
-                    page={page}
+                      page={page}
                       pageCount={getPageCount()}
                       className={style.pagination}
                       onChange={(e, page) => onPageChange(page)}
