@@ -41,7 +41,6 @@ export function RestaurantCuisinesSelec({
         return { ...cuisine };
       }
     });
-
     updateState(newSelectedCuisines);
   }
 

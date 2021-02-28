@@ -8,6 +8,15 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     width: "95%",
     margin: "auto 5px",
   },
+  drawer: {
+    width: "250px",
+    backgroundColor: "transparent",
+    fontFamily: Family,
+    padding: "10px",
+    "&.MuiPaper-elevation16": {
+      boxShadow: "2px 2px 3px rgba(0,0,0,0)",
+    },
+  },
   mainContainer: {
     fontFamily: Font.Family,
     backgroundColor: Colors.BACKGROUND,

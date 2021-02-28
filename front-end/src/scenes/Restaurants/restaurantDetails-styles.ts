@@ -10,10 +10,10 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
   pageContentContainer: {
     width: "85%",
     margin: "auto auto 50px auto",
-    backgroundColor: 'white',
-    borderRadius: '5px',
+    backgroundColor: "white",
+    borderRadius: "5px",
     boxShadow: Shadow.LIGHT,
-    padding: '10px',
+    padding: "10px",
   },
   detailsGrid: {
     [theme.breakpoints.down(910)]: {
@@ -36,9 +36,16 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     marginLeft: "10px",
     height: "500px",
   },
+  progressCircleContainer: {
+    display: "flex",
+    margin: "auto",
+    position: "absolute",
+    left: "50vw",
+    top: "50vh",
+  },
   restaurantImage: {
     objectFit: "cover",
-    width: '100%',
+    width: "100%",
     height: "100%",
     margin: "auto",
   },

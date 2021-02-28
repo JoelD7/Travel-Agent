@@ -1,28 +1,27 @@
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { Grid } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
-import { batch, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { batchActions } from "redux-batched-actions";
 import {
-  CustomButton,
   Navbar,
   NotAvailableCard,
   Pagination,
   ProgressCircle,
   RestaurantCard,
+  RestaurantFilterDrawer,
   RestaurantFilters,
   RestaurantSlides,
   ServicesToolbar,
   SortPageSize,
   Text,
 } from "../../components";
-import { Colors, Shadow } from "../../styles";
+import { Shadow } from "../../styles";
 import {
   filterByFeature,
-  restaurantsPlaceholder,
-  selectAllRestaurants,
+  hasAny,
   selectCurrentCity,
+  selectLoadingRestaurants,
   selectRestaurantCuisines,
   selectRestaurantFeatures,
   selectRestaurants,
@@ -32,6 +31,7 @@ import {
   addRestaurantCuisines,
   addRestaurantFeatures,
   setAllRestaurants,
+  setLoadingRestaurants,
   setRestaurants,
 } from "../../utils/store/restaurant-slice";
 import { IATALocation } from "../../utils/types/location-types";
@@ -46,8 +46,6 @@ interface Restaurant_List {
 
 export function Restaurant_List() {
   const style = restaurantListStyles();
-
-  const [openDrawer, setOpenDrawer] = useState(false);
 
   const currentCity: IATALocation = useSelector(selectCurrentCity);
   const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
@@ -65,7 +63,8 @@ export function Restaurant_List() {
   const cuisines: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
   const features: RestaurantFilter[] = useSelector(selectRestaurantFeatures);
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const loading: boolean = useSelector(selectLoadingRestaurants);
   const [noRestaurants, setNoRestaurants] = useState(false);
 
   const [total, setTotal] = useState<number>(0);
@@ -80,21 +79,27 @@ export function Restaurant_List() {
 
   useEffect(() => {
     if (!loading) {
-      setLoading(true);
+      dispatch(setLoadingRestaurants(true));
     }
 
     fetchRestaurants(currentCity.lat, currentCity.lon, pageSize, page * pageSize)
       .then((res) => {
         let restaurantsRes: RestaurantSearch[] = res.data.businesses;
-        let resTotal = Number(res.data.total);
 
+        let resTotal = Number(res.data.total);
         setTotal(resTotal > 1000 ? 1000 : resTotal);
+
+        if (areFeaturesSelected()) {
+          filterRestaurantsByFeatures(restaurantsRes);
+        }
 
         dispatch(
           batchActions([
             setRestaurants(restaurantsRes),
+            setAllRestaurants(restaurantsRes),
             addRestaurantCuisines(cuisines, restaurantsRes),
             addRestaurantFeatures(features, restaurantsRes),
+            setLoadingRestaurants(false),
           ])
         );
 
@@ -103,15 +108,36 @@ export function Restaurant_List() {
         } else if (noRestaurants) {
           setNoRestaurants(false);
         }
-
-        if (page === 0) {
-          setRestaurantSlides(restaurantsRes);
-        }
-
-        setLoading(false);
       })
       .catch((error) => console.log(error));
   }, [currentCity, page, pageSize]);
+
+  /**
+   * The restaurant slides actually depend only on the
+   * currently displayed restaurants.
+   *
+   * If the displayed restaurants are modified by
+   * a filter, this code ensures that the slides are
+   * updated.
+   */
+  useEffect(() => {
+    if (page === 0) {
+      setRestaurantSlides(restaurants);
+    }
+  }, [restaurants]);
+
+  function filterRestaurantsByFeatures(restaurantsRes: RestaurantSearch[]) {
+    let selectedFeatures: string[] = features.map((f) => f.name);
+
+    restaurantsRes.filter((restaurant: RestaurantSearch) => {
+      let resFeatures: string[] = restaurant.transactions;
+      return hasAny(resFeatures, selectedFeatures);
+    });
+  }
+
+  function areFeaturesSelected() {
+    return features.filter((ft) => ft.checked).length > 0;
+  }
 
   function setRestaurantSlides(restaurantsRes: RestaurantSearch[]) {
     let deliveryRestaurantsBuf: RestaurantSearch[] = [];
@@ -198,19 +224,12 @@ export function Restaurant_List() {
         <Grid container spacing={2} className={style.pageContentContainer}>
           {/* Filters */}
           <Grid item className={style.filterGrid}>
-            <RestaurantFilters setLoading={(value) => setLoading(value)} />
+            <RestaurantFilters setLoading={(value) => {}} />
           </Grid>
 
           {/* Filter button */}
           <Grid item className={style.filterButtonGrid}>
-            <CustomButton
-              icon={faFilter}
-              backgroundColor={Colors.PURPLE}
-              style={{ paddingLeft: "10px", fontSize: "14px" }}
-              onClick={() => setOpenDrawer(true)}
-            >
-              Filters
-            </CustomButton>
+            <RestaurantFilterDrawer />
           </Grid>
 
           {/* Restaurants */}
@@ -302,6 +321,15 @@ export function Restaurant_List() {
           </Grid>
         </Grid>
       </div>
+
+      {/* <Drawer
+        open={openDrawer}
+        anchor="left"
+        onClose={() => setOpenDrawer(false)}
+        classes={{ root: style.drawer, paper: style.drawer }}
+      >
+        <RestaurantFilters setLoading={(value) => setLoading(value)} />
+      </Drawer> */}
     </div>
   );
 }

@@ -1,6 +1,12 @@
 import { restaurantDetailsStyles } from "./restaurantDetails-styles";
 import React, { useEffect, useState } from "react";
-import { CustomButton, IconText, Navbar, ServicesToolbar } from "../../components";
+import {
+  CustomButton,
+  IconText,
+  Navbar,
+  ProgressCircle,
+  ServicesToolbar,
+} from "../../components";
 import { useParams } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import Ratings from "react-ratings-declarative";
@@ -18,13 +24,16 @@ import { fetchRestaurant } from "../../utils/external-apis/yelp-apis";
 export function RestaurantDetails() {
   const style = restaurantDetailsStyles();
   const { id } = useParams<any>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [restaurant, setRestaurant] = useState<Restaurant>(restaurantPlaceholder);
+  const amenities: string = getRestaurantTransactions(restaurant);
 
   useEffect(() => {
     fetchRestaurant(id)
       .then((res) => {
         setRestaurant(res.data);
+        setLoading(false);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -38,7 +47,18 @@ export function RestaurantDetails() {
       <Navbar />
       <ServicesToolbar />
 
-      <Grid container spacing={2} className={style.pageContentContainer}>
+      {loading && (
+        <div className={style.progressCircleContainer}>
+          <ProgressCircle />
+        </div>
+      )}
+
+      <Grid
+        container
+        spacing={2}
+        className={style.pageContentContainer}
+        style={loading ? { filter: "blur(4px)" } : {}}
+      >
         <Grid item xs={12}>
           <h1 style={{ marginBottom: "0px" }}>{restaurant.name}</h1>
           <Ratings
@@ -109,10 +129,12 @@ export function RestaurantDetails() {
               Click here
             </a>
 
-            <h4 style={{ marginBottom: "0px" }}>Amenities</h4>
-            <p style={{ marginTop: "5px", fontSize: "15px" }}>
-              {getRestaurantTransactions(restaurant)}
-            </p>
+            {amenities !== "" && (
+              <>
+                <h4 style={{ marginBottom: "0px" }}>Amenities</h4>
+                <p style={{ marginTop: "5px", fontSize: "15px" }}>{amenities}</p>
+              </>
+            )}
           </div>
         </Grid>
       </Grid>

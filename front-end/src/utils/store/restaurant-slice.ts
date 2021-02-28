@@ -91,6 +91,12 @@ const restaurantSlice = createSlice({
         };
       },
     },
+    updateRestaurantFeatures(state, action: PayloadAction<RestaurantFilter[]>) {
+      state.features = action.payload;
+    },
+    updateRestaurantCuisines(state, action: PayloadAction<RestaurantCuisine[]>) {
+      state.cuisines = action.payload;
+    },
     updateRestaurantCheckedFeatures(state, action: PayloadAction<RestaurantFilter[]>) {
       state.checkedFeatures = action.payload;
     },
@@ -117,6 +123,8 @@ export const {
   addRestaurantCuisines,
   updateRestaurantCheckedFeatures,
   updateRestaurantCheckedCuisines,
+  updateRestaurantFeatures,
+  updateRestaurantCuisines,
 } = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;
