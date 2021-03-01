@@ -82,6 +82,24 @@ export function Restaurant_List() {
       dispatch(setLoadingRestaurants(true));
     }
 
+    loadRestaurants();
+  }, [currentCity, page, pageSize]);
+
+  /**
+   * The restaurant slides actually depend only on the
+   * currently displayed restaurants.
+   *
+   * If the displayed restaurants are modified by
+   * a filter, this code ensures that the slides are
+   * updated.
+   */
+  useEffect(() => {
+    if (page === 0) {
+      setRestaurantSlides(restaurants);
+    }
+  }, [restaurants]);
+
+  function loadRestaurants() {
     fetchRestaurants(currentCity.lat, currentCity.lon, pageSize, page * pageSize)
       .then((res) => {
         let restaurantsRes: RestaurantSearch[] = res.data.businesses;
@@ -110,21 +128,7 @@ export function Restaurant_List() {
         }
       })
       .catch((error) => console.log(error));
-  }, [currentCity, page, pageSize]);
-
-  /**
-   * The restaurant slides actually depend only on the
-   * currently displayed restaurants.
-   *
-   * If the displayed restaurants are modified by
-   * a filter, this code ensures that the slides are
-   * updated.
-   */
-  useEffect(() => {
-    if (page === 0) {
-      setRestaurantSlides(restaurants);
-    }
-  }, [restaurants]);
+  }
 
   function filterRestaurantsByFeatures(restaurantsRes: RestaurantSearch[]) {
     let selectedFeatures: string[] = features.map((f) => f.name);
@@ -240,40 +244,49 @@ export function Restaurant_List() {
               </NotAvailableCard>
             ) : (
               <>
-                {deliveryRestaurants.length > 0 && page === 0 && (
-                  <RestaurantSlides
-                    loading={loading}
-                    restaurants={deliveryRestaurants}
-                    title="Delivery Available"
-                  />
-                )}
+                {/* Slides */}
+                {page === 0 && (
+                  <div style={{ marginBottom: "50px" }}>
+                    {deliveryRestaurants.length > 0 && page === 0 && (
+                      <RestaurantSlides
+                        loading={loading}
+                        restaurants={deliveryRestaurants}
+                        title="Delivery Available"
+                      />
+                    )}
 
-                {pickupRestaurants.length > 0 && page === 0 && (
-                  <RestaurantSlides
-                    loading={loading}
-                    restaurants={filterByFeature("pickup", restaurants)}
-                    title="Pickup"
-                  />
-                )}
+                    {pickupRestaurants.length > 0 && page === 0 && (
+                      <RestaurantSlides
+                        loading={loading}
+                        restaurants={filterByFeature("pickup", restaurants)}
+                        title="Pickup"
+                      />
+                    )}
 
-                {reservationRestaurants.length > 0 && page === 0 && (
-                  <RestaurantSlides
-                    loading={loading}
-                    restaurants={filterByFeature("restaurant_reservation", restaurants)}
-                    title="Reservation"
-                  />
+                    {reservationRestaurants.length > 0 && page === 0 && (
+                      <RestaurantSlides
+                        loading={loading}
+                        restaurants={filterByFeature(
+                          "restaurant_reservation",
+                          restaurants
+                        )}
+                        title="Reservation"
+                      />
+                    )}
+                  </div>
                 )}
 
                 <Text
                   id={topRestaurantId}
-                  style={{ margin: "50px 0px 20px 0px" }}
+                  style={{ marginBottom: "20px" }}
                   weight={500}
                   component="h2"
                   bold
                   color={getTitleColor()}
                 >{`Top Restaurants in ${currentCity.city}`}</Text>
+
                 <div className={style.restaurantCardContainer}>
-                  <Grid container>
+                  <Grid container style={{ marginTop: "15px" }}>
                     <SortPageSize
                       includeSort={false}
                       pageSize={pageSize}
@@ -321,15 +334,6 @@ export function Restaurant_List() {
           </Grid>
         </Grid>
       </div>
-
-      {/* <Drawer
-        open={openDrawer}
-        anchor="left"
-        onClose={() => setOpenDrawer(false)}
-        classes={{ root: style.drawer, paper: style.drawer }}
-      >
-        <RestaurantFilters setLoading={(value) => setLoading(value)} />
-      </Drawer> */}
     </div>
   );
 }

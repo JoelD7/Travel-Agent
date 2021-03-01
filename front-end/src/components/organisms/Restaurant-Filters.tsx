@@ -58,15 +58,17 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
   function applyFilters() {
     dispatch(setLoadingRestaurants(true));
 
-    let filteredFeatures: RestaurantFilter[] = features.filter((f) => f.checked);
-    if (filteredFeatures.length > 0) {
-      filterByFeatures(filteredFeatures);
-    }
+    setTimeout(() => {
+      let filteredFeatures: RestaurantFilter[] = features.filter((f) => f.checked);
+      if (filteredFeatures.length > 0) {
+        filterByFeatures(filteredFeatures);
+      }
 
-    let filteredCuisines: RestaurantCuisine[] = cuisines.filter((c) => c.checked);
-    if (filteredCuisines.length > 0) {
-      filterByCuisines(filteredCuisines);
-    }
+      let filteredCuisines: RestaurantCuisine[] = cuisines.filter((c) => c.checked);
+      if (filteredCuisines.length > 0) {
+        filterByCuisines(filteredCuisines);
+      }
+    }, 250);
   }
 
   function filterByFeatures(filteredFeatures: RestaurantFilter[]) {

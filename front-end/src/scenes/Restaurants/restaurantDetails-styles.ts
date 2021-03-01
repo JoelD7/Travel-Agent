@@ -28,6 +28,7 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     backgroundColor: Colors.BLUE,
     boxShadow: Shadow.LIGHT,
   },
+
   imageGrid: {
     [theme.breakpoints.down(910)]: {
       width: "100%",
@@ -45,8 +46,9 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
   },
   restaurantImage: {
     objectFit: "cover",
-    width: "100%",
-    height: "100%",
+    width: "95%",
+    maxHeight: "490px",
+    borderRadius: "5px",
     margin: "auto",
   },
   tripButtonGrid: {
@@ -55,5 +57,10 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
       margin: "10px auto auto auto",
       width: "100%",
     },
+  },
+  slider: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
   },
 }));

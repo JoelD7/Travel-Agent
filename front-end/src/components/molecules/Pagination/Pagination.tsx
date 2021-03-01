@@ -18,6 +18,11 @@ export function Pagination({ pageCount, page, className, onChange }: Pagination)
       fontFamily: Font.Family,
     },
     paginationItemPage: {
+      backgroundColor: "white",
+      "&:hover": {
+        backgroundColor: Colors.BLUE_HOVER,
+        color: "white",
+      },
       "&.Mui-selected": {
         backgroundColor: Colors.BLUE,
         color: "white",

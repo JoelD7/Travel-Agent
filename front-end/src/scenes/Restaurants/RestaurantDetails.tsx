@@ -6,6 +6,7 @@ import {
   Navbar,
   ProgressCircle,
   ServicesToolbar,
+  SliderArrow,
 } from "../../components";
 import { useParams } from "react-router-dom";
 import { Grid } from "@material-ui/core";
@@ -20,6 +21,7 @@ import {
   restaurantPlaceholder,
 } from "../../utils";
 import { fetchRestaurant } from "../../utils/external-apis/yelp-apis";
+import Slider from "react-slick";
 
 export function RestaurantDetails() {
   const style = restaurantDetailsStyles();
@@ -28,6 +30,13 @@ export function RestaurantDetails() {
 
   const [restaurant, setRestaurant] = useState<Restaurant>(restaurantPlaceholder);
   const amenities: string = getRestaurantTransactions(restaurant);
+
+  const sliderSettings = {
+    className: style.slider,
+    nextArrow: <SliderArrow direction="right" />,
+    prevArrow: <SliderArrow direction="left" />,
+    slidesToShow: 1,
+  };
 
   useEffect(() => {
     fetchRestaurant(id)
@@ -59,6 +68,7 @@ export function RestaurantDetails() {
         className={style.pageContentContainer}
         style={loading ? { filter: "blur(4px)" } : {}}
       >
+        {/* Ratings */}
         <Grid item xs={12}>
           <h1 style={{ marginBottom: "0px" }}>{restaurant.name}</h1>
           <Ratings
@@ -74,6 +84,7 @@ export function RestaurantDetails() {
           </Ratings>
         </Grid>
 
+        {/* Location, phone, include in trip */}
         <Grid item xs={12}>
           <Grid container>
             <IconText
@@ -96,14 +107,19 @@ export function RestaurantDetails() {
           </Grid>
         </Grid>
 
+        {/* Images */}
         <Grid item className={style.imageGrid}>
-          <Grid container style={{ height: "100%" }}>
-            <img
-              src={restaurant.image_url}
-              className={style.restaurantImage}
-              alt="restaurant image"
-            />
-          </Grid>
+          <Slider {...sliderSettings}>
+            {restaurant.photos.map((photo) => (
+              <div key={photo}>
+                <img
+                  src={photo}
+                  className={style.restaurantImage}
+                  alt="restaurant image"
+                />
+              </div>
+            ))}
+          </Slider>
         </Grid>
 
         <Grid item className={style.detailsGrid}>
