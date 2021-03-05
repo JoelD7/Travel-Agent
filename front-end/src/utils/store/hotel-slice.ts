@@ -1,11 +1,16 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addDays } from "date-fns";
+import { addDays, format } from "date-fns";
 import { hotelPlaceholder } from "../placeholders";
-import { HotelBooking, HotelPax, HotelSearch } from "../types/hotel-types";
+import {
+  HotelBooking,
+  HotelBookingParams,
+  HotelPax,
+  HotelSearch,
+} from "../types/hotel-types";
 
 interface HotelReducer {
-  reservationParams: HotelSearch;
+  reservationParams: HotelBookingParams;
   hotelDetail: HotelBooking;
   allRoomAccordionsExpanded: boolean;
 }
@@ -14,15 +19,32 @@ const initialState: HotelReducer = {
   hotelDetail: hotelPlaceholder,
   allRoomAccordionsExpanded: false,
   reservationParams: {
-    checkIn: addDays(new Date(), 1),
-    checkOut: addDays(new Date(), 3),
-    adults: 2,
-    children: 0,
-    paxes: [],
-    rooms: 1,
-    priceRange: [0, 500],
-    stars: 0,
-    occupancyParamsChanged: false,
+    // occupancyParamsChanged: false,
+
+    stay: {
+      checkIn: addDays(new Date(), 1),
+      checkOut: addDays(new Date(), 3),
+    },
+    occupancies: [
+      {
+        adults: 2,
+        children: 0,
+        paxes: [],
+        rooms: 1,
+      },
+    ],
+
+    geolocation: {
+      longitude: 2.3522,
+      latitude: 48.8566,
+      radius: 15,
+      unit: "km",
+    },
+    filter: {
+      maxHotels: 250,
+      minCategory: 1,
+      minRate: 0,
+    },
   },
 };
 

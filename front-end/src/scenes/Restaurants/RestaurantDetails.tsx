@@ -9,7 +9,7 @@ import {
   SliderArrow,
 } from "../../components";
 import { useParams } from "react-router-dom";
-import { Grid } from "@material-ui/core";
+import { CardActionArea, Grid } from "@material-ui/core";
 import Ratings from "react-ratings-declarative";
 import { Colors, Shadow } from "../../styles";
 import { faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -111,7 +111,7 @@ export function RestaurantDetails() {
         <Grid item className={style.imageGrid}>
           <Slider {...sliderSettings}>
             {restaurant.photos.map((photo) => (
-              <div key={photo}>
+              <div key={photo} className={style.photoContainer}>
                 <img
                   src={photo}
                   className={style.restaurantImage}

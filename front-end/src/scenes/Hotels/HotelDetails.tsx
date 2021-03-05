@@ -7,15 +7,17 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { Backdrop, CardActionArea, Dialog, Divider, Grid } from "@material-ui/core";
-import { format, parseISO } from "date-fns";
-import React, { useRef, useState } from "react";
+import { differenceInHours, format, parseISO, subDays } from "date-fns";
+import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useParams, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
 import {
   CustomButton,
   IconText,
   Navbar,
+  ProgressCircle,
   Rating,
   RoomAccordion,
   ServicesToolbar,
@@ -24,16 +26,20 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
+  convertReservationParamsToURLParams,
   currencyFormatter,
   getHotelImages,
   getHotelStars,
+  hotelPlaceholder,
+  LocalStorageKeys,
   scrollToBottom,
   selectHotelDetail,
   selectHotelReservationParams,
   selectRoomAccordionExpanded,
 } from "../../utils";
-import { setRoomAccordionExpanded } from "../../utils/store/hotel-slice";
-import { HotelBooking } from "../../utils/types/hotel-types";
+import { getHotelDetails } from "../../utils/external-apis/hotelbeds-apis";
+import { setHotelDetail, setRoomAccordionExpanded } from "../../utils/store/hotel-slice";
+import { HotelBooking, HotelBookingParams } from "../../utils/types/hotel-types";
 import { hotelDetailsStyles } from "./hotelDetails-styles";
 
 interface RoomAccordion {
@@ -43,14 +49,28 @@ interface RoomAccordion {
 export function HotelDetails() {
   const style = hotelDetailsStyles();
   const hotel: HotelBooking = useSelector(selectHotelDetail);
+  // const [hotel, setHotel] = useState<HotelBooking>(hotelPlaceholder);
   const hotelPhotos = getHotelImages(hotel);
+
+  const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
+
+  const { id } = useParams<any>();
+  const location = useLocation();
+
+  const query = useQuery();
+
+  for (const pair of Array.from(query.entries())) {
+  }
+
+  for (const pair of Array.from(query.keys())) {
+  }
+
+  const [loading, setLoading] = useState<boolean>(true);
 
   const roomTitleId = "rooms";
   const roomAnchorEl = useRef(null);
 
   const dispatch = useDispatch();
-
-  const reservationParams = useSelector(selectHotelReservationParams);
 
   const [limitedAbout, setLimitedAbout] = useState(true);
 
@@ -89,17 +109,67 @@ export function HotelDetails() {
     initialSlide: initialImageSlide,
   };
 
+  useEffect(() => {
+    console.log(
+      "params: ",
+      convertReservationParamsToURLParams(reservationParams, "hotelDetails")
+    );
+    if (String(hotel.code) !== String(id)) {
+      getHotelDetails(id)
+        .then((res) => {
+          // setHotel(res.data.hotels[0]);
+          // console.log(JSON.stringify(res.data.hotels[0]));
+          setLoading(false);
+        })
+        .catch((error) => console.log("Error while fetching hotel details | ", error));
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  function useQuery() {
+    return new URLSearchParams(location.search);
+  }
+
   function getPhoneList() {
     return hotel.phones.map((phone) => phone.phoneNumber).join(" | ");
   }
 
+  function getHotelBooking() {
+    let hotelBookingString: string | null = localStorage.getItem(
+      LocalStorageKeys.HOTEL_BOOKING
+    );
+
+    let hotelBooking: HotelBooking | null =
+      hotelBookingString !== null ? JSON.parse(hotelBookingString) : null;
+
+    return hotelBooking;
+  }
+
+  function getHotelBookingLastUpdate() {
+    let lastUpdateString: string | null = localStorage.getItem(
+      LocalStorageKeys.HOTEL_BOOKING_LAST_UPDATE
+    );
+
+    return lastUpdateString === null
+      ? subDays(new Date(), 2)
+      : parseISO(lastUpdateString);
+  }
+
+  function areReservationParamsUpdated() {
+    let hotelBooking: HotelBooking | null = getHotelBooking();
+    let dateDifference = differenceInHours(new Date(), getHotelBookingLastUpdate());
+
+    return dateDifference >= 24 || hotelBooking === null;
+  }
+
   function getOccupancyText(param: "room" | "adult") {
-    let roomQty = reservationParams.rooms > 1 ? "rooms" : "room";
-    let adultQty = reservationParams.adults > 1 ? "adults" : "adult";
+    let roomQty = reservationParams.occupancies[0].rooms > 1 ? "rooms" : "room";
+    let adultQty = reservationParams.occupancies[0].adults > 1 ? "adults" : "adult";
 
     return param === "room"
-      ? `${reservationParams.rooms} ${roomQty}`
-      : `${reservationParams.adults} ${adultQty}`;
+      ? `${reservationParams.occupancies[0].rooms} ${roomQty}`
+      : `${reservationParams.occupancies[0].adults} ${adultQty}`;
   }
 
   function goToRoomOptions() {
@@ -134,7 +204,13 @@ export function HotelDetails() {
 
       <ServicesToolbar />
 
-      <div className={style.pageContainer}>
+      {loading && (
+        <div className={style.progressCircleContainer}>
+          <ProgressCircle />
+        </div>
+      )}
+
+      <div className={style.pageContainer} style={loading ? { filter: "blur(4px)" } : {}}>
         {/* Images slider */}
         <div style={{ marginBottom: "20px" }}>
           <Slider {...sliderSettings} dots>
@@ -276,12 +352,12 @@ export function HotelDetails() {
                 </IconText>
               </Grid>
 
-              {reservationParams.children > 0 && (
+              {reservationParams.occupancies[0].children > 0 && (
                 <Grid item xs={12}>
                   <IconText
                     icon={faChild}
                     fontSize={16}
-                  >{`${reservationParams.children} children`}</IconText>
+                  >{`${reservationParams.occupancies[0].children} children`}</IconText>
                 </Grid>
               )}
 

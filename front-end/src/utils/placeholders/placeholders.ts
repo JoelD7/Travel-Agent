@@ -2448,6 +2448,9 @@ export const hotelPlaceholder: HotelBooking = {
     },
   ],
   categoryCode: "3EST",
+  category: {
+    code: "3EST",
+  },
   categoryName: "3 STARS",
   destinationName: "Orlando Area - Florida - FL",
   countryCode: "US",

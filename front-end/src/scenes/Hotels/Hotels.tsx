@@ -24,7 +24,7 @@ import Axios, { AxiosResponse } from "axios";
 import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Family } from "../../assets/fonts";
 import {
   CustomButton,
@@ -43,6 +43,8 @@ import {
 import { Colors, Shadow } from "../../styles";
 import {
   capitalizeString,
+  convertReservationParamsToURLParams,
+  convertURLToReservationParams,
   getCityImage,
   getFindPlaceFromTextURL,
   getHotelImages,
@@ -50,6 +52,7 @@ import {
   getPhotoFromReferenceURL,
   HotelBedAPI,
   hotelsPlaceholder,
+  LocalStorageKeys,
   muiDateFormatter,
   Routes,
   selectHotelReservationParams,
@@ -59,6 +62,7 @@ import { setHotelDetail, updateReservationParams } from "../../utils/store/hotel
 import {
   HotelAvailability,
   HotelBooking,
+  HotelBookingParams,
   HotelPax,
   Occupancy,
 } from "../../utils/types/hotel-types";
@@ -71,6 +75,12 @@ interface AvailabilityParams {
 
 interface HotelCard {
   hotel: HotelBooking;
+}
+
+interface HotelSearchFilter {
+  stars: number;
+  priceRange: number[];
+  occupancyParamsChanged: boolean;
 }
 
 type SortOption =
@@ -192,7 +202,13 @@ export function Hotels() {
     },
   ];
 
-  const state = useSelector(selectHotelReservationParams);
+  const [state, setState] = useState<HotelSearchFilter>({
+    priceRange: [0, 500],
+    stars: 0,
+    occupancyParamsChanged: false,
+  });
+
+  const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
   const dispatch = useDispatch();
 
@@ -236,14 +252,34 @@ export function Hotels() {
   const [page, setPage] = useState(0);
 
   const history = useHistory();
+  const location = useLocation();
 
   const city = "Paris";
 
   useEffect(() => {
-    // searchHotels();
     getCityImage(city).then((res) => {
       setImage(String(res));
     });
+
+    // console.log(
+    //   "params: ",
+    //   convertReservationParamsToURLParams(reservationParams, "hotel")
+    // );
+    if (isURLWithParams()) {
+      console.log("url has params");
+
+      dispatch(
+        updateReservationParams(convertURLToReservationParams(location.search, "hotel"))
+      );
+    } else {
+      console.log("url doesn't have params");
+      history.push(
+        `${location.pathname}${convertReservationParamsToURLParams(
+          reservationParams,
+          "hotel"
+        )}`
+      );
+    }
   }, []);
 
   useEffect(() => {
@@ -255,8 +291,6 @@ export function Hotels() {
       .then((availabilityRes) => {
         let availability = availabilityRes.data.hotels;
         let hotelsForBooking: any[] = [];
-
-        // console.log("Response: ", JSON.stringify(availabilityRes.data));
 
         if (availability.hotels) {
           /**
@@ -280,6 +314,10 @@ export function Hotels() {
   }
 
   function fetchHotelAvailability() {
+    console.log(
+      "Reserv params in fetchHotelAvailability(): ",
+      JSON.stringify(reservationParams)
+    );
     const filter = {
       maxHotels: 250,
       //stars
@@ -287,25 +325,7 @@ export function Hotels() {
       minRate: state.priceRange[0],
     };
     const bookingParams = {
-      stay: {
-        checkIn: state.checkIn,
-        checkOut: state.checkOut,
-      },
-      occupancies: [
-        {
-          rooms: state.rooms,
-          adults: state.adults,
-          children: state.children,
-          paxes: state.paxes,
-        },
-      ],
-
-      geolocation: {
-        longitude: 2.3522,
-        latitude: 48.8566,
-        radius: 15,
-        unit: "km",
-      },
+      ...reservationParams,
       filter:
         state.priceRange[1] === maxRate
           ? filter
@@ -335,7 +355,6 @@ export function Hotels() {
         useSecondaryLanguage: false,
       },
     }).then((res) => {
-      console.log("Hotel details fetched: ", res.data.hotels.length);
       setHotels(res, availabilityParams);
     });
   }
@@ -364,7 +383,6 @@ export function Hotels() {
 
     hotelAvailabilityTemp = { ...hotelAvailabilityTemp, hotels: hotelsBuffer };
 
-    // console.log("Hotels: ", JSON.stringify(hotelAvailabilityTemp));
     setHotelAvailability(hotelAvailabilityTemp);
 
     if (hotelsMounted) {
@@ -426,6 +444,10 @@ export function Hotels() {
     }
   }
 
+  function isURLWithParams(): boolean {
+    return location.search !== "";
+  }
+
   function setMaximumPriceInRange(hotelsForBooking: any[]) {
     let sortedRates = hotelsForBooking
       .sort((a, b) => Number(a.minRate) - Number(b.minRate))
@@ -441,7 +463,11 @@ export function Hotels() {
   }
 
   function onHotelCardClick(hotel: HotelBooking) {
-    dispatch(setHotelDetail(hotel));
+    localStorage.setItem(LocalStorageKeys.HOTEL_BOOKING, JSON.stringify(hotel));
+    localStorage.setItem(
+      LocalStorageKeys.HOTEL_BOOKING_LAST_UPDATE,
+      JSON.stringify(new Date())
+    );
     history.push(`${Routes.HOTELS}/${hotel.code}`);
   }
 
@@ -566,23 +592,23 @@ export function Hotels() {
         updateReservationParams({
           children: value,
           paxes: paxes,
-          occupancyParamsChanged: true,
         })
       );
+      setState({ ...state, occupancyParamsChanged: true });
     } else {
       dispatch(
         updateReservationParams({
           [param.field]: value,
-          occupancyParamsChanged: true,
         })
       );
+      setState({ ...state, occupancyParamsChanged: true });
     }
   }
 
   function onChildAgeChanged(e: ChangeEvent<SelectEvent>, index: number) {
     let newPaxes: HotelPax[] = [];
 
-    newPaxes = state.paxes.map((pax: any, i) => {
+    newPaxes = reservationParams.occupancies[0].paxes.map((pax: any, i: any) => {
       if (i === index) {
         return { ...pax, age: e.target.value as number };
       }
@@ -614,10 +640,10 @@ export function Hotels() {
   }
 
   function getOccupancyText() {
-    let roomQty = state.rooms > 1 ? "rooms" : "room";
-    let adultQty = state.adults > 1 ? "adults" : "adult";
+    let roomQty = reservationParams.occupancies[0].rooms > 1 ? "rooms" : "room";
+    let adultQty = reservationParams.occupancies[0].adults > 1 ? "adults" : "adult";
 
-    return `${state.rooms} ${roomQty}, ${state.adults} ${adultQty}, ${state.children} children`;
+    return `${reservationParams.occupancies[0].rooms} ${roomQty}, ${reservationParams.occupancies[0].adults} ${adultQty}, ${reservationParams.occupancies[0].children} children`;
   }
 
   function onSortOptionChange(option: string) {
@@ -755,7 +781,7 @@ export function Hotels() {
                     <Grid item className={style.datepickerItemGrid}>
                       <h5 className={style.whiteParamText}>Check-in</h5>
                       <KeyboardDatePicker
-                        value={state.checkIn}
+                        value={reservationParams.stay.checkIn}
                         labelFunc={muiDateFormatter}
                         className={style.datepicker}
                         minDate={new Date()}
@@ -767,7 +793,7 @@ export function Hotels() {
                     <Grid item className={style.datepickerItemGrid}>
                       <h5 className={style.whiteParamText}>Check-out</h5>
                       <KeyboardDatePicker
-                        value={state.checkOut}
+                        value={reservationParams.stay.checkOut}
                         labelFunc={muiDateFormatter}
                         className={style.datepicker}
                         minDate={new Date()}
@@ -987,7 +1013,7 @@ export function Hotels() {
                   style={{ width: "45%", marginLeft: "auto" }}
                 >
                   <Select
-                    value={state[param.field]}
+                    value={reservationParams.occupancies[0][param.field]}
                     style={{ height: "30px" }}
                     classes={{ icon: style.selectIcon }}
                     variant="outlined"
@@ -1005,9 +1031,11 @@ export function Hotels() {
 
           {/* Children ages */}
           <div>
-            {state.paxes.length > 0 && <Divider style={{ margin: "15px auto" }} />}
+            {reservationParams.occupancies[0].paxes.length > 0 && (
+              <Divider style={{ margin: "15px auto" }} />
+            )}
 
-            {state.paxes.map((pax, i) => (
+            {reservationParams.occupancies[0].paxes.map((pax, i) => (
               <Grid key={i} item style={{ marginBottom: "10px" }}>
                 <Grid container>
                   {/* Icon */}

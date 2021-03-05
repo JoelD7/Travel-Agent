@@ -19,7 +19,7 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(910)]: {
       width: "100%",
     },
-    width: "60%",
+    width: "57%",
     color: "white",
   },
   detailsContainer: {
@@ -28,12 +28,11 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     backgroundColor: Colors.BLUE,
     boxShadow: Shadow.LIGHT,
   },
-
   imageGrid: {
     [theme.breakpoints.down(910)]: {
       width: "100%",
     },
-    width: "38%",
+    width: "42%",
     marginLeft: "10px",
     height: "500px",
   },
@@ -44,10 +43,14 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     left: "50vw",
     top: "50vh",
   },
+  photoContainer: {
+    height: "470px",
+    margin: "50px 0px",
+  },
   restaurantImage: {
     objectFit: "cover",
     width: "95%",
-    maxHeight: "490px",
+    height: "100%",
     borderRadius: "5px",
     margin: "auto",
   },
@@ -62,5 +65,6 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     display: "flex",
     alignItems: "center",
+    height: "100%",
   },
 }));

@@ -1,4 +1,6 @@
+import Axios, { AxiosResponse } from "axios";
 import { sha256 } from "js-sha256";
+import { proxyUrl } from ".";
 
 export const hotelAvailabilityURL = "https://api.test.hotelbeds.com/hotel-api/1.0/hotels";
 export const hotelContentURL =
@@ -24,3 +26,19 @@ export const imageURL = {
   xxl: "http://photos.hotelbeds.com/giata/xxl/", // + {path} For 2048 pixel-wide images
   original: "http://photos.hotelbeds.com/giata/original/", //+ {path} For images in its original size (please note that this is not a standard and actual size may vary between hotels)
 };
+
+export function getHotelDetails(code: string): Promise<AxiosResponse<any>> {
+  return Axios.get(
+    proxyUrl + `https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels`,
+    {
+      headers: headers,
+      params: {
+        codes: code,
+        fields: "all",
+        language: "ENG",
+        from: "1",
+        useSecondaryLanguage: false,
+      },
+    }
+  );
+}

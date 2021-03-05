@@ -24,6 +24,7 @@ export interface HotelAvailability {
   hotels: HotelBooking[];
 }
 
+//Information about a hotel in relation with booking parameters.
 export interface HotelBooking {
   checkIn?: string;
   checkOut?: string;
@@ -46,6 +47,9 @@ export interface HotelBooking {
   };
   //stars
   categoryCode: string;
+  category: {
+    code: string;
+  };
   categoryName: string;
   description: {
     content: string;
@@ -66,6 +70,32 @@ export interface HotelRooms {
   code: string; //Internal room code
   name: string;
   rates: HotelRoomRate[];
+}
+
+export interface HotelBookingParams {
+  stay: {
+    checkIn: Date;
+    checkOut: Date;
+  };
+  occupancies: {
+    [rooms: string]: number | HotelPax[];
+    adults: number;
+    children: number;
+    paxes: HotelPax[];
+  }[];
+
+  geolocation: {
+    longitude: number;
+    latitude: number;
+    radius: number;
+    unit: string;
+  };
+  filter: {
+    maxHotels: number;
+    //stars
+    minCategory: number;
+    minRate: number;
+  };
 }
 
 export interface HotelRoomRate {
@@ -109,7 +139,11 @@ export interface HotelSearch {
   [key: string]: HotelSearch[keyof HotelSearch];
 }
 
-export interface HotelDetails {
+/**
+ * Information about a hotel, not including booking
+ * parameters.
+ */
+export interface HotelDetail {
   code: number;
   name: {
     content: string;

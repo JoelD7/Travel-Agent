@@ -89,6 +89,13 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
       height: "100%",
       width: "100%",
     },
+    progressCircleContainer: {
+      display: "flex",
+      margin: "auto",
+      position: "absolute",
+      left: "50vw",
+      top: "50vh",
+    },
     reservationInfoContainer: {
       padding: "20px",
       marginLeft: "auto",
