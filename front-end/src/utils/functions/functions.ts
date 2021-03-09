@@ -15,7 +15,7 @@ import { getFindPlaceFromTextURL, proxyUrl } from "../external-apis";
 import { EventType } from "../types";
 import { HotelBooking } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
-export * from "./hotel";
+export * from "./hotel-functions";
 export * from "./flight";
 
 export function muiDateFormatter(date: MaterialUiPickersDate, invalidLabel: string) {

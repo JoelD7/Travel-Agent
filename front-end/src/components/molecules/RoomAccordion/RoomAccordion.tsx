@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
 import { capitalizeString, currencyFormatter } from "../../../utils";
-import { HotelRooms } from "../../../utils/types/hotel-types";
+import { HotelRoomRate, HotelRooms } from "../../../utils/types/hotel-types";
 import { Text, IconText, CustomButton } from "../../atoms";
 import { selectRoomAccordionExpanded } from "../../../utils";
 import { setRoomAccordionExpanded } from "../../../utils/store/hotel-slice";
@@ -45,17 +45,39 @@ export function RoomAccordion({ room }: RoomAccordion) {
   const allRoomAccordionsExpanded = useSelector(selectRoomAccordionExpanded);
   const [expanded, setExpanded] = useState<boolean>(allRoomAccordionsExpanded);
 
+  const [uniqueRates, setUniqueRates] = useState<HotelRoomRate[]>([]);
+
   useEffect(() => {
     if (allRoomAccordionsExpanded) {
       setExpanded(true);
     }
   }, [allRoomAccordionsExpanded]);
 
+  useEffect(() => {
+    setUniqueRates(getUniqueRates());
+  }, []);
+
   function onAccordionChange(isExpanded: boolean) {
     setExpanded(isExpanded);
     if (!isExpanded) {
       dispatch(setRoomAccordionExpanded(false));
     }
+  }
+
+  function getUniqueRates(): HotelRoomRate[] {
+    let rateIds: string[] = [];
+    let uniqueRates: HotelRoomRate[] = [];
+
+    room.rates.forEach((rate) => {
+      let rateId = rate.boardName + rate.net;
+
+      if (!rateIds.includes(rateId)) {
+        uniqueRates.push(rate);
+        rateIds.push(rateId);
+      }
+    });
+
+    return uniqueRates;
   }
 
   return (
@@ -73,7 +95,7 @@ export function RoomAccordion({ room }: RoomAccordion) {
 
       <AccordionDetails style={{ background: "white" }}>
         <Grid container>
-          {room.rates.map((rate, i) => (
+          {uniqueRates.map((rate, i) => (
             <>
               <Grid item xs={12}>
                 <Grid container alignItems="center">
@@ -99,7 +121,7 @@ export function RoomAccordion({ room }: RoomAccordion) {
                 </Grid>
               </Grid>
 
-              {i < room.rates.length - 1 && (
+              {i < uniqueRates.length - 1 && (
                 <Grid item xs={12} style={{ margin: "15px" }}>
                   <Divider style={{ backgroundColor: "#cecece" }} />
                 </Grid>

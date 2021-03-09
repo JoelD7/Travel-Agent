@@ -90,7 +90,7 @@ export interface HotelBookingParams {
     radius: number;
     unit: string;
   };
-  filter: {
+  filter?: {
     maxHotels: number;
     //stars
     minCategory: number;

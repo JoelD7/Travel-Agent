@@ -21,7 +21,7 @@ import {
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Axios, { AxiosResponse } from "axios";
-import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
@@ -82,14 +82,6 @@ interface HotelSearchFilter {
   priceRange: number[];
   occupancyParamsChanged: boolean;
 }
-
-type SortOption =
-  | "Name | A - Z"
-  | "Name | Z - A"
-  | "Stars | desc"
-  | "Stars | asc"
-  | "Price | desc"
-  | "Price | asc";
 
 export function Hotels() {
   const theme = createMuiTheme({
@@ -179,6 +171,8 @@ export function Hotels() {
     },
   });
 
+  const location = useLocation();
+
   const style = hotelsStyles();
 
   const occupanciesParams: Occupancy[] = [
@@ -202,13 +196,17 @@ export function Hotels() {
     },
   ];
 
+  const [urlParams, setURLParams] = useState<{ [index: string]: string }>(
+    getURLParamsAsKVP()
+  );
+
   const [state, setState] = useState<HotelSearchFilter>({
     priceRange: [0, 500],
     stars: 0,
     occupancyParamsChanged: false,
   });
 
-  const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
+  let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
   const dispatch = useDispatch();
 
@@ -235,59 +233,61 @@ export function Hotels() {
     "Price | asc",
   ];
 
-  const [sortOption, setSortOption] = useState<string>("Stars | desc");
+  const [sortOption, setSortOption] = useState<string>(getSortOption());
 
   const [loadingOnMount, setLoadingOnMount] = useState(true);
-  // const [loadingOnMount, setLoadingOnMount] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hotelsMounted, setHotelsMounted] = useState(false);
 
   const [maxRate, setMaxRate] = useState<number>(500);
 
   const [noHotels, setNoHotels] = useState(false);
-  // const [noHotels, setNoHotels] = useState(true);
 
   const pageSizeOptions = [20, 30, 40];
-  const [pageSize, setPageSize] = useState(20);
-  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(getPageSize());
+  const [page, setPage] = useState(getPage());
 
   const history = useHistory();
-  const location = useLocation();
 
   const city = "Paris";
+
+  const firstRender = useRef(true);
 
   useEffect(() => {
     getCityImage(city).then((res) => {
       setImage(String(res));
     });
 
-    // console.log(
-    //   "params: ",
-    //   convertReservationParamsToURLParams(reservationParams, "hotel")
-    // );
     if (isURLWithParams()) {
-      console.log("url has params");
+      reservationParams = convertURLToReservationParams(location.search, "hotel");
 
-      dispatch(
-        updateReservationParams(convertURLToReservationParams(location.search, "hotel"))
-      );
+      dispatch(updateReservationParams(reservationParams));
+      searchHotels(reservationParams);
     } else {
-      console.log("url doesn't have params");
-      history.push(
-        `${location.pathname}${convertReservationParamsToURLParams(
-          reservationParams,
-          "hotel"
-        )}`
-      );
+      updateURL();
+      searchHotels(reservationParams);
     }
   }, []);
 
   useEffect(() => {
-    searchHotels();
+    if (!isFirstRender()) {
+      searchHotels(reservationParams);
+    }
   }, [state.stars]);
 
-  function searchHotels() {
-    fetchHotelAvailability()
+  //On sortOption, page, pageSize change
+  useEffect(() => {
+    if (!isFirstRender()) {
+      updateURL();
+    }
+  }, [sortOption, page, pageSize]);
+
+  function searchHotels(reservationParams: HotelBookingParams) {
+    if (!isFirstRender()) {
+      updateURL();
+    }
+
+    fetchHotelAvailability(reservationParams)
       .then((availabilityRes) => {
         let availability = availabilityRes.data.hotels;
         let hotelsForBooking: any[] = [];
@@ -313,17 +313,14 @@ export function Hotels() {
       });
   }
 
-  function fetchHotelAvailability() {
-    console.log(
-      "Reserv params in fetchHotelAvailability(): ",
-      JSON.stringify(reservationParams)
-    );
+  function fetchHotelAvailability(reservationParams: HotelBookingParams) {
     const filter = {
       maxHotels: 250,
       //stars
       minCategory: state.stars === 0 ? 1 : state.stars,
       minRate: state.priceRange[0],
     };
+
     const bookingParams = {
       ...reservationParams,
       filter:
@@ -379,11 +376,13 @@ export function Hotels() {
       hotels: [],
     };
 
-    let hotelsBuffer: any[] = sortHotelsByStarsDesc(hotelsForBooking, hotelsDetails);
+    let hotelsBuffer: HotelBooking[] = buildHotels(hotelsForBooking, hotelsDetails);
+    let sortedHotels: HotelBooking[] = sortHotels(sortOption, hotelsBuffer);
 
-    hotelAvailabilityTemp = { ...hotelAvailabilityTemp, hotels: hotelsBuffer };
+    hotelAvailabilityTemp = { ...hotelAvailabilityTemp, hotels: sortedHotels };
 
     setHotelAvailability(hotelAvailabilityTemp);
+    firstRender.current = false;
 
     if (hotelsMounted) {
       setLoading(false);
@@ -397,8 +396,15 @@ export function Hotels() {
     }
   }
 
-  function sortHotelsByStarsDesc(hotelsForBooking: any[], hotelsDetails: any): any[] {
-    let unsortedHotels: any[] = [];
+  /**
+   * Combines the hotels from responses of both requests(hotel availability and hotel content)
+   * into a single type: HotelBooking.
+   *
+   * This combination is required in order to have the booking information
+   * and hotel details of each hotel.
+   */
+  function buildHotels(hotelsForBooking: any[], hotelsDetails: any): HotelBooking[] {
+    let hotels: HotelBooking[] = [];
 
     for (let i = 0; i < hotelsDetails.length; i++) {
       const hotelDetailBuffer = hotelsDetails[i];
@@ -415,12 +421,10 @@ export function Hotels() {
       const { rooms, ...hotelDetail } = hotelDetailBuffer;
       const hotelForBooking = hotelsForBooking[i];
 
-      unsortedHotels.push({ ...hotelForBooking, ...hotelDetail });
+      hotels.push({ ...hotelForBooking, ...hotelDetail });
     }
 
-    return unsortedHotels.sort(
-      (a: HotelBooking, b: HotelBooking) => getHotelStars(b) - getHotelStars(a)
-    );
+    return hotels;
   }
 
   /**
@@ -448,6 +452,88 @@ export function Hotels() {
     return location.search !== "";
   }
 
+  function isFirstRender() {
+    return firstRender.current;
+  }
+
+  /**
+   * Updates de URL using the reservation parameters.
+   * It uses the the reservation parameters in the Redux store
+   * unless the optional argument is provided.
+   * @param optionalReservationParams
+   */
+  function updateURL(optionalReservationParams?: HotelBookingParams) {
+    let validReservationParams: HotelBookingParams = optionalReservationParams
+      ? optionalReservationParams
+      : reservationParams;
+
+    history.push(
+      `${location.pathname}${convertReservationParamsToURLParams(
+        validReservationParams,
+        "hotel"
+      )}&sortBy=${sortOption}&page=${page + 1}&pageSize=${pageSize}`
+    );
+
+    //To avoid setting the urlParams variable twice on the first render.
+    if (!isFirstRender()) {
+      setURLParams(getURLParamsAsKVP());
+    }
+  }
+
+  function getPage(): number {
+    let page = 0;
+
+    if (isURLWithParams() && urlParams.hasOwnProperty("page")) {
+      page = Number(urlParams["page"]);
+    }
+
+    return page;
+  }
+
+  function getPageSize(): number {
+    let pageSize = 20;
+
+    if (isURLWithParams() && urlParams.hasOwnProperty("pageSize")) {
+      pageSize = Number(urlParams["pageSize"]);
+    }
+
+    return pageSize;
+  }
+
+  function getSortOption(): string {
+    let sortOption = "Stars | desc";
+
+    if (isURLWithParams() && urlParams.hasOwnProperty("sortBy")) {
+      sortOption = urlParams["sortBy"];
+    }
+
+    return sortOption;
+  }
+
+  function getURLParamsAsKVP() {
+    let kvpObject: { [key: string]: string } = {};
+
+    location.search
+      .substring(1)
+      .split("&")
+      .forEach((kvp) => {
+        let key = kvp.split("=")[0];
+        let value = kvp.split("=")[1];
+
+        if (key === "page") {
+          value = String(Number(value) - 1);
+          kvpObject = { ...kvpObject, [key]: value };
+        } else if (key === "sortBy") {
+          kvpObject = { ...kvpObject, [key]: decodeURIComponent(value) };
+        } else {
+          kvpObject = { ...kvpObject, [key]: value };
+        }
+      });
+
+    // console.log("kvpObject: ", JSON.stringify(kvpObject));
+    return kvpObject;
+  }
+
   function setMaximumPriceInRange(hotelsForBooking: any[]) {
     let sortedRates = hotelsForBooking
       .sort((a, b) => Number(a.minRate) - Number(b.minRate))
@@ -455,7 +541,8 @@ export function Hotels() {
 
     let mediumPrice = Math.floor(sortedRates[Math.round(sortedRates.length / 2) - 1]);
     setMaxRate(mediumPrice);
-    dispatch(updateReservationParams({ priceRange: [0, mediumPrice] }));
+
+    setState({ ...state, priceRange: [state.priceRange[0], mediumPrice] });
   }
 
   function getFormattedAddress(hotel: HotelBooking) {
@@ -588,17 +675,18 @@ export function Hotels() {
         paxes.push({ type: "CH", age: 4 });
       }
 
-      dispatch(
-        updateReservationParams({
-          children: value,
-          paxes: paxes,
-        })
-      );
+      let occupancies = [
+        { ...reservationParams.occupancies[0], children: value, paxes: paxes },
+      ];
+
+      dispatch(updateReservationParams({ occupancies }));
+
       setState({ ...state, occupancyParamsChanged: true });
     } else {
+      let occupancies = [{ ...reservationParams.occupancies[0], [param.field]: value }];
       dispatch(
         updateReservationParams({
-          [param.field]: value,
+          occupancies,
         })
       );
       setState({ ...state, occupancyParamsChanged: true });
@@ -615,11 +703,21 @@ export function Hotels() {
       return pax;
     });
 
-    dispatch(updateReservationParams({ paxes: newPaxes, occupancyParamsChanged: true }));
+    let occupancies = [{ ...reservationParams.occupancies[0], paxes: newPaxes }];
+
+    dispatch(updateReservationParams({ occupancies }));
+    setState({ ...state, occupancyParamsChanged: true });
   }
 
   function onOccupancyDateChange(date: any, param: "checkIn" | "checkOut") {
-    dispatch(updateReservationParams({ [param]: date, occupancyParamsChanged: true }));
+    let stay = { ...reservationParams.stay, [param]: date };
+
+    dispatch(
+      updateReservationParams({
+        stay,
+      })
+    );
+    setState({ ...state, occupancyParamsChanged: true });
   }
 
   function onOccupanciesPopoverChange(event: MouseEvent<HTMLButtonElement>) {
@@ -635,8 +733,8 @@ export function Hotels() {
   function onSearchButtonPress() {
     setLoading(true);
 
-    searchHotels();
-    dispatch(updateReservationParams({ occupancyParamsChanged: false }));
+    searchHotels(reservationParams);
+    setState({ ...state, occupancyParamsChanged: false });
   }
 
   function getOccupancyText() {
@@ -648,54 +746,51 @@ export function Hotels() {
 
   function onSortOptionChange(option: string) {
     setSortOption(option);
-    sortHotels(option);
+    let sortedHotels = sortHotels(option, hotelAvailability.hotels);
+    setHotelAvailability({ ...hotelAvailability, hotels: sortedHotels });
   }
 
-  function sortHotels(option: string) {
+  function sortHotels(option: string, hotels: HotelBooking[]) {
     let buffer: any[] = [];
 
     switch (option) {
       case "Name | A - Z":
-        buffer = hotelAvailability.hotels.sort((a: HotelBooking, b: HotelBooking) =>
+        buffer = hotels.sort((a: HotelBooking, b: HotelBooking) =>
           a.name.content.localeCompare(b.name.content)
         );
         break;
 
       case "Name | Z - A":
-        buffer = hotelAvailability.hotels.sort((a: HotelBooking, b: HotelBooking) =>
+        buffer = hotels.sort((a: HotelBooking, b: HotelBooking) =>
           b.name.content.localeCompare(a.name.content)
         );
         break;
 
       case "Stars | asc":
-        buffer = hotelAvailability.hotels.sort(
+        buffer = hotels.sort(
           (a: HotelBooking, b: HotelBooking) => getHotelStars(a) - getHotelStars(b)
         );
         break;
 
       case "Stars | desc":
-        buffer = hotelAvailability.hotels.sort(
+        buffer = hotels.sort(
           (a: HotelBooking, b: HotelBooking) => getHotelStars(b) - getHotelStars(a)
         );
         break;
 
       case "Price | asc":
-        buffer = hotelAvailability.hotels.sort(
-          (a: HotelBooking, b: HotelBooking) => a.minRate - b.minRate
-        );
+        buffer = hotels.sort((a: HotelBooking, b: HotelBooking) => a.minRate - b.minRate);
         break;
 
       case "Price | desc":
-        buffer = hotelAvailability.hotels.sort(
-          (a: HotelBooking, b: HotelBooking) => b.minRate - a.minRate
-        );
+        buffer = hotels.sort((a: HotelBooking, b: HotelBooking) => b.minRate - a.minRate);
         break;
 
       default:
-        buffer = hotelAvailability.hotels;
+        buffer = hotels;
     }
 
-    setHotelAvailability({ ...hotelAvailability, hotels: buffer });
+    return buffer;
   }
 
   function areCardsLoading() {
@@ -703,19 +798,19 @@ export function Hotels() {
   }
 
   function onPriceRangeChange(range: number[]) {
-    dispatch(updateReservationParams({ priceRange: range }));
     let min = range[0];
     let max = range[1];
 
     let buffer = allHotels.filter(
       (hotel) => hotel.minRate >= min && hotel.minRate <= max
     );
+    setState({ ...state, priceRange: range });
     setHotelAvailability({ ...hotelAvailability, hotels: buffer });
   }
 
   function onStarChange(star: number) {
+    setState({ ...state, stars: star });
     setLoading(true);
-    dispatch(updateReservationParams({ stars: star }));
   }
 
   function onPageSizeChange(value: number) {
@@ -725,7 +820,9 @@ export function Hotels() {
 
   function onPageChange(newPage: number) {
     window.scrollTo(0, 0);
-    setTimeout(() => setPage(newPage - 2), 250);
+    setTimeout(() => {
+      setPage(newPage - 1);
+    }, 250);
   }
 
   function getPageCount() {

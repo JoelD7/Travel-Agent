@@ -7,11 +7,12 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { Backdrop, CardActionArea, Dialog, Divider, Grid } from "@material-ui/core";
+import Axios from "axios";
 import { differenceInHours, format, parseISO, subDays } from "date-fns";
 import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams, useRouteMatch } from "react-router-dom";
+import { useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
 import {
   CustomButton,
@@ -27,18 +28,26 @@ import {
 import { Colors } from "../../styles";
 import {
   convertReservationParamsToURLParams,
+  convertURLToReservationParams,
   currencyFormatter,
   getHotelImages,
   getHotelStars,
+  HotelBedAPI,
   hotelPlaceholder,
   LocalStorageKeys,
+  proxyUrl,
+  Routes,
   scrollToBottom,
   selectHotelDetail,
   selectHotelReservationParams,
   selectRoomAccordionExpanded,
 } from "../../utils";
 import { getHotelDetails } from "../../utils/external-apis/hotelbeds-apis";
-import { setHotelDetail, setRoomAccordionExpanded } from "../../utils/store/hotel-slice";
+import {
+  setHotelDetail,
+  setRoomAccordionExpanded,
+  updateReservationParams,
+} from "../../utils/store/hotel-slice";
 import { HotelBooking, HotelBookingParams } from "../../utils/types/hotel-types";
 import { hotelDetailsStyles } from "./hotelDetails-styles";
 
@@ -52,20 +61,16 @@ export function HotelDetails() {
   // const [hotel, setHotel] = useState<HotelBooking>(hotelPlaceholder);
   const hotelPhotos = getHotelImages(hotel);
 
-  const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
+  let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
   const { id } = useParams<any>();
   const location = useLocation();
 
   const query = useQuery();
 
-  for (const pair of Array.from(query.entries())) {
-  }
-
-  for (const pair of Array.from(query.keys())) {
-  }
-
   const [loading, setLoading] = useState<boolean>(true);
+
+  const history = useHistory();
 
   const roomTitleId = "rooms";
   const roomAnchorEl = useRef(null);
@@ -78,6 +83,12 @@ export function HotelDetails() {
 
   const [viewerOpen, setViewerOpen] = useState(false);
   const [initialImageSlide, setInitialImageSlide] = useState(0);
+
+  const firstRender = useRef(true);
+
+  const [urlParams, setURLParams] = useState<{ [index: string]: string }>(
+    getURLParamsAsKVP()
+  );
 
   const sliderSettings = {
     className: style.slider,
@@ -110,22 +121,116 @@ export function HotelDetails() {
   };
 
   useEffect(() => {
-    console.log(
-      "params: ",
-      convertReservationParamsToURLParams(reservationParams, "hotelDetails")
-    );
+    if (isURLWithParams()) {
+      reservationParams = convertURLToReservationParams(location.search, "hotelDetails");
+
+      dispatch(updateReservationParams(reservationParams));
+    } else {
+      updateURL();
+    }
+
     if (String(hotel.code) !== String(id)) {
-      getHotelDetails(id)
-        .then((res) => {
-          // setHotel(res.data.hotels[0]);
-          // console.log(JSON.stringify(res.data.hotels[0]));
-          setLoading(false);
-        })
-        .catch((error) => console.log("Error while fetching hotel details | ", error));
+      fetchHotelAvailability().then((availabilityRes) => {
+        getHotelDetails(id)
+          .then((res) => {
+            let hotelForBooking = availabilityRes.data.hotels.hotels[0];
+            let availableHotels: number = availabilityRes.data.hotels.total;
+
+            if (availableHotels === 0) {
+              redirectToHotels();
+            }
+
+            let hotelDetails = res.data.hotels[0];
+
+            dispatch(setHotelDetail(mergeHotelResponses(hotelForBooking, hotelDetails)));
+            setLoading(false);
+          })
+          .catch((error) => console.log("Error while fetching hotel details | ", error));
+      });
     } else {
       setLoading(false);
     }
   }, []);
+
+  function fetchHotelAvailability() {
+    /**
+     * Search by hotel code is a filter. The API only allows
+     * the use of single type of filter for fetching data
+     * (the available filters are: destination, geolocation, filter).
+     */
+    let { filter, geolocation, ...bookingParams } = {
+      ...reservationParams,
+      hotels: {
+        hotel: [Number(id)],
+      },
+    };
+
+    return Axios.post(proxyUrl + HotelBedAPI.hotelAvailabilityURL, bookingParams, {
+      headers: HotelBedAPI.headers,
+    });
+  }
+
+  function mergeHotelResponses(hotelForBooking: any, hotelDetails: any) {
+    //To prevent the overriding of the "rooms" prop in hotelForBooking
+    let { rooms, ...hotelDetail } = hotelDetails;
+    return { ...hotelForBooking, ...hotelDetail };
+  }
+
+  function redirectToHotels() {
+    history.push(Routes.HOTELS);
+  }
+
+  function getUrlParamsArray() {
+    let kvp: string[][] = [[]];
+
+    for (const pair of Array.from(query.entries())) {
+      kvp.push(pair);
+    }
+    return kvp;
+  }
+
+  /**
+   * Updates de URL using the reservation parameters.
+   * It uses the the reservation parameters in the Redux store
+   * unless the optional argument is provided.
+   * @param optionalReservationParams
+   */
+  function updateURL() {
+    history.push(
+      `${location.pathname}${convertReservationParamsToURLParams(
+        reservationParams,
+        "hotelDetails"
+      )}`
+    );
+
+    //To avoid setting the urlParams variable twice on the first render.
+    if (!isFirstRender()) {
+      setURLParams(getURLParamsAsKVP());
+    }
+  }
+
+  function isURLWithParams(): boolean {
+    return location.search !== "";
+  }
+
+  function isFirstRender() {
+    return firstRender.current;
+  }
+
+  function getURLParamsAsKVP() {
+    let kvpObject: { [key: string]: string } = {};
+    let kvpArray: string[][] = getUrlParamsArray();
+
+    kvpArray.forEach((kvp) => {
+      let key = kvp[0];
+      let value = kvp[1];
+
+      kvpObject = { ...kvpObject, [key]: value };
+    });
+
+    // console.log("kvpObject: ", JSON.stringify(kvpObject));
+    return kvpObject;
+  }
 
   function useQuery() {
     return new URLSearchParams(location.search);
@@ -133,17 +238,6 @@ export function HotelDetails() {
 
   function getPhoneList() {
     return hotel.phones.map((phone) => phone.phoneNumber).join(" | ");
-  }
-
-  function getHotelBooking() {
-    let hotelBookingString: string | null = localStorage.getItem(
-      LocalStorageKeys.HOTEL_BOOKING
-    );
-
-    let hotelBooking: HotelBooking | null =
-      hotelBookingString !== null ? JSON.parse(hotelBookingString) : null;
-
-    return hotelBooking;
   }
 
   function getHotelBookingLastUpdate() {
@@ -154,13 +248,6 @@ export function HotelDetails() {
     return lastUpdateString === null
       ? subDays(new Date(), 2)
       : parseISO(lastUpdateString);
-  }
-
-  function areReservationParamsUpdated() {
-    let hotelBooking: HotelBooking | null = getHotelBooking();
-    let dateDifference = differenceInHours(new Date(), getHotelBookingLastUpdate());
-
-    return dateDifference >= 24 || hotelBooking === null;
   }
 
   function getOccupancyText(param: "room" | "adult") {
@@ -213,7 +300,7 @@ export function HotelDetails() {
       <div className={style.pageContainer} style={loading ? { filter: "blur(4px)" } : {}}>
         {/* Images slider */}
         <div style={{ marginBottom: "20px" }}>
-          <Slider {...sliderSettings} dots>
+          <Slider {...sliderSettings} dots lazyLoad="ondemand">
             {hotelPhotos.map((photo, i) => (
               <CardActionArea
                 key={photo}

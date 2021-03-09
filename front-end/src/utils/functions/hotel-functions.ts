@@ -1,6 +1,6 @@
-import { addDays, format } from "date-fns";
+import { addDays, format, parseISO } from "date-fns";
 import { HotelBedAPI } from "../external-apis";
-import { HotelBooking, HotelBookingParams } from "../types/hotel-types";
+import { HotelBooking, HotelBookingParams, HotelPax } from "../types/hotel-types";
 
 export function getHotelStars(hotel: HotelBooking) {
   if (hotel.categoryCode) {
@@ -40,10 +40,6 @@ export function convertReservationParamsToURLParams(
   let radius: string = String(reservationParams.geolocation.radius);
   let unit: string = reservationParams.geolocation.unit;
 
-  let maxHotels: string = String(reservationParams.filter.maxHotels);
-  let minCategory: string = String(reservationParams.filter.minCategory);
-  let minRate: string = String(reservationParams.filter.minRate);
-
   params.push(`checkIn=${checkIn}`);
   params.push(`checkOut=${checkOut}`);
   params.push(`adults=${adults}`);
@@ -54,14 +50,17 @@ export function convertReservationParamsToURLParams(
     params.push(`paxes=${paxes}`);
   }
 
-  if (page === "hotel") {
-    params.push(`longitude=${longitude}`);
-    params.push(`latitude=${latitude}`);
-    params.push(`radius=${radius}`);
-    params.push(`unit=${unit}`);
+  params.push(`longitude=${longitude}`);
+  params.push(`latitude=${latitude}`);
+  params.push(`radius=${radius}`);
+  params.push(`unit=${unit}`);
+
+  if (page === "hotel" && reservationParams.filter) {
+    let maxHotels: string = String(reservationParams.filter.maxHotels);
+    let minCategory: string = String(reservationParams.filter.minCategory);
+
     params.push(`maxHotels=${maxHotels}`);
     params.push(`minCategory=${minCategory}`);
-    params.push(`minRate=${minRate}`);
   }
 
   return "?" + params.sort().join("&");
@@ -84,15 +83,15 @@ export function convertURLToReservationParams(
 
   reservationParams = {
     stay: {
-      checkIn: parameters.checkIn,
-      checkOut: parameters.checkOut,
+      checkIn: parseISO(parameters.checkIn),
+      checkOut: parseISO(parameters.checkOut),
     },
     occupancies: [
       {
         adults: Number(parameters.adults),
         children: Number(parameters.children),
         rooms: Number(parameters.rooms),
-        paxes: parameters.hasOwnProperty("paxes") ? parameters.paxes : [],
+        paxes: getPaxes(parameters),
       },
     ],
     geolocation: {
@@ -101,12 +100,31 @@ export function convertURLToReservationParams(
       radius: Number(parameters.radius),
       unit: parameters.unit,
     },
-    filter: {
-      maxHotels: Number(parameters.maxHotels),
-      minCategory: Number(parameters.minCategory),
-      minRate: Number(parameters.minRate),
-    },
+    filter:
+      page === "hotel"
+        ? {
+            maxHotels: Number(parameters.maxHotels),
+            minCategory: Number(parameters.minCategory),
+            minRate: Number(parameters.minRate),
+          }
+        : undefined,
   };
 
   return reservationParams;
+}
+
+function getPaxes(parameters: any): HotelPax[] {
+  let paxes: HotelPax[] = [];
+
+  if (parameters.hasOwnProperty("paxes")) {
+    let stringPaxes = parameters.paxes.split(",");
+    for (let i = 0; i <= stringPaxes.length - 2; i += 2) {
+      let type = stringPaxes[i];
+      let age = stringPaxes[i + 1];
+
+      paxes.push({ type, age: Number(age) });
+    }
+  }
+
+  return paxes;
 }

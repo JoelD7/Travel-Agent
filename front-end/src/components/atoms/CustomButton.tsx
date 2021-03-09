@@ -80,6 +80,10 @@ export function CustomButton({
   });
 
   function getHoverColor(color: string | undefined): string {
+    if (type === "text") {
+      return "";
+    }
+
     switch (color) {
       case Colors.PURPLE:
         return Colors.PURPLE_HOVER;
