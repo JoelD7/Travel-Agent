@@ -4,16 +4,6 @@ import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
 export const hotelsStyles = makeStyles((theme: Theme) => ({
-  addressContactGrid: {
-    display: "flex",
-    justifyContent: "center",
-    padding: "0px 10px 10px 10px",
-    width: "49%",
-    alignItems: "center",
-    [theme.breakpoints.down(715)]: {
-      width: "50%",
-    },
-  },
   background: {
     height: "55vh",
     width: "100%",
@@ -32,9 +22,6 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(715)]: {
       width: "50%",
     },
-  },
-  cardText: {
-    fontSize: "14px",
   },
   datepicker: {
     backgroundColor: "white",
@@ -89,19 +76,6 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     },
     [theme.breakpoints.down(640)]: {
       width: "33%",
-    },
-  },
-  defaultContentContainer: {
-    height: "73%",
-    [theme.breakpoints.down(950)]: {
-      display: "none",
-    },
-  },
-  smContentContainer: {
-    display: "none",
-
-    [theme.breakpoints.down(950)]: {
-      display: "flex",
     },
   },
   drawer: {
@@ -177,54 +151,11 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
-  hotelCard: {
-    boxShadow: Shadow.LIGHT3D,
-    margin: "0px 0px 15px 0px",
-    borderRadius: "10px",
-    display: "flex",
-    backgroundColor: "white",
-    width: "100%",
-
-    [theme.breakpoints.down(1280)]: {
-      marginLeft: "0px",
-    },
-  },
   hotelCardContainer: {
     marginLeft: "15px",
   },
   hotelCardContainerLoading: {
     filter: "blur(4px)",
-  },
-  hotelImage: {
-    objectFit: "cover",
-    borderTopLeftRadius: "10px",
-    borderBottomLeftRadius: "10px",
-    height: "100%",
-    width: "100%",
-    maxHeight: "193px",
-
-    [theme.breakpoints.down(950)]: {
-      borderRadius: "10px 10px 0px 0px",
-      maxHeight: "100%",
-    },
-  },
-  hotelImageGrid: {
-    width: "33%",
-
-    [theme.breakpoints.down(950)]: {
-      width: "100%",
-      height: "210px",
-    },
-  },
-  hotelContentGrid: {
-    width: "66%",
-
-    [theme.breakpoints.down(950)]: {
-      width: "100%",
-    },
-    [theme.breakpoints.down(621)]: {
-      padding: "10px",
-    },
   },
   hotelNameContainer: {
     width: "50%",
@@ -256,6 +187,11 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
         borderBottom: `3px solid ${Colors.GREEN}`,
       },
     },
+  },
+  notFoundImg: {
+    objectFit: "cover",
+    height: "190px",
+    margin: "20px 20px 0px 20px",
   },
   pageContentContainer: {
     [theme.breakpoints.down(578)]: {},
@@ -296,17 +232,6 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     padding: "10px",
     position: "relative",
   },
-  priceAndDetailsGrid: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "0px 10px 10px 10px",
-    width: "49%",
-
-    [theme.breakpoints.down(715)]: {
-      width: "50%",
-    },
-  },
   popoverPaper: {
     width: "265px",
     maxHeight: "280px",
@@ -317,6 +242,11 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     marginLeft: "5px",
     marginBottom: "3px",
     marginTop: "5px",
+  },
+  redirectionDialog: {
+    "&.MuiDialog-paperScrollPaper": {
+      padding: "10px",
+    },
   },
   reservationParamBox: {
     width: "85%",

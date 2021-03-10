@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import { CustomButton } from "../../components";
 import { Colors } from "../../styles";
 import {
-  currencyFormatter,
+  formatAsCurrency,
   flightPlaceholder,
   formatFlightDate,
   formatFlightSegmentTime,
@@ -214,7 +214,7 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
 
         <Grid item xs={12} style={{ marginTop: "20px" }}>
           <Grid container justify="flex-end">
-            <h2 style={{ fontSize: "20px", marginRight: "10px" }}>{`US${currencyFormatter(
+            <h2 style={{ fontSize: "20px", marginRight: "10px" }}>{`US${formatAsCurrency(
               flight.price.total
             )}`}</h2>
             <CustomButton onClick={() => {}}>Purchase flight</CustomButton>

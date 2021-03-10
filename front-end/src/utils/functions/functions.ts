@@ -7,16 +7,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { CSSProperties } from "@material-ui/styles";
-import Axios from "axios";
 import { compareAsc, format } from "date-fns";
-import { getPhotoFromReferenceURL } from "..";
 import { iataCodes } from "../constants/iataCodes";
-import { getFindPlaceFromTextURL, proxyUrl } from "../external-apis";
 import { EventType } from "../types";
-import { HotelBooking } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
-export * from "./hotel-functions";
 export * from "./flight";
+export * from "./hotel-functions";
 
 export function muiDateFormatter(date: MaterialUiPickersDate, invalidLabel: string) {
   return date
@@ -34,13 +30,13 @@ export function getLinkStyle(color: string = "initial"): CSSProperties {
   };
 }
 
-export const currencyFormatter = Intl.NumberFormat("en-US", {
+export const formatAsCurrency = Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
   maximumFractionDigits: 2,
 }).format;
 
-export const decimalFormatter = Intl.NumberFormat("en-US", {
+export const formatAsDecimal = Intl.NumberFormat("en-US", {
   style: "decimal",
   maximumFractionDigits: 2,
 }).format;
@@ -502,9 +498,9 @@ export function getLocalStorageConsumption(unit: "MB" | "kB") {
   let length = JSON.stringify(localStorage).length;
 
   if (unit === "MB") {
-    return console.log(`Local storage: ${decimalFormatter(length / 1048576)} MB`);
+    return console.log(`Local storage: ${formatAsDecimal(length / 1048576)} MB`);
   } else {
-    return console.log(`Local storage: ${decimalFormatter(length / 1024)} kB`);
+    return console.log(`Local storage: ${formatAsDecimal(length / 1024)} kB`);
   }
 }
 

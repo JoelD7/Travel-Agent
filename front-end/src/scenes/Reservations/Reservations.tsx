@@ -12,7 +12,7 @@ import {
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
-import { currencyFormatter, flightsPlaceholder } from "../../utils";
+import { formatAsCurrency, flightsPlaceholder } from "../../utils";
 import { reservationStyles } from "./reservation-styles";
 import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
 import { format } from "date-fns";
@@ -187,7 +187,7 @@ export function Reservations() {
                           component="h4"
                           bold
                         >
-                          {currencyFormatter(hotel.cost)}
+                          {formatAsCurrency(hotel.cost)}
                         </Text>
                       </Grid>
                     </CardContent>

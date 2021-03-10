@@ -1,15 +1,12 @@
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  faBed,
-  faChild,
-  faFilter,
-  faMapMarkerAlt,
-  faPhone,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBed, faChild, faFilter, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   createMuiTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   Drawer,
   FormControl,
@@ -28,8 +25,8 @@ import { useHistory, useLocation } from "react-router-dom";
 import { Family } from "../../assets/fonts";
 import {
   CustomButton,
+  HotelCard,
   HotelStarSelector,
-  IconText,
   Navbar,
   NotAvailableCard,
   Pagination,
@@ -42,23 +39,21 @@ import {
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
-  capitalizeString,
   convertReservationParamsToURLParams,
   convertURLToReservationParams,
   getCityImage,
-  getFindPlaceFromTextURL,
-  getHotelImages,
   getHotelStars,
-  getPhotoFromReferenceURL,
   HotelBedAPI,
   hotelsPlaceholder,
-  LocalStorageKeys,
   muiDateFormatter,
-  Routes,
   selectHotelReservationParams,
+  selectOpenRedirecDialog,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
-import { setHotelDetail, updateReservationParams } from "../../utils/store/hotel-slice";
+import {
+  setOpenRedirecDialog,
+  updateReservationParams,
+} from "../../utils/store/hotel-slice";
 import {
   HotelAvailability,
   HotelBooking,
@@ -71,10 +66,6 @@ import { hotelsStyles } from "./hotels-styles";
 interface AvailabilityParams {
   availability: any;
   hotelsForBooking: any[];
-}
-
-interface HotelCard {
-  hotel: HotelBooking;
 }
 
 interface HotelSearchFilter {
@@ -246,6 +237,8 @@ export function Hotels() {
   const pageSizeOptions = [20, 30, 40];
   const [pageSize, setPageSize] = useState(getPageSize());
   const [page, setPage] = useState(getPage());
+
+  const openRedirecDialog: boolean = useSelector(selectOpenRedirecDialog);
 
   const history = useHistory();
 
@@ -543,126 +536,6 @@ export function Hotels() {
     setMaxRate(mediumPrice);
 
     setState({ ...state, priceRange: [state.priceRange[0], mediumPrice] });
-  }
-
-  function getFormattedAddress(hotel: HotelBooking) {
-    return hotel.address.content;
-  }
-
-  function onHotelCardClick(hotel: HotelBooking) {
-    localStorage.setItem(LocalStorageKeys.HOTEL_BOOKING, JSON.stringify(hotel));
-    localStorage.setItem(
-      LocalStorageKeys.HOTEL_BOOKING_LAST_UPDATE,
-      JSON.stringify(new Date())
-    );
-    history.push(`${Routes.HOTELS}/${hotel.code}`);
-  }
-
-  function HotelCard({ hotel }: HotelCard) {
-    return (
-      <Grid container id="card" className={style.hotelCard}>
-        {/* Image */}
-        <Grid item className={style.hotelImageGrid} id="photo">
-          {hotel.images.length > 1 && (
-            <img src={`${getHotelImages(hotel)[0]}`} className={style.hotelImage} />
-          )}
-        </Grid>
-
-        {/* Content */}
-        <Grid item className={style.hotelContentGrid} id="content">
-          <Grid item xs={12} id="title">
-            <Grid
-              container
-              alignItems="center"
-              style={{ margin: "10px 0px", paddingLeft: "10px" }}
-            >
-              <Text component="h3" style={{ marginRight: "10px" }} bold>
-                {hotel.name.content}
-              </Text>
-
-              <div>
-                <Rating type="star" score={getHotelStars(hotel)} />
-              </div>
-            </Grid>
-          </Grid>
-
-          {/* Card content */}
-          <Grid container className={style.defaultContentContainer}>
-            {/* Price and details button */}
-            <Grid item className={style.priceAndDetailsGrid}>
-              <div>
-                <h4 style={{ textAlign: "center" }}>{`From $ ${hotel.minRate}`}</h4>
-                <CustomButton
-                  backgroundColor={Colors.PURPLE}
-                  onClick={() => onHotelCardClick(hotel)}
-                >
-                  View details
-                </CustomButton>
-              </div>
-            </Grid>
-
-            <Grid item style={{ height: "90%" }}>
-              <Divider orientation="vertical" />
-            </Grid>
-
-            {/* Contact and address */}
-            <Grid item className={style.addressContactGrid}>
-              <div>
-                <p className={style.cardText}>
-                  <b>Hotel info</b>
-                </p>
-
-                <IconText
-                  text={hotel.phones[0].phoneNumber}
-                  icon={faPhone}
-                  style={{ marginBottom: "5px" }}
-                />
-
-                <IconText
-                  text={capitalizeString(getFormattedAddress(hotel), "full sentence")}
-                  icon={faMapMarkerAlt}
-                />
-              </div>
-            </Grid>
-          </Grid>
-
-          {/* Card content for SM size */}
-          <Grid container className={style.smContentContainer}>
-            {/* Price and details button */}
-            <Grid item xs={12}>
-              <div style={{ paddingLeft: "10px" }}>
-                <IconText
-                  text={hotel.phones[0].phoneNumber}
-                  icon={faPhone}
-                  style={{ marginBottom: "5px" }}
-                />
-
-                <IconText
-                  text={capitalizeString(getFormattedAddress(hotel), "full sentence")}
-                  icon={faMapMarkerAlt}
-                />
-              </div>
-            </Grid>
-
-            <Grid item xs={12} style={{ padding: "10px" }}>
-              <Grid container>
-                <Text component="h3" bold>{`$ From ${hotel.minRate}`}</Text>
-                <CustomButton
-                  style={{
-                    margin: "auto 0px auto auto",
-                    fontSize: "16px",
-                  }}
-                  backgroundColor={Colors.PURPLE}
-                  onClick={() => history.push(`${Routes.HOTELS}/${hotel.code}`)}
-                >
-                  View details
-                </CustomButton>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    );
   }
 
   function onOccupanciesParamChange(e: ChangeEvent<SelectEvent>, param: Occupancy) {
@@ -1165,6 +1038,47 @@ export function Hotels() {
           </div>
         </ThemeProvider>
       </Popover>
+
+      {/* Redirection dialog */}
+      <Dialog
+        className={style.redirectionDialog}
+        open={openRedirecDialog}
+        onClose={() => dispatch(setOpenRedirecDialog(false))}
+      >
+        <DialogTitle style={{ padding: "16px 24px 0px 16px" }}>
+          <Text color={Colors.BLUE} bold component="h1">
+            Hotel not available
+          </Text>
+        </DialogTitle>
+        <DialogContent>
+          <Divider />
+          <Grid container>
+            <Grid item xs={7}>
+              <p>
+                Sorry. This hotel has no rooms available for the dates and/or occupancy
+                indicated.
+              </p>
+              <p>Redirecting to the Hotels page to enter new parameters.</p>
+            </Grid>
+            <Grid item xs={5}>
+              <img
+                src="/Travel-Agent/not-found.png"
+                alt="dead-robot-emoji"
+                className={style.notFoundImg}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+
+        <DialogActions>
+          <CustomButton
+            backgroundColor={Colors.PURPLE}
+            onClick={() => dispatch(setOpenRedirecDialog(false))}
+          >
+            Ok
+          </CustomButton>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

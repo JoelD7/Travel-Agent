@@ -8,7 +8,7 @@ import { Font } from "../../../assets";
 import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
 import {
-  currencyFormatter,
+  formatAsCurrency,
   parseFlightDuration,
   getFlightCitiesLabel,
   formatFlightDateTime,
@@ -195,7 +195,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
 
           {/* Flight price */}
           <Grid item className={style.priceButtonGrid}>
-            <h2 style={{ marginTop: "12px" }}>{`${currencyFormatter(
+            <h2 style={{ marginTop: "12px" }}>{`${formatAsCurrency(
               flight.price.total
             )}`}</h2>
           </Grid>
@@ -254,7 +254,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
 
       <Grid key="price & button xs" item xs={12} className={style.priceButtonXS}>
         <Grid container alignItems="center">
-          <h2 style={{ marginRight: "auto", marginTop: "12px" }}>{`${currencyFormatter(
+          <h2 style={{ marginRight: "auto", marginTop: "12px" }}>{`${formatAsCurrency(
             flight.price.total
           )}`}</h2>
           <CustomButton

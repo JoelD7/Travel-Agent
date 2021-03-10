@@ -6,7 +6,16 @@ import {
   faPhone,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { Backdrop, CardActionArea, Dialog, Divider, Grid } from "@material-ui/core";
+import {
+  Backdrop,
+  CardActionArea,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid,
+} from "@material-ui/core";
 import Axios from "axios";
 import { differenceInHours, format, parseISO, subDays } from "date-fns";
 import React, { useEffect, useRef, useState } from "react";
@@ -29,9 +38,10 @@ import { Colors } from "../../styles";
 import {
   convertReservationParamsToURLParams,
   convertURLToReservationParams,
-  currencyFormatter,
+  formatAsCurrency,
   getHotelImages,
   getHotelStars,
+  getMinRate,
   HotelBedAPI,
   hotelPlaceholder,
   LocalStorageKeys,
@@ -45,6 +55,7 @@ import {
 import { getHotelDetails } from "../../utils/external-apis/hotelbeds-apis";
 import {
   setHotelDetail,
+  setOpenRedirecDialog,
   setRoomAccordionExpanded,
   updateReservationParams,
 } from "../../utils/store/hotel-slice";
@@ -58,7 +69,7 @@ interface RoomAccordion {
 export function HotelDetails() {
   const style = hotelDetailsStyles();
   const hotel: HotelBooking = useSelector(selectHotelDetail);
-  // const [hotel, setHotel] = useState<HotelBooking>(hotelPlaceholder);
+
   const hotelPhotos = getHotelImages(hotel);
 
   let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
@@ -130,14 +141,17 @@ export function HotelDetails() {
     }
 
     if (String(hotel.code) !== String(id)) {
+      console.log("fetching hotel data");
       fetchHotelAvailability().then((availabilityRes) => {
         getHotelDetails(id)
           .then((res) => {
             let hotelForBooking = availabilityRes.data.hotels.hotels[0];
             let availableHotels: number = availabilityRes.data.hotels.total;
+            // let availableHotels: number = 0;
 
             if (availableHotels === 0) {
               redirectToHotels();
+              dispatch(setOpenRedirecDialog(true));
             }
 
             let hotelDetails = res.data.hotels[0];
@@ -228,7 +242,6 @@ export function HotelDetails() {
       kvpObject = { ...kvpObject, [key]: value };
     });
 
-    // console.log("kvpObject: ", JSON.stringify(kvpObject));
     return kvpObject;
   }
 
@@ -401,7 +414,7 @@ export function HotelDetails() {
 
               <Grid item xs={12}>
                 <Text color={Colors.BLUE} component="h2" bold>
-                  {currencyFormatter(hotel.minRate)}
+                  {formatAsCurrency(getMinRate(hotel.rooms))}
                 </Text>
               </Grid>
 

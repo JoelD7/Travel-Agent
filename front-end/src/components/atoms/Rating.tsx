@@ -1,13 +1,8 @@
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
+import { faCircle, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Colors } from "../../styles";
+import React from "react";
 import ReactRating from "react-rating";
-import {
-  faCircle as faCircleReg,
-  faStar as faStarReg,
-} from "@fortawesome/free-regular-svg-icons";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { Colors } from "../../styles";
 
 interface Rating {
   score: number;

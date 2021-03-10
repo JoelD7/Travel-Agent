@@ -37,7 +37,7 @@ import Slider from "react-slick";
 import {
   activitiesPlaceholder,
   POICategory,
-  currencyFormatter,
+  formatAsCurrency,
   getPOICategoryParent,
   poisPlaceholderAPI,
   selectPOIs,
@@ -232,7 +232,7 @@ export function ThingsToDo() {
   function convertCurrency(currency: string, amount: string) {
     if (rates) {
       let value = Number(amount);
-      return currencyFormatter((1 / Number(rates.rates[currency])) * value);
+      return formatAsCurrency((1 / Number(rates.rates[currency])) * value);
     } else {
       return amount;
     }

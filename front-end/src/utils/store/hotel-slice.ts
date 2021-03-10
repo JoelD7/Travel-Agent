@@ -13,14 +13,14 @@ interface HotelReducer {
   reservationParams: HotelBookingParams;
   hotelDetail: HotelBooking;
   allRoomAccordionsExpanded: boolean;
+  openRedirecDialog: boolean;
 }
 
 const initialState: HotelReducer = {
   hotelDetail: hotelPlaceholder,
   allRoomAccordionsExpanded: false,
+  openRedirecDialog: false,
   reservationParams: {
-    // occupancyParamsChanged: false,
-
     stay: {
       checkIn: addDays(new Date(), 1),
       checkOut: addDays(new Date(), 3),
@@ -63,12 +63,16 @@ const hotelSlice = createSlice({
     setRoomAccordionExpanded(state, action: PayloadAction<boolean>) {
       state.allRoomAccordionsExpanded = action.payload;
     },
+    setOpenRedirecDialog(state, action: PayloadAction<boolean>) {
+      state.openRedirecDialog = action.payload;
+    },
   },
 });
 
 export const {
   updateReservationParams,
   setHotelDetail,
+  setOpenRedirecDialog,
   setRoomAccordionExpanded,
 } = hotelSlice.actions;
 

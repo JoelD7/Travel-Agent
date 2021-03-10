@@ -1,6 +1,13 @@
 import { addDays, format, parseISO } from "date-fns";
 import { HotelBedAPI } from "../external-apis";
-import { HotelBooking, HotelBookingParams, HotelPax } from "../types/hotel-types";
+import {
+  HotelBooking,
+  HotelBookingParams,
+  HotelPax,
+  HotelRoomRate,
+  HotelRooms,
+} from "../types/hotel-types";
+import { formatAsDecimal } from "./functions";
 
 export function getHotelStars(hotel: HotelBooking) {
   if (hotel.categoryCode) {
@@ -124,7 +131,39 @@ function getPaxes(parameters: any): HotelPax[] {
 
       paxes.push({ type, age: Number(age) });
     }
+  } else if (parameters.hasOwnProperty("children")) {
+    let children: number = Number(parameters.children);
+    for (let i = 0; i < children; i++) {
+      paxes.push({ type: "CH", age: 4 });
+    }
   }
 
   return paxes;
+}
+
+export function getRoomTotalPrice(rate: HotelRoomRate): number {
+  let total: number = Number(rate.net);
+
+  if (rate.taxes) {
+    total += Number(rate.taxes.taxes[0].amount);
+  }
+
+  return Number(formatAsDecimal(total));
+}
+
+export function getMinRate(rooms: HotelRooms[]) {
+  let rates: HotelRoomRate[] = [];
+
+  rooms.forEach((room) => {
+    rates.concat(room.rates);
+  });
+
+  let minRate = rates.reduce((prev: HotelRoomRate, cur: HotelRoomRate) => {
+    let totalPrev = getRoomTotalPrice(prev);
+    let totalCur = getRoomTotalPrice(cur);
+
+    return totalPrev < totalCur ? prev : cur;
+  }, rooms[0].rates[0]);
+
+  return getRoomTotalPrice(minRate);
 }

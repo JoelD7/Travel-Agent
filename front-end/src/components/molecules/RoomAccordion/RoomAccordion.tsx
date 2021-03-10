@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
-import { capitalizeString, currencyFormatter } from "../../../utils";
+import { capitalizeString, formatAsCurrency, getRoomTotalPrice } from "../../../utils";
 import { HotelRoomRate, HotelRooms } from "../../../utils/types/hotel-types";
 import { Text, IconText, CustomButton } from "../../atoms";
 import { selectRoomAccordionExpanded } from "../../../utils";
@@ -109,7 +109,7 @@ export function RoomAccordion({ room }: RoomAccordion) {
                 <Grid container alignItems="center">
                   <Text bold>Total: </Text>
                   <Text style={{ marginLeft: "3px" }}>
-                    {currencyFormatter(Number(rate.net))}
+                    {formatAsCurrency(getRoomTotalPrice(rate))}
                   </Text>
 
                   <CustomButton

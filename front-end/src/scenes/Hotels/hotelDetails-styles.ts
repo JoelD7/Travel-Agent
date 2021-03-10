@@ -54,6 +54,11 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
       fontFamily: Font.Family,
       backgroundColor: Colors.BACKGROUND,
     },
+    notFoundImg: {
+      objectFit: "cover",
+      height: "190px",
+      margin: "20px 20px 0px 20px",
+    },
     paperImage: {
       maxWidth: "1100px",
       width: "1100px",
@@ -103,6 +108,11 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
       borderRadius: "10px",
       backgroundColor: "white",
       boxShadow: Shadow.MEDIUM,
+    },
+    redirectionDialog: {
+      "&.MuiDialog-paperScrollPaper": {
+        padding: "10px",
+      },
     },
     reservationInfoGrid: {
       width: "35%",
