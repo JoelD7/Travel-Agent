@@ -46,8 +46,10 @@ import {
   HotelBedAPI,
   hotelsPlaceholder,
   muiDateFormatter,
+  getMinRate,
   selectHotelReservationParams,
   selectOpenRedirecDialog,
+  formatAsDecimal,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
 import {
@@ -528,11 +530,16 @@ export function Hotels() {
   }
 
   function setMaximumPriceInRange(hotelsForBooking: any[]) {
-    let sortedRates = hotelsForBooking
-      .sort((a, b) => Number(a.minRate) - Number(b.minRate))
-      .map((hotel) => Number(hotel.minRate));
+    let sortedRates: number[] = hotelsForBooking
+      .sort((a, b) => getMinRate(a.rooms) - getMinRate(b.rooms))
+      .map((hotel) => getMinRate(hotel.rooms));
 
-    let mediumPrice = Math.floor(sortedRates[Math.round(sortedRates.length / 2) - 1]);
+    let size = sortedRates.length;
+
+    let mediumPrice: number = Number(
+      formatAsDecimal(sortedRates.reduce((a, b) => a + b, 0) / size)
+    );
+
     setMaxRate(mediumPrice);
 
     setState({ ...state, priceRange: [state.priceRange[0], mediumPrice] });
@@ -652,11 +659,15 @@ export function Hotels() {
         break;
 
       case "Price | asc":
-        buffer = hotels.sort((a: HotelBooking, b: HotelBooking) => a.minRate - b.minRate);
+        buffer = hotels.sort(
+          (a: HotelBooking, b: HotelBooking) => getMinRate(a.rooms) - getMinRate(b.rooms)
+        );
         break;
 
       case "Price | desc":
-        buffer = hotels.sort((a: HotelBooking, b: HotelBooking) => b.minRate - a.minRate);
+        buffer = hotels.sort(
+          (a: HotelBooking, b: HotelBooking) => getMinRate(b.rooms) - getMinRate(a.rooms)
+        );
         break;
 
       default:
@@ -675,8 +686,9 @@ export function Hotels() {
     let max = range[1];
 
     let buffer = allHotels.filter(
-      (hotel) => hotel.minRate >= min && hotel.minRate <= max
+      (hotel) => getMinRate(hotel.rooms) >= min && getMinRate(hotel.rooms) <= max
     );
+
     setState({ ...state, priceRange: range });
     setHotelAvailability({ ...hotelAvailability, hotels: buffer });
   }

@@ -140,24 +140,24 @@ export function HotelDetails() {
       updateURL();
     }
 
-    if (String(hotel.code) !== String(id)) {
-      console.log("fetching hotel data");
+    if (!isHotelnStore()) {
       fetchHotelAvailability().then((availabilityRes) => {
         getHotelDetails(id)
           .then((res) => {
-            let hotelForBooking = availabilityRes.data.hotels.hotels[0];
             let availableHotels: number = availabilityRes.data.hotels.total;
-            // let availableHotels: number = 0;
 
             if (availableHotels === 0) {
               redirectToHotels();
               dispatch(setOpenRedirecDialog(true));
+            } else {
+              let hotelForBooking = availabilityRes.data.hotels.hotels[0];
+              let hotelDetails = res.data.hotels[0];
+
+              dispatch(
+                setHotelDetail(mergeHotelResponses(hotelForBooking, hotelDetails))
+              );
+              setLoading(false);
             }
-
-            let hotelDetails = res.data.hotels[0];
-
-            dispatch(setHotelDetail(mergeHotelResponses(hotelForBooking, hotelDetails)));
-            setLoading(false);
           })
           .catch((error) => console.log("Error while fetching hotel details | ", error));
       });
@@ -165,6 +165,10 @@ export function HotelDetails() {
       setLoading(false);
     }
   }, []);
+
+  function isHotelnStore(): boolean {
+    return String(hotel.code) === String(id);
+  }
 
   function fetchHotelAvailability() {
     /**
@@ -251,16 +255,6 @@ export function HotelDetails() {
 
   function getPhoneList() {
     return hotel.phones.map((phone) => phone.phoneNumber).join(" | ");
-  }
-
-  function getHotelBookingLastUpdate() {
-    let lastUpdateString: string | null = localStorage.getItem(
-      LocalStorageKeys.HOTEL_BOOKING_LAST_UPDATE
-    );
-
-    return lastUpdateString === null
-      ? subDays(new Date(), 2)
-      : parseISO(lastUpdateString);
   }
 
   function getOccupancyText(param: "room" | "adult") {

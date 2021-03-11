@@ -148,10 +148,10 @@ export function getRoomTotalPrice(rate: HotelRoomRate): number {
     total += Number(rate.taxes.taxes[0].amount);
   }
 
-  return Number(formatAsDecimal(total));
+  return Number(total);
 }
 
-export function getMinRate(rooms: HotelRooms[]) {
+export function getMinRate(rooms: HotelRooms[]): number {
   let rates: HotelRoomRate[] = [];
 
   rooms.forEach((room) => {

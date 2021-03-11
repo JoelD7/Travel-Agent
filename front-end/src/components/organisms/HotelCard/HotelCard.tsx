@@ -72,8 +72,8 @@ export function HotelCard({ hotel }: HotelCard) {
           {/* Price and details button */}
           <Grid item className={style.priceAndDetailsGrid}>
             <div>
-              <h4 style={{ textAlign: "center" }}>{`From $ ${getMinRate(
-                hotel.rooms
+              <h4 style={{ textAlign: "center" }}>{`From $ ${formatAsDecimal(
+                getMinRate(hotel.rooms)
               )}`}</h4>
               <CustomButton
                 backgroundColor={Colors.PURPLE}
@@ -129,7 +129,9 @@ export function HotelCard({ hotel }: HotelCard) {
 
           <Grid item xs={12} style={{ padding: "10px" }}>
             <Grid container>
-              <Text component="h3" bold>{`$ From ${getMinRate(hotel.rooms)}`}</Text>
+              <Text component="h3" bold>{`$ From ${formatAsDecimal(
+                getMinRate(hotel.rooms)
+              )}`}</Text>
               <CustomButton
                 style={{
                   margin: "auto 0px auto auto",
