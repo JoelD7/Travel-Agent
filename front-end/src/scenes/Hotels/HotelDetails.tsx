@@ -6,22 +6,13 @@ import {
   faPhone,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  Backdrop,
-  CardActionArea,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  Grid,
-} from "@material-ui/core";
+import { Backdrop, CardActionArea, Dialog, Divider, Grid } from "@material-ui/core";
 import Axios from "axios";
-import { differenceInHours, format, parseISO, subDays } from "date-fns";
+import { format, parseISO } from "date-fns";
 import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import Slider from "react-slick";
 import {
   CustomButton,
@@ -43,8 +34,6 @@ import {
   getHotelStars,
   getMinRate,
   HotelBedAPI,
-  hotelPlaceholder,
-  LocalStorageKeys,
   proxyUrl,
   Routes,
   scrollToBottom,
@@ -52,7 +41,10 @@ import {
   selectHotelReservationParams,
   selectRoomAccordionExpanded,
 } from "../../utils";
-import { getHotelDetails } from "../../utils/external-apis/hotelbeds-apis";
+import {
+  getHotelBedHeaders,
+  getHotelDetails,
+} from "../../utils/external-apis/hotelbeds-apis";
 import {
   setHotelDetail,
   setOpenRedirecDialog,
@@ -132,13 +124,11 @@ export function HotelDetails() {
   };
 
   useEffect(() => {
-    if (isURLWithParams()) {
-      reservationParams = convertURLToReservationParams(location.search, "hotelDetails");
+    reservationParams = convertURLToReservationParams(location.search, "hotel");
 
-      dispatch(updateReservationParams(reservationParams));
-    } else {
-      updateURL();
-    }
+    dispatch(updateReservationParams(reservationParams));
+
+    setURLParamsAsKVP();
 
     if (!isHotelnStore()) {
       fetchHotelAvailability().then((availabilityRes) => {
@@ -184,7 +174,7 @@ export function HotelDetails() {
     };
 
     return Axios.post(proxyUrl + HotelBedAPI.hotelAvailabilityURL, bookingParams, {
-      headers: HotelBedAPI.headers,
+      headers: getHotelBedHeaders(),
     });
   }
 
@@ -207,20 +197,7 @@ export function HotelDetails() {
     return kvp;
   }
 
-  /**
-   * Updates de URL using the reservation parameters.
-   * It uses the the reservation parameters in the Redux store
-   * unless the optional argument is provided.
-   * @param optionalReservationParams
-   */
-  function updateURL() {
-    history.push(
-      `${location.pathname}${convertReservationParamsToURLParams(
-        reservationParams,
-        "hotelDetails"
-      )}`
-    );
-
+  function setURLParamsAsKVP() {
     //To avoid setting the urlParams variable twice on the first render.
     if (!isFirstRender()) {
       setURLParams(getURLParamsAsKVP());
@@ -479,7 +456,7 @@ export function HotelDetails() {
             </Text>
 
             {hotel.rooms.map((room) => (
-              <RoomAccordion key={room.code} room={room} />
+              <RoomAccordion hotel={hotel} key={room.code} room={room} />
             ))}
           </Grid>
         </Grid>

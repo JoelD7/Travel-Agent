@@ -73,6 +73,7 @@ export interface HotelRooms {
 }
 
 export interface HotelBookingParams {
+  id: string;
   stay: {
     checkIn: Date;
     checkOut: Date;
@@ -210,8 +211,9 @@ interface HotelRoom {
   };
 }
 
-interface HotelImage {
+export interface HotelImage {
   order: number;
   path: string;
   visualOrder: number;
+  roomCode: string;
 }

@@ -1,20 +1,20 @@
-import { faPhone, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import { Grid, Divider } from "@material-ui/core";
+import { faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { Divider, Grid } from "@material-ui/core";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { Colors } from "../../../styles";
 import {
   capitalizeString,
-  getRoomTotalPrice,
+  convertReservationParamsToURLParams,
+  formatAsDecimal,
   getHotelImages,
   getHotelStars,
-  HotelBooking,
-  HotelRoomRate,
-  formatAsDecimal,
-  Routes,
-  HotelRooms,
   getMinRate,
+  HotelBooking,
+  HotelBookingParams,
+  Routes,
+  selectHotelReservationParams,
 } from "../../../utils";
 import { setHotelDetail } from "../../../utils/store/hotel-slice";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
@@ -30,13 +30,20 @@ export function HotelCard({ hotel }: HotelCard) {
   const style = hotelCardStyles();
   const dispatch = useDispatch();
 
+  let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
+
   function getFormattedAddress(hotel: HotelBooking) {
     return hotel.address.content;
   }
 
   function onHotelCardClick(hotel: HotelBooking) {
     dispatch(setHotelDetail(hotel));
-    history.push(`${Routes.HOTELS}/${hotel.code}`);
+    history.push(
+      `${Routes.HOTELS}/${hotel.code}${convertReservationParamsToURLParams(
+        reservationParams,
+        "hotelDetails"
+      )}`
+    );
   }
 
   return (

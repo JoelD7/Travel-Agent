@@ -16,35 +16,40 @@ interface HotelReducer {
   openRedirecDialog: boolean;
 }
 
+const initialStateReservationParams = {
+  stay: {
+    checkIn: addDays(new Date(), 1),
+    checkOut: addDays(new Date(), 3),
+  },
+  occupancies: [
+    {
+      adults: 2,
+      children: 0,
+      paxes: [],
+      rooms: 1,
+    },
+  ],
+
+  geolocation: {
+    longitude: 2.3522,
+    latitude: 48.8566,
+    radius: 15,
+    unit: "km",
+  },
+  filter: {
+    maxHotels: 250,
+    minCategory: 1,
+    minRate: 0,
+  },
+};
+
 const initialState: HotelReducer = {
   hotelDetail: hotelPlaceholder,
   allRoomAccordionsExpanded: false,
   openRedirecDialog: false,
   reservationParams: {
-    stay: {
-      checkIn: addDays(new Date(), 1),
-      checkOut: addDays(new Date(), 3),
-    },
-    occupancies: [
-      {
-        adults: 2,
-        children: 0,
-        paxes: [],
-        rooms: 1,
-      },
-    ],
-
-    geolocation: {
-      longitude: 2.3522,
-      latitude: 48.8566,
-      radius: 15,
-      unit: "km",
-    },
-    filter: {
-      maxHotels: 250,
-      minCategory: 1,
-      minRate: 0,
-    },
+    ...initialStateReservationParams,
+    id: JSON.stringify(initialStateReservationParams),
   },
 };
 
@@ -56,8 +61,19 @@ const hotelSlice = createSlice({
       state.hotelDetail = action.payload;
     },
 
-    updateReservationParams(state, action: PayloadAction<any>) {
-      state.reservationParams = { ...state.reservationParams, ...action.payload };
+    updateReservationParams: {
+      reducer(state, action) {
+        state.reservationParams = action.payload;
+      },
+
+      prepare(reservationParams: any) {
+        let id = JSON.stringify({ ...reservationParams });
+        return {
+          payload: { ...reservationParams, id },
+          meta: "",
+          error: false,
+        };
+      },
     },
 
     setRoomAccordionExpanded(state, action: PayloadAction<boolean>) {

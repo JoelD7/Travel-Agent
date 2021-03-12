@@ -10,17 +10,27 @@ import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
-import { capitalizeString, formatAsCurrency, getRoomTotalPrice } from "../../../utils";
-import { HotelRoomRate, HotelRooms } from "../../../utils/types/hotel-types";
+import {
+  capitalizeString,
+  formatAsCurrency,
+  getRoomTotalPrice,
+  HotelBooking,
+  HotelRoomRate,
+  HotelRooms,
+  HotelImage,
+  selectRoomAccordionExpanded,
+  HotelBedAPI,
+} from "../../../utils";
 import { Text, IconText, CustomButton } from "../../atoms";
-import { selectRoomAccordionExpanded } from "../../../utils";
 import { setRoomAccordionExpanded } from "../../../utils/store/hotel-slice";
+import { RoomAccordionTitle } from "../RoomAccordionTitle/RoomAccordionTitle";
 
 interface RoomAccordion {
+  hotel: HotelBooking;
   room: HotelRooms;
 }
 
-export function RoomAccordion({ room }: RoomAccordion) {
+export function RoomAccordion({ hotel, room }: RoomAccordion) {
   const accordionStyles = makeStyles(() => ({
     accordionRoot: {
       backgroundColor: Colors.BLUE,
@@ -87,10 +97,11 @@ export function RoomAccordion({ room }: RoomAccordion) {
       expanded={expanded}
       classes={{ root: style.accordionRoot, rounded: style.accordionRounded }}
     >
-      <AccordionSummary expandIcon={<IconText icon={faChevronDown}></IconText>}>
-        <Text component="h3" color="white" bold>
-          {capitalizeString(room.name, "full sentence")}
-        </Text>
+      <AccordionSummary
+        style={{ display: "flex" }}
+        expandIcon={<IconText icon={faChevronDown}></IconText>}
+      >
+        <RoomAccordionTitle room={room} />
       </AccordionSummary>
 
       <AccordionDetails style={{ background: "white" }}>

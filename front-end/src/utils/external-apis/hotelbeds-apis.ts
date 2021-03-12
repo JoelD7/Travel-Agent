@@ -27,6 +27,16 @@ export const imageURL = {
   original: "http://photos.hotelbeds.com/giata/original/", //+ {path} For images in its original size (please note that this is not a standard and actual size may vary between hotels)
 };
 
+export function getHotelBedHeaders() {
+  return {
+    "Api-key": apiKey,
+    "X-Signature": sha256(`${apiKey}${secret}${Math.round(Date.now() / 1000)}`),
+    "Accept-Encoding": "gzip",
+    Accept: "application/json",
+    "Access-Control-Allow-Origin": "*",
+  };
+}
+
 export function getHotelDetails(code: string): Promise<AxiosResponse<any>> {
   return Axios.get(
     proxyUrl + `https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels`,

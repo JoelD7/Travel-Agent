@@ -88,7 +88,7 @@ export function convertURLToReservationParams(
     parameters = { ...parameters, [key]: value };
   });
 
-  reservationParams = {
+  let buffer = {
     stay: {
       checkIn: parseISO(parameters.checkIn),
       checkOut: parseISO(parameters.checkOut),
@@ -117,25 +117,33 @@ export function convertURLToReservationParams(
         : undefined,
   };
 
+  reservationParams = { ...buffer, id: JSON.stringify(buffer) };
+
   return reservationParams;
 }
 
 function getPaxes(parameters: any): HotelPax[] {
   let paxes: HotelPax[] = [];
 
+  let children: number = Number(parameters.children);
+
   if (parameters.hasOwnProperty("paxes")) {
     let stringPaxes = parameters.paxes.split(",");
-    for (let i = 0; i <= stringPaxes.length - 2; i += 2) {
-      let type = stringPaxes[i];
-      let age = stringPaxes[i + 1];
+    let totalPaxes = stringPaxes.length / 2;
 
-      paxes.push({ type, age: Number(age) });
+    if (totalPaxes === children) {
+      for (let i = 0; i <= stringPaxes.length - 2; i += 2) {
+        let type = stringPaxes[i];
+        let age = stringPaxes[i + 1];
+
+        paxes.push({ type, age: Number(age) });
+      }
+      return paxes;
     }
-  } else if (parameters.hasOwnProperty("children")) {
-    let children: number = Number(parameters.children);
-    for (let i = 0; i < children; i++) {
-      paxes.push({ type: "CH", age: 4 });
-    }
+  }
+
+  for (let i = 0; i < children; i++) {
+    paxes.push({ type: "CH", age: 4 });
   }
 
   return paxes;

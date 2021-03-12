@@ -2,9 +2,16 @@ import React from "react";
 import { createMuiTheme, MenuItem, ThemeProvider, Toolbar } from "@material-ui/core";
 import { Colors } from "../../../styles";
 import { servicesToolbarStyles } from "../servicesToolbar-styles";
-import { Link, useHistory } from "react-router-dom";
-import { getLinkStyle, Routes } from "../../../utils";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import {
+  convertReservationParamsToURLParams,
+  convertURLToReservationParams,
+  getLinkStyle,
+  Routes,
+  selectHotelReservationParams,
+} from "../../../utils";
 import { CreateCSSProperties, CSSProperties } from "@material-ui/styles";
+import { useSelector } from "react-redux";
 
 interface NavbarService {
   label: string;
@@ -20,6 +27,8 @@ interface ServicesToolbar {
 export function ServicesToolbar({ home, style }: ServicesToolbar) {
   let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
   let page = "/" + segmentedURL[segmentedURL.length - 1];
+
+  const reservationParams = useSelector(selectHotelReservationParams);
 
   const navbarServices: NavbarService[] = [
     {
@@ -64,7 +73,30 @@ export function ServicesToolbar({ home, style }: ServicesToolbar) {
 
   const styles = servicesToolbarStyles();
 
-  const history = useHistory();
+  function getServiceRoute(route: string) {
+    switch (route) {
+      case Routes.HOTELS:
+        return `${Routes.HOTELS}${convertReservationParamsToURLParams(
+          reservationParams,
+          "hotel"
+        )}&sortBy=Stars | desc&page=${1}&pageSize=${20}`;
+
+      case Routes.FLIGHTS:
+        return Routes.FLIGHTS;
+
+      case Routes.RESTAURANTS:
+        return Routes.RESTAURANTS;
+
+      case Routes.THINGS_TODO:
+        return Routes.THINGS_TODO;
+
+      case Routes.CAR_RENTAL:
+        return Routes.CAR_RENTAL;
+
+      default:
+        return Routes.HOME;
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -73,11 +105,14 @@ export function ServicesToolbar({ home, style }: ServicesToolbar) {
         style={{ ...style }}
       >
         {navbarServices.map((service, i) => (
-          <Link key={service.route} to={service.route} style={getLinkStyle(Colors.BLUE)}>
+          <Link
+            key={service.route}
+            to={getServiceRoute(service.route)}
+            style={getLinkStyle(Colors.BLUE)}
+          >
             <MenuItem
               key={i}
               selected={service.selected}
-              // onClick={() => history.push(service.route)}
               classes={{ root: home ? styles.menuItemRootHome : styles.menuItemRoot }}
             >
               {service.label}

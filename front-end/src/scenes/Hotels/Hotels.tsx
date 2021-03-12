@@ -52,6 +52,7 @@ import {
   formatAsDecimal,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
+import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
 import {
   setOpenRedirecDialog,
   updateReservationParams,
@@ -325,7 +326,7 @@ export function Hotels() {
     };
 
     return Axios.post(proxyUrl + HotelBedAPI.hotelAvailabilityURL, bookingParams, {
-      headers: HotelBedAPI.headers,
+      headers: getHotelBedHeaders(),
     });
   }
 
@@ -337,7 +338,7 @@ export function Hotels() {
     let maxHotels = availability.hotels.length;
 
     Axios.get(proxyUrl + HotelBedAPI.hotelContentURL, {
-      headers: HotelBedAPI.headers,
+      headers: getHotelBedHeaders(),
       params: {
         fields: "all",
         codes: hotelCodes.join(","),
@@ -536,8 +537,8 @@ export function Hotels() {
 
     let size = sortedRates.length;
 
-    let mediumPrice: number = Number(
-      formatAsDecimal(sortedRates.reduce((a, b) => a + b, 0) / size)
+    let mediumPrice: number = Math.round(
+      Number(formatAsDecimal(sortedRates.reduce((a, b) => a + b, 0) / size))
     );
 
     setMaxRate(mediumPrice);

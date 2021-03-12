@@ -21,3 +21,4 @@ export { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 export { NotAvailableCard } from "./NotAvailableCard/NotAvailableCard";
 export { Pagination } from "./Pagination/Pagination";
 export { RestaurantFilterDrawer } from "./RestaurantFilterDrawer";
+export { RoomAccordionTitle } from "./RoomAccordionTitle/RoomAccordionTitle";
