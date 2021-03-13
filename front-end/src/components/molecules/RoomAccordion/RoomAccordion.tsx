@@ -33,9 +33,13 @@ interface RoomAccordion {
 export function RoomAccordion({ hotel, room }: RoomAccordion) {
   const accordionStyles = makeStyles(() => ({
     accordionRoot: {
-      backgroundColor: Colors.BLUE,
+      backgroundColor: "white",
       boxShadow: Shadow.MEDIUM3D,
       marginBottom: "10px",
+
+      "&:before": {
+        backgroundColor: Colors.TRANSPARENT,
+      },
 
       "&.Mui-expanded:last-child": {
         marginBottom: "40px",
@@ -99,7 +103,14 @@ export function RoomAccordion({ hotel, room }: RoomAccordion) {
     >
       <AccordionSummary
         style={{ display: "flex" }}
-        expandIcon={<IconText icon={faChevronDown}></IconText>}
+        expandIcon={
+          <IconText
+            backgroundColor={Colors.GREEN}
+            iconColor={Colors.BLUE}
+            size={28}
+            icon={faChevronDown}
+          ></IconText>
+        }
       >
         <RoomAccordionTitle room={room} />
       </AccordionSummary>

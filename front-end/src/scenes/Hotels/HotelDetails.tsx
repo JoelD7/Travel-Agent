@@ -140,7 +140,14 @@ export function HotelDetails() {
               redirectToHotels();
               dispatch(setOpenRedirecDialog(true));
             } else {
-              let hotelForBooking = availabilityRes.data.hotels.hotels[0];
+              let checkIn = availabilityRes.data.hotels.checkIn;
+              let checkOut = availabilityRes.data.hotels.checkOut;
+
+              let hotelForBooking = {
+                ...availabilityRes.data.hotels.hotels[0],
+                checkIn,
+                checkOut,
+              };
               let hotelDetails = res.data.hotels[0];
 
               dispatch(
@@ -403,7 +410,7 @@ export function HotelDetails() {
                   <Grid item xs={12}>
                     <IconText icon={faCalendar} fontSize={16}>
                       <p style={{ margin: "0" }}>
-                        <b>Check in: </b>
+                        <b>Check out: </b>
                         {format(parseISO(hotel.checkOut), "dd MMM., yyyy")}
                       </p>
                     </IconText>
@@ -449,7 +456,7 @@ export function HotelDetails() {
         </Grid>
 
         {/* Rooms */}
-        <Grid container style={{ marginTop: "40px" }}>
+        <Grid container className={style.roomsContainer}>
           <Grid item className={style.roomsGrid}>
             <Text id={`${roomTitleId}`} component="h2" bold color={Colors.BLUE}>
               Rooms

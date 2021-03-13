@@ -117,8 +117,12 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
     reservationInfoGrid: {
       width: "35%",
     },
+    roomsContainer: {
+      marginTop: "40px",
+      width: "902px",
+    },
     roomsGrid: {
-      width: "40%",
+      width: "100%",
     },
     slider: {
       width: "100%",
