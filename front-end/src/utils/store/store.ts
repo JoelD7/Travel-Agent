@@ -59,6 +59,9 @@ export const selectRoomAccordionExpanded = (state: RootState) =>
 export const selectOpenRedirecDialog = (state: RootState) =>
   state.hotelReducer.openRedirecDialog;
 
+export const selectIsHotelDetailsBlurred = (state: RootState) =>
+  state.hotelReducer.isHotelDetailsBlurred;
+
 //#endregion
 
 //#region AirportCity search

@@ -5,3 +5,4 @@ export const LIGHT3D = "2px 2px 12px rgba(118,118,118,0.5)";
 export const MEDIUM = "2px 2px 3px rgba(10,10,10,0.7)";
 export const MEDIUM3D = "3px 3px 7px rgba(50,50,50,0.5)";
 export const DARK = "3px 3px 10px rgba(10,10,10,0.8)";
+export const TRANSPARENT = "0px 0px rgba(0,0,0,0)";

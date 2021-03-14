@@ -95,8 +95,8 @@ export function HotelDetails() {
 
   const sliderSettings = {
     className: style.slider,
-    nextArrow: <SliderArrow iconSize="2x" direction="right" />,
-    prevArrow: <SliderArrow iconSize="2x" direction="left" />,
+    nextArrow: <SliderArrow onTop direction="right" />,
+    prevArrow: <SliderArrow onTop direction="left" />,
     slidesToShow: 3,
     slidesToScroll: 3,
     responsive: [
@@ -104,12 +104,14 @@ export function HotelDetails() {
         breakpoint: 1374,
         settings: {
           slidesToShow: 2,
+          slidesToScroll: 2,
         },
       },
       {
         breakpoint: 1140,
         settings: {
           slidesToShow: 1,
+          slidesToScroll: 1,
         },
       },
     ],
@@ -117,8 +119,12 @@ export function HotelDetails() {
 
   const imageSliderSettings = {
     className: style.imageSlider,
-    nextArrow: <SliderArrow onTop iconSize="2x" direction="right" />,
-    prevArrow: <SliderArrow onTop iconSize="2x" direction="left" />,
+    nextArrow: (
+      <SliderArrow backgroundColor="#00000075" iconColor="#b6b6b6" direction="right" />
+    ),
+    prevArrow: (
+      <SliderArrow backgroundColor="#00000075" iconColor="#b6b6b6" direction="left" />
+    ),
     slidesToShow: 1,
     initialSlide: initialImageSlide,
   };
@@ -129,43 +135,34 @@ export function HotelDetails() {
     dispatch(updateReservationParams(reservationParams));
 
     setURLParamsAsKVP();
+    setLoading(false);
 
-    if (!isHotelnStore()) {
-      fetchHotelAvailability().then((availabilityRes) => {
-        getHotelDetails(id)
-          .then((res) => {
-            let availableHotels: number = availabilityRes.data.hotels.total;
+    // fetchHotelAvailability().then((availabilityRes) => {
+    //   getHotelDetails(id)
+    //     .then((res) => {
+    //       let availableHotels: number = availabilityRes.data.hotels.total;
 
-            if (availableHotels === 0) {
-              redirectToHotels();
-              dispatch(setOpenRedirecDialog(true));
-            } else {
-              let checkIn = availabilityRes.data.hotels.checkIn;
-              let checkOut = availabilityRes.data.hotels.checkOut;
+    //       if (availableHotels === 0) {
+    //         redirectToHotels();
+    //         dispatch(setOpenRedirecDialog(true));
+    //       } else {
+    //         let checkIn = availabilityRes.data.hotels.checkIn;
+    //         let checkOut = availabilityRes.data.hotels.checkOut;
 
-              let hotelForBooking = {
-                ...availabilityRes.data.hotels.hotels[0],
-                checkIn,
-                checkOut,
-              };
-              let hotelDetails = res.data.hotels[0];
+    //         let hotelForBooking = {
+    //           ...availabilityRes.data.hotels.hotels[0],
+    //           checkIn,
+    //           checkOut,
+    //         };
+    //         let hotelDetails = res.data.hotels[0];
 
-              dispatch(
-                setHotelDetail(mergeHotelResponses(hotelForBooking, hotelDetails))
-              );
-              setLoading(false);
-            }
-          })
-          .catch((error) => console.log("Error while fetching hotel details | ", error));
-      });
-    } else {
-      setLoading(false);
-    }
+    //         dispatch(setHotelDetail(mergeHotelResponses(hotelForBooking, hotelDetails)));
+    //         setLoading(false);
+    //       }
+    //     })
+    //     .catch((error) => console.log("Error while fetching hotel details | ", error));
+    // });
   }, []);
-
-  function isHotelnStore(): boolean {
-    return String(hotel.code) === String(id);
-  }
 
   function fetchHotelAvailability() {
     /**
@@ -271,7 +268,10 @@ export function HotelDetails() {
   }
 
   return (
-    <div className={style.mainContainer}>
+    <div
+      className={style.mainContainer}
+      style={viewerOpen ? { filter: "blur(4px)" } : {}}
+    >
       <a href={`#${roomTitleId}`} ref={roomAnchorEl} hidden></a>
 
       <Helmet>

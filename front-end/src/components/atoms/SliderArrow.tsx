@@ -23,6 +23,8 @@ interface SliderArrowProps {
     | "10x";
   className?: string;
   onTop?: boolean;
+  iconColor?: string;
+  backgroundColor?: string;
   style?: CSSProperties;
   onClick?: (event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 }
@@ -32,12 +34,14 @@ export function SliderArrow({
   onTop,
   direction,
   style,
+  backgroundColor = Colors.BLUE,
+  iconColor = "white",
   className,
   iconSize = "1x",
 }: SliderArrowProps) {
   const sliderArrowStyles = makeStyles((theme: Theme) => ({
     iconContainer: {
-      backgroundColor: Colors.BLUE,
+      backgroundColor: backgroundColor,
       borderRadius: "50%",
       height: iconSize === "1x" ? "40px" : "56px",
       width: iconSize === "1x" ? "40px" : "56px",
@@ -65,7 +69,7 @@ export function SliderArrow({
       <FontAwesomeIcon
         size={iconSize}
         icon={direction === "right" ? faChevronRight : faChevronLeft}
-        color={"white"}
+        color={iconColor}
         style={
           direction === "right"
             ? { position: "relative", left: "2px" }

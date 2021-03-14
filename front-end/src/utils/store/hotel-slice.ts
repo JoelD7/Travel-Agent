@@ -14,6 +14,7 @@ interface HotelReducer {
   hotelDetail: HotelBooking;
   allRoomAccordionsExpanded: boolean;
   openRedirecDialog: boolean;
+  isHotelDetailsBlurred: boolean;
 }
 
 const initialStateReservationParams = {
@@ -47,6 +48,7 @@ const initialState: HotelReducer = {
   hotelDetail: hotelPlaceholder,
   allRoomAccordionsExpanded: false,
   openRedirecDialog: false,
+  isHotelDetailsBlurred: false,
   reservationParams: {
     ...initialStateReservationParams,
     id: JSON.stringify(initialStateReservationParams),
@@ -82,6 +84,10 @@ const hotelSlice = createSlice({
     setOpenRedirecDialog(state, action: PayloadAction<boolean>) {
       state.openRedirecDialog = action.payload;
     },
+
+    blurHotelDetails(state, action: PayloadAction<boolean>) {
+      state.isHotelDetailsBlurred = action.payload;
+    },
   },
 });
 
@@ -89,6 +95,7 @@ export const {
   updateReservationParams,
   setHotelDetail,
   setOpenRedirecDialog,
+  blurHotelDetails,
   setRoomAccordionExpanded,
 } = hotelSlice.actions;
 

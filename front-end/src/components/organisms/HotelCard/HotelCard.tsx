@@ -37,7 +37,7 @@ export function HotelCard({ hotel }: HotelCard) {
   }
 
   function onHotelCardClick(hotel: HotelBooking) {
-    dispatch(setHotelDetail(hotel));
+    // dispatch(setHotelDetail(hotel));
     history.push(
       `${Routes.HOTELS}/${hotel.code}${convertReservationParamsToURLParams(
         reservationParams,

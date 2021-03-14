@@ -22,6 +22,33 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
     },
     aboutHotelGrid: {
       width: "65%",
+      [theme.breakpoints.down(1060)]: {
+        width: "100%",
+      },
+    },
+    reservationInfoGrid: {
+      width: "35%",
+      [theme.breakpoints.down(1060)]: {
+        width: "64%",
+        marginTop: "20px",
+      },
+      [theme.breakpoints.down(675)]: {
+        width: "100%",
+      },
+    },
+    reservationInfoContainer: {
+      padding: "20px",
+      marginLeft: "auto",
+      width: "85%",
+      borderRadius: "10px",
+      backgroundColor: "white",
+      boxShadow: Shadow.MEDIUM,
+      [theme.breakpoints.down(1060)]: {
+        marginLeft: "0px",
+      },
+      [theme.breakpoints.down(675)]: {
+        width: "100%",
+      },
     },
     arrowLeft: {
       position: "absolute",
@@ -60,23 +87,27 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
       margin: "20px 20px 0px 20px",
     },
     paperImage: {
-      maxWidth: "1100px",
-      width: "1100px",
-      height: "694px",
-      minWidth: "525px",
-      backgroundColor: "black",
+      maxWidth: "92vw",
+      backgroundColor: Colors.TRANSPARENT,
+      "&.MuiPaper-elevation24": {
+        boxShadow: Shadow.TRANSPARENT,
+      },
     },
     pageContainer: {
       width: "85%",
       margin: "auto",
+      [theme.breakpoints.down(500)]: {
+        width: "93%",
+      },
     },
     photoContainer: {
       height: "400px",
       margin: "50px 0px",
+      [theme.breakpoints.down(1140)]: {
+        height: "46vw",
+      },
     },
-    photoContainerImage: {
-      height: "80vh",
-    },
+    photoContainerImage: {},
     photo: {
       objectFit: "cover",
       height: "100%",
@@ -93,6 +124,7 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
       objectFit: "cover",
       height: "100%",
       width: "100%",
+      borderRadius: "10px",
     },
     progressCircleContainer: {
       display: "flex",
@@ -101,25 +133,20 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
       left: "50vw",
       top: "50vh",
     },
-    reservationInfoContainer: {
-      padding: "20px",
-      marginLeft: "auto",
-      width: "85%",
-      borderRadius: "10px",
-      backgroundColor: "white",
-      boxShadow: Shadow.MEDIUM,
-    },
+
     redirectionDialog: {
       "&.MuiDialog-paperScrollPaper": {
         padding: "10px",
       },
     },
-    reservationInfoGrid: {
-      width: "35%",
-    },
+
     roomsContainer: {
       marginTop: "40px",
       width: "902px",
+
+      [theme.breakpoints.down(1027)]: {
+        width: "89vw",
+      },
     },
     roomsGrid: {
       width: "100%",

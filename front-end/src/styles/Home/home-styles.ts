@@ -7,7 +7,6 @@ import { Family } from "../../assets/fonts";
 export const home_explore_button: CreateCSSProperties<{}> = {
   border: "3px solid white",
   fontSize: "18px",
-  // borderRadius: "50px",
   color: "white",
   margin: "auto",
 

@@ -378,6 +378,7 @@ export function Hotels() {
     hotelAvailabilityTemp = { ...hotelAvailabilityTemp, hotels: sortedHotels };
 
     setHotelAvailability(hotelAvailabilityTemp);
+
     firstRender.current = false;
 
     if (hotelsMounted) {
