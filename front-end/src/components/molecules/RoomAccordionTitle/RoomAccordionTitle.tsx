@@ -157,8 +157,7 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
       .filter((image) => image.roomCode === roomCode)
       .sort((a, b) => a.visualOrder - b.visualOrder);
 
-    // return roomImages.length > 0 ? HotelBedAPI.imageURL.bigger + roomImages[0].path : "";
-    return "/Travel-Agent/george6.jpg";
+    return roomImages.length > 0 ? HotelBedAPI.imageURL.bigger + roomImages[0].path : "";
   }
 
   function getOccupancyText(param: "room" | "adult") {

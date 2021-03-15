@@ -95,8 +95,8 @@ export function HotelDetails() {
 
   const sliderSettings = {
     className: style.slider,
-    nextArrow: <SliderArrow onTop direction="right" />,
-    prevArrow: <SliderArrow onTop direction="left" />,
+    nextArrow: <SliderArrow direction="right" />,
+    prevArrow: <SliderArrow direction="left" />,
     slidesToShow: 3,
     slidesToScroll: 3,
     responsive: [
@@ -135,33 +135,32 @@ export function HotelDetails() {
     dispatch(updateReservationParams(reservationParams));
 
     setURLParamsAsKVP();
-    setLoading(false);
 
-    // fetchHotelAvailability().then((availabilityRes) => {
-    //   getHotelDetails(id)
-    //     .then((res) => {
-    //       let availableHotels: number = availabilityRes.data.hotels.total;
+    fetchHotelAvailability().then((availabilityRes) => {
+      getHotelDetails(id)
+        .then((res) => {
+          let availableHotels: number = availabilityRes.data.hotels.total;
 
-    //       if (availableHotels === 0) {
-    //         redirectToHotels();
-    //         dispatch(setOpenRedirecDialog(true));
-    //       } else {
-    //         let checkIn = availabilityRes.data.hotels.checkIn;
-    //         let checkOut = availabilityRes.data.hotels.checkOut;
+          if (availableHotels === 0) {
+            redirectToHotels();
+            dispatch(setOpenRedirecDialog(true));
+          } else {
+            let checkIn = availabilityRes.data.hotels.checkIn;
+            let checkOut = availabilityRes.data.hotels.checkOut;
 
-    //         let hotelForBooking = {
-    //           ...availabilityRes.data.hotels.hotels[0],
-    //           checkIn,
-    //           checkOut,
-    //         };
-    //         let hotelDetails = res.data.hotels[0];
+            let hotelForBooking = {
+              ...availabilityRes.data.hotels.hotels[0],
+              checkIn,
+              checkOut,
+            };
+            let hotelDetails = res.data.hotels[0];
 
-    //         dispatch(setHotelDetail(mergeHotelResponses(hotelForBooking, hotelDetails)));
-    //         setLoading(false);
-    //       }
-    //     })
-    //     .catch((error) => console.log("Error while fetching hotel details | ", error));
-    // });
+            dispatch(setHotelDetail(mergeHotelResponses(hotelForBooking, hotelDetails)));
+            setLoading(false);
+          }
+        })
+        .catch((error) => console.log("Error while fetching hotel details | ", error));
+    });
   }, []);
 
   function fetchHotelAvailability() {
