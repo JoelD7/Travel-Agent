@@ -65,12 +65,7 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
       padding: "35px",
       boxShadow: Shadow.MEDIUM,
     },
-    imageSlider: {
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      height: "100%",
-    },
+
     limitedAboutText: {
       display: "-webkit-box",
       WebkitLineClamp: 6,
@@ -86,13 +81,7 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
       height: "190px",
       margin: "20px 20px 0px 20px",
     },
-    paperImage: {
-      maxWidth: "92vw",
-      backgroundColor: Colors.TRANSPARENT,
-      "&.MuiPaper-elevation24": {
-        boxShadow: Shadow.TRANSPARENT,
-      },
-    },
+
     pageContainer: {
       width: "85%",
       margin: "auto",
@@ -100,32 +89,7 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
         width: "93%",
       },
     },
-    photoContainer: {
-      height: "400px",
-      margin: "50px 0px",
-      [theme.breakpoints.down(1140)]: {
-        height: "46vw",
-      },
-    },
-    photoContainerImage: {},
-    photo: {
-      objectFit: "cover",
-      height: "100%",
-      borderRadius: "10px",
-      width: "97%",
-      margin: "auto 5px",
 
-      [theme.breakpoints.down(1140)]: {
-        width: "auto",
-        margin: "auto",
-      },
-    },
-    photoInSlider: {
-      objectFit: "cover",
-      height: "100%",
-      width: "100%",
-      borderRadius: "10px",
-    },
     progressCircleContainer: {
       display: "flex",
       margin: "auto",

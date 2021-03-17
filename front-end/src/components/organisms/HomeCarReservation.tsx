@@ -133,7 +133,9 @@ export default function HomeCarReservation() {
                 <h5 className={style.reservationParamText}>{param.label}</h5>
                 <KeyboardDateTimePicker
                   value={car[param.prop]}
-                  labelFunc={muiDateFormatter}
+                  labelFunc={(date, invalidLabel) =>
+                    muiDateFormatter(date, invalidLabel, "date")
+                  }
                   className={style.datepicker}
                   minDate={new Date()}
                   format="dd MMM., yyyy  hh:mm a"

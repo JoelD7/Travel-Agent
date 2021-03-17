@@ -3,6 +3,21 @@ import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
 
 export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
+  datepicker: {
+    backgroundColor: "white",
+    fontFamily: Font.Family,
+    width: "100%",
+    maxWidth: "100%",
+    borderRadius: "4px",
+
+    "& .MuiIconButton-root": {
+      color: Colors.BLUE,
+    },
+
+    "& .MuiInputBase-input": {
+      padding: "6px 7px 7px",
+    },
+  },
   mainContainer: {
     fontFamily: Font.Family,
     backgroundColor: Colors.BACKGROUND,
@@ -19,7 +34,7 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(910)]: {
       width: "100%",
     },
-    width: "57%",
+    width: "30%",
     color: "white",
   },
   detailsContainer: {
@@ -32,7 +47,7 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(910)]: {
       width: "100%",
     },
-    width: "42%",
+    width: "69%",
     marginLeft: "10px",
     height: "500px",
   },
@@ -47,6 +62,12 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     height: "470px",
     margin: "50px 0px",
   },
+  popoverPaper: {
+    width: "390px",
+    maxHeight: "280px",
+    padding: "15px",
+    borderRadius: "10px",
+  },
   restaurantImage: {
     objectFit: "cover",
     width: "95%",
@@ -60,6 +81,29 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
       margin: "10px auto auto auto",
       width: "100%",
     },
+  },
+  select: {
+    "& .MuiOutlinedInput-input": {
+      padding: "10px 25px 10px 15px",
+      borderRadius: "10px",
+      margin: "0px 5px",
+    },
+
+    "& .MuiOutlinedInput-root": {
+      "&:hover fieldset": {
+        borderColor: "#cecece",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#cecece",
+      },
+    },
+
+    "& .MuiMenuItem-root": {
+      fontFamily: Font.Family,
+    },
+  },
+  selectIcon: {
+    color: Colors.BLUE,
   },
   slider: {
     width: "100%",

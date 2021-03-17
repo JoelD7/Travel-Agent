@@ -2,23 +2,13 @@ import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 import {
   faChevronCircleLeft,
   faChevronCircleRight,
-  faChevronLeft,
-  faPlaneDeparture,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CardActionArea, Grid, IconButton, Slide } from "@material-ui/core";
-import {
-  addDays,
-  addMonths,
-  eachDayOfInterval,
-  format,
-  getDate,
-  subMonths,
-} from "date-fns";
+import { CardActionArea, Grid, IconButton } from "@material-ui/core";
+import { addDays, addMonths, eachDayOfInterval, format, subMonths } from "date-fns";
 import { endOfMonth, subDays } from "date-fns/esm";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import SwipeableViews from "react-swipeable-views";
+import { useSelector } from "react-redux";
 import {
   // Calendar,
   CustomButton,
@@ -33,8 +23,6 @@ import { areDatesEqual, eventToIcon, tripPlaceholder } from "../../utils";
 import { calendarItemHolderSelect } from "../../utils/store/calendar-slice";
 import { CalendarItem, Trip, TripEvent } from "../../utils/types/trip-types";
 import { itineraryStyles } from "./itinerary-styles";
-import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-import { Libraries } from "@react-google-maps/api/dist/utils/make-load-script-url";
 
 interface Calendar {
   baseDate: Date;

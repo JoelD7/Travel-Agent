@@ -7,6 +7,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { Backdrop, CardActionArea, Dialog, Divider, Grid } from "@material-ui/core";
+import { CSSProperties } from "@material-ui/styles";
 import Axios from "axios";
 import { format, parseISO } from "date-fns";
 import React, { useEffect, useRef, useState } from "react";
@@ -16,6 +17,7 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import Slider from "react-slick";
 import {
   CustomButton,
+  HotelDetailsSlider,
   IconText,
   Navbar,
   ProgressCircle,
@@ -27,7 +29,6 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
-  convertReservationParamsToURLParams,
   convertURLToReservationParams,
   formatAsCurrency,
   getHotelImages,
@@ -62,8 +63,6 @@ export function HotelDetails() {
   const style = hotelDetailsStyles();
   const hotel: HotelBooking = useSelector(selectHotelDetail);
 
-  const hotelPhotos = getHotelImages(hotel);
-
   let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
   const { id } = useParams<any>();
@@ -85,56 +84,19 @@ export function HotelDetails() {
   const allRoomAccordionsExpanded = useSelector(selectRoomAccordionExpanded);
 
   const [viewerOpen, setViewerOpen] = useState(false);
-  const [initialImageSlide, setInitialImageSlide] = useState(0);
 
   const firstRender = useRef(true);
 
-  const [urlParams, setURLParams] = useState<{ [index: string]: string }>(
-    getURLParamsAsKVP()
-  );
-
-  const sliderSettings = {
-    className: style.slider,
-    nextArrow: <SliderArrow direction="right" />,
-    prevArrow: <SliderArrow direction="left" />,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    responsive: [
-      {
-        breakpoint: 1374,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 1140,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
-
-  const imageSliderSettings = {
-    className: style.imageSlider,
-    nextArrow: (
-      <SliderArrow backgroundColor="#00000075" iconColor="#b6b6b6" direction="right" />
-    ),
-    prevArrow: (
-      <SliderArrow backgroundColor="#00000075" iconColor="#b6b6b6" direction="left" />
-    ),
-    slidesToShow: 1,
-    initialSlide: initialImageSlide,
-  };
-
   useEffect(() => {
+    initComponent();
+
+    // initComponentTest();
+  }, []);
+
+  function initComponent() {
     reservationParams = convertURLToReservationParams(location.search, "hotel");
 
     dispatch(updateReservationParams(reservationParams));
-
-    setURLParamsAsKVP();
 
     fetchHotelAvailability().then((availabilityRes) => {
       getHotelDetails(id)
@@ -161,7 +123,15 @@ export function HotelDetails() {
         })
         .catch((error) => console.log("Error while fetching hotel details | ", error));
     });
-  }, []);
+  }
+
+  function initComponentTest() {
+    reservationParams = convertURLToReservationParams(location.search, "hotel");
+
+    dispatch(updateReservationParams(reservationParams));
+
+    setLoading(false);
+  }
 
   function fetchHotelAvailability() {
     /**
@@ -200,33 +170,8 @@ export function HotelDetails() {
     return kvp;
   }
 
-  function setURLParamsAsKVP() {
-    //To avoid setting the urlParams variable twice on the first render.
-    if (!isFirstRender()) {
-      setURLParams(getURLParamsAsKVP());
-    }
-  }
-
-  function isURLWithParams(): boolean {
-    return location.search !== "";
-  }
-
   function isFirstRender() {
     return firstRender.current;
-  }
-
-  function getURLParamsAsKVP() {
-    let kvpObject: { [key: string]: string } = {};
-    let kvpArray: string[][] = getUrlParamsArray();
-
-    kvpArray.forEach((kvp) => {
-      let key = kvp[0];
-      let value = kvp[1];
-
-      kvpObject = { ...kvpObject, [key]: value };
-    });
-
-    return kvpObject;
   }
 
   function useQuery() {
@@ -247,23 +192,21 @@ export function HotelDetails() {
   }
 
   function goToRoomOptions() {
-    dispatch(setRoomAccordionExpanded(true));
-    if (allRoomAccordionsExpanded) {
-      //@ts-ignore
-      roomAnchorEl.current.click();
-      scrollToBottom();
-    } else {
-      setTimeout(() => {
-        //@ts-ignore
-        roomAnchorEl.current.click();
-        scrollToBottom();
-      }, 525);
-    }
-  }
-
-  function openFullScreenImageSlider(initialSlide: number) {
-    setInitialImageSlide(initialSlide);
-    setViewerOpen(true);
+    // dispatch(setRoomAccordionExpanded(true));
+    //@ts-ignore
+    roomAnchorEl.current.click();
+    // scrollToBottom();
+    // if (allRoomAccordionsExpanded) {
+    //   //@ts-ignore
+    //   roomAnchorEl.current.click();
+    //   scrollToBottom();
+    // } else {
+    //   setTimeout(() => {
+    //     //@ts-ignore
+    //     roomAnchorEl.current.click();
+    //     scrollToBottom();
+    //   }, 525);
+    // }
   }
 
   return (
@@ -289,19 +232,7 @@ export function HotelDetails() {
 
       <div className={style.pageContainer} style={loading ? { filter: "blur(4px)" } : {}}>
         {/* Images slider */}
-        <div style={{ marginBottom: "20px" }}>
-          <Slider {...sliderSettings} dots lazyLoad="ondemand">
-            {hotelPhotos.map((photo, i) => (
-              <CardActionArea
-                key={photo}
-                className={style.photoContainer}
-                onClick={() => openFullScreenImageSlider(i)}
-              >
-                <img src={`${photo}`} alt={`${photo}`} className={style.photo} />
-              </CardActionArea>
-            ))}
-          </Slider>
-        </div>
+        <HotelDetailsSlider hotel={hotel} />
 
         {/* About hotel / Reservation info */}
         <Grid container style={{ marginTop: "40px" }}>
@@ -467,25 +398,6 @@ export function HotelDetails() {
           </Grid>
         </Grid>
       </div>
-
-      {/* Fullscreen images */}
-      <Dialog
-        open={viewerOpen}
-        onClose={() => setViewerOpen(false)}
-        BackdropComponent={Backdrop}
-        classes={{ paper: style.paperImage }}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Slider {...imageSliderSettings}>
-          {hotelPhotos.map((photo) => (
-            <div key={photo} className={style.photoContainerImage}>
-              <img src={`${photo}`} alt={`${photo}`} className={style.photoInSlider} />
-            </div>
-          ))}
-        </Slider>
-      </Dialog>
     </div>
   );
 }

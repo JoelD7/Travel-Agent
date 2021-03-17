@@ -80,7 +80,9 @@ export function ThingsToDoDetails() {
         <Grid item key="title" xs={12}>
           <Grid container alignItems="baseline">
             <Grid item xs={8}>
-              <Text component="h2">{poi.name}</Text>
+              <Text component="h1" bold>
+                {poi.name}
+              </Text>
               <Ratings
                 rating={poi.rating / 2}
                 widgetRatedColors={Colors.PURPLE}
@@ -94,7 +96,7 @@ export function ThingsToDoDetails() {
               </Ratings>
             </Grid>
             <CustomButton
-              style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto", height: "50px" }}
+              style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
               onClick={() => {}}
               backgroundColor={Colors.GREEN}
               rounded

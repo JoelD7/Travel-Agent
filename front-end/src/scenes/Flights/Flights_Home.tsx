@@ -375,7 +375,9 @@ export function Flights_Home() {
                 <h5 className={style.reservationParamText}>Departure</h5>
                 <KeyboardDatePicker
                   value={flight.departure}
-                  labelFunc={muiDateFormatter}
+                  labelFunc={(date, invalidLabel) =>
+                    muiDateFormatter(date, invalidLabel, "date")
+                  }
                   className={style.datepicker}
                   minDate={new Date()}
                   format="dd MMM., yyyy"
@@ -388,7 +390,9 @@ export function Flights_Home() {
                   <h5 className={style.reservationParamText}>Return</h5>
                   <KeyboardDatePicker
                     value={flight.return}
-                    labelFunc={muiDateFormatter}
+                    labelFunc={(date, invalidLabel) =>
+                      muiDateFormatter(date, invalidLabel, "date")
+                    }
                     className={style.datepicker}
                     minDate={new Date()}
                     format="dd MMM., yyyy"

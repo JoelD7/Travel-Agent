@@ -68,12 +68,7 @@ export function CustomButton({
       },
       fontSize: `${size}px`,
       textTransform: "capitalize",
-      color:
-        type === "text"
-          ? textColor
-          : backgroundColor === Colors.GREEN
-          ? Colors.BLUE
-          : textColor,
+      color: textColor,
       cursor: "pointer",
       ...style,
     },

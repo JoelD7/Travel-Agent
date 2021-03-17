@@ -14,11 +14,30 @@ import { IATALocation } from "../types/location-types";
 export * from "./flight";
 export * from "./hotel-functions";
 
-export function muiDateFormatter(date: MaterialUiPickersDate, invalidLabel: string) {
+export function muiDateFormatter(
+  date: MaterialUiPickersDate,
+  invalidLabel: string,
+  type: "date" | "datetime"
+) {
+  if (type === "date") {
+    return date
+      ? format(
+          new Date(date?.getFullYear(), date?.getMonth(), date?.getDate()),
+          "EEE. d/MMM, yyyy"
+        )
+      : "dd MMM., yyyy";
+  }
+
   return date
     ? format(
-        new Date(date?.getFullYear(), date?.getMonth(), date?.getDate()),
-        "EEE. d/MMM, yyyy"
+        new Date(
+          date?.getFullYear(),
+          date?.getMonth(),
+          date?.getDate(),
+          date.getHours(),
+          date.getMinutes()
+        ),
+        "EEE. d/MMM, yyyy 'at' h:mm"
       )
     : "dd MMM., yyyy";
 }

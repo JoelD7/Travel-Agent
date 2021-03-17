@@ -1,17 +1,13 @@
-import {
-  faClock,
-  faMapMarkedAlt,
-  faMapMarkerAlt,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
+import { faClock, faMapMarkerAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CardActionArea, Dialog, Grid, IconButton } from "@material-ui/core";
+import { Dialog, Grid, IconButton } from "@material-ui/core";
 import { format } from "date-fns";
 import React from "react";
 import { Colors } from "../../../styles";
 import { eventToIcon, EventType } from "../../../utils";
 import { TripEvent } from "../../../utils/types/trip-types";
 import { CustomButton, IconText, Text } from "../../atoms";
+import { NotAvailableCard } from "../NotAvailableCard/NotAvailableCard";
 import { dayItineraryStyles } from "./dayItinerary-styles";
 
 interface DayItinerary {
@@ -143,9 +139,9 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
             ))}
           </Grid>
         ) : (
-          <Text component="h2" bold color={Colors.BLUE}>
-            You have no events schedule for this day.
-          </Text>
+          <NotAvailableCard title="Hey!" imageHeight={185}>
+            Looks like you have no events scheduled for this day.
+          </NotAvailableCard>
         )}
       </Grid>
     </Dialog>

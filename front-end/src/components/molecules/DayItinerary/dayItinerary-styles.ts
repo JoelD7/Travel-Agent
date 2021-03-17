@@ -25,6 +25,7 @@ export const dayItineraryStyles = makeStyles((theme: Theme) => ({
   },
   paper: {
     height: "675px",
+    backgroundColor: Colors.BACKGROUND,
     width: "700px",
     padding: "10px",
   },

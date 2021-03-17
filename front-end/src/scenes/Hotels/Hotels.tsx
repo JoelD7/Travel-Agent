@@ -766,7 +766,9 @@ export function Hotels() {
                       <h5 className={style.whiteParamText}>Check-in</h5>
                       <KeyboardDatePicker
                         value={reservationParams.stay.checkIn}
-                        labelFunc={muiDateFormatter}
+                        labelFunc={(date, invalidLabel) =>
+                          muiDateFormatter(date, invalidLabel, "date")
+                        }
                         className={style.datepicker}
                         minDate={new Date()}
                         format="dd MMM., yyyy"
@@ -778,7 +780,9 @@ export function Hotels() {
                       <h5 className={style.whiteParamText}>Check-out</h5>
                       <KeyboardDatePicker
                         value={reservationParams.stay.checkOut}
-                        labelFunc={muiDateFormatter}
+                        labelFunc={(date, invalidLabel) =>
+                          muiDateFormatter(date, invalidLabel, "date")
+                        }
                         className={style.datepicker}
                         minDate={new Date()}
                         format="dd MMM., yyyy"

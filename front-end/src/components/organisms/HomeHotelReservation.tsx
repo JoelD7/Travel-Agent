@@ -1,10 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  faBed,
-  faChild,
-  faSearch,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBed, faChild, faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   createMuiTheme,
@@ -16,19 +11,13 @@ import {
   TextField,
   ThemeProvider,
 } from "@material-ui/core";
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
-import {
-  homeStyles,
-  style_createTripButton,
-} from "../../styles/Home/home-styles";
+import { homeStyles, style_createTripButton } from "../../styles/Home/home-styles";
 import { muiDateFormatter } from "../../utils";
 import { CustomButton } from "../atoms";
 
@@ -167,7 +156,9 @@ export default function HomeHotelReservation() {
               <h5 className={style.reservationParamText}>Check-in</h5>
               <KeyboardDatePicker
                 value={hotel.checkIn}
-                labelFunc={muiDateFormatter}
+                labelFunc={(date, invalidLabel) =>
+                  muiDateFormatter(date, invalidLabel, "date")
+                }
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"
@@ -179,7 +170,9 @@ export default function HomeHotelReservation() {
               <h5 className={style.reservationParamText}>Check-out</h5>
               <KeyboardDatePicker
                 value={hotel.checkOut}
-                labelFunc={muiDateFormatter}
+                labelFunc={(date, invalidLabel) =>
+                  muiDateFormatter(date, invalidLabel, "date")
+                }
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"
@@ -202,9 +195,7 @@ export default function HomeHotelReservation() {
                   startAdornment={
                     <FontAwesomeIcon icon={param.icon} color={Colors.BLUE} />
                   }
-                  onChange={(e) =>
-                    setHotel({ ...hotel, [param.field]: e.target.value })
-                  }
+                  onChange={(e) => setHotel({ ...hotel, [param.field]: e.target.value })}
                 >
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
                     <MenuItem value={n}>{n}</MenuItem>
@@ -220,7 +211,9 @@ export default function HomeHotelReservation() {
                 rounded
                 style={{ width: "90%", boxShadow: Shadow.MEDIUM }}
                 onClick={() => {}}
-              >Search</CustomButton>
+              >
+                Search
+              </CustomButton>
             </Grid>
           </Grid>
         </ThemeProvider>

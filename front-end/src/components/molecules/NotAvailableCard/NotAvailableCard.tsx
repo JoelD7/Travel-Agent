@@ -1,15 +1,33 @@
-import { Grid } from "@material-ui/core";
+import { Grid, makeStyles } from "@material-ui/core";
 import React, { ReactNode } from "react";
-import { Colors } from "../../../styles";
+import { Colors, Shadow } from "../../../styles";
 import { Text } from "../../atoms";
-import { notAvailableCardStyles } from "./notAvailableCard-styles";
 
 interface NotAvailableCard {
-  children: ReactNode;
+  children: ReactNode; //Detailed info
   title: string;
+  imageHeight?: number;
 }
 
-export function NotAvailableCard({ children, title }: NotAvailableCard) {
+export function NotAvailableCard({
+  children,
+  title,
+  imageHeight = 250,
+}: NotAvailableCard) {
+  const notAvailableCardStyles = makeStyles(() => ({
+    noHotelsContainer: {
+      borderRadius: "10px",
+      marginLeft: "15px",
+      boxShadow: Shadow.LIGHT,
+      backgroundColor: "white",
+      padding: "15px",
+    },
+    notFoundImg: {
+      objectFit: "cover",
+      height: `${imageHeight}px`,
+    },
+  }));
+
   const style = notAvailableCardStyles();
   return (
     <Grid container className={style.noHotelsContainer}>
@@ -28,7 +46,7 @@ export function NotAvailableCard({ children, title }: NotAvailableCard) {
           <img
             src="/Travel-Agent/not-found.png"
             className={style.notFoundImg}
-            alt="no hotels found"
+            alt="unavailable"
           />
         </Grid>
       </Grid>
