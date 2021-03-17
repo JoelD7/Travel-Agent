@@ -7,7 +7,7 @@ export const includeInTripStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "white",
     fontFamily: Font.Family,
     width: "100%",
-    maxWidth: "100%",
+    maxWidth: "282px",
     borderRadius: "4px",
 
     "& .MuiIconButton-root": {
@@ -18,8 +18,14 @@ export const includeInTripStyles = makeStyles((theme: Theme) => ({
       padding: "6px 7px 7px",
     },
   },
+  labelGrid: {
+    width: "25%",
+    [theme.breakpoints.down(430)]: {
+      width: "100%",
+    },
+  },
   popoverPaper: {
-    width: "415px",
+    width: "375px",
     maxHeight: "280px",
     padding: "15px",
     borderRadius: "10px",
@@ -42,6 +48,13 @@ export const includeInTripStyles = makeStyles((theme: Theme) => ({
 
     "& .MuiMenuItem-root": {
       fontFamily: Font.Family,
+    },
+  },
+  selectGrid: {
+    width: "75%",
+    [theme.breakpoints.down(430)]: {
+      width: "100%",
+      marginBottom: "10px",
     },
   },
   selectIcon: {

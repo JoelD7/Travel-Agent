@@ -16,11 +16,16 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     padding: "10px",
   },
   detailsGrid: {
-    [theme.breakpoints.down(910)]: {
-      width: "100%",
-    },
-    width: "30%",
+    width: "41%",
     color: "white",
+    [theme.breakpoints.down(1214)]: {
+      width: "77%",
+      margin: "auto",
+    },
+    [theme.breakpoints.down(995)]: {
+      width: "88%",
+      margin: "auto",
+    },
   },
   detailsContainer: {
     borderRadius: "5px",
@@ -29,12 +34,20 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
     boxShadow: Shadow.LIGHT,
   },
   imageGrid: {
-    [theme.breakpoints.down(910)]: {
-      width: "100%",
-    },
-    width: "69%",
+    width: "58%",
     marginLeft: "10px",
     height: "500px",
+    [theme.breakpoints.down(1214)]: {
+      width: "87%",
+      margin: "auto",
+    },
+    [theme.breakpoints.down(995)]: {
+      width: "100%",
+    },
+    [theme.breakpoints.down(676)]: {
+      height: "auto",
+      marginBottom: "20px",
+    },
   },
   progressCircleContainer: {
     display: "flex",

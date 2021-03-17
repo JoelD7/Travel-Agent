@@ -6,7 +6,6 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../../styles";
 import {
-  capitalizeString,
   getAutocompleteLabel,
   iataCodes,
   onQueryChanged,
@@ -33,13 +32,17 @@ interface IataAutocomplete {
   flightDirection?: "from" | "to";
   type: "city" | "airport";
   home?: boolean;
+  isInNavbar?: boolean;
+  className?: string;
 }
 
-interface RenderInput {
-  params: any;
-}
-
-export function IataAutocomplete({ flightDirection, type, home }: IataAutocomplete) {
+export function IataAutocomplete({
+  flightDirection,
+  type,
+  home,
+  isInNavbar,
+  className,
+}: IataAutocomplete) {
   const [predictions, setPredictions] = useState<IATALocation[]>([]);
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
@@ -113,6 +116,7 @@ export function IataAutocomplete({ flightDirection, type, home }: IataAutocomple
       value={autocomplete}
       onChange={(e, value) => onAutomcompleteValueChange(value)}
       options={predictions}
+      className={className}
       loading={predictions.length !== 0}
       getOptionLabel={(option) => getAutocompleteLabel(option, type)}
       popupIcon={
@@ -139,6 +143,7 @@ export function IataAutocomplete({ flightDirection, type, home }: IataAutocomple
             value={searchQuery}
             variant="outlined"
             placeholder="Search locations"
+            style={isInNavbar ? { width: "100%" } : {}}
             className={style.searchBar}
             onChange={(e) => dispatch(onQueryChanged({ value: e.target.value }))}
             size="small"

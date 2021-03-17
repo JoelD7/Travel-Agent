@@ -8,6 +8,12 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     position: "absolute",
     top: "-5px",
   },
+  autocompleteContainer: {
+    width: "300px",
+    [theme.breakpoints.down(500)]: {
+      width: "68vw",
+    },
+  },
   autocompelteListbox: {
     fontFamily: Font.Family,
   },
@@ -32,6 +38,17 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     alignItems: "center",
     [theme.breakpoints.down(1000)]: {
       display: "none",
+    },
+  },
+  logoLinkContainer: {
+    [theme.breakpoints.down(520)]: {
+      display: "none",
+    },
+  },
+  logoLinkContainerSm: {
+    display: "none",
+    [theme.breakpoints.down(520)]: {
+      display: "block",
     },
   },
   logotype: {

@@ -17,6 +17,7 @@ import {
   ThingsToDoDetails,
   TripDetails,
   Trips,
+  NotFound,
 } from "./scenes";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Routes } from "./utils";
@@ -40,6 +41,7 @@ export default function App() {
         <Route exact path={Routes.FAVORITE_PLACES} component={FavPlaces} />
         <Route exact path={Routes.RESERVATIONS} component={Reservations} />
         <Route exact path={Routes.ITINERARY} component={Itinerary} />
+        <Route component={NotFound} />
       </Switch>
     </Router>
   );

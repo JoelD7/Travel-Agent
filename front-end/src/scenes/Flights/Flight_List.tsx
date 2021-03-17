@@ -882,7 +882,6 @@ export function Flight_List() {
                   style={{
                     width: "140px",
                     boxShadow: Shadow.DARK,
-                    color: Colors.BLUE,
                   }}
                   onClick={() => onSearchFlightsClick()}
                 >

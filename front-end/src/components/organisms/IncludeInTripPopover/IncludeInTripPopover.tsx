@@ -231,7 +231,7 @@ export function IncludeInTripPopover({
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container>
               {/* Trip */}
-              <Grid item xs={4}>
+              <Grid item className={style.labelGrid}>
                 <Grid container>
                   <IconText icon={faPlaneDeparture}></IconText>
                   <Text component="h4" bold color={Colors.BLUE}>
@@ -240,7 +240,7 @@ export function IncludeInTripPopover({
                 </Grid>
               </Grid>
 
-              <Grid item xs={8}>
+              <Grid item className={style.selectGrid}>
                 <FormControl>
                   <Select
                     value={trip}
@@ -261,7 +261,7 @@ export function IncludeInTripPopover({
               {datetimePopoverParams.map((param) => (
                 <Grid container key={param.label} style={{ marginTop: "10px" }}>
                   {/* label and icon */}
-                  <Grid item xs={4}>
+                  <Grid item className={style.labelGrid}>
                     <Grid container>
                       <IconText icon={faClock}></IconText>
                       <Text component="h4" bold color={Colors.BLUE}>
@@ -271,7 +271,7 @@ export function IncludeInTripPopover({
                   </Grid>
 
                   {/* Select */}
-                  <Grid item xs={8}>
+                  <Grid item className={style.selectGrid}>
                     <KeyboardDateTimePicker
                       value={datetimePopover[param.variable]}
                       labelFunc={(date, invalidLabel) =>
