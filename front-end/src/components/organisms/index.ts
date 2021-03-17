@@ -5,3 +5,4 @@ export { RestaurantFilters } from "./Restaurant-Filters";
 export { SortPageSize } from "./SortPageSize/SortPageSize";
 export { HotelCard } from "./HotelCard/HotelCard";
 export { HotelDetailsSlider } from "./HotelDetailsSlider/HotelDetailsSlider";
+export { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopover";

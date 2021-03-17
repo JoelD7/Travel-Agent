@@ -8,6 +8,7 @@ import {
   ServicesToolbar,
   SliderArrow,
   Text,
+  IncludeInTripPopover,
 } from "../../components";
 import { useParams } from "react-router-dom";
 import {
@@ -197,8 +198,6 @@ export function RestaurantDetails() {
       .catch((error) => console.log(error));
   }, []);
 
-  const tripOptions = ["Journey Through the Alps", "Andes Walk", "Europe in the Snow"];
-
   function onIncludeTripClick(event: MouseEvent<HTMLButtonElement>) {
     setTripAnchor(event.currentTarget);
     setOpenPopover(true);
@@ -209,35 +208,10 @@ export function RestaurantDetails() {
     setOpenPopover(false);
   }
 
-  const datetimePopoverParams = [
-    {
-      label: "Start",
-      variable: "start",
-    },
-    {
-      label: "End",
-      variable: "end",
-    },
-  ];
-
   const [datetimePopover, setDatetimePopover] = useState<{ [index: string]: Date }>({
     start: new Date(),
     end: addHours(new Date(), 1),
   });
-
-  function onPopoverDateChange(date: MaterialUiPickersDate, variable: string) {
-    if (date === null) {
-      setDatetimePopover({
-        ...datetimePopover,
-        [variable]: new Date(),
-      });
-    } else {
-      setDatetimePopover({
-        ...datetimePopover,
-        [variable]: parseISO(date.toISOString()),
-      });
-    }
-  }
 
   return (
     <div className={style.mainContainer}>
@@ -347,91 +321,13 @@ export function RestaurantDetails() {
         </Grid>
       </Grid>
 
-      <Popover
-        open={openPopover}
-        anchorEl={tripAnchor}
-        onClose={() => onPopoverClose()}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        classes={{ paper: style.popoverPaper }}
-      >
-        <ThemeProvider theme={theme}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid container>
-              {/* Trip */}
-              <Grid item xs={4}>
-                <Grid container>
-                  <IconText icon={faPlaneDeparture}></IconText>
-                  <Text component="h4" bold color={Colors.BLUE}>
-                    Trip
-                  </Text>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={8}>
-                <FormControl>
-                  <Select
-                    value={trip}
-                    style={{ height: "30px" }}
-                    classes={{ icon: style.selectIcon }}
-                    variant="outlined"
-                    className={style.select}
-                    onChange={(e) => setTrip(e.target.value as string)}
-                  >
-                    {tripOptions.map((option) => (
-                      <MenuItem value={option}>{option}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              {/* Datetimes */}
-              {datetimePopoverParams.map((param) => (
-                <Grid container key={param.label} style={{ marginTop: "10px" }}>
-                  {/* label and icon */}
-                  <Grid item xs={4}>
-                    <Grid container>
-                      <IconText icon={faClock}></IconText>
-                      <Text component="h4" bold color={Colors.BLUE}>
-                        {param.label}
-                      </Text>
-                    </Grid>
-                  </Grid>
-
-                  {/* Select */}
-                  <Grid item xs={8}>
-                    <KeyboardDateTimePicker
-                      value={datetimePopover[param.variable]}
-                      labelFunc={(date, invalidLabel) =>
-                        muiDateFormatter(date, invalidLabel, "datetime")
-                      }
-                      className={style.datepicker}
-                      minDate={new Date()}
-                      format="EEE. d/MMM, yyyy 'at' h:mm"
-                      onChange={(date) => onPopoverDateChange(date, param.variable)}
-                    />
-                  </Grid>
-                </Grid>
-              ))}
-
-              {/* Add button */}
-              <Grid container>
-                <IconButton
-                  style={{ margin: "10px 0px 0px auto", backgroundColor: Colors.GREEN }}
-                >
-                  <FontAwesomeIcon icon={faPlus} color="white" />
-                </IconButton>
-              </Grid>
-            </Grid>
-          </MuiPickersUtilsProvider>
-        </ThemeProvider>
-      </Popover>
+      <IncludeInTripPopover
+        place={restaurant}
+        tripAnchor={tripAnchor}
+        setTripAnchor={setTripAnchor}
+        openPopover={openPopover}
+        setOpenPopover={setOpenPopover}
+      />
     </div>
   );
 }

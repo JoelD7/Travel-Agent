@@ -1,6 +1,13 @@
 import { Grid } from "@material-ui/core";
-import React from "react";
-import { CustomButton, IconText, Navbar, ServicesToolbar, Text } from "../../components";
+import React, { useState, MouseEvent } from "react";
+import {
+  CustomButton,
+  IconText,
+  IncludeInTripPopover,
+  Navbar,
+  ServicesToolbar,
+  Text,
+} from "../../components";
 import { poiPlaceholder } from "../../utils";
 import { thingsToDoDetailsStyles as thingsToDoDetailsStyles } from "./thingsToDoDetails-styles";
 import Ratings from "react-ratings-declarative";
@@ -16,7 +23,10 @@ import Helmet from "react-helmet";
 import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
 
 export function ThingsToDoDetails() {
-  const poi = poiPlaceholder;
+  const poi: POI = poiPlaceholder;
+
+  const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
+  const [openPopover, setOpenPopover] = useState(false);
 
   function photoURLBuilder(photo: POIPhotoItems) {
     return `${photo.prefix}${photo.width}x${photo.height}${photo.suffix}`;
@@ -66,6 +76,11 @@ export function ThingsToDoDetails() {
     return attributes;
   }
 
+  function onIncludeTripClick(event: MouseEvent<HTMLButtonElement>) {
+    setTripAnchor(event.currentTarget);
+    setOpenPopover(true);
+  }
+
   const style = thingsToDoDetailsStyles();
   return (
     <div className={style.mainContainer}>
@@ -76,6 +91,7 @@ export function ThingsToDoDetails() {
       <Navbar />
       <ServicesToolbar />
 
+      {/* Page content */}
       <Grid container spacing={2} className={style.pageContentContainer}>
         <Grid item key="title" xs={12}>
           <Grid container alignItems="baseline">
@@ -97,7 +113,7 @@ export function ThingsToDoDetails() {
             </Grid>
             <CustomButton
               style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
-              onClick={() => {}}
+              onClick={(e) => onIncludeTripClick(e)}
               backgroundColor={Colors.GREEN}
               rounded
             >
@@ -207,6 +223,14 @@ export function ThingsToDoDetails() {
           </div>
         </Grid>
       </Grid>
+
+      <IncludeInTripPopover
+        place={poi}
+        tripAnchor={tripAnchor}
+        setTripAnchor={setTripAnchor}
+        openPopover={openPopover}
+        setOpenPopover={setOpenPopover}
+      />
     </div>
   );
 }
