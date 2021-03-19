@@ -1482,17 +1482,34 @@ export const restaurantCategories: RestaurantCategories[] = [
   },
 ];
 
+/**
+ * Fetches the restaurants from the API.
+ * @param latitude
+ * @param longitude
+ * @param limit optional. Number of restaurants to return.
+ * @param offset optional. Offset the list of returned restaurants by this amount.
+ * @param cuisines optional. Return restaurants of these type of cuisines.
+ * @param cuisineAliases optional. Return restaurants of these type of cuisines. The difference
+ * is that while the previous parameter is an array of objects, this one is a string that consists
+ * of the aliases of the cuisines separated by commas.
+ * @returns
+ */
 export function fetchRestaurants(
   latitude: string,
   longitude: string,
   limit: number = 0,
   offset: number = 0,
   cuisines?: RestaurantCuisine[],
+  cuisineAliases?: string
 ) {
   let cuisinesList = "";
 
   if (cuisines) {
     cuisinesList = cuisines.map((c) => c.alias).join(",");
+  }
+
+  if (cuisineAliases) {
+    cuisinesList = cuisineAliases;
   }
 
   return Axios.get(proxyUrl + "https://api.yelp.com/v3/businesses/search", {
@@ -1505,7 +1522,7 @@ export function fetchRestaurants(
       latitude,
       longitude,
       limit,
-offset,
+      offset,
     },
   });
 }

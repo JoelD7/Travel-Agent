@@ -16,15 +16,12 @@ import { Colors } from "../../../styles";
 import { CustomButton } from "../../atoms";
 import { checkboxSelectorDialog } from "../../atoms/checkboxSelectorDialog-styles";
 
-interface RestaurantCuisinesSelec {
+interface ResCuisineSelector {
   cuisines: RestaurantCuisine[];
   updateState: (selectedCuisines: RestaurantCuisine[]) => void;
 }
 
-export function RestaurantCuisinesSelec({
-  cuisines,
-  updateState,
-}: RestaurantCuisinesSelec) {
+export function ResCuisineSelector({ cuisines, updateState }: ResCuisineSelector) {
   const style = checkboxSelectorDialog();
 
   const [openDialog, setOpenDialog] = useState(false);

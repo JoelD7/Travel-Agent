@@ -17,12 +17,12 @@ import { capitalizeString } from "../../../utils";
 import { CustomButton } from "../../atoms";
 import { checkboxSelectorDialog } from "../../atoms/checkboxSelectorDialog-styles";
 
-interface RestaurantFeature {
-  features: RestaurantFilter[];
-  updateState: (selectedFeatures: RestaurantFilter[]) => void;
+interface ResFeatureSelector {
+  features: RestaurantFeature[];
+  updateState: (selectedFeatures: RestaurantFeature[]) => void;
 }
 
-export function RestaurantFeature({ features, updateState }: RestaurantFeature) {
+export function ResFeatureSelector({ features, updateState }: ResFeatureSelector) {
   const style = checkboxSelectorDialog();
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -32,7 +32,7 @@ export function RestaurantFeature({ features, updateState }: RestaurantFeature) 
   function onFeatureChange(event: ChangeEvent<HTMLInputElement>) {
     let changedCheck = event.target.name;
 
-    let newSelectedFeatures: RestaurantFilter[] = features.map((feature) => {
+    let newSelectedFeatures: RestaurantFeature[] = features.map((feature) => {
       if (feature.name === changedCheck) {
         return { ...feature, checked: event.target.checked };
       } else {

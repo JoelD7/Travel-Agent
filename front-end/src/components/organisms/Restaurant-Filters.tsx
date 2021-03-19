@@ -15,17 +15,18 @@ import {
 import { fetchRestaurants } from "../../utils/external-apis/yelp-apis";
 import {
   setRestaurants,
-  updateRestaurantCheckedCuisines,
+  updateResCheckedCuisinesFromURL,
   updateRestaurantCheckedFeatures,
   addRestaurantCuisines,
   addRestaurantFeatures,
   updateRestaurantFeatures,
   updateRestaurantCuisines,
   setLoadingRestaurants,
+  setRestaurantFilterParams,
 } from "../../utils/store/restaurant-slice";
 import { IATALocation } from "../../utils/types/location-types";
 import { CustomButton, Text } from "../atoms";
-import { RestaurantCuisinesSelec, RestaurantFeature } from "../molecules";
+import { ResCuisineSelector, ResFeatureSelector } from "../molecules";
 
 interface RestaurantFilters {
   setLoading?: (value: boolean) => void;
@@ -37,8 +38,8 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
   const [cuisines, setCuisines] = useState<RestaurantCuisine[]>([]);
   const cuisinesRedux: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
 
-  const featuresRedux: RestaurantFilter[] = useSelector(selectRestaurantFeatures);
-  const [features, setFeatures] = useState<RestaurantFilter[]>([]);
+  const featuresRedux: RestaurantFeature[] = useSelector(selectRestaurantFeatures);
+  const [features, setFeatures] = useState<RestaurantFeature[]>([]);
 
   const dispatch = useDispatch();
 
@@ -55,11 +56,20 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
     setFeatures(featuresRedux);
   }, [featuresRedux]);
 
+  useEffect(() => {
+    dispatch(
+      setRestaurantFilterParams({
+        cuisines,
+        features,
+      })
+    );
+  }, [features, cuisines]);
+
   function applyFilters() {
     dispatch(setLoadingRestaurants(true));
 
     setTimeout(() => {
-      let filteredFeatures: RestaurantFilter[] = features.filter((f) => f.checked);
+      let filteredFeatures: RestaurantFeature[] = features.filter((f) => f.checked);
       if (filteredFeatures.length > 0) {
         filterByFeatures(filteredFeatures);
       }
@@ -71,7 +81,7 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
     }, 250);
   }
 
-  function filterByFeatures(filteredFeatures: RestaurantFilter[]) {
+  function filterByFeatures(filteredFeatures: RestaurantFeature[]) {
     let selectedFeatures: string[] = filteredFeatures.map((f) => f.name);
     let restaurantDispatcher;
 
@@ -82,13 +92,13 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
       });
       restaurantDispatcher = () => setRestaurants(buffer);
     } else {
+      console.log("no features are selected");
       restaurantDispatcher = () => setRestaurants(allRestaurants);
     }
 
     dispatch(
       batchActions([
         restaurantDispatcher(),
-        updateRestaurantCheckedFeatures(filteredFeatures),
         updateRestaurantFeatures(features),
         setLoadingRestaurants(false),
       ])
@@ -107,7 +117,6 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
         dispatch(
           batchActions([
             setRestaurants(res.data.businesses),
-            updateRestaurantCheckedCuisines(filteredCuisines),
             updateRestaurantCuisines(cuisines),
             setLoadingRestaurants(false),
           ])
@@ -126,7 +135,8 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
       >
         Features
       </Text>
-      <RestaurantFeature
+
+      <ResFeatureSelector
         features={features}
         updateState={(selected) => setFeatures(selected)}
       />
@@ -141,7 +151,7 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
       >
         Cuisines
       </Text>
-      <RestaurantCuisinesSelec
+      <ResCuisineSelector
         cuisines={cuisines}
         updateState={(selected) => setCuisines(selected)}
       />

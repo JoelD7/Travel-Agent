@@ -527,7 +527,6 @@ export function Hotels() {
         }
       });
 
-    // console.log("kvpObject: ", JSON.stringify(kvpObject));
     return kvpObject;
   }
 

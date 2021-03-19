@@ -17,8 +17,8 @@ import { CustomButton } from "../../atoms";
 import { checkboxSelectorDialog } from "../../atoms/checkboxSelectorDialog-styles";
 
 interface RestaurantEstablishments {
-  values: RestaurantFilter[];
-  updateState: (selectedEstablishments: RestaurantFilter[]) => void;
+  values: RestaurantFeature[];
+  updateState: (selectedEstablishments: RestaurantFeature[]) => void;
 }
 
 export function RestaurantEstablishments({
@@ -29,7 +29,7 @@ export function RestaurantEstablishments({
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const [establishments, setEstablishments] = useState<RestaurantFilter[]>(values);
+  const [establishments, setEstablishments] = useState<RestaurantFeature[]>(values);
 
   const size = establishments.length;
 
@@ -153,7 +153,9 @@ export function RestaurantEstablishments({
               backgroundColor={Colors.PURPLE}
               rounded
               onClick={() => closeDialog()}
-            >Ok</CustomButton>
+            >
+              Ok
+            </CustomButton>
           </Grid>
         </Grid>
       </Dialog>

@@ -85,7 +85,7 @@ export function ServicesToolbar({ home, style }: ServicesToolbar) {
         return Routes.FLIGHTS;
 
       case Routes.RESTAURANTS:
-        return Routes.RESTAURANTS;
+        return `${Routes.RESTAURANTS}?page=${1}&pageSize=${20}`;
 
       case Routes.THINGS_TODO:
         return Routes.THINGS_TODO;

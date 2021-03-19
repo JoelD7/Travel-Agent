@@ -80,7 +80,7 @@ interface ResLocation {
   countryID: number;
 }
 
-interface RestaurantFilter {
+interface RestaurantFeature {
   name: string;
   checked: boolean;
 }
@@ -89,4 +89,9 @@ interface RestaurantCuisine {
   title: string;
   alias: string;
   checked: boolean;
+}
+
+interface RestaurantFilterParams {
+  features: RestaurantFeature[];
+  cuisines: RestaurantCuisine[];
 }

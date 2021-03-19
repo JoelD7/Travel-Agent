@@ -1,4 +1,10 @@
-import { getLinkStyle, Routes } from "../../../utils";
+import {
+  convertReservationParamsToURLParams,
+  getLinkStyle,
+  HotelBookingParams,
+  Routes,
+  selectHotelReservationParams,
+} from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 import React, { useState } from "react";
 import {
@@ -22,6 +28,7 @@ import { dashDrawerStyles } from "./dashDrawer-styles";
 import { Link, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
+import { useSelector } from "react-redux";
 
 export function DashDrawer() {
   const style = dashDrawerStyles();
@@ -60,11 +67,16 @@ export function DashDrawer() {
     },
   ]);
 
+  const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
+
   const bottomDrawerOptions: DrawerOptions[] = [
     {
       label: "Hotels",
       icon: faHotel,
-      route: Routes.HOTELS,
+      route: `${Routes.HOTELS}${convertReservationParamsToURLParams(
+        reservationParams,
+        "hotel"
+      )}&sortBy=Stars | desc&page=${1}&pageSize=${20}`,
       selected: page === Routes.HOTELS,
       user: false,
     },
@@ -78,7 +90,7 @@ export function DashDrawer() {
     {
       label: "Restaurants",
       icon: faUtensils,
-      route: Routes.RESTAURANTS,
+      route: `${Routes.RESTAURANTS}?page=${1}&pageSize=${20}`,
       selected: page === Routes.RESTAURANTS,
       user: false,
     },

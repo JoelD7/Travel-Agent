@@ -8,8 +8,8 @@ export interface DrawerOptions {
   user: boolean;
 }
 
-export interface RestaurantFilter {
-  id: number;
-  name: string;
-  checked: boolean;
-}
+// export interface RestaurantFilter {
+//   id: number;
+//   name: string;
+//   checked: boolean;
+// }

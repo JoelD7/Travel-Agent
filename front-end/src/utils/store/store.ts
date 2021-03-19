@@ -9,6 +9,7 @@ import restaurantSlice from "./restaurant-slice";
 import { useDispatch } from "react-redux";
 import { enableBatching } from "redux-batched-actions";
 export * from "./flight-slice";
+export * from "./restaurant-slice";
 
 const store = configureStore({
   reducer: {
@@ -99,13 +100,18 @@ export const selectRestaurantCuisines = createSelector(
 export const selectRestaurants = (state: RootState) => state.restaurantSlice.restaurants;
 export const selectAllRestaurants = (state: RootState) =>
   state.restaurantSlice.allRestaurants;
+
 export const selectCheckedRestaurantCuisines = (state: RootState) =>
   state.restaurantSlice.checkedCuisines;
+
 export const selectCheckedRestaurantFeatures = (state: RootState) =>
   state.restaurantSlice.checkedFeatures;
 
 export const selectLoadingRestaurants = (state: RootState) =>
   state.restaurantSlice.loadingRestaurants;
+
+export const selectRestaurantFilterParams = (state: RootState) =>
+  state.restaurantSlice.filterParams;
 //#endregion
 
 export default store;

@@ -121,6 +121,39 @@ export function getDistinctCuisines(cuisines: { title: string; alias: string }[]
   return buffer;
 }
 
-export function filterByFeature(feature: string, restaurants: RestaurantSearch[]) {
+export function filterByFeature(
+  feature: string,
+  restaurants: RestaurantSearch[]
+): RestaurantSearch[] {
   return restaurants.filter((res) => res.transactions.includes(feature));
+}
+
+export function convertResFilterParamsToURLParams(
+  resFilterParams: RestaurantFilterParams
+) {
+  let params: string[] = [];
+
+  let cuisines: string = resFilterParams.cuisines
+    .filter((cuisine) => cuisine.checked)
+    .map((cuisine) => cuisine.alias)
+    .join(",");
+
+  let features: string = resFilterParams.features
+    .filter((feature) => feature.checked)
+    .map((feature) => feature.name)
+    .join(",");
+
+  if (cuisines !== "") {
+    params.push(`cuisines=${cuisines}`);
+  }
+
+  if (features !== "") {
+    params.push(`features=${features}`);
+  }
+
+  if (params.length === 0) {
+    return "";
+  } else {
+    return `?${params.join("&")}`;
+  }
 }
