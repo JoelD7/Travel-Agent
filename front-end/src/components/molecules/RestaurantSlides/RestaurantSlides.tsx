@@ -17,7 +17,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom";
 import { Routes } from "../../../utils";
 import Rating from "react-rating";
-import { getRestaurantCategoriesList } from "../../../utils/functions/restaurant";
+import {
+  getRestaurantCategoriesList,
+  getRestaurantTransactions,
+} from "../../../utils/functions/restaurant";
 
 interface RestaurantSlides {
   restaurants: RestaurantSearch[];
@@ -38,7 +41,6 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
     className: style.slider,
     nextArrow: <SliderArrow direction="right" />,
     prevArrow: <SliderArrow direction="left" />,
-    // slidesToShow: getSlidesToShow(3),
     slidesToScroll: getSlidesToShow(3),
     responsive: [
       {
@@ -130,6 +132,7 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
         className={style.slideshowGrid}
         style={loading ? { filter: "blur(4px)" } : {}}
       >
+        {/* Slide title */}
         <Grid container>
           <Text style={{ marginLeft: "53px" }} weight={500} component="h2">
             {title}

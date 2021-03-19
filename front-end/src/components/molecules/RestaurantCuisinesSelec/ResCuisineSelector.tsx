@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import React, { ChangeEvent, useState } from "react";
 import { Colors } from "../../../styles";
+import { sortCuisines } from "../../../utils";
 import { CustomButton } from "../../atoms";
 import { checkboxSelectorDialog } from "../../atoms/checkboxSelectorDialog-styles";
 
@@ -31,14 +32,17 @@ export function ResCuisineSelector({ cuisines, updateState }: ResCuisineSelector
   function onCuisineChange(event: ChangeEvent<HTMLInputElement>) {
     let changedCheck = event.target.name;
 
-    let newSelectedCuisines = cuisines.map((cuisine) => {
+    let newCuisines: RestaurantCuisine[] = cuisines.map((cuisine) => {
       if (cuisine.title === changedCheck) {
         return { ...cuisine, checked: event.target.checked };
       } else {
         return { ...cuisine };
       }
     });
-    updateState(newSelectedCuisines);
+
+    let sortedCuisines: RestaurantCuisine[] = sortCuisines(newCuisines);
+
+    updateState(sortedCuisines);
   }
 
   function closeDialog() {

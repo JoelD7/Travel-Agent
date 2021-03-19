@@ -157,3 +157,15 @@ export function convertResFilterParamsToURLParams(
     return `?${params.join("&")}`;
   }
 }
+
+export function sortCuisines(unsortedCuisines: RestaurantCuisine[]): RestaurantCuisine[] {
+  let selectedCuisines: RestaurantCuisine[] = unsortedCuisines
+    .filter((cuisine) => cuisine.checked)
+    .sort((a, b) => a.title.localeCompare(b.title));
+
+  let unselectedCuisines: RestaurantCuisine[] = unsortedCuisines
+    .filter((cuisine) => !cuisine.checked)
+    .sort((a, b) => a.title.localeCompare(b.title));
+
+  return selectedCuisines.concat(unselectedCuisines);
+}

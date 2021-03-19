@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getDistinctCuisines } from "../functions";
+import { getDistinctCuisines, sortCuisines } from "../functions";
 
 interface RestaurantSlice {
   features: RestaurantFeature[];
@@ -81,16 +81,18 @@ const restaurantSlice = createSlice({
       prepare(curCuisines: RestaurantCuisine[], cuisinesURL: string) {
         //The cuisines in the URL are represented as their aliases.
         let aliases: string[] = cuisinesURL.split(",");
-        console.log("cuisinesURL: ", cuisinesURL);
-        let updatedCuisines: RestaurantCuisine[] = curCuisines.map((cuisine) => {
+
+        let buffer: RestaurantCuisine[] = curCuisines.map((cuisine) => {
           if (aliases.includes(cuisine.alias)) {
             return { ...cuisine, checked: true };
           }
           return cuisine;
         });
 
+        let sortedCuisines: RestaurantCuisine[] = sortCuisines(buffer);
+
         return {
-          payload: updatedCuisines,
+          payload: sortedCuisines,
         };
       },
     },

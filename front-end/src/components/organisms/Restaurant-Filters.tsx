@@ -56,15 +56,6 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
     setFeatures(featuresRedux);
   }, [featuresRedux]);
 
-  useEffect(() => {
-    dispatch(
-      setRestaurantFilterParams({
-        cuisines,
-        features,
-      })
-    );
-  }, [features, cuisines]);
-
   function applyFilters() {
     dispatch(setLoadingRestaurants(true));
 
@@ -78,6 +69,13 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
       if (filteredCuisines.length > 0) {
         filterByCuisines(filteredCuisines);
       }
+
+      dispatch(
+        setRestaurantFilterParams({
+          cuisines,
+          features,
+        })
+      );
     }, 250);
   }
 
@@ -92,7 +90,6 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
       });
       restaurantDispatcher = () => setRestaurants(buffer);
     } else {
-      console.log("no features are selected");
       restaurantDispatcher = () => setRestaurants(allRestaurants);
     }
 

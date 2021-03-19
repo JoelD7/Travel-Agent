@@ -87,10 +87,10 @@ export function Restaurant_List() {
   );
 
   /**
-   * Group of actions to be dispatched together in order
+   * Group of actions to be dispatched together in first render, in order
    * to improve performance.
    */
-  let batchedActions: AnyAction[] = [];
+  let batchedActionsOnFirstRender: AnyAction[] = [];
 
   const loading: boolean = useSelector(selectLoadingRestaurants);
   const [noRestaurants, setNoRestaurants] = useState(false);
@@ -104,6 +104,16 @@ export function Restaurant_List() {
   const topRestaurantId = "topRestaurantId";
 
   const firstRender = useRef(true);
+
+  /**
+   * The returned restaurants by the API.
+   *
+   * The purpose of this variable is to
+   * be able to use the returned restaurants
+   * without being held back by the fact that the
+   * setting of the state is async.
+   */
+  let restaurantsRes: RestaurantSearch[] = [];
 
   useEffect(() => {}, []);
 
@@ -143,10 +153,6 @@ export function Restaurant_List() {
     return firstRender.current;
   }
 
-  function isURLWithParams(): boolean {
-    return location.search !== "";
-  }
-
   function isURLWithResParams(): boolean {
     return urlParams.hasOwnProperty("cuisines") || urlParams.hasOwnProperty("features");
   }
@@ -169,7 +175,6 @@ export function Restaurant_List() {
 
       kvp = { ...kvp, [key]: value };
     }
-    console.log("kvp: ", JSON.stringify(kvp));
     return kvp;
   }
 
@@ -216,16 +221,12 @@ export function Restaurant_List() {
   function loadRestaurants() {
     fetchRestaurants(currentCity.lat, currentCity.lon, pageSize, page * pageSize)
       .then((res) => {
-        let restaurantsRes: RestaurantSearch[] = res.data.businesses;
+        restaurantsRes = res.data.businesses;
 
         let resTotal = Number(res.data.total);
         setTotal(resTotal > 1000 ? 1000 : resTotal);
 
-        if (areFeaturesSelected()) {
-          filterRestaurantsByFeatures(restaurantsRes);
-        }
-
-        setRestaurantsDependencies(restaurantsRes);
+        setRestaurantsDependencies();
 
         if (restaurantsRes.length === 0) {
           setNoRestaurants(true);
@@ -236,20 +237,7 @@ export function Restaurant_List() {
       .catch((error) => console.log(error));
   }
 
-  function filterRestaurantsByFeatures(restaurantsRes: RestaurantSearch[]) {
-    let selectedFeatures: string[] = features.map((f) => f.name);
-
-    restaurantsRes.filter((restaurant: RestaurantSearch) => {
-      let resFeatures: string[] = restaurant.transactions;
-      return hasAny(resFeatures, selectedFeatures);
-    });
-  }
-
-  function areFeaturesSelected() {
-    return features.filter((ft) => ft.checked).length > 0;
-  }
-
-  function setRestaurantsDependencies(restaurantsRes: RestaurantSearch[]) {
+  function setRestaurantsDependencies() {
     let cuisinesToAdd: RestaurantCuisine[] = getCuisinesFromRestaurantsResponse(
       cuisines,
       restaurantsRes
@@ -260,9 +248,9 @@ export function Restaurant_List() {
       restaurantsRes
     );
 
-    batchedActions.push(setRestaurants(restaurantsRes));
-    batchedActions.push(setAllRestaurants(restaurantsRes));
-    batchedActions.push(setLoadingRestaurants(false));
+    batchedActionsOnFirstRender.push(setAllRestaurants(restaurantsRes));
+    batchedActionsOnFirstRender.push(setLoadingRestaurants(false));
+    batchedActionsOnFirstRender.push(setRestaurants(restaurantsRes));
 
     /**
      * Do not dispatch the actions to set cuisines and features
@@ -276,9 +264,13 @@ export function Restaurant_List() {
         addRestaurantCuisines(cuisinesToAdd),
         addRestaurantFeatures(featuresToAdd)
       );
+    } else {
+      batchedActionsOnFirstRender.push(addRestaurantCuisines(cuisinesToAdd));
+      batchedActionsOnFirstRender.push(addRestaurantFeatures(featuresToAdd));
     }
 
-    dispatch(batchActions(batchedActions));
+    firstRender.current = false;
+    dispatch(batchActions(batchedActionsOnFirstRender));
   }
 
   /**
@@ -339,11 +331,13 @@ export function Restaurant_List() {
   }
 
   function updateURL() {
-    let resFilterParamsAsURL = convertResFilterParamsToURLParams(resFilterParams);
+    let resFilterParamsAsURL: string = convertResFilterParamsToURLParams(resFilterParams);
+
     if (resFilterParamsAsURL === "") {
       history.push(`${Routes.RESTAURANTS}?page=${page + 1}&pageSize=${pageSize}`);
       return;
     }
+
     history.push(
       `${Routes.RESTAURANTS}${resFilterParamsAsURL}&page=${page + 1}&pageSize=${pageSize}`
     );
@@ -357,17 +351,64 @@ export function Restaurant_List() {
   ) {
     if (urlParams.hasOwnProperty("cuisines")) {
       let cuisinesURL: string = urlParams["cuisines"];
-      batchedActions.push(updateResCheckedCuisinesFromURL(cuisines, cuisinesURL));
+
+      batchedActionsOnFirstRender.push(
+        updateResCheckedCuisinesFromURL(cuisines, cuisinesURL)
+      );
+
+      fetchRestaurantsByCuisineURL(cuisinesURL);
     } else {
-      batchedActions.push(defaultCuisinesAction);
+      batchedActionsOnFirstRender.push(defaultCuisinesAction);
     }
 
     if (urlParams.hasOwnProperty("features")) {
       let featuresURL: string = urlParams["features"];
-      batchedActions.push(updateRestaurantCheckedFeatures(features, featuresURL));
+      batchedActionsOnFirstRender.push(
+        updateRestaurantCheckedFeatures(features, featuresURL)
+      );
+
+      filterRestaurantsByFeatures(featuresURL);
     } else {
-      batchedActions.push(defaultFeaturesAction);
+      batchedActionsOnFirstRender.push(defaultFeaturesAction);
     }
+  }
+
+  /**
+   * In case that the URL includes the cuisines parameter, this function
+   * fetches restaurants from it.
+   * @param cuisinesURL
+   */
+  function fetchRestaurantsByCuisineURL(cuisinesURL: string) {
+    fetchRestaurants(
+      currentCity.lat,
+      currentCity.lon,
+      pageSize,
+      page * pageSize,
+      undefined,
+      cuisinesURL
+    )
+      .then((res) => {
+        let restaurantsRes: RestaurantSearch[] = res.data.businesses;
+
+        dispatch(
+          batchActions([setRestaurants(restaurantsRes), setLoadingRestaurants(false)])
+        );
+      })
+      .catch((error) =>
+        console.log("Error while fetching restaurants by cuisines | ", error)
+      );
+  }
+
+  function filterRestaurantsByFeatures(featuresURL: string) {
+    let selectedFeatures: string[] = featuresURL.split(",");
+
+    let filteredRestaurants: RestaurantSearch[] = restaurantsRes.filter(
+      (restaurant: RestaurantSearch) => {
+        let resFeatures: string[] = restaurant.transactions;
+        return hasAny(resFeatures, selectedFeatures);
+      }
+    );
+    batchedActionsOnFirstRender.push(setRestaurants(filteredRestaurants));
   }
 
   function getPage(): number {
