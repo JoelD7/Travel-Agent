@@ -16,7 +16,14 @@ import {
 import { format } from "date-fns";
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { DashDrawer, IconText, Navbar, SliderArrow, Text } from "../../components";
+import {
+  DashDrawer,
+  Footer,
+  IconText,
+  Navbar,
+  SliderArrow,
+  Text,
+} from "../../components";
 import { Colors } from "../../styles";
 import { getLinkStyle, Routes, tripPlaceholder, tripsPlaceholder } from "../../utils";
 import { DrawerOptions } from "../../utils/types/drawerOption-types";
@@ -209,6 +216,8 @@ export function Trips() {
           </Grid>
         </Grid>
       </Grid>
+
+      <Footer />
     </div>
   );
 }

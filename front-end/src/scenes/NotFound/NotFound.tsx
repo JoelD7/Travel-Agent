@@ -2,7 +2,7 @@ import { Grid } from "@material-ui/core";
 import React from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { CustomButton, Navbar, ServicesToolbar, Text } from "../../components";
+import { CustomButton, Footer, Navbar, ServicesToolbar, Text } from "../../components";
 import { Colors } from "../../styles";
 import { Routes } from "../../utils";
 import { notFoundStyles } from "./notFoundStyles";
@@ -46,6 +46,8 @@ export function NotFound() {
           />
         </div>
       </Grid>
+
+      <Footer />
     </div>
   );
 }

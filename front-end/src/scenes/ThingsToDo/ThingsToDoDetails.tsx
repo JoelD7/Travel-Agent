@@ -2,6 +2,7 @@ import { Grid } from "@material-ui/core";
 import React, { useState, MouseEvent } from "react";
 import {
   CustomButton,
+  Footer,
   IconText,
   IncludeInTripPopover,
   Navbar,
@@ -231,6 +232,8 @@ export function ThingsToDoDetails() {
         openPopover={openPopover}
         setOpenPopover={setOpenPopover}
       />
+
+      <Footer />
     </div>
   );
 }

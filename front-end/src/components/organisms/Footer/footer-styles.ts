@@ -5,30 +5,67 @@ export const footerStyles = makeStyles((theme: Theme) => ({
   contentContainer: {
     width: "80%",
     margin: "auto",
+    [theme.breakpoints.down(1000)]: {
+      width: "85%",
+    },
+    [theme.breakpoints.down(735)]: {
+      width: "100%",
+    },
+    [theme.breakpoints.down(660)]: {
+      width: "90%",
+    },
+  },
+  contentGrid: {
+    width: "65%",
+    [theme.breakpoints.down(1000)]: {
+      width: "100%",
+      marginTop: "25px",
+    },
   },
   dividerGrid: {
-    width: "5%",
+    width: "7%",
+    [theme.breakpoints.down(660)]: {
+      display: "none",
+    },
   },
   link: {
     color: "white",
-    marginTop: "5px",
     textDecoration: "none",
     "&:hover": {
       textDecoration: "underline",
     },
+  },
+  linkText: {
+    marginTop: "6px ​!important",
   },
   logo: {
     height: "44px",
   },
   logoGrid: {
     width: "35%",
+    [theme.breakpoints.down(1042)]: {
+      width: "30%",
+    },
+    [theme.breakpoints.down(1000)]: {
+      width: "100%",
+    },
   },
   linkGrid: {
-    width: "20%",
+    width: "31%",
+    [theme.breakpoints.down(735)]: {
+      width: "25%",
+    },
+    [theme.breakpoints.down(660)]: {
+      width: "50%",
+      marginBottom: "20px",
+    },
+    [theme.breakpoints.down(450)]: {
+      width: "100%",
+      marginBottom: "20px",
+    },
   },
   mainContainer: {
     backgroundColor: Colors.BLUE,
-    width: "96.46vw",
     padding: "40px 20px",
     color: "white",
   },

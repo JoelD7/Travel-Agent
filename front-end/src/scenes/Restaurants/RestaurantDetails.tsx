@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import Slider from "react-slick";
 import {
   CustomButton,
+  Footer,
   IconText,
   IncludeInTripPopover,
   Navbar,
@@ -154,6 +155,8 @@ export function RestaurantDetails() {
           </div>
         </Grid>
       </Grid>
+
+      <Footer />
 
       <IncludeInTripPopover
         place={restaurant}

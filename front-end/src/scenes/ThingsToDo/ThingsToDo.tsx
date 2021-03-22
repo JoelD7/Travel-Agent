@@ -23,6 +23,7 @@ import {
   POICard,
   Text,
   ProgressCircle,
+  Footer,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import { thingsToDoStyles as thingsToDoStyles } from "./thingsToDo-styles";
@@ -535,6 +536,8 @@ export function ThingsToDo() {
           </Grid>
         </>
       </div>
+
+      <Footer />
     </div>
   );
 }

@@ -25,6 +25,7 @@ import {
   RoomAccordion,
   ServicesToolbar,
   SliderArrow,
+  Footer,
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
@@ -398,6 +399,8 @@ export function HotelDetails() {
           </Grid>
         </Grid>
       </div>
+
+      <Footer />
     </div>
   );
 }

@@ -10,6 +10,7 @@ import React from "react";
 import {
   CustomButton,
   DashDrawer,
+  Footer,
   Navbar,
   PhotoAlbumCard,
   SliderArrow,
@@ -230,6 +231,8 @@ export function TripDetails() {
           </div>
         </Grid>
       </Grid>
+
+      <Footer />
     </div>
   );
 }

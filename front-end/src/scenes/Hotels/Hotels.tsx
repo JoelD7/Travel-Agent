@@ -25,6 +25,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { Family } from "../../assets/fonts";
 import {
   CustomButton,
+  Footer,
   HotelCard,
   HotelStarSelector,
   Navbar,
@@ -942,6 +943,8 @@ export function Hotels() {
           </Grid>
         </Grid>
       </Grid>
+
+      <Footer />
 
       {/* Drawer filter */}
       <Drawer

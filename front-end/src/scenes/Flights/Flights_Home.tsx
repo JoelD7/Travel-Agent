@@ -22,6 +22,7 @@ import {
   IataAutocomplete,
   Navbar,
   PageSubtitle,
+  Footer,
   ServicesToolbar,
 } from "../../components";
 import { Colors } from "../../styles";
@@ -477,6 +478,8 @@ export function Flights_Home() {
           />
         ))}
       </Grid>
+
+      <Footer />
     </div>
   );
 }

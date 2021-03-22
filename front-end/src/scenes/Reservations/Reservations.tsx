@@ -7,6 +7,7 @@ import {
   CardFlight,
   CustomButton,
   DashDrawer,
+  Footer,
   IconText,
   Navbar,
   Text,
@@ -198,6 +199,8 @@ export function Reservations() {
           </Grid>
         </Grid>
       </Grid>
+
+      <Footer />
     </div>
   );
 }

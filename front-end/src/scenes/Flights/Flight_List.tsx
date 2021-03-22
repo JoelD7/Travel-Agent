@@ -30,6 +30,7 @@ import {
   CardFlight,
   CustomButton,
   FlightTimesRange,
+  Footer,
   IataAutocomplete,
   Navbar,
   Pagination,
@@ -1116,6 +1117,8 @@ export function Flight_List() {
           </Grid>
         </Grid>
       </div>
+
+      <Footer />
 
       <Drawer
         open={openDrawer}

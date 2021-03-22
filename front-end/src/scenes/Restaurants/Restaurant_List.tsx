@@ -6,6 +6,7 @@ import { useHistory, useLocation } from "react-router";
 import { AnyAction } from "redux";
 import { batchActions } from "redux-batched-actions";
 import {
+  Footer,
   Navbar,
   NotAvailableCard,
   Pagination,
@@ -620,6 +621,8 @@ export function Restaurant_List() {
           </Grid>
         </Grid>
       </div>
+
+      <Footer />
     </div>
   );
 }

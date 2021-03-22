@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   CustomButton,
   DashDrawer,
+  Footer,
   IconText,
   Navbar,
   SliderArrow,
@@ -165,6 +166,8 @@ export function FavPlaces() {
           </div>
         </Grid>
       </Grid>
+
+      <Footer />
     </div>
   );
 }

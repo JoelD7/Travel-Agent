@@ -22,11 +22,19 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { carlos, Font, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors } from "../../../styles";
-import { getLinkStyle, Routes } from "../../../utils";
+import {
+  getHotelDefaultRoute,
+  getLinkStyle,
+  Routes,
+  selectHotelReservationParams,
+  getRestaurantsDefaultRoute,
+  HotelBookingParams,
+} from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 import { CustomButton } from "../../atoms";
 import { drawerButtonStyle, drawerStyles } from "./navDrawer-styles";
@@ -40,8 +48,14 @@ interface CDrawerProps {
 export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
   const style = drawerStyles();
 
-  let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
-  let page = "/" + segmentedURL[segmentedURL.length - 1];
+  const location = useLocation();
+  const history = useHistory();
+
+  let page = location.pathname;
+
+  const hotelReservationParams: HotelBookingParams = useSelector(
+    selectHotelReservationParams
+  );
 
   const theme = createMuiTheme({
     overrides: {
@@ -85,7 +99,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
     {
       label: "Hotels",
       icon: faHotel,
-      route: Routes.HOTELS,
+      route: getHotelDefaultRoute(hotelReservationParams),
       selected: page === Routes.HOTELS,
       user: false,
     },
@@ -99,7 +113,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
     {
       label: "Restaurants",
       icon: faUtensils,
-      route: Routes.RESTAURANTS,
+      route: getRestaurantsDefaultRoute(),
       selected: page === Routes.RESTAURANTS,
       user: false,
     },
@@ -161,7 +175,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
               backgroundColor={Colors.PURPLE}
               rounded
               style={{ ...drawerButtonStyle, marginBottom: "0px" }}
-              onClick={() => {}}
+              onClick={() => history.push(Routes.LOGIN)}
             >
               Login
             </CustomButton>

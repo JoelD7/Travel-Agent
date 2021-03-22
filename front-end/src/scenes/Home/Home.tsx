@@ -210,156 +210,157 @@ export function Home() {
   };
 
   return (
-    <div className="mainContainer">
-      <Helmet>
-        <title>Tripper</title>
-      </Helmet>
+    <>
+      <div className="mainContainer">
+        <Helmet>
+          <title>Tripper</title>
+        </Helmet>
 
-      <Grid id="section-1" container className={style.topContainer}>
-        <Grid item xs={12}>
-          <Navbar home />
-          <ServicesToolbar home />
-        </Grid>
+        <Grid id="section-1" container className={style.topContainer}>
+          <Grid item xs={12}>
+            <Navbar home />
+            <ServicesToolbar home />
+          </Grid>
 
-        <Grid item className={style.reservationGrid}>
-          <div className={style.reservationContainer}>
-            <h3 style={{ textAlign: "center", color: Colors.BLUE }}>
-              What are you looking for?
-            </h3>
+          <Grid item className={style.reservationGrid}>
+            <div className={style.reservationContainer}>
+              <h3 style={{ textAlign: "center", color: Colors.BLUE }}>
+                What are you looking for?
+              </h3>
 
-            <div className={style.servicesContainer}>
-              {services.map((service) => (
-                <div>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <ButtonIcon
-                      primary={Colors.PURPLE}
-                      secondary={"white"}
-                      selectable={true}
-                      selected={selectedService[service.prop]}
-                      onClick={() => onServicePressed(service.prop)}
-                      size="medium"
-                      className={getIconClassname(service.prop)}
-                      icon={service.icon}
-                    />
+              <div className={style.servicesContainer}>
+                {services.map((service) => (
+                  <div>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <ButtonIcon
+                        primary={Colors.PURPLE}
+                        secondary={"white"}
+                        selectable={true}
+                        selected={selectedService[service.prop]}
+                        onClick={() => onServicePressed(service.prop)}
+                        size="medium"
+                        className={getIconClassname(service.prop)}
+                        icon={service.icon}
+                      />
+                    </div>
+                    <p className={style.serviceName}>{service.name}</p>
                   </div>
-                  <p className={style.serviceName}>{service.name}</p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
 
-            <div id="reservationMode">
-              <SwipeableViews index={index} onChangeIndex={(i) => setIndex(i)}>
-                <HomeHotelReservation />
-                <HomeFlightReservation />
-                <HomeCarReservation />
-              </SwipeableViews>
+              <div id="reservationMode">
+                <SwipeableViews index={index} onChangeIndex={(i) => setIndex(i)}>
+                  <HomeHotelReservation />
+                  <HomeFlightReservation />
+                  <HomeCarReservation />
+                </SwipeableViews>
+              </div>
             </div>
-          </div>
+          </Grid>
+
+          <Grid item className={style.mainPhotoGrid}>
+            <Grid
+              container
+              justify="center"
+              alignItems="center"
+              className={style.homeImageDiv}
+            >
+              <div>
+                <h1 className={style.homeImageText}>Hey, where you're off to next?</h1>
+                <div className={style.exploreButtonContainer}>
+                  <CustomButton size={18}>Explore places</CustomButton>
+                </div>
+              </div>
+            </Grid>
+          </Grid>
         </Grid>
 
-        <Grid item className={style.mainPhotoGrid}>
-          <Grid
-            container
-            justify="center"
-            alignItems="center"
-            className={style.homeImageDiv}
-          >
-            <div>
-              <h1 className={style.homeImageText}>Hey, where you're off to next?</h1>
-              <div className={style.exploreButtonContainer}>
-                <CustomButton size={18}>Explore places</CustomButton>
+        <PageSubtitle label="Plan your trip" />
+        <Grid id="section-2" container className={style.section}>
+          <Grid item className={style.planTripGrid}>
+            <div className={style.redirectTripContainer}>
+              <Text color="white" bold component="h2">
+                Make a trip
+              </Text>
+
+              <p>Plan your trips however you want! </p>
+
+              <p>
+                The first step in planning your trip is making an itinerary. An itinerary
+                will help you organize your time so you can get the most out of your
+                journey.
+              </p>
+
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <CustomButton
+                  backgroundColor={Colors.GREEN}
+                  style={styles.style_createTripButton}
+                >
+                  Create trip
+                </CustomButton>
+              </div>
+            </div>
+          </Grid>
+
+          <Grid item className={style.planTripPhotoContainer}>
+            <div className={style.redirectTripContainerHidden}>
+              <h2 style={{ fontWeight: "normal" }}>Make a trip</h2>
+
+              <p>Plan your trips however you want! </p>
+
+              <p>
+                The first step in planning your trip is making an itinerary. An itinerary
+                will help you organize your time so you can get the most out of your
+                journey.
+              </p>
+
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <CustomButton
+                  backgroundColor={Colors.GREEN}
+                  textColor={Colors.BLUE}
+                  style={styles.style_createTripButton}
+                >
+                  Create trip
+                </CustomButton>
               </div>
             </div>
           </Grid>
         </Grid>
-      </Grid>
 
-      <PageSubtitle label="Plan your trip" />
-      <Grid id="section-2" container className={style.section}>
-        <Grid item className={style.planTripGrid}>
-          <div className={style.redirectTripContainer}>
-            <Text color="white" bold component="h2">
-              Make a trip
-            </Text>
+        <PageSubtitle label="Popular destinations" />
+        <Grid id="section-3" container className={style.section}>
+          <Slider {...sliderSettings} slidesToScroll={1} slidesToShow={3}>
+            {popularDestinations.map((destination, i) => (
+              <div key={i}>
+                <Card className={style.card}>
+                  <CardActionArea>
+                    <CardMedia component="img" height="250" image={destination.image} />
+                  </CardActionArea>
 
-            <p>Plan your trips however you want! </p>
-
-            <p>
-              The first step in planning your trip is making an itinerary. An itinerary
-              will help you organize your time so you can get the most out of your
-              journey.
-            </p>
-
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              <CustomButton
-                backgroundColor={Colors.GREEN}
-                style={styles.style_createTripButton}
-              >
-                Create trip
-              </CustomButton>
-            </div>
-          </div>
+                  <CardContent>
+                    <div
+                      style={{ fontWeight: "bold" }}
+                    >{`${destination.city}, ${destination.country}`}</div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </Slider>
         </Grid>
-
-        <Grid item className={style.planTripPhotoContainer}>
-          <div className={style.redirectTripContainerHidden}>
-            <h2 style={{ fontWeight: "normal" }}>Make a trip</h2>
-
-            <p>Plan your trips however you want! </p>
-
-            <p>
-              The first step in planning your trip is making an itinerary. An itinerary
-              will help you organize your time so you can get the most out of your
-              journey.
-            </p>
-
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              <CustomButton
-                backgroundColor={Colors.GREEN}
-                textColor={Colors.BLUE}
-                style={styles.style_createTripButton}
-              >
-                Create trip
-              </CustomButton>
-            </div>
-          </div>
-        </Grid>
-      </Grid>
-
-      <PageSubtitle label="Popular destinations" />
-      <Grid id="section-3" container className={style.section}>
-        <Slider {...sliderSettings} slidesToScroll={1} slidesToShow={3}>
-          {popularDestinations.map((destination, i) => (
-            <div key={i}>
-              <Card className={style.card}>
-                <CardActionArea>
-                  <CardMedia component="img" height="250" image={destination.image} />
-                </CardActionArea>
-
-                <CardContent>
-                  <div
-                    style={{ fontWeight: "bold" }}
-                  >{`${destination.city}, ${destination.country}`}</div>
-                </CardContent>
-              </Card>
-            </div>
-          ))}
-        </Slider>
-      </Grid>
-
+      </div>
       <Footer />
-    </div>
+    </>
   );
 }

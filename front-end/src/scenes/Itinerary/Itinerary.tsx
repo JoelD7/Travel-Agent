@@ -14,6 +14,7 @@ import {
   CustomButton,
   DashDrawer,
   DayItinerary,
+  Footer,
   IconText,
   Navbar,
   Text,
@@ -322,6 +323,8 @@ export function Itinerary() {
           date={dateItinerary.date}
         />
       )}
+
+      <Footer />
     </div>
   );
 }

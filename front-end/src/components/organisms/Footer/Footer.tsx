@@ -5,6 +5,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoIcon } from "../../../assets";
+import { Colors } from "../../../styles";
 import {
   getHotelDefaultRoute,
   getRestaurantsDefaultRoute,
@@ -12,7 +13,7 @@ import {
   getLinkStyle,
   selectHotelReservationParams,
 } from "../../../utils";
-import { Text } from "../../atoms";
+import { IconText, Text } from "../../atoms";
 import { footerStyles } from "./footer-styles";
 
 export function Footer() {
@@ -72,60 +73,77 @@ export function Footer() {
           </Grid>
         </Grid>
 
-        {/* Book links */}
-        <Grid item className={style.linkGrid}>
-          <Text color="white" bold component="h4">
-            Book
-          </Text>
-
-          {bookLinks.map((link) => (
-            <Link key={link.route} className={style.link} to={link.route}>
-              <Text color="white" component="h5" style={{ marginTop: "5px" }}>
-                {link.label}
+        {/* Content grids */}
+        <Grid item className={style.contentGrid}>
+          <Grid container>
+            {/* Book links */}
+            <Grid item className={style.linkGrid}>
+              <Text color="white" bold component="h4" style={{ marginBottom: "12px" }}>
+                Book
               </Text>
-            </Link>
-          ))}
-        </Grid>
 
-        {/* See links */}
-        <Grid item className={style.linkGrid}>
-          <Text color="white" bold component="h4">
-            See
-          </Text>
+              {bookLinks.map((link) => (
+                <Link key={link.route} className={style.link} to={link.route}>
+                  <Text color="white" component="h5" style={{ marginTop: "6px" }}>
+                    {link.label}
+                  </Text>
+                </Link>
+              ))}
+            </Grid>
 
-          {seeLinks.map((link) => (
-            <Link key={link.route} className={style.link} to={link.route}>
-              <Text color="white" component="h5" style={{ marginTop: "5px" }}>
-                {link.label}
+            {/* See links */}
+            <Grid item className={style.linkGrid}>
+              <Text color="white" bold component="h4" style={{ marginBottom: "12px" }}>
+                See
               </Text>
-            </Link>
-          ))}
-        </Grid>
 
-        {/* Divider */}
-        <Grid item className={style.dividerGrid}>
-          <Divider orientation="vertical" style={{ backgroundColor: "white" }} />
-        </Grid>
+              {seeLinks.map((link) => (
+                <Link key={link.route} className={style.link} to={link.route}>
+                  <Text color="white" component="h5" style={{ marginTop: "6px" }}>
+                    {link.label}
+                  </Text>
+                </Link>
+              ))}
+            </Grid>
 
-        {/* Contact */}
-        <Grid item className={style.linkGrid}>
-          <Text color="white" bold component="h4">
-            Contact info
-          </Text>
+            {/* Divider */}
+            <Grid item className={style.dividerGrid}>
+              <Grid container justify="center">
+                <Divider orientation="vertical" style={{ backgroundColor: "white" }} />
+              </Grid>
+            </Grid>
 
-          {/* eMail */}
-          <Grid container alignItems="center">
-            <FontAwesomeIcon icon={faEnvelope} color="white" />
-            <Text style={{ marginLeft: "5px" }} color="white" component="h5">
-              joeld200013@gmail.com
-            </Text>
-          </Grid>
-          {/* Phone */}
-          <Grid container alignItems="center">
-            <FontAwesomeIcon icon={faPhone} color="white" />
-            <Text style={{ marginLeft: "5px" }} color="white" component="h5">
-              (829) 977 0013
-            </Text>
+            {/* Contact */}
+            <Grid item className={style.linkGrid}>
+              <Text color="white" bold component="h4" style={{ marginBottom: "12px" }}>
+                Contact info
+              </Text>
+
+              {/* eMail */}
+              <Grid container alignItems="center">
+                <IconText
+                  fontSize={16}
+                  textColor="white"
+                  icon={faEnvelope}
+                  style={{ marginTop: "6px" }}
+                  backgroundColor={"inherit"}
+                >
+                  joeld200013@gmail.com
+                </IconText>
+              </Grid>
+              {/* Phone */}
+              <Grid container alignItems="center">
+                <IconText
+                  fontSize={16}
+                  textColor="white"
+                  icon={faPhone}
+                  style={{ marginTop: "6px" }}
+                  backgroundColor={"inherit"}
+                >
+                  (829) 977 0013
+                </IconText>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

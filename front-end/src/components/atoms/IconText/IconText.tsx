@@ -4,6 +4,7 @@ import { makeStyles, Theme } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React, { ReactNode } from "react";
 import { Colors, Shadow } from "../../../styles";
+import { Font } from "../../../assets";
 
 interface IconTextProps {
   text?: string;
@@ -50,13 +51,15 @@ export function IconText({
       width: `${size}px`,
       height: `${size}px`,
       borderRadius: "50%",
-      padding: "5px",
+      //This means that the icon wont have a background circle
+      padding: backgroundColor === "inherit" ? "0px" : "5px",
       marginRight: "5px",
       boxShadow: shadow ? Shadow.MEDIUM : "0px 0px 0px white",
       ...iconStyle,
     },
     text: {
       color: textColor,
+      fontFamily: Font.Family,
       fontSize: `${fontSize}px`,
       margin: "0px",
     },
