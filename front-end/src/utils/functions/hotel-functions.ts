@@ -1,4 +1,5 @@
 import { addDays, format, parseISO } from "date-fns";
+import { Routes } from "..";
 import { HotelBedAPI } from "../external-apis";
 import {
   HotelBooking,
@@ -174,4 +175,11 @@ export function getMinRate(rooms: HotelRooms[]): number {
   }, rooms[0].rates[0]);
 
   return getRoomTotalPrice(minRate);
+}
+
+export function getHotelDefaultRoute(reservationParams: HotelBookingParams): string {
+  return `${Routes.HOTELS}${convertReservationParamsToURLParams(
+    reservationParams,
+    "hotel"
+  )}&sortBy=Stars | desc&page=${1}&pageSize=${20}`;
 }

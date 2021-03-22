@@ -6,9 +6,11 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import {
   convertReservationParamsToURLParams,
   convertURLToReservationParams,
+  getHotelDefaultRoute,
   getLinkStyle,
   Routes,
   selectHotelReservationParams,
+  getRestaurantsDefaultRoute,
 } from "../../../utils";
 import { CreateCSSProperties, CSSProperties } from "@material-ui/styles";
 import { useSelector } from "react-redux";
@@ -76,16 +78,13 @@ export function ServicesToolbar({ home, style }: ServicesToolbar) {
   function getServiceRoute(route: string) {
     switch (route) {
       case Routes.HOTELS:
-        return `${Routes.HOTELS}${convertReservationParamsToURLParams(
-          reservationParams,
-          "hotel"
-        )}&sortBy=Stars | desc&page=${1}&pageSize=${20}`;
+        return getHotelDefaultRoute(reservationParams);
 
       case Routes.FLIGHTS:
         return Routes.FLIGHTS;
 
       case Routes.RESTAURANTS:
-        return `${Routes.RESTAURANTS}?page=${1}&pageSize=${20}`;
+        return getRestaurantsDefaultRoute();
 
       case Routes.THINGS_TODO:
         return Routes.THINGS_TODO;

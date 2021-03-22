@@ -3,7 +3,9 @@ import {
   getLinkStyle,
   HotelBookingParams,
   Routes,
+  getRestaurantsDefaultRoute,
   selectHotelReservationParams,
+  getHotelDefaultRoute,
 } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 import React, { useState } from "react";
@@ -73,10 +75,7 @@ export function DashDrawer() {
     {
       label: "Hotels",
       icon: faHotel,
-      route: `${Routes.HOTELS}${convertReservationParamsToURLParams(
-        reservationParams,
-        "hotel"
-      )}&sortBy=Stars | desc&page=${1}&pageSize=${20}`,
+      route: getHotelDefaultRoute(reservationParams),
       selected: page === Routes.HOTELS,
       user: false,
     },
@@ -90,7 +89,7 @@ export function DashDrawer() {
     {
       label: "Restaurants",
       icon: faUtensils,
-      route: `${Routes.RESTAURANTS}?page=${1}&pageSize=${20}`,
+      route: getRestaurantsDefaultRoute(),
       selected: page === Routes.RESTAURANTS,
       user: false,
     },

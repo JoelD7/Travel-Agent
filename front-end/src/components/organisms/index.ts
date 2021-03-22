@@ -7,3 +7,4 @@ export { HotelCard } from "./HotelCard/HotelCard";
 export { HotelDetailsSlider } from "./HotelDetailsSlider/HotelDetailsSlider";
 export { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopover";
 export { RestaurantDetailsSlider } from "./RestaurantDetailsSlider/RestaurantDetailsSlider";
+export { Footer } from "./Footer/Footer";

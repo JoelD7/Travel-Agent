@@ -35,6 +35,7 @@ import React, { useState } from "react";
 import { carlos, logoTypeWhiteFore } from "../../assets";
 import {
   CustomButton,
+  Footer,
   HomeCarReservation,
   HomeFlightReservation,
   HomeHotelReservation,
@@ -121,37 +122,37 @@ export function Home() {
 
   const popularDestinations = [
     {
-      image: "destinations/paris.jpg",
+      image: "./Travel-Agent/destinations/paris.jpg",
       country: "France",
       city: "Paris",
     },
     {
-      image: "destinations/tokio.jpg",
+      image: "./Travel-Agent/destinations/tokio.jpg",
       country: "Japan",
       city: "Tokio",
     },
     {
-      image: "destinations/agra.jpg",
+      image: "./Travel-Agent/destinations/agra.jpg",
       country: "India",
       city: "Agra",
     },
     {
-      image: "destinations/singapore.jpg",
+      image: "./Travel-Agent/destinations/singapore.jpg",
       country: "Singapore",
       city: "Singapore",
     },
     {
-      image: "destinations/rio.jpg",
+      image: "./Travel-Agent/destinations/rio.jpg",
       country: "Brazil",
       city: "Rio de Janeiro",
     },
     {
-      image: "destinations/new-york.jpg",
+      image: "./Travel-Agent/destinations/new-york.jpg",
       country: "United States",
       city: "New York",
     },
     {
-      image: "destinations/rome.jpg",
+      image: "./Travel-Agent/destinations/rome.jpg",
       country: "Italy",
       city: "Rome",
     },
@@ -298,7 +299,6 @@ export function Home() {
             >
               <CustomButton
                 backgroundColor={Colors.GREEN}
-                textColor={Colors.BLUE}
                 style={styles.style_createTripButton}
               >
                 Create trip
@@ -358,6 +358,8 @@ export function Home() {
           ))}
         </Slider>
       </Grid>
+
+      <Footer />
     </div>
   );
 }

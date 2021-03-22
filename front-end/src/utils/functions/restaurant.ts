@@ -1,3 +1,4 @@
+import { Routes } from "..";
 import { capitalizeString } from "./functions";
 
 export function getRestaurantCategoriesList(
@@ -168,4 +169,8 @@ export function sortCuisines(unsortedCuisines: RestaurantCuisine[]): RestaurantC
     .sort((a, b) => a.title.localeCompare(b.title));
 
   return selectedCuisines.concat(unselectedCuisines);
+}
+
+export function getRestaurantsDefaultRoute(): string {
+  return `${Routes.RESTAURANTS}?page=${1}&pageSize=${20}`;
 }
