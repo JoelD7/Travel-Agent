@@ -1,4 +1,4 @@
-import { Slider } from "@material-ui/core";
+import { Grid, Slider } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { ChangeEvent, useState } from "react";
 import { dateTimeRangeStyles } from "./dateTimeRange-styles";
@@ -20,22 +20,43 @@ export function DatetimeRange({ updateState, value, max, min }: DatetimeRange) {
     setSlider(value as number[]);
   }
 
-  function parseNumberToDateLabel(value: number) {
+  function getDate(value: number) {
     let date: Date = new Date(value);
-    return format(date, "dd/MM 'at' h:mm aa");
+    return format(date, "dd/MM");
+  }
+
+  function getTime(value: number) {
+    let date: Date = new Date(value);
+    return format(date, "h:mm aa");
   }
 
   return (
     <div onBlur={() => updateState(slider)}>
-      <div style={{ display: "flex", width: "88%", margin: "auto" }}>
-        <p style={{ textAlign: "start", fontSize: "16px" }}>{`${parseNumberToDateLabel(
-          slider[0]
-        )}`}</p>
+      <Grid container className={style.textRangeGrid}>
+        {/* Start */}
+        <Grid item xs={6}>
+          <Grid container justify="flex-start">
+            <div>
+              <p className={style.text}>{getDate(slider[0])}</p>
+              <p className={style.text}>{getTime(slider[0])}</p>
+            </div>
+          </Grid>
+        </Grid>
 
-        <p
-          style={{ textAlign: "end", fontSize: "16px", marginLeft: "auto" }}
-        >{`${parseNumberToDateLabel(slider[1])}`}</p>
-      </div>
+        {/* End */}
+        <Grid item xs={6}>
+          <Grid container justify="flex-end">
+            <div>
+              <p className={style.text} style={{ textAlign: "end" }}>
+                {getDate(slider[1])}
+              </p>
+              <p className={style.text} style={{ textAlign: "end" }}>
+                {getTime(slider[1])}
+              </p>
+            </div>
+          </Grid>
+        </Grid>
+      </Grid>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Slider

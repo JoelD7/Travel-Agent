@@ -1,32 +1,28 @@
 import {
-  faArrowRight,
   faChevronCircleRight,
   faCircle,
-  faDotCircle,
   faPlane,
-  faPlaneDeparture,
   faTimes,
-  faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Backdrop, Dialog, Divider, Grid, IconButton, Modal } from "@material-ui/core";
-import { parseISO } from "date-fns";
+import { Backdrop, Dialog, Divider, Grid, IconButton } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { CustomButton } from "../../components";
 import { Colors } from "../../styles";
 import {
+  capitalizeString,
+  FlightSearch,
   formatAsCurrency,
-  flightPlaceholder,
   formatFlightDate,
   formatFlightSegmentTime,
-  formatFlightTime,
   getFlightCitiesLabel,
   getFlightSegmentCarrier,
   getIataLocation,
   getLastSegment,
   parseFlightDuration,
   selectFlightDictionaries,
+  selectFlightParams,
 } from "../../utils";
 import { flightDetailsStyles } from "./flightDetails-styles";
 
@@ -34,7 +30,6 @@ interface FlightDetails {
   open: boolean;
   flight: Flight;
   onClose: () => void;
-  //   passengers: number;
 }
 
 interface FlightCard {
@@ -43,9 +38,36 @@ interface FlightCard {
 
 export function FlightDetails({ flight, open, onClose }: FlightDetails) {
   const style = flightDetailsStyles();
-  const passengers = 3;
 
-  const dictionaries: FlightDictionary = useSelector(selectFlightDictionaries);
+  const flightSearch: FlightSearch = useSelector(selectFlightParams);
+
+  const passengers = getFlightPassengers();
+
+  const dictionaries: FlightDictionary | undefined = useSelector(
+    selectFlightDictionaries
+  );
+
+  function getFlightPassengers() {
+    let total: number = 0;
+    total += flightSearch.adults;
+
+    if (flightSearch.children) {
+      total += flightSearch.children;
+    }
+
+    if (flightSearch.infants) {
+      total += flightSearch.infants;
+    }
+
+    return total;
+  }
+
+  function getFlightClass(): string {
+    return capitalizeString(
+      flight.travelerPricings[0].fareDetailsBySegment[0].cabin,
+      "each word"
+    );
+  }
 
   function FlightCard({ itinerary }: FlightCard) {
     function getCityFromIata(iata: string) {
@@ -62,6 +84,7 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
           <h2 style={{ fontSize: "20px", color: Colors.BLUE }}>
             {itinerary === 0 ? "Depart" : "Return"}
           </h2>
+
           <p className={style.flightCardDate}>
             {formatFlightDate(flight, "departure", itinerary)}
           </p>
@@ -87,9 +110,11 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <p style={{ textAlign: "center" }}>
-                    {getFlightSegmentCarrier(segment, dictionaries)}
-                  </p>
+                  {dictionaries && (
+                    <p style={{ textAlign: "center" }}>
+                      {getFlightSegmentCarrier(segment, dictionaries)}
+                    </p>
+                  )}
                 </Grid>
               </Grid>
             </Grid>
@@ -161,6 +186,7 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
             </IconButton>
           </Grid>
         </Grid>
+
         {/* Dates, flight params */}
         <Grid key="subtitle" item xs={12}>
           <Grid container alignItems="center">
@@ -205,7 +231,7 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
               icon={faCircle}
             />
 
-            <p className={style.subtitle}>{flight.class}</p>
+            <p className={style.subtitle}>{getFlightClass()}</p>
           </Grid>
         </Grid>
 

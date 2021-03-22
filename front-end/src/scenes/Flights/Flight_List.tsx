@@ -19,11 +19,12 @@ import {
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Axios from "axios";
-import { addDays, compareDesc, format } from "date-fns";
+import { addDays, compareDesc, format, subDays } from "date-fns";
 import { compareAsc } from "date-fns/esm";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router";
 import { Family } from "../../assets/fonts";
 import {
   CardFlight,
@@ -38,16 +39,21 @@ import {
   SortPageSize,
   Text,
 } from "../../components";
+import { IconTP } from "../../components/atoms/IconTP/IconTP";
 import { Colors, Shadow } from "../../styles";
 import {
   addFlightDuration,
+  convertFlightToURLParams,
+  convertURLParamsToFlight,
   flightsPlaceholder,
+  getFlightClassForAPI,
   getAccessToken,
   getMaxDate,
   getMinDate,
   getSavedAccessToken,
   isDateBetweenRange,
   muiDateFormatter,
+  Routes,
   selectFlightFromAutocomplete,
   selectFlightListURL,
   selectFlightParams,
@@ -62,6 +68,7 @@ import {
   setFlightDeparture,
   setFlightDictionaries,
   setFlightInfants,
+  setFlightParams,
   setFlightReturn,
 } from "../../utils/store/flight-slice";
 import { FlightTypes } from "../../utils/types";
@@ -146,7 +153,7 @@ export function Flight_List() {
     },
   });
 
-  const flight: FlightSearch = useSelector(selectFlightParams);
+  const flightSearch: FlightSearch = useSelector(selectFlightParams);
 
   const [state, setState] = useState<FlightSearchParams>({
     flightType: "Round trip",
@@ -207,10 +214,18 @@ export function Flight_List() {
 
   const [flights, setFlights] = useState<Flight[]>(flightsPlaceholder);
   const [allFlights, setAllFlights] = useState<Flight[]>([]);
-  const flightListURL: string = useSelector(selectFlightListURL);
+  const flightListURL: string | undefined = useSelector(selectFlightListURL);
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
+
+  const location = useLocation();
+
+  const query = useQuery();
+
+  const [urlParams, setURLParams] = useState<{ [index: string]: string }>(
+    getURLParamsAsKVP()
+  );
 
   const sortOptions: string[] = [
     "Price | desc",
@@ -226,23 +241,41 @@ export function Flight_List() {
     "Latest return departure",
     "Latest return arrival",
   ];
-  const [sortOption, setSortOption] = useState<string>("Price");
+  const [sortOption, setSortOption] = useState<string>(getSortOption());
 
-  const [page, setPage] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(20);
+  const [page, setPage] = useState<number>(getPage());
+  const [pageSize, setPageSize] = useState<number>(getPageSize());
   const pageSizeOptions = [20, 30, 40];
 
+  const firstRender = useRef(true);
+
   const flightClasses: FlightClassType[] = [
-    "Business",
     "Economy",
-    "First",
     "Premium Economy",
+    "Business",
+    "First",
   ];
 
+  const history = useHistory();
+
   useEffect(() => {
-    startFlightFetching(flightListURL, fetchFlights);
+    fetchFlights();
   }, []);
 
+  useEffect(() => {
+    if (!firstRender.current) {
+      updateURL();
+    }
+  }, [
+    page,
+    pageSize,
+    sortOption,
+    flightFromAutocomplete,
+    flightToAutocomplete,
+    flightSearch.class,
+  ]);
+
+  // Date range filter change
   useEffect(() => {
     filterByDates(allFlights);
     setLoading(false);
@@ -254,17 +287,294 @@ export function Flight_List() {
     state.returnFlightDates?.arrivalDatetimeRange,
   ]);
 
+  function fetchFlights() {
+    setLoading(true);
+
+    let flightFromUrl: FlightSearch = convertURLParamsToFlight(query);
+    dispatch(setFlightParams(flightFromUrl));
+
+    getAccessToken()
+      .then((res) => {
+        let accessToken = res;
+        Axios.get(`https://test.api.amadeus.com/v2/shopping/flight-offers`, {
+          headers: {
+            Authorization: `Bearer ${accessToken.token}`,
+          },
+          params: getFlightSearchParams(flightFromUrl),
+        })
+          .then((res) => {
+            dispatch(setFlightDictionaries(res.data.dictionaries));
+            filterSimilarFlights(res.data.data);
+            setLoading(false);
+            setLoadingOnMount(false);
+          })
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
+  }
+
+  function getFlightSearchParams(flightSearch: FlightSearch) {
+    let searchParams = {
+      originLocationCode: flightSearch.flightFromAutocomplete?.code,
+      destinationLocationCode: flightSearch.flightToAutocomplete?.code,
+      departureDate: format(flightSearch.departure, "yyyy-MM-dd"),
+      returnDate: flightSearch.return
+        ? format(flightSearch.return, "yyyy-MM-dd")
+        : format(addDays(flightSearch.departure, 2), "yyyy-MM-dd"),
+      adults: flightSearch.adults,
+      children: flightSearch.children,
+      infants: flightSearch.infants,
+    };
+
+    return flightSearch.class === ""
+      ? searchParams
+      : {
+          ...searchParams,
+          travelClass: getFlightClassForAPI(flightSearch.class),
+        };
+  }
+
+  /**
+   * Similar flights have the exact same price. The only
+   * things that varies a little is the schedule.
+   *
+   * By using the price, this function filters out
+   * flights that have similar characteristics in order
+   * to give the user a non-repetitive variety of flights.
+   * @param flights
+   */
+  function filterSimilarFlights(flights: Flight[]) {
+    let buffer: Flight[] = [];
+    let count = 0;
+    let curPrice = "0";
+    let prices: number[] = [];
+
+    flights.forEach((flight) => {
+      prices.push(flight.price.total);
+
+      let flightPrice = String(flight.price.total);
+
+      if (count === 2 && flightPrice !== curPrice) {
+        curPrice = flightPrice;
+        buffer.push(flight);
+        count = 0;
+        count++;
+      } else if (flightPrice === curPrice && count < 2) {
+        buffer.push(flight);
+        count++;
+      } else if (count < 2) {
+        curPrice = flightPrice;
+        buffer.push(flight);
+        count++;
+      }
+    });
+
+    firstRender.current = false;
+
+    prices.sort((a, b) => a - b);
+    setPriceRange([0, Math.floor(prices[prices.length - 1])]);
+    setMaxPrice(Math.floor(prices[prices.length - 1]));
+
+    getDatimeSliderValues(buffer);
+
+    if (sortOption !== "Price | asc") {
+      sortFlightsBy(sortOption, buffer, "no filter");
+    } else {
+      setFlights(buffer);
+    }
+
+    setAllFlights(buffer);
+  }
+
+  function getDatimeSliderValues(flights: Flight[]) {
+    let outDepartureDatetimes: Date[] = [];
+    let minOutDepartureDatetime: Date;
+    let maxOutDepartureDatetime: Date;
+
+    let outArrivalDatetimes: Date[] = [];
+    let minOutArrivalDatetime: Date;
+    let maxOutArrivalDatetime: Date;
+
+    let returnDepartureDatetimes: Date[] = [];
+    let minReturnDepartureDatetime: Date;
+    let maxReturnDepartureDatetime: Date;
+
+    let returnArrivalDatetimes: Date[] = [];
+    let minReturnArrivalDatetime: Date;
+    let maxReturnArrivalDatetime: Date;
+
+    flights.forEach((flight) => {
+      //#region Outgoing flight
+      let lastSegmentIndex: number = flight.itineraries[0].segments.length - 1;
+
+      outDepartureDatetimes.push(
+        new Date(flight.itineraries[0].segments[0].departure.at)
+      );
+      outArrivalDatetimes.push(
+        new Date(flight.itineraries[0].segments[lastSegmentIndex].arrival.at)
+      );
+      //#endregion
+      let lastSegmentIndexReturn: number = flight.itineraries[1].segments.length - 1;
+      returnDepartureDatetimes.push(
+        new Date(flight.itineraries[1].segments[0].departure.at)
+      );
+      returnArrivalDatetimes.push(
+        new Date(flight.itineraries[1].segments[lastSegmentIndexReturn].arrival.at)
+      );
+    });
+
+    //Outgoing
+    minOutDepartureDatetime = outDepartureDatetimes.reduce(
+      (prev, cur) => getMinDate(prev, cur),
+      addDays(new Date(), 365)
+    );
+    maxOutDepartureDatetime = outDepartureDatetimes.reduce(
+      (prev, cur) => getMaxDate(prev, cur),
+      subDays(new Date(), 1)
+    );
+
+    minOutArrivalDatetime = outArrivalDatetimes.reduce(
+      (prev, cur) => getMinDate(prev, cur),
+      addDays(new Date(), 365)
+    );
+    maxOutArrivalDatetime = outArrivalDatetimes.reduce(
+      (prev, cur) => getMaxDate(prev, cur),
+      subDays(new Date(), 1)
+    );
+
+    //Return
+    minReturnDepartureDatetime = returnDepartureDatetimes.reduce(
+      (prev, cur) => getMinDate(prev, cur),
+      addDays(new Date(), 365)
+    );
+    maxReturnDepartureDatetime = returnDepartureDatetimes.reduce(
+      (prev, cur) => getMaxDate(prev, cur),
+      subDays(new Date(), 1)
+    );
+
+    minReturnArrivalDatetime = returnArrivalDatetimes.reduce(
+      (prev, cur) => getMinDate(prev, cur),
+      addDays(new Date(), 365)
+    );
+    maxReturnArrivalDatetime = returnArrivalDatetimes.reduce(
+      (prev, cur) => getMaxDate(prev, cur),
+      subDays(new Date(), 1)
+    );
+
+    setState({
+      ...state,
+      exitFlightDates: {
+        minDeparture: minOutDepartureDatetime,
+        maxDeparture: maxOutDepartureDatetime,
+        departureDatetimeRange: [minOutDepartureDatetime, maxOutDepartureDatetime],
+
+        minArrival: minOutArrivalDatetime,
+        maxArrival: maxOutArrivalDatetime,
+        arrivalDatetimeRange: [minOutArrivalDatetime, maxOutArrivalDatetime],
+      },
+      returnFlightDates: {
+        minDeparture: minReturnDepartureDatetime,
+        maxDeparture: maxReturnDepartureDatetime,
+        departureDatetimeRange: [minReturnDepartureDatetime, maxReturnDepartureDatetime],
+
+        minArrival: minReturnArrivalDatetime,
+        maxArrival: maxReturnArrivalDatetime,
+        arrivalDatetimeRange: [minReturnArrivalDatetime, maxReturnArrivalDatetime],
+      },
+    });
+  }
+
+  function useQuery() {
+    return new URLSearchParams(location.search);
+  }
+
   function getPageCount() {
     return Math.ceil(flights.length / pageSize);
   }
 
-  function sortFlightsBy(value: string) {
-    let sortedFlights: Flight[] = [];
-    let unsortedFlights: Flight[] = isAnyFilterApplied() ? flights : allFlights;
-    console.log(`isAnyFilterApplied(): ${isAnyFilterApplied()}`);
+  function updateURL() {
+    history.push(
+      `${Routes.FLIGHT_LIST}${convertFlightToURLParams(flightSearch)}&page=${
+        page + 1
+      }&pageSize=${pageSize}&sortBy=${sortOption}`
+    );
+  }
 
-    switch (value) {
+  function getPage(): number {
+    let page = 0;
+    if (urlParams.hasOwnProperty("page")) {
+      page = Number(urlParams.page) - 1;
+    }
+
+    return page;
+  }
+
+  function getPageSize(): number {
+    let pageSize = 20;
+    if (urlParams.hasOwnProperty("pageSize")) {
+      pageSize = Number(urlParams.pageSize);
+    }
+
+    return pageSize;
+  }
+
+  function getSortOption(): string {
+    let sortOption = "Price | asc";
+
+    if (urlParams.hasOwnProperty("sortBy")) {
+      sortOption = urlParams["sortBy"];
+    }
+
+    return sortOption;
+  }
+
+  /**
+   *
+   * @returns The URL parameters as key value pairs in an object with
+   * the form: {key: value}.
+   */
+  function getURLParamsAsKVP(): { [index: string]: string } {
+    let kvp: { [index: string]: string } = {};
+
+    for (const pair of Array.from(query.entries())) {
+      let key = pair[0];
+      let value = pair[1];
+
+      if (key === "sortBy") {
+        kvp = { ...kvp, [key]: decodeURIComponent(value) };
+      } else {
+        kvp = { ...kvp, [key]: value };
+      }
+    }
+    return kvp;
+  }
+
+  /**
+   * Sorts flights by the specified option.
+   * @param option option to sort flights by.
+   * @param allFlights all the unfiltered flights initialy returned by the API.
+   * The purpose of this parameter is to always sort the flights based the entire
+   * list of them, and not on a filtered list that might not have all the flights.
+   * @param filter indicates if the function should take into acount the flight's
+   * departure/return datetime filters to create the unsorted flights array.
+   */
+  function sortFlightsBy(
+    option: string,
+    allFlights: Flight[],
+    filter: "use filter" | "no filter"
+  ) {
+    let sortedFlights: Flight[] = [];
+    let unsortedFlights: Flight[] = [];
+
+    if (filter === "use filter") {
+      unsortedFlights = isAnyFilterApplied() ? flights : allFlights;
+    } else {
+      unsortedFlights = allFlights;
+    }
+
+    switch (option) {
       case "Price | desc":
+        console.log(unsortedFlights);
         sortedFlights = unsortedFlights.sort((a, b) => b.price.total - a.price.total);
         break;
       case "Price | asc":
@@ -415,156 +725,6 @@ export function Flight_List() {
     setFlights(filteredFlights);
   }
 
-  function fetchFlights(flightListURL: string) {
-    let accessToken = getSavedAccessToken();
-
-    Axios.get(flightListURL, {
-      headers: {
-        Authorization: `Bearer ${accessToken.token}`,
-      },
-    })
-      .then((res) => {
-        dispatch(setFlightDictionaries(res.data.dictionaries));
-        filterSimilarFlights(res.data.data);
-        setLoadingOnMount(false);
-      })
-      .catch((error) => console.log(error));
-  }
-
-  /**
-   * Similar flights have the exact same price. The only
-   * things that varies a little is the schedule.
-   *
-   * By using the price, this function filters out
-   * flights that have similar characteristics in order
-   * to give the user a non-repetitive variety of flights.
-   * @param flights
-   */
-  function filterSimilarFlights(flights: Flight[]) {
-    let buffer: Flight[] = [];
-    let count = 0;
-    let curPrice = "0";
-    let prices: number[] = [];
-
-    flights.forEach((flight) => {
-      prices.push(flight.price.total);
-
-      let flightPrice = String(flight.price.total);
-
-      if (count === 2 && flightPrice !== curPrice) {
-        curPrice = flightPrice;
-        buffer.push(flight);
-        count = 0;
-        count++;
-      } else if (flightPrice === curPrice && count < 2) {
-        buffer.push(flight);
-        count++;
-      } else if (count < 2) {
-        curPrice = flightPrice;
-        buffer.push(flight);
-        count++;
-      }
-    });
-
-    prices.sort((a, b) => a - b);
-    setPriceRange([0, Math.floor(prices[prices.length - 1])]);
-    setMaxPrice(Math.floor(prices[prices.length - 1]));
-
-    getDatimeSliderValues(buffer);
-    setFlights(buffer);
-    setAllFlights(buffer);
-  }
-
-  function getDatimeSliderValues(flights: Flight[]) {
-    let outDepartureDatetimes: Date[] = [];
-    let minOutDepartureDatetime: Date;
-    let maxOutDepartureDatetime: Date;
-
-    let outArrivalDatetimes: Date[] = [];
-    let minOutArrivalDatetime: Date;
-    let maxOutArrivalDatetime: Date;
-
-    let returnDepartureDatetimes: Date[] = [];
-    let minReturnDepartureDatetime: Date;
-    let maxReturnDepartureDatetime: Date;
-
-    let returnArrivalDatetimes: Date[] = [];
-    let minReturnArrivalDatetime: Date;
-    let maxReturnArrivalDatetime: Date;
-
-    flights.forEach((flight) => {
-      //#region Outgoing flight
-      let lastSegmentIndex: number = flight.itineraries[0].segments.length - 1;
-
-      outDepartureDatetimes.push(
-        new Date(flight.itineraries[0].segments[0].departure.at)
-      );
-      outArrivalDatetimes.push(
-        new Date(flight.itineraries[0].segments[lastSegmentIndex].arrival.at)
-      );
-      //#endregion
-      let lastSegmentIndexReturn: number = flight.itineraries[1].segments.length - 1;
-      returnDepartureDatetimes.push(
-        new Date(flight.itineraries[1].segments[0].departure.at)
-      );
-      returnArrivalDatetimes.push(
-        new Date(flight.itineraries[1].segments[lastSegmentIndexReturn].arrival.at)
-      );
-    });
-
-    //Outgoing
-    minOutDepartureDatetime = outDepartureDatetimes.reduce((prev, cur) =>
-      getMinDate(prev, cur)
-    );
-    maxOutDepartureDatetime = outDepartureDatetimes.reduce((prev, cur) =>
-      getMaxDate(prev, cur)
-    );
-
-    minOutArrivalDatetime = outArrivalDatetimes.reduce((prev, cur) =>
-      getMinDate(prev, cur)
-    );
-    maxOutArrivalDatetime = outArrivalDatetimes.reduce((prev, cur) =>
-      getMaxDate(prev, cur)
-    );
-
-    //Return
-    minReturnDepartureDatetime = returnDepartureDatetimes.reduce((prev, cur) =>
-      getMinDate(prev, cur)
-    );
-    maxReturnDepartureDatetime = returnDepartureDatetimes.reduce((prev, cur) =>
-      getMaxDate(prev, cur)
-    );
-
-    minReturnArrivalDatetime = returnArrivalDatetimes.reduce((prev, cur) =>
-      getMinDate(prev, cur)
-    );
-    maxReturnArrivalDatetime = returnArrivalDatetimes.reduce((prev, cur) =>
-      getMaxDate(prev, cur)
-    );
-
-    setState({
-      ...state,
-      exitFlightDates: {
-        minDeparture: minOutDepartureDatetime,
-        maxDeparture: maxOutDepartureDatetime,
-        departureDatetimeRange: [minOutDepartureDatetime, maxOutDepartureDatetime],
-
-        minArrival: minOutArrivalDatetime,
-        maxArrival: maxOutArrivalDatetime,
-        arrivalDatetimeRange: [minOutArrivalDatetime, maxOutArrivalDatetime],
-      },
-      returnFlightDates: {
-        minDeparture: minReturnDepartureDatetime,
-        maxDeparture: maxReturnDepartureDatetime,
-        departureDatetimeRange: [minReturnDepartureDatetime, maxReturnDepartureDatetime],
-
-        minArrival: minReturnArrivalDatetime,
-        maxArrival: maxReturnArrivalDatetime,
-        arrivalDatetimeRange: [minReturnArrivalDatetime, maxReturnArrivalDatetime],
-      },
-    });
-  }
-
   function onDateRangeChanged(
     arr: number[],
     flightDateRangeField: "exitFlightDates" | "returnFlightDates",
@@ -615,6 +775,7 @@ export function Flight_List() {
         >
           Price range
         </Text>
+
         <PriceRange
           value={priceRange}
           max={maxPrice}
@@ -689,6 +850,7 @@ export function Flight_List() {
 
   function onSearchFlightsClick() {
     setLoading(true);
+
     getAccessToken()
       .then((res) => {
         let accessToken = res;
@@ -696,15 +858,7 @@ export function Flight_List() {
           headers: {
             Authorization: `Bearer ${accessToken.token}`,
           },
-          params: {
-            originLocationCode: flightFromAutocomplete?.code,
-            destinationLocationCode: flightToAutocomplete?.code,
-            departureDate: format(flight.departure, "yyyy-MM-dd"),
-            returnDate: format(flight.return, "yyyy-MM-dd"),
-            adults: flight.adults,
-            children: flight.children,
-            infants: flight.infants,
-          },
+          params: getFlightSearchParams(flightSearch),
         })
           .then((res) => {
             dispatch(setFlightDictionaries(res.data.dictionaries));
@@ -724,11 +878,11 @@ export function Flight_List() {
     param: string
   ) {
     if (param === "adults") {
-      dispatch(setFlightAdults(e.target.value as string));
+      dispatch(setFlightAdults(e.target.value as number));
     } else if (param === "children") {
-      dispatch(setFlightChildren(e.target.value as string));
+      dispatch(setFlightChildren(e.target.value as number));
     } else {
-      dispatch(setFlightInfants(e.target.value as string));
+      dispatch(setFlightInfants(e.target.value as number));
     }
   }
 
@@ -738,7 +892,7 @@ export function Flight_List() {
 
   function onSortOptionChange(option: string) {
     setSortOption(option);
-    sortFlightsBy(option);
+    sortFlightsBy(option, allFlights, "use filter");
     setPage(0);
   }
 
@@ -800,7 +954,7 @@ export function Flight_List() {
                 <Grid item className={style.datepickerGrid}>
                   <h5 className={style.reservationParamText}>Departure</h5>
                   <KeyboardDatePicker
-                    value={flight.departure}
+                    value={flightSearch.departure}
                     labelFunc={(date, invalidLabel) =>
                       muiDateFormatter(date, invalidLabel, "date")
                     }
@@ -815,13 +969,13 @@ export function Flight_List() {
                   <Grid item className={style.datepickerGrid}>
                     <h5 className={style.reservationParamText}>Return</h5>
                     <KeyboardDatePicker
-                      value={flight.return}
+                      value={flightSearch.return}
                       labelFunc={(date, invalidLabel) =>
                         muiDateFormatter(date, invalidLabel, "date")
                       }
                       className={style.datepicker}
                       //@ts-ignore
-                      minDate={addDays(flight.departure.valueOf(), 1)}
+                      minDate={addDays(flightSearch.departure.valueOf(), 1)}
                       format="dd MMM., yyyy"
                       onChange={(d) => dispatch(setFlightReturn(d))}
                     />
@@ -836,7 +990,7 @@ export function Flight_List() {
 
                   <FormControl style={{ width: "100%" }} className={style.selectControl}>
                     <Select
-                      value={flight[passenger.variable]}
+                      value={flightSearch[passenger.variable]}
                       variant="outlined"
                       className={style.select}
                       startAdornment={
@@ -860,7 +1014,7 @@ export function Flight_List() {
 
                 <FormControl style={{ width: "100%" }} className={style.selectControl}>
                   <Select
-                    value={flight.class}
+                    value={flightSearch.class}
                     variant="outlined"
                     className={style.select}
                     startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
@@ -916,6 +1070,7 @@ export function Flight_List() {
 
           <Grid item className={style.flightsGrid}>
             <Grid container>
+              {/* Sort and size */}
               <Grid item xs={12} style={{ marginBottom: "30px" }}>
                 <SortPageSize
                   pageSize={pageSize}

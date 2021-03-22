@@ -258,7 +258,7 @@ export default function HomeFlightReservation() {
                 variant="outlined"
                 className={style.select}
                 startAdornment={<FontAwesomeIcon icon={faUsers} color={Colors.BLUE} />}
-                onChange={(e) => dispatch(setFlightAdults(e.target.value as string))}
+                onChange={(e) => dispatch(setFlightAdults(e.target.value as number))}
               >
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
                   <MenuItem value={n}>{n}</MenuItem>

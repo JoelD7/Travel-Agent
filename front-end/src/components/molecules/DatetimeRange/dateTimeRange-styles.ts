@@ -15,4 +15,12 @@ export const dateTimeRangeStyles = makeStyles((theme: Theme) => ({
     height: "16px",
     width: "16px",
   },
+  text: {
+    fontSize: "14px",
+    margin: "0px",
+  },
+  textRangeGrid: {
+    width: "95%",
+    margin: "auto",
+  },
 }));

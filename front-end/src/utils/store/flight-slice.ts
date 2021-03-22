@@ -6,17 +6,17 @@ import { AirportCity, IATALocation } from "../types/location-types";
 
 export interface FlightSearch {
   departure: Date;
-  return: Date;
+  return?: Date;
   from: string;
   to: string;
-  adults: string;
+  adults: number;
   class: string;
-  children?: string;
-  infants?: string;
-  dictionaries: FlightDictionary;
+  children?: number;
+  infants?: number;
+  dictionaries?: FlightDictionary;
   flightFromAutocomplete?: IATALocation | null;
   flightToAutocomplete?: IATALocation | null;
-  flightListURL: string;
+  flightListURL?: string;
   [key: string]: FlightSearch[keyof FlightSearch];
 }
 
@@ -35,11 +35,11 @@ const initialState: FlightSearch = {
       a: "",
     },
   },
-  to: "",
-  adults: "1",
+  to: airportCityPlaceholderTwo.code,
+  adults: 2,
   class: "",
-  children: "",
-  infants: "",
+  children: 0,
+  infants: 0,
 };
 
 const flightSlice = createSlice({
@@ -53,9 +53,13 @@ const flightSlice = createSlice({
       //@ts-ignore
       state.departure = new Date(action.payload.getTime());
     },
-    setFlightReturn(state, action: PayloadAction<MaterialUiPickersDate>) {
+    setFlightReturn(state, action: PayloadAction<MaterialUiPickersDate | undefined>) {
       //@ts-ignore
-      state.return = new Date(action.payload.getTime());
+      if (action.payload) {
+        state.return = new Date(action.payload.getTime());
+      } else {
+        state.return = undefined;
+      }
     },
     setFlightFrom(state, action: PayloadAction<string>) {
       state.from = action.payload;
@@ -63,16 +67,16 @@ const flightSlice = createSlice({
     setFlightTo(state, action: PayloadAction<string>) {
       state.to = action.payload;
     },
-    setFlightAdults(state, action: PayloadAction<string>) {
+    setFlightAdults(state, action: PayloadAction<number>) {
       state.adults = action.payload;
     },
     setFlightClass(state, action: PayloadAction<string>) {
       state.class = action.payload;
     },
-    setFlightChildren(state, action: PayloadAction<string>) {
+    setFlightChildren(state, action: PayloadAction<number>) {
       state.children = action.payload;
     },
-    setFlightInfants(state, action: PayloadAction<string>) {
+    setFlightInfants(state, action: PayloadAction<number>) {
       state.infants = action.payload;
     },
     setFlightFromAutocomplete(

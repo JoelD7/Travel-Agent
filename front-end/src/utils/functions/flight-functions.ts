@@ -1,4 +1,7 @@
 import { format, parseISO } from "date-fns";
+import { URLSearchParams } from "url";
+import { iataCodes } from "../constants";
+import { FlightSearch } from "../store";
 import { IATALocation } from "../types/location-types";
 import { capitalizeString, getIataLocation } from "./functions";
 
@@ -154,7 +157,7 @@ export function getAutocompleteLabel(
   if (option) {
     return type === "city"
       ? `${option.city}, ${option.country}`
-      : `${capitalizeString(`${option.city}`, "each word")} (${option.code})`;
+      : `${option.name}, ${capitalizeString(`${option.city}`, "each word")}`;
   }
   return "";
 }
@@ -186,4 +189,91 @@ export function addFlightDuration(flight: Flight) {
   }
 
   return hours * 60 + minutes;
+}
+
+export function convertFlightToURLParams(flight: FlightSearch) {
+  let params: string[] = [];
+
+  params.push(`departure=${format(flight.departure, "yyyy-MM-dd")}`);
+  if (flight.return) {
+    params.push(`return=${format(flight.return, "yyyy-MM-dd")}`);
+  }
+  params.push(`from=${flight.from}`);
+  params.push(`to=${flight.to}`);
+  params.push(`adults=${flight.adults}`);
+
+  if (flight.infants && flight.infants !== 0) {
+    params.push(`infants=${flight.infants}`);
+  }
+
+  if (flight.children && flight.children !== 0) {
+    params.push(`children=${flight.children}`);
+  }
+
+  if (flight.class !== "") {
+    params.push(`class=${flight.class}`);
+  }
+
+  return `?${params.join("&")}`;
+}
+
+export function convertURLParamsToFlight(query: URLSearchParams): FlightSearch {
+  let kvp: { [index: string]: string } = {};
+  let flight: FlightSearch;
+  let buffer: any = {};
+
+  for (const pair of Array.from(query.entries())) {
+    let key = pair[0];
+    let value = pair[1];
+
+    kvp = { ...kvp, [key]: value };
+  }
+
+  buffer = {
+    departure: parseISO(kvp.departure),
+    from: kvp.from,
+    to: kvp.to,
+    flightFromAutocomplete: iataCodes.filter((iata) => iata.code === kvp.from)[0],
+    flightToAutocomplete: iataCodes.filter((iata) => iata.code === kvp.to)[0],
+    adults: Number(kvp.adults),
+  };
+
+  if (kvp.hasOwnProperty("return")) {
+    buffer = { ...buffer, return: parseISO(kvp.return) };
+  }
+
+  if (kvp.hasOwnProperty("children")) {
+    buffer = { ...buffer, children: Number(kvp.children) };
+  }
+
+  if (kvp.hasOwnProperty("infants")) {
+    buffer = { ...buffer, infants: Number(kvp.infants) };
+  }
+
+  if (kvp.hasOwnProperty("class")) {
+    buffer = { ...buffer, class: kvp.class };
+  }
+
+  flight = { ...buffer };
+
+  return flight;
+}
+
+/**
+ * Returns the flight class in a format understandable for
+ * the API.
+ */
+export function getFlightClassForAPI(value: string): string {
+  switch (value) {
+    case "Economy":
+      return "ECONOMY";
+    case "Premium Economy":
+      return "PREMIUM_ECONOMY";
+    case "Business":
+      return "BUSINESS";
+    case "First":
+      return "FIRST";
+    default:
+      return "ECONOMY";
+  }
 }

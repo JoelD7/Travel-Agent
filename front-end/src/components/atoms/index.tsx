@@ -9,3 +9,4 @@ export { Rating } from "./Rating";
 export { Text } from "./Text";
 export { AmenityIcon } from "./AmenityIcon";
 export { CustomTF } from "./CustomTF";
+export { IconTP } from "./IconTP/IconTP";

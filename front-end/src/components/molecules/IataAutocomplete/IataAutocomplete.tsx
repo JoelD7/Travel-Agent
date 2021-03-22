@@ -71,6 +71,10 @@ export function IataAutocomplete({
     getPredictions(text);
   }, [text]);
 
+  useEffect(() => {
+    setAutocomplete(getAutocompleteDefault());
+  }, [flightFromAutocomplete, flightToAutocomplete]);
+
   function getPredictions(query: string) {
     let buffer = iataCodes.filter(
       (iata) =>
@@ -84,6 +88,9 @@ export function IataAutocomplete({
 
   function onAutomcompleteValueChange(value: IATALocation | null) {
     setAutocomplete(value);
+    if (value) {
+      setText(value.code);
+    }
   }
 
   function onTextChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {

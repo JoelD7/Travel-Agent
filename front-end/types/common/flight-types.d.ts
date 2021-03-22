@@ -1,6 +1,7 @@
 interface Flight {
   itineraries: FlightItinerary[];
   price: FlightPrice;
+  travelerPricings: FlightTravelerPricing[];
   class: FlightClassType;
 }
 
@@ -87,6 +88,14 @@ interface FlightDeal {
 
 interface FlightDictionary {
   carriers: { [x: string]: string };
+}
+
+interface FlightTravelerPricing {
+  fareDetailsBySegment: FlightFareSegment[];
+}
+
+interface FlightFareSegment {
+  cabin: string;
 }
 
 const ROUND = "Round trip";

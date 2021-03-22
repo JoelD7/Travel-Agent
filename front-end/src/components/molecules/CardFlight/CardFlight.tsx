@@ -34,7 +34,9 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
   const returnFlight: FlightItinerary | undefined =
     flight.itineraries.length > 1 ? flight.itineraries[1] : undefined;
 
-  const dictionaries: FlightDictionary = useSelector(selectFlightDictionaries);
+  const dictionaries: FlightDictionary | undefined = useSelector(
+    selectFlightDictionaries
+  );
 
   const [flightDetailsModal, setFlightDetailsModal] = useState(false);
 
@@ -172,25 +174,31 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
               "h:mm aa"
             )}`}</p>
 
-            <p className={style.airportsText}>{`${
-              exitFlight.segments[0].departure.iataCode
-            } - 
+            {dictionaries && (
+              <p className={style.airportsText}>{`${
+                exitFlight.segments[0].departure.iataCode
+              } - 
           ${getLastSegment(exitFlight).arrival.iataCode}, ${getFlightSegmentCarrier(
-              exitFlight.segments[0],
-              dictionaries
-            )}`}</p>
+                exitFlight.segments[0],
+                dictionaries
+              )}`}</p>
+            )}
           </Grid>
 
           {/* Flight duration and stops */}
           <Grid item className={style.timeStopsGrid}>
-            <p className={style.durationText}>{`${parseFlightDuration(
-              exitFlight.duration
-            )}`}</p>
-            <p className={style.durationSubText}>
-              {exitFlight.segments.length > 1
-                ? `${parseStops(exitFlight.segments)}`
-                : "Nonstop"}
-            </p>
+            <Grid container justify="flex-end">
+              <div>
+                <p className={style.durationText}>{`${parseFlightDuration(
+                  exitFlight.duration
+                )}`}</p>
+                <p className={style.durationSubText}>
+                  {exitFlight.segments.length > 1
+                    ? `${parseStops(exitFlight.segments)}`
+                    : "Nonstop"}
+                </p>
+              </div>
+            </Grid>
           </Grid>
 
           {/* Flight price */}
@@ -219,24 +227,30 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
                   "h:mm aa"
                 )}`}</p>
 
-                <p className={style.airportsText}>{`${
-                  getLastSegment(returnFlight).departure.iataCode
-                } - 
+                {dictionaries && (
+                  <p className={style.airportsText}>{`${
+                    getLastSegment(returnFlight).departure.iataCode
+                  } - 
             ${getLastSegment(returnFlight).arrival.iataCode}, ${getFlightSegmentCarrier(
-                  getLastSegment(returnFlight),
-                  dictionaries
-                )}`}</p>
+                    getLastSegment(returnFlight),
+                    dictionaries
+                  )}`}</p>
+                )}
               </Grid>
 
               <Grid item className={style.timeStopsGrid}>
-                <p className={style.durationText}>{`${parseFlightDuration(
-                  returnFlight.duration
-                )}`}</p>
-                <p className={style.durationSubText}>
-                  {returnFlight.segments.length > 1
-                    ? `${parseStops(returnFlight.segments)}`
-                    : "Nonstop"}
-                </p>
+                <Grid container justify="flex-end">
+                  <div>
+                    <p className={style.durationText}>{`${parseFlightDuration(
+                      returnFlight.duration
+                    )}`}</p>
+                    <p className={style.durationSubText}>
+                      {returnFlight.segments.length > 1
+                        ? `${parseStops(returnFlight.segments)}`
+                        : "Nonstop"}
+                    </p>
+                  </div>
+                </Grid>
               </Grid>
             </>
           )}

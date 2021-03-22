@@ -53,12 +53,22 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     width: "50%",
     alignItems: "center",
     justifyContent: "center",
+    [theme.breakpoints.down(925)]: {
+      width: "45%",
+    },
     [theme.breakpoints.down(625)]: {
-      width: "75.1%",
+      width: "50%",
     },
   },
   timeStopsGrid: {
     width: "10.6%",
+    [theme.breakpoints.down(925)]: {
+      width: "15%",
+    },
+    [theme.breakpoints.down(625)]: {
+      width: "40%",
+      justifyContent: "center",
+    },
     alignItems: "center",
     justifyContent: "center",
   },
@@ -120,7 +130,7 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     fontFamily: Family,
     marginBottom: "10px",
-    padding: "10px",
+    padding: "15px",
     backgroundColor: "white",
     borderRadius: "10px",
     boxShadow: Shadow.MEDIUM3D,

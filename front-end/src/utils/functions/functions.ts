@@ -11,7 +11,7 @@ import { compareAsc, format } from "date-fns";
 import { iataCodes } from "../constants/iataCodes";
 import { EventType } from "../types";
 import { IATALocation } from "../types/location-types";
-export * from "./flight";
+export * from "./flight-functions";
 export * from "./hotel-functions";
 
 export function muiDateFormatter(

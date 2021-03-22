@@ -41,6 +41,7 @@ import {
   iataCodes,
   getCityImage,
   selectFlightListURL,
+  convertFlightToURLParams,
 } from "../../utils";
 import {
   fetchAirportCitiesByInput,
@@ -235,11 +236,11 @@ export function Flights_Home() {
 
   const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
-  const flightListURL: string = useSelector(selectFlightListURL);
+  const flightListURL: string | undefined = useSelector(selectFlightListURL);
 
   const [deals, setDeals] = useState<FlightDeal[]>([]);
 
-  const dictionaies: FlightDictionary = useSelector(selectFlightDictionaries);
+  const dictionaies: FlightDictionary | undefined = useSelector(selectFlightDictionaries);
   const [currency, setCurrency] = useState<string>("");
 
   const currentCity: IATALocation = useSelector(selectCurrentCity);
@@ -279,26 +280,29 @@ export function Flights_Home() {
     param: string
   ) {
     if (param === "adults") {
-      dispatch(setFlightAdults(e.target.value as string));
+      dispatch(setFlightAdults(e.target.value as number));
     } else if (param === "children") {
-      dispatch(setFlightChildren(e.target.value as string));
+      dispatch(setFlightChildren(e.target.value as number));
     } else {
-      dispatch(setFlightInfants(e.target.value as string));
+      dispatch(setFlightInfants(e.target.value as number));
     }
   }
 
   function onFindFlightsClicked() {
-    history.push(Routes.FLIGHT_LIST);
+    history.push(
+      `${Routes.FLIGHT_LIST}${convertFlightToURLParams(
+        flight
+      )}&page=1&pageSize=20&sortBy=Price | asc`
+    );
+  }
 
-    // if (!flightToAutocomplete) {
-    //   let r = getRandomArbitrary(0, iataCodes.length);
-
-    //   console.log(`r: ${r} | iataCodes length: ${iataCodes.length}`);
-    //   let randomCity: IATALocation = iataCodes[r];
-    //   dispatch(setFlightToAutocomplete(randomCity));
-    //   let newurl = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=MIA&destinationLocationCode=${randomCity.code}&departureDate=2021-02-25&returnDate=2021-02-27&adults=2`;
-    //   dispatch(setFlightListURL(newurl));
-    // }
+  function onFlightTypeChange(flightType: string) {
+    if (flightType === FlightTypes.ONE_WAY) {
+      setState({ ...state, flightType: FlightTypes.ONE_WAY });
+      dispatch(setFlightReturn(undefined));
+    } else {
+      setState({ ...state, flightType: FlightTypes.ROUND });
+    }
   }
 
   return (
@@ -331,7 +335,7 @@ export function Flights_Home() {
               <MenuItem
                 selected={state.flightType === FlightTypes.ROUND}
                 classes={{ root: style.menuItemRoot }}
-                onClick={() => setState({ ...state, flightType: "Round trip" })}
+                onClick={() => onFlightTypeChange(FlightTypes.ROUND)}
               >
                 Round-trip
               </MenuItem>
@@ -339,7 +343,7 @@ export function Flights_Home() {
               <MenuItem
                 selected={state.flightType === FlightTypes.ONE_WAY}
                 classes={{ root: style.menuItemRoot }}
-                onClick={() => setState({ ...state, flightType: "One way" })}
+                onClick={() => onFlightTypeChange(FlightTypes.ONE_WAY)}
               >
                 One way
               </MenuItem>

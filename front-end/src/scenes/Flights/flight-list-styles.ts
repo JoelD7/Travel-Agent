@@ -50,8 +50,8 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   datepickerGrid: {
     width: "25%",
-    [theme.breakpoints.down(1245)]: {
-      width: "33%",
+    [theme.breakpoints.down(1262)]: {
+      width: "30%",
     },
     [theme.breakpoints.down(1083)]: {
       width: "50%",
@@ -77,7 +77,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "white",
     boxShadow: Shadow.MEDIUM3D,
     borderRadius: "5px",
-    padding: "10px",
+    padding: "15px",
   },
   filtersGrid: {
     width: "25%",
@@ -95,11 +95,9 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
 
     [theme.breakpoints.down(1040)]: {
       margin: "auto",
-      width: "75%",
+      width: "90%",
     },
-    [theme.breakpoints.down(821)]: {
-      width: "85%",
-    },
+
     [theme.breakpoints.down(736)]: {
       width: "100%",
     },
@@ -177,7 +175,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   passengerParamGrid: {
     width: "12.5%",
     [theme.breakpoints.down(1245)]: {
-      width: "22%",
+      width: "20%",
     },
     [theme.breakpoints.down(1083)]: {
       width: "33%",
@@ -196,14 +194,11 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     marginTop: "5px",
   },
   reservParamGrid: {
-    width: "25%",
-    [theme.breakpoints.down(1245)]: {
-      width: "33%",
+    width: "41%",
+    [theme.breakpoints.down(1262)]: {
+      width: "50%",
     },
-    [theme.breakpoints.down(1083)]: {
-      width: "100%",
-    },
-    [theme.breakpoints.down(640)]: {
+    [theme.breakpoints.down(978)]: {
       width: "100%",
     },
   },
