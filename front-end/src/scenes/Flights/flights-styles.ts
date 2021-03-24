@@ -37,6 +37,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
   dealsContainer: {
     width: "70%",
     margin: "auto",
+    marginBottom: "40px",
     [theme.breakpoints.down(1348)]: {
       width: "80%",
     },

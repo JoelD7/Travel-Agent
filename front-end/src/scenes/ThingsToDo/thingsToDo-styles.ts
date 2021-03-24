@@ -52,7 +52,6 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    marginBottom: "40px",
     backgroundColor: Colors.BACKGROUND,
   },
   menuItemRoot: {
@@ -130,9 +129,8 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     width: "80%",
-    margin: "25px auto auto auto",
+    margin: "25px auto 40px auto",
     position: "relative",
-    // bottom: "137px",
 
     [theme.breakpoints.down(1035)]: {
       width: "90%",

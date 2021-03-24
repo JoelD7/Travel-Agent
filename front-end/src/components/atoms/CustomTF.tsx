@@ -18,6 +18,8 @@ interface CustomTFProps {
   width?: string;
   placeholder?: string;
   rounded?: boolean;
+  error?: boolean;
+  helperText?: string;
   params?: AutocompleteRenderInputParams;
   numeric?: boolean;
   onChange?: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
@@ -41,13 +43,20 @@ export function CustomTF({
   numeric,
   params,
   className,
+  error,
+  helperText,
 }: CustomTFProps) {
   const [text, setText] = useState(value);
 
   const fieldStyles = makeStyles({
     textField: {
       width: className ? "" : width,
-      backgroundColor: backgroundColor,
+      /**
+       * If this has a background color, the "required alert" message's
+       * background will have the same color, which is not
+       * desired.
+       */
+      // backgroundColor: backgroundColor,
       borderRadius: rounded ? "20px" : "5px",
 
       "& .MuiInputBase-root": {
@@ -95,8 +104,11 @@ export function CustomTF({
       className={`${style.textField} ${className}`}
       onFocus={onFocus}
       variant={"outlined"}
+      // onChange={onTextChanged}
       onChange={onChange ? onChange : onTextChanged}
       onBlur={updateState}
+      error={error}
+      helperText={helperText}
     />
   );
 }

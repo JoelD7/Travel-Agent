@@ -7,9 +7,10 @@ import {
   Grid,
   MenuItem,
   Select,
+  Snackbar,
   ThemeProvider,
 } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
+import { Alert, Autocomplete } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import React, { ChangeEvent, useEffect, useState } from "react";
@@ -21,10 +22,15 @@ import {
   capitalizeString,
   muiDateFormatter,
   selectAirportPredictions,
+  selectOpenRequiredFieldSnack,
   selectFlightFromAutocomplete,
   selectFlightParams,
   selectFlightToAutocomplete,
   updateAirportPredictions,
+  getFlightDefaultRoute,
+  setOpenRequiredFieldSnack,
+  Routes,
+  convertFlightToURLParams,
 } from "../../utils";
 import {
   fetchAirportCitiesByInput,
@@ -45,6 +51,8 @@ import { AirportCity, IATALocation } from "../../utils/types/location-types";
 import { CustomButton } from "../atoms";
 import { IataAutocomplete } from "../molecules";
 import { CustomTF } from "../atoms/CustomTF";
+import { Font } from "../../assets";
+import { useHistory } from "react-router";
 
 interface FlightType {
   departure: MaterialUiPickersDate;
@@ -143,7 +151,7 @@ export default function HomeFlightReservation() {
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
-  const airportPredictions: IATALocation[] = useSelector(selectAirportPredictions);
+  const history = useHistory();
 
   useEffect(() => {
     if (focusedAutocomplete === "From") {
@@ -177,31 +185,17 @@ export default function HomeFlightReservation() {
 
   const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
 
+  const flightSearch: FlightSearch = useSelector(selectFlightParams);
+
   const style = homeStyles();
 
-  function updateLocationParams(
-    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-    param: string
-  ) {
-    if (param === "from") {
-      dispatch(setFlightFrom(e.target.value));
-    } else {
-      dispatch(setFlightTo(e.target.value));
+  function onSearchClick() {
+    if (flightFromAutocomplete === null || flightToAutocomplete === null) {
+      dispatch(setOpenRequiredFieldSnack(true));
+      return;
     }
-  }
 
-  function getAutocompleteValue(param: string) {
-    return param === "from" ? flightFromAutocomplete : flightToAutocomplete;
-  }
-
-  function onAutomcompleteValueChange(
-    e: ChangeEvent<{}>,
-    value: IATALocation | null,
-    param: string
-  ) {
-    param === "from"
-      ? dispatch(setFlightFromAutocomplete(value))
-      : dispatch(setFlightToAutocomplete(value));
+    history.push(getFlightDefaultRoute(flightSearch));
   }
 
   return (
@@ -294,7 +288,7 @@ export default function HomeFlightReservation() {
               <CustomButton
                 rounded
                 style={{ width: "90%", boxShadow: Shadow.MEDIUM }}
-                onClick={() => {}}
+                onClick={() => onSearchClick()}
               >
                 Search
               </CustomButton>

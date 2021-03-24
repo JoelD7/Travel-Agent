@@ -373,8 +373,11 @@ export function Flight_List() {
     firstRender.current = false;
 
     prices.sort((a, b) => a - b);
-    setPriceRange([0, Math.floor(prices[prices.length - 1])]);
-    setMaxPrice(Math.floor(prices[prices.length - 1]));
+
+    let maxPrice: number = Math.floor(prices[prices.length - 1]);
+
+    setPriceRange([0, maxPrice]);
+    setMaxPrice(maxPrice);
 
     getDatimeSliderValues(buffer);
 

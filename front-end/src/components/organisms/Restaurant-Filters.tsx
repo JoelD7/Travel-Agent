@@ -14,15 +14,11 @@ import {
 } from "../../utils";
 import { fetchRestaurants } from "../../utils/external-apis/yelp-apis";
 import {
-  setRestaurants,
-  updateResCheckedCuisinesFromURL,
-  updateRestaurantCheckedFeatures,
-  addRestaurantCuisines,
-  addRestaurantFeatures,
-  updateRestaurantFeatures,
-  updateRestaurantCuisines,
   setLoadingRestaurants,
   setRestaurantFilterParams,
+  setRestaurants,
+  updateRestaurantCuisines,
+  updateRestaurantFeatures,
 } from "../../utils/store/restaurant-slice";
 import { IATALocation } from "../../utils/types/location-types";
 import { CustomButton, Text } from "../atoms";

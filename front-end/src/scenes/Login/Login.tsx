@@ -7,6 +7,7 @@ import { logoType, loginImage } from "../../assets";
 import { CustomButton, Footer, Navbar } from "../../components";
 import TextInput from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
+import { Routes } from "../../utils";
 
 interface LoginType {
   email: string;
@@ -98,10 +99,12 @@ export function Login() {
             </Grid>
 
             <Grid id="redirectLogin" container>
-              <p style={{ color: Colors.PURPLE }}>
+              <p style={{ color: Colors.BLUE }}>
                 Not registered?
                 <b>
-                  <a href="/signup">Sign up</a>
+                  <a style={{ marginLeft: "5px" }} href={Routes.SIGNUP}>
+                    Sign up
+                  </a>
                 </b>
               </p>
             </Grid>

@@ -7,9 +7,6 @@ import { logoType, signup } from "../../assets/images";
 import { CustomButton, Footer } from "../../components";
 import TextInput from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
-import { Formik, Form, FastField } from "formik";
-import * as Yup from "yup";
-import { ObjectSchemaConstructor, ObjectSchema } from "yup";
 
 interface SignUpValuesType {
   firstName: string;

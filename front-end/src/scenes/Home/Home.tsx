@@ -27,12 +27,13 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Snackbar,
   Toolbar,
 } from "@material-ui/core";
 import { CreateCSSProperties, ThemeProvider } from "@material-ui/styles";
 import React, { useState } from "react";
 
-import { carlos, logoTypeWhiteFore } from "../../assets";
+import { carlos, Font, logoTypeWhiteFore } from "../../assets";
 import {
   CustomButton,
   Footer,
@@ -56,7 +57,13 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Helmet from "react-helmet";
 import { getRestaurantHours } from "../../utils/functions/restaurant";
-import { restaurantPlaceholder } from "../../utils";
+import {
+  restaurantPlaceholder,
+  selectOpenRequiredFieldSnack,
+  setOpenRequiredFieldSnack,
+} from "../../utils";
+import { Alert } from "@material-ui/lab";
+import { useDispatch, useSelector } from "react-redux";
 
 interface ServiceIconType {
   hotel: boolean;
@@ -118,7 +125,11 @@ export function Home() {
     carRental: false,
   });
 
+  const dispatch = useDispatch();
+
   const [index, setIndex] = useState(0);
+
+  const openRequiredFieldSnack = useSelector(selectOpenRequiredFieldSnack);
 
   const popularDestinations = [
     {
@@ -360,6 +371,23 @@ export function Home() {
           </Slider>
         </Grid>
       </div>
+
+      <Snackbar
+        open={openRequiredFieldSnack}
+        autoHideDuration={6000}
+        onClose={() => dispatch(setOpenRequiredFieldSnack(false))}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => dispatch(setOpenRequiredFieldSnack(false))}
+          severity="error"
+        >
+          The required fields must be filled.
+        </Alert>
+      </Snackbar>
+
       <Footer />
     </>
   );

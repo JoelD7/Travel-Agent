@@ -13,8 +13,8 @@ interface FlightTimesRange {
   destinationDateRangeValue: Date[] | undefined;
   label: string;
   city: string;
-  max: Date | undefined,
-  min: Date | undefined,
+  max: Date | undefined;
+  min: Date | undefined;
 }
 
 export function FlightTimesRange({
@@ -24,11 +24,11 @@ export function FlightTimesRange({
   destinationDateRangeValue,
   label,
   city,
-  max, 
+  max,
   min,
 }: FlightTimesRange) {
   return (
-    <div>
+    <div style={{ marginBottom: "25px" }}>
       <div>
         <p style={{ fontSize: "14px" }}>
           {" "}
@@ -39,11 +39,7 @@ export function FlightTimesRange({
           max={max ? max : new Date()}
           min={min ? min : new Date()}
           updateState={(slider) =>
-            onDateRangeChanged(
-              slider,
-              flightDateRangeField,
-              destinationDateRangeField
-            )
+            onDateRangeChanged(slider, flightDateRangeField, destinationDateRangeField)
           }
           value={destinationDateRangeValue as Date[]}
         />

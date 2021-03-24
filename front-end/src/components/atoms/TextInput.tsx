@@ -1,11 +1,8 @@
 import { createMuiTheme, makeStyles, TextField } from "@material-ui/core";
-import {
-  CreateCSSProperties,
-  CSSProperties,
-  ThemeProvider,
-} from "@material-ui/styles";
+import { CreateCSSProperties, CSSProperties, ThemeProvider } from "@material-ui/styles";
 import React, { ChangeEvent, ReactNode, SetStateAction, useState } from "react";
 import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
+import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import { Colors } from "../../styles";
 
@@ -25,13 +22,7 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type TextInputType = PartialBy<
   TextInputProps,
-  | "style"
-  | "label"
-  | "type"
-  | "className"
-  | "endAdornment"
-  | "coPassword"
-  | "updateState"
+  "style" | "label" | "type" | "className" | "endAdornment" | "coPassword" | "updateState"
 >;
 
 export default function TextInput({
@@ -85,7 +76,11 @@ export default function TextInput({
       ...style,
     },
     input: {
-      fontFamily: Family,
+      fontFamily: Font.Family,
+      color: Colors.BLUE,
+    },
+    inputLabel: {
+      fontFamily: Font.Family,
       color: Colors.BLUE,
     },
   });
@@ -143,6 +138,9 @@ export default function TextInput({
           classes: { root: styles.input },
           type: type ? type : "text",
           endAdornment: endAdornment ? endAdornment : <b></b>,
+        }}
+        InputLabelProps={{
+          classes: { root: styles.inputLabel },
         }}
         name={name}
         label={label}

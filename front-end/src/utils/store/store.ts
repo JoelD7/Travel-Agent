@@ -5,6 +5,7 @@ import calendarReducer from "./calendar-slice";
 import poiReducer from "./poi-slice";
 import hotelReducer from "./hotel-slice";
 import flightSlice from "./flight-slice";
+import rootSlice from "./root-slice";
 import restaurantSlice from "./restaurant-slice";
 import { useDispatch } from "react-redux";
 import { enableBatching } from "redux-batched-actions";
@@ -17,9 +18,10 @@ const store = configureStore({
     searchNavbar: enableBatching(searchNavbarReducer),
     calendarSlice: enableBatching(calendarReducer),
     poiReducer: enableBatching(poiReducer),
-    hotelReducer: hotelReducer,
+    hotelReducer: enableBatching(hotelReducer),
     flightSlice: enableBatching(flightSlice),
     restaurantSlice: enableBatching(restaurantSlice),
+    rootSlice: enableBatching(rootSlice),
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
@@ -28,6 +30,12 @@ export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 //Selectors
+
+//#region Root
+export const selectOpenRequiredFieldSnack = (state: RootState) =>
+  state.rootSlice.openRequiredFieldSnack;
+//#endregion
+
 //#region POI
 export const selectPOIs = (state: RootState) => state.poiReducer.pois;
 export const selectAllPOIs = (state: RootState) => state.poiReducer.allPois;
@@ -86,6 +94,7 @@ export const selectFlightToAutocomplete = (state: RootState) =>
 export const selectFlightListURL = (state: RootState) => state.flightSlice.flightListURL;
 export const selectFlightDictionaries = (state: RootState) =>
   state.flightSlice.dictionaries;
+
 //#endregion
 
 //#region Restaurant

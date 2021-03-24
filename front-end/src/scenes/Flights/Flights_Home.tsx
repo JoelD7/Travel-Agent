@@ -43,6 +43,7 @@ import {
   getCityImage,
   selectFlightListURL,
   convertFlightToURLParams,
+  getFlightDefaultRoute,
 } from "../../utils";
 import {
   fetchAirportCitiesByInput,
@@ -178,11 +179,6 @@ export function Flights_Home() {
     },
   });
 
-  const destination = {
-    image: "dubai.jpg",
-    name: "Dubai",
-  };
-
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -215,7 +211,8 @@ export function Flights_Home() {
     },
     flightType: "Round trip",
   });
-  const flight: FlightSearch = useSelector(selectFlightParams);
+
+  const flightSearch: FlightSearch = useSelector(selectFlightParams);
 
   const passengersParams = [
     {
@@ -236,12 +233,9 @@ export function Flights_Home() {
   ];
 
   const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
-  const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
-  const flightListURL: string | undefined = useSelector(selectFlightListURL);
 
   const [deals, setDeals] = useState<FlightDeal[]>([]);
 
-  const dictionaies: FlightDictionary | undefined = useSelector(selectFlightDictionaries);
   const [currency, setCurrency] = useState<string>("");
 
   const currentCity: IATALocation = useSelector(selectCurrentCity);
@@ -253,7 +247,7 @@ export function Flights_Home() {
       setImage(String(res));
     });
 
-    fetchGreatFlightDeals(currentCity, flight.departure)
+    fetchGreatFlightDeals(currentCity, flightSearch.departure)
       .then((res) => {
         setCurrency(res.data.meta.currency);
         let deals = res.data.data;
@@ -261,17 +255,6 @@ export function Flights_Home() {
       })
       .catch((error) => console.log(error));
   }, []);
-
-  function getAirportPredictions(searchQuery: string) {
-    if (searchQuery === "") {
-      return;
-    }
-    fetchAirportCitiesByInput(searchQuery, "AIRPORT")
-      .then((res) => {
-        dispatch(updateAirportPredictions(res.data.data));
-      })
-      .catch((error) => console.log(error));
-  }
 
   function onPassengerParamsChange(
     e: ChangeEvent<{
@@ -290,11 +273,7 @@ export function Flights_Home() {
   }
 
   function onFindFlightsClicked() {
-    history.push(
-      `${Routes.FLIGHT_LIST}${convertFlightToURLParams(
-        flight
-      )}&page=1&pageSize=20&sortBy=Price | asc`
-    );
+    history.push(getFlightDefaultRoute(flightSearch));
   }
 
   function onFlightTypeChange(flightType: string) {
@@ -379,7 +358,7 @@ export function Flights_Home() {
               >
                 <h5 className={style.reservationParamText}>Departure</h5>
                 <KeyboardDatePicker
-                  value={flight.departure}
+                  value={flightSearch.departure}
                   labelFunc={(date, invalidLabel) =>
                     muiDateFormatter(date, invalidLabel, "date")
                   }
@@ -394,7 +373,7 @@ export function Flights_Home() {
                 <Grid item className={style.largeGrid}>
                   <h5 className={style.reservationParamText}>Return</h5>
                   <KeyboardDatePicker
-                    value={flight.return}
+                    value={flightSearch.return}
                     labelFunc={(date, invalidLabel) =>
                       muiDateFormatter(date, invalidLabel, "date")
                     }
@@ -416,7 +395,7 @@ export function Flights_Home() {
 
                 <FormControl style={{ width: "100%" }}>
                   <Select
-                    value={flight[passenger.variable]}
+                    value={flightSearch[passenger.variable]}
                     variant="outlined"
                     className={style.select}
                     startAdornment={
@@ -437,7 +416,7 @@ export function Flights_Home() {
 
               <FormControl style={{ width: "100%" }}>
                 <Select
-                  value={flight.class}
+                  value={flightSearch.class}
                   variant="outlined"
                   className={style.select}
                   startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}

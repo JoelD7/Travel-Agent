@@ -1,9 +1,9 @@
 .MuiOutlinedInput-notchedOutline {
   border-color: #cecece !important;
 }
-.MuiInputLabel-root {
+/* .MuiInputLabel-root {
   color: #fff !important;
-}
+} */
 .slick-initialized .slick-slide {
   display: inline-grid;
   align-content: space-between;

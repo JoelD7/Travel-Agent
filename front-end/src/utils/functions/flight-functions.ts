@@ -1,5 +1,6 @@
 import { format, parseISO } from "date-fns";
 import { URLSearchParams } from "url";
+import { Routes } from "..";
 import { iataCodes } from "../constants";
 import { FlightSearch } from "../store";
 import { IATALocation } from "../types/location-types";
@@ -276,4 +277,10 @@ export function getFlightClassForAPI(value: string): string {
     default:
       return "ECONOMY";
   }
+}
+
+export function getFlightDefaultRoute(flightSearch: FlightSearch) {
+  return `${Routes.FLIGHT_LIST}${convertFlightToURLParams(
+    flightSearch
+  )}&page=1&pageSize=20&sortBy=Price | asc`;
 }

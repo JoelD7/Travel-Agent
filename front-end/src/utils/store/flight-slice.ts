@@ -2,7 +2,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays, format } from "date-fns";
 import { airportCityPlaceholder, airportCityPlaceholderTwo } from "../placeholders";
-import { AirportCity, IATALocation } from "../types/location-types";
+import { IATALocation } from "../types/location-types";
 
 export interface FlightSearch {
   departure: Date;
