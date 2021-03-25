@@ -7,7 +7,7 @@ import { Colors } from "../../styles";
 
 interface CustomTFProps {
   value: string;
-  updateState?: (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  updateState?: (text: string) => void;
   containerStyle?: CreateCSSProperties<{}>;
   className?: string;
   textStyle?: string;
@@ -106,7 +106,7 @@ export function CustomTF({
       variant={"outlined"}
       // onChange={onTextChanged}
       onChange={onChange ? onChange : onTextChanged}
-      onBlur={updateState}
+      onBlur={updateState ? () => updateState(text) : () => {}}
       error={error}
       helperText={helperText}
     />

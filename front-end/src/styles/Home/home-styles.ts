@@ -34,9 +34,12 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     boxShadow: `5px 5px 10px ${Colors.BLUE}`,
   },
   exploreButtonContainer: {
-    display: " flex",
+    display: "flex",
     width: "100%",
     justifyContent: "center",
+    [theme.breakpoints.down(1150)]: {
+      display: "none",
+    },
   },
   datepicker: {
     backgroundColor: "white",

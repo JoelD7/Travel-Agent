@@ -15,8 +15,10 @@ import {
   Grid,
   MenuItem,
   Select,
+  Snackbar,
   ThemeProvider,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Axios from "axios";
 import { addDays, compareDesc, format, subDays } from "date-fns";
@@ -25,6 +27,7 @@ import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router";
+import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import {
   CardFlight,
@@ -40,18 +43,16 @@ import {
   SortPageSize,
   Text,
 } from "../../components";
-import { IconTP } from "../../components/atoms/IconTP/IconTP";
 import { Colors, Shadow } from "../../styles";
 import {
   addFlightDuration,
   convertFlightToURLParams,
   convertURLParamsToFlight,
   flightsPlaceholder,
-  getFlightClassForAPI,
   getAccessToken,
+  getFlightClassForAPI,
   getMaxDate,
   getMinDate,
-  getSavedAccessToken,
   isDateBetweenRange,
   muiDateFormatter,
   Routes,
@@ -59,7 +60,8 @@ import {
   selectFlightListURL,
   selectFlightParams,
   selectFlightToAutocomplete,
-  startFlightFetching,
+  selectOpenRequiredFieldSnack,
+  setOpenRequiredFieldSnack,
 } from "../../utils";
 import {
   FlightSearch,
@@ -221,6 +223,8 @@ export function Flight_List() {
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
   const location = useLocation();
+
+  const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
 
   const query = useQuery();
 
@@ -853,6 +857,11 @@ export function Flight_List() {
   }
 
   function onSearchFlightsClick() {
+    if (flightFromAutocomplete === null || flightToAutocomplete === null) {
+      setOpenRequiredFieldSnack(true);
+      return;
+    }
+
     setLoading(true);
 
     getAccessToken()
@@ -1131,6 +1140,22 @@ export function Flight_List() {
       >
         <SearchFilters />
       </Drawer>
+
+      <Snackbar
+        open={openRequiredFieldSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenRequiredFieldSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenRequiredFieldSnack(false)}
+          severity="error"
+        >
+          The required fields must be filled.
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

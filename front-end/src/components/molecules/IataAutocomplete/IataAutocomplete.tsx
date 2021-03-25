@@ -1,12 +1,11 @@
 import { faMapMarkerAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconButton, Snackbar, TextField } from "@material-ui/core";
-import { Alert, Autocomplete, AutocompleteRenderInputParams } from "@material-ui/lab";
+import { IconButton, TextField } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AnyAction } from "redux";
 import { batchActions } from "redux-batched-actions";
-import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
 import {
   getAutocompleteLabel,
@@ -39,9 +38,7 @@ interface IataAutocomplete {
   className?: string;
 }
 
-interface AutocompleteInput {
-  params: AutocompleteRenderInputParams;
-}
+type PredictionPerQuery = { [index: string]: IATALocation[] };
 
 export function IataAutocomplete({
   flightDirection,
@@ -73,6 +70,12 @@ export function IataAutocomplete({
     type === "city" ? searchQuery : flightDirection === "from" ? flight.from : flight.to
   );
 
+  const [predictionsPerQuery, setPredictionsPerQuery] = useState<PredictionPerQuery>({
+    "": [],
+  });
+
+  const [predictionQueriesMade, setPredictionQueriesMade] = useState<string[]>([""]);
+
   function getAutocompleteDefault() {
     if (type === "city") {
       return undefined;
@@ -90,32 +93,61 @@ export function IataAutocomplete({
   }, [flightFromAutocomplete, flightToAutocomplete]);
 
   function getPredictions(query: string) {
-    let buffer: IATALocation[] = iataCodes.filter(
-      (iata) =>
-        iata.code.toLowerCase().includes(query) ||
-        iata.name.toLowerCase().includes(query) ||
-        iata.city.toLowerCase().includes(query)
-    );
+    let predictionsBuffer: IATALocation[] = [];
 
-    setPredictions(buffer);
+    if (!predictionQueriesMade.includes(query)) {
+      predictionsBuffer = iataCodes.filter(
+        (iata) =>
+          iata.code.toLowerCase().includes(query) ||
+          iata.name.toLowerCase().includes(query) ||
+          iata.city.toLowerCase().includes(query)
+      );
+
+      setPredictionQueriesMade([...predictionQueriesMade, query]);
+      setPredictionsPerQuery({ ...predictionsPerQuery, [query]: predictionsBuffer });
+      console.log("updated predictions: ", {
+        ...predictionsPerQuery,
+        [query]: predictionsBuffer,
+      });
+    } else {
+      predictionsBuffer = predictionsPerQuery[query];
+    }
+
+    setPredictions(predictionsBuffer);
   }
 
   function onAutomcompleteValueChange(value: IATALocation | null) {
     setAutocomplete(value);
+
+    if (type === "airport") {
+      checkRequiredAirportField(value);
+    }
+
     if (value) {
       setText(value.code);
     }
   }
 
-  function onTextChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    let value = e.target.value;
-
-    if (value === "") {
+  function checkRequiredAirportField(value: IATALocation | null) {
+    if (isTextFieldEmpty(value)) {
       setError(true);
       setHelperText("Required");
     } else if (error) {
       setError(false);
+      setHelperText("");
     }
+  }
+
+  function isTextFieldEmpty(value: IATALocation | null) {
+    if (type === "city") {
+      return false;
+    }
+
+    return value === null;
+  }
+
+  function onTextChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+    let value = e.target.value;
     setText(value);
   }
 
@@ -145,8 +177,9 @@ export function IataAutocomplete({
     dispatch(batchActions(batchedActions));
   }
 
-  const cityOnChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+  function onCityChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     setSearchQuery(e.target.value);
+  }
 
   return (
     <>
@@ -184,22 +217,20 @@ export function IataAutocomplete({
               placeholder="Search locations"
               style={isInNavbar ? { width: "100%" } : {}}
               className={style.searchBar}
-              onChange={cityOnChange}
+              onChange={onCityChange}
               size="small"
             />
           ) : (
-            <CustomTF
-              params={params}
+            <TextField
+              {...params}
               value={text}
+              size="small"
+              placeholder="City or airport"
+              className={style.searchBarInput}
+              variant={"outlined"}
+              onChange={(e) => onTextChange(e)}
               error={error}
               helperText={helperText}
-              className={style.searchBarInput}
-              outlineColor={Colors.GREEN_HOVER}
-              onChange={(e) => onTextChange(e)}
-              placeholder="City or airport"
-              startAdornment={
-                <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
-              }
             />
           )
         }

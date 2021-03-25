@@ -7,48 +7,38 @@ import {
   Grid,
   MenuItem,
   Select,
+  Snackbar,
   ThemeProvider,
   Toolbar,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import {
   CardDealFlight,
   CustomButton,
+  Footer,
   IataAutocomplete,
   Navbar,
   PageSubtitle,
-  Footer,
   ServicesToolbar,
 } from "../../components";
 import { Colors } from "../../styles";
 import {
-  getSavedAccessToken,
+  getCityImage,
+  getFlightDefaultRoute,
   muiDateFormatter,
-  Routes,
-  selectAirportPredictions,
   selectCurrentCity,
-  selectFlightDictionaries,
   selectFlightFromAutocomplete,
   selectFlightParams,
-  setFlightListURL,
   selectFlightToAutocomplete,
-  getRandomArbitrary,
-  updateAirportPredictions,
-  iataCodes,
-  getCityImage,
-  selectFlightListURL,
-  convertFlightToURLParams,
-  getFlightDefaultRoute,
 } from "../../utils";
-import {
-  fetchAirportCitiesByInput,
-  fetchGreatFlightDeals,
-} from "../../utils/external-apis/amadeus-apis";
+import { fetchGreatFlightDeals } from "../../utils/external-apis/amadeus-apis";
 import {
   FlightSearch,
   setFlightAdults,
@@ -57,7 +47,6 @@ import {
   setFlightDeparture,
   setFlightInfants,
   setFlightReturn,
-  setFlightToAutocomplete,
 } from "../../utils/store/flight-slice";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
@@ -234,6 +223,8 @@ export function Flights_Home() {
 
   const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
 
+  const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
+
   const [deals, setDeals] = useState<FlightDeal[]>([]);
 
   const [currency, setCurrency] = useState<string>("");
@@ -241,6 +232,9 @@ export function Flights_Home() {
   const currentCity: IATALocation = useSelector(selectCurrentCity);
 
   const [image, setImage] = useState<string>("");
+
+  const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
+  const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
   useEffect(() => {
     getCityImage(currentCity.city).then((res) => {
@@ -273,6 +267,11 @@ export function Flights_Home() {
   }
 
   function onFindFlightsClicked() {
+    if (flightFromAutocomplete === null || flightToAutocomplete === null) {
+      setOpenRequiredFieldSnack(true);
+      return;
+    }
+
     history.push(getFlightDefaultRoute(flightSearch));
   }
 
@@ -459,6 +458,22 @@ export function Flights_Home() {
       </Grid>
 
       <Footer />
+
+      <Snackbar
+        open={openRequiredFieldSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenRequiredFieldSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenRequiredFieldSnack(false)}
+          severity="error"
+        >
+          The required fields must be filled.
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

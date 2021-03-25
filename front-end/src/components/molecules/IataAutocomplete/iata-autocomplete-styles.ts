@@ -35,9 +35,22 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     backgroundColor: "rgba(0,0,0,0)",
     color: Colors.BLUE,
+    borderRadius: "5px",
     "& .MuiInputBase-input": {
       position: "relative",
       bottom: "4px",
+    },
+    "& .MuiInputBase-root": {
+      height: "32px",
+    },
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "5px",
+      "&:hover fieldset": {
+        borderColor: Colors.GREEN_HOVER,
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: Colors.GREEN_HOVER,
+      },
     },
   },
   searchBarInputHome: {

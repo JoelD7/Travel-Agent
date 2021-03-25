@@ -153,7 +153,7 @@ export default function HomeCarReservation() {
                 value={car[param.prop] as string}
                 rounded
                 width="100%"
-                updateState={(e) => setCar({ ...car, [param.prop]: e.target.value })}
+                updateState={(value) => setCar({ ...car, [param.prop]: value })}
                 startAdornment={
                   <FontAwesomeIcon icon={faMapMarkerAlt} color={Colors.BLUE} />
                 }
