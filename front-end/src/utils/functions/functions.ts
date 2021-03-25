@@ -580,3 +580,10 @@ export function isDateBetweenRange(date: Date, range: Date[] | undefined) {
   }
   return compareAsc(date, range[0]) >= 0 && compareAsc(date, range[1]) <= 0;
 }
+
+/**
+ * Returns true if the first date is ater the second one.
+ */
+export function isDateAfterThat(date: Date, date2: Date): boolean {
+  return compareAsc(date, date2) === 1;
+}

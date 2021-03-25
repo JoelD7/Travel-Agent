@@ -1,5 +1,5 @@
 import DateFnsUtils from "@date-io/date-fns";
-import { faMapMarkerAlt, faStar, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   createMuiTheme,
@@ -7,30 +7,26 @@ import {
   Grid,
   MenuItem,
   Select,
-  Snackbar,
   ThemeProvider,
 } from "@material-ui/core";
-import { Alert, Autocomplete } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import { addDays, parseISO } from "date-fns";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
 import {
-  capitalizeString,
+  getFlightDefaultRoute,
+  isDateAfterThat,
   muiDateFormatter,
-  selectAirportPredictions,
-  selectOpenRequiredFieldSnack,
   selectFlightFromAutocomplete,
   selectFlightParams,
   selectFlightToAutocomplete,
-  updateAirportPredictions,
-  getFlightDefaultRoute,
   setOpenRequiredFieldSnack,
-  Routes,
-  convertFlightToURLParams,
+  updateAirportPredictions,
 } from "../../utils";
 import {
   fetchAirportCitiesByInput,
@@ -41,28 +37,10 @@ import {
   setFlightAdults,
   setFlightClass,
   setFlightDeparture,
-  setFlightFrom,
-  setFlightFromAutocomplete,
   setFlightReturn,
-  setFlightTo,
-  setFlightToAutocomplete,
 } from "../../utils/store/flight-slice";
-import { AirportCity, IATALocation } from "../../utils/types/location-types";
 import { CustomButton } from "../atoms";
 import { IataAutocomplete } from "../molecules";
-import { CustomTF } from "../atoms/CustomTF";
-import { Font } from "../../assets";
-import { useHistory } from "react-router";
-
-interface FlightType {
-  departure: MaterialUiPickersDate;
-  return: MaterialUiPickersDate;
-  from: string;
-  to: string;
-  passengers: string;
-  class: FlightClassType;
-  [key: string]: FlightType[keyof FlightType];
-}
 
 export default function HomeFlightReservation() {
   const theme = createMuiTheme({
@@ -198,6 +176,23 @@ export default function HomeFlightReservation() {
     history.push(getFlightDefaultRoute(flightSearch));
   }
 
+  function onDateChange(date: MaterialUiPickersDate, field: "departure" | "return") {
+    switch (field) {
+      case "departure":
+        let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
+
+        if (flightSearch.return && isDateAfterThat(newDate, flightSearch.return)) {
+          dispatch(setFlightReturn(addDays(newDate, 1)));
+        }
+
+        dispatch(setFlightDeparture(date));
+        break;
+      case "return":
+        dispatch(setFlightReturn(date));
+        break;
+    }
+  }
+
   return (
     <div>
       <Grid container className={style.reservationParamsGrid} spacing={2}>
@@ -214,7 +209,7 @@ export default function HomeFlightReservation() {
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"
-                onChange={(d) => dispatch(setFlightDeparture(d))}
+                onChange={(d) => onDateChange(d, "departure")}
               />
             </Grid>
 
@@ -228,7 +223,7 @@ export default function HomeFlightReservation() {
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"
-                onChange={(d) => dispatch(setFlightReturn(d))}
+                onChange={(d) => onDateChange(d, "return")}
               />
             </Grid>
           </MuiPickersUtilsProvider>

@@ -28,8 +28,12 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
   dealGrid: {
     width: "48%",
     margin: "10px",
-    [theme.breakpoints.down(990)]: {
-      width: "77%",
+    [theme.breakpoints.down(1130)]: {
+      width: "47%",
+    },
+    [theme.breakpoints.down(1040)]: {
+      width: "70%",
+      margin: "10px auto 10px auto",
     },
     [theme.breakpoints.down(865)]: {
       width: "85%",

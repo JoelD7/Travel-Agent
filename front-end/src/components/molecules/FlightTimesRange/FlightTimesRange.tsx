@@ -1,4 +1,5 @@
 import React from "react";
+import { Colors } from "../../../styles";
 import { DatetimeRange } from "../DatetimeRange/DatetimeRange";
 
 interface FlightTimesRange {
@@ -30,7 +31,7 @@ export function FlightTimesRange({
   return (
     <div style={{ marginBottom: "25px" }}>
       <div>
-        <p style={{ fontSize: "14px" }}>
+        <p style={{ fontSize: "14px", color: Colors.BLUE }}>
           {" "}
           <b style={{ fontSize: "16px" }}>{label}</b> {city}
         </p>

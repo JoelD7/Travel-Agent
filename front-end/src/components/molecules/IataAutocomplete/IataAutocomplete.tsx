@@ -105,10 +105,6 @@ export function IataAutocomplete({
 
       setPredictionQueriesMade([...predictionQueriesMade, query]);
       setPredictionsPerQuery({ ...predictionsPerQuery, [query]: predictionsBuffer });
-      console.log("updated predictions: ", {
-        ...predictionsPerQuery,
-        [query]: predictionsBuffer,
-      });
     } else {
       predictionsBuffer = predictionsPerQuery[query];
     }

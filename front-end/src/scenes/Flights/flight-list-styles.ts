@@ -68,10 +68,12 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   drawer: {
     width: "250px",
-    backgroundColor: Colors.BLUE,
+    backgroundColor: "white",
     fontFamily: Family,
     color: "white",
     padding: "10px",
+    borderRadius: "10px",
+    marginLeft: "7px",
   },
   filtersContainer: {
     backgroundColor: "white",

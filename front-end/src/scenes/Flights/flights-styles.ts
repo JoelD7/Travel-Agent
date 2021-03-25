@@ -38,17 +38,17 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     width: "70%",
     margin: "auto",
     marginBottom: "40px",
-    [theme.breakpoints.down(1348)]: {
+    [theme.breakpoints.down(1445)]: {
       width: "80%",
     },
-    [theme.breakpoints.down(1150)]: {
+    [theme.breakpoints.down(1272)]: {
       width: "90%",
     },
     [theme.breakpoints.down(990)]: {
       justifyContent: "center",
     },
     [theme.breakpoints.down(518)]: {
-      width: "101%",
+      width: "94%",
     },
   },
   dealGrid: {

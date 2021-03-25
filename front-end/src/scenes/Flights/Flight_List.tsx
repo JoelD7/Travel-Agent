@@ -20,8 +20,9 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import Axios from "axios";
-import { addDays, compareDesc, format, subDays } from "date-fns";
+import { addDays, compareDesc, format, parseISO, subDays } from "date-fns";
 import { compareAsc } from "date-fns/esm";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
@@ -53,15 +54,13 @@ import {
   getFlightClassForAPI,
   getMaxDate,
   getMinDate,
+  isDateAfterThat,
   isDateBetweenRange,
   muiDateFormatter,
   Routes,
   selectFlightFromAutocomplete,
-  selectFlightListURL,
   selectFlightParams,
   selectFlightToAutocomplete,
-  selectOpenRequiredFieldSnack,
-  setOpenRequiredFieldSnack,
 } from "../../utils";
 import {
   FlightSearch,
@@ -157,6 +156,8 @@ export function Flight_List() {
   });
 
   const flightSearch: FlightSearch = useSelector(selectFlightParams);
+  const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
+  const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
   const [state, setState] = useState<FlightSearchParams>({
     flightType: "Round trip",
@@ -217,14 +218,10 @@ export function Flight_List() {
 
   const [flights, setFlights] = useState<Flight[]>(flightsPlaceholder);
   const [allFlights, setAllFlights] = useState<Flight[]>([]);
-  const flightListURL: string | undefined = useSelector(selectFlightListURL);
-
-  const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
-  const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
-
-  const location = useLocation();
 
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
+
+  const location = useLocation();
 
   const query = useQuery();
 
@@ -768,19 +765,11 @@ export function Flight_List() {
 
   function SearchFilters() {
     return (
-      <>
-        <Text
-          style={{ color: openDrawer ? "white" : Colors.BLUE }}
-          weight="bold"
-          component="h3"
-        >
+      <div>
+        <Text style={{ color: Colors.BLUE }} weight="bold" component="h3">
           Search filters
         </Text>
-        <Text
-          style={{ color: openDrawer ? "white" : Colors.BLUE }}
-          weight="bold"
-          component="h4"
-        >
+        <Text style={{ color: Colors.BLUE }} weight="bold" component="h4">
           Price range
         </Text>
 
@@ -852,7 +841,7 @@ export function Flight_List() {
             onDateRangeChanged={onDateRangeChanged}
           />
         </div>
-      </>
+      </div>
     );
   }
 
@@ -919,6 +908,23 @@ export function Flight_List() {
     setTimeout(() => setPage(newPage - 1), 250);
   }
 
+  function onDateChange(date: MaterialUiPickersDate, field: "departure" | "return") {
+    switch (field) {
+      case "departure":
+        let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
+
+        if (flightSearch.return && isDateAfterThat(newDate, flightSearch.return)) {
+          dispatch(setFlightReturn(addDays(newDate, 1)));
+        }
+
+        dispatch(setFlightDeparture(date));
+        break;
+      case "return":
+        dispatch(setFlightReturn(date));
+        break;
+    }
+  }
+
   return (
     <div className={style.mainContainer}>
       <Helmet>
@@ -974,7 +980,7 @@ export function Flight_List() {
                     className={style.datepicker}
                     minDate={new Date()}
                     format="dd MMM., yyyy"
-                    onChange={(d) => dispatch(setFlightDeparture(d))}
+                    onChange={(d) => onDateChange(d, "departure")}
                   />
                 </Grid>
 
@@ -990,7 +996,7 @@ export function Flight_List() {
                       //@ts-ignore
                       minDate={addDays(flightSearch.departure.valueOf(), 1)}
                       format="dd MMM., yyyy"
-                      onChange={(d) => dispatch(setFlightReturn(d))}
+                      onChange={(d) => onDateChange(d, "return")}
                     />
                   </Grid>
                 )}
@@ -1095,6 +1101,7 @@ export function Flight_List() {
                 />
               </Grid>
 
+              {/* Flight cards */}
               {isLoadingEnabled() && (
                 <Grid
                   item

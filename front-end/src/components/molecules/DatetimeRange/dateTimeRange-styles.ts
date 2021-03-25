@@ -18,6 +18,7 @@ export const dateTimeRangeStyles = makeStyles((theme: Theme) => ({
   text: {
     fontSize: "14px",
     margin: "0px",
+    color: "black",
   },
   textRangeGrid: {
     width: "95%",

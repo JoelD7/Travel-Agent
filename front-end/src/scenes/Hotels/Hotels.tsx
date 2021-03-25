@@ -17,7 +17,9 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import Axios, { AxiosResponse } from "axios";
+import { addDays, parseISO } from "date-fns";
 import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,6 +53,7 @@ import {
   selectHotelReservationParams,
   selectOpenRedirecDialog,
   formatAsDecimal,
+  isDateAfterThat,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
 import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
@@ -591,14 +594,29 @@ export function Hotels() {
     setState({ ...state, occupancyParamsChanged: true });
   }
 
-  function onOccupancyDateChange(date: any, param: "checkIn" | "checkOut") {
-    let stay = { ...reservationParams.stay, [param]: date };
+  function onOccupancyDateChange(
+    date: MaterialUiPickersDate,
+    param: "checkIn" | "checkOut"
+  ) {
+    let stay = reservationParams.stay;
+    let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
+
+    stay = { ...stay, [param]: newDate };
+
+    if (
+      param === "checkIn" &&
+      isDateAfterThat(newDate, reservationParams.stay.checkOut)
+    ) {
+      stay = { ...stay, ["checkOut"]: addDays(newDate, 2) };
+    }
 
     dispatch(
       updateReservationParams({
+        ...reservationParams,
         stay,
       })
     );
+
     setState({ ...state, occupancyParamsChanged: true });
   }
 

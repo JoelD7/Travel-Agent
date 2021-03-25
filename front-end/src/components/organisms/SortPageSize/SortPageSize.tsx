@@ -35,7 +35,8 @@ export function SortPageSize({
   onPageSizeChange,
   onSortOptionChange,
   sortOption,
-  sortOptions = [],className,
+  sortOptions = [],
+  className,
   includeSort = true,
   includePaging = true,
   pageSize,
@@ -95,17 +96,12 @@ export function SortPageSize({
       },
     },
   });
+
   const sortPageStyles = makeStyles(() => ({
-    sortContainer: {
-      padding: "10px",
-      backgroundColor: Colors.BLUE,
-      boxShadow: Shadow.MEDIUM,
-      borderRadius: "10px",
-      marginLeft: "auto",
-      width: "max-content",
-      [theme.breakpoints.down(600)]: {
-        marginLeft: "0px",
-        marginRight: "auto",
+    gridContainer: {
+      justifyContent: "flex-end",
+      [theme.breakpoints.down(630)]: {
+        justifyContent: "flex-start",
       },
     },
     menuItemSelect: {
@@ -151,10 +147,39 @@ export function SortPageSize({
     selectIcon: {
       color: Colors.BLUE,
     },
-    sortFormControl: {
+    sortContainer: {
+      padding: "10px",
       backgroundColor: "white",
-      marginLeft: "15px",
+      boxShadow: Shadow.LIGHT3D,
+      borderRadius: "10px",
+      marginLeft: "auto",
+      minWidth: "555px",
+      width: "max-content",
+      [theme.breakpoints.down(600)]: {
+        marginLeft: "0px",
+        marginRight: "auto",
+      },
+    },
+    sortGrid: {
+      width: "66.6%",
+      [theme.breakpoints.down(630)]: {
+        width: "100%",
+      },
+    },
+    pagingGrid: {
+      width: "33%",
+      [theme.breakpoints.down(630)]: {
+        marginTop: "20px",
+        width: "100%",
+      },
+    },
+    pagingGridFull: {
+      width: "100%",
+    },
+    sortFormControl: {
+      margin: "auto 10px auto 15px",
       borderRadius: "5px",
+      width: "270px",
     },
   }));
 
@@ -162,16 +187,20 @@ export function SortPageSize({
 
   return (
     <Grid container className={`${style.sortContainer} ${className}`} alignItems="center">
-      {/* Sort grid */}
-      {includeSort && (
-        <Grid item xs={8}>
-          <Grid container>
-            <Text bold style={{ alignSelf: "end", margin: "auto" }} color={"white"}>
-              Sort by
-            </Text>
+      <ThemeProvider theme={theme}>
+        {/* Sort grid */}
+        {includeSort && (
+          <Grid item className={style.sortGrid}>
+            <Grid container className={style.gridContainer}>
+              <Text
+                bold
+                style={{ alignSelf: "end", margin: "auto 0px" }}
+                color={Colors.BLUE}
+              >
+                Sort by
+              </Text>
 
-            <ThemeProvider theme={theme}>
-              <FormControl className={style.sortFormControl} style={{ width: "145px" }}>
+              <FormControl className={style.sortFormControl}>
                 <Select
                   value={sortOption}
                   variant="outlined"
@@ -195,47 +224,47 @@ export function SortPageSize({
                 orientation="vertical"
                 style={{ background: "white", margin: "0px 10px" }}
               />
-            </ThemeProvider>
+            </Grid>
           </Grid>
-        </Grid>
-      )}
+        )}
 
-      {/* Paging grid */}
-      {includePaging && (
-        <Grid item xs={includeSort ? 4 : 12}>
-          <Grid container>
-            <Text
-              bold
-              style={{ alignSelf: "end", margin: "auto 0px auto 5px" }}
-              color={"white"}
-            >
-              See
-            </Text>
-
-            <FormControl className={style.sortFormControl} style={{ width: "70px" }}>
-              <Select
-                value={pageSize}
-                variant="outlined"
-                classes={{ icon: style.selectIcon }}
-                className={style.select}
-                onChange={(e, value) =>
-                  onPageSizeChange ? onPageSizeChange(e.target.value as number) : {}
-                }
+        {/* Paging grid */}
+        {includePaging && (
+          <Grid item className={includeSort ? style.pagingGrid : style.pagingGridFull}>
+            <Grid container className={style.gridContainer}>
+              <Text
+                bold
+                style={{ alignSelf: "end", margin: "auto 0px auto 5px" }}
+                color={Colors.BLUE}
               >
-                {pageSizeOptions.map((option, i) => (
-                  <MenuItem
-                    classes={{ root: style.menuItemSelect }}
-                    key={i}
-                    value={option}
-                  >
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                See
+              </Text>
+
+              <FormControl className={style.sortFormControl} style={{ width: "70px" }}>
+                <Select
+                  value={pageSize}
+                  variant="outlined"
+                  classes={{ icon: style.selectIcon }}
+                  className={style.select}
+                  onChange={(e, value) =>
+                    onPageSizeChange ? onPageSizeChange(e.target.value as number) : {}
+                  }
+                >
+                  {pageSizeOptions.map((option, i) => (
+                    <MenuItem
+                      classes={{ root: style.menuItemSelect }}
+                      key={i}
+                      value={option}
+                    >
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
-        </Grid>
-      )}
+        )}
+      </ThemeProvider>
     </Grid>
   );
 }

@@ -13,6 +13,8 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
+import { addDays, parseISO } from "date-fns";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,6 +34,7 @@ import { Colors } from "../../styles";
 import {
   getCityImage,
   getFlightDefaultRoute,
+  isDateAfterThat,
   muiDateFormatter,
   selectCurrentCity,
   selectFlightFromAutocomplete,
@@ -223,8 +226,6 @@ export function Flights_Home() {
 
   const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
 
-  const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
-
   const [deals, setDeals] = useState<FlightDeal[]>([]);
 
   const [currency, setCurrency] = useState<string>("");
@@ -232,6 +233,8 @@ export function Flights_Home() {
   const currentCity: IATALocation = useSelector(selectCurrentCity);
 
   const [image, setImage] = useState<string>("");
+
+  const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
@@ -271,7 +274,6 @@ export function Flights_Home() {
       setOpenRequiredFieldSnack(true);
       return;
     }
-
     history.push(getFlightDefaultRoute(flightSearch));
   }
 
@@ -281,6 +283,23 @@ export function Flights_Home() {
       dispatch(setFlightReturn(undefined));
     } else {
       setState({ ...state, flightType: FlightTypes.ROUND });
+    }
+  }
+
+  function onDateChange(date: MaterialUiPickersDate, field: "departure" | "return") {
+    switch (field) {
+      case "departure":
+        let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
+
+        if (flightSearch.return && isDateAfterThat(newDate, flightSearch.return)) {
+          dispatch(setFlightReturn(addDays(newDate, 1)));
+        }
+
+        dispatch(setFlightDeparture(date));
+        break;
+      case "return":
+        dispatch(setFlightReturn(date));
+        break;
     }
   }
 
@@ -364,7 +383,7 @@ export function Flights_Home() {
                   className={style.datepicker}
                   minDate={new Date()}
                   format="dd MMM., yyyy"
-                  onChange={(d) => dispatch(setFlightDeparture(d))}
+                  onChange={(d) => onDateChange(d, "departure")}
                 />
               </Grid>
 
@@ -379,7 +398,7 @@ export function Flights_Home() {
                     className={style.datepicker}
                     minDate={new Date()}
                     format="dd MMM., yyyy"
-                    onChange={(d) => dispatch(setFlightReturn(d))}
+                    onChange={(d) => onDateChange(d, "return")}
                   />
                 </Grid>
               )}
@@ -446,7 +465,7 @@ export function Flights_Home() {
 
       <PageSubtitle label="Great deals" containerStyle={{ margin: "20px auto" }} />
 
-      <Grid container spacing={2} className={style.dealsContainer}>
+      <Grid container className={style.dealsContainer}>
         {deals.slice(0, 6).map((deal) => (
           <CardDealFlight
             key={deal.links.flightOffers}

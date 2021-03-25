@@ -5,4 +5,5 @@ export * from "./flight-slice";
 export * from "./hotel-slice";
 export * from "./restaurant-slice";
 export * from "./calendar-slice";
+export * from "./signUpSlice";
 export * from "./store";

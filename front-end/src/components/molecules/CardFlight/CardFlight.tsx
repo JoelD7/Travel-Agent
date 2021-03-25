@@ -259,7 +259,10 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
             item
             className={returnFlight ? style.priceButtonGrid : style.priceButtonGridFull}
           >
-            <CustomButton onClick={() => setFlightDetailsModal(true)}>
+            <CustomButton
+              backgroundColor={Colors.GREEN}
+              onClick={() => setFlightDetailsModal(true)}
+            >
               View details
             </CustomButton>
           </Grid>
@@ -274,6 +277,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
           <CustomButton
             style={{ marginLeft: "auto" }}
             onClick={() => setFlightDetailsModal(true)}
+            backgroundColor={Colors.GREEN}
           >
             View details
           </CustomButton>

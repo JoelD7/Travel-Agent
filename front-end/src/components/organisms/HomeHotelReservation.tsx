@@ -13,12 +13,12 @@ import {
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { addDays } from "date-fns";
+import { addDays, parseISO } from "date-fns";
 import React, { useState } from "react";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
-import { homeStyles, style_createTripButton } from "../../styles/Home/home-styles";
-import { muiDateFormatter } from "../../utils";
+import { homeStyles } from "../../styles/Home/home-styles";
+import { isDateAfterThat, muiDateFormatter } from "../../utils";
 import { CustomButton } from "../atoms";
 
 interface HotelType {
@@ -129,6 +129,22 @@ export default function HomeHotelReservation() {
   ];
 
   const style = homeStyles();
+
+  function onDateChange(date: MaterialUiPickersDate, param: "checkIn" | "checkOut") {
+    let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
+
+    let checkOut: Date =
+      hotel.checkOut === null ? new Date() : parseISO(hotel.checkOut.toISOString());
+
+    let newHotel = { ...hotel, [param]: newDate };
+
+    if (param === "checkIn" && isDateAfterThat(newDate, checkOut)) {
+      newHotel = { ...newHotel, ["checkOut"]: addDays(newDate, 2) };
+    }
+
+    setHotel(newHotel);
+  }
+
   return (
     <div>
       <div className={style.searchLocationContainer}>
@@ -162,7 +178,7 @@ export default function HomeHotelReservation() {
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"
-                onChange={(d) => setHotel({ ...hotel, checkIn: d })}
+                onChange={(d) => onDateChange(d, "checkIn")}
               />
             </Grid>
 
@@ -176,7 +192,7 @@ export default function HomeHotelReservation() {
                 className={style.datepicker}
                 minDate={new Date()}
                 format="dd MMM., yyyy"
-                onChange={(d) => setHotel({ ...hotel, checkOut: d })}
+                onChange={(d) => onDateChange(d, "checkOut")}
               />
             </Grid>
           </MuiPickersUtilsProvider>
