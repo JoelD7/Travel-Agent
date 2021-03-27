@@ -34,6 +34,7 @@ interface IataAutocomplete {
   flightDirection?: "from" | "to";
   type: "city" | "airport";
   home?: boolean;
+  placeholder?: string;
   isInNavbar?: boolean;
   className?: string;
 }
@@ -43,6 +44,7 @@ type PredictionPerQuery = { [index: string]: IATALocation[] };
 export function IataAutocomplete({
   flightDirection,
   type,
+  placeholder,
   home,
   isInNavbar,
   className,
@@ -210,7 +212,7 @@ export function IataAutocomplete({
               {...params}
               value={searchQuery}
               variant="outlined"
-              placeholder="Search locations"
+              placeholder={placeholder ? placeholder : "Search locations"}
               style={isInNavbar ? { width: "100%" } : {}}
               className={style.searchBar}
               onChange={onCityChange}
@@ -221,7 +223,7 @@ export function IataAutocomplete({
               {...params}
               value={text}
               size="small"
-              placeholder="City or airport"
+              placeholder={placeholder ? placeholder : "City or airport"}
               className={style.searchBarInput}
               variant={"outlined"}
               onChange={(e) => onTextChange(e)}

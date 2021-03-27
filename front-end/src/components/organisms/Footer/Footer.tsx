@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { logoIcon } from "../../../assets";
 import { Colors } from "../../../styles";
 import {
-  getHotelDefaultRoute,
+  getHotelSearchURL,
   getRestaurantsDefaultRoute,
   Routes,
   getLinkStyle,
@@ -24,7 +24,7 @@ export function Footer() {
   const bookLinks = [
     {
       label: "Hotels",
-      route: getHotelDefaultRoute(reservationParams),
+      route: getHotelSearchURL(reservationParams),
     },
     {
       label: "Flights",

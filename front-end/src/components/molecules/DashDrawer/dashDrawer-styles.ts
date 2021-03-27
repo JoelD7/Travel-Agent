@@ -25,12 +25,12 @@ export const dashDrawerStyles = makeStyles((theme: Theme) => ({
   listItemRoot: {
     borderBottom: `2px solid ${Colors.BLUE}`,
     "&.Mui-selected": {
-      backgroundColor: Colors.GREEN_DRAWER,
-      borderBottom: `2px solid ${Colors.GREEN_DRAWER}`,
+      backgroundColor: Colors.GREEN,
+      borderBottom: `2px solid ${Colors.GREEN}`,
       color: Colors.BLUE,
 
       "&:hover": {
-        backgroundColor: Colors.GREEN_DRAWER,
+        backgroundColor: Colors.GREEN,
       },
     },
   },

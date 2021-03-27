@@ -1,2 +1,2 @@
-let a = "queso".split(",");
-console.log(a);
+let booleanValues = [false, false, false];
+console.log(booleanValues.reduce((prev, cur) => prev || cur));

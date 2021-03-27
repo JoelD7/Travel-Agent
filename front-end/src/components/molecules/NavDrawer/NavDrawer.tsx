@@ -28,7 +28,7 @@ import { carlos, Font, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors } from "../../../styles";
 import {
-  getHotelDefaultRoute,
+  getHotelSearchURL,
   getLinkStyle,
   Routes,
   selectHotelReservationParams,
@@ -99,7 +99,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
     {
       label: "Hotels",
       icon: faHotel,
-      route: getHotelDefaultRoute(hotelReservationParams),
+      route: getHotelSearchURL(hotelReservationParams),
       selected: page === Routes.HOTELS,
       user: false,
     },

@@ -19,7 +19,7 @@ import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
 import {
-  getFlightDefaultRoute,
+  getFlightSearchURL,
   isDateAfterThat,
   muiDateFormatter,
   selectFlightFromAutocomplete,
@@ -173,7 +173,7 @@ export default function HomeFlightReservation() {
       return;
     }
 
-    history.push(getFlightDefaultRoute(flightSearch));
+    history.push(getFlightSearchURL(flightSearch));
   }
 
   function onDateChange(date: MaterialUiPickersDate, field: "departure" | "return") {

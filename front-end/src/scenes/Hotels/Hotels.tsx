@@ -630,7 +630,7 @@ export function Hotels() {
     setOpenOccupancies(false);
   }
 
-  function onSearchButtonPress() {
+  function onSearchButtonClick() {
     setLoading(true);
 
     searchHotels(reservationParams);
@@ -837,7 +837,7 @@ export function Hotels() {
                       backgroundColor={Colors.GREEN}
                       rounded
                       className={style.searchButton}
-                      onClick={() => onSearchButtonPress()}
+                      onClick={() => onSearchButtonClick()}
                     >
                       {`${state.occupancyParamsChanged ? "Update search" : "Search"}`}
                     </CustomButton>

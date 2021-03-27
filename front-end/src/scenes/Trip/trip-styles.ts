@@ -8,6 +8,11 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     border: "1px solid #CECECE",
     padding: "10px",
   },
+  footerContainer: {
+    position: "relative",
+    zIndex: 3,
+    marginTop: "250px",
+  },
   itineraryButton: {
     fontSize: "16px",
     alignSelf: "flex-start",
@@ -29,7 +34,6 @@ export const tripStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    marginBottom: "40px",
     backgroundColor: Colors.BACKGROUND,
   },
   pageContentGrid: {

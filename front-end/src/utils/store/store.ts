@@ -36,6 +36,10 @@ export const selectOpenRequiredFieldSnack = (state: RootState) =>
   state.rootSlice.openRequiredFieldSnack;
 //#endregion
 
+//#region Search
+export const selectCurrentCity = (state: RootState) => state.searchNavbar.currentCity;
+//#endregion
+
 //#region POI
 export const selectPOIs = (state: RootState) => state.poiReducer.pois;
 export const selectAllPOIs = (state: RootState) => state.poiReducer.allPois;
@@ -81,7 +85,6 @@ export const selectCityPredictions = (state: RootState) =>
 export const selectAirportPredictions = (state: RootState) =>
   state.searchNavbar.airportPredictions;
 
-export const selectCurrentCity = (state: RootState) => state.searchNavbar.currentCity;
 //#endregion
 
 //#region Flight
@@ -94,6 +97,8 @@ export const selectFlightToAutocomplete = (state: RootState) =>
 export const selectFlightListURL = (state: RootState) => state.flightSlice.flightListURL;
 export const selectFlightDictionaries = (state: RootState) =>
   state.flightSlice.dictionaries;
+
+export const selectFlightType = (state: RootState) => state.flightSlice.flightType;
 
 //#endregion
 

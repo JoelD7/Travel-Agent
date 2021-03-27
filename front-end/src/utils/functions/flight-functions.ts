@@ -3,6 +3,7 @@ import { URLSearchParams } from "url";
 import { Routes } from "..";
 import { iataCodes } from "../constants";
 import { FlightSearch } from "../store";
+import { FlightTypes } from "../types";
 import { IATALocation } from "../types/location-types";
 import { capitalizeString, getIataLocation } from "./functions";
 
@@ -192,7 +193,7 @@ export function addFlightDuration(flight: Flight) {
   return hours * 60 + minutes;
 }
 
-export function convertFlightToURLParams(flight: FlightSearch) {
+export function convertFlightToURLParams(flight: FlightSearch, city: IATALocation) {
   let params: string[] = [];
 
   params.push(`departure=${format(flight.departure, "yyyy-MM-dd")}`);
@@ -232,6 +233,7 @@ export function convertURLParamsToFlight(query: URLSearchParams): FlightSearch {
 
   buffer = {
     departure: parseISO(kvp.departure),
+    flightType: FlightTypes.ONE_WAY,
     from: kvp.from,
     to: kvp.to,
     flightFromAutocomplete: iataCodes.filter((iata) => iata.code === kvp.from)[0],
@@ -240,7 +242,7 @@ export function convertURLParamsToFlight(query: URLSearchParams): FlightSearch {
   };
 
   if (kvp.hasOwnProperty("return")) {
-    buffer = { ...buffer, return: parseISO(kvp.return) };
+    buffer = { ...buffer, return: parseISO(kvp.return), flightType: FlightTypes.ROUND };
   }
 
   if (kvp.hasOwnProperty("children")) {
@@ -279,7 +281,7 @@ export function getFlightClassForAPI(value: string): string {
   }
 }
 
-export function getFlightDefaultRoute(flightSearch: FlightSearch) {
+export function getFlightSearchURL(flightSearch: FlightSearch) {
   return `${Routes.FLIGHT_LIST}${convertFlightToURLParams(
     flightSearch
   )}&page=1&pageSize=20&sortBy=Price | asc`;

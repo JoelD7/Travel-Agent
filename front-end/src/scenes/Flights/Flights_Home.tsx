@@ -19,6 +19,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { batchActions } from "redux-batched-actions";
 import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import {
@@ -33,13 +34,15 @@ import {
 import { Colors } from "../../styles";
 import {
   getCityImage,
-  getFlightDefaultRoute,
+  getFlightSearchURL,
   isDateAfterThat,
   muiDateFormatter,
   selectCurrentCity,
   selectFlightFromAutocomplete,
   selectFlightParams,
+  setFlightType,
   selectFlightToAutocomplete,
+  selectFlightType,
 } from "../../utils";
 import { fetchGreatFlightDeals } from "../../utils/external-apis/amadeus-apis";
 import {
@@ -173,6 +176,7 @@ export function Flights_Home() {
 
   const history = useHistory();
   const dispatch = useDispatch();
+  const flightType = useSelector(selectFlightType);
 
   const [state, setState] = useState<FlightSearchParams>({
     exitFlightDates: {
@@ -201,7 +205,7 @@ export function Flights_Home() {
       ],
       arrivalDatetimeRange: [new Date(2020, 10, 21, 8, 0), new Date(2020, 10, 21, 15, 0)],
     },
-    flightType: "Round trip",
+    flightType: useSelector(selectFlightType),
   });
 
   const flightSearch: FlightSearch = useSelector(selectFlightParams);
@@ -274,14 +278,22 @@ export function Flights_Home() {
       setOpenRequiredFieldSnack(true);
       return;
     }
-    history.push(getFlightDefaultRoute(flightSearch));
+    history.push(getFlightSearchURL(flightSearch));
   }
 
   function onFlightTypeChange(flightType: string) {
     if (flightType === FlightTypes.ONE_WAY) {
       setState({ ...state, flightType: FlightTypes.ONE_WAY });
-      dispatch(setFlightReturn(undefined));
+      dispatch(
+        batchActions([setFlightType(FlightTypes.ONE_WAY), setFlightReturn(undefined)])
+      );
     } else {
+      dispatch(
+        batchActions([
+          setFlightType(FlightTypes.ROUND),
+          setFlightReturn(addDays(flightSearch.departure, 1)),
+        ])
+      );
       setState({ ...state, flightType: FlightTypes.ROUND });
     }
   }
@@ -356,12 +368,10 @@ export function Flights_Home() {
           </Grid>
 
           {/* To Grid */}
-          {state.flightType === FlightTypes.ROUND && (
-            <Grid item xs={12} key="destinationTF">
-              <h5 className={style.reservationParamText}>To</h5>
-              <IataAutocomplete type="airport" flightDirection="to" />
-            </Grid>
-          )}
+          <Grid item xs={12} key="destinationTF">
+            <h5 className={style.reservationParamText}>To</h5>
+            <IataAutocomplete type="airport" flightDirection="to" />
+          </Grid>
 
           {/* Dates */}
           <ThemeProvider theme={theme}>

@@ -15,11 +15,20 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays, parseISO } from "date-fns";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
-import { isDateAfterThat, muiDateFormatter } from "../../utils";
+import {
+  getHotelSearchURL,
+  HotelBookingParams,
+  isDateAfterThat,
+  muiDateFormatter,
+  selectHotelReservationParams,
+} from "../../utils";
 import { CustomButton } from "../atoms";
+import { IataAutocomplete } from "../molecules";
 
 interface HotelType {
   checkIn: MaterialUiPickersDate;
@@ -101,6 +110,8 @@ export default function HomeHotelReservation() {
     },
   });
 
+  const history = useHistory();
+
   const [locationQuery, setLocationQuery] = useState<string>();
   const [hotel, setHotel] = useState<HotelType>({
     checkIn: new Date(),
@@ -130,6 +141,8 @@ export default function HomeHotelReservation() {
 
   const style = homeStyles();
 
+  const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
+
   function onDateChange(date: MaterialUiPickersDate, param: "checkIn" | "checkOut") {
     let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
 
@@ -145,24 +158,14 @@ export default function HomeHotelReservation() {
     setHotel(newHotel);
   }
 
+  function onSearchClick() {
+    history.push(getHotelSearchURL(reservationParams));
+  }
+
   return (
     <div>
       <div className={style.searchLocationContainer}>
-        <IconButton style={{ boxShadow: "5px 5px 5px #cecece" }}>
-          <FontAwesomeIcon icon={faSearch} color={Colors.BLUE} />
-        </IconButton>
-
-        <TextField
-          value={locationQuery}
-          onChange={(e) => setLocationQuery(e.target.value)}
-          className={style.locationQueryTF}
-          placeholder="Where?"
-          variant="outlined"
-          size="small"
-          InputProps={{
-            className: style.locationQueryText,
-          }}
-        />
+        <IataAutocomplete type="city" placeholder="Where?" />
       </div>
 
       <Grid container className={style.reservationParamsGrid} spacing={2}>
@@ -226,7 +229,7 @@ export default function HomeHotelReservation() {
               <CustomButton
                 rounded
                 style={{ width: "90%", boxShadow: Shadow.MEDIUM }}
-                onClick={() => {}}
+                onClick={() => onSearchClick()}
               >
                 Search
               </CustomButton>

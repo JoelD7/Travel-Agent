@@ -28,7 +28,6 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     backgroundColor: Colors.BACKGROUND,
   },
   datepicker: {
-    backgroundColor: "white",
     fontFamily: Family,
     width: "100%",
     maxWidth: "100%",
@@ -43,12 +42,26 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     },
     "& .MuiInputBase-root": {
       height: "32px",
+      borderRadius: "5px",
+      backgroundColor: "white",
     },
     "& .MuiInput-underline::after": {
       borderBottom: `2px solid ${Colors.GREEN_HOVER}`,
     },
   },
   datepickerGrid: {
+    width: "25%",
+    [theme.breakpoints.down(1262)]: {
+      width: "30%",
+    },
+    [theme.breakpoints.down(1083)]: {
+      width: "50%",
+    },
+    [theme.breakpoints.down(640)]: {
+      width: "100%",
+    },
+  },
+  datepickerGridFull: {
     width: "25%",
     [theme.breakpoints.down(1262)]: {
       width: "30%",
@@ -110,6 +123,25 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(1040)]: {
       display: "block",
       width: "50%",
+    },
+  },
+  menuItemRoot: {
+    fontFamily: Font.Family,
+    borderBottom: `2px solid rgba(0,0,0,0)`,
+    margin: "0px 5px",
+    fontSize: "16px",
+    color: "white",
+
+    "&.MuiListItem-root": {
+      "&.Mui-selected": {
+        backgroundColor: "rgba(0,0,0,0)",
+        borderBottom: `2px solid ${Colors.GREEN}`,
+      },
+    },
+    "&.MuiListItem-button": {
+      "&:hover": {
+        borderBottom: `2px solid ${Colors.GREEN}`,
+      },
     },
   },
   pagination: {

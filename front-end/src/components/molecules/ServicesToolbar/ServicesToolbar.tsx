@@ -6,14 +6,16 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import {
   convertReservationParamsToURLParams,
   convertURLToReservationParams,
-  getHotelDefaultRoute,
+  getHotelSearchURL,
   getLinkStyle,
+  selectCurrentCity,
   Routes,
   selectHotelReservationParams,
   getRestaurantsDefaultRoute,
 } from "../../../utils";
 import { CreateCSSProperties, CSSProperties } from "@material-ui/styles";
 import { useSelector } from "react-redux";
+import { IATALocation } from "../../../utils/types/location-types";
 
 interface NavbarService {
   label: string;
@@ -31,6 +33,7 @@ export function ServicesToolbar({ home, style }: ServicesToolbar) {
   let page = "/" + segmentedURL[segmentedURL.length - 1];
 
   const reservationParams = useSelector(selectHotelReservationParams);
+  const city: IATALocation = useSelector(selectCurrentCity);
 
   const navbarServices: NavbarService[] = [
     {
@@ -78,7 +81,7 @@ export function ServicesToolbar({ home, style }: ServicesToolbar) {
   function getServiceRoute(route: string) {
     switch (route) {
       case Routes.HOTELS:
-        return getHotelDefaultRoute(reservationParams);
+        return getHotelSearchURL(reservationParams, city);
 
       case Routes.FLIGHTS:
         return Routes.FLIGHTS;

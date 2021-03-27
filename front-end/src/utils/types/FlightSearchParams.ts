@@ -1,17 +1,9 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 
 export interface FlightSearchParams {
-  // departure: MaterialUiPickersDate;
-  // return: MaterialUiPickersDate;
-  // from: string;
-  // to: string;
-  // adults: string;
-  // children: string;
-  // infants: string;
   flightType: FlightType;
-  // class: FlightClassType;
   exitFlightDates: DatetimeRange;
-  returnFlightDates: DatetimeRange;
+  returnFlightDates?: DatetimeRange;
 
   [key: string]: FlightSearchParams[keyof FlightSearchParams];
 }

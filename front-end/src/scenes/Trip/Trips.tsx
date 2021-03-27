@@ -1,21 +1,10 @@
-import { faCalendar, faFlag, faHeart, faPlane } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Drawer,
-  List,
-  ListItemIcon,
-  ListItemText,
-  ListItem,
-  Divider,
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  CardActionArea,
-} from "@material-ui/core";
+import { faCalendar, faFlag } from "@fortawesome/free-solid-svg-icons";
+import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
+import Helmet from "react-helmet";
 import { Link, useHistory } from "react-router-dom";
+import Slider from "react-slick";
 import {
   DashDrawer,
   Footer,
@@ -26,10 +15,7 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import { getLinkStyle, Routes, tripPlaceholder, tripsPlaceholder } from "../../utils";
-import { DrawerOptions } from "../../utils/types/drawerOption-types";
 import { tripStyles } from "./trip-styles";
-import Slider from "react-slick";
-import Helmet from "react-helmet";
 
 export function Trips() {
   const style = tripStyles();
@@ -217,7 +203,9 @@ export function Trips() {
         </Grid>
       </Grid>
 
-      <Footer />
+      <div className={style.footerContainer}>
+        <Footer />
+      </div>
     </div>
   );
 }

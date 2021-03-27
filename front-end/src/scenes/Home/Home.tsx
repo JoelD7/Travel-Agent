@@ -133,37 +133,37 @@ export function Home() {
 
   const popularDestinations = [
     {
-      image: "./Travel-Agent/destinations/paris.jpg",
+      image: "/Travel-Agent/destinations/paris.jpg",
       country: "France",
       city: "Paris",
     },
     {
-      image: "./Travel-Agent/destinations/tokio.jpg",
+      image: "/Travel-Agent/destinations/tokio.jpg",
       country: "Japan",
       city: "Tokio",
     },
     {
-      image: "./Travel-Agent/destinations/agra.jpg",
+      image: "/Travel-Agent/destinations/agra.jpg",
       country: "India",
       city: "Agra",
     },
     {
-      image: "./Travel-Agent/destinations/singapore.jpg",
+      image: "/Travel-Agent/destinations/singapore.jpg",
       country: "Singapore",
       city: "Singapore",
     },
     {
-      image: "./Travel-Agent/destinations/rio.jpg",
+      image: "/Travel-Agent/destinations/rio.jpg",
       country: "Brazil",
       city: "Rio de Janeiro",
     },
     {
-      image: "./Travel-Agent/destinations/new-york.jpg",
+      image: "/Travel-Agent/destinations/new-york.jpg",
       country: "United States",
       city: "New York",
     },
     {
-      image: "./Travel-Agent/destinations/rome.jpg",
+      image: "/Travel-Agent/destinations/rome.jpg",
       country: "Italy",
       city: "Rome",
     },

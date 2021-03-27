@@ -8,6 +8,7 @@ import {
   HotelRoomRate,
   HotelRooms,
 } from "../types/hotel-types";
+import { IATALocation } from "../types/location-types";
 import { formatAsDecimal } from "./functions";
 
 export function getHotelStars(hotel: HotelBooking) {
@@ -29,6 +30,7 @@ export function getHotelImages(hotel: HotelBooking) {
 
 export function convertReservationParamsToURLParams(
   reservationParams: HotelBookingParams,
+  city: IATALocation,
   page: "hotel" | "hotelDetails"
 ): string {
   let params = [];
@@ -58,8 +60,8 @@ export function convertReservationParamsToURLParams(
     params.push(`paxes=${paxes}`);
   }
 
-  params.push(`longitude=${longitude}`);
-  params.push(`latitude=${latitude}`);
+  params.push(`longitude=${city.lon}`);
+  params.push(`latitude=${city.lat}`);
   params.push(`radius=${radius}`);
   params.push(`unit=${unit}`);
 
@@ -177,9 +179,13 @@ export function getMinRate(rooms: HotelRooms[]): number {
   return getRoomTotalPrice(minRate);
 }
 
-export function getHotelDefaultRoute(reservationParams: HotelBookingParams): string {
+export function getHotelSearchURL(
+  reservationParams: HotelBookingParams,
+  city: IATALocation
+): string {
   return `${Routes.HOTELS}${convertReservationParamsToURLParams(
     reservationParams,
+    city,
     "hotel"
   )}&sortBy=Stars | desc&page=${1}&pageSize=${20}`;
 }

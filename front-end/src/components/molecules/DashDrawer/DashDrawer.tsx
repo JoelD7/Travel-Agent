@@ -5,7 +5,7 @@ import {
   Routes,
   getRestaurantsDefaultRoute,
   selectHotelReservationParams,
-  getHotelDefaultRoute,
+  getHotelSearchURL,
 } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 import React, { useState } from "react";
@@ -75,7 +75,7 @@ export function DashDrawer() {
     {
       label: "Hotels",
       icon: faHotel,
-      route: getHotelDefaultRoute(reservationParams),
+      route: getHotelSearchURL(reservationParams),
       selected: page === Routes.HOTELS,
       user: false,
     },

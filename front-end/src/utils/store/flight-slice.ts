@@ -2,6 +2,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays, format } from "date-fns";
 import { airportCityPlaceholder, airportCityPlaceholderTwo } from "../placeholders";
+import { FlightTypes } from "../types";
 import { IATALocation } from "../types/location-types";
 
 export interface FlightSearch {
@@ -12,6 +13,7 @@ export interface FlightSearch {
   adults: number;
   class: string;
   children?: number;
+  flightType: FlightType;
   infants?: number;
   dictionaries?: FlightDictionary;
   flightFromAutocomplete?: IATALocation | null;
@@ -23,6 +25,7 @@ export interface FlightSearch {
 const initialState: FlightSearch = {
   departure: addDays(new Date(), 1),
   return: addDays(new Date(), 3),
+  flightType: FlightTypes.ONE_WAY,
   from: airportCityPlaceholder.code,
   flightListURL: `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=MIA&destinationLocationCode=MUC&departureDate=${format(
     addDays(new Date(), 1),
@@ -37,7 +40,7 @@ const initialState: FlightSearch = {
   },
   to: airportCityPlaceholderTwo.code,
   adults: 2,
-  class: "",
+  class: "Economy",
   children: 0,
   infants: 0,
 };
@@ -60,6 +63,9 @@ const flightSlice = createSlice({
       } else {
         state.return = undefined;
       }
+    },
+    setFlightType(state, action: PayloadAction<FlightType>) {
+      state.flightType = action.payload;
     },
     setFlightFrom(state, action: PayloadAction<string>) {
       state.from = action.payload;
@@ -114,5 +120,6 @@ export const {
   setFlightInfants,
   setFlightFromAutocomplete,
   setFlightToAutocomplete,
+  setFlightType,
 } = flightSlice.actions;
 export default flightSlice.reducer;

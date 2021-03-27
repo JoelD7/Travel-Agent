@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AirportCity, IATALocation } from "../types/location-types";
+import { IATALocation } from "../types/location-types";
 import { airportCityPlaceholder } from "../../utils";
 
 interface SearchType {
