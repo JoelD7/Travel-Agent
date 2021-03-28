@@ -1,10 +1,10 @@
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import {
   Accordion,
-  AccordionSummary,
   AccordionDetails,
-  Grid,
+  AccordionSummary,
   Divider,
+  Grid,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useState } from "react";
@@ -17,12 +17,10 @@ import {
   HotelBooking,
   HotelRoomRate,
   HotelRooms,
-  HotelImage,
   selectRoomAccordionExpanded,
-  HotelBedAPI,
 } from "../../../utils";
-import { Text, IconText, CustomButton, IconTP } from "../../atoms";
 import { setRoomAccordionExpanded } from "../../../utils/store/hotel-slice";
+import { CustomButton, IconTP, Text } from "../../atoms";
 import { RoomAccordionTitle } from "../RoomAccordionTitle/RoomAccordionTitle";
 
 interface RoomAccordion {

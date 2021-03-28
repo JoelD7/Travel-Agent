@@ -1,4 +1,4 @@
-import { faMapMarkerAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconButton, TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
@@ -6,29 +6,26 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AnyAction } from "redux";
 import { batchActions } from "redux-batched-actions";
-import { Colors } from "../../../styles";
 import {
+  FlightSearch,
   getAutocompleteLabel,
   iataCodes,
   onQueryChanged,
+  persistGeolocationInLocalStorage,
   selectFlightFromAutocomplete,
   selectFlightParams,
   selectFlightToAutocomplete,
   selectSearchQuery,
   setCurrentCity,
-  updateAirportPredictions,
-  updateCityPredictions,
   setFlightFrom,
-  updateHotelCoordinates,
-  FlightSearch,
   setFlightFromAutocomplete,
   setFlightTo,
   setFlightToAutocomplete,
-  persistGeolocationInLocalStorage,
+  updateAirportPredictions,
+  updateCityPredictions,
+  updateHotelCoordinates,
 } from "../../../utils";
-
 import { IATALocation } from "../../../utils/types/location-types";
-import { CustomTF } from "../../atoms";
 import { iataAutocompleteStyles } from "./iata-autocomplete-styles";
 
 interface IataAutocomplete {
@@ -39,8 +36,6 @@ interface IataAutocomplete {
   isInNavbar?: boolean;
   className?: string;
 }
-
-type PredictionPerQuery = { [index: string]: IATALocation[] };
 
 export function IataAutocomplete({
   flightDirection,
@@ -59,7 +54,7 @@ export function IataAutocomplete({
 
   let batchedActions: AnyAction[] = [];
 
-  const [searchQuery, setSearchQuery] = useState(useSelector(selectSearchQuery));
+  const searchQuery = useSelector(selectSearchQuery);
 
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState("");
@@ -72,12 +67,6 @@ export function IataAutocomplete({
   const [text, setText] = useState<string>(
     type === "city" ? searchQuery : flightDirection === "from" ? flight.from : flight.to
   );
-
-  const [predictionsPerQuery, setPredictionsPerQuery] = useState<PredictionPerQuery>({
-    "": [],
-  });
-
-  const [predictionQueriesMade, setPredictionQueriesMade] = useState<string[]>([""]);
 
   function getAutocompleteDefault() {
     if (type === "city") {
@@ -96,21 +85,12 @@ export function IataAutocomplete({
   }, [flightFromAutocomplete, flightToAutocomplete]);
 
   function getPredictions(query: string) {
-    let predictionsBuffer: IATALocation[] = [];
-
-    if (!predictionQueriesMade.includes(query)) {
-      predictionsBuffer = iataCodes.filter(
-        (iata) =>
-          iata.code.toLowerCase().includes(query) ||
-          iata.name.toLowerCase().includes(query) ||
-          iata.city.toLowerCase().includes(query)
-      );
-
-      setPredictionQueriesMade([...predictionQueriesMade, query]);
-      setPredictionsPerQuery({ ...predictionsPerQuery, [query]: predictionsBuffer });
-    } else {
-      predictionsBuffer = predictionsPerQuery[query];
-    }
+    let predictionsBuffer: IATALocation[] = iataCodes.filter(
+      (iata) =>
+        iata.code.toLowerCase().includes(query) ||
+        iata.name.toLowerCase().includes(query) ||
+        iata.city.toLowerCase().includes(query)
+    );
 
     setPredictions(predictionsBuffer);
   }
@@ -153,7 +133,7 @@ export function IataAutocomplete({
   function updateState() {
     batchedActions = [];
 
-    batchedActions.push(onQueryChanged({ value: searchQuery }));
+    batchedActions.push(onQueryChanged({ value: text }));
 
     if (type === "city") {
       batchedActions.push(updateCityPredictions(predictions));
@@ -189,7 +169,7 @@ export function IataAutocomplete({
   }
 
   function onCityChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    setSearchQuery(e.target.value);
+    setText(e.target.value);
   }
 
   return (
@@ -223,7 +203,7 @@ export function IataAutocomplete({
           type === "city" ? (
             <TextField
               {...params}
-              value={searchQuery}
+              value={text}
               variant="outlined"
               placeholder={placeholder ? placeholder : "Search locations"}
               style={isInNavbar ? { width: "100%" } : {}}

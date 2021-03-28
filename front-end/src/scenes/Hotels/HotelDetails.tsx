@@ -1,49 +1,34 @@
-import {
-  faBed,
-  faCalendar,
-  faChild,
-  faMapMarkerAlt,
-  faPhone,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
-import { Backdrop, CardActionArea, Dialog, Divider, Grid } from "@material-ui/core";
-import { CSSProperties } from "@material-ui/styles";
+import { faBed, faCalendar, faChild, faUser } from "@fortawesome/free-solid-svg-icons";
+import { Grid } from "@material-ui/core";
 import Axios from "axios";
 import { format, parseISO } from "date-fns";
 import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
-import Slider from "react-slick";
 import {
+  AboutHotel,
   CustomButton,
+  Footer,
   HotelDetailsSlider,
   IconText,
   Navbar,
   ProgressCircle,
-  Rating,
   RoomAccordion,
   ServicesToolbar,
-  SliderArrow,
-  Footer,
   Text,
-  AboutHotel,
 } from "../../components";
 import { Colors } from "../../styles";
 import {
   convertURLToReservationParams,
   formatAsCurrency,
-  getHotelImages,
-  getHotelStars,
   getMinRate,
   HotelBedAPI,
   proxyUrl,
   Routes,
-  scrollToBottom,
   selectCurrentCity,
   selectHotelDetail,
   selectHotelReservationParams,
-  selectRoomAccordionExpanded,
 } from "../../utils";
 import {
   getHotelBedHeaders,
@@ -52,7 +37,6 @@ import {
 import {
   setHotelDetail,
   setOpenRedirecDialog,
-  setRoomAccordionExpanded,
   updateReservationParams,
 } from "../../utils/store/hotel-slice";
 import { HotelBooking, HotelBookingParams } from "../../utils/types/hotel-types";
@@ -82,10 +66,6 @@ export function HotelDetails() {
   const roomAnchorEl = useRef(null);
 
   const dispatch = useDispatch();
-
-  const [limitedAbout, setLimitedAbout] = useState(true);
-
-  const allRoomAccordionsExpanded = useSelector(selectRoomAccordionExpanded);
 
   const [viewerOpen, setViewerOpen] = useState(false);
 
@@ -135,18 +115,6 @@ export function HotelDetails() {
     });
   }
 
-  function initComponentTest() {
-    reservationParams = convertURLToReservationParams(
-      location.search,
-      geolocation,
-      "hotel"
-    );
-
-    dispatch(updateReservationParams(reservationParams));
-
-    setLoading(false);
-  }
-
   function fetchHotelAvailability() {
     /**
      * Search by hotel code is a filter. The API only allows
@@ -175,25 +143,8 @@ export function HotelDetails() {
     history.push(Routes.HOTELS);
   }
 
-  function getUrlParamsArray() {
-    let kvp: string[][] = [[]];
-
-    for (const pair of Array.from(query.entries())) {
-      kvp.push(pair);
-    }
-    return kvp;
-  }
-
-  function isFirstRender() {
-    return firstRender.current;
-  }
-
   function useQuery() {
     return new URLSearchParams(location.search);
-  }
-
-  function getPhoneList() {
-    return hotel.phones.map((phone) => phone.phoneNumber).join(" | ");
   }
 
   function getOccupancyText(param: "room" | "adult") {

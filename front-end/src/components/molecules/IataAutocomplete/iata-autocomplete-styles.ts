@@ -23,6 +23,7 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
     borderRadius: "10px",
     "& .MuiOutlinedInput-root": {
       borderRadius: "10px",
+      fontFamily: Font.Family,
       "&:hover fieldset": {
         borderColor: "#cecece",
       },
