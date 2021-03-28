@@ -40,11 +40,11 @@ export const Navbar: FunctionComponent<Navbar> = ({
       fetchNewAccessToken()
         .then((res) => {
           updateAccessToken(res.data);
-          getCityPredictions();
+          // getCityPredictions();
         })
         .catch((error) => console.log(error));
     } else {
-      getCityPredictions();
+      // getCityPredictions();
     }
   }, [searchQuery]);
 

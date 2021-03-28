@@ -1,13 +1,9 @@
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addDays, format } from "date-fns";
+import { addDays } from "date-fns";
+import { getDefaultGeolocation } from "../functions";
 import { hotelPlaceholder } from "../placeholders";
-import {
-  HotelBooking,
-  HotelBookingParams,
-  HotelPax,
-  HotelSearch,
-} from "../types/hotel-types";
+import { HotelBooking, HotelBookingParams, HotelCoordinates } from "../types/hotel-types";
+import { IATALocation } from "../types/location-types";
 
 interface HotelReducer {
   reservationParams: HotelBookingParams;
@@ -16,6 +12,8 @@ interface HotelReducer {
   openRedirecDialog: boolean;
   isHotelDetailsBlurred: boolean;
 }
+
+const defaultGeolocation: IATALocation = getDefaultGeolocation();
 
 const initialStateReservationParams = {
   stay: {
@@ -32,8 +30,8 @@ const initialStateReservationParams = {
   ],
 
   geolocation: {
-    longitude: 2.3522,
-    latitude: 48.8566,
+    longitude: Number(defaultGeolocation.lon),
+    latitude: Number(defaultGeolocation.lat),
     radius: 15,
     unit: "km",
   },
@@ -78,6 +76,13 @@ const hotelSlice = createSlice({
       },
     },
 
+    updateHotelCoordinates(state, action: PayloadAction<HotelCoordinates>) {
+      state.reservationParams.geolocation = {
+        ...state.reservationParams.geolocation,
+        ...action.payload,
+      };
+    },
+
     setRoomAccordionExpanded(state, action: PayloadAction<boolean>) {
       state.allRoomAccordionsExpanded = action.payload;
     },
@@ -97,6 +102,7 @@ export const {
   setOpenRedirecDialog,
   blurHotelDetails,
   setRoomAccordionExpanded,
+  updateHotelCoordinates,
 } = hotelSlice.actions;
 
 export default hotelSlice.reducer;

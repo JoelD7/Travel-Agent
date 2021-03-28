@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IATALocation } from "../types/location-types";
 import { airportCityPlaceholder } from "../../utils";
+import { getDefaultGeolocation } from "../functions";
 
 interface SearchType {
   query: string;
@@ -17,7 +18,7 @@ const initialState: SearchType = {
   query: " ",
   cityPredictions: [],
   airportPredictions: [],
-  currentCity: airportCityPlaceholder,
+  currentCity: getDefaultGeolocation(),
 };
 
 const searchSlice = createSlice({

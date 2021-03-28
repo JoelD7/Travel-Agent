@@ -20,7 +20,7 @@ import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
 import {
   getFlightSearchURL,
-  isDateAfterThat,
+  isDateAfterOrEqual,
   muiDateFormatter,
   selectFlightFromAutocomplete,
   selectFlightParams,
@@ -181,7 +181,7 @@ export default function HomeFlightReservation() {
       case "departure":
         let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
 
-        if (flightSearch.return && isDateAfterThat(newDate, flightSearch.return)) {
+        if (flightSearch.return && isDateAfterOrEqual(newDate, flightSearch.return)) {
           dispatch(setFlightReturn(addDays(newDate, 1)));
         }
 

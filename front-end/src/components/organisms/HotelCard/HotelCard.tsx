@@ -37,7 +37,6 @@ export function HotelCard({ hotel }: HotelCard) {
   }
 
   function onHotelCardClick(hotel: HotelBooking) {
-    // dispatch(setHotelDetail(hotel));
     history.push(
       `${Routes.HOTELS}/${hotel.code}${convertReservationParamsToURLParams(
         reservationParams,
@@ -57,98 +56,102 @@ export function HotelCard({ hotel }: HotelCard) {
 
       {/* Content */}
       <Grid item className={style.hotelContentGrid} id="content">
-        {/* Title and rating */}
-        <Grid item xs={12} id="title">
-          <Grid
-            container
-            alignItems="center"
-            style={{ margin: "10px 0px", paddingLeft: "10px" }}
-          >
-            <Text component="h3" style={{ marginRight: "10px" }} bold>
-              {hotel.name.content}
-            </Text>
+        <Grid container>
+          {/* Title and rating */}
+          <Grid item xs={12} id="title">
+            <Grid
+              container
+              alignItems="center"
+              style={{ margin: "10px 0px", paddingLeft: "10px" }}
+            >
+              <Grid item xs={12}>
+                <Text component="h3" className={style.hotelName} bold>
+                  {capitalizeString(hotel.name.content, "each word")}
+                </Text>
+              </Grid>
 
-            <div>
-              <Rating readonly type="star" score={getHotelStars(hotel)} />
-            </div>
-          </Grid>
-        </Grid>
-
-        {/* Card content */}
-        <Grid container className={style.defaultContentContainer}>
-          {/* Price and details button */}
-          <Grid item className={style.priceAndDetailsGrid}>
-            <div>
-              <h4 style={{ textAlign: "center" }}>{`From $ ${formatAsDecimal(
-                getMinRate(hotel.rooms)
-              )}`}</h4>
-              <CustomButton
-                backgroundColor={Colors.PURPLE}
-                onClick={() => onHotelCardClick(hotel)}
-              >
-                View details
-              </CustomButton>
-            </div>
+              <Grid item xs={12}>
+                <Rating readonly type="star" score={getHotelStars(hotel)} />
+              </Grid>
+            </Grid>
           </Grid>
 
-          <Grid item style={{ height: "90%" }}>
-            <Divider orientation="vertical" />
+          {/* Card content */}
+          <Grid container className={style.defaultContentContainer}>
+            {/* Price and details button */}
+            <Grid item className={style.priceAndDetailsGrid}>
+              <div>
+                <h4 style={{ textAlign: "center" }}>{`From $ ${formatAsDecimal(
+                  getMinRate(hotel.rooms)
+                )}`}</h4>
+                <CustomButton
+                  backgroundColor={Colors.PURPLE}
+                  onClick={() => onHotelCardClick(hotel)}
+                >
+                  View details
+                </CustomButton>
+              </div>
+            </Grid>
+
+            <Grid item style={{ height: "90%" }}>
+              <Divider orientation="vertical" />
+            </Grid>
+
+            {/* Contact and address */}
+            <Grid item className={style.addressContactGrid}>
+              <div>
+                <p className={style.cardText}>
+                  <b>Hotel info</b>
+                </p>
+
+                <IconText
+                  text={hotel.phones[0].phoneNumber}
+                  icon={faPhone}
+                  style={{ marginBottom: "5px" }}
+                />
+
+                <IconText
+                  text={capitalizeString(getFormattedAddress(hotel), "full sentence")}
+                  icon={faMapMarkerAlt}
+                />
+              </div>
+            </Grid>
           </Grid>
 
-          {/* Contact and address */}
-          <Grid item className={style.addressContactGrid}>
-            <div>
-              <p className={style.cardText}>
-                <b>Hotel info</b>
-              </p>
+          {/* Card content for SM size */}
+          <Grid container className={style.smContentContainer}>
+            {/* Price and details button */}
+            <Grid item xs={12}>
+              <div style={{ paddingLeft: "10px" }}>
+                <IconText
+                  text={hotel.phones[0].phoneNumber}
+                  icon={faPhone}
+                  style={{ marginBottom: "5px" }}
+                />
 
-              <IconText
-                text={hotel.phones[0].phoneNumber}
-                icon={faPhone}
-                style={{ marginBottom: "5px" }}
-              />
+                <IconText
+                  text={capitalizeString(getFormattedAddress(hotel), "full sentence")}
+                  icon={faMapMarkerAlt}
+                />
+              </div>
+            </Grid>
 
-              <IconText
-                text={capitalizeString(getFormattedAddress(hotel), "full sentence")}
-                icon={faMapMarkerAlt}
-              />
-            </div>
-          </Grid>
-        </Grid>
-
-        {/* Card content for SM size */}
-        <Grid container className={style.smContentContainer}>
-          {/* Price and details button */}
-          <Grid item xs={12}>
-            <div style={{ paddingLeft: "10px" }}>
-              <IconText
-                text={hotel.phones[0].phoneNumber}
-                icon={faPhone}
-                style={{ marginBottom: "5px" }}
-              />
-
-              <IconText
-                text={capitalizeString(getFormattedAddress(hotel), "full sentence")}
-                icon={faMapMarkerAlt}
-              />
-            </div>
-          </Grid>
-
-          <Grid item xs={12} style={{ padding: "10px" }}>
-            <Grid container>
-              <Text component="h3" bold>{`$ From ${formatAsDecimal(
-                getMinRate(hotel.rooms)
-              )}`}</Text>
-              <CustomButton
-                style={{
-                  margin: "auto 0px auto auto",
-                  fontSize: "16px",
-                }}
-                backgroundColor={Colors.PURPLE}
-                onClick={() => history.push(`${Routes.HOTELS}/${hotel.code}`)}
-              >
-                View details
-              </CustomButton>
+            <Grid item xs={12} style={{ padding: "10px" }}>
+              <Grid container>
+                <Text component="h3" bold>{`$ From ${formatAsDecimal(
+                  getMinRate(hotel.rooms)
+                )}`}</Text>
+                <CustomButton
+                  style={{
+                    margin: "auto 0px auto auto",
+                    fontSize: "16px",
+                  }}
+                  backgroundColor={Colors.PURPLE}
+                  onClick={() => history.push(`${Routes.HOTELS}/${hotel.code}`)}
+                >
+                  View details
+                </CustomButton>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

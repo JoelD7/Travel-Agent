@@ -39,6 +39,7 @@ import {
   proxyUrl,
   Routes,
   scrollToBottom,
+  selectCurrentCity,
   selectHotelDetail,
   selectHotelReservationParams,
   selectRoomAccordionExpanded,
@@ -54,6 +55,7 @@ import {
   updateReservationParams,
 } from "../../utils/store/hotel-slice";
 import { HotelBooking, HotelBookingParams } from "../../utils/types/hotel-types";
+import { IATALocation } from "../../utils/types/location-types";
 import { hotelDetailsStyles } from "./hotelDetails-styles";
 
 interface RoomAccordion {
@@ -88,6 +90,8 @@ export function HotelDetails() {
 
   const firstRender = useRef(true);
 
+  const geolocation: IATALocation = useSelector(selectCurrentCity);
+
   useEffect(() => {
     initComponent();
 
@@ -95,7 +99,11 @@ export function HotelDetails() {
   }, []);
 
   function initComponent() {
-    reservationParams = convertURLToReservationParams(location.search, "hotel");
+    reservationParams = convertURLToReservationParams(
+      location.search,
+      geolocation,
+      "hotel"
+    );
 
     dispatch(updateReservationParams(reservationParams));
 
@@ -127,7 +135,11 @@ export function HotelDetails() {
   }
 
   function initComponentTest() {
-    reservationParams = convertURLToReservationParams(location.search, "hotel");
+    reservationParams = convertURLToReservationParams(
+      location.search,
+      geolocation,
+      "hotel"
+    );
 
     dispatch(updateReservationParams(reservationParams));
 

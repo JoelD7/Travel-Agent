@@ -1,8 +1,6 @@
-import { parseISO } from "date-fns";
-import { HotelAmenity } from "..";
 import { EventType } from "../types";
-import { HotelBooking, HotelAvailability } from "../types/hotel-types";
-import { AirportCity, IATALocation } from "../types/location-types";
+import { HotelAvailability, HotelBooking } from "../types/hotel-types";
+import { IATALocation } from "../types/location-types";
 import { Trip } from "../types/trip-types";
 
 export const restaurantsPlaceholder: RestaurantSearch[] = [
@@ -2445,6 +2443,7 @@ export const hotelsPlaceholder: HotelAvailability = {
 export const hotelPlaceholder: HotelBooking = {
   checkIn: "2021-06-15",
   checkOut: "2021-06-16",
+  S2C: "4*",
   code: 128537,
   name: {
     content: "Coco Key Hotel and Water Park Resort",

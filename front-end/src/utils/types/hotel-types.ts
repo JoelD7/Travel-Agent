@@ -42,6 +42,7 @@ export interface HotelBooking {
   cancellationAmount?: number;
   countryCode: string;
   stateCode?: string;
+  S2C: string;
   city: {
     content: string;
   };
@@ -63,6 +64,11 @@ export interface HotelBooking {
   }[];
   images: HotelImage[];
   rooms: HotelRooms[];
+}
+
+export interface HotelCoordinates {
+  longitude: number;
+  latitude: number;
 }
 
 export interface HotelRooms {

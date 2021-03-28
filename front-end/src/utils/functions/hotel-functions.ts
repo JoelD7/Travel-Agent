@@ -1,4 +1,4 @@
-import { addDays, format, parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { Routes } from "..";
 import { HotelBedAPI } from "../external-apis";
 import {
@@ -9,13 +9,28 @@ import {
   HotelRooms,
 } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
-import { formatAsDecimal } from "./functions";
 
 export function getHotelStars(hotel: HotelBooking) {
-  if (hotel.categoryCode) {
-    return Number(hotel.categoryCode.split("EST")[0]);
+  console.log(hotel);
+  let stars = Number(hotel.categoryCode.split("EST")[0]);
+
+  if (isNaN(stars)) {
+    for (const char of hotel.categoryName) {
+      if (char === " ") {
+        continue;
+      }
+
+      if (Number.isFinite(Number(char))) {
+        stars = Number(char);
+      }
+    }
+
+    if (hotel.categoryName.includes("HALF")) {
+      stars = stars + 0.5;
+    }
   }
-  return Number(hotel.category.code.split("EST")[0]);
+
+  return stars;
 }
 
 export function getHotelImages(hotel: HotelBooking) {
@@ -30,7 +45,7 @@ export function getHotelImages(hotel: HotelBooking) {
 
 export function convertReservationParamsToURLParams(
   reservationParams: HotelBookingParams,
-  city: IATALocation,
+  // city: IATALocation,
   page: "hotel" | "hotelDetails"
 ): string {
   let params = [];
@@ -60,8 +75,8 @@ export function convertReservationParamsToURLParams(
     params.push(`paxes=${paxes}`);
   }
 
-  params.push(`longitude=${city.lon}`);
-  params.push(`latitude=${city.lat}`);
+  params.push(`longitude=${longitude}`);
+  params.push(`latitude=${latitude}`);
   params.push(`radius=${radius}`);
   params.push(`unit=${unit}`);
 
@@ -76,8 +91,17 @@ export function convertReservationParamsToURLParams(
   return "?" + params.sort().join("&");
 }
 
+/**
+ *
+ * @param urlParams
+ * @param geolocation is necesarry to prevent the situation in which the
+ * coordinates in the URL are outdated.
+ * @param page
+ * @returns
+ */
 export function convertURLToReservationParams(
   urlParams: string,
+  geolocation: IATALocation,
   page: "hotel" | "hotelDetails"
 ): HotelBookingParams {
   let reservationParams: HotelBookingParams;
@@ -105,8 +129,8 @@ export function convertURLToReservationParams(
       },
     ],
     geolocation: {
-      latitude: Number(parameters.latitude),
-      longitude: Number(parameters.longitude),
+      latitude: Number(geolocation.lat),
+      longitude: Number(geolocation.lon),
       radius: Number(parameters.radius),
       unit: parameters.unit,
     },
@@ -156,7 +180,10 @@ export function getRoomTotalPrice(rate: HotelRoomRate): number {
   let total: number = Number(rate.net);
 
   if (rate.taxes) {
-    total += Number(rate.taxes.taxes[0].amount);
+    let taxes = Number(rate.taxes.taxes[0].amount);
+    if (!isNaN(taxes)) {
+      total += Number(rate.taxes.taxes[0].amount);
+    }
   }
 
   return Number(total);
@@ -166,7 +193,8 @@ export function getMinRate(rooms: HotelRooms[]): number {
   let rates: HotelRoomRate[] = [];
 
   rooms.forEach((room) => {
-    rates.concat(room.rates);
+    let buffer = rates.concat(room.rates);
+    rates = buffer;
   });
 
   let minRate = rates.reduce((prev: HotelRoomRate, cur: HotelRoomRate) => {
@@ -176,16 +204,21 @@ export function getMinRate(rooms: HotelRooms[]): number {
     return totalPrev < totalCur ? prev : cur;
   }, rooms[0].rates[0]);
 
-  return getRoomTotalPrice(minRate);
+  let rateTotals: number[] = rates
+    .map((rate) => getRoomTotalPrice(rate))
+    .sort((a, b) => a - b);
+
+  console.log("rateTotals: ", rateTotals);
+
+  return rateTotals[0];
 }
 
 export function getHotelSearchURL(
-  reservationParams: HotelBookingParams,
-  city: IATALocation
+  reservationParams: HotelBookingParams
+  // city: IATALocation
 ): string {
   return `${Routes.HOTELS}${convertReservationParamsToURLParams(
     reservationParams,
-    city,
     "hotel"
   )}&sortBy=Stars | desc&page=${1}&pageSize=${20}`;
 }

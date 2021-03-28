@@ -84,7 +84,7 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
 
     pageContainer: {
       width: "85%",
-      margin: "auto",
+      margin: "auto auto 150px auto",
       [theme.breakpoints.down(500)]: {
         width: "93%",
       },

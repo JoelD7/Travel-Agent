@@ -193,7 +193,7 @@ export function addFlightDuration(flight: Flight) {
   return hours * 60 + minutes;
 }
 
-export function convertFlightToURLParams(flight: FlightSearch, city: IATALocation) {
+export function convertFlightToURLParams(flight: FlightSearch) {
   let params: string[] = [];
 
   params.push(`departure=${format(flight.departure, "yyyy-MM-dd")}`);

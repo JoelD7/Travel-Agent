@@ -52,22 +52,21 @@ import {
   getMinRate,
   selectHotelReservationParams,
   selectOpenRedirecDialog,
+  selectCurrentCity,
   formatAsDecimal,
-  isDateAfterThat,
-} from "../../utils";
-import { proxyUrl } from "../../utils/external-apis";
-import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
-import {
-  setOpenRedirecDialog,
-  updateReservationParams,
-} from "../../utils/store/hotel-slice";
-import {
+  isDateAfterOrEqual,
   HotelAvailability,
   HotelBooking,
   HotelBookingParams,
   HotelPax,
   Occupancy,
-} from "../../utils/types/hotel-types";
+  setOpenRedirecDialog,
+  updateReservationParams,
+} from "../../utils";
+import { proxyUrl } from "../../utils/external-apis";
+import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
+import { IATALocation } from "../../utils/types/location-types";
+
 import { hotelsStyles } from "./hotels-styles";
 
 interface AvailabilityParams {
@@ -246,20 +245,23 @@ export function Hotels() {
   const [page, setPage] = useState(getPage());
 
   const openRedirecDialog: boolean = useSelector(selectOpenRedirecDialog);
+  const geolocation: IATALocation = useSelector(selectCurrentCity);
 
   const history = useHistory();
-
-  const city = "Paris";
 
   const firstRender = useRef(true);
 
   useEffect(() => {
-    getCityImage(city).then((res) => {
+    getCityImage(geolocation.city).then((res) => {
       setImage(String(res));
     });
 
     if (isURLWithParams()) {
-      reservationParams = convertURLToReservationParams(location.search, "hotel");
+      reservationParams = convertURLToReservationParams(
+        location.search,
+        geolocation,
+        "hotel"
+      );
 
       dispatch(updateReservationParams(reservationParams));
       searchHotels(reservationParams);
@@ -271,9 +273,15 @@ export function Hotels() {
 
   useEffect(() => {
     if (!isFirstRender()) {
+      setLoading(true);
+
+      getCityImage(geolocation.city).then((res) => {
+        setImage(String(res));
+      });
+
       searchHotels(reservationParams);
     }
-  }, [state.stars]);
+  }, [state.stars, geolocation]);
 
   //On sortOption, page, pageSize change
   useEffect(() => {
@@ -605,7 +613,7 @@ export function Hotels() {
 
     if (
       param === "checkIn" &&
-      isDateAfterThat(newDate, reservationParams.stay.checkOut)
+      isDateAfterOrEqual(newDate, reservationParams.stay.checkOut)
     ) {
       stay = { ...stay, ["checkOut"]: addDays(newDate, 2) };
     }
@@ -737,7 +745,7 @@ export function Hotels() {
   return (
     <div className={style.mainContainer}>
       <Helmet>
-        <title>Hotels in Paris</title>
+        <title>{`Hotels in ${geolocation.city}`}</title>
       </Helmet>
 
       <Navbar />
@@ -768,7 +776,7 @@ export function Hotels() {
                     color="white"
                     bold
                   >
-                    Hotels in Paris
+                    {`Hotels in ${geolocation.city}`}
                   </Text>
                 </Grid>
               </Grid>

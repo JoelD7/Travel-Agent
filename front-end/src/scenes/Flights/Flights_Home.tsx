@@ -35,7 +35,7 @@ import { Colors } from "../../styles";
 import {
   getCityImage,
   getFlightSearchURL,
-  isDateAfterThat,
+  isDateAfterOrEqual,
   muiDateFormatter,
   selectCurrentCity,
   selectFlightFromAutocomplete,
@@ -234,7 +234,7 @@ export function Flights_Home() {
 
   const [currency, setCurrency] = useState<string>("");
 
-  const currentCity: IATALocation = useSelector(selectCurrentCity);
+  const city: IATALocation = useSelector(selectCurrentCity);
 
   const [image, setImage] = useState<string>("");
 
@@ -244,11 +244,11 @@ export function Flights_Home() {
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
   useEffect(() => {
-    getCityImage(currentCity.city).then((res) => {
+    getCityImage(city.city).then((res) => {
       setImage(String(res));
     });
 
-    fetchGreatFlightDeals(currentCity, flightSearch.departure)
+    fetchGreatFlightDeals(city, flightSearch.departure)
       .then((res) => {
         setCurrency(res.data.meta.currency);
         let deals = res.data.data;
@@ -303,7 +303,7 @@ export function Flights_Home() {
       case "departure":
         let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
 
-        if (flightSearch.return && isDateAfterThat(newDate, flightSearch.return)) {
+        if (flightSearch.return && isDateAfterOrEqual(newDate, flightSearch.return)) {
           dispatch(setFlightReturn(addDays(newDate, 1)));
         }
 
@@ -318,7 +318,7 @@ export function Flights_Home() {
   return (
     <div className={style.mainContainer}>
       <Helmet>
-        <title>{`Flights to ${currentCity.city}`}</title>
+        <title>{`Flights to ${city.city}`}</title>
       </Helmet>
 
       <Navbar />
@@ -336,7 +336,7 @@ export function Flights_Home() {
         {/* Reservation Container */}
         <Grid container spacing={2} className={style.reservationContainer}>
           <Grid item xs={12}>
-            <h2>{`Find the best flight to ${currentCity.city}`}</h2>
+            <h2>{`Find the best flight to ${city.city}`}</h2>
           </Grid>
 
           {/* Flight type toolbar */}

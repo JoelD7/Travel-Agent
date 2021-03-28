@@ -4,7 +4,6 @@ import { Shadow } from "../../../styles";
 export const hotelCardStyles = makeStyles((theme: Theme) => ({
   addressContactGrid: {
     display: "flex",
-    justifyContent: "center",
     padding: "0px 10px 10px 10px",
     width: "49%",
     alignItems: "center",
@@ -16,7 +15,7 @@ export const hotelCardStyles = makeStyles((theme: Theme) => ({
     fontSize: "14px",
   },
   defaultContentContainer: {
-    height: "73%",
+    alignSelf: "flex-end",
     [theme.breakpoints.down(950)]: {
       display: "none",
     },
@@ -34,6 +33,7 @@ export const hotelCardStyles = makeStyles((theme: Theme) => ({
     },
   },
   hotelContentGrid: {
+    padding: "5px",
     width: "66%",
 
     [theme.breakpoints.down(950)]: {
@@ -49,7 +49,7 @@ export const hotelCardStyles = makeStyles((theme: Theme) => ({
     borderBottomLeftRadius: "10px",
     height: "100%",
     width: "100%",
-    maxHeight: "193px",
+    maxHeight: "100%",
 
     [theme.breakpoints.down(950)]: {
       borderRadius: "10px 10px 0px 0px",
@@ -58,11 +58,18 @@ export const hotelCardStyles = makeStyles((theme: Theme) => ({
   },
   hotelImageGrid: {
     width: "33%",
+    maxHeight: "230px",
 
     [theme.breakpoints.down(950)]: {
       width: "100%",
       height: "210px",
     },
+  },
+  hotelName: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    marginRight: "10px",
   },
   priceAndDetailsGrid: {
     display: "flex",

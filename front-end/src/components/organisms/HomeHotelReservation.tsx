@@ -23,7 +23,7 @@ import { homeStyles } from "../../styles/Home/home-styles";
 import {
   getHotelSearchURL,
   HotelBookingParams,
-  isDateAfterThat,
+  isDateAfterOrEqual,
   muiDateFormatter,
   selectHotelReservationParams,
 } from "../../utils";
@@ -151,7 +151,7 @@ export default function HomeHotelReservation() {
 
     let newHotel = { ...hotel, [param]: newDate };
 
-    if (param === "checkIn" && isDateAfterThat(newDate, checkOut)) {
+    if (param === "checkIn" && isDateAfterOrEqual(newDate, checkOut)) {
       newHotel = { ...newHotel, ["checkOut"]: addDays(newDate, 2) };
     }
 

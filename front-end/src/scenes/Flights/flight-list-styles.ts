@@ -150,6 +150,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   pageContentContainer: {
     width: "85%",
     margin: "auto",
+    marginBottom: "60px",
     position: "relative",
     bottom: "10px",
     [theme.breakpoints.down(1318)]: {

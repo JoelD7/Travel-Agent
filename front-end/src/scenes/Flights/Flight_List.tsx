@@ -39,6 +39,7 @@ import {
   Footer,
   IataAutocomplete,
   Navbar,
+  NotAvailableCard,
   Pagination,
   PriceRange,
   ProgressCircle,
@@ -56,7 +57,7 @@ import {
   getFlightClassForAPI,
   getMaxDate,
   getMinDate,
-  isDateAfterThat,
+  isDateAfterOrEqual,
   isDateBetweenRange,
   muiDateFormatter,
   Routes,
@@ -225,6 +226,8 @@ export function Flight_List() {
 
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
 
+  const [occupancyParamsChanged, setOccupancyParamsChanged] = useState(false);
+
   const location = useLocation();
 
   const query = useQuery();
@@ -295,6 +298,13 @@ export function Flight_List() {
     flightSearch.class,
   ]);
 
+  useEffect(() => {
+    if (!firstRender) {
+      console.log("setOccupancyParamsChanged(true)");
+      setOccupancyParamsChanged(true);
+    }
+  }, [flightFromAutocomplete, flightToAutocomplete]);
+
   // Date range filter change
   useEffect(() => {
     if (!firstRender) {
@@ -326,7 +336,10 @@ export function Flight_List() {
         })
           .then((res) => {
             dispatch(setFlightDictionaries(res.data.dictionaries));
-            filterSimilarFlights(res.data.data);
+            let flightsFromResponse = res.data.data;
+
+            filterSimilarFlights(flightsFromResponse);
+
             setLoading(false);
             setLoadingOnMount(false);
           })
@@ -366,6 +379,9 @@ export function Flight_List() {
      * itinerary, it means that the user searched
      * round flights.
      */
+    if (flightsParam.length === 0) {
+      return false;
+    }
     return flightsParam[0].itineraries.length > 1;
   }
 
@@ -418,8 +434,11 @@ export function Flight_List() {
     } else {
       setFlights(buffer);
     }
-
     setAllFlights(buffer);
+
+    setTimeout(() => {
+      setFirstRender(true);
+    }, 250);
   }
 
   function setDatimeSliderValues(flightsParam: Flight[]) {
@@ -452,7 +471,6 @@ export function Flight_List() {
       //#endregion
 
       if (areReturnFlightsAvlb(flightsParam)) {
-        console.log("hey");
         let lastSegmentIndexReturn: number = flight.itineraries[1].segments.length - 1;
         returnDepartureDatetimes.push(
           new Date(flight.itineraries[1].segments[0].departure.at)
@@ -497,7 +515,6 @@ export function Flight_List() {
 
     //Return
     if (areReturnFlightsAvlb(flightsParam)) {
-      console.log("hey again");
       minReturnDepartureDatetime = returnDepartureDatetimes.reduce(
         (prev, cur) => getMinDate(prev, cur),
         addDays(new Date(), 365)
@@ -626,7 +643,6 @@ export function Flight_List() {
 
     switch (option) {
       case "Price | desc":
-        console.log(unsortedFlights);
         sortedFlights = unsortedFlights.sort((a, b) => b.price.total - a.price.total);
         break;
       case "Price | asc":
@@ -929,8 +945,13 @@ export function Flight_List() {
     );
   }
 
+  function areAnyFlightsReturned(): boolean {
+    return flights.length > 0;
+  }
+
   function onSearchFlightsClick() {
     updateURL();
+    setOccupancyParamsChanged(false);
 
     if (isRequiredFieldEmpty()) {
       setOpenRequiredFieldSnack(true);
@@ -1013,6 +1034,7 @@ export function Flight_List() {
     } else {
       dispatch(setFlightInfants(e.target.value as number));
     }
+    setOccupancyParamsChanged(true);
   }
 
   function isLoadingEnabled() {
@@ -1036,11 +1058,13 @@ export function Flight_List() {
   }
 
   function onDateChange(date: MaterialUiPickersDate, field: "departure" | "return") {
+    setOccupancyParamsChanged(true);
+
     switch (field) {
       case "departure":
         let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
 
-        if (flightSearch.return && isDateAfterThat(newDate, flightSearch.return)) {
+        if (flightSearch.return && isDateAfterOrEqual(newDate, flightSearch.return)) {
           dispatch(setFlightReturn(addDays(newDate, 1)));
         }
 
@@ -1223,12 +1247,11 @@ export function Flight_List() {
                 <CustomButton
                   backgroundColor={Colors.GREEN}
                   style={{
-                    width: "140px",
                     boxShadow: Shadow.DARK,
                   }}
                   onClick={() => onSearchFlightsClick()}
                 >
-                  Search
+                  {`${occupancyParamsChanged ? "Update search" : "Search"}`}
                 </CustomButton>
               </Grid>
             </ThemeProvider>
@@ -1286,11 +1309,20 @@ export function Flight_List() {
 
               {!loadingOnMount && (
                 <Grid item xs={12} style={loading ? { filter: "blur(4px)" } : {}}>
-                  {flights
-                    .slice(page * pageSize, page * pageSize + pageSize)
-                    .map((flight, i) => (
-                      <CardFlight variant="regular" key={i} flight={flight} />
-                    ))}
+                  {areAnyFlightsReturned() ? (
+                    <div>
+                      {flights
+                        .slice(page * pageSize, page * pageSize + pageSize)
+                        .map((flight, i) => (
+                          <CardFlight variant="regular" key={i} flight={flight} />
+                        ))}
+                    </div>
+                  ) : (
+                    <NotAvailableCard title="Oops...">
+                      There are no available flights for the selected booking parameters.
+                      Try with another ones.
+                    </NotAvailableCard>
+                  )}
                 </Grid>
               )}
 

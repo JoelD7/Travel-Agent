@@ -18,14 +18,15 @@ import {
   setCurrentCity,
   updateAirportPredictions,
   updateCityPredictions,
-} from "../../../utils";
-import {
-  FlightSearch,
   setFlightFrom,
+  updateHotelCoordinates,
+  FlightSearch,
   setFlightFromAutocomplete,
   setFlightTo,
   setFlightToAutocomplete,
-} from "../../../utils/store/flight-slice";
+  persistGeolocationInLocalStorage,
+} from "../../../utils";
+
 import { IATALocation } from "../../../utils/types/location-types";
 import { CustomTF } from "../../atoms";
 import { iataAutocompleteStyles } from "./iata-autocomplete-styles";
@@ -157,18 +158,30 @@ export function IataAutocomplete({
     if (type === "city") {
       batchedActions.push(updateCityPredictions(predictions));
 
+      //This var may be undefined
       if (autocomplete) {
+        persistGeolocationInLocalStorage(autocomplete);
+
+        batchedActions.push(setFlightFrom(autocomplete.code));
+        batchedActions.push(setFlightFromAutocomplete(autocomplete));
+        batchedActions.push(
+          updateHotelCoordinates({
+            latitude: Number(autocomplete.lat),
+            longitude: Number(autocomplete.lon),
+          })
+        );
+
         batchedActions.push(setCurrentCity(autocomplete));
       }
     } else {
       batchedActions.push(updateAirportPredictions(predictions));
 
       if (flightDirection === "from") {
-        batchedActions.push(setFlightFromAutocomplete(autocomplete));
         batchedActions.push(setFlightFrom(text));
+        batchedActions.push(setFlightFromAutocomplete(autocomplete));
       } else {
-        batchedActions.push(setFlightToAutocomplete(autocomplete));
         batchedActions.push(setFlightTo(text));
+        batchedActions.push(setFlightToAutocomplete(autocomplete));
       }
     }
 

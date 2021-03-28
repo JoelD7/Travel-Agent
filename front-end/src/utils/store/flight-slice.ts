@@ -1,6 +1,7 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays, format } from "date-fns";
+import { getDefaultGeolocation } from "../functions";
 import { airportCityPlaceholder, airportCityPlaceholderTwo } from "../placeholders";
 import { FlightTypes } from "../types";
 import { IATALocation } from "../types/location-types";
@@ -22,16 +23,20 @@ export interface FlightSearch {
   [key: string]: FlightSearch[keyof FlightSearch];
 }
 
+const defaultGeolocation: IATALocation = getDefaultGeolocation();
+
 const initialState: FlightSearch = {
   departure: addDays(new Date(), 1),
   return: addDays(new Date(), 3),
   flightType: FlightTypes.ONE_WAY,
-  from: airportCityPlaceholder.code,
-  flightListURL: `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=MIA&destinationLocationCode=MUC&departureDate=${format(
+  from: defaultGeolocation.code,
+  flightListURL: `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${
+    defaultGeolocation.code
+  }&destinationLocationCode=MUC&departureDate=${format(
     addDays(new Date(), 1),
     "yyyy-MM-dd"
   )}&returnDate=${format(addDays(new Date(), 3), "yyyy-MM-dd")}&adults=${2}`,
-  flightFromAutocomplete: airportCityPlaceholder,
+  flightFromAutocomplete: defaultGeolocation,
   flightToAutocomplete: airportCityPlaceholderTwo,
   dictionaries: {
     carriers: {

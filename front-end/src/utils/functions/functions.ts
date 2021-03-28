@@ -9,6 +9,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { CSSProperties } from "@material-ui/styles";
 import { compareAsc, format } from "date-fns";
 import { iataCodes } from "../constants/iataCodes";
+import { airportCityPlaceholder } from "../placeholders";
 import { EventType } from "../types";
 import { IATALocation } from "../types/location-types";
 export * from "./flight-functions";
@@ -582,8 +583,24 @@ export function isDateBetweenRange(date: Date, range: Date[] | undefined) {
 }
 
 /**
- * Returns true if the first date is ater the second one.
+ * Returns true if the first date is after or equal the second one.
  */
-export function isDateAfterThat(date: Date, date2: Date): boolean {
-  return compareAsc(date, date2) === 1;
+export function isDateAfterOrEqual(date: Date, date2: Date): boolean {
+  return compareAsc(date, date2) >= 0;
+}
+
+export function persistGeolocationInLocalStorage(geolocation: IATALocation) {
+  localStorage.setItem("geoLocation", JSON.stringify(geolocation));
+}
+
+export function getDefaultGeolocation(): IATALocation {
+  let defaultGeolocation: IATALocation;
+  let savedItem = localStorage.getItem("geoLocation");
+
+  if (savedItem === null) {
+    return airportCityPlaceholder;
+  } else {
+    defaultGeolocation = JSON.parse(savedItem);
+    return defaultGeolocation;
+  }
 }
