@@ -59,19 +59,6 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
       zIndex: 2,
       left: "1096px",
     },
-    aboutHotelContainer: {
-      borderRadius: "10px",
-      backgroundColor: "white",
-      padding: "35px",
-      boxShadow: Shadow.MEDIUM,
-    },
-
-    limitedAboutText: {
-      display: "-webkit-box",
-      WebkitLineClamp: 6,
-      WebkitBoxOrient: "vertical",
-      overflow: "hidden",
-    },
     mainContainer: {
       fontFamily: Font.Family,
       backgroundColor: Colors.BACKGROUND,

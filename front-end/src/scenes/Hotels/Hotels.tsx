@@ -301,14 +301,7 @@ export function Hotels() {
         let hotelsForBooking: any[] = [];
 
         if (availability.hotels) {
-          /**
-           * This array should be sorted the same way as "hotelsDetails"
-           * in order to referencing the same hotels while iterating
-           * over both of these arrays.
-           */
-          hotelsForBooking = availability.hotels.sort(
-            (a: any, b: any) => a.code - b.code
-          );
+          hotelsForBooking = availability.hotels;
           fetchHotels({ availability, hotelsForBooking });
         } else {
           setNoHotelsAvailable(availability);
@@ -370,14 +363,8 @@ export function Hotels() {
   ) {
     const { availability, hotelsForBooking } = availabilityParams;
 
-    /**
-     * This array should be sorted the same way as "hotelsForBooking"
-     * in order to referencing the same hotels while iterating
-     * over both of these arrays.
-     */
-    let hotelsDetails = fetchHotelsRes.data.hotels.sort(
-      (a: any, b: any) => a.code - b.code
-    );
+    let hotelsDetails = fetchHotelsRes.data.hotels;
+
     let hotelAvailabilityTemp: HotelAvailability = {
       checkIn: availability.checkIn,
       checkOut: availability.checkOut,
@@ -428,7 +415,9 @@ export function Hotels() {
        * "hotelDetail".
        */
       const { rooms, ...hotelDetail } = hotelDetailBuffer;
-      const hotelForBooking = hotelsForBooking[i];
+      const hotelForBooking = hotelsForBooking.filter(
+        (hb) => hb.code === hotelDetail.code
+      )[0];
 
       hotels.push({ ...hotelForBooking, ...hotelDetail });
     }

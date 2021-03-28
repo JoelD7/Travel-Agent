@@ -9,3 +9,4 @@ export { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopove
 export { RestaurantDetailsSlider } from "./RestaurantDetailsSlider/RestaurantDetailsSlider";
 export { Footer } from "./Footer/Footer";
 export { FlightListContent } from "./FlightListContent/FlightListContent";
+export { AboutHotel } from "./AboutHotel/AboutHotel";

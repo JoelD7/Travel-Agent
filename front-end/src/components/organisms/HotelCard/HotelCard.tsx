@@ -28,7 +28,6 @@ export function HotelCard({ hotel }: HotelCard) {
   const history = useHistory();
 
   const style = hotelCardStyles();
-  const dispatch = useDispatch();
 
   let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
@@ -46,13 +45,24 @@ export function HotelCard({ hotel }: HotelCard) {
   }
 
   return (
-    <Grid container id="card" className={style.hotelCard}>
+    <Grid
+      container
+      id="card"
+      className={style.hotelCard}
+      /**
+       * Hide card if hotel has no images. It doesn't make sense to show
+       * hotel info if the user cannot see the hotel.
+       */
+      style={!hotel.images ? { display: "none" } : {}}
+    >
       {/* Image */}
-      <Grid item className={style.hotelImageGrid} id="photo">
-        {hotel.images.length > 1 && (
-          <img src={`${getHotelImages(hotel)[0]}`} className={style.hotelImage} />
-        )}
-      </Grid>
+      {hotel.images && (
+        <Grid item className={style.hotelImageGrid} id="photo">
+          {hotel.images.length > 1 && (
+            <img src={`${getHotelImages(hotel)[0]}`} className={style.hotelImage} />
+          )}
+        </Grid>
+      )}
 
       {/* Content */}
       <Grid item className={style.hotelContentGrid} id="content">

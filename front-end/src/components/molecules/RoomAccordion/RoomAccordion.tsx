@@ -21,7 +21,7 @@ import {
   selectRoomAccordionExpanded,
   HotelBedAPI,
 } from "../../../utils";
-import { Text, IconText, CustomButton } from "../../atoms";
+import { Text, IconText, CustomButton, IconTP } from "../../atoms";
 import { setRoomAccordionExpanded } from "../../../utils/store/hotel-slice";
 import { RoomAccordionTitle } from "../RoomAccordionTitle/RoomAccordionTitle";
 
@@ -104,12 +104,7 @@ export function RoomAccordion({ hotel, room }: RoomAccordion) {
       <AccordionSummary
         style={{ display: "flex" }}
         expandIcon={
-          <IconText
-            backgroundColor={Colors.GREEN}
-            iconColor={Colors.BLUE}
-            size={28}
-            icon={faChevronDown}
-          ></IconText>
+          <IconTP icon={faChevronDown} backgroundColor={Colors.GREEN} size={28} />
         }
       >
         <RoomAccordionTitle room={room} />

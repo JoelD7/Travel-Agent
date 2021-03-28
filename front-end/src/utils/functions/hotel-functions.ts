@@ -11,7 +11,6 @@ import {
 import { IATALocation } from "../types/location-types";
 
 export function getHotelStars(hotel: HotelBooking) {
-  console.log(hotel);
   let stars = Number(hotel.categoryCode.split("EST")[0]);
 
   if (isNaN(stars)) {
@@ -208,7 +207,7 @@ export function getMinRate(rooms: HotelRooms[]): number {
     .map((rate) => getRoomTotalPrice(rate))
     .sort((a, b) => a - b);
 
-  console.log("rateTotals: ", rateTotals);
+  // console.log("rateTotals: ", rateTotals);
 
   return rateTotals[0];
 }
