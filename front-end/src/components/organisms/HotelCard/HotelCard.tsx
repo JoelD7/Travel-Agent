@@ -15,8 +15,8 @@ import {
   HotelBookingParams,
   Routes,
   selectHotelReservationParams,
+  setHotelDetail,
 } from "../../../utils";
-import { setHotelDetail } from "../../../utils/store/hotel-slice";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
 import { hotelCardStyles } from "./hotelCardStyles";
 
@@ -29,6 +29,8 @@ export function HotelCard({ hotel }: HotelCard) {
 
   const style = hotelCardStyles();
 
+  const dispatch = useDispatch();
+
   let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
   function getFormattedAddress(hotel: HotelBooking) {
@@ -36,6 +38,7 @@ export function HotelCard({ hotel }: HotelCard) {
   }
 
   function onHotelCardClick(hotel: HotelBooking) {
+    dispatch(setHotelDetail(hotel));
     history.push(
       `${Routes.HOTELS}/${hotel.code}${convertReservationParamsToURLParams(
         reservationParams,

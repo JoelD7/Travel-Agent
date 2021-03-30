@@ -604,3 +604,10 @@ export function getDefaultGeolocation(): IATALocation {
     return defaultGeolocation;
   }
 }
+
+/**
+ * Indicates if the value is in range(inclusive).
+ */
+export function isValueInRange(value: number, range: number[]): boolean {
+  return value >= range[0] && value <= range[1];
+}

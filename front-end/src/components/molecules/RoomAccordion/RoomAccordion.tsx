@@ -28,7 +28,10 @@ interface RoomAccordion {
   room: HotelRooms;
 }
 
-export function RoomAccordion({ hotel, room }: RoomAccordion) {
+export const RoomAccordion = React.memo(function Component({
+  hotel,
+  room,
+}: RoomAccordion) {
   const accordionStyles = makeStyles(() => ({
     accordionRoot: {
       backgroundColor: "white",
@@ -93,58 +96,62 @@ export function RoomAccordion({ hotel, room }: RoomAccordion) {
   }
 
   return (
-    <Accordion
-      key={room.code}
-      onChange={(e, isExpanded) => onAccordionChange(isExpanded)}
-      expanded={expanded}
-      classes={{ root: style.accordionRoot, rounded: style.accordionRounded }}
-    >
-      <AccordionSummary
-        style={{ display: "flex" }}
-        expandIcon={
-          <IconTP icon={faChevronDown} backgroundColor={Colors.GREEN} size={28} />
-        }
-      >
-        <RoomAccordionTitle room={room} />
-      </AccordionSummary>
+    <>
+      {hotel && (
+        <Accordion
+          key={room.code}
+          onChange={(e, isExpanded) => onAccordionChange(isExpanded)}
+          expanded={expanded}
+          classes={{ root: style.accordionRoot, rounded: style.accordionRounded }}
+        >
+          <AccordionSummary
+            style={{ display: "flex" }}
+            expandIcon={
+              <IconTP icon={faChevronDown} backgroundColor={Colors.GREEN} size={28} />
+            }
+          >
+            <RoomAccordionTitle room={room} />
+          </AccordionSummary>
 
-      <AccordionDetails style={{ background: "white" }}>
-        <Grid container>
-          {uniqueRates.map((rate, i) => (
-            <>
-              <Grid item xs={12}>
-                <Grid container alignItems="center">
-                  <Text style={{ marginLeft: "3px" }}>
-                    {capitalizeString(rate.boardName, "each word")}
-                  </Text>
-                </Grid>
-              </Grid>
+          <AccordionDetails style={{ background: "white" }}>
+            <Grid container>
+              {uniqueRates.map((rate, i) => (
+                <>
+                  <Grid item xs={12}>
+                    <Grid container alignItems="center">
+                      <Text style={{ marginLeft: "3px" }}>
+                        {capitalizeString(rate.boardName, "each word")}
+                      </Text>
+                    </Grid>
+                  </Grid>
 
-              <Grid item xs={12}>
-                <Grid container alignItems="center">
-                  <Text bold>Total: </Text>
-                  <Text style={{ marginLeft: "3px" }}>
-                    {formatAsCurrency(getRoomTotalPrice(rate))}
-                  </Text>
+                  <Grid item xs={12}>
+                    <Grid container alignItems="center">
+                      <Text bold>Total: </Text>
+                      <Text style={{ marginLeft: "3px" }}>
+                        {formatAsCurrency(getRoomTotalPrice(rate))}
+                      </Text>
 
-                  <CustomButton
-                    style={{ marginLeft: "auto" }}
-                    backgroundColor={Colors.PURPLE}
-                  >
-                    Book room
-                  </CustomButton>
-                </Grid>
-              </Grid>
+                      <CustomButton
+                        style={{ marginLeft: "auto" }}
+                        backgroundColor={Colors.PURPLE}
+                      >
+                        Book room
+                      </CustomButton>
+                    </Grid>
+                  </Grid>
 
-              {i < uniqueRates.length - 1 && (
-                <Grid item xs={12} style={{ margin: "15px" }}>
-                  <Divider style={{ backgroundColor: "#cecece" }} />
-                </Grid>
-              )}
-            </>
-          ))}
-        </Grid>
-      </AccordionDetails>
-    </Accordion>
+                  {i < uniqueRates.length - 1 && (
+                    <Grid item xs={12} style={{ margin: "15px" }}>
+                      <Divider style={{ backgroundColor: "#cecece" }} />
+                    </Grid>
+                  )}
+                </>
+              ))}
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+      )}
+    </>
   );
-}
+});

@@ -24,6 +24,7 @@ import {
   formatAsCurrency,
   getMinRate,
   HotelBedAPI,
+  isValueInRange,
   proxyUrl,
   Routes,
   selectCurrentCity,
@@ -49,7 +50,7 @@ interface RoomAccordion {
 
 export function HotelDetails() {
   const style = hotelDetailsStyles();
-  const hotel: HotelBooking = useSelector(selectHotelDetail);
+  const hotel: HotelBooking | undefined = useSelector(selectHotelDetail);
 
   let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
@@ -58,7 +59,7 @@ export function HotelDetails() {
 
   const query = useQuery();
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(hotel ? false : true);
 
   const history = useHistory();
 
@@ -68,16 +69,49 @@ export function HotelDetails() {
   const dispatch = useDispatch();
 
   const [viewerOpen, setViewerOpen] = useState(false);
+  const [renderedHeights, setRenderedHeights] = useState<number[]>([0]);
 
-  const firstRender = useRef(true);
+  const [cardsToRender, setCardsToRender] = useState<number>(3);
 
   const geolocation: IATALocation = useSelector(selectCurrentCity);
 
   useEffect(() => {
-    initComponent();
+    if (!hotel) {
+      initComponent();
+    }
 
-    // initComponentTest();
-  }, []);
+    window.addEventListener("scroll", roomAccordionRenderController, { passive: true });
+
+    return () => window.removeEventListener("scroll", roomAccordionRenderController);
+  }, [renderedHeights, cardsToRender]);
+
+  /**
+   * Controls how many RoomAccordion cards are rendered using the
+   * current scroll position in order to improve performance. When
+   * the scroll hits the bottom of the page, this function enables
+   * that more cards are rendered.
+   */
+  function roomAccordionRenderController() {
+    /**
+     * The difference between the maximum value for scoll in
+     * y-axis and the height of the page(this being the greater
+     * value).
+     */
+    const PAGE_HEIGHT_TO_SCROLL_DIF = window.innerHeight;
+    let scrollY = window.pageYOffset + PAGE_HEIGHT_TO_SCROLL_DIF;
+    let windowHeight = document.documentElement.offsetHeight;
+
+    let heightRange: number[] = [windowHeight - 100, windowHeight];
+    if (isValueInRange(scrollY, heightRange)) {
+      let lastRegisteredHeight: number = renderedHeights[renderedHeights.length - 1];
+      if (windowHeight > lastRegisteredHeight) {
+        let cardsToRenderBuffer: number = cardsToRender + 10;
+
+        setRenderedHeights([...renderedHeights, windowHeight]);
+        setCardsToRender(cardsToRenderBuffer);
+      }
+    }
+  }
 
   function initComponent() {
     reservationParams = convertURLToReservationParams(
@@ -157,33 +191,27 @@ export function HotelDetails() {
   }
 
   function goToRoomOptions() {
-    // dispatch(setRoomAccordionExpanded(true));
     //@ts-ignore
     roomAnchorEl.current.click();
-    // scrollToBottom();
-    // if (allRoomAccordionsExpanded) {
-    //   //@ts-ignore
-    //   roomAnchorEl.current.click();
-    //   scrollToBottom();
-    // } else {
-    //   setTimeout(() => {
-    //     //@ts-ignore
-    //     roomAnchorEl.current.click();
-    //     scrollToBottom();
-    //   }, 525);
-    // }
+  }
+
+  function areAllRoomsRendered(): boolean {
+    if (!hotel) {
+      return true;
+    }
+
+    return cardsToRender >= hotel.rooms.length;
   }
 
   return (
-    <div
-      className={style.mainContainer}
-      style={viewerOpen ? { filter: "blur(4px)" } : {}}
-    >
+    <div className={style.mainContainer}>
       <a href={`#${roomTitleId}`} ref={roomAnchorEl} hidden></a>
 
-      <Helmet>
-        <title>{hotel.name.content}</title>
-      </Helmet>
+      {hotel && (
+        <Helmet>
+          <title>{hotel.name.content}</title>
+        </Helmet>
+      )}
 
       <Navbar />
 
@@ -195,106 +223,130 @@ export function HotelDetails() {
         </div>
       )}
 
-      <div className={style.pageContainer} style={loading ? { filter: "blur(4px)" } : {}}>
-        {/* Images slider */}
-        <HotelDetailsSlider hotel={hotel} />
+      {hotel && (
+        <>
+          <div
+            className={style.pageContainer}
+            style={loading ? { filter: "blur(4px)" } : {}}
+          >
+            {/* Images slider */}
+            <HotelDetailsSlider hotel={hotel} />
 
-        {/* About hotel / Reservation info */}
-        <Grid container style={{ marginTop: "40px" }}>
-          {/* About hotel */}
-          <Grid item className={style.aboutHotelGrid}>
-            <AboutHotel hotel={hotel} />
-          </Grid>
-
-          {/* Reservation info */}
-          <Grid item className={style.reservationInfoGrid}>
-            <Grid container className={style.reservationInfoContainer}>
-              <Grid item xs={12}>
-                <Text color={Colors.BLUE} component="h4">
-                  Rates starting at
-                </Text>
+            {/* About hotel / Reservation info */}
+            <Grid container style={{ marginTop: "40px" }}>
+              {/* About hotel */}
+              <Grid item className={style.aboutHotelGrid}>
+                <AboutHotel hotel={hotel} />
               </Grid>
 
-              <Grid item xs={12}>
-                <Text color={Colors.BLUE} component="h2" bold>
-                  {formatAsCurrency(getMinRate(hotel.rooms))}
-                </Text>
-              </Grid>
+              {/* Reservation info */}
+              <Grid item className={style.reservationInfoGrid}>
+                <Grid container className={style.reservationInfoContainer}>
+                  <Grid item xs={12}>
+                    <Text color={Colors.BLUE} component="h4">
+                      Rates starting at
+                    </Text>
+                  </Grid>
 
-              {/* Dates */}
-              {hotel.checkIn && hotel.checkOut && (
-                <>
-                  <Grid item xs={12} style={{ marginTop: "20px" }}>
-                    <IconText icon={faCalendar} fontSize={16}>
-                      <p style={{ margin: "0" }}>
-                        <b>Check in: </b>
-                        {format(parseISO(hotel.checkIn), "dd MMM., yyyy")}
-                      </p>
+                  <Grid item xs={12}>
+                    <Text color={Colors.BLUE} component="h2" bold>
+                      {formatAsCurrency(getMinRate(hotel.rooms))}
+                    </Text>
+                  </Grid>
+
+                  {/* Dates */}
+                  {hotel.checkIn && hotel.checkOut && (
+                    <>
+                      <Grid item xs={12} style={{ marginTop: "20px" }}>
+                        <IconText icon={faCalendar} fontSize={16}>
+                          <p style={{ margin: "0" }}>
+                            <b>Check in: </b>
+                            {format(parseISO(hotel.checkIn), "dd MMM., yyyy")}
+                          </p>
+                        </IconText>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <IconText icon={faCalendar} fontSize={16}>
+                          <p style={{ margin: "0" }}>
+                            <b>Check out: </b>
+                            {format(parseISO(hotel.checkOut), "dd MMM., yyyy")}
+                          </p>
+                        </IconText>
+                      </Grid>
+                    </>
+                  )}
+
+                  {/* Occupancy params */}
+                  <Grid item xs={12}>
+                    <IconText icon={faBed} fontSize={16}>
+                      {getOccupancyText("room")}
                     </IconText>
                   </Grid>
                   <Grid item xs={12}>
-                    <IconText icon={faCalendar} fontSize={16}>
-                      <p style={{ margin: "0" }}>
-                        <b>Check out: </b>
-                        {format(parseISO(hotel.checkOut), "dd MMM., yyyy")}
-                      </p>
+                    <IconText icon={faUser} fontSize={16}>
+                      {getOccupancyText("adult")}
                     </IconText>
                   </Grid>
-                </>
-              )}
 
-              {/* Occupancy params */}
-              <Grid item xs={12}>
-                <IconText icon={faBed} fontSize={16}>
-                  {getOccupancyText("room")}
-                </IconText>
-              </Grid>
-              <Grid item xs={12}>
-                <IconText icon={faUser} fontSize={16}>
-                  {getOccupancyText("adult")}
-                </IconText>
-              </Grid>
+                  {reservationParams.occupancies[0].children > 0 && (
+                    <Grid item xs={12}>
+                      <IconText
+                        icon={faChild}
+                        fontSize={16}
+                      >{`${reservationParams.occupancies[0].children} children`}</IconText>
+                    </Grid>
+                  )}
 
-              {reservationParams.occupancies[0].children > 0 && (
-                <Grid item xs={12}>
-                  <IconText
-                    icon={faChild}
-                    fontSize={16}
-                  >{`${reservationParams.occupancies[0].children} children`}</IconText>
-                </Grid>
-              )}
-
-              <Grid item xs={12}>
-                <Grid container>
-                  <CustomButton
-                    type="text"
-                    style={{ marginLeft: "auto" }}
-                    textColor={Colors.BLUE}
-                    onClick={() => goToRoomOptions()}
-                  >
-                    See room options
-                  </CustomButton>
+                  <Grid item xs={12}>
+                    <Grid container>
+                      <CustomButton
+                        type="text"
+                        style={{ marginLeft: "auto" }}
+                        textColor={Colors.BLUE}
+                        onClick={() => goToRoomOptions()}
+                      >
+                        See room options
+                      </CustomButton>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Grid>
 
-        {/* Rooms */}
-        <Grid container className={style.roomsContainer}>
-          <Grid item className={style.roomsGrid}>
-            <Text id={`${roomTitleId}`} component="h2" bold color={Colors.BLUE}>
-              Rooms
-            </Text>
+            {/* Rooms */}
+            <Grid container className={style.roomsContainer}>
+              {/* RoomAccordion cards */}
+              <Grid item className={style.roomsGrid}>
+                <Text id={`${roomTitleId}`} component="h2" bold color={Colors.BLUE}>
+                  Rooms
+                </Text>
 
-            {hotel.rooms.map((room) => (
-              <RoomAccordion hotel={hotel} key={room.code} room={room} />
-            ))}
-          </Grid>
-        </Grid>
-      </div>
+                {hotel.rooms.slice(0, cardsToRender).map((room) => (
+                  <RoomAccordion hotel={hotel} key={room.code} room={room} />
+                ))}
+              </Grid>
 
-      <Footer />
+              {/* Loading cards */}
+              {!areAllRoomsRendered() && (
+                <Grid item xs={12} style={{ marginTop: "20px" }}>
+                  <Grid container justify="center">
+                    <Text component="p" color="#9e9e9e">
+                      Loading more rooms...
+                    </Text>
+                    <ProgressCircle
+                      color="#9e9e9e"
+                      style={{ margin: "0px 0px 0px 15px" }}
+                      size={20}
+                    />
+                  </Grid>
+                </Grid>
+              )}
+            </Grid>
+          </div>
+
+          <Footer />
+        </>
+      )}
     </div>
   );
 }

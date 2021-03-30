@@ -7,7 +7,7 @@ import { IATALocation } from "../types/location-types";
 
 interface HotelReducer {
   reservationParams: HotelBookingParams;
-  hotelDetail: HotelBooking;
+  hotelDetail?: HotelBooking;
   allRoomAccordionsExpanded: boolean;
   openRedirecDialog: boolean;
   isHotelDetailsBlurred: boolean;
@@ -43,7 +43,6 @@ const initialStateReservationParams = {
 };
 
 const initialState: HotelReducer = {
-  hotelDetail: hotelPlaceholder,
   allRoomAccordionsExpanded: false,
   openRedirecDialog: false,
   isHotelDetailsBlurred: false,

@@ -371,7 +371,12 @@ export function Hotels() {
       hotels: [],
     };
 
-    let hotelsBuffer: HotelBooking[] = buildHotels(hotelsForBooking, hotelsDetails);
+    let hotelsBuffer: HotelBooking[] = buildHotels(
+      hotelsForBooking,
+      hotelsDetails,
+      availability.checkIn,
+      availability.checkOut
+    );
     let sortedHotels: HotelBooking[] = sortHotels(sortOption, hotelsBuffer);
 
     hotelAvailabilityTemp = { ...hotelAvailabilityTemp, hotels: sortedHotels };
@@ -399,7 +404,12 @@ export function Hotels() {
    * This combination is required in order to have the booking information
    * and hotel details of each hotel.
    */
-  function buildHotels(hotelsForBooking: any[], hotelsDetails: any): HotelBooking[] {
+  function buildHotels(
+    hotelsForBooking: any[],
+    hotelsDetails: any,
+    checkIn: any,
+    checkOut: any
+  ): HotelBooking[] {
     let hotels: HotelBooking[] = [];
 
     for (let i = 0; i < hotelsDetails.length; i++) {
@@ -419,7 +429,7 @@ export function Hotels() {
         (hb) => hb.code === hotelDetail.code
       )[0];
 
-      hotels.push({ ...hotelForBooking, ...hotelDetail });
+      hotels.push({ ...hotelForBooking, ...hotelDetail, checkIn, checkOut });
     }
 
     return hotels;

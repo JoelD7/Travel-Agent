@@ -40,7 +40,7 @@ interface RoomAccordionTitle {
 }
 
 export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
-  const hotel: HotelBooking = useSelector(selectHotelDetail);
+  const hotel: HotelBooking | undefined = useSelector(selectHotelDetail);
   const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
   let image: string = getRoomImage();
@@ -151,6 +151,10 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
    * Returns the highest rated image of a hotel room.
    */
   function getRoomImage(): string {
+    if (!hotel) {
+      return "";
+    }
+
     let roomCode: string = room.code.split("-")[0];
 
     let roomImages: HotelImage[] = hotel.images
@@ -189,114 +193,116 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
 
   return (
     <div onClick={(e) => e.stopPropagation()} onFocus={(e) => e.stopPropagation()}>
-      <Grid container alignItems="center">
-        {/* Image */}
-        {image !== "" && (
-          <Grid item className={style.imageContainer}>
-            <CardActionArea
-              onClick={(e) => onImageClicked(e)}
-              onFocus={(e) => e.stopPropagation()}
-              style={{ height: "fit-content" }}
-            >
-              <img src={`${image}`} className={style.image} alt={`${room.name}`} />
-            </CardActionArea>
-          </Grid>
-        )}
+      {hotel && (
+        <Grid container alignItems="center">
+          {/* Image */}
+          {image !== "" && (
+            <Grid item className={style.imageContainer}>
+              <CardActionArea
+                onClick={(e) => onImageClicked(e)}
+                onFocus={(e) => e.stopPropagation()}
+                style={{ height: "fit-content" }}
+              >
+                <img src={`${image}`} className={style.image} alt={`${room.name}`} />
+              </CardActionArea>
+            </Grid>
+          )}
 
-        {/* Reservation info */}
-        <Grid item className={style.contentContainer}>
-          {/* Room Name */}
-          <Text component="h3" color={Colors.BLUE} bold>
-            {capitalizeString(room.name, "full sentence")}
-          </Text>
+          {/* Reservation info */}
+          <Grid item className={style.contentContainer}>
+            {/* Room Name */}
+            <Text component="h3" color={Colors.BLUE} bold>
+              {capitalizeString(room.name, "full sentence")}
+            </Text>
 
-          {/* Info box */}
-          <Grid item className={style.infoBoxGridItem}>
-            <Grid container className={style.reservationInfoContainer}>
-              {/* Title */}
-              <Grid item xs={12}>
-                <Grid container>
-                  <Grid item xs={8}>
-                    <Text color="white" component="h5">
-                      Rates starting at
-                    </Text>
-                    {/* Min Price */}
-                    <Text color="white" component="h3" bold>
-                      {formatAsCurrency(getMinRateForRoom())}
-                    </Text>
-                  </Grid>
-
-                  <Grid item xs={4}>
-                    <IconButton
-                      className={style.photoPopupContainerXS}
-                      onClick={(e) => onImageClicked(e)}
-                      onFocus={(e) => e.stopPropagation()}
-                    >
-                      <FontAwesomeIcon icon={faCamera} color="white" />
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              {/* Dates */}
-              {hotel.checkIn && hotel.checkOut && (
-                <>
-                  <Grid item xs={12} style={{ marginTop: "20px" }}>
-                    <IconText textColor="white" icon={faCalendar} fontSize={16}>
-                      <p style={{ margin: "0" }}>
-                        <b>Check in: </b>
-                        {format(parseISO(hotel.checkIn), "dd MMM., yyyy")}
-                      </p>
-                    </IconText>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <IconText textColor="white" icon={faCalendar} fontSize={16}>
-                      <p style={{ margin: "0" }}>
-                        <b>Check out: </b>
-                        {format(parseISO(hotel.checkOut), "dd MMM., yyyy")}
-                      </p>
-                    </IconText>
-                  </Grid>
-                </>
-              )}
-
-              {/* Occupancy params */}
-              <Grid item xs={12}>
-                <IconText textColor="white" icon={faBed} fontSize={16}>
-                  {getOccupancyText("room")}
-                </IconText>
-              </Grid>
-              <Grid item xs={12}>
-                <IconText textColor="white" icon={faUser} fontSize={16}>
-                  {getOccupancyText("adult")}
-                </IconText>
-              </Grid>
-
-              {reservationParams.occupancies[0].children > 0 && (
+            {/* Info box */}
+            <Grid item className={style.infoBoxGridItem}>
+              <Grid container className={style.reservationInfoContainer}>
+                {/* Title */}
                 <Grid item xs={12}>
-                  <IconText
-                    textColor="white"
-                    icon={faChild}
-                    fontSize={16}
-                  >{`${reservationParams.occupancies[0].children} children`}</IconText>
+                  <Grid container>
+                    <Grid item xs={8}>
+                      <Text color="white" component="h5">
+                        Rates starting at
+                      </Text>
+                      {/* Min Price */}
+                      <Text color="white" component="h3" bold>
+                        {formatAsCurrency(getMinRateForRoom())}
+                      </Text>
+                    </Grid>
+
+                    <Grid item xs={4}>
+                      <IconButton
+                        className={style.photoPopupContainerXS}
+                        onClick={(e) => onImageClicked(e)}
+                        onFocus={(e) => e.stopPropagation()}
+                      >
+                        <FontAwesomeIcon icon={faCamera} color="white" />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
                 </Grid>
-              )}
+
+                {/* Dates */}
+                {hotel.checkIn && hotel.checkOut && (
+                  <>
+                    <Grid item xs={12} style={{ marginTop: "20px" }}>
+                      <IconText textColor="white" icon={faCalendar} fontSize={16}>
+                        <p style={{ margin: "0" }}>
+                          <b>Check in: </b>
+                          {format(parseISO(hotel.checkIn), "dd MMM., yyyy")}
+                        </p>
+                      </IconText>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <IconText textColor="white" icon={faCalendar} fontSize={16}>
+                        <p style={{ margin: "0" }}>
+                          <b>Check out: </b>
+                          {format(parseISO(hotel.checkOut), "dd MMM., yyyy")}
+                        </p>
+                      </IconText>
+                    </Grid>
+                  </>
+                )}
+
+                {/* Occupancy params */}
+                <Grid item xs={12}>
+                  <IconText textColor="white" icon={faBed} fontSize={16}>
+                    {getOccupancyText("room")}
+                  </IconText>
+                </Grid>
+                <Grid item xs={12}>
+                  <IconText textColor="white" icon={faUser} fontSize={16}>
+                    {getOccupancyText("adult")}
+                  </IconText>
+                </Grid>
+
+                {reservationParams.occupancies[0].children > 0 && (
+                  <Grid item xs={12}>
+                    <IconText
+                      textColor="white"
+                      icon={faChild}
+                      fontSize={16}
+                    >{`${reservationParams.occupancies[0].children} children`}</IconText>
+                  </Grid>
+                )}
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
 
-        {/* Photo popup icon */}
-        <Grid item className={style.photoPopupGrid}>
-          <IconButton
-            className={style.photoPopupContainer}
-            onClick={(e) => onImageClicked(e)}
-            onFocus={(e) => e.stopPropagation()}
-          >
-            <FontAwesomeIcon size="2x" icon={faCamera} color="white" />
-          </IconButton>
+          {/* Photo popup icon */}
+          <Grid item className={style.photoPopupGrid}>
+            <IconButton
+              className={style.photoPopupContainer}
+              onClick={(e) => onImageClicked(e)}
+              onFocus={(e) => e.stopPropagation()}
+            >
+              <FontAwesomeIcon size="2x" icon={faCamera} color="white" />
+            </IconButton>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
 
       {/* Fullimage Dialog */}
       <Dialog

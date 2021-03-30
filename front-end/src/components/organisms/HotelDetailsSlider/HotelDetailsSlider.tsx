@@ -1,4 +1,11 @@
-import { Backdrop, CardActionArea, Dialog, makeStyles, Theme } from "@material-ui/core";
+import {
+  Backdrop,
+  CardActionArea,
+  Dialog,
+  Grid,
+  makeStyles,
+  Theme,
+} from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
 import Slider from "react-slick";
@@ -79,8 +86,9 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
     },
     photoInSlider: {
       objectFit: "cover",
-      height: "100%",
-      width: "100%",
+      height: "auto",
+      width: "auto",
+      margin: "auto",
       borderRadius: "10px",
     },
     slider: {
@@ -147,14 +155,14 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
   return (
     <div style={{ marginBottom: "20px" }}>
       {/* Images slider */}
-      <Slider {...sliderSettings} dots lazyLoad="ondemand">
+      <Slider {...sliderSettings} lazyLoad="ondemand">
         {hotelPhotos.map((photo, i) => (
           <CardActionArea
             key={photo}
             className={style.photoContainer}
             onClick={() => openFullScreenImageSlider(i)}
           >
-            <img src={`${photo}`} alt={`${photo}`} className={style.photo} />
+            <img src={photo} alt="" className={style.photo} />
           </CardActionArea>
         ))}
       </Slider>
@@ -171,9 +179,14 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
       >
         <Slider {...imageSliderSettings} lazyLoad="ondemand">
           {hotelPhotos.map((photo) => (
-            <div key={photo} className={style.photoContainerImage}>
+            <Grid
+              container
+              justify="center"
+              key={photo}
+              className={style.photoContainerImage}
+            >
               <img src={`${photo}`} alt={`${photo}`} className={style.photoInSlider} />
-            </div>
+            </Grid>
           ))}
         </Slider>
       </Dialog>
