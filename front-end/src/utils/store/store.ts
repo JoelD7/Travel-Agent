@@ -34,6 +34,10 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 //#region Root
 export const selectOpenRequiredFieldSnack = (state: RootState) =>
   state.rootSlice.openRequiredFieldSnack;
+
+export const selectExchangeRate = (state: RootState) => state.rootSlice.exchangeRate;
+
+export const selectBaseCurrency = (state: RootState) => state.rootSlice.baseCurrency;
 //#endregion
 
 //#region Search

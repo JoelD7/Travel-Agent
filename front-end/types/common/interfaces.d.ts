@@ -1,12 +1,3 @@
-interface ExchangeRate {
-  lastUpdated: number;
-  base: string;
-  rates: {
-    [key: string]: number;
-  };
-  [key: string]: ExchangeRate[keyof ExchangeRate];
-}
-
 interface HotelReservation {
   id: string;
   name: string;

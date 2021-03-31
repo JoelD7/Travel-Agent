@@ -57,8 +57,6 @@ export function HotelDetails() {
   const { id } = useParams<any>();
   const location = useLocation();
 
-  const query = useQuery();
-
   const [loading, setLoading] = useState<boolean>(hotel ? false : true);
 
   const history = useHistory();
@@ -68,7 +66,6 @@ export function HotelDetails() {
 
   const dispatch = useDispatch();
 
-  const [viewerOpen, setViewerOpen] = useState(false);
   const [renderedHeights, setRenderedHeights] = useState<number[]>([0]);
 
   const [cardsToRender, setCardsToRender] = useState<number>(3);
@@ -175,10 +172,6 @@ export function HotelDetails() {
 
   function redirectToHotels() {
     history.push(Routes.HOTELS);
-  }
-
-  function useQuery() {
-    return new URLSearchParams(location.search);
   }
 
   function getOccupancyText(param: "room" | "adult") {

@@ -1,17 +1,24 @@
-import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faDollarSign, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Divider, Grid } from "@material-ui/core";
-import React from "react";
-import { useSelector } from "react-redux";
+import { Divider, FormControl, Grid, MenuItem, Select } from "@material-ui/core";
+import Axios from "axios";
+import { differenceInHours } from "date-fns";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoIcon } from "../../../assets";
 import { Colors } from "../../../styles";
 import {
+  currencies,
+  ExchangeRate,
   getHotelSearchURL,
   getRestaurantsDefaultRoute,
   Routes,
-  getLinkStyle,
+  selectBaseCurrency,
+  selectExchangeRate,
   selectHotelReservationParams,
+  setBaseCurrency,
+  setExchangeRate,
 } from "../../../utils";
 import { IconText, Text } from "../../atoms";
 import { footerStyles } from "./footer-styles";
@@ -59,6 +66,57 @@ export function Footer() {
       route: Routes.FAVORITE_PLACES,
     },
   ];
+
+  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
+  const baseCurrencyStore: string = useSelector(selectBaseCurrency);
+  const [currency, setCurrency] = useState<string>(baseCurrencyStore);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!areRatesUpdated()) {
+      getExchangeRates();
+    }
+  }, []);
+
+  function areRatesUpdated() {
+    if (exchangeRate === null) {
+      return false;
+    }
+
+    return differenceInHours(Date.now(), exchangeRate.lastUpdated) < 24;
+  }
+
+  function getExchangeRates() {
+    Axios.get("https://openexchangerates.org/api/latest.json", {
+      params: {
+        app_id: process.env.REACT_APP_CURRENCY_API_KEY,
+        base: baseCurrencyStore,
+      },
+    })
+      .then((res) => {
+        let newExchangeRates = { ...res.data, lastUpdated: Date.now() };
+        dispatch(setExchangeRate(newExchangeRates));
+
+        localStorage.setItem("rates", JSON.stringify(newExchangeRates));
+      })
+      .catch((er) => {
+        console.log(`Error: ${er}`);
+      });
+  }
+
+  function onCurrencyBaseChange(
+    e: React.ChangeEvent<{
+      name?: string | undefined;
+      value: unknown;
+    }>
+  ) {
+    setCurrency(e.target.value as string);
+  }
+
+  function updateBaseCurrencyInStore() {
+    dispatch(setBaseCurrency(currency));
+  }
 
   return (
     <div className={style.mainContainer}>
@@ -108,7 +166,7 @@ export function Footer() {
 
             {/* Divider */}
             <Grid item className={style.dividerGrid}>
-              <Grid container justify="center">
+              <Grid container justify="center" style={{ height: "100%" }}>
                 <Divider orientation="vertical" style={{ backgroundColor: "white" }} />
               </Grid>
             </Grid>
@@ -143,6 +201,35 @@ export function Footer() {
                   (829) 977 0013
                 </IconText>
               </Grid>
+            </Grid>
+
+            {/* Currency */}
+            <Grid
+              item
+              className={style.currencyGrid}
+              onBlur={() => updateBaseCurrencyInStore()}
+            >
+              <Text color="white" bold component="h4" style={{ marginBottom: "12px" }}>
+                Currency
+              </Text>
+
+              <FormControl style={{ width: "100%" }} className={style.selectControl}>
+                <Select
+                  value={baseCurrencyStore}
+                  variant="outlined"
+                  className={style.select}
+                  startAdornment={
+                    <FontAwesomeIcon icon={faDollarSign} color={Colors.BLUE} />
+                  }
+                  onChange={(e) => onCurrencyBaseChange(e)}
+                >
+                  {currencies.map((n) => (
+                    <MenuItem key={n} value={n}>
+                      {n}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
         </Grid>

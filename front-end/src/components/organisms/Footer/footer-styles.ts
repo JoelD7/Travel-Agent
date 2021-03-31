@@ -1,13 +1,12 @@
 import { makeStyles, Theme } from "@material-ui/core";
+import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
 
 export const footerStyles = makeStyles((theme: Theme) => ({
   contentContainer: {
-    width: "80%",
+    width: "90%",
     margin: "auto",
-    [theme.breakpoints.down(1000)]: {
-      width: "85%",
-    },
+
     [theme.breakpoints.down(735)]: {
       width: "100%",
     },
@@ -16,14 +15,13 @@ export const footerStyles = makeStyles((theme: Theme) => ({
     },
   },
   contentGrid: {
-    width: "65%",
-    [theme.breakpoints.down(1000)]: {
-      width: "100%",
-      marginTop: "25px",
-    },
+    width: "70%",
+  },
+  currencyGrid: {
+    width: "15&",
   },
   dividerGrid: {
-    width: "7%",
+    width: "3%",
     [theme.breakpoints.down(660)]: {
       display: "none",
     },
@@ -42,31 +40,34 @@ export const footerStyles = makeStyles((theme: Theme) => ({
     height: "44px",
   },
   logoGrid: {
-    width: "35%",
-    [theme.breakpoints.down(1042)]: {
-      width: "30%",
-    },
-    [theme.breakpoints.down(1000)]: {
-      width: "100%",
-    },
+    width: "30%",
   },
   linkGrid: {
-    width: "31%",
-    [theme.breakpoints.down(735)]: {
-      width: "25%",
-    },
-    [theme.breakpoints.down(660)]: {
-      width: "50%",
-      marginBottom: "20px",
-    },
-    [theme.breakpoints.down(450)]: {
-      width: "100%",
-      marginBottom: "20px",
-    },
+    width: "25%",
   },
   mainContainer: {
     backgroundColor: Colors.BLUE,
     padding: "40px 20px",
     color: "white",
+  },
+  selectControl: {
+    "& .MuiOutlinedInput-root": {
+      "&:hover fieldset": {
+        borderColor: Colors.GREEN_HOVER,
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: Colors.GREEN_HOVER,
+      },
+    },
+  },
+  select: {
+    height: "32px",
+    "& .MuiOutlinedInput-input": {
+      padding: "10px 25px 10px 15px",
+    },
+
+    "& .MuiMenuItem-root": {
+      fontFamily: Font.Family,
+    },
   },
 }));

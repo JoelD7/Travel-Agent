@@ -47,12 +47,16 @@ import {
   selectLoadingCategories,
   selectAvailableCategories,
   setAvailableCategories,
+  setExchangeRate,
+  selectBaseCurrency,
   fetchPOIs,
   useAppDispatch,
   selectConsultedCategories,
   selectConsultedCoordinates,
   poisPlaceholder,
   selectPOIsByCategory,
+  selectExchangeRate,
+  ExchangeRate,
 } from "../../utils";
 import { faCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
@@ -74,9 +78,6 @@ type SortOption = "" | "Name | A - Z" | "Name | Z - A";
 
 export function ThingsToDo() {
   const style = thingsToDoStyles();
-
-  // const [pois, setPois] = useState<POISearch[]>([]);
-  // const [allPois, setAllPois] = useState<POISearch[]>([]);
 
   const pois = useSelector(selectPOIs);
   const allPois = useSelector(selectAllPOIs);
@@ -125,9 +126,6 @@ export function ThingsToDo() {
   const loadingPOICard = useSelector(selectLoadingPOICard);
   const loadingCategories = useSelector(selectLoadingCategories);
 
-  // const [loadingPOICard, setLoadingPOICard] = useState(true);
-  // const [loadingCategories, setLoadingCategories] = useState(true);
-
   const consultedCategories = useSelector(selectConsultedCategories);
   const consultedCoordinates = useSelector(selectConsultedCoordinates);
 
@@ -156,9 +154,9 @@ export function ThingsToDo() {
   };
 
   const activities: Activity[] = activitiesPlaceholder;
-  const [rates, setRates] = useState<ExchangeRate>(
-    JSON.parse(String(localStorage.getItem("rates")))
-  );
+
+  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
+  const baseCurrency: string = useSelector(selectBaseCurrency);
 
   const dispatch = useAppDispatch();
 
@@ -169,10 +167,6 @@ export function ThingsToDo() {
   const poisByCategory = useSelector(selectPOIsByCategory);
 
   useEffect(() => {
-    if (!areRatesUpdated()) {
-      getExchangeRates();
-    }
-
     if (JSON.stringify(allPois) === JSON.stringify(poisPlaceholder)) {
       dispatch(fetchPOIs("51.5074, 0.1278")).then((res) => {
         let pois: POISearch[] = res.payload.response.venues;
@@ -199,30 +193,6 @@ export function ThingsToDo() {
     }
   }
 
-  function areRatesUpdated() {
-    if (rates === null) {
-      return false;
-    }
-    return differenceInHours(Date.now(), rates.lastUpdated) < 24;
-  }
-
-  function getExchangeRates() {
-    Axios.get("https://openexchangerates.org/api/latest.json", {
-      params: {
-        app_id: process.env.REACT_APP_CURRENCY_API_KEY,
-        base: "USD",
-      },
-    })
-      .then((res) => {
-        let newExchangeRates = { ...res.data, lastUpdated: Date.now() };
-        setRates(newExchangeRates);
-        localStorage.setItem("rates", JSON.stringify(newExchangeRates));
-      })
-      .catch((er) => {
-        console.log(`Error: ${er}`);
-      });
-  }
-
   function goToBookingLink(href: string) {
     Object.assign(document.createElement("a"), {
       target: "_blank",
@@ -231,9 +201,9 @@ export function ThingsToDo() {
   }
 
   function convertCurrency(currency: string, amount: string) {
-    if (rates) {
+    if (exchangeRate) {
       let value = Number(amount);
-      return formatAsCurrency((1 / Number(rates.rates[currency])) * value);
+      return formatAsCurrency((1 / Number(exchangeRate.rates[currency])) * value);
     } else {
       return amount;
     }
