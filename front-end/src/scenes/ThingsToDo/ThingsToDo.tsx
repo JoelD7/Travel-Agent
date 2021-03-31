@@ -1,9 +1,9 @@
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import {
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
-  CircularProgress,
   FormControl,
   Grid,
   makeStyles,
@@ -12,67 +12,55 @@ import {
   Theme,
 } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  CustomButton,
-  IconText,
-  Navbar,
-  ParentCategoryToolbar,
-  POICategorySlider,
-  ServicesToolbar,
-  SliderArrow,
-  POICard,
-  Text,
-  ProgressCircle,
-  Footer,
-} from "../../components";
-import { Colors, Shadow } from "../../styles";
-import { thingsToDoStyles as thingsToDoStyles } from "./thingsToDo-styles";
-import {
-  POICategories,
-  POICategoryFetch,
-  POICategoryMap,
-  POICategorySearch,
-} from "../../utils/POICategory";
-import { Font } from "../../assets";
+import Helmet from "react-helmet";
+import Ratings from "react-ratings-declarative";
+import { useSelector } from "react-redux";
 import Slider from "react-slick";
 import {
+  CustomButton,
+  Footer,
+  Navbar,
+  ParentCategoryToolbar,
+  POICard,
+  POICategorySlider,
+  ProgressCircle,
+  ServicesToolbar,
+  SliderArrow,
+  Text,
+} from "../../components";
+import { Colors, Shadow } from "../../styles";
+import {
   activitiesPlaceholder,
-  POICategory,
+  ExchangeRate,
+  fetchPOIs,
   formatAsCurrency,
   getPOICategoryParent,
-  poisPlaceholderAPI,
-  selectPOIs,
+  POICategory,
+  poisPlaceholder,
   selectAllPOIs,
-  selectLoadingPOICard,
-  selectLoadingCategories,
   selectAvailableCategories,
-  setAvailableCategories,
-  setExchangeRate,
   selectBaseCurrency,
-  fetchPOIs,
-  useAppDispatch,
   selectConsultedCategories,
   selectConsultedCoordinates,
-  poisPlaceholder,
-  selectPOIsByCategory,
   selectExchangeRate,
-  ExchangeRate,
+  selectLoadingCategories,
+  selectLoadingPOICard,
+  selectPOIs,
+  selectPOIsByCategory,
+  selectCurrentCity,
+  setAvailableCategories,
+  useAppDispatch,
 } from "../../utils";
-import { faCircle, IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { useHistory } from "react-router-dom";
-import Ratings from "react-ratings-declarative";
-import Axios from "axios";
-import { differenceInHours } from "date-fns";
-import Helmet from "react-helmet";
-import "./thingsTodo.css";
-import { nanoid } from "nanoid";
-import { useDispatch, useSelector } from "react-redux";
+import { POICategoryFetch, POICategorySearch } from "../../utils/POICategory";
 import {
+  addPOIsByCategoryGroup,
   fetchPOIsOfCategory,
   onLoadingPOICardChange,
   setPOIs,
-  addPOIsByCategoryGroup,
 } from "../../utils/store/poi-slice";
+import { IATALocation } from "../../utils/types/location-types";
+import { thingsToDoStyles as thingsToDoStyles } from "./thingsToDo-styles";
+import "./thingsTodo.css";
 
 type SortOption = "" | "Name | A - Z" | "Name | Z - A";
 
@@ -166,9 +154,11 @@ export function ThingsToDo() {
   const availableCategories: POICategorySearch[] = useSelector(selectAvailableCategories);
   const poisByCategory = useSelector(selectPOIsByCategory);
 
+  const geolocation: IATALocation = useSelector(selectCurrentCity);
+
   useEffect(() => {
     if (JSON.stringify(allPois) === JSON.stringify(poisPlaceholder)) {
-      dispatch(fetchPOIs("51.5074, 0.1278")).then((res) => {
+      dispatch(fetchPOIs(`${geolocation.lat}, ${geolocation.lon}`)).then((res) => {
         let pois: POISearch[] = res.payload.response.venues;
         dispatch(setAvailableCategories(pois));
       });
@@ -198,15 +188,6 @@ export function ThingsToDo() {
       target: "_blank",
       href: href,
     }).click();
-  }
-
-  function convertCurrency(currency: string, amount: string) {
-    if (exchangeRate) {
-      let value = Number(amount);
-      return formatAsCurrency((1 / Number(exchangeRate.rates[currency])) * value);
-    } else {
-      return amount;
-    }
   }
 
   function onCategorySelected(category: POICategorySearch) {
@@ -298,7 +279,7 @@ export function ThingsToDo() {
       <a ref={toursTitleAnchorEl} href={`#${toursTitleID}`} hidden></a>
 
       <Helmet>
-        <title>Things to do in London</title>
+        <title>{`Things to do in ${geolocation.city}`}</title>
       </Helmet>
 
       <Navbar />
@@ -320,7 +301,7 @@ export function ThingsToDo() {
 
             <Grid item xs={10} className={style.pageTitleTextGrid}>
               <Text style={{ position: "relative" }} bold component="hm" color="white">
-                Things to in London
+                {`Things to do in ${geolocation.city}`}
               </Text>
             </Grid>
           </Grid>
@@ -359,7 +340,7 @@ export function ThingsToDo() {
               selectedCategory.name === categoryPlaceholder.name
                 ? "Places to go"
                 : selectedCategory.pluralName
-            } in London`}</Text>
+            } in ${geolocation.city}`}</Text>
 
             {poiSliderRows === 2 ? (
               <CustomButton
@@ -455,7 +436,7 @@ export function ThingsToDo() {
             component="h2"
             bold
             className={style.toursTitle}
-          >{`Tours and activites in London`}</Text>
+          >{`Tours and activites in ${geolocation.city}`}</Text>
 
           <Grid key="tours cards" container>
             {activities.slice(0, 6).map((activity, i) => (
@@ -489,10 +470,15 @@ export function ThingsToDo() {
                     ))}
                   </Ratings>
 
-                  <p>{`${convertCurrency(
-                    activity.price.currencyCode,
-                    activity.price.amount
-                  )}`}</p>
+                  <Text
+                    bold
+                    style={{ marginTop: "20px" }}
+                    color={Colors.BLUE}
+                  >{`${formatAsCurrency(
+                    Number(activity.price.amount),
+                    baseCurrency,
+                    exchangeRate
+                  )}`}</Text>
                   <CustomButton
                     rounded
                     style={{ fontSize: "16px", marginTop: "auto" }}

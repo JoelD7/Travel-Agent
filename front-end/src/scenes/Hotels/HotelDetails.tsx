@@ -30,6 +30,9 @@ import {
   selectCurrentCity,
   selectHotelDetail,
   selectHotelReservationParams,
+  selectBaseCurrency,
+  ExchangeRate,
+  selectExchangeRate,
 } from "../../utils";
 import {
   getHotelBedHeaders,
@@ -71,6 +74,9 @@ export function HotelDetails() {
   const [cardsToRender, setCardsToRender] = useState<number>(3);
 
   const geolocation: IATALocation = useSelector(selectCurrentCity);
+
+  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   useEffect(() => {
     if (!hotel) {
@@ -243,7 +249,11 @@ export function HotelDetails() {
 
                   <Grid item xs={12}>
                     <Text color={Colors.BLUE} component="h2" bold>
-                      {formatAsCurrency(getMinRate(hotel.rooms))}
+                      {formatAsCurrency(
+                        getMinRate(hotel.rooms),
+                        baseCurrency,
+                        exchangeRate
+                      )}
                     </Text>
                   </Grid>
 

@@ -13,16 +13,26 @@ import {
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
-import { formatAsCurrency, flightsPlaceholder } from "../../utils";
+import {
+  formatAsCurrency,
+  flightsPlaceholder,
+  selectBaseCurrency,
+  ExchangeRate,
+  selectExchangeRate,
+} from "../../utils";
 import { reservationStyles } from "./reservation-styles";
 import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
 import { format } from "date-fns";
 import Helmet from "react-helmet";
+import { useSelector } from "react-redux";
 
 export function Reservations() {
   const style = reservationStyles();
 
   const flights: Flight[] = flightsPlaceholder;
+
+  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   const hotels: HotelReservation[] = [
     {
@@ -188,7 +198,7 @@ export function Reservations() {
                           component="h4"
                           bold
                         >
-                          {formatAsCurrency(hotel.cost)}
+                          {formatAsCurrency(hotel.cost, baseCurrency, exchangeRate)}
                         </Text>
                       </Grid>
                     </CardContent>

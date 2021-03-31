@@ -1,6 +1,7 @@
 import { format, parseISO } from "date-fns";
 import { Routes } from "..";
 import { HotelBedAPI } from "../external-apis";
+import { ExchangeRate } from "../types";
 import {
   HotelBooking,
   HotelBookingParams,
@@ -9,6 +10,7 @@ import {
   HotelRooms,
 } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
+import { DEFAULT_CURRENCY } from "../constants";
 
 export function getHotelStars(hotel: HotelBooking) {
   let stars = Number(hotel.categoryCode.split("EST")[0]);
@@ -196,18 +198,9 @@ export function getMinRate(rooms: HotelRooms[]): number {
     rates = buffer;
   });
 
-  let minRate = rates.reduce((prev: HotelRoomRate, cur: HotelRoomRate) => {
-    let totalPrev = getRoomTotalPrice(prev);
-    let totalCur = getRoomTotalPrice(cur);
-
-    return totalPrev < totalCur ? prev : cur;
-  }, rooms[0].rates[0]);
-
   let rateTotals: number[] = rates
     .map((rate) => getRoomTotalPrice(rate))
     .sort((a, b) => a - b);
-
-  // console.log("rateTotals: ", rateTotals);
 
   return rateTotals[0];
 }

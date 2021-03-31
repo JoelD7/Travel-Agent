@@ -16,6 +16,9 @@ import {
   selectFlightDictionaries,
   capitalizeString,
   getLastSegment,
+  selectBaseCurrency,
+  ExchangeRate,
+  selectExchangeRate,
   getFlightSegmentCarrier,
 } from "../../../utils";
 import { CustomButton, IconText, Text } from "../../atoms";
@@ -34,6 +37,9 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
   const returnFlight: FlightItinerary | undefined =
     flight.itineraries.length > 1 ? flight.itineraries[1] : undefined;
 
+  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
+
   const dictionaries: FlightDictionary | undefined = useSelector(
     selectFlightDictionaries
   );
@@ -42,7 +48,6 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
 
   function parseStops(segments: FlightSegment[]) {
     let stopsSegments: FlightSegment[] = segments.slice(0, segments.length - 1);
-    // let stopsSegments: FlightSegment[] = segments.slice(1, segments.length - 1);
     let stops = "";
     let quant = 0;
 
@@ -126,9 +131,11 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
 
                 <Grid id="price grid" item xs={4}>
                   <Grid container alignItems="center">
-                    <h5
-                      style={{ margin: "auto 0px auto auto" }}
-                    >{`${flight.price.currency}$ ${flight.price.total}`}</h5>
+                    <h5 style={{ margin: "auto 0px auto auto" }}>{`${formatAsCurrency(
+                      Number(flight.price.total),
+                      baseCurrency,
+                      exchangeRate
+                    )}`}</h5>
                   </Grid>
                 </Grid>
               </Grid>
@@ -204,7 +211,9 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
           {/* Flight price */}
           <Grid item className={style.priceButtonGrid}>
             <h2 style={{ marginTop: "12px" }}>{`${formatAsCurrency(
-              flight.price.total
+              flight.price.total,
+              baseCurrency,
+              exchangeRate
             )}`}</h2>
           </Grid>
         </Grid>
@@ -272,7 +281,9 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
       <Grid key="price & button xs" item xs={12} className={style.priceButtonXS}>
         <Grid container alignItems="center">
           <h2 style={{ marginRight: "auto", marginTop: "12px" }}>{`${formatAsCurrency(
-            flight.price.total
+            flight.price.total,
+            baseCurrency,
+            exchangeRate
           )}`}</h2>
           <CustomButton
             style={{ marginLeft: "auto" }}

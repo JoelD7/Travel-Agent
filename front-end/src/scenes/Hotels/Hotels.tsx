@@ -62,6 +62,7 @@ import {
   Occupancy,
   setOpenRedirecDialog,
   updateReservationParams,
+  selectBaseCurrency,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
 import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";

@@ -2,11 +2,18 @@ import { faCalendar, faFlag, faPlane } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardActionArea, CardContent, CardHeader, Grid } from "@material-ui/core";
 import { format } from "date-fns";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
-import { getIataLocation, Routes } from "../../../utils";
+import {
+  getIataLocation,
+  Routes,
+  ExchangeRate,
+  selectExchangeRate,
+  selectBaseCurrency,
+  formatAsCurrency,
+} from "../../../utils";
 import {
   setFlightListURL,
   setFlightToAutocomplete,
@@ -17,18 +24,20 @@ import { cardFlightStyles } from "../CardFlight/cardFlightStyles";
 
 interface CardDealFlight {
   deal: FlightDeal;
-  currency: string;
   className?: string;
   animate?: boolean;
 }
 
-export function CardDealFlight({ deal, className, animate, currency }: CardDealFlight) {
+export function CardDealFlight({ deal, className, animate }: CardDealFlight) {
   const style = cardFlightStyles();
   const dispatch = useDispatch();
   const history = useHistory();
 
   const origin: IATALocation | undefined = getIataLocation(deal.origin);
   const destination: IATALocation | undefined = getIataLocation(deal.destination);
+
+  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
+  const baseCurrency: string = useSelector(selectBaseCurrency);
 
   function getCardTitle(location: IATALocation | undefined) {
     if (location) {
@@ -105,9 +114,11 @@ export function CardDealFlight({ deal, className, animate, currency }: CardDealF
 
                 <Grid id="price grid" item xs={4}>
                   <Grid container alignItems="center">
-                    <h5
-                      style={{ margin: "auto 0px auto auto" }}
-                    >{`${currency}$ ${deal.price.total}`}</h5>
+                    <h5 style={{ margin: "auto 0px auto auto" }}>{`${formatAsCurrency(
+                      Number(deal.price.total),
+                      baseCurrency,
+                      exchangeRate
+                    )}`}</h5>
                   </Grid>
                 </Grid>
               </Grid>

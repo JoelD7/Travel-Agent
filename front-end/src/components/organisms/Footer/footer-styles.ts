@@ -6,23 +6,39 @@ export const footerStyles = makeStyles((theme: Theme) => ({
   contentContainer: {
     width: "90%",
     margin: "auto",
-
-    [theme.breakpoints.down(735)]: {
-      width: "100%",
-    },
-    [theme.breakpoints.down(660)]: {
-      width: "90%",
+    [theme.breakpoints.down(1250)]: {
+      width: "95%",
     },
   },
   contentGrid: {
     width: "70%",
+    [theme.breakpoints.down(1050)]: {
+      width: "100%",
+      marginTop: "40px",
+    },
   },
   currencyGrid: {
-    width: "15&",
+    width: "20%",
+    [theme.breakpoints.down(1250)]: {
+      width: "25%",
+    },
+    [theme.breakpoints.down(770)]: {
+      width: "20%",
+    },
+    [theme.breakpoints.down(650)]: {
+      width: "25%",
+    },
+    [theme.breakpoints.down(630)]: {
+      width: "50%",
+    },
+    [theme.breakpoints.down(433)]: {
+      width: "100%",
+      marginBottom: "30px",
+    },
   },
   dividerGrid: {
     width: "3%",
-    [theme.breakpoints.down(660)]: {
+    [theme.breakpoints.down(630)]: {
       display: "none",
     },
   },
@@ -41,9 +57,28 @@ export const footerStyles = makeStyles((theme: Theme) => ({
   },
   logoGrid: {
     width: "30%",
+    [theme.breakpoints.down(1290)]: {
+      width: "27%",
+    },
+    [theme.breakpoints.down(1050)]: {
+      width: "100%",
+    },
   },
   linkGrid: {
     width: "25%",
+    [theme.breakpoints.down(1530)]: {
+      width: "22%",
+    },
+    [theme.breakpoints.down(770)]: {
+      width: "30%",
+      marginBottom: "30px",
+    },
+    [theme.breakpoints.down(630)]: {
+      width: "50%",
+    },
+    [theme.breakpoints.down(433)]: {
+      width: "100%",
+    },
   },
   mainContainer: {
     backgroundColor: Colors.BLUE,
@@ -53,21 +88,27 @@ export const footerStyles = makeStyles((theme: Theme) => ({
   selectControl: {
     "& .MuiOutlinedInput-root": {
       "&:hover fieldset": {
-        borderColor: Colors.GREEN_HOVER,
+        borderColor: `${Colors.GREEN_HOVER} !important`,
       },
       "&.Mui-focused fieldset": {
-        borderColor: Colors.GREEN_HOVER,
+        borderColor: `${Colors.GREEN_HOVER} !important`,
       },
     },
   },
   select: {
     height: "32px",
+    backgroundColor: "white",
     "& .MuiOutlinedInput-input": {
-      padding: "10px 25px 10px 15px",
+      padding: "10px 25px 10px 15px !important",
     },
 
     "& .MuiMenuItem-root": {
-      fontFamily: Font.Family,
+      fontFamily: `${Font.Family} !important`,
     },
+  },
+  selectMenuItem: {
+    fontFamily: `${Font.Family}`,
+    color: "black",
+    border: "2px solid white",
   },
 }));

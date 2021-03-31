@@ -231,6 +231,7 @@ export function Flights_Home() {
   const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
 
   const [deals, setDeals] = useState<FlightDeal[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [currency, setCurrency] = useState<string>("");
 
@@ -250,7 +251,7 @@ export function Flights_Home() {
 
     fetchGreatFlightDeals(city, flightSearch.departure)
       .then((res) => {
-        setCurrency(res.data.meta.currency);
+        // setCurrency(res.data.meta.currency);
         let deals = res.data.data;
         setDeals(deals);
       })
@@ -477,12 +478,7 @@ export function Flights_Home() {
 
       <Grid container className={style.dealsContainer}>
         {deals.slice(0, 6).map((deal) => (
-          <CardDealFlight
-            key={deal.links.flightOffers}
-            currency={currency}
-            deal={deal}
-            animate
-          />
+          <CardDealFlight key={deal.links.flightOffers} deal={deal} animate />
         ))}
       </Grid>
 

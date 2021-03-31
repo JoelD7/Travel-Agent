@@ -27187,7 +27187,7 @@ export const iataCodes: IATALocation[] = [
     lat: "40.6437",
     lon: "-73.79",
     name: "John F Kennedy International Airport",
-    city: "Jamaica",
+    city: "New York City",
     state: "New York",
     country: "United States",
     woeid: "12520380",

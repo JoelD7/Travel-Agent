@@ -8,9 +8,10 @@ import {
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { CSSProperties } from "@material-ui/styles";
 import { compareAsc, format } from "date-fns";
+import { DEFAULT_CURRENCY } from "../constants";
 import { iataCodes } from "../constants/iataCodes";
 import { airportCityPlaceholder } from "../placeholders";
-import { EventType } from "../types";
+import { EventType, ExchangeRate } from "../types";
 import { IATALocation } from "../types/location-types";
 export * from "./flight-functions";
 export * from "./hotel-functions";
@@ -50,11 +51,25 @@ export function getLinkStyle(color: string = "initial"): CSSProperties {
   };
 }
 
-export const formatAsCurrency = Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 2,
-}).format;
+export function formatAsCurrency(
+  value: number,
+  currency: string,
+  exchangeRate: ExchangeRate
+) {
+  const formatter = Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency,
+    currencyDisplay: "symbol",
+    maximumFractionDigits: 2,
+  }).format;
+
+  if (currency === DEFAULT_CURRENCY) {
+    return formatter(value);
+  }
+
+  let convertedValue = value * exchangeRate.rates[currency];
+  return formatter(convertedValue);
+}
 
 export const formatAsDecimal = Intl.NumberFormat("en-US", {
   style: "decimal",

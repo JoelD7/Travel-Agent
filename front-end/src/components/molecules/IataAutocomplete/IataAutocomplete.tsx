@@ -89,7 +89,8 @@ export function IataAutocomplete({
       (iata) =>
         iata.code.toLowerCase().includes(query) ||
         iata.name.toLowerCase().includes(query) ||
-        iata.city.toLowerCase().includes(query)
+        iata.city.toLowerCase().includes(query) ||
+        (iata.state !== null ? iata.state.toLowerCase().includes(query) : false)
     );
 
     setPredictions(predictionsBuffer);

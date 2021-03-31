@@ -10,8 +10,17 @@ interface RootSlice {
 const initialState: RootSlice = {
   openRequiredFieldSnack: false,
   exchangeRate: JSON.parse(String(localStorage.getItem("rates"))),
-  baseCurrency: "USD",
+  baseCurrency: getBaseCurrency(),
 };
+
+function getBaseCurrency(): string {
+  let lsValue = localStorage.getItem("baseCurrency");
+  if (lsValue === null) {
+    return "USD";
+  }
+
+  return lsValue;
+}
 
 const rootSlice = createSlice({
   name: "rootSlice",

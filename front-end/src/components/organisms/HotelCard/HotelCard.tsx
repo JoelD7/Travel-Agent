@@ -10,12 +10,16 @@ import {
   formatAsDecimal,
   getHotelImages,
   getHotelStars,
+  selectBaseCurrency,
   getMinRate,
   HotelBooking,
   HotelBookingParams,
   Routes,
   selectHotelReservationParams,
   setHotelDetail,
+  ExchangeRate,
+  selectExchangeRate,
+  formatAsCurrency,
 } from "../../../utils";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
 import { hotelCardStyles } from "./hotelCardStyles";
@@ -30,6 +34,9 @@ export function HotelCard({ hotel }: HotelCard) {
   const style = hotelCardStyles();
 
   const dispatch = useDispatch();
+
+  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
@@ -94,8 +101,10 @@ export function HotelCard({ hotel }: HotelCard) {
             {/* Price and details button */}
             <Grid item className={style.priceAndDetailsGrid}>
               <div>
-                <h4 style={{ textAlign: "center" }}>{`From $ ${formatAsDecimal(
-                  getMinRate(hotel.rooms)
+                <h4 style={{ textAlign: "center" }}>{`From ${formatAsCurrency(
+                  getMinRate(hotel.rooms),
+                  baseCurrency,
+                  exchangeRate
                 )}`}</h4>
                 <CustomButton
                   backgroundColor={Colors.PURPLE}
@@ -151,8 +160,10 @@ export function HotelCard({ hotel }: HotelCard) {
 
             <Grid item xs={12} style={{ padding: "10px" }}>
               <Grid container>
-                <Text component="h3" bold>{`$ From ${formatAsDecimal(
-                  getMinRate(hotel.rooms)
+                <Text component="h3" bold>{`From ${formatAsCurrency(
+                  getMinRate(hotel.rooms),
+                  baseCurrency,
+                  exchangeRate
                 )}`}</Text>
                 <CustomButton
                   style={{

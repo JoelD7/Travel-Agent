@@ -23,6 +23,9 @@ import {
   parseFlightDuration,
   selectFlightDictionaries,
   selectFlightParams,
+  selectBaseCurrency,
+  ExchangeRate,
+  selectExchangeRate,
 } from "../../utils";
 import { flightDetailsStyles } from "./flightDetails-styles";
 
@@ -46,6 +49,9 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
   const dictionaries: FlightDictionary | undefined = useSelector(
     selectFlightDictionaries
   );
+
+  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   function getFlightPassengers() {
     let total: number = 0;
@@ -241,7 +247,9 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
         <Grid item xs={12} style={{ marginTop: "20px" }}>
           <Grid container justify="flex-end">
             <h2 style={{ fontSize: "20px", marginRight: "10px" }}>{`US${formatAsCurrency(
-              flight.price.total
+              flight.price.total,
+              baseCurrency,
+              exchangeRate
             )}`}</h2>
             <CustomButton onClick={() => {}}>Purchase flight</CustomButton>
           </Grid>

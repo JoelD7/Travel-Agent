@@ -18,6 +18,9 @@ import {
   HotelRoomRate,
   HotelRooms,
   selectRoomAccordionExpanded,
+  ExchangeRate,
+  selectExchangeRate,
+  selectBaseCurrency,
 } from "../../../utils";
 import { setRoomAccordionExpanded } from "../../../utils/store/hotel-slice";
 import { CustomButton, IconTP, Text } from "../../atoms";
@@ -61,6 +64,9 @@ export const RoomAccordion = React.memo(function Component({
   const [expanded, setExpanded] = useState<boolean>(allRoomAccordionsExpanded);
 
   const [uniqueRates, setUniqueRates] = useState<HotelRoomRate[]>([]);
+
+  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
+  const baseCurrency: string = useSelector(selectBaseCurrency);
 
   useEffect(() => {
     if (allRoomAccordionsExpanded) {
@@ -129,7 +135,11 @@ export const RoomAccordion = React.memo(function Component({
                     <Grid container alignItems="center">
                       <Text bold>Total: </Text>
                       <Text style={{ marginLeft: "3px" }}>
-                        {formatAsCurrency(getRoomTotalPrice(rate))}
+                        {formatAsCurrency(
+                          getRoomTotalPrice(rate),
+                          baseCurrency,
+                          exchangeRate
+                        )}
                       </Text>
 
                       <CustomButton

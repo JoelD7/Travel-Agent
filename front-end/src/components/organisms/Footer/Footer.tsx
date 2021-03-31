@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Divider, FormControl, Grid, MenuItem, Select } from "@material-ui/core";
 import Axios from "axios";
 import { differenceInHours } from "date-fns";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoIcon } from "../../../assets";
 import { Colors } from "../../../styles";
 import {
-  currencies,
+  currenciesCode,
+  currenciesName,
   ExchangeRate,
   getHotelSearchURL,
   getRestaurantsDefaultRoute,
@@ -72,6 +73,7 @@ export function Footer() {
   const [currency, setCurrency] = useState<string>(baseCurrencyStore);
 
   const dispatch = useDispatch();
+  const firstRender = useRef(true);
 
   useEffect(() => {
     if (!areRatesUpdated()) {
@@ -91,13 +93,13 @@ export function Footer() {
     Axios.get("https://openexchangerates.org/api/latest.json", {
       params: {
         app_id: process.env.REACT_APP_CURRENCY_API_KEY,
-        base: baseCurrencyStore,
+        //The free tier only allows USD as the base currency
+        base: "USD",
       },
     })
       .then((res) => {
         let newExchangeRates = { ...res.data, lastUpdated: Date.now() };
         dispatch(setExchangeRate(newExchangeRates));
-
         localStorage.setItem("rates", JSON.stringify(newExchangeRates));
       })
       .catch((er) => {
@@ -111,11 +113,11 @@ export function Footer() {
       value: unknown;
     }>
   ) {
-    setCurrency(e.target.value as string);
-  }
+    let newCurrency = e.target.value as string;
+    setCurrency(newCurrency);
 
-  function updateBaseCurrencyInStore() {
-    dispatch(setBaseCurrency(currency));
+    dispatch(setBaseCurrency(newCurrency));
+    localStorage.setItem("baseCurrency", newCurrency);
   }
 
   return (
@@ -171,6 +173,35 @@ export function Footer() {
               </Grid>
             </Grid>
 
+            {/* Currency */}
+            <Grid item className={style.currencyGrid}>
+              <Text color="white" bold component="h4" style={{ marginBottom: "12px" }}>
+                Currency
+              </Text>
+
+              <FormControl style={{ width: "120px" }} className={style.selectControl}>
+                <Select
+                  value={baseCurrencyStore}
+                  variant="outlined"
+                  className={style.select}
+                  startAdornment={
+                    <FontAwesomeIcon icon={faDollarSign} color={Colors.BLUE} />
+                  }
+                  onChange={(e) => onCurrencyBaseChange(e)}
+                >
+                  {currenciesCode.map((code) => (
+                    <MenuItem
+                      key={code}
+                      value={code}
+                      classes={{ root: style.selectMenuItem }}
+                    >
+                      {`${code} ${currenciesName[code]}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
             {/* Contact */}
             <Grid item className={style.linkGrid}>
               <Text color="white" bold component="h4" style={{ marginBottom: "12px" }}>
@@ -201,35 +232,6 @@ export function Footer() {
                   (829) 977 0013
                 </IconText>
               </Grid>
-            </Grid>
-
-            {/* Currency */}
-            <Grid
-              item
-              className={style.currencyGrid}
-              onBlur={() => updateBaseCurrencyInStore()}
-            >
-              <Text color="white" bold component="h4" style={{ marginBottom: "12px" }}>
-                Currency
-              </Text>
-
-              <FormControl style={{ width: "100%" }} className={style.selectControl}>
-                <Select
-                  value={baseCurrencyStore}
-                  variant="outlined"
-                  className={style.select}
-                  startAdornment={
-                    <FontAwesomeIcon icon={faDollarSign} color={Colors.BLUE} />
-                  }
-                  onChange={(e) => onCurrencyBaseChange(e)}
-                >
-                  {currencies.map((n) => (
-                    <MenuItem key={n} value={n}>
-                      {n}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
             </Grid>
           </Grid>
         </Grid>

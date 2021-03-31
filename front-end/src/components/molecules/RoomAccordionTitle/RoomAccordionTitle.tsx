@@ -32,6 +32,9 @@ import {
   HotelBookingParams,
   getRoomTotalPrice,
   HotelRoomRate,
+  selectBaseCurrency,
+  ExchangeRate,
+  selectExchangeRate,
 } from "../../../utils";
 import { Text, IconText } from "../../atoms";
 
@@ -42,6 +45,9 @@ interface RoomAccordionTitle {
 export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
   const hotel: HotelBooking | undefined = useSelector(selectHotelDetail);
   const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
+
+  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   let image: string = getRoomImage();
 
@@ -227,7 +233,11 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
                       </Text>
                       {/* Min Price */}
                       <Text color="white" component="h3" bold>
-                        {formatAsCurrency(getMinRateForRoom())}
+                        {formatAsCurrency(
+                          getMinRateForRoom(),
+                          baseCurrency,
+                          exchangeRate
+                        )}
                       </Text>
                     </Grid>
 
