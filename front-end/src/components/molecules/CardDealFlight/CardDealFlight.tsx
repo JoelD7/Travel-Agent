@@ -1,6 +1,6 @@
 import { faCalendar, faFlag, faPlane } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardActionArea, CardContent, CardHeader, Grid } from "@material-ui/core";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -13,8 +13,12 @@ import {
   selectExchangeRate,
   selectBaseCurrency,
   formatAsCurrency,
+  FlightTypes,
+  FlightClass,
+  getFlightSearchURL,
 } from "../../../utils";
 import {
+  FlightSearch,
   setFlightListURL,
   setFlightToAutocomplete,
 } from "../../../utils/store/flight-slice";
@@ -61,8 +65,31 @@ export function CardDealFlight({ deal, className, animate }: CardDealFlight) {
   }
 
   function onCardDealClick() {
-    history.push(Routes.FLIGHT_LIST);
     dispatch(setFlightListURL(deal.links.flightOffers));
+
+    let urlParams = deal.links.flightOffers.split("?")[1];
+    let query = new URLSearchParams(urlParams);
+
+    let kvp: { [index: string]: string } = {};
+
+    for (const pair of Array.from(query.entries())) {
+      let key = pair[0];
+      let value = pair[1];
+
+      kvp = { ...kvp, [key]: value };
+    }
+
+    let flightSearch: FlightSearch = {
+      from: kvp["originLocationCode"],
+      to: kvp["destinationLocationCode"],
+      departure: parseISO(kvp["departureDate"]),
+      return: parseISO(kvp["returnDate"]),
+      adults: Number(kvp["adults"]),
+      flightType: FlightTypes.ROUND,
+      class: FlightClass.Economy,
+    };
+
+    history.push(getFlightSearchURL(flightSearch));
 
     let destinationIataLocation: IATALocation | undefined = getIataLocation(
       deal.destination

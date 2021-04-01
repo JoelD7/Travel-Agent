@@ -28,7 +28,9 @@ import {
   Footer,
   IataAutocomplete,
   Navbar,
+  NotAvailableCard,
   PageSubtitle,
+  ProgressCircle,
   ServicesToolbar,
 } from "../../components";
 import { Colors } from "../../styles";
@@ -37,7 +39,7 @@ import {
   getFlightSearchURL,
   isDateAfterOrEqual,
   muiDateFormatter,
-  selectCurrentCity,
+  selectGeolocation,
   selectFlightFromAutocomplete,
   selectFlightParams,
   setFlightType,
@@ -235,7 +237,7 @@ export function Flights_Home() {
 
   const [currency, setCurrency] = useState<string>("");
 
-  const city: IATALocation = useSelector(selectCurrentCity);
+  const city: IATALocation = useSelector(selectGeolocation);
 
   const [image, setImage] = useState<string>("");
 
@@ -251,12 +253,21 @@ export function Flights_Home() {
 
     fetchGreatFlightDeals(city, flightSearch.departure)
       .then((res) => {
-        // setCurrency(res.data.meta.currency);
         let deals = res.data.data;
         setDeals(deals);
+        setLoading(false);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        if (invalidDestinationsError(error)) {
+          console.log(error.response.status);
+          setLoading(false);
+        }
+      });
   }, []);
+
+  function invalidDestinationsError(error: any) {
+    return error.response && error.response.status === 500;
+  }
 
   function onPassengerParamsChange(
     e: ChangeEvent<{
@@ -314,6 +325,10 @@ export function Flights_Home() {
         dispatch(setFlightReturn(date));
         break;
     }
+  }
+
+  function areNoDealsReturned(): boolean {
+    return !loading && deals.length === 0;
   }
 
   return (
@@ -476,11 +491,27 @@ export function Flights_Home() {
 
       <PageSubtitle label="Great deals" containerStyle={{ margin: "20px auto" }} />
 
+      {/* Loading animation */}
+      {loading && (
+        <Grid container justify="center">
+          <ProgressCircle />
+        </Grid>
+      )}
+
+      {/* Deals */}
       <Grid container className={style.dealsContainer}>
         {deals.slice(0, 6).map((deal) => (
           <CardDealFlight key={deal.links.flightOffers} deal={deal} animate />
         ))}
       </Grid>
+
+      {areNoDealsReturned() && (
+        <Grid container className={style.dealsContainer}>
+          <NotAvailableCard title="Sorry!">
+            There are no deals available for these destinations.
+          </NotAvailableCard>
+        </Grid>
+      )}
 
       <Footer />
 

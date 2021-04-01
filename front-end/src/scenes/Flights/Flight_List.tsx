@@ -75,9 +75,12 @@ import {
   setFlightParams,
   setFlightReturn,
   setFlightType,
+  selectGeolocation,
+  iataCodes,
 } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
+import { IATALocation } from "../../utils/types/location-types";
 import { flightListStyles } from "./flight-list-styles";
 
 export function Flight_List() {
@@ -179,19 +182,6 @@ export function Flight_List() {
       ],
       arrivalDatetimeRange: [new Date(2020, 10, 10, 17, 0), new Date(2020, 10, 11, 5, 0)],
     },
-    // returnFlightDates: {
-    //   minDeparture: new Date(2020, 10, 20, 10, 0),
-    //   maxDeparture: new Date(2020, 10, 20, 15, 0),
-
-    //   minArrival: new Date(2020, 10, 21, 8, 0),
-    //   maxArrival: new Date(2020, 10, 21, 15, 0),
-
-    //   departureDatetimeRange: [
-    //     new Date(2020, 10, 20, 10, 0),
-    //     new Date(2020, 10, 20, 15, 0),
-    //   ],
-    //   arrivalDatetimeRange: [new Date(2020, 10, 21, 8, 0), new Date(2020, 10, 21, 15, 0)],
-    // },
   });
 
   const [priceRange, setPriceRange] = useState<number[]>([0, 500]);
@@ -272,6 +262,8 @@ export function Flight_List() {
 
   const [firstRender, setFirstRender] = useState(true);
 
+  const geolocation: IATALocation = useSelector(selectGeolocation);
+
   const flightClasses: FlightClassType[] = [
     "Economy",
     "Premium Economy",
@@ -283,6 +275,7 @@ export function Flight_List() {
 
   useEffect(() => {
     fetchFlights();
+    getUserLocation();
   }, []);
 
   useEffect(() => {
@@ -318,6 +311,17 @@ export function Flight_List() {
     state.returnFlightDates?.departureDatetimeRange,
     state.returnFlightDates?.arrivalDatetimeRange,
   ]);
+
+  function getUserLocation() {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      let crd = pos.coords;
+
+      console.log("Your current position is:");
+      console.log(`Latitude : ${crd.latitude}`);
+      console.log(`Longitude: ${crd.longitude}`);
+      console.log(`More or less ${crd.accuracy} meters.`);
+    });
+  }
 
   function fetchFlights() {
     setLoading(true);
@@ -1093,10 +1097,14 @@ export function Flight_List() {
     }
   }
 
+  function getCityFromIataCode(code: string) {
+    return iataCodes.filter((iata: IATALocation) => iata.code === code)[0].city;
+  }
+
   return (
     <div className={style.mainContainer}>
       <Helmet>
-        <title>Flights to Dubai</title>
+        <title>{`Flights to ${getCityFromIataCode(flightSearch.to)}`}</title>
       </Helmet>
 
       <Navbar />
@@ -1112,7 +1120,7 @@ export function Flight_List() {
 
             <Grid item xs={10} style={{ margin: "0px auto" }}>
               <Text component="hm" bold color="white">
-                Flights to Dubai
+                {`Flights to ${getCityFromIataCode(flightSearch.to)}`}
               </Text>
             </Grid>
           </Grid>

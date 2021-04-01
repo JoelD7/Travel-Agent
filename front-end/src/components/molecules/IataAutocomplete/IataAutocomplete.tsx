@@ -16,7 +16,7 @@ import {
   selectFlightParams,
   selectFlightToAutocomplete,
   selectSearchQuery,
-  setCurrentCity,
+  setGeolocation,
   setFlightFrom,
   setFlightFromAutocomplete,
   setFlightTo,
@@ -152,7 +152,7 @@ export function IataAutocomplete({
           })
         );
 
-        batchedActions.push(setCurrentCity(autocomplete));
+        batchedActions.push(setGeolocation(autocomplete));
       }
     } else {
       batchedActions.push(updateAirportPredictions(predictions));

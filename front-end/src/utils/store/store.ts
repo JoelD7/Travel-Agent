@@ -41,7 +41,7 @@ export const selectBaseCurrency = (state: RootState) => state.rootSlice.baseCurr
 //#endregion
 
 //#region Search
-export const selectCurrentCity = (state: RootState) => state.searchNavbar.currentCity;
+export const selectGeolocation = (state: RootState) => state.searchNavbar.geolocation;
 //#endregion
 
 //#region POI

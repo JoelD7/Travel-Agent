@@ -7,7 +7,7 @@ interface SearchType {
   query: string;
   cityPredictions: IATALocation[];
   airportPredictions: IATALocation[];
-  currentCity: IATALocation;
+  geolocation: IATALocation;
 }
 
 interface PayloadType {
@@ -18,7 +18,7 @@ const initialState: SearchType = {
   query: " ",
   cityPredictions: [],
   airportPredictions: [],
-  currentCity: getDefaultGeolocation(),
+  geolocation: getDefaultGeolocation(),
 };
 
 const searchSlice = createSlice({
@@ -37,8 +37,8 @@ const searchSlice = createSlice({
     updateAirportPredictions(state, action: PayloadAction<IATALocation[]>) {
       state.airportPredictions = action.payload;
     },
-    setCurrentCity(state, action: PayloadAction<IATALocation>) {
-      state.currentCity = action.payload;
+    setGeolocation(state, action: PayloadAction<IATALocation>) {
+      state.geolocation = action.payload;
     },
   },
 });
@@ -46,7 +46,7 @@ const searchSlice = createSlice({
 export const {
   onQueryChanged,
   updateCityPredictions,
-  setCurrentCity,
+  setGeolocation,
   updateAirportPredictions,
 } = searchSlice.actions;
 export default searchSlice.reducer;

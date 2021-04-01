@@ -48,7 +48,7 @@ import {
   selectLoadingPOICard,
   selectPOIs,
   selectPOIsByCategory,
-  selectCurrentCity,
+  selectGeolocation,
   setAvailableCategories,
   useAppDispatch,
 } from "../../utils";
@@ -156,7 +156,7 @@ export function ThingsToDo() {
   const availableCategories: POICategorySearch[] = useSelector(selectAvailableCategories);
   const poisByCategory = useSelector(selectPOIsByCategory);
 
-  const geolocation: IATALocation = useSelector(selectCurrentCity);
+  const geolocation: IATALocation = useSelector(selectGeolocation);
 
   useEffect(() => {
     if (JSON.stringify(allPois) === JSON.stringify(poisPlaceholder)) {

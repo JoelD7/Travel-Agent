@@ -1,7 +1,8 @@
 import * as LocalStorageKeys from "./localStorageKeys";
+import * as FlightClass from "./flight-classes";
 export * from "./airports";
 export * from "./iataCodes";
-export { LocalStorageKeys };
+export { LocalStorageKeys, FlightClass };
 
 export const DEFAULT_CURRENCY = "USD";
 
