@@ -80,11 +80,12 @@ export function FavPlaces() {
 
       <Grid container className={styles.mainGrid}>
         <Grid item xs={12} style={{ marginTop: "10px" }}>
-          <IconText iconStyle={{ padding: "7px" }} shadow size={44} icon={faHeart}>
+          <IconText iconStyle={{ padding: "12px" }} shadow size={44} icon={faHeart}>
             <Text component="h1" bold>
               Your favorite spots
             </Text>
           </IconText>
+
           <div>
             {poiCategories
               .filter((category) => getPlacesOfCategory(category.name).length > 0)
@@ -92,7 +93,7 @@ export function FavPlaces() {
                 <Grid container style={{ marginTop: "20px" }}>
                   <Grid item xs={12}>
                     <Grid container>
-                      <Text weight={500} component="h2">
+                      <Text bold color={Colors.BLUE} component="h2">
                         {category.pluralName}
                       </Text>
                       <CustomButton
@@ -167,7 +168,9 @@ export function FavPlaces() {
         </Grid>
       </Grid>
 
-      <Footer />
+      <div className={styles.footerContainer}>
+        <Footer />
+      </div>
     </div>
   );
 }

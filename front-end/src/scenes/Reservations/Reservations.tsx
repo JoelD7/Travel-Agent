@@ -106,7 +106,9 @@ export function Reservations() {
           {/* Flights title */}
           <Grid item xs={12}>
             <Grid id="Flights" container>
-              <Text component="h2">Flights</Text>
+              <Text bold color={Colors.BLUE} component="h2">
+                Flights
+              </Text>
               <CustomButton
                 style={{ paddingBottom: "0px" }}
                 iconColor="#7e7e7e"
@@ -135,7 +137,9 @@ export function Reservations() {
           {/* Hotels title */}
           <Grid item xs={12}>
             <Grid id="Hotels" container>
-              <Text component="h2">Hotels</Text>
+              <Text bold color={Colors.BLUE} component="h2">
+                Hotels
+              </Text>
               <CustomButton
                 style={{ paddingBottom: "0px" }}
                 iconColor="#7e7e7e"
@@ -210,7 +214,9 @@ export function Reservations() {
         </Grid>
       </Grid>
 
-      <Footer />
+      <div className={style.footerContainer}>
+        <Footer />
+      </div>
     </div>
   );
 }

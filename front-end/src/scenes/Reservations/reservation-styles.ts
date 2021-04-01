@@ -14,6 +14,11 @@ export const reservationStyles = makeStyles((theme: Theme) => ({
       margin: "0px",
     },
   },
+  footerContainer: {
+    position: "relative",
+    zIndex: 3,
+    marginTop: "250px",
+  },
   hotelCard: {
     borderRadius: "10px",
     width: "25%",

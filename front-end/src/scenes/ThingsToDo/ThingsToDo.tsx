@@ -1,4 +1,6 @@
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
+import Rating from "react-rating";
 import {
   Card,
   CardActionArea,
@@ -13,7 +15,6 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
-import Ratings from "react-ratings-declarative";
 import { useSelector } from "react-redux";
 import Slider from "react-slick";
 import {
@@ -61,6 +62,7 @@ import {
 import { IATALocation } from "../../utils/types/location-types";
 import { thingsToDoStyles as thingsToDoStyles } from "./thingsToDo-styles";
 import "./thingsTodo.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type SortOption = "" | "Name | A - Z" | "Name | Z - A";
 
@@ -458,17 +460,25 @@ export function ThingsToDo() {
                   >
                     {activity.name}
                   </Text>
-                  <Ratings
-                    rating={Number(activity.rating)}
-                    widgetRatedColors={Colors.PURPLE}
-                    widgetHoverColors={Colors.PURPLE}
-                    widgetDimensions="25px"
-                    widgetSpacings="4px"
-                  >
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <Ratings.Widget key={n} />
-                    ))}
-                  </Ratings>
+
+                  <Rating
+                    initialRating={Number(activity.rating)}
+                    readonly
+                    emptySymbol={
+                      <FontAwesomeIcon
+                        style={{ margin: "0px 1px" }}
+                        icon={faStarReg}
+                        color={Colors.PURPLE}
+                      />
+                    }
+                    fullSymbol={
+                      <FontAwesomeIcon
+                        style={{ margin: "0px 1px" }}
+                        icon={faStar}
+                        color={Colors.PURPLE}
+                      />
+                    }
+                  />
 
                   <Text
                     bold

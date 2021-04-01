@@ -324,7 +324,9 @@ export function Itinerary() {
         />
       )}
 
-      <Footer />
+      <div className={style.footerContainer}>
+        <Footer />
+      </div>
     </div>
   );
 }

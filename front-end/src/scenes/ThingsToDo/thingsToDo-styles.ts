@@ -104,6 +104,7 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
+
   parentCategoryBar: {
     display: "flex",
     minHeight: "20px",

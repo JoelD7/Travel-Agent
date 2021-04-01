@@ -6,14 +6,18 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
   favCard: {
     margin: "10px",
   },
+  footerContainer: {
+    position: "relative",
+    zIndex: 3,
+    marginTop: "250px",
+  },
   mainContainer: {
     fontFamily: Font.Family,
     backgroundColor: Colors.BACKGROUND,
   },
   mainGrid: {
-    marginLeft: "265px",
-    // width: "81%",
-    width: "calc(100% - 265px)",
+    marginLeft: "290px",
+    width: "calc(100% - 330px)",
     [theme.breakpoints.down("sm")]: {
       width: "85%",
       margin: "auto",

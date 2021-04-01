@@ -1,7 +1,7 @@
 import React from "react";
 import { POICategories, POICategorySearch } from "../../../utils/POICategory";
 import Slider from "react-slick";
-import { CardActionArea, Card, CardContent, CircularProgress } from "@material-ui/core";
+import { CardActionArea, Card, CardContent } from "@material-ui/core";
 import { ProgressCircle, SliderArrow, Text } from "../../atoms";
 import { thingsToDoStyles } from "../../../scenes/ThingsToDo/thingsToDo-styles";
 import { CSSProperties } from "@material-ui/styles";
@@ -25,22 +25,24 @@ export function POICategorySlider({
     className: style.slider,
     nextArrow: <SliderArrow direction="right" />,
     prevArrow: <SliderArrow direction="left" />,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToShow: availableCategories.length >= 4 ? 4 : availableCategories.length,
+    slidesToScroll: availableCategories.length >= 4 ? 4 : availableCategories.length,
     responsive: [
       {
         breakpoint: 1198,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
+          slidesToShow: availableCategories.length >= 3 ? 3 : availableCategories.length,
+          slidesToScroll:
+            availableCategories.length >= 3 ? 3 : availableCategories.length,
           infinite: true,
         },
       },
       {
         breakpoint: 1000,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToShow: availableCategories.length >= 2 ? 2 : availableCategories.length,
+          slidesToScroll:
+            availableCategories.length >= 2 ? 2 : availableCategories.length,
           infinite: true,
         },
       },

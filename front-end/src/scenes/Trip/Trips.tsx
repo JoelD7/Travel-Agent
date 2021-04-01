@@ -188,7 +188,9 @@ export function Trips() {
 
           {/* Trips */}
           <Grid item xs={12} className={style.tripCardGrid}>
-            <Text component="h2">Trips</Text>
+            <Text bold color={Colors.BLUE} component="h2">
+              Trips
+            </Text>
 
             <Grid key="trip cards" container>
               {trips.length > 4 ? (

@@ -50,6 +50,11 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
   dayItem: {
     width: "calc(78.5vw / 7)",
   },
+  footerContainer: {
+    position: "relative",
+    zIndex: 3,
+    marginTop: "250px",
+  },
   mainContainer: {
     backgroundColor: Colors.BACKGROUND,
     fontFamily: Font.Family,
