@@ -23,7 +23,7 @@ import {
   isDateAfterOrEqual,
   muiDateFormatter,
   selectFlightFromAutocomplete,
-  selectFlightParams,
+  selectFlightSearchParams,
   selectFlightToAutocomplete,
   setOpenRequiredFieldSnack,
   updateAirportPredictions,
@@ -123,7 +123,7 @@ export default function HomeFlightReservation() {
   });
   const dispatch = useDispatch();
 
-  const flight: FlightSearch = useSelector(selectFlightParams);
+  const flight: FlightSearch = useSelector(selectFlightSearchParams);
   const [focusedAutocomplete, setFocusedAutocomplete] = useState<string>("");
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
@@ -163,7 +163,7 @@ export default function HomeFlightReservation() {
 
   const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
 
-  const flightSearch: FlightSearch = useSelector(selectFlightParams);
+  const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
 
   const style = homeStyles();
 

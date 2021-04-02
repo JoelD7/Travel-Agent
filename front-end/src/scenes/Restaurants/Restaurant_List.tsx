@@ -23,7 +23,7 @@ import { Shadow } from "../../styles";
 import {
   filterByFeature,
   hasAny,
-  selectGeolocation,
+  selectDestinationCity,
   selectLoadingRestaurants,
   selectRestaurantCuisines,
   selectRestaurantFeatures,
@@ -54,7 +54,7 @@ interface Restaurant_List {
 export function Restaurant_List() {
   const style = restaurantListStyles();
 
-  const currentCity: IATALocation = useSelector(selectGeolocation);
+  const currentCity: IATALocation = useSelector(selectDestinationCity);
   const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
 
   const history = useHistory();

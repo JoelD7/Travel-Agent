@@ -52,7 +52,7 @@ import {
   getMinRate,
   selectHotelReservationParams,
   selectOpenRedirecDialog,
-  selectGeolocation,
+  selectDestinationCity,
   formatAsDecimal,
   isDateAfterOrEqual,
   HotelAvailability,
@@ -246,7 +246,7 @@ export function Hotels() {
   const [page, setPage] = useState(getPage());
 
   const openRedirecDialog: boolean = useSelector(selectOpenRedirecDialog);
-  const geolocation: IATALocation = useSelector(selectGeolocation);
+  const geolocation: IATALocation = useSelector(selectDestinationCity);
 
   const history = useHistory();
 

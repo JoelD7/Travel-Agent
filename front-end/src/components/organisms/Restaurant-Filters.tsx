@@ -7,7 +7,7 @@ import { Colors } from "../../styles";
 import {
   hasAny,
   selectAllRestaurants,
-  selectGeolocation,
+  selectDestinationCity,
   selectRestaurantCuisines,
   selectRestaurantFeatures,
   selectRestaurants,
@@ -42,7 +42,7 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
   const allRestaurants: RestaurantSearch[] = useSelector(selectAllRestaurants);
   const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
 
-  const currentCity: IATALocation = useSelector(selectGeolocation);
+  const currentCity: IATALocation = useSelector(selectDestinationCity);
 
   useEffect(() => {
     setCuisines(cuisinesRedux);

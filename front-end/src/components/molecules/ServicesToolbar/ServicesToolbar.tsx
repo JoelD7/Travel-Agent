@@ -8,7 +8,7 @@ import {
   convertURLToReservationParams,
   getHotelSearchURL,
   getLinkStyle,
-  selectGeolocation,
+  selectDestinationCity,
   Routes,
   selectHotelReservationParams,
   getRestaurantsDefaultRoute,
@@ -33,7 +33,7 @@ export function ServicesToolbar({ home, style }: ServicesToolbar) {
   let page = "/" + segmentedURL[segmentedURL.length - 1];
 
   const reservationParams = useSelector(selectHotelReservationParams);
-  const city: IATALocation = useSelector(selectGeolocation);
+  const city: IATALocation = useSelector(selectDestinationCity);
 
   const navbarServices: NavbarService[] = [
     {

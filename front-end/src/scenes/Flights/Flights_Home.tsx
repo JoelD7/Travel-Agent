@@ -39,9 +39,9 @@ import {
   getFlightSearchURL,
   isDateAfterOrEqual,
   muiDateFormatter,
-  selectGeolocation,
+  selectDestinationCity,
   selectFlightFromAutocomplete,
-  selectFlightParams,
+  selectFlightSearchParams,
   setFlightType,
   selectFlightToAutocomplete,
   selectFlightType,
@@ -210,7 +210,7 @@ export function Flights_Home() {
     flightType: useSelector(selectFlightType),
   });
 
-  const flightSearch: FlightSearch = useSelector(selectFlightParams);
+  const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
 
   const passengersParams = [
     {
@@ -237,7 +237,7 @@ export function Flights_Home() {
 
   const [currency, setCurrency] = useState<string>("");
 
-  const city: IATALocation = useSelector(selectGeolocation);
+  const city: IATALocation = useSelector(selectDestinationCity);
 
   const [image, setImage] = useState<string>("");
 

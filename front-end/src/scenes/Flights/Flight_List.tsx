@@ -62,7 +62,7 @@ import {
   muiDateFormatter,
   Routes,
   selectFlightFromAutocomplete,
-  selectFlightParams,
+  selectFlightSearchParams,
   selectFlightType,
   selectFlightToAutocomplete,
   FlightSearch,
@@ -75,7 +75,7 @@ import {
   setFlightParams,
   setFlightReturn,
   setFlightType,
-  selectGeolocation,
+  selectDestinationCity,
   iataCodes,
 } from "../../utils";
 import { FlightTypes } from "../../utils/types";
@@ -161,7 +161,7 @@ export function Flight_List() {
     },
   });
 
-  const flightSearch: FlightSearch = useSelector(selectFlightParams);
+  const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
@@ -262,7 +262,7 @@ export function Flight_List() {
 
   const [firstRender, setFirstRender] = useState(true);
 
-  const geolocation: IATALocation = useSelector(selectGeolocation);
+  const geolocation: IATALocation = useSelector(selectDestinationCity);
 
   const flightClasses: FlightClassType[] = [
     "Economy",

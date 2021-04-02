@@ -27,7 +27,7 @@ import {
   isValueInRange,
   proxyUrl,
   Routes,
-  selectGeolocation,
+  selectDestinationCity,
   selectHotelDetail,
   selectHotelReservationParams,
   selectBaseCurrency,
@@ -73,7 +73,7 @@ export function HotelDetails() {
 
   const [cardsToRender, setCardsToRender] = useState<number>(3);
 
-  const geolocation: IATALocation = useSelector(selectGeolocation);
+  const geolocation: IATALocation = useSelector(selectDestinationCity);
 
   const baseCurrency: string = useSelector(selectBaseCurrency);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);

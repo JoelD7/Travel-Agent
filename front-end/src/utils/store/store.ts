@@ -41,7 +41,9 @@ export const selectBaseCurrency = (state: RootState) => state.rootSlice.baseCurr
 //#endregion
 
 //#region Search
-export const selectGeolocation = (state: RootState) => state.searchNavbar.geolocation;
+export const selectOriginCity = (state: RootState) => state.searchNavbar.originCity;
+export const selectDestinationCity = (state: RootState) =>
+  state.searchNavbar.destinationCity;
 //#endregion
 
 //#region POI
@@ -92,7 +94,7 @@ export const selectAirportPredictions = (state: RootState) =>
 //#endregion
 
 //#region Flight
-export const selectFlightParams = (state: RootState) => state.flightSlice;
+export const selectFlightSearchParams = (state: RootState) => state.flightSlice;
 export const selectFlightFromAutocomplete = (state: RootState) =>
   state.flightSlice.flightFromAutocomplete;
 export const selectFlightToAutocomplete = (state: RootState) =>

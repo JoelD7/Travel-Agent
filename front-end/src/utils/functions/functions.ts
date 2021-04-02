@@ -604,13 +604,16 @@ export function isDateAfterOrEqual(date: Date, date2: Date): boolean {
   return compareAsc(date, date2) >= 0;
 }
 
-export function persistGeolocationInLocalStorage(geolocation: IATALocation) {
-  localStorage.setItem("geoLocation", JSON.stringify(geolocation));
+export function persistGeolocationInLocalStorage(
+  geolocation: IATALocation,
+  type: "originCity" | "destinationCity"
+) {
+  localStorage.setItem(`${type}`, JSON.stringify(geolocation));
 }
 
-export function getDefaultGeolocation(): IATALocation {
+export function getDefaultCity(type: "originCity" | "destinationCity"): IATALocation {
   let defaultGeolocation: IATALocation;
-  let savedItem = localStorage.getItem("geoLocation");
+  let savedItem = localStorage.getItem(`${type}`);
 
   if (savedItem === null) {
     return airportCityPlaceholder;

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays } from "date-fns";
-import { getDefaultGeolocation } from "../functions";
+import { getDefaultCity } from "../functions";
 import { hotelPlaceholder } from "../placeholders";
 import { HotelBooking, HotelBookingParams, HotelCoordinates } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
@@ -13,7 +13,7 @@ interface HotelReducer {
   isHotelDetailsBlurred: boolean;
 }
 
-const defaultGeolocation: IATALocation = getDefaultGeolocation();
+const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
 
 const initialStateReservationParams = {
   stay: {
@@ -30,8 +30,8 @@ const initialStateReservationParams = {
   ],
 
   geolocation: {
-    longitude: Number(defaultGeolocation.lon),
-    latitude: Number(defaultGeolocation.lat),
+    longitude: Number(defaultDestinationCity.lon),
+    latitude: Number(defaultDestinationCity.lat),
     radius: 15,
     unit: "km",
   },

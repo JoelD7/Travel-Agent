@@ -22,7 +22,7 @@ import {
   getLastSegment,
   parseFlightDuration,
   selectFlightDictionaries,
-  selectFlightParams,
+  selectFlightSearchParams,
   selectBaseCurrency,
   ExchangeRate,
   selectExchangeRate,
@@ -42,7 +42,7 @@ interface FlightCard {
 export function FlightDetails({ flight, open, onClose }: FlightDetails) {
   const style = flightDetailsStyles();
 
-  const flightSearch: FlightSearch = useSelector(selectFlightParams);
+  const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
 
   const passengers = getFlightPassengers();
 

@@ -13,17 +13,19 @@ import {
   onQueryChanged,
   persistGeolocationInLocalStorage,
   selectFlightFromAutocomplete,
-  selectFlightParams,
+  selectFlightSearchParams,
   selectFlightToAutocomplete,
   selectSearchQuery,
-  setGeolocation,
+  setDestinationCity,
   setFlightFrom,
   setFlightFromAutocomplete,
   setFlightTo,
   setFlightToAutocomplete,
   updateAirportPredictions,
   updateCityPredictions,
+  LocationType,
   updateHotelCoordinates,
+  setOriginCity,
 } from "../../../utils";
 import { IATALocation } from "../../../utils/types/location-types";
 import { iataAutocompleteStyles } from "./iata-autocomplete-styles";
@@ -31,9 +33,11 @@ import { iataAutocompleteStyles } from "./iata-autocomplete-styles";
 interface IataAutocomplete {
   flightDirection?: "from" | "to";
   type: "city" | "airport";
+  cityType?: LocationType.LocationType;
   home?: boolean;
   placeholder?: string;
   isInNavbar?: boolean;
+  required?: boolean;
   className?: string;
 }
 
@@ -42,6 +46,8 @@ export function IataAutocomplete({
   type,
   placeholder,
   home,
+  required = false,
+  cityType = LocationType.DESTINATION,
   isInNavbar,
   className,
 }: IataAutocomplete) {
@@ -49,7 +55,7 @@ export function IataAutocomplete({
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
-  const flight: FlightSearch = useSelector(selectFlightParams);
+  const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
   const dispatch = useDispatch();
 
   let batchedActions: AnyAction[] = [];
@@ -65,7 +71,11 @@ export function IataAutocomplete({
     getAutocompleteDefault()
   );
   const [text, setText] = useState<string>(
-    type === "city" ? searchQuery : flightDirection === "from" ? flight.from : flight.to
+    type === "city"
+      ? searchQuery
+      : flightDirection === "from"
+      ? flightSearch.from
+      : flightSearch.to
   );
 
   function getAutocompleteDefault() {
@@ -99,8 +109,8 @@ export function IataAutocomplete({
   function onAutomcompleteValueChange(value: IATALocation | null) {
     setAutocomplete(value);
 
-    if (type === "airport") {
-      checkRequiredAirportField(value);
+    if (required) {
+      checkRequiredField(value);
     }
 
     if (value) {
@@ -108,7 +118,7 @@ export function IataAutocomplete({
     }
   }
 
-  function checkRequiredAirportField(value: IATALocation | null) {
+  function checkRequiredField(value: IATALocation | null) {
     if (isTextFieldEmpty(value)) {
       setError(true);
       setHelperText("Required");
@@ -141,10 +151,10 @@ export function IataAutocomplete({
 
       //This var may be undefined
       if (autocomplete) {
-        persistGeolocationInLocalStorage(autocomplete);
+        persistGeolocationInLocalStorage(autocomplete, cityType);
 
-        batchedActions.push(setFlightFrom(autocomplete.code));
-        batchedActions.push(setFlightFromAutocomplete(autocomplete));
+        batchedActions.push(setFlightTo(autocomplete.code));
+        batchedActions.push(setFlightToAutocomplete(autocomplete));
         batchedActions.push(
           updateHotelCoordinates({
             latitude: Number(autocomplete.lat),
@@ -152,7 +162,7 @@ export function IataAutocomplete({
           })
         );
 
-        batchedActions.push(setGeolocation(autocomplete));
+        batchedActions.push(setDestinationCity(autocomplete));
       }
     } else {
       batchedActions.push(updateAirportPredictions(predictions));

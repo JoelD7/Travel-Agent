@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IATALocation } from "../types/location-types";
-import { airportCityPlaceholder } from "../../utils";
-import { getDefaultGeolocation } from "../functions";
+import { getDefaultCity } from "../functions";
 
 interface SearchType {
   query: string;
   cityPredictions: IATALocation[];
   airportPredictions: IATALocation[];
-  geolocation: IATALocation;
+  originCity: IATALocation;
+  destinationCity: IATALocation;
 }
 
 interface PayloadType {
@@ -18,7 +18,8 @@ const initialState: SearchType = {
   query: " ",
   cityPredictions: [],
   airportPredictions: [],
-  geolocation: getDefaultGeolocation(),
+  originCity: getDefaultCity("originCity"),
+  destinationCity: getDefaultCity("destinationCity"),
 };
 
 const searchSlice = createSlice({
@@ -37,8 +38,11 @@ const searchSlice = createSlice({
     updateAirportPredictions(state, action: PayloadAction<IATALocation[]>) {
       state.airportPredictions = action.payload;
     },
-    setGeolocation(state, action: PayloadAction<IATALocation>) {
-      state.geolocation = action.payload;
+    setOriginCity(state, action: PayloadAction<IATALocation>) {
+      state.originCity = action.payload;
+    },
+    setDestinationCity(state, action: PayloadAction<IATALocation>) {
+      state.destinationCity = action.payload;
     },
   },
 });
@@ -46,7 +50,8 @@ const searchSlice = createSlice({
 export const {
   onQueryChanged,
   updateCityPredictions,
-  setGeolocation,
+  setDestinationCity,
   updateAirportPredictions,
+  setOriginCity,
 } = searchSlice.actions;
 export default searchSlice.reducer;
