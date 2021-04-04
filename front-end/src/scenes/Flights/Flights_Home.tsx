@@ -35,7 +35,7 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
-  getCityImage,
+  fetchCityImage,
   getFlightSearchURL,
   isDateAfterOrEqual,
   muiDateFormatter,
@@ -45,6 +45,9 @@ import {
   setFlightType,
   selectFlightToAutocomplete,
   selectFlightType,
+  isCityImageUpdated,
+  selectCityImage,
+  setCityImage,
 } from "../../utils";
 import { fetchGreatFlightDeals } from "../../utils/external-apis/amadeus-apis";
 import {
@@ -56,7 +59,7 @@ import {
   setFlightInfants,
   setFlightReturn,
 } from "../../utils/store/flight-slice";
-import { FlightTypes } from "../../utils/types";
+import { CityImage, FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { IATALocation } from "../../utils/types/location-types";
 import { flightStyles } from "./flights-styles";
@@ -178,7 +181,6 @@ export function Flights_Home() {
 
   const history = useHistory();
   const dispatch = useDispatch();
-  const flightType = useSelector(selectFlightType);
 
   const [state, setState] = useState<FlightSearchParams>({
     exitFlightDates: {
@@ -235,11 +237,8 @@ export function Flights_Home() {
   const [deals, setDeals] = useState<FlightDeal[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const [currency, setCurrency] = useState<string>("");
-
-  const city: IATALocation = useSelector(selectDestinationCity);
-
-  const [image, setImage] = useState<string>("");
+  const destinationCity: IATALocation = useSelector(selectDestinationCity);
+  const cityImage: CityImage = useSelector(selectCityImage);
 
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
 
@@ -247,11 +246,11 @@ export function Flights_Home() {
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
   useEffect(() => {
-    getCityImage(city.city).then((res) => {
-      setImage(String(res));
-    });
+    if (!isCityImageUpdated(destinationCity, cityImage)) {
+      getCityImage();
+    }
 
-    fetchGreatFlightDeals(city, flightSearch.departure)
+    fetchGreatFlightDeals(destinationCity, flightSearch.departure)
       .then((res) => {
         let deals = res.data.data;
         setDeals(deals);
@@ -264,6 +263,12 @@ export function Flights_Home() {
         }
       });
   }, []);
+
+  function getCityImage() {
+    fetchCityImage(destinationCity.city).then((res) => {
+      dispatch(setCityImage({ city: destinationCity.city, image: String(res) }));
+    });
+  }
 
   function invalidDestinationsError(error: any) {
     return error.response && error.response.status === 500;
@@ -334,7 +339,7 @@ export function Flights_Home() {
   return (
     <div className={style.mainContainer}>
       <Helmet>
-        <title>{`Flights to ${city.city}`}</title>
+        <title>{`Flights to ${destinationCity.city}`}</title>
       </Helmet>
 
       <Navbar />
@@ -343,7 +348,7 @@ export function Flights_Home() {
       <Grid
         container
         className={style.topContainer}
-        style={{ backgroundImage: `url(${image})` }}
+        style={{ backgroundImage: `url(${cityImage.image})` }}
       >
         <Grid item xs={12}>
           <ServicesToolbar />
@@ -352,7 +357,7 @@ export function Flights_Home() {
         {/* Reservation Container */}
         <Grid container spacing={2} className={style.reservationContainer}>
           <Grid item xs={12}>
-            <h2>{`Find the best flight to ${city.city}`}</h2>
+            <h2>{`Find the best flight to ${destinationCity.city}`}</h2>
           </Grid>
 
           {/* Flight type toolbar */}

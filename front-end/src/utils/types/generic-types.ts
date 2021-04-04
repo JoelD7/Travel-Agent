@@ -6,3 +6,8 @@ export interface ExchangeRate {
   };
   [key: string]: ExchangeRate[keyof ExchangeRate];
 }
+
+export interface CityImage {
+  city: string;
+  image: string;
+}

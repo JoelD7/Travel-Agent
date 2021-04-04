@@ -51,6 +51,11 @@ import {
   selectDestinationCity,
   setAvailableCategories,
   useAppDispatch,
+  isCityImageUpdated,
+  setCityImage,
+  fetchCityImage,
+  CityImage,
+  selectCityImage,
 } from "../../utils";
 import { POICategoryFetch, POICategorySearch } from "../../utils/POICategory";
 import {
@@ -156,14 +161,21 @@ export function ThingsToDo() {
   const availableCategories: POICategorySearch[] = useSelector(selectAvailableCategories);
   const poisByCategory = useSelector(selectPOIsByCategory);
 
-  const geolocation: IATALocation = useSelector(selectDestinationCity);
+  const destinationCity: IATALocation = useSelector(selectDestinationCity);
+  const cityImage: CityImage = useSelector(selectCityImage);
 
   useEffect(() => {
+    if (!isCityImageUpdated(destinationCity, cityImage)) {
+      getCityImage();
+    }
+
     if (JSON.stringify(allPois) === JSON.stringify(poisPlaceholder)) {
-      dispatch(fetchPOIs(`${geolocation.lat}, ${geolocation.lon}`)).then((res) => {
-        let pois: POISearch[] = res.payload.response.venues;
-        dispatch(setAvailableCategories(pois));
-      });
+      dispatch(fetchPOIs(`${destinationCity.lat}, ${destinationCity.lon}`)).then(
+        (res) => {
+          let pois: POISearch[] = res.payload.response.venues;
+          dispatch(setAvailableCategories(pois));
+        }
+      );
     } else {
       dispatch(setPOIs(allPois));
     }
@@ -172,6 +184,12 @@ export function ThingsToDo() {
   useEffect(() => {
     goToToursTitle();
   }, [selectedCategory]);
+
+  function getCityImage() {
+    fetchCityImage(destinationCity.city).then((res) => {
+      dispatch(setCityImage({ city: destinationCity.city, image: String(res) }));
+    });
+  }
 
   /**
    * Clicks on the anchor element with a ref to
@@ -281,14 +299,14 @@ export function ThingsToDo() {
       <a ref={toursTitleAnchorEl} href={`#${toursTitleID}`} hidden></a>
 
       <Helmet>
-        <title>{`Things to do in ${geolocation.city}`}</title>
+        <title>{`Things to do in ${destinationCity.city}`}</title>
       </Helmet>
 
       <Navbar />
 
       <div
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/dubai.jpg")`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${cityImage.image})`,
         }}
         className={style.background}
       ></div>
@@ -303,7 +321,7 @@ export function ThingsToDo() {
 
             <Grid item xs={10} className={style.pageTitleTextGrid}>
               <Text style={{ position: "relative" }} bold component="hm" color="white">
-                {`Things to do in ${geolocation.city}`}
+                {`Things to do in ${destinationCity.city}`}
               </Text>
             </Grid>
           </Grid>
@@ -342,7 +360,7 @@ export function ThingsToDo() {
               selectedCategory.name === categoryPlaceholder.name
                 ? "Places to go"
                 : selectedCategory.pluralName
-            } in ${geolocation.city}`}</Text>
+            } in ${destinationCity.city}`}</Text>
 
             {poiSliderRows === 2 ? (
               <CustomButton
@@ -438,7 +456,7 @@ export function ThingsToDo() {
             component="h2"
             bold
             className={style.toursTitle}
-          >{`Tours and activites in ${geolocation.city}`}</Text>
+          >{`Tours and activites in ${destinationCity.city}`}</Text>
 
           <Grid key="tours cards" container>
             {activities.slice(0, 6).map((activity, i) => (

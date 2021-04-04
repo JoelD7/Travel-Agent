@@ -224,7 +224,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     borderRadius: "10px",
   },
   searchLocationContainer: {
-    width: "80%",
+    width: "40%",
     display: "flex",
     margin: "auto",
     marginTop: "30px",

@@ -44,7 +44,7 @@ export function getPlaceAutocompleteURL(input: string) {
  * Returns a cover image for a city.
  * @param city
  */
-export function getCityImage(city: string) {
+export function fetchCityImage(city: string) {
   const placesRequestUrl = getFindPlaceFromTextURL(city, ["name", "photos"]);
 
   return Axios.get(proxyUrl + placesRequestUrl)

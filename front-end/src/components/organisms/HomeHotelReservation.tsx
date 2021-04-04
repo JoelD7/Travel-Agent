@@ -112,7 +112,6 @@ export default function HomeHotelReservation() {
 
   const history = useHistory();
 
-  const [locationQuery, setLocationQuery] = useState<string>();
   const [hotel, setHotel] = useState<HotelType>({
     checkIn: new Date(),
     checkOut: addDays(new Date(), 2),

@@ -153,16 +153,21 @@ export function IataAutocomplete({
       if (autocomplete) {
         persistGeolocationInLocalStorage(autocomplete, cityType);
 
-        batchedActions.push(setFlightTo(autocomplete.code));
-        batchedActions.push(setFlightToAutocomplete(autocomplete));
-        batchedActions.push(
-          updateHotelCoordinates({
-            latitude: Number(autocomplete.lat),
-            longitude: Number(autocomplete.lon),
-          })
-        );
-
-        batchedActions.push(setDestinationCity(autocomplete));
+        if (cityType === LocationType.ORIGIN) {
+          batchedActions.push(setFlightFrom(autocomplete.code));
+          batchedActions.push(setFlightFromAutocomplete(autocomplete));
+          batchedActions.push(setOriginCity(autocomplete));
+        } else {
+          batchedActions.push(setFlightTo(autocomplete.code));
+          batchedActions.push(setFlightToAutocomplete(autocomplete));
+          batchedActions.push(
+            updateHotelCoordinates({
+              latitude: Number(autocomplete.lat),
+              longitude: Number(autocomplete.lon),
+            })
+          );
+          batchedActions.push(setDestinationCity(autocomplete));
+        }
       }
     } else {
       batchedActions.push(updateAirportPredictions(predictions));
@@ -191,6 +196,7 @@ export function IataAutocomplete({
         onChange={(e, value) => onAutomcompleteValueChange(value)}
         options={predictions}
         className={className}
+        style={{ width: "100%" }}
         loading={predictions.length !== 0}
         getOptionLabel={(option) => getAutocompleteLabel(option, type)}
         popupIcon={
@@ -218,7 +224,7 @@ export function IataAutocomplete({
               variant="outlined"
               placeholder={placeholder ? placeholder : "Search locations"}
               style={isInNavbar ? { width: "100%" } : {}}
-              className={style.searchBar}
+              className={isInNavbar ? style.navbar : style.searchBar}
               onChange={onCityChange}
               size="small"
             />

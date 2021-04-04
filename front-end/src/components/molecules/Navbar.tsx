@@ -84,12 +84,14 @@ export const Navbar: FunctionComponent<Navbar> = ({
         </Link>
 
         {/* Search box */}
-        <IataAutocomplete
-          className={style.autocompleteContainer}
-          type="city"
-          isInNavbar
-          home={home}
-        />
+        <div style={{ width: "350px" }}>
+          <IataAutocomplete
+            className={style.autocompleteContainer}
+            type="city"
+            isInNavbar
+            home={home}
+          />
+        </div>
 
         <div className={style.rightChildrenContainer}>
           <div className={style.defaultHomeNav}>

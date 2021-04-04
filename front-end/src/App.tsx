@@ -39,7 +39,7 @@ import { Font } from "./assets";
 export default function App() {
   const style = appStyles();
 
-  const [openOriginCityDialog, setOpenOriginCityDialog] = useState(true);
+  const [openOriginCityDialog, setOpenOriginCityDialog] = useState(false);
 
   const originCity: IATALocation = useSelector(selectOriginCity);
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
@@ -90,7 +90,7 @@ export default function App() {
       {/* Dialog */}
       <Dialog open={openOriginCityDialog} classes={{ paperWidthSm: style.paperWidthSm }}>
         <Grid container style={{ padding: "15px" }} alignItems="center">
-          <IconTP icon={faMapMarkerAlt} size={60} style={{ padding: "10px" }} />
+          <IconTP icon={faMapMarkerAlt} size={50} style={{ padding: "10px" }} />
           <Text component="h1" style={{ marginLeft: "10px" }} bold color={Colors.BLUE}>
             Where are you from?
           </Text>

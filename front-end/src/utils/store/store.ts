@@ -38,6 +38,8 @@ export const selectOpenRequiredFieldSnack = (state: RootState) =>
 export const selectExchangeRate = (state: RootState) => state.rootSlice.exchangeRate;
 
 export const selectBaseCurrency = (state: RootState) => state.rootSlice.baseCurrency;
+
+export const selectCityImage = (state: RootState) => state.rootSlice.cityImage;
 //#endregion
 
 //#region Search

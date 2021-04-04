@@ -17,9 +17,22 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
   popupIndicatorOpen: {
     transform: "rotate(0deg)",
   },
-  searchBar: {
+  navbar: {
     marginLeft: "10px",
     width: "300px",
+    borderRadius: "10px",
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "10px",
+      fontFamily: Font.Family,
+      "&:hover fieldset": {
+        borderColor: "#cecece",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "#cecece",
+      },
+    },
+  },
+  searchBar: {
     borderRadius: "10px",
     "& .MuiOutlinedInput-root": {
       borderRadius: "10px",

@@ -44,30 +44,32 @@ import { Colors, Shadow } from "../../styles";
 import {
   convertReservationParamsToURLParams,
   convertURLToReservationParams,
-  getCityImage,
-  getHotelStars,
-  HotelBedAPI,
-  hotelsPlaceholder,
-  muiDateFormatter,
-  getMinRate,
-  selectHotelReservationParams,
-  selectOpenRedirecDialog,
-  selectDestinationCity,
   formatAsDecimal,
-  isDateAfterOrEqual,
+  fetchCityImage,
+  getHotelStars,
+  getMinRate,
   HotelAvailability,
+  HotelBedAPI,
   HotelBooking,
   HotelBookingParams,
   HotelPax,
+  hotelsPlaceholder,
+  isDateAfterOrEqual,
+  muiDateFormatter,
   Occupancy,
+  selectDestinationCity,
+  selectHotelReservationParams,
+  selectOpenRedirecDialog,
   setOpenRedirecDialog,
   updateReservationParams,
-  selectBaseCurrency,
+  setCityImage,
+  selectCityImage,
+  CityImage,
+  isCityImageUpdated,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
 import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
 import { IATALocation } from "../../utils/types/location-types";
-
 import { hotelsStyles } from "./hotels-styles";
 
 interface AvailabilityParams {
@@ -247,15 +249,16 @@ export function Hotels() {
 
   const openRedirecDialog: boolean = useSelector(selectOpenRedirecDialog);
   const geolocation: IATALocation = useSelector(selectDestinationCity);
+  const cityImage: CityImage = useSelector(selectCityImage);
 
   const history = useHistory();
 
   const firstRender = useRef(true);
 
   useEffect(() => {
-    getCityImage(geolocation.city).then((res) => {
-      setImage(String(res));
-    });
+    if (!isCityImageUpdated(geolocation, cityImage)) {
+      getCityImage();
+    }
 
     if (isURLWithParams()) {
       reservationParams = convertURLToReservationParams(
@@ -276,9 +279,9 @@ export function Hotels() {
     if (!isFirstRender()) {
       setLoading(true);
 
-      getCityImage(geolocation.city).then((res) => {
-        setImage(String(res));
-      });
+      if (!isCityImageUpdated(geolocation, cityImage)) {
+        getCityImage();
+      }
 
       searchHotels(reservationParams);
     }
@@ -290,6 +293,12 @@ export function Hotels() {
       updateURL();
     }
   }, [sortOption, page, pageSize]);
+
+  function getCityImage() {
+    fetchCityImage(geolocation.city).then((res) => {
+      dispatch(setCityImage({ city: geolocation.city, image: String(res) }));
+    });
+  }
 
   function searchHotels(reservationParams: HotelBookingParams) {
     if (!isFirstRender()) {
@@ -752,7 +761,7 @@ export function Hotels() {
 
       <div
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${image})`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${cityImage.image})`,
         }}
         className={style.background}
       ></div>

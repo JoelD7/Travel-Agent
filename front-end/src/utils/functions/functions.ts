@@ -11,7 +11,7 @@ import { compareAsc, format } from "date-fns";
 import { DEFAULT_CURRENCY } from "../constants";
 import { iataCodes } from "../constants/iataCodes";
 import { airportCityPlaceholder } from "../placeholders";
-import { EventType, ExchangeRate } from "../types";
+import { CityImage, EventType, ExchangeRate } from "../types";
 import { IATALocation } from "../types/location-types";
 export * from "./flight-functions";
 export * from "./hotel-functions";
@@ -628,4 +628,24 @@ export function getDefaultCity(type: "originCity" | "destinationCity"): IATALoca
  */
 export function isValueInRange(value: number, range: number[]): boolean {
   return value >= range[0] && value <= range[1];
+}
+
+export function getDefaultCityImage(): CityImage {
+  let savedItem = localStorage.getItem(`cityImage`);
+
+  if (savedItem === null) {
+    return {
+      city: "",
+      image: "",
+    };
+  }
+
+  return JSON.parse(savedItem);
+}
+
+export function isCityImageUpdated(
+  destinationCity: IATALocation,
+  cityImage: CityImage
+): boolean {
+  return destinationCity.city === cityImage.city;
 }
