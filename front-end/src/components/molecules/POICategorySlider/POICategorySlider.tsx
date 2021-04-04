@@ -10,14 +10,12 @@ interface POICategorySlider {
   availableCategories: POICategorySearch[];
   onCategorySelected: (category: POICategorySearch) => void;
   selectedCategory: POICategorySearch;
-  loading: boolean;
 }
 
 export function POICategorySlider({
   availableCategories,
   onCategorySelected,
   selectedCategory,
-  loading,
 }: POICategorySlider) {
   const style = thingsToDoStyles();
 
@@ -70,14 +68,18 @@ export function POICategorySlider({
 
   return (
     <div style={{ height: "264px", display: "flex" }}>
-      {loading && <ProgressCircle />}
-
-      {loading ? (
-        // This shows while the categories are loaded
-        <Slider {...categorySliderSettings}>
-          {POICategories.map((category, i) => (
-            <div key={category.id}>
-              <Card className={style.cardPlaceholder} style={{ borderRadius: "15px" }}>
+      <Slider {...categorySliderSettings}>
+        {POICategories.map((category, i) => (
+          <div key={category.id}>
+            <CardActionArea
+              className={
+                selectedCategory.pluralName === category.pluralName
+                  ? style.cardSelected
+                  : style.card
+              }
+              onClick={() => onCategorySelected(category)}
+            >
+              <Card style={{ borderRadius: "15px" }}>
                 <CardContent style={getCategoryCardStyle(category)}>
                   <div className={style.categoryNameContainer}>
                     <Text bold color="white">
@@ -86,35 +88,10 @@ export function POICategorySlider({
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          ))}
-        </Slider>
-      ) : (
-        <Slider {...categorySliderSettings}>
-          {availableCategories.map((category, i) => (
-            <div key={category.id}>
-              <CardActionArea
-                className={
-                  selectedCategory.pluralName === category.pluralName
-                    ? style.cardSelected
-                    : style.card
-                }
-                onClick={() => onCategorySelected(category)}
-              >
-                <Card style={{ borderRadius: "15px" }}>
-                  <CardContent style={getCategoryCardStyle(category)}>
-                    <div className={style.categoryNameContainer}>
-                      <Text bold color="white">
-                        {category.name}
-                      </Text>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CardActionArea>
-            </div>
-          ))}
-        </Slider>
-      )}
+            </CardActionArea>
+          </div>
+        ))}
+      </Slider>
     </div>
   );
 }

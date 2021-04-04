@@ -104,7 +104,6 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
-
   parentCategoryBar: {
     display: "flex",
     minHeight: "20px",
@@ -130,7 +129,7 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     width: "80%",
-    margin: "25px auto 40px auto",
+    margin: "25px auto 150px auto",
     position: "relative",
 
     [theme.breakpoints.down(1035)]: {
@@ -220,6 +219,13 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     alignItems: "center",
     position: "absolute",
     filter: "blur(4px)",
+  },
+  progressCircleContainer: {
+    display: "flex",
+    margin: "auto",
+    position: "absolute",
+    left: "50vw",
+    top: "50vh",
   },
   rating: {
     marginBottom: "15px",

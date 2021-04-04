@@ -129,6 +129,21 @@ export async function fetchGreatFlightDeals(city: IATALocation, departureDate: D
   );
 }
 
+export async function fetchToursAndActivities(city: IATALocation) {
+  let accessToken = await getAccessToken();
+
+  return Axios.get(proxyUrl + `https://test.api.amadeus.com/v1/shopping/activities`, {
+    headers: {
+      Authorization: `Bearer ${accessToken ? accessToken.token : ""}`,
+    },
+    params: {
+      latitude: city.lat,
+      longitude: city.lon,
+      radius: 3,
+    },
+  });
+}
+
 /**
  * Returns city data based on its id.
  * @param id

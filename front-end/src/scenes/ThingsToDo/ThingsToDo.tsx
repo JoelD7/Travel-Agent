@@ -1,11 +1,5 @@
-import { faCircle, faStar } from "@fortawesome/free-solid-svg-icons";
-import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
-import Rating from "react-rating";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import {
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
   FormControl,
   Grid,
   makeStyles,
@@ -31,31 +25,28 @@ import {
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
-  activitiesPlaceholder,
+  CityImage,
   ExchangeRate,
+  fetchCityImage,
   fetchPOIs,
-  formatAsCurrency,
   getPOICategoryParent,
+  isCityImageUpdated,
   POICategory,
   poisPlaceholder,
   selectAllPOIs,
-  selectAvailableCategories,
   selectBaseCurrency,
+  selectCityImage,
   selectConsultedCategories,
   selectConsultedCoordinates,
+  selectDestinationCity,
   selectExchangeRate,
   selectLoadingCategories,
   selectLoadingPOICard,
   selectPOIs,
   selectPOIsByCategory,
-  selectDestinationCity,
   setAvailableCategories,
-  useAppDispatch,
-  isCityImageUpdated,
   setCityImage,
-  fetchCityImage,
-  CityImage,
-  selectCityImage,
+  useAppDispatch,
 } from "../../utils";
 import { POICategoryFetch, POICategorySearch } from "../../utils/POICategory";
 import {
@@ -67,7 +58,6 @@ import {
 import { IATALocation } from "../../utils/types/location-types";
 import { thingsToDoStyles as thingsToDoStyles } from "./thingsToDo-styles";
 import "./thingsTodo.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type SortOption = "" | "Name | A - Z" | "Name | Z - A";
 
@@ -148,7 +138,7 @@ export function ThingsToDo() {
     ],
   };
 
-  const activities: Activity[] = activitiesPlaceholder;
+  const [activities, setActivities] = useState<Activity[]>([]);
 
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
   const baseCurrency: string = useSelector(selectBaseCurrency);
@@ -158,7 +148,7 @@ export function ThingsToDo() {
   const [sortOption, setSortOption] = useState<SortOption>("");
   const sortOptions: SortOption[] = ["Name | A - Z", "Name | Z - A"];
 
-  const availableCategories: POICategorySearch[] = useSelector(selectAvailableCategories);
+  const availableCategories: POICategorySearch[] = POICategory.POICategories;
   const poisByCategory = useSelector(selectPOIsByCategory);
 
   const destinationCity: IATALocation = useSelector(selectDestinationCity);
@@ -170,12 +160,7 @@ export function ThingsToDo() {
     }
 
     if (JSON.stringify(allPois) === JSON.stringify(poisPlaceholder)) {
-      dispatch(fetchPOIs(`${destinationCity.lat}, ${destinationCity.lon}`)).then(
-        (res) => {
-          let pois: POISearch[] = res.payload.response.venues;
-          dispatch(setAvailableCategories(pois));
-        }
-      );
+      dispatch(fetchPOIs(`${destinationCity.lat}, ${destinationCity.lon}`));
     } else {
       dispatch(setPOIs(allPois));
     }
@@ -203,13 +188,6 @@ export function ThingsToDo() {
     }
   }
 
-  function goToBookingLink(href: string) {
-    Object.assign(document.createElement("a"), {
-      target: "_blank",
-      href: href,
-    }).click();
-  }
-
   function onCategorySelected(category: POICategorySearch) {
     dispatch(onLoadingPOICardChange(true));
 
@@ -223,13 +201,16 @@ export function ThingsToDo() {
       let params: POICategoryFetch = {
         category,
         categoryParent: "",
-        ll: "51.5074, 0.1278",
+        ll: `${destinationCity.lat}, ${destinationCity.lon}`,
         cached: false,
       };
 
       let categoryParent: string = getPOICategoryParent(category.id);
 
-      let cached: boolean = arePOIsOfCategoryCached("51.5074, 0.1278", categoryParent);
+      let cached: boolean = arePOIsOfCategoryCached(
+        `${destinationCity.lat}, ${destinationCity.lon}`,
+        categoryParent
+      );
       params = { ...params, cached, categoryParent };
 
       if (cached) {
@@ -240,7 +221,7 @@ export function ThingsToDo() {
           dispatch(
             addPOIsByCategoryGroup({
               category: categoryParent,
-              ll: "51.5074, 0.1278",
+              ll: `${destinationCity.lat}, ${destinationCity.lon}`,
               pois: res.payload as POISearch[],
             })
           );
@@ -349,7 +330,6 @@ export function ThingsToDo() {
         <POICategorySlider
           availableCategories={availableCategories}
           selectedCategory={selectedCategory}
-          loading={loadingCategories}
           onCategorySelected={onCategorySelected}
         />
 
@@ -446,77 +426,6 @@ export function ThingsToDo() {
                 </Grid>
               )}
             </Grid>
-          </Grid>
-        </>
-
-        {/* Tours cards */}
-        <>
-          <Text
-            id={toursTitleID}
-            component="h2"
-            bold
-            className={style.toursTitle}
-          >{`Tours and activites in ${destinationCity.city}`}</Text>
-
-          <Grid key="tours cards" container>
-            {activities.slice(0, 6).map((activity, i) => (
-              <Card key={i} className={style.activityCard}>
-                <CardActionArea onClick={() => goToBookingLink(activity.bookingLink)}>
-                  <CardMedia component="img" image={activity.pictures[0]} height="200" />
-                </CardActionArea>
-
-                <CardContent>
-                  <Text
-                    component="h5"
-                    bold
-                    style={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxHeight: "52px",
-                      marginTop: "0px",
-                    }}
-                  >
-                    {activity.name}
-                  </Text>
-
-                  <Rating
-                    initialRating={Number(activity.rating)}
-                    readonly
-                    emptySymbol={
-                      <FontAwesomeIcon
-                        style={{ margin: "0px 1px" }}
-                        icon={faStarReg}
-                        color={Colors.PURPLE}
-                      />
-                    }
-                    fullSymbol={
-                      <FontAwesomeIcon
-                        style={{ margin: "0px 1px" }}
-                        icon={faStar}
-                        color={Colors.PURPLE}
-                      />
-                    }
-                  />
-
-                  <Text
-                    bold
-                    style={{ marginTop: "20px" }}
-                    color={Colors.BLUE}
-                  >{`${formatAsCurrency(
-                    Number(activity.price.amount),
-                    baseCurrency,
-                    exchangeRate
-                  )}`}</Text>
-                  <CustomButton
-                    rounded
-                    style={{ fontSize: "16px", marginTop: "auto" }}
-                    onClick={() => goToBookingLink(activity.bookingLink)}
-                  >
-                    Check out
-                  </CustomButton>
-                </CardContent>
-              </Card>
-            ))}
           </Grid>
         </>
       </div>

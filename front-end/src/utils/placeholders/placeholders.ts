@@ -2179,7 +2179,6 @@ export const activitiesPlaceholder: Activity[] = [
       "Book your tickets to the 9/11 Memorial & Museum on Musement today. Visit the touching memorial, and learn about the events of that fateful day.",
 
     rating: "4.700000",
-    // pictures: [""],
     pictures: [
       "https://images.musement.com/cover/0001/19/9-11-memorial-museum-tickets_header-18896.jpeg?w=500",
     ],
@@ -2195,7 +2194,6 @@ export const activitiesPlaceholder: Activity[] = [
       "See New York's famous landmarks from the air on an exhilarating 15-minute helicopter tour. You'll come face-to-face with the Statue of Liberty as you fly above the Hudson River. Admire the iconic Empire State Building, the silver Art Deco brilliance of the Chrysler Building, and the sprawling green expanse of Central Park. A must for any visitor to New York City!",
 
     rating: "4.400000",
-    // pictures: [""],
     pictures: [
       "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/70/61/53.jpg",
     ],

@@ -15,11 +15,11 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
     padding: "15px",
     backgroundColor: Colors.BLUE,
     boxShadow: Shadow.LIGHT,
-    color: 'white'
+    color: "white",
   },
-  images:{
+  images: {
     objectFit: "cover",
-    width: '100%',
+    width: "100%",
     height: "100%",
     margin: "auto",
   },
@@ -37,11 +37,18 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     width: "85%",
-    margin: "auto auto 50px auto",
-    borderRadius: '10px',
+    margin: "auto auto 150px auto",
+    borderRadius: "10px",
     boxShadow: Shadow.LIGHT,
-    padding: '10px',
-    backgroundColor: 'white',
+    padding: "10px",
+    backgroundColor: "white",
+  },
+  progressCircleContainer: {
+    display: "flex",
+    margin: "auto",
+    position: "absolute",
+    left: "50vw",
+    top: "50vh",
   },
   tripButtonGrid: {
     margin: "auto 0px auto auto",
