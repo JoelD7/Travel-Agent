@@ -7,7 +7,7 @@ export function getRestaurantCategoriesList(
   return restaurant.categories.map((c) => c.title).join(", ");
 }
 
-export function getRestaurantHours(restaurant: Restaurant) {
+export function getRestaurantHours(restaurant: Restaurant): string[] {
   const weekDays = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];
   let timing = [];
 
@@ -88,7 +88,8 @@ export function getRestaurantHours(restaurant: Restaurant) {
       }
     }
   }
-  return timing.join(", ");
+
+  return timing;
 }
 
 function parseHour(value: string) {

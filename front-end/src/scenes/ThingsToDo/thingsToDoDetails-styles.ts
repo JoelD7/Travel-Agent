@@ -50,6 +50,14 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
     marginLeft: "10px",
     height: "500px",
   },
+  imageGridNoImage: {
+    [theme.breakpoints.down(910)]: {
+      width: "100%",
+    },
+    width: "48%",
+    marginLeft: "10px",
+    height: "500px",
+  },
   mainContainer: {
     fontFamily: Font.Family,
     backgroundColor: Colors.BACKGROUND,

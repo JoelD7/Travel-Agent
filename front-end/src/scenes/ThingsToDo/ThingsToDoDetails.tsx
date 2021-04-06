@@ -6,6 +6,7 @@ import {
   IconText,
   IncludeInTripPopover,
   Navbar,
+  NotAvailableCard,
   ProgressCircle,
   Rating,
   ServicesToolbar,
@@ -26,6 +27,7 @@ import Helmet from "react-helmet";
 import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { useParams } from "react-router";
 import Axios from "axios";
+import { NotFound } from "../NotFound/NotFound";
 
 export function ThingsToDoDetails() {
   const [poi, sePOI] = useState<POI>();
@@ -63,7 +65,7 @@ export function ThingsToDoDetails() {
     if (photo) {
       return `${photo.prefix}${photo.width}x${photo.height}${photo.suffix}`;
     }
-    return "";
+    return " ";
   }
 
   function parseAddress(poi: POI) {
@@ -184,13 +186,22 @@ export function ThingsToDoDetails() {
             </Grid>
 
             {/* Image */}
-            <Grid item className={style.imageGrid}>
+            <Grid
+              item
+              className={poi.bestPhoto ? style.imageGrid : style.imageGridNoImage}
+            >
               <Grid container style={{ height: "100%" }}>
-                <img
-                  src={photoURLBuilder(poi.bestPhoto)}
-                  className={style.images}
-                  alt="restaurant image"
-                />
+                {poi.bestPhoto ? (
+                  <img
+                    src={photoURLBuilder(poi.bestPhoto)}
+                    className={style.images}
+                    alt="restaurant image"
+                  />
+                ) : (
+                  <NotAvailableCard variant="vertical" title="Sorry">
+                    This place has no photos available.
+                  </NotAvailableCard>
+                )}
               </Grid>
             </Grid>
 

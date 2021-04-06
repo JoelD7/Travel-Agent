@@ -3,6 +3,12 @@ import { Family } from "../../../assets/fonts";
 import { Colors, Shadow } from "../../../styles";
 
 export const cardFlightStyles = makeStyles((theme: Theme) => ({
+  airlineClassGrid: {
+    width: "50%",
+    [theme.breakpoints.down(590)]: {
+      width: "100%",
+    },
+  },
   airportsText: {
     fontSize: "14px",
     color: "#5f5f5f",
@@ -23,6 +29,13 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     },
     [theme.breakpoints.down(518)]: {
       margin: "10px 0px",
+    },
+  },
+  detailButtonGrid: {
+    width: "50%",
+    [theme.breakpoints.down(590)]: {
+      width: "100%",
+      marginTop: "10px",
     },
   },
   dealGrid: {
@@ -102,14 +115,20 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
       display: "block",
     },
   },
+  priceGrid: {
+    width: "33.3%",
+    [theme.breakpoints.down(590)]: {
+      display: "none",
+    },
+  },
   priceGridRes: {
     display: "none",
     alignItems: "center",
-    justifyContent: "flex-start",
-    width: "50%",
+    justifyContent: "flex-end",
+    marginRight: "10px",
 
-    [theme.breakpoints.down(625)]: {
-      display: "flex",
+    [theme.breakpoints.down(590)]: {
+      display: "block",
     },
   },
   buttonGridRes: {
@@ -138,6 +157,12 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "white",
     borderRadius: "10px",
     boxShadow: Shadow.MEDIUM3D,
+  },
+  flightsDataGrid: {
+    width: "66.6%",
+    [theme.breakpoints.down(590)]: {
+      width: "100%",
+    },
   },
   timesText: {
     fontSize: "18px",

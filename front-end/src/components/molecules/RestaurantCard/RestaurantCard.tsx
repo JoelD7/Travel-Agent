@@ -5,8 +5,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CardActionArea, Grid } from "@material-ui/core";
 import React from "react";
-import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import { Colors } from "../../../styles";
 import { getLinkStyle, Routes } from "../../../utils";
 import { getRestaurantCategoriesList } from "../../../utils/functions/restaurant";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
@@ -20,32 +20,35 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
   const style = restaurantCardStyles();
   const history = useHistory();
 
-  const dispatch = useDispatch();
-
   function onRestaurantClick() {
     history.push(`${Routes.RESTAURANTS}/${restaurant.id}`);
   }
 
   return (
     <Grid container className={style.mainContainer}>
+      {/* Photo */}
       <Grid item className={style.photoGrid}>
         <CardActionArea style={{ height: "100%" }} onClick={() => onRestaurantClick()}>
           <img src={restaurant.image_url} className={style.cardImage} />
         </CardActionArea>
       </Grid>
 
+      {/* Content */}
       <Grid item className={style.cardContentGrid}>
-        <Grid container style={{ height: "100%" }}>
+        <Grid container style={{ height: "100%", padding: "10px" }}>
           <Grid item xs={12}>
-            <Text component="h3" weight={500} style={{ margin: "5px 0px" }}>
+            {/* Name */}
+            <Text component="h3" bold color={Colors.BLUE} style={{ marginTop: "5px" }}>
               {restaurant.name}
             </Text>
           </Grid>
 
+          {/* Rating */}
           <Grid item xs={12}>
             <Rating score={restaurant.rating} readonly type="star" />
           </Grid>
 
+          {/* Cuisines */}
           <Grid item xs={12} style={{ marginTop: "15px" }}>
             <IconText
               shadow
@@ -55,6 +58,7 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
             />
           </Grid>
 
+          {/* Address */}
           <Grid item xs={12}>
             <IconText
               shadow
@@ -64,6 +68,7 @@ export function RestaurantCard({ restaurant }: RestaurantCard) {
             />
           </Grid>
 
+          {/* Button */}
           <Grid item xs={12}>
             <Grid container style={{ paddingRight: "10px" }}>
               <CustomButton style={{ marginLeft: "auto" }} icon={faChevronRight} rounded>

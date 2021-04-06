@@ -96,8 +96,6 @@ export function Home() {
     holder: { ...state.holder, [45]: { calendarItems: [{ a: "klk" }] } },
   };
 
-  getRestaurantHours(restaurantPlaceholder);
-
   const services = [
     {
       name: "Hotel",

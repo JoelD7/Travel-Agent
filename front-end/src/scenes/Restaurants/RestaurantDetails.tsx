@@ -9,9 +9,7 @@ import {
 import { Grid } from "@material-ui/core";
 import React, { MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import Ratings from "react-ratings-declarative";
 import { useParams } from "react-router-dom";
-import Slider from "react-slick";
 import {
   CustomButton,
   Footer,
@@ -22,7 +20,6 @@ import {
   Rating,
   RestaurantDetailsSlider,
   ServicesToolbar,
-  SliderArrow,
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
@@ -45,13 +42,6 @@ export function RestaurantDetails() {
 
   const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
   const [openPopover, setOpenPopover] = useState(false);
-
-  const sliderSettings = {
-    className: style.slider,
-    nextArrow: <SliderArrow direction="right" />,
-    prevArrow: <SliderArrow direction="left" />,
-    slidesToShow: 1,
-  };
 
   useEffect(() => {
     fetchRestaurant(id)
@@ -131,58 +121,79 @@ export function RestaurantDetails() {
               Details
             </Text>
 
-            <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
-              Cuisines
-            </Text>
-            <IconText
-              textColor="white"
-              fontSize={15}
-              icon={faUtensils}
-              style={{ marginBottom: "20px" }}
-            >
-              {getRestaurantCategoriesList(restaurant)}
-            </IconText>
+            {/* Cuisines */}
+            <div>
+              <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
+                Cuisines
+              </Text>
+              <IconText
+                textColor="white"
+                fontSize={15}
+                icon={faUtensils}
+                style={{ marginBottom: "20px" }}
+              >
+                {getRestaurantCategoriesList(restaurant)}
+              </IconText>
+            </div>
 
-            <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
-              Timings
-            </Text>
-            <IconText
-              textColor="white"
-              fontSize={15}
-              icon={faClock}
-              style={{ marginBottom: "20px" }}
-            >
-              {getRestaurantHours(restaurant)}
-            </IconText>
+            {/* Timings */}
+            <div>
+              <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
+                Timings
+              </Text>
+              {getRestaurantHours(restaurant).map((timing) => (
+                <IconText
+                  key={timing}
+                  textColor="white"
+                  fontSize={15}
+                  icon={faClock}
+                  style={{ marginBottom: "5px" }}
+                >
+                  {timing}
+                </IconText>
+              ))}
+            </div>
 
-            <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
-              Menu
-            </Text>
-            <IconText
-              textColor="white"
-              fontSize={15}
-              icon={faUtensils}
-              style={{ marginBottom: "20px" }}
-            >
-              <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
-                Click here
-              </a>
-            </IconText>
+            {/* Menu */}
+            <div>
+              <Text
+                bold
+                style={{ margin: "20px 0px 7px 0px" }}
+                color="white"
+                component="h4"
+              >
+                Menu
+              </Text>
+              <IconText
+                textColor="white"
+                fontSize={15}
+                icon={faUtensils}
+                style={{ marginBottom: "20px" }}
+              >
+                <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
+                  Click here
+                </a>
+              </IconText>
+            </div>
 
-            <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
-              Website
-            </Text>
-            <IconText
-              textColor="white"
-              fontSize={15}
-              icon={faGlobe}
-              style={{ marginBottom: "20px" }}
-            >
-              <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
-                Click here
-              </a>
-            </IconText>
+            {/* Website */}
+            <div>
+              <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
+                Website
+              </Text>
+              <IconText
+                textColor="white"
+                fontSize={15}
+                icon={faGlobe}
+                style={{ marginBottom: "20px" }}
+              >
+                <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
+                  Click here
+                </a>
+              </IconText>
+            </div>
 
+            {/* Amenities */}
             {amenities !== "" && (
               <>
                 <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">

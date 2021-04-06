@@ -135,7 +135,7 @@ export function Reservations() {
           </Grid>
 
           {/* Hotels title */}
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{ marginTop: "30px" }}>
             <Grid id="Hotels" container>
               <Text bold color={Colors.BLUE} component="h2">
                 Hotels

@@ -71,7 +71,8 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
           <CardHeader
             title={
               <Grid container style={{ fontFamily: Font.Family }}>
-                <Grid id="text grid" item xs={8}>
+                <Grid id="text grid" item className={style.flightsDataGrid}>
+                  {/* Outgoing flight */}
                   <div style={{ display: "flex" }}>
                     <Text style={{ color: Colors.BLUE }} component="h4" weight="bold">
                       {getFlightCitiesLabel(flight, "departure")}
@@ -98,6 +99,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
                     </p>
                   </div>
 
+                  {/* Return flight */}
                   {returnFlight && (
                     <div>
                       <div style={{ marginTop: "10px", display: "flex" }}>
@@ -129,13 +131,14 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
                   )}
                 </Grid>
 
-                <Grid id="price grid" item xs={4}>
-                  <Grid container alignItems="center">
-                    <h5 style={{ margin: "auto 0px auto auto" }}>{`${formatAsCurrency(
+                {/* Price */}
+                <Grid id="price grid" item className={style.priceGrid}>
+                  <Grid container alignItems="center" justify="flex-end">
+                    <Text bold component="h4">{`${formatAsCurrency(
                       Number(flight.price.total),
                       baseCurrency,
                       exchangeRate
-                    )}`}</h5>
+                    )}`}</Text>
                   </Grid>
                 </Grid>
               </Grid>
@@ -143,20 +146,36 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
           />
 
           <CardContent>
-            <div style={{ display: "flex" }}>
-              <IconText
-                icon={faPlaneDeparture}
-                text={`${flight.itineraries[0].segments[0].carrierCode}, ${flight.class}`}
-              />
+            {/* Airline and class */}
+            <Grid container>
+              <Grid item className={style.airlineClassGrid}>
+                <IconText
+                  icon={faPlaneDeparture}
+                  text={`${flight.itineraries[0].segments[0].carrierCode}, ${flight.class}`}
+                />
+              </Grid>
 
-              <CustomButton
-                style={{ marginLeft: "auto", fontSize: "14px" }}
-                onClick={() => {}}
-                backgroundColor={Colors.PURPLE}
-              >
-                View details
-              </CustomButton>
-            </div>
+              <Grid item className={style.detailButtonGrid}>
+                <Grid container justify="flex-end">
+                  {/* Price responsive */}
+                  <Grid id="price grid" item className={style.priceGridRes}>
+                    <Text bold component="h4">{`${formatAsCurrency(
+                      Number(flight.price.total),
+                      baseCurrency,
+                      exchangeRate
+                    )}`}</Text>
+                  </Grid>
+
+                  <CustomButton
+                    style={{ fontSize: "14px" }}
+                    onClick={() => {}}
+                    backgroundColor={Colors.PURPLE}
+                  >
+                    View details
+                  </CustomButton>
+                </Grid>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       </CardActionArea>

@@ -7,12 +7,14 @@ interface NotAvailableCard {
   children: ReactNode; //Detailed info
   title: string;
   imageHeight?: number;
+  variant?: "vertical" | "horizontal";
 }
 
 export function NotAvailableCard({
   children,
   title,
   imageHeight = 250,
+  variant = "horizontal",
 }: NotAvailableCard) {
   const notAvailableCardStyles = makeStyles(() => ({
     noHotelsContainer: {
@@ -32,7 +34,7 @@ export function NotAvailableCard({
   return (
     <Grid container className={style.noHotelsContainer}>
       {/* Message */}
-      <Grid item xs={8}>
+      <Grid item xs={variant === "horizontal" ? 8 : 12}>
         <Text component="h1" bold color={Colors.BLUE}>
           {title}
         </Text>
@@ -41,7 +43,7 @@ export function NotAvailableCard({
       </Grid>
 
       {/* Image */}
-      <Grid item xs={4}>
+      <Grid item xs={variant === "horizontal" ? 8 : 12}>
         <Grid alignItems="center" justify="center" container style={{ height: "100%" }}>
           <img
             src="/Travel-Agent/not-found.png"
