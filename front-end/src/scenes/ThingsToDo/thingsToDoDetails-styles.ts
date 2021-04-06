@@ -3,6 +3,18 @@ import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
 
 export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
+  aboutContainer: {
+    borderRadius: "10px",
+    background: "white",
+    padding: "20px",
+    boxShadow: Shadow.MEDIUM,
+  },
+  aboutGrid: {
+    width: "48%",
+    [theme.breakpoints.down(910)]: {
+      width: "100%",
+    },
+  },
   detailsGrid: {
     [theme.breakpoints.down(910)]: {
       width: "100%",
@@ -17,6 +29,10 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
     boxShadow: Shadow.LIGHT,
     color: "white",
   },
+  divider: {
+    background: "#cecece",
+    marginBottom: "10px",
+  },
   images: {
     objectFit: "cover",
     width: "100%",
@@ -26,6 +42,9 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
   imageGrid: {
     [theme.breakpoints.down(910)]: {
       width: "100%",
+    },
+    [theme.breakpoints.down(676)]: {
+      height: "60vw",
     },
     width: "48%",
     marginLeft: "10px",
@@ -49,6 +68,13 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
     position: "absolute",
     left: "50vw",
     top: "50vh",
+  },
+  titleRatingGrid: {
+    width: "66.6%",
+    [theme.breakpoints.down(400)]: {
+      width: "100%",
+      marginBottom: "10px",
+    },
   },
   tripButtonGrid: {
     margin: "auto 0px auto auto",

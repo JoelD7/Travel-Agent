@@ -4,6 +4,7 @@ interface POI {
   contact: POIContact;
   location: POILocation;
   categories: POICategory[];
+  description?: string;
   url: string;
   rating: number; //1-10
   photos?: POIPhotos;

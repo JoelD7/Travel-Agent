@@ -45,6 +45,9 @@ export const fetchPOIs = createAsyncThunk(
   "poiReducer/getPoisThunk",
   async (ll: string, thunkAPI) => {
     const response = await Axios.get("https://api.foursquare.com/v2/venues/search", {
+      headers: {
+        "Accept-Language": "en",
+      },
       params: {
         ll: ll,
         categoryId:

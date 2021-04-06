@@ -30,7 +30,7 @@ export function AboutHotel({ hotel }: AboutHotel) {
 
       {/* Hotel stars */}
       <Grid item xs={12}>
-        <Rating type="star" readonly size="2x" score={getHotelStars(hotel)} />
+        <Rating type="star" readonly size={30} score={getHotelStars(hotel)} />
       </Grid>
 
       {/* Address and contact */}

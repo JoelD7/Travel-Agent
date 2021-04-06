@@ -889,7 +889,7 @@ export function Hotels() {
                   type="star"
                   score={state.stars}
                   onChange={onStarChange}
-                  size="2x"
+                  size={40}
                 />
               </div>
             </Grid>

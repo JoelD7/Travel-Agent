@@ -1,4 +1,11 @@
-import { faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClock,
+  faGlobe,
+  faMapMarkerAlt,
+  faPhone,
+  faStar,
+  faUtensils,
+} from "@fortawesome/free-solid-svg-icons";
 import { Grid } from "@material-ui/core";
 import React, { MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
@@ -12,9 +19,11 @@ import {
   IncludeInTripPopover,
   Navbar,
   ProgressCircle,
+  Rating,
   RestaurantDetailsSlider,
   ServicesToolbar,
   SliderArrow,
+  Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
@@ -79,20 +88,12 @@ export function RestaurantDetails() {
         className={style.pageContentContainer}
         style={loading ? { filter: "blur(4px)" } : {}}
       >
-        {/* Ratings */}
+        {/* Name and Ratings */}
         <Grid item xs={12}>
-          <h1 style={{ marginBottom: "0px" }}>{restaurant.name}</h1>
-          <Ratings
-            rating={restaurant.rating}
-            widgetRatedColors={Colors.PURPLE}
-            widgetHoverColors={Colors.PURPLE}
-            widgetDimensions="25px"
-            widgetSpacings="4px"
-          >
-            {[1, 2, 3, 4, 5].map((n) => (
-              <Ratings.Widget key={n} />
-            ))}
-          </Ratings>
+          <Text component="h1" bold color={Colors.BLUE}>
+            {restaurant.name}
+          </Text>
+          <Rating size={30} type="star" readonly score={restaurant.rating} />
         </Grid>
 
         {/* Location, phone, include in trip */}
@@ -123,33 +124,78 @@ export function RestaurantDetails() {
           <RestaurantDetailsSlider photos={restaurant.photos} />
         </Grid>
 
+        {/* Details */}
         <Grid item className={style.detailsGrid}>
           <div className={style.detailsContainer}>
-            <h2>Details</h2>
-            <h4 style={{ marginBottom: "0px" }}>Cuisines</h4>
-            <p style={{ marginTop: "5px", fontSize: "15px" }}>
+            <Text bold color="white" component="h3" style={{ marginBottom: "15px" }}>
+              Details
+            </Text>
+
+            <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
+              Cuisines
+            </Text>
+            <IconText
+              textColor="white"
+              fontSize={15}
+              icon={faUtensils}
+              style={{ marginBottom: "20px" }}
+            >
               {getRestaurantCategoriesList(restaurant)}
-            </p>
+            </IconText>
 
-            <h4 style={{ marginBottom: "0px" }}>Timings</h4>
-            <p style={{ marginTop: "5px", fontSize: "15px" }}>
+            <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
+              Timings
+            </Text>
+            <IconText
+              textColor="white"
+              fontSize={15}
+              icon={faClock}
+              style={{ marginBottom: "20px" }}
+            >
               {getRestaurantHours(restaurant)}
-            </p>
+            </IconText>
 
-            <h4 style={{ marginBottom: "0px" }}>Menu</h4>
-            <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
-              Click here
-            </a>
+            <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
+              Menu
+            </Text>
+            <IconText
+              textColor="white"
+              fontSize={15}
+              icon={faUtensils}
+              style={{ marginBottom: "20px" }}
+            >
+              <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
+                Click here
+              </a>
+            </IconText>
 
-            <h4 style={{ marginBottom: "0px" }}>Website</h4>
-            <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
-              Click here
-            </a>
+            <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
+              Website
+            </Text>
+            <IconText
+              textColor="white"
+              fontSize={15}
+              icon={faGlobe}
+              style={{ marginBottom: "20px" }}
+            >
+              <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
+                Click here
+              </a>
+            </IconText>
 
             {amenities !== "" && (
               <>
-                <h4 style={{ marginBottom: "0px" }}>Amenities</h4>
-                <p style={{ marginTop: "5px", fontSize: "15px" }}>{amenities}</p>
+                <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
+                  Amenities
+                </Text>
+                <IconText
+                  textColor="white"
+                  fontSize={15}
+                  icon={faStar}
+                  style={{ marginBottom: "20px" }}
+                >
+                  {amenities}
+                </IconText>
               </>
             )}
           </div>

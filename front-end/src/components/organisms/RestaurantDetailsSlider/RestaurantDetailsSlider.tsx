@@ -1,9 +1,7 @@
-import { Backdrop, CardActionArea, Dialog, makeStyles, Theme } from "@material-ui/core";
+import { Backdrop, CardActionArea, Dialog } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
 import Slider from "react-slick";
-import { Colors, Shadow } from "../../../styles";
-import { getHotelImages, HotelBooking } from "../../../utils";
 import { SliderArrow } from "../../atoms";
 import { restaurantDetailSliderStyles } from "./restaurantDetailSliderStyles";
 
