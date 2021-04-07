@@ -57,8 +57,6 @@ export function ParentCategoryToolbar({
 
   const [menusToShow, setMenusToShow] = useState<number>(5);
 
-  const initialCategory = POICategory.Museum.pluralName;
-
   const [open, setOpen] = useState(false);
   const [openSecondMenu, setOpenSecondMenu] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

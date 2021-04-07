@@ -232,7 +232,9 @@ export function TripDetails() {
         </Grid>
       </Grid>
 
-      <Footer />
+      <div className={style.footerContainer}>
+        <Footer />
+      </div>
     </div>
   );
 }

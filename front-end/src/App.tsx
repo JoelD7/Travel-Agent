@@ -1,13 +1,22 @@
+import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { Dialog, DialogActions, DialogContent, Grid, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { appStyles } from "./app-styles";
+import { Font } from "./assets";
+import { CustomButton, IataAutocomplete, IconTP, Text } from "./components";
 import {
   FavPlaces,
   Flights_Home,
-  HotelDetails,
   Flight_List,
   Home,
+  HotelDetails,
   Hotels,
   Itinerary,
   Login,
+  NotFound,
   Reservations,
   RestaurantDetails,
   Restaurant_List,
@@ -16,25 +25,9 @@ import {
   ThingsToDoDetails,
   TripDetails,
   Trips,
-  NotFound,
 } from "./scenes";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Routes, LocationType, IATALocation, selectOriginCity } from "./utils";
-import { appStyles } from "./app-styles";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Snackbar,
-  Grid,
-} from "@material-ui/core";
-import { CustomButton, IataAutocomplete, IconTP, Text } from "./components";
-import { faMapMarkedAlt, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { Colors } from "./styles";
-import { useSelector } from "react-redux";
-import { Alert } from "@material-ui/lab";
-import { Font } from "./assets";
+import { IATALocation, LocationType, Routes, selectOriginCity } from "./utils";
 
 export default function App() {
   const style = appStyles();
@@ -90,8 +83,8 @@ export default function App() {
       {/* Dialog */}
       <Dialog open={openOriginCityDialog} classes={{ paperWidthSm: style.paperWidthSm }}>
         <Grid container style={{ padding: "15px" }} alignItems="center">
-          <IconTP icon={faMapMarkerAlt} size={50} style={{ padding: "10px" }} />
-          <Text component="h1" style={{ marginLeft: "10px" }} bold color={Colors.BLUE}>
+          <IconTP icon={faMapMarkerAlt} size={40} style={{ padding: "10px" }} />
+          <Text component="h2" style={{ marginLeft: "10px" }} bold color={Colors.BLUE}>
             Where are you from?
           </Text>
         </Grid>

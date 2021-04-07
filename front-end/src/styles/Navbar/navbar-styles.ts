@@ -32,6 +32,10 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     height: "60px",
     boxShadow: "0px 0px red",
   },
+  closeDialogButton: {
+    bottom: "20px",
+    marginLeft: "auto",
+  },
   defaultHomeNav: {
     display: "flex",
     marginRight: "30px",
@@ -73,6 +77,10 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
         borderBottom: `2px solid ${Colors.PURPLE_HOVER}`,
       },
     },
+  },
+  paperWidthSm: {
+    width: "515px",
+    borderRadius: "10px",
   },
   popupIndicatorOpen: {
     transform: "rotate(0deg)",

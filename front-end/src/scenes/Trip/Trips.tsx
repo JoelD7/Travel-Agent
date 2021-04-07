@@ -23,8 +23,6 @@ export function Trips() {
   const [trips, setTrips] = useState(tripsPlaceholder);
   const lastTrip = tripPlaceholder;
 
-  const history = useHistory();
-
   const sliderSettings = {
     className: style.slider,
     nextArrow: <SliderArrow direction="right" />,
