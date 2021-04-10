@@ -11,3 +11,4 @@ export { Footer } from "./Footer/Footer";
 export { FlightListContent } from "./FlightListContent/FlightListContent";
 export { AboutHotel } from "./AboutHotel/AboutHotel";
 export { FullScreenImage } from "./FullScreenImage/FullScreenImage";
+export { CarsCard } from "./CarsCard/CarsCard";

@@ -11,7 +11,7 @@ import {
   Routes,
   ExchangeRate,
   selectExchangeRate,
-  selectBaseCurrency,
+  selectEndCurrency,
   formatAsCurrency,
   FlightTypes,
   FlightClass,
@@ -41,7 +41,7 @@ export function CardDealFlight({ deal, className, animate }: CardDealFlight) {
   const destination: IATALocation | undefined = getIataLocation(deal.destination);
 
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const baseCurrency: string = useSelector(selectEndCurrency);
 
   function getCardTitle(location: IATALocation | undefined) {
     if (location) {
@@ -143,6 +143,7 @@ export function CardDealFlight({ deal, className, animate }: CardDealFlight) {
                   <Grid container alignItems="center">
                     <h5 style={{ margin: "auto 0px auto auto" }}>{`${formatAsCurrency(
                       Number(deal.price.total),
+                      deal.price.currency,
                       baseCurrency,
                       exchangeRate
                     )}`}</h5>

@@ -7,5 +7,6 @@ export * from "./hotel-types";
 export * from "./location-types";
 export * from "./restaurant-types";
 export * from "./trip-types";
+export * from "./car-types";
 
 export { FlightTypes, EventType };

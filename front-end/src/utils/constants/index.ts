@@ -1,8 +1,10 @@
 import * as LocalStorageKeys from "./localStorageKeys";
 import * as FlightClass from "./flight-classes";
 import * as LocationType from "./geolocation";
+import { CarCheckbox } from "../types";
 export * from "./airports";
 export * from "./iataCodes";
+export * from "./iso3166-countryCodes";
 export { LocalStorageKeys, FlightClass, LocationType };
 
 export const DEFAULT_CURRENCY = "USD";
@@ -352,3 +354,18 @@ export const currenciesName: { [index: string]: string } = {
   ZMW: "Zambian Kwacha",
   ZWL: "Zimbabwean Dollar",
 };
+
+export const carRentalFeatures: CarCheckbox[] = [
+  {
+    name: "Air conditioned",
+    checked: true,
+  },
+  {
+    name: "Bluetooth",
+    checked: true,
+  },
+  {
+    name: "Smoke free",
+    checked: true,
+  },
+];

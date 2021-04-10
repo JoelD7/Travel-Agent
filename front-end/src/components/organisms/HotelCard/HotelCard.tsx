@@ -10,7 +10,7 @@ import {
   formatAsDecimal,
   getHotelImages,
   getHotelStars,
-  selectBaseCurrency,
+  selectEndCurrency,
   getMinRate,
   HotelBooking,
   HotelBookingParams,
@@ -35,7 +35,7 @@ export function HotelCard({ hotel }: HotelCard) {
 
   const dispatch = useDispatch();
 
-  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const baseCurrency: string = useSelector(selectEndCurrency);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
@@ -103,6 +103,7 @@ export function HotelCard({ hotel }: HotelCard) {
               <div>
                 <h4 style={{ textAlign: "center" }}>{`From ${formatAsCurrency(
                   getMinRate(hotel.rooms),
+                  "USD",
                   baseCurrency,
                   exchangeRate
                 )}`}</h4>
@@ -162,6 +163,7 @@ export function HotelCard({ hotel }: HotelCard) {
               <Grid container>
                 <Text component="h3" bold>{`From ${formatAsCurrency(
                   getMinRate(hotel.rooms),
+                  "USD",
                   baseCurrency,
                   exchangeRate
                 )}`}</Text>

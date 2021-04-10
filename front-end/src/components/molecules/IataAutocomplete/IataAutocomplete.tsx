@@ -25,7 +25,11 @@ import {
   updateCityPredictions,
   LocationType,
   updateHotelCoordinates,
+  selectCarSearch,
   setOriginCity,
+  CarSearch,
+  setCarSearch,
+  getISOCodeFromCountry,
 } from "../../../utils";
 import { IATALocation } from "../../../utils/types/location-types";
 import { iataAutocompleteStyles } from "./iata-autocomplete-styles";
@@ -39,6 +43,7 @@ interface IataAutocomplete {
   isInNavbar?: boolean;
   required?: boolean;
   className?: string;
+  getOptionLabel?: (option: any) => string;
 }
 
 export function IataAutocomplete({
@@ -49,6 +54,7 @@ export function IataAutocomplete({
   required = false,
   cityType = LocationType.DESTINATION,
   isInNavbar,
+  getOptionLabel,
   className,
 }: IataAutocomplete) {
   const [predictions, setPredictions] = useState<IATALocation[]>([]);
@@ -56,6 +62,9 @@ export function IataAutocomplete({
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
   const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
+
+  const carSearch: CarSearch = useSelector(selectCarSearch);
+
   const dispatch = useDispatch();
 
   let batchedActions: AnyAction[] = [];
@@ -154,10 +163,22 @@ export function IataAutocomplete({
         persistGeolocationInLocalStorage(autocomplete, cityType);
 
         if (cityType === LocationType.ORIGIN) {
+          batchedActions.push(
+            setCarSearch({
+              ...carSearch,
+              country_code: getISOCodeFromCountry(autocomplete.country),
+            })
+          );
           batchedActions.push(setFlightFrom(autocomplete.code));
           batchedActions.push(setFlightFromAutocomplete(autocomplete));
           batchedActions.push(setOriginCity(autocomplete));
         } else {
+          batchedActions.push(
+            setCarSearch({
+              ...carSearch,
+              pickup_location: autocomplete.code,
+            })
+          );
           batchedActions.push(setFlightTo(autocomplete.code));
           batchedActions.push(setFlightToAutocomplete(autocomplete));
           batchedActions.push(
@@ -178,6 +199,14 @@ export function IataAutocomplete({
       } else {
         batchedActions.push(setFlightTo(text));
         batchedActions.push(setFlightToAutocomplete(autocomplete));
+        if (autocomplete) {
+          batchedActions.push(
+            setCarSearch({
+              ...carSearch,
+              pickup_location: autocomplete.code,
+            })
+          );
+        }
       }
     }
 
@@ -198,7 +227,9 @@ export function IataAutocomplete({
         className={className}
         style={{ width: "100%" }}
         loading={predictions.length !== 0}
-        getOptionLabel={(option) => getAutocompleteLabel(option, type)}
+        getOptionLabel={
+          getOptionLabel ? getOptionLabel : (option) => getAutocompleteLabel(option, type)
+        }
         popupIcon={
           type === "city" ? (
             <IconButton>

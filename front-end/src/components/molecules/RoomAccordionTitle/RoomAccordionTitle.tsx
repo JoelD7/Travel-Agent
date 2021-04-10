@@ -32,7 +32,7 @@ import {
   HotelBookingParams,
   getRoomTotalPrice,
   HotelRoomRate,
-  selectBaseCurrency,
+  selectEndCurrency,
   ExchangeRate,
   selectExchangeRate,
 } from "../../../utils";
@@ -46,7 +46,7 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
   const hotel: HotelBooking | undefined = useSelector(selectHotelDetail);
   const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
-  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const baseCurrency: string = useSelector(selectEndCurrency);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   let image: string = getRoomImage();
@@ -235,6 +235,7 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
                       <Text color="white" component="h3" bold>
                         {formatAsCurrency(
                           getMinRateForRoom(),
+                          "USD",
                           baseCurrency,
                           exchangeRate
                         )}

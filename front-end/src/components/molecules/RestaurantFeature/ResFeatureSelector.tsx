@@ -22,7 +22,7 @@ interface ResFeatureSelector {
   updateState: (selectedFeatures: RestaurantFeature[]) => void;
 }
 
-export function ResFeatureSelector({ features, updateState }: ResFeatureSelector) {
+export function  ResFeatureSelector({ features, updateState }: ResFeatureSelector) {
   const style = checkboxSelectorDialog();
 
   const [openDialog, setOpenDialog] = useState(false);

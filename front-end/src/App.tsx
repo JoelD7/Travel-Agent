@@ -8,6 +8,7 @@ import { appStyles } from "./app-styles";
 import { Font } from "./assets";
 import { CustomButton, IataAutocomplete, IconTP, Text } from "./components";
 import {
+  CarRental,
   FavPlaces,
   Flights_Home,
   Flight_List,
@@ -76,6 +77,7 @@ export default function App() {
           <Route exact path={Routes.FAVORITE_PLACES} component={FavPlaces} />
           <Route exact path={Routes.RESERVATIONS} component={Reservations} />
           <Route exact path={Routes.ITINERARY} component={Itinerary} />
+          <Route exact path={Routes.CAR_RENTAL} component={CarRental} />
           <Route component={NotFound} />
         </Switch>
       </Router>

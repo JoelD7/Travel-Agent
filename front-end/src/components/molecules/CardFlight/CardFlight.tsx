@@ -16,7 +16,7 @@ import {
   selectFlightDictionaries,
   capitalizeString,
   getLastSegment,
-  selectBaseCurrency,
+  selectEndCurrency,
   ExchangeRate,
   selectExchangeRate,
   getFlightSegmentCarrier,
@@ -37,7 +37,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
   const returnFlight: FlightItinerary | undefined =
     flight.itineraries.length > 1 ? flight.itineraries[1] : undefined;
 
-  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const baseCurrency: string = useSelector(selectEndCurrency);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   const dictionaries: FlightDictionary | undefined = useSelector(
@@ -136,6 +136,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
                   <Grid container alignItems="center" justify="flex-end">
                     <Text bold component="h4">{`${formatAsCurrency(
                       Number(flight.price.total),
+                      flight.price.currency,
                       baseCurrency,
                       exchangeRate
                     )}`}</Text>
@@ -161,6 +162,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
                   <Grid id="price grid" item className={style.priceGridRes}>
                     <Text bold component="h4">{`${formatAsCurrency(
                       Number(flight.price.total),
+                      flight.price.currency,
                       baseCurrency,
                       exchangeRate
                     )}`}</Text>
@@ -231,6 +233,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
           <Grid item className={style.priceButtonGrid}>
             <h2 style={{ marginTop: "12px" }}>{`${formatAsCurrency(
               flight.price.total,
+              flight.price.currency,
               baseCurrency,
               exchangeRate
             )}`}</h2>
@@ -301,6 +304,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
         <Grid container alignItems="center">
           <h2 style={{ marginRight: "auto", marginTop: "12px" }}>{`${formatAsCurrency(
             flight.price.total,
+            flight.price.currency,
             baseCurrency,
             exchangeRate
           )}`}</h2>

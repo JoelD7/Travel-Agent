@@ -34,7 +34,7 @@ import {
   POICategory,
   poisPlaceholder,
   selectAllPOIs,
-  selectBaseCurrency,
+  selectEndCurrency,
   selectCityImage,
   selectConsultedCategories,
   selectConsultedCoordinates,
@@ -141,7 +141,7 @@ export function ThingsToDo() {
   const [activities, setActivities] = useState<Activity[]>([]);
 
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const baseCurrency: string = useSelector(selectEndCurrency);
 
   const dispatch = useAppDispatch();
 

@@ -872,6 +872,7 @@ export function Flight_List() {
         </Text>
 
         <PriceRange
+          baseCurrency={flights[0].price.currency}
           value={priceRange}
           max={maxPrice}
           updateState={(slider) => onPriceSliderChange(slider)}

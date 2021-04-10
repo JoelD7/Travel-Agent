@@ -227,8 +227,8 @@ export function Home() {
 
         <Grid id="section-1" container className={style.topContainer}>
           <Grid item xs={12}>
-            <Navbar home />
-            <ServicesToolbar home />
+            <Navbar transparent />
+            <ServicesToolbar transparent />
           </Grid>
 
           <Grid item className={style.reservationGrid}>

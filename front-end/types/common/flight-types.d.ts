@@ -79,6 +79,7 @@ interface FlightDeal {
   departureDate: string;
   returnDate: string;
   price: {
+    currency: string;
     total: string;
   };
   links: {

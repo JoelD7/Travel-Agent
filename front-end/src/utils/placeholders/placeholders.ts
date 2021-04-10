@@ -1,4 +1,4 @@
-import { EventType } from "../types";
+import { Car, CarCheckbox, EventType } from "../types";
 import { HotelAvailability, HotelBooking } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
 import { Trip } from "../types/trip-types";
@@ -3178,3 +3178,460 @@ export const airportCityPlaceholderTwo: IATALocation = {
   direct_flights: "213",
   carriers: "95",
 };
+
+export const carBrandPlaceholder: CarCheckbox[] = [
+  {
+    name: "Chrysler",
+    checked: true,
+  },
+  {
+    name: "Fiat",
+    checked: false,
+  },
+  {
+    name: "Ford",
+    checked: false,
+  },
+  {
+    name: "Toyota",
+    checked: true,
+  },
+];
+
+export const carsPlaceholder: Car[] = [
+  {
+    category: {
+      name: "Ford Fiesta or similar",
+      make: "Kia",
+      model: "Rio",
+      vehicle_class_name: "Economy",
+      vehicle_transmission: "Automatic",
+      mpg: "27/35",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2019/ford/2019-ford-fiesta-se-5door-2wd-hatchback-grey.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      smoke_free: true,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "5",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 217.74,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group B - Kia Soul or similar",
+      make: "Kia",
+      model: "Soul",
+      vehicle_class_name: "Compact",
+      vehicle_transmission: "Automatic",
+      mpg: "25/29",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2021/kia/2021-kia-soul-s-5door-hatchback-black.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      smoke_free: true,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "5",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 237.07,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group C - Toyota Corolla or similar",
+      make: "Toyota",
+      model: "Corolla",
+      vehicle_class_name: "Intermediate",
+      vehicle_transmission: "Automatic",
+      mpg: "29/35",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2020/toyota/2020-toyota-corolla-le-sedan-grey.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      smoke_free: true,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "5",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 256.4,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group D - Volkswagen Jetta or similar",
+      make: "Volkswagen",
+      model: "Jetta",
+      vehicle_class_name: "Standard",
+      vehicle_transmission: "Automatic",
+      mpg: "24/35",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2021/volkswagen/2021-volkswagen-jetta-s-sedan-silver.png",
+    },
+    features: {
+      smoke_free: true,
+      bluetooth_equipped: false,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "5",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 217.72,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group E - Toyota Camry or similar",
+      make: "Toyota",
+      model: "Camry",
+      vehicle_class_name: "Full-Size",
+      vehicle_transmission: "Automatic",
+      mpg: "22/30",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2021/toyota/2021-toyota-camry-se-sedan-black.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      air_conditioned: true,
+      smoke_free: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "5",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 275.73,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group S - Nissan Pathfinder or similar",
+      make: "Nissan",
+      model: "Pathfinder",
+      vehicle_class_name: "Standard Elite SUV",
+      vehicle_transmission: "Automatic",
+      mpg: "15/20",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2020/nissan/2020-nissan-pathfinder-s-4wd-suv-black.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      smoke_free: true,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "7",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 306.62,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group P - Ford Transit 12-Passenger Van or similar",
+      make: "Ford Transit",
+      model: "12-Passenger Van",
+      vehicle_class_name: "Passenger Van",
+      vehicle_transmission: "Automatic",
+      mpg: "15/20",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2020/ford/2020-ford-transit-350-xlt-low-roof-passenger-van-white.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      air_conditioned: true,
+      smoke_free: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "12",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 396.84,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group G - Volkswagen Passat or similar",
+      make: "Volkswagen",
+      model: "Passat",
+      vehicle_class_name: "Premium",
+      vehicle_transmission: "Automatic",
+      mpg: "18/29",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2021/volkswagen/2021-volkswagen-passat-se-sedan-black.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      smoke_free: true,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "5",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 295.06,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group H - Chrysler 300 or similar",
+      make: "Chrysler",
+      model: "300",
+      vehicle_class_name: "Luxury",
+      vehicle_transmission: "Automatic",
+      mpg: "18/21",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2019/chrysler/2019-chrysler-300-limited-sedan-black.png",
+    },
+    features: {
+      smoke_free: true,
+      bluetooth_equipped: false,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "5",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 311.8,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group L - Ford Expedition or similar",
+      make: "Ford",
+      model: "Expedition",
+      vehicle_class_name: "Premium SUV",
+      vehicle_transmission: "Automatic",
+      mpg: "16/21",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2020/ford/2020-ford-expedition-xlt-suv-black.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      smoke_free: true,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "7/8",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 373.65,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group K - Ford Mustang Convertible or similar",
+      make: "Ford",
+      model: "Mustang Convertible",
+      vehicle_class_name: "Convertible",
+      vehicle_transmission: "Automatic",
+      mpg: "19/24",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2020/ford/2020-ford-mustang-ecoboost-premium-convertible-grey.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      smoke_free: true,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "2",
+      seats: "4",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 511.48,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group W - Ford Edge or similar",
+      make: "Ford",
+      model: "Edge",
+      vehicle_class_name: "Standard SUV",
+      vehicle_transmission: "Automatic",
+      mpg: "15/22",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2020/ford/2020-ford-edge-st-4wd-suv-grey.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      smoke_free: true,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "5",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 291.19,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group V - Chrysler Voyager or similar",
+      make: "Chrysler",
+      model: "Voyager",
+      vehicle_class_name: "Minivan",
+      vehicle_transmission: "Automatic",
+      mpg: "16/21",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2020/chrysler/2020-chrysler-voyager-lx-minivan-white.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      air_conditioned: true,
+      smoke_free: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "7",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 286.04,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group F - Mazda CX-5 or similar",
+      make: "Mazda",
+      model: "CX-5",
+      vehicle_class_name: "Intermediate SUV",
+      vehicle_transmission: "Automatic",
+      mpg: "20/26",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2021/mazda/2021-mazda-cx-5-grand-touring-4wd-suv-gray.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      smoke_free: true,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "5",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 284.75,
+      },
+    },
+  },
+  {
+    category: {
+      name: "Group Z - Chevrolet Tahoe or similar",
+      make: "Chevrolet",
+      model: "Tahoe",
+      vehicle_class_name: "Full-Size SUV",
+      vehicle_transmission: "Automatic",
+      mpg: "14/19",
+      image_url:
+        "https://www.avis.com/content/dam/cars/l/2021/chevrolet/2021-chevrolet-tahoe-lt-4wd-suv-black.png",
+    },
+    features: {
+      bluetooth_equipped: false,
+      smoke_free: true,
+      air_conditioned: true,
+    },
+    capacity: {
+      doors: "4",
+      seats: "7/8",
+    },
+    rate_totals: {
+      rate: {
+        currency: "EUR",
+      },
+      pay_later: {
+        reservation_total: 301.5,
+      },
+    },
+  },
+];

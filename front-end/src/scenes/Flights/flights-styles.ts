@@ -21,7 +21,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
   },
   datepicker: {
     backgroundColor: "white",
-    fontFamily: Family,
+    fontFamily: Font.Family,
     width: "100%",
     maxWidth: "100%",
     borderRadius: "20px",

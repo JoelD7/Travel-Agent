@@ -7,6 +7,7 @@ import hotelReducer from "./hotel-slice";
 import flightSlice from "./flight-slice";
 import rootSlice from "./root-slice";
 import restaurantSlice from "./restaurant-slice";
+import carSlice from "./car-slice";
 import { useDispatch } from "react-redux";
 import { enableBatching } from "redux-batched-actions";
 export * from "./flight-slice";
@@ -21,6 +22,7 @@ const store = configureStore({
     hotelReducer: enableBatching(hotelReducer),
     flightSlice: enableBatching(flightSlice),
     restaurantSlice: enableBatching(restaurantSlice),
+    carSlice: enableBatching(carSlice),
     rootSlice: enableBatching(rootSlice),
   },
 });
@@ -37,7 +39,7 @@ export const selectOpenRequiredFieldSnack = (state: RootState) =>
 
 export const selectExchangeRate = (state: RootState) => state.rootSlice.exchangeRate;
 
-export const selectBaseCurrency = (state: RootState) => state.rootSlice.baseCurrency;
+export const selectEndCurrency = (state: RootState) => state.rootSlice.endCurrency;
 
 export const selectCityImage = (state: RootState) => state.rootSlice.cityImage;
 //#endregion
@@ -134,6 +136,10 @@ export const selectLoadingRestaurants = (state: RootState) =>
 
 export const selectRestaurantFilterParams = (state: RootState) =>
   state.restaurantSlice.filterParams;
+//#endregion
+
+//#region Car rental
+export const selectCarSearch = (state: RootState) => state.carSlice.carSearch;
 //#endregion
 
 export default store;

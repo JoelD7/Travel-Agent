@@ -40,17 +40,16 @@ import { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 import { NavDrawer } from "./NavDrawer/NavDrawer";
 
 interface Navbar {
-  home?: boolean;
+  transparent?: boolean;
   position?: "fixed" | "absolute" | "sticky" | "static" | "relative";
 }
 
 export const Navbar: FunctionComponent<Navbar> = ({
-  home,
+  transparent,
   position = "relative",
 }: Navbar) => {
   const style = navbarStyles();
   const searchQuery = useSelector(selectSearchQuery);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isAccessTokenUpdatable()) {
@@ -96,14 +95,17 @@ export const Navbar: FunctionComponent<Navbar> = ({
   }
 
   return (
-    <AppBar position={position} className={home ? style.appbarHome : style.appbar}>
+    <AppBar position={position} className={transparent ? style.appbarHome : style.appbar}>
       <Toolbar className={style.toolbar}>
         <Link
           to={Routes.HOME}
           style={{ outline: "none", border: "none" }}
           className={style.logoLinkContainer}
         >
-          <img src={home ? logoTypeWhiteFore : logoType} className={style.logotype} />
+          <img
+            src={transparent ? logoTypeWhiteFore : logoType}
+            className={style.logotype}
+          />
         </Link>
 
         {/* Home */}
@@ -121,7 +123,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
             className={style.autocompleteContainer}
             type="city"
             isInNavbar
-            home={home}
+            home={transparent}
           />
         </div>
 
@@ -135,7 +137,9 @@ export const Navbar: FunctionComponent<Navbar> = ({
                   classes={{ root: style.menuItemRoot }}
                 >
                   <Link
-                    style={home ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)}
+                    style={
+                      transparent ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)
+                    }
                     to={Routes.TRIPS}
                   >
                     Trips
@@ -146,7 +150,9 @@ export const Navbar: FunctionComponent<Navbar> = ({
                   classes={{ root: style.menuItemRoot }}
                 >
                   <Link
-                    style={home ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)}
+                    style={
+                      transparent ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)
+                    }
                     to={Routes.RESERVATIONS}
                   >
                     Reservations
@@ -158,14 +164,14 @@ export const Navbar: FunctionComponent<Navbar> = ({
               <>
                 <MenuItem
                   onClick={() => {}}
-                  style={home ? { color: "white" } : {}}
+                  style={transparent ? { color: "white" } : {}}
                   classes={{ root: style.menuItemRoot }}
                 >
                   Login
                 </MenuItem>
                 <MenuItem
                   onClick={() => {}}
-                  style={home ? { color: "white" } : {}}
+                  style={transparent ? { color: "white" } : {}}
                   classes={{ root: style.menuItemRoot }}
                 >
                   Sign Up
@@ -181,7 +187,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
           </div>
 
           <IconButton onClick={() => setOpenDrawer(true)}>
-            <FontAwesomeIcon color={home ? "white" : Colors.BLUE} icon={faBars} />
+            <FontAwesomeIcon color={transparent ? "white" : Colors.BLUE} icon={faBars} />
           </IconButton>
         </div>
       </Toolbar>

@@ -5,19 +5,19 @@ import { CityImage, ExchangeRate } from "../types";
 interface RootSlice {
   openRequiredFieldSnack: boolean;
   exchangeRate: ExchangeRate;
-  baseCurrency: string;
+  endCurrency: string;
   cityImage: CityImage;
 }
 
 const initialState: RootSlice = {
   openRequiredFieldSnack: false,
   exchangeRate: JSON.parse(String(localStorage.getItem("rates"))),
-  baseCurrency: getBaseCurrency(),
+  endCurrency: getEndCurrency(),
   cityImage: getDefaultCityImage(),
 };
 
-function getBaseCurrency(): string {
-  let lsValue = localStorage.getItem("baseCurrency");
+function getEndCurrency(): string {
+  let lsValue = localStorage.getItem("endCurrency");
   if (lsValue === null) {
     return "USD";
   }
@@ -35,8 +35,8 @@ const rootSlice = createSlice({
     setExchangeRate(state, action: PayloadAction<ExchangeRate>) {
       state.exchangeRate = action.payload;
     },
-    setBaseCurrency(state, action: PayloadAction<string>) {
-      state.baseCurrency = action.payload;
+    setEndCurrency(state, action: PayloadAction<string>) {
+      state.endCurrency = action.payload;
     },
     setCityImage(state, action: PayloadAction<CityImage>) {
       state.cityImage = action.payload;
@@ -47,7 +47,7 @@ const rootSlice = createSlice({
 export const {
   setOpenRequiredFieldSnack,
   setExchangeRate,
-  setBaseCurrency,
+  setEndCurrency,
   setCityImage,
 } = rootSlice.actions;
 

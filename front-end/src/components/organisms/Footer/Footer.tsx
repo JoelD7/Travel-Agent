@@ -15,10 +15,10 @@ import {
   getHotelSearchURL,
   getRestaurantsDefaultRoute,
   Routes,
-  selectBaseCurrency,
+  selectEndCurrency,
   selectExchangeRate,
   selectHotelReservationParams,
-  setBaseCurrency,
+  setEndCurrency,
   setExchangeRate,
 } from "../../../utils";
 import { IconText, Text } from "../../atoms";
@@ -69,7 +69,7 @@ export function Footer() {
   ];
 
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-  const baseCurrencyStore: string = useSelector(selectBaseCurrency);
+  const baseCurrencyStore: string = useSelector(selectEndCurrency);
   const [currency, setCurrency] = useState<string>(baseCurrencyStore);
 
   const dispatch = useDispatch();
@@ -116,8 +116,8 @@ export function Footer() {
     let newCurrency = e.target.value as string;
     setCurrency(newCurrency);
 
-    dispatch(setBaseCurrency(newCurrency));
-    localStorage.setItem("baseCurrency", newCurrency);
+    dispatch(setEndCurrency(newCurrency));
+    localStorage.setItem("endCurrency", newCurrency);
   }
 
   return (

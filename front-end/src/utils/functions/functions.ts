@@ -8,7 +8,7 @@ import {
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { CSSProperties } from "@material-ui/styles";
 import { compareAsc, format } from "date-fns";
-import { DEFAULT_CURRENCY } from "../constants";
+import { DEFAULT_CURRENCY, isoCountryCodes } from "../constants";
 import { iataCodes } from "../constants/iataCodes";
 import { airportCityPlaceholder } from "../placeholders";
 import { CityImage, EventType, ExchangeRate } from "../types";
@@ -51,24 +51,47 @@ export function getLinkStyle(color: string = "initial"): CSSProperties {
   };
 }
 
+/**
+ * Converts between currencies.
+ *
+ * @param value
+ * @param fromCurrency If this parameter is specifically indicated as a string and not as variable,
+ * this means that the API in question always returns prices in the same currency.
+ * @param toCurrency
+ * @param exchangeRate
+ * @returns
+ */
 export function formatAsCurrency(
   value: number,
-  currency: string,
+  fromCurrency: string,
+  toCurrency: string,
   exchangeRate: ExchangeRate
 ) {
   const formatter = Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: currency,
+    currency: toCurrency,
     currencyDisplay: "symbol",
     maximumFractionDigits: 2,
   }).format;
 
-  if (currency === DEFAULT_CURRENCY) {
-    return formatter(value);
-  }
+  // From USD to anything
+  if (fromCurrency === DEFAULT_CURRENCY) {
+    let convertedValue = value * exchangeRate.rates[toCurrency];
+    return formatter(convertedValue);
 
-  let convertedValue = value * exchangeRate.rates[currency];
-  return formatter(convertedValue);
+    // From anything to USD
+  } else if (toCurrency === DEFAULT_CURRENCY) {
+    let convertedValue = value * (1 / exchangeRate.rates[fromCurrency]);
+    return formatter(convertedValue);
+
+    // From anything to anything
+  } else {
+    //fromCurrency to USD
+    let valueAsDollar = value * (1 / exchangeRate.rates[fromCurrency]);
+    //From USD to toCurrency
+    let convertedValue = valueAsDollar * exchangeRate.rates[toCurrency];
+    return formatter(convertedValue);
+  }
 }
 
 export const formatAsDecimal = Intl.NumberFormat("en-US", {
@@ -648,4 +671,8 @@ export function isCityImageUpdated(
   cityImage: CityImage
 ): boolean {
   return destinationCity.city === cityImage.city;
+}
+
+export function getISOCodeFromCountry(country: string): string {
+  return isoCountryCodes.filter((codes) => codes.name === country)[0]["alpha-2"];
 }

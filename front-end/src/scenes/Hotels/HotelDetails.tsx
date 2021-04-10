@@ -30,7 +30,7 @@ import {
   selectDestinationCity,
   selectHotelDetail,
   selectHotelReservationParams,
-  selectBaseCurrency,
+  selectEndCurrency,
   ExchangeRate,
   selectExchangeRate,
 } from "../../utils";
@@ -75,7 +75,7 @@ export function HotelDetails() {
 
   const geolocation: IATALocation = useSelector(selectDestinationCity);
 
-  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const baseCurrency: string = useSelector(selectEndCurrency);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   useEffect(() => {
@@ -251,6 +251,7 @@ export function HotelDetails() {
                     <Text color={Colors.BLUE} component="h2" bold>
                       {formatAsCurrency(
                         getMinRate(hotel.rooms),
+                        "USD",
                         baseCurrency,
                         exchangeRate
                       )}
@@ -296,7 +297,7 @@ export function HotelDetails() {
                       <IconText
                         icon={faChild}
                         fontSize={16}
-                      >{`${reservationParams.occupancies[0].children} children`}</IconText>
+                      >{`${reservationParams.occupancies[0]["children"]} children`}</IconText>
                     </Grid>
                   )}
 

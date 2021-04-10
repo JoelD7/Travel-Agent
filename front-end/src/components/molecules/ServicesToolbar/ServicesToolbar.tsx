@@ -1,21 +1,19 @@
-import React from "react";
 import { createMuiTheme, MenuItem, ThemeProvider, Toolbar } from "@material-ui/core";
+import { CSSProperties } from "@material-ui/styles";
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { Colors } from "../../../styles";
-import { servicesToolbarStyles } from "../servicesToolbar-styles";
-import { Link, useHistory, useLocation } from "react-router-dom";
 import {
-  convertReservationParamsToURLParams,
-  convertURLToReservationParams,
   getHotelSearchURL,
   getLinkStyle,
-  selectDestinationCity,
-  Routes,
-  selectHotelReservationParams,
   getRestaurantsDefaultRoute,
+  Routes,
+  selectDestinationCity,
+  selectHotelReservationParams,
 } from "../../../utils";
-import { CreateCSSProperties, CSSProperties } from "@material-ui/styles";
-import { useSelector } from "react-redux";
 import { IATALocation } from "../../../utils/types/location-types";
+import { servicesToolbarStyles } from "../servicesToolbar-styles";
 
 interface NavbarService {
   label: string;
@@ -24,11 +22,11 @@ interface NavbarService {
 }
 
 interface ServicesToolbar {
-  home?: boolean;
+  transparent?: boolean;
   style?: CSSProperties;
 }
 
-export function ServicesToolbar({ home, style }: ServicesToolbar) {
+export function ServicesToolbar({ transparent, style }: ServicesToolbar) {
   let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
   let page = "/" + segmentedURL[segmentedURL.length - 1];
 
@@ -103,7 +101,7 @@ export function ServicesToolbar({ home, style }: ServicesToolbar) {
   return (
     <ThemeProvider theme={theme}>
       <Toolbar
-        className={home ? styles.servicesToolbarHome : styles.servicesToolbar}
+        className={transparent ? styles.servicesToolbarHome : styles.servicesToolbar}
         style={{ ...style }}
       >
         {navbarServices.map((service, i) => (
@@ -115,7 +113,9 @@ export function ServicesToolbar({ home, style }: ServicesToolbar) {
             <MenuItem
               key={i}
               selected={service.selected}
-              classes={{ root: home ? styles.menuItemRootHome : styles.menuItemRoot }}
+              classes={{
+                root: transparent ? styles.menuItemRootHome : styles.menuItemRoot,
+              }}
             >
               {service.label}
             </MenuItem>

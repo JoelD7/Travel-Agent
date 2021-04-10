@@ -16,7 +16,7 @@ import { Colors } from "../../styles";
 import {
   formatAsCurrency,
   flightsPlaceholder,
-  selectBaseCurrency,
+  selectEndCurrency,
   ExchangeRate,
   selectExchangeRate,
 } from "../../utils";
@@ -31,7 +31,7 @@ export function Reservations() {
 
   const flights: Flight[] = flightsPlaceholder;
 
-  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const endCurrency: string = useSelector(selectEndCurrency);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   const hotels: HotelReservation[] = [
@@ -202,7 +202,7 @@ export function Reservations() {
                           component="h4"
                           bold
                         >
-                          {formatAsCurrency(hotel.cost, baseCurrency, exchangeRate)}
+                          {formatAsCurrency(hotel.cost, "USD", endCurrency, exchangeRate)}
                         </Text>
                       </Grid>
                     </CardContent>

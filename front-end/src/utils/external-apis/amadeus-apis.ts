@@ -1,7 +1,7 @@
 import Axios, { AxiosResponse } from "axios";
 import { addSeconds, compareAsc, formatISO, parseISO } from "date-fns";
 import { proxyUrl } from ".";
-import { AirportCity, IATALocation } from "../types/location-types";
+import { IATALocation } from "../types/location-types";
 
 export const airportCitySearchURL =
   "https://test.api.amadeus.com/v1/reference-data/locations";

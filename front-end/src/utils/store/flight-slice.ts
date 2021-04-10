@@ -38,8 +38,8 @@ const initialState: FlightSearch = {
     addDays(new Date(), 1),
     "yyyy-MM-dd"
   )}&returnDate=${format(addDays(new Date(), 3), "yyyy-MM-dd")}&adults=${2}`,
-  flightFromAutocomplete: defaultDestinationCity,
-  flightToAutocomplete: airportCityPlaceholderTwo,
+  flightFromAutocomplete: defaultOriginCity,
+  flightToAutocomplete: defaultDestinationCity,
   dictionaries: {
     carriers: {
       a: "",

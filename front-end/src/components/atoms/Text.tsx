@@ -38,7 +38,7 @@ export const Text: FunctionComponent<{
   const textStyles = makeStyles({
     text: {
       fontSize: componentParser[component],
-      fontWeight: bold ? "bold" : component === "p" ? 500 : weight,
+      fontWeight: bold ? "bold" : component === "p" ? weight : "bold",
       fontFamily: Font.Family,
       color: color,
       margin: `${component === "p" ? "0px 0px 10px 0px" : "2px 0px"}`,

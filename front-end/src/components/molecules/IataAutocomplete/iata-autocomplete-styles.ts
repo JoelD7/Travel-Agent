@@ -47,7 +47,8 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
   },
   searchBarInput: {
     width: "100%",
-    backgroundColor: "rgba(0,0,0,0)",
+    backgroundColor: "white",
+    // backgroundColor: "rgba(0,0,0,0)",
     color: Colors.BLUE,
     borderRadius: "5px",
     "& .MuiInputBase-input": {

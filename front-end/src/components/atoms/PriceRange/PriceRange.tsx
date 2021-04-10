@@ -4,23 +4,24 @@ import { useSelector } from "react-redux";
 import {
   selectExchangeRate,
   ExchangeRate,
-  selectBaseCurrency,
+  selectEndCurrency,
   formatAsCurrency,
 } from "../../../utils";
 import { priceRangeStyles } from "./priceRange-styles";
 
 interface PriceRange {
+  baseCurrency: string;
   value: number[];
   max: number;
   updateState: (value: number[]) => void;
 }
 
-export function PriceRange({ updateState, value, max }: PriceRange) {
+export function PriceRange({ updateState, value, max, baseCurrency }: PriceRange) {
   const style = priceRangeStyles();
 
   const [slider, setSlider] = useState<number[]>(value);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-  const baseCurrency: string = useSelector(selectBaseCurrency);
+  const endCurrency: string = useSelector(selectEndCurrency);
 
   useEffect(() => {
     setSlider(value);
@@ -35,8 +36,9 @@ export function PriceRange({ updateState, value, max }: PriceRange) {
       <p style={{ textAlign: "center", fontSize: "16px" }}>{` ${formatAsCurrency(
         slider[0],
         baseCurrency,
+        endCurrency,
         exchangeRate
-      )} -  ${formatAsCurrency(slider[1], baseCurrency, exchangeRate)}+`}</p>
+      )} -  ${formatAsCurrency(slider[1], baseCurrency, endCurrency, exchangeRate)}+`}</p>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Slider

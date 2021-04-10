@@ -876,6 +876,7 @@ export function Hotels() {
                 </Text>
                 <PriceRange
                   value={state.priceRange}
+                  baseCurrency="USD"
                   max={maxRate}
                   updateState={onPriceRangeChange}
                 />
@@ -993,6 +994,7 @@ export function Hotels() {
         <h3>Price range</h3>
         <PriceRange
           value={state.priceRange}
+          baseCurrency="USD"
           max={maxRate}
           updateState={onPriceRangeChange}
         />
