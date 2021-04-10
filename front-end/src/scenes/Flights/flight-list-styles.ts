@@ -82,7 +82,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   drawer: {
     width: "250px",
     backgroundColor: "white",
-    fontFamily: Family,
+    fontFamily: Font.Family,
     color: "white",
     padding: "10px",
     borderRadius: "10px",

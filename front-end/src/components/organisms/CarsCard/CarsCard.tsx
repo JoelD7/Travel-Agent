@@ -2,7 +2,9 @@ import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 import { faBluetooth } from "@fortawesome/free-brands-svg-icons";
 import {
   faChair,
+  faCogs,
   faDoorClosed,
+  faGasPump,
   faGlobe,
   faSmokingBan,
   faSnowflake,
@@ -96,10 +98,20 @@ export function CarsCard({ car }: CarsCard) {
         </Grid>
       </Grid>
 
-      {/* Seats and doors */}
+      {/* Car details*/}
       <Grid item xs={12} style={{ marginTop: "20px" }}>
-        <IconText icon={faChair}>{`${car.capacity.seats} Seats`}</IconText>
-        <IconText icon={faDoorClosed}>{`${car.capacity.doors} Doors`}</IconText>
+        <Grid container>
+          <Grid item xs={6}>
+            <IconText icon={faChair}>{`${car.capacity.seats} Seats`}</IconText>
+            <IconText icon={faDoorClosed}>{`${car.capacity.doors} Doors`}</IconText>
+          </Grid>
+          <Grid item xs={6}>
+            <Grid container>
+              <IconText icon={faGasPump}>{`${car.category.mpg} MPG`}</IconText>
+              <IconText icon={faCogs}>{`${car.category.vehicle_transmission}`}</IconText>
+            </Grid>
+          </Grid>
+        </Grid>
       </Grid>
 
       {/* Price and button */}

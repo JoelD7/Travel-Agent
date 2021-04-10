@@ -1257,6 +1257,7 @@ export function Flight_List() {
                   backgroundColor={Colors.GREEN}
                   style={{
                     boxShadow: Shadow.DARK,
+                    fontSize: "18px",
                   }}
                   onClick={() => onSearchFlightsClick()}
                 >

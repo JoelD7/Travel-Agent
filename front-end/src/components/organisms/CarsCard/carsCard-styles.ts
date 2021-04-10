@@ -7,10 +7,6 @@ export const carsCardStyles = makeStyles((theme: Theme) => ({
     boxShadow: Shadow.LIGHT3D,
     backgroundColor: "white",
     padding: "15px",
-    transition: "all .2s ease-in-out",
-    "&:hover": {
-      transform: "scale(1.1)",
-    },
   },
   image: {
     objectFit: "cover",

@@ -104,6 +104,7 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
         <Divider />
         {flightItinerary.segments.map((segment, i) => (
           <Grid key={i} container style={{ paddingTop: "20px" }}>
+            {/* Airline and logo */}
             <Grid key="airline" item xs={2}>
               <Grid container alignItems="center">
                 <Grid item xs={12} style={{ display: "flex" }}>
@@ -125,25 +126,34 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
               </Grid>
             </Grid>
 
-            <Grid key="first time" item xs={2}>
+            {/* Departure time */}
+            <Grid key="first time" item xs={3}>
               <p className={style.firstTime}>
                 {formatFlightSegmentTime(segment, "departure")}
               </p>
-              <p className={style.firstIata}>{segment.departure.iataCode}</p>
+              <p className={style.firstIata}>
+                {getCityFromIata(segment.departure.iataCode)}
+              </p>
+              <p className={style.firstIata}>{`(${segment.departure.iataCode})`}</p>
             </Grid>
 
-            <Grid key="line" item xs={2} style={{ padding: "5px 10px" }}>
+            <Grid key="line" item xs={1} style={{ padding: "5px 10px" }}>
               <Divider className={style.timeDivider} />
             </Grid>
 
-            <Grid key="second time" item xs={2}>
+            {/* Arrival time */}
+            <Grid key="second time" item xs={3}>
               <p className={style.secondTime}>
                 {formatFlightSegmentTime(segment, "arrival")}
               </p>
-              <p className={style.secondIata}>{segment.arrival.iataCode}</p>
+              <p className={style.secondIata}>
+                {getCityFromIata(segment.arrival.iataCode)}
+              </p>
+              <p className={style.secondIata}>{`(${segment.arrival.iataCode})`}</p>
             </Grid>
 
-            <Grid item xs={4}>
+            {/* Duration */}
+            <Grid item xs={3}>
               <p style={{ fontSize: "14px", textAlign: "end" }}>
                 <b>Duration</b>
                 {`: ${parseFlightDuration(segment.duration)}`}
@@ -244,6 +254,7 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
         <FlightCard itinerary={0} />
         {flight.itineraries.length > 1 && <FlightCard itinerary={1} />}
 
+        {/* Button */}
         <Grid item xs={12} style={{ marginTop: "20px" }}>
           <Grid container justify="flex-end">
             <h2 style={{ fontSize: "20px", marginRight: "10px" }}>{`${formatAsCurrency(
@@ -252,7 +263,9 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
               baseCurrency,
               exchangeRate
             )}`}</h2>
-            <CustomButton onClick={() => {}}>Purchase flight</CustomButton>
+            <CustomButton backgroundColor={Colors.GREEN} onClick={() => {}}>
+              Purchase flight
+            </CustomButton>
           </Grid>
         </Grid>
       </Grid>

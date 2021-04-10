@@ -26,7 +26,7 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
   },
   firstIata: {
     textAlign: "end",
-    marginTop: "0px",
+    margin: "0px",
   },
   secondTime: {
     textAlign: "start",
@@ -35,7 +35,7 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
   },
   secondIata: {
     textAlign: "start",
-    marginTop: "0px",
+    margin: "0px",
   },
   timeDivider: {
     height: "5px",

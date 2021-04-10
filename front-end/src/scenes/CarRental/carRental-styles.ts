@@ -7,11 +7,28 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
     width: "30%",
   },
   carsGrid: {
-    width: "75%",
+    width: "80%",
     padding: "0px 27px",
+    [theme.breakpoints.down(1210)]: {
+      width: "100%",
+    },
   },
   carsGridItem: {
     width: "33%",
+    minWidth: "325px",
+    maxWidth: "430px",
+    [theme.breakpoints.down(1350)]: {
+      width: "45%",
+    },
+    [theme.breakpoints.down(805)]: {
+      width: "50%",
+    },
+    [theme.breakpoints.down(740)]: {
+      width: "65%",
+    },
+    [theme.breakpoints.down(565)]: {
+      width: "90%",
+    },
   },
   dateButtonGrid: {
     width: "20%",
@@ -35,30 +52,34 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
       height: "32px",
     },
   },
-  colorSecondary: {
-    "&:hover": {
-      backgroundColor: "rgba(149, 46, 228, 0.2)",
-    },
-    "&.Mui-checked": {
-      color: Colors.PURPLE,
-
-      "&:hover": {
-        backgroundColor: "rgba(149, 46, 228, 0.2)",
-      },
-    },
-  },
-  formLabel: {
+  drawer: {
+    width: "250px",
+    backgroundColor: "white",
     fontFamily: Font.Family,
+    padding: "10px",
+    height: "auto",
+    borderRadius: "10px",
+    marginLeft: "7px",
   },
   filterContainer: {
-    width: "230px",
+    width: "190px",
     background: "white",
     padding: "20px",
     borderRadius: "10px",
     boxShadow: Shadow.LIGHT3D,
   },
+  filterButtonGrid: {
+    display: "none",
+    [theme.breakpoints.down(1210)]: {
+      display: "block",
+      width: "50%",
+    },
+  },
   filterGrid: {
-    width: "25%",
+    width: "20%",
+    [theme.breakpoints.down(1210)]: {
+      display: "none",
+    },
   },
   gridContainer: {
     justifyContent: "flex-end",
@@ -96,13 +117,15 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
   pageContainer: {
     width: "95%",
     margin: "115px auto 150px auto",
+    [theme.breakpoints.down(415)]: {
+      width: "97%",
+    },
   },
   pageTitle: {
     margin: "25px 0px 0px 55px !important",
   },
   pageTitleContainer: {
     width: "fit-content",
-    maxWidth: "505px",
   },
   topImageContainer: {
     height: "55vh",
@@ -151,6 +174,9 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
   },
   sortGrid: {
     width: "100%",
+    [theme.breakpoints.down(1210)]: {
+      width: "50%",
+    },
   },
   selectIcon: {
     color: Colors.BLUE,
