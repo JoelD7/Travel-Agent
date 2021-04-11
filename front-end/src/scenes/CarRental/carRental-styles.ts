@@ -3,8 +3,26 @@ import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
 
 export const carRentalStyles = makeStyles((theme: Theme) => ({
+  backgroundImage: {
+    objectFit: "cover",
+    position: "absolute",
+    height: "55vh",
+    width: "100%",
+  },
   buttonGrid: {
     width: "30%",
+    [theme.breakpoints.down(1220)]: {
+      width: "10%",
+    },
+    [theme.breakpoints.down(1015)]: {
+      width: "30%",
+    },
+    [theme.breakpoints.down(835)]: {
+      width: "20%",
+    },
+    [theme.breakpoints.down(655)]: {
+      width: "100%",
+    },
   },
   carsGrid: {
     width: "80%",
@@ -32,6 +50,18 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
   },
   dateButtonGrid: {
     width: "20%",
+    [theme.breakpoints.down(1220)]: {
+      width: "25%",
+    },
+    [theme.breakpoints.down(1015)]: {
+      width: "33%",
+    },
+    [theme.breakpoints.down(835)]: {
+      width: "40%",
+    },
+    [theme.breakpoints.down(655)]: {
+      width: "100%",
+    },
   },
   datepicker: {
     backgroundColor: "white",
@@ -74,6 +104,16 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
       display: "block",
       width: "50%",
     },
+    [theme.breakpoints.down(590)]: {
+      width: "35%",
+    },
+    [theme.breakpoints.down(460)]: {
+      width: "21%",
+    },
+    [theme.breakpoints.down(380)]: {
+      width: "100%",
+      marginBottom: "15px",
+    },
   },
   filterGrid: {
     width: "20%",
@@ -83,9 +123,10 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
   },
   gridContainer: {
     justifyContent: "flex-end",
-    // [theme.breakpoints.down(630)]: {
-    //   justifyContent: "flex-start",
-    // },
+    [theme.breakpoints.down(380)]: {
+      width: "100%",
+      justifyContent: "flex-start",
+    },
   },
   menuItemSelect: {
     borderBottom: `3px solid rgba(0,0,0,0)`,
@@ -107,8 +148,26 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
+  locationDiv: {
+    width: "100%",
+    [theme.breakpoints.down(1015)]: {
+      width: "55%",
+    },
+    [theme.breakpoints.down(730)]: {
+      width: "70%",
+    },
+    [theme.breakpoints.down(655)]: {
+      width: "100%",
+    },
+  },
   locationGrid: {
     width: "30%",
+    [theme.breakpoints.down(1220)]: {
+      width: "38%",
+    },
+    [theme.breakpoints.down(1015)]: {
+      width: "100%",
+    },
   },
   mainContainer: {
     backgroundColor: Colors.BACKGROUND,
@@ -116,33 +175,31 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
   },
   pageContainer: {
     width: "95%",
-    margin: "115px auto 150px auto",
+    margin: "20px auto 150px auto",
+    [theme.breakpoints.down(549)]: {
+      margin: "75px ​auto 150px auto",
+    },
     [theme.breakpoints.down(415)]: {
       width: "97%",
     },
   },
-  pageTitle: {
-    margin: "25px 0px 0px 55px !important",
-  },
   pageTitleContainer: {
     width: "fit-content",
+    padding: "35px",
   },
   topImageContainer: {
-    height: "55vh",
-    backgroundImage:
-      "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0)), url('/Travel-Agent/car-rental.jpg')",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundPositionY: "50%",
+    height: "65vh",
+    [theme.breakpoints.down(655)]: {
+      height: "auto",
+    },
   },
   searchParamsGrid: {
     borderRadius: "50px",
     width: "95%",
-    margin: "auto",
+    margin: "auto auto 20px",
     padding: "20px 30px",
     backgroundColor: Colors.BLUE,
     position: "relative",
-    top: "157px",
   },
   select: {
     "& .MuiOutlinedInput-input": {
@@ -176,6 +233,16 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     [theme.breakpoints.down(1210)]: {
       width: "50%",
+    },
+    [theme.breakpoints.down(590)]: {
+      width: "65%",
+    },
+    [theme.breakpoints.down(460)]: {
+      width: "75%",
+      marginLeft: "auto",
+    },
+    [theme.breakpoints.down(380)]: {
+      width: "100%",
     },
   },
   selectIcon: {

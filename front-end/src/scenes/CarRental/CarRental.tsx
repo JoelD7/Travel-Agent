@@ -218,18 +218,25 @@ export function CarRental() {
       </Helmet>
 
       {/* Image container */}
-      <div className={style.topImageContainer}>
-        <Navbar transparent />
-        <ServicesToolbar transparent />
+      <Grid container className={style.topImageContainer}>
+        <img
+          src="/Travel-Agent/car-rental.jpg"
+          className={style.backgroundImage}
+          alt=""
+        />
 
-        {/* Title */}
-        <div className={style.pageTitleContainer}>
-          <Text
-            component="hm"
-            color="white"
-            className={style.pageTitle}
-          >{`Car Rental in ${destinationCity.city}`}</Text>
-        </div>
+        <Grid item xs={12} style={{ zIndex: 1 }}>
+          <Navbar transparent />
+          <ServicesToolbar transparent />
+
+          {/* Title */}
+          <div className={style.pageTitleContainer}>
+            <Text
+              component="hm"
+              color="white"
+            >{`Car Rental in ${destinationCity.city}`}</Text>
+          </div>
+        </Grid>
 
         {/* Search params */}
         <Grid container spacing={2} className={style.searchParamsGrid}>
@@ -238,7 +245,9 @@ export function CarRental() {
             <Text color="white" component="h4">
               Pickup location
             </Text>
-            <IataAutocomplete type="airport" flightDirection="to" />
+            <div className={style.locationDiv}>
+              <IataAutocomplete type="airport" flightDirection="to" />
+            </div>
           </Grid>
 
           {/* Dates */}
@@ -294,7 +303,7 @@ export function CarRental() {
             </Grid>
           </Grid>
         </Grid>
-      </div>
+      </Grid>
 
       {/* Page container */}
       <Grid container className={style.pageContainer} justify="center">
