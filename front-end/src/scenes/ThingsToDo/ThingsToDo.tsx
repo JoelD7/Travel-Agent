@@ -283,40 +283,38 @@ export function ThingsToDo() {
         <title>{`Things to do in ${destinationCity.city}`}</title>
       </Helmet>
 
-      <Navbar />
-
-      <div
-        style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${cityImage.image})`,
-        }}
-        className={style.background}
-      ></div>
       {/* Page Title Container */}
       <Grid container className={style.pageTitleContainer}>
-        {/* Services toolbar and title */}
-        <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12}>
-              <ServicesToolbar style={{ boxShadow: Shadow.MEDIUM }} />
-            </Grid>
+        <img src={cityImage.image} className={style.backgroundImage} alt="" />
 
-            <Grid item xs={10} className={style.pageTitleTextGrid}>
-              <Text style={{ position: "relative" }} bold component="hm" color="white">
-                {`Things to do in ${destinationCity.city}`}
-              </Text>
+        <Grid container style={{ zIndex: 1, width: "100%" }}>
+          {/* Services toolbar and title */}
+          <Grid item xs={12}>
+            <Navbar transparent />
+
+            <Grid container>
+              <Grid item xs={12}>
+                <ServicesToolbar transparent />
+              </Grid>
+
+              <Grid item xs={10} className={style.pageTitleTextGrid}>
+                <Text style={{ position: "relative" }} bold component="hm" color="white">
+                  {`Things to do in ${destinationCity.city}`}
+                </Text>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
 
-        {/* Parent categories of POIs */}
-        <Grid container style={{ alignSelf: "flex-end" }}>
-          <ParentCategoryToolbar
-            itemsToShow={3}
-            selectedCategory={selectedCategory}
-            updateSelectedCategory={(category: any) => {
-              onCategorySelected(category);
-            }}
-          />
+          {/* Parent categories of POIs */}
+          <Grid container style={{ alignSelf: "flex-end" }}>
+            <ParentCategoryToolbar
+              itemsToShow={3}
+              selectedCategory={selectedCategory}
+              updateSelectedCategory={(category: any) => {
+                onCategorySelected(category);
+              }}
+            />
+          </Grid>
         </Grid>
       </Grid>
 

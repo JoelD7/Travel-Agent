@@ -134,7 +134,7 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
       >
         {/* Slide title */}
         <Grid container>
-          <Text style={{ marginLeft: "53px" }} weight={500} component="h2">
+          <Text style={{ marginLeft: "45px" }} color={Colors.BLUE} component="h2">
             {title}
           </Text>
           <Button

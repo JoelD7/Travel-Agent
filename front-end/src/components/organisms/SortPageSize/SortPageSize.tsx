@@ -153,11 +153,14 @@ export function SortPageSize({
       boxShadow: Shadow.LIGHT3D,
       borderRadius: "10px",
       marginLeft: "auto",
-      minWidth: "555px",
-      width: "max-content",
-      [theme.breakpoints.down(600)]: {
+      width: "555px",
+      [theme.breakpoints.down(1040)]: {
         marginLeft: "0px",
         marginRight: "auto",
+      },
+      
+      [theme.breakpoints.down(620)]: {
+        width: '100%',
       },
     },
     sortGrid: {
@@ -180,6 +183,9 @@ export function SortPageSize({
       margin: "auto 10px auto 15px",
       borderRadius: "5px",
       width: "270px",
+      [theme.breakpoints.down(420)]: {
+        width: "70%",
+      },
     },
   }));
 

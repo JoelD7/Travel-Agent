@@ -488,16 +488,23 @@ export function Restaurant_List() {
         <title>{`Restaurants in ${currentCity.city}`}</title>
       </Helmet>
 
-      <Navbar />
       <a ref={topRestaurantAnchorEl} href={`#${topRestaurantId}`} hidden></a>
 
       <div>
         <Grid container className={style.pageTitleContainer}>
+          <img
+            src="/Travel-Agent/restaurant.jpg"
+            className={style.backgroundImage}
+            alt=""
+          />
+
           {/* Services toolbar and title */}
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{ zIndex: 1 }}>
+            <Navbar transparent />
+
             <Grid container className={style.titleAndToolbarContainer}>
               <Grid item xs={12}>
-                <ServicesToolbar style={{ boxShadow: Shadow.MEDIUM }} />
+                <ServicesToolbar transparent />
               </Grid>
 
               <Grid item xs={10} style={{ margin: "0px auto" }}>
@@ -514,14 +521,16 @@ export function Restaurant_List() {
 
         <Grid container spacing={2} className={style.pageContentContainer}>
           {/* Filters */}
-          <Grid item className={style.filterGrid}>
-            <RestaurantFilters setLoading={(value) => {}} />
-          </Grid>
+          <>
+            <Grid item className={style.filterGrid}>
+              <RestaurantFilters setLoading={(value) => {}} />
+            </Grid>
 
-          {/* Filter button */}
-          <Grid item className={style.filterButtonGrid}>
-            <RestaurantFilterDrawer />
-          </Grid>
+            {/* Filter button */}
+            <Grid item className={style.filterButtonGrid}>
+              <RestaurantFilterDrawer />
+            </Grid>
+          </>
 
           {/* Restaurants */}
           <Grid item className={style.restaurantsGrid}>

@@ -202,10 +202,10 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
     },
   },
   searchParamsGrid: {
-    borderRadius: "50px",
+    borderRadius: "10px",
     width: "95%",
     margin: "auto auto 20px",
-    padding: "20px 30px",
+    padding: "10px",
     backgroundColor: Colors.BLUE,
     position: "relative",
   },
@@ -260,5 +260,12 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
     margin: "auto 10px auto 15px",
     borderRadius: "5px",
     width: "170px",
+  },
+  whiteParamText: {
+    color: "white",
+    fontSize: "14px",
+    marginLeft: "5px",
+    marginBottom: "3px !important",
+    marginTop: "5px",
   },
 }));

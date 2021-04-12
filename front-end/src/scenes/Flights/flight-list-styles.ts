@@ -7,6 +7,12 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   autocompelteListbox: {
     fontFamily: Font.Family,
   },
+  backgroundImage: {
+    objectFit: "cover",
+    position: "absolute",
+    height: "55vh",
+    width: "100%",
+  },
   classParamGrid: {
     width: "25%",
     [theme.breakpoints.down(1245)]: {
@@ -119,6 +125,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   filterButtonGrid: {
     display: "none",
+    paddingLeft: "20px",
     marginBottom: "20px",
     [theme.breakpoints.down(1040)]: {
       display: "block",
@@ -196,14 +203,20 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     width: "85%",
   },
   pageTitleContainerPic: {
-    backgroundImage: `url('flights.jpg')`,
-    minHeight: "55vh",
-    marginBottom: "25px",
-    backgroundPositionY: "20%",
-    backgroundSize: "cover",
+    marginBottom: "35px",
+
+    "&::before": {
+      content: '""',
+      background: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
+      width: "100%",
+      position: "absolute",
+      height: "55vh",
+      zIndex: 1,
+    },
 
     [theme.breakpoints.down(1000)]: {
       margin: "auto",
+      marginBottom: "35px",
       width: "100%",
     },
   },

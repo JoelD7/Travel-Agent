@@ -1,6 +1,7 @@
 /* eslint-disable */ 
 import { IATALocation } from "../types/location-types";
 
+//3885 cities
 export const iataCodes: IATALocation[] = [
   {
     code: "AAA",

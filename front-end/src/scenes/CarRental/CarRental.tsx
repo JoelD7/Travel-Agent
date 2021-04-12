@@ -242,7 +242,7 @@ export function CarRental() {
         <Grid container spacing={2} className={style.searchParamsGrid}>
           {/* Location */}
           <Grid item className={style.locationGrid}>
-            <Text color="white" component="h4">
+            <Text color="white" className={style.whiteParamText} bold>
               Pickup location
             </Text>
             <div className={style.locationDiv}>
@@ -255,7 +255,7 @@ export function CarRental() {
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               {/* Pickup date */}
               <Grid item className={style.dateButtonGrid}>
-                <Text color="white" component="h4">
+                <Text color="white" className={style.whiteParamText} bold>
                   Pickup
                 </Text>
                 <KeyboardDatePicker
@@ -272,7 +272,7 @@ export function CarRental() {
 
               {/* Dropoff date */}
               <Grid item className={style.dateButtonGrid}>
-                <Text color="white" component="h4">
+                <Text color="white" className={style.whiteParamText} bold>
                   Dropoff
                 </Text>
                 <KeyboardDatePicker

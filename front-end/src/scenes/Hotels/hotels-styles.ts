@@ -13,6 +13,23 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     backgroundRepeat: "no-repeat",
     backgroundPositionY: "50%",
   },
+  backgroundImage: {
+    objectFit: "cover",
+    position: "absolute",
+    height: "55vh",
+    width: "100%",
+  },
+  backgroundImageContainer: {
+    height: "100%",
+    "&::before": {
+      content: '""',
+      background: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
+      width: "100%",
+      position: "absolute",
+      height: "55vh",
+      zIndex: 1,
+    },
+  },
   cardData2: {
     display: "flex",
     padding: "0px 10px 10px 10px",
@@ -220,9 +237,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     },
   },
   pageTitleGrid: {
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundPositionY: "50%",
+    height: "65vh",
   },
   pageTitleContainer: {
     backgroundColor: Colors.BLUE,
@@ -250,7 +265,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   },
   reservationParamBox: {
     width: "85%",
-    margin: "40px auto",
+    margin: "auto auto 40px",
     position: "relative",
   },
   select: {
@@ -317,8 +332,9 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   },
   whiteParamText: {
     color: "white",
+    fontSize: "14px",
     marginLeft: "5px",
-    marginBottom: "3px",
+    marginBottom: "3px !important",
     marginTop: "5px",
   },
 }));

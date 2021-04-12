@@ -12,6 +12,12 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     backgroundRepeat: "no-repeat",
     backgroundPositionY: "50%",
   },
+  backgroundImage: {
+    objectFit: "cover",
+    position: "absolute",
+    height: "55vh",
+    width: "100%",
+  },
   card: {
     transition: "all .2s ease-in-out",
     width: "92%",
@@ -129,6 +135,7 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     width: "80%",
+    zIndex: 1,
     margin: "25px auto 150px auto",
     position: "relative",
 
@@ -137,10 +144,15 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     },
   },
   pageTitleContainer: {
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundPositionY: "50%",
-    height: "35vh",
+    height: "42vh",
+    "&::before": {
+      content: '""',
+      background: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
+      width: "100%",
+      position: "absolute",
+      height: "55vh",
+      zIndex: 1,
+    },
   },
   pageTitleTextGrid: {
     margin: "0px auto",

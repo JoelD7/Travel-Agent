@@ -4,6 +4,12 @@ import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
 export const restaurantListStyles = makeStyles((theme: Theme) => ({
+  backgroundImage: {
+    objectFit: "cover",
+    position: "absolute",
+    height: "55vh",
+    width: "100%",
+  },
   card: {
     width: "95%",
     margin: "auto 5px",
@@ -20,12 +26,6 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     fontFamily: Font.Family,
     backgroundColor: Colors.BACKGROUND,
-  },
-  pageContentContainer: {
-    width: "90%",
-    margin: "auto",
-    position: "relative",
-    bottom: "155px",
   },
   filterGrid: {
     width: "22%",
@@ -55,14 +55,26 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   },
   pagination: {
     margin: "20px 0px 40px auto",
+    [theme.breakpoints.down(620)]: {
+      margin: "20px 0px 40px",
+    },
+  },
+  pageContentContainer: {
+    width: "90%",
+    margin: "auto",
+    position: "relative",
+    zIndex: 1,
   },
   pageTitleContainer: {
-    height: "55vh",
-    backgroundImage:
-      "linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('/Travel-Agent/restaurant.jpg')",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundPositionY: "50%",
+    "&::before": {
+      content: '""',
+      background: "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0))",
+      width: "100%",
+      position: "absolute",
+      height: "55vh",
+      zIndex: 1,
+    },
+    height: "45vh",
   },
   restaurantName: {
     fontSize: "14px",
@@ -115,5 +127,6 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   topSorter: {
     margin: "0px auto 0px 0px !important",
     height: "max-content",
+    width: "157px !important",
   },
 }));
