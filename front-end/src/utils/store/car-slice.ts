@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addDays } from "date-fns";
+import { addDays, format } from "date-fns";
 import { getDefaultCity, getISOCodeFromCountry } from "../functions";
 import { CarCheckbox, CarSearch, IATALocation } from "../types";
 
@@ -14,9 +14,9 @@ const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
 
 const initialState: CarReducer = {
   carSearch: {
-    pickup_date: addDays(new Date(), 2).toISOString(),
+    pickup_date: format(addDays(new Date(), 2), `yyyy-MM-dd'T'HH:mm:ss`),
     pickup_location: defaultDestinationCity.code,
-    dropoff_date: addDays(new Date(), 4).toISOString(),
+    dropoff_date: format(addDays(new Date(), 4), `yyyy-MM-dd'T'HH:mm:ss`),
     country_code: getISOCodeFromCountry(defaultDestinationCity.country),
   },
   features: [

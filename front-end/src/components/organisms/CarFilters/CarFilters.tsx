@@ -9,7 +9,7 @@ import {
   RadioGroup,
   Grid,
 } from "@material-ui/core";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { batchActions } from "redux-batched-actions";
 import { Colors } from "../../../styles";
@@ -32,10 +32,11 @@ interface CarFilters {}
 export function CarFilters({}: CarFilters) {
   const style = carFiltersStyles();
 
-  const [brands, setBrands] = useState<CarCheckbox[]>(useSelector(selectCarSearchBrands));
-  const [features, setFeatures] = useState<CarCheckbox[]>(
-    useSelector(selectCarSearchFeatures)
-  );
+  const brandsRedux: CarCheckbox[] = useSelector(selectCarSearchBrands);
+  const featuresRedux: CarCheckbox[] = useSelector(selectCarSearchFeatures);
+
+  const [brands, setBrands] = useState<CarCheckbox[]>(brandsRedux);
+  const [features, setFeatures] = useState<CarCheckbox[]>(featuresRedux);
   const [transmission, setTransmission] = useState<string>(
     useSelector(selectCarSearchTransmission)
   );
@@ -47,6 +48,11 @@ export function CarFilters({}: CarFilters) {
     { value: "manual", label: "Manual" },
     { value: "all", label: "All" },
   ];
+
+  useEffect(() => {
+    setBrands(brandsRedux);
+    setFeatures(featuresRedux);
+  }, [brandsRedux, featuresRedux]);
 
   function onBrandChange(event: ChangeEvent<HTMLInputElement>) {
     let changedCheck = event.target.name;

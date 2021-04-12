@@ -1,46 +1,43 @@
 import DateFnsUtils from "@date-io/date-fns";
-import { faSquare } from "@fortawesome/free-regular-svg-icons";
-import { faCheckSquare, faFilter } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import {
   createMuiTheme,
-  Grid,
-  ThemeProvider,
-  FormControl,
-  Select,
-  MenuItem,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Radio,
-  RadioGroup,
-  Tooltip,
   Drawer,
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  ThemeProvider,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { addDays, parseISO } from "date-fns";
-import React, { ChangeEvent, useState } from "react";
+import Axios from "axios";
+import { addDays, parseISO, format } from "date-fns";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AnyAction } from "redux";
+import { batchActions } from "redux-batched-actions";
 import { Font } from "../../assets";
 import {
+  CarFilters,
+  CarsCard,
+  CustomButton,
+  Footer,
+  IataAutocomplete,
   Navbar,
+  ProgressCircle,
   ServicesToolbar,
   Text,
-  IataAutocomplete,
-  CustomButton,
-  SortPageSize,
-  CarsCard,
-  Footer,
-  CarFilters,
 } from "../../components";
 import { Colors } from "../../styles";
 import {
+  Car,
   CarCheckbox,
-  carBrandPlaceholder,
+  AvisToken,
   CarSearch,
-  FlightTypes,
+  getAvisAccessToken,
+  carsPlaceholder,
   IATALocation,
   isDateAfterOrEqual,
   muiDateFormatter,
@@ -49,9 +46,9 @@ import {
   selectCarSearchFeatures,
   selectCarSearchTransmission,
   selectDestinationCity,
-  carRentalFeatures,
-  Car,
-  carsPlaceholder,
+  setCarSearchBrands,
+  setCarSearchFeatures,
+  setCarSearchTransmission,
 } from "../../utils";
 import { carRentalStyles } from "./carRental-styles";
 
@@ -163,6 +160,8 @@ export function CarRental() {
   const features: CarCheckbox[] = useSelector(selectCarSearchFeatures);
   const transmission: string = useSelector(selectCarSearchTransmission);
 
+  let batchedActions: AnyAction[] = [];
+
   const transmissions: { value: string; label: string }[] = [
     { value: "automatic", label: "Automatic" },
     { value: "manual", label: "Manual" },
@@ -171,8 +170,65 @@ export function CarRental() {
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
+  const dispatch = useDispatch();
+
   const [localCarSearch, setLocalCarSearch] = useState<CarSearch>(carSearch);
   const [sortOption, setSortOption] = useState<string>("Price | desc");
+
+  const [loading, setLoading] = useState(true);
+  const [loadingOnMount, setLoadingOnMount] = useState(true);
+
+  useEffect(() => {
+    fetchCarRentals();
+  }, []);
+
+  function fetchCarRentals() {
+    getAvisAccessToken()
+      .then((accessToken: AvisToken) => {
+        Axios.get("https://stage.abgapiservices.com:443/cars/catalog/v1/vehicles", {
+          headers: {
+            Authorization: `Bearer ${accessToken.token}`,
+            client_id: process.env.REACT_APP_AVIS_ID,
+          },
+          params: {
+            brand: "Avis",
+            pickup_date: carSearch.pickup_date,
+            pickup_location: carSearch.pickup_location,
+            dropoff_date: carSearch.dropoff_date,
+            dropoff_location: carSearch.pickup_location,
+            country_code: carSearch.country_code,
+          },
+        })
+          .then((res) => {
+            setCars(res.data.vehicles);
+            setBrands(res.data.vehicles);
+
+            dispatch(batchActions(batchedActions));
+            setLoading(false);
+            setLoadingOnMount(false);
+          })
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
+  }
+
+  function setBrands(vehicles: any[]) {
+    let brandsSet = new Set<string>();
+    let existingBrands: string[] = brands.map((brand) => brand.name);
+    let brandsBuffer: CarCheckbox[] = [];
+
+    vehicles.forEach((vehicle) => brandsSet.add(vehicle.category.make));
+
+    Array.from(brandsSet.values()).forEach((make) => {
+      if (!existingBrands.includes(make)) {
+        brandsBuffer.push({ name: make, checked: false });
+        existingBrands.push(make);
+      }
+    });
+
+    brandsBuffer.sort((a, b) => a.name.localeCompare(b.name));
+    batchedActions.push(setCarSearchBrands(brandsBuffer));
+  }
 
   function onDateChange(
     date: MaterialUiPickersDate,
@@ -188,15 +244,21 @@ export function CarRental() {
         if (dropoff_date && isDateAfterOrEqual(newDate, dropoff_date)) {
           setLocalCarSearch({
             ...localCarSearch,
-            dropoff_date: addDays(newDate, 1).toISOString(),
+            dropoff_date: format(addDays(newDate, 1), `yyyy-MM-dd'T'HH:mm:ss`),
           });
         }
 
-        setLocalCarSearch({ ...localCarSearch, pickup_date: newDate.toISOString() });
+        setLocalCarSearch({
+          ...localCarSearch,
+          pickup_date: format(newDate, `yyyy-MM-dd'T'HH:mm:ss`),
+        });
         break;
       case "dropoff_date":
         newDate = date === null ? new Date() : parseISO(date.toISOString());
-        setLocalCarSearch({ ...localCarSearch, dropoff_date: newDate.toISOString() });
+        setLocalCarSearch({
+          ...localCarSearch,
+          dropoff_date: format(newDate, `yyyy-MM-dd'T'HH:mm:ss`),
+        });
         break;
     }
   }
@@ -365,13 +427,26 @@ export function CarRental() {
 
         {/* Cars cards */}
         <Grid item className={style.carsGrid}>
-          <Grid container spacing={2} justify="center">
-            {cars.map((car, i) => (
-              <Grid key={i} item className={style.carsGridItem}>
-                <CarsCard car={car} />
-              </Grid>
-            ))}
-          </Grid>
+          {loading && (
+            <Grid container justify="center">
+              <ProgressCircle />
+            </Grid>
+          )}
+
+          {!loadingOnMount && (
+            <Grid
+              container
+              spacing={2}
+              justify="center"
+              style={loading ? { filter: "blur(4px)" } : {}}
+            >
+              {cars.map((car, i) => (
+                <Grid key={i} item className={style.carsGridItem}>
+                  <CarsCard car={car} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Grid>
       </Grid>
 

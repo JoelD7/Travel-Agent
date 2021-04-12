@@ -1,7 +1,7 @@
 import Axios, { AxiosResponse } from "axios";
 import { addSeconds, compareAsc, parseISO } from "date-fns";
 
-interface AvisToken {
+export interface AvisToken {
   token: string;
   expiration: string;
 }
@@ -9,7 +9,7 @@ interface AvisToken {
 let emptyAccessToken = { token: "", expiration: new Date().toISOString() };
 const TOKEN_NAME = "avisToken";
 
-export async function fetchNewAccessToken(): Promise<AxiosResponse<any>> {
+export async function fetchNewAvisAccessToken(): Promise<AxiosResponse<any>> {
   let client_id = process.env.REACT_APP_AVIS_ID;
   let client_secret = process.env.REACT_APP_AVIS_SECRET;
   let axiosResponse = await Axios.get(`https://stage.abgapiservices.com/oauth/token/v1`, {
@@ -22,7 +22,7 @@ export async function fetchNewAccessToken(): Promise<AxiosResponse<any>> {
   return new Promise<AxiosResponse<any>>((resolve) => resolve(axiosResponse));
 }
 
-export function updateAccessToken(data: any) {
+export function updateAvisAccessToken(data: any) {
   let newAccessToken = {
     token: data.access_token,
     expiration: addSeconds(new Date(), data.expires_in),
@@ -35,12 +35,12 @@ export function updateAccessToken(data: any) {
  * Returns the currently saved access token in localStorage,
  * or if expiration time is up, requests a new one.
  */
-export async function getAccessToken(): Promise<AvisToken> {
-  let curAccessToken = getSavedAccessToken();
+export async function getAvisAccessToken(): Promise<AvisToken> {
+  let curAccessToken = getAvisSavedAccessToken();
 
-  if (isAccessTokenUpdatable()) {
-    let accessTokenResponse = await fetchNewAccessToken();
-    updateAccessToken(accessTokenResponse.data);
+  if (isAvisAccessTokenUpdatable()) {
+    let accessTokenResponse = await fetchNewAvisAccessToken();
+    updateAvisAccessToken(accessTokenResponse.data);
 
     let newAccessToken = JSON.parse(localStorage.getItem(TOKEN_NAME) || "");
     return new Promise<AvisToken>((resolve) => {
@@ -56,15 +56,15 @@ export async function getAccessToken(): Promise<AvisToken> {
 /**
  * Returns the currently saved access token in localStorage.
  */
-export function getSavedAccessToken() {
+export function getAvisSavedAccessToken() {
   return localStorage.getItem(TOKEN_NAME) === null
     ? emptyAccessToken
     : JSON.parse(localStorage.getItem(TOKEN_NAME) || "");
 }
 
-export function isAccessTokenUpdatable() {
+export function isAvisAccessTokenUpdatable() {
   let curDate = new Date();
-  let accessToken = getSavedAccessToken();
+  let accessToken = getAvisSavedAccessToken();
 
   let tokenExpiration = parseISO(accessToken.expiration);
   return compareAsc(tokenExpiration, curDate) <= 0;

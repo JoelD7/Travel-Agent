@@ -2,6 +2,7 @@ import * as HotelBedAPI from "./hotelbeds-apis";
 export * from "./google-places-apis";
 export { HotelBedAPI };
 export * from "./amadeus-apis";
+export * from "./avis-apis";
 
 /**
  * To use Google Places API and HotelBeds API on the client side, a proxy is required to add the
