@@ -139,6 +139,7 @@ export const selectRestaurantFilterParams = (state: RootState) =>
 //#endregion
 
 //#region Car rental
+export const selectCarReducer = (state: RootState) => state.carSlice;
 export const selectCarSearch = (state: RootState) => state.carSlice.carSearch;
 export const selectCarSearchBrands = (state: RootState) => state.carSlice.brands;
 export const selectCarSearchFeatures = (state: RootState) => state.carSlice.features;

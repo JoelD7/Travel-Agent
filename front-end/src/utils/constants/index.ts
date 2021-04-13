@@ -1,7 +1,9 @@
 import * as LocalStorageKeys from "./localStorageKeys";
 import * as FlightClass from "./flight-classes";
 import * as LocationType from "./geolocation";
-import { CarCheckbox } from "../types";
+import { CarCheckbox, CarSearch, IATALocation } from "../types";
+import { addDays, format } from "date-fns";
+import { getDefaultCity, getISOCodeFromCountry } from "../functions";
 export * from "./airports";
 export * from "./iataCodes";
 export * from "./iso3166-countryCodes";
@@ -369,3 +371,12 @@ export const carRentalFeatures: CarCheckbox[] = [
     checked: true,
   },
 ];
+
+const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
+
+export const carSearchDefault: CarSearch = {
+  pickup_date: format(addDays(new Date(), 2), `yyyy-MM-dd'T'HH:mm:ss`),
+  pickup_location: defaultDestinationCity.code,
+  dropoff_date: format(addDays(new Date(), 4), `yyyy-MM-dd'T'HH:mm:ss`),
+  country_code: getISOCodeFromCountry(defaultDestinationCity.country),
+};

@@ -28,12 +28,13 @@ import { carlos, Font, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors } from "../../../styles";
 import {
+  getCarRentalDefaultURL,
   getHotelSearchURL,
   getLinkStyle,
-  Routes,
-  selectHotelReservationParams,
   getRestaurantsDefaultRoute,
   HotelBookingParams,
+  Routes,
+  selectHotelReservationParams,
 } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 import { CustomButton } from "../../atoms";
@@ -127,8 +128,8 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
     {
       label: "Car rental",
       icon: faCar,
-      route: "",
-      selected: false,
+      route: getCarRentalDefaultURL(),
+      selected: page === Routes.CAR_RENTAL,
       user: false,
     },
   ]);

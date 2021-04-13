@@ -5,10 +5,13 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Colors } from "../../../styles";
 import {
+  CarSearch,
+  getCarRentalDefaultURL,
   getHotelSearchURL,
   getLinkStyle,
   getRestaurantsDefaultRoute,
   Routes,
+  selectCarSearch,
   selectDestinationCity,
   selectHotelReservationParams,
 } from "../../../utils";
@@ -32,6 +35,7 @@ export function ServicesToolbar({ transparent, style }: ServicesToolbar) {
 
   const reservationParams = useSelector(selectHotelReservationParams);
   const city: IATALocation = useSelector(selectDestinationCity);
+  const carSearch: CarSearch = useSelector(selectCarSearch);
 
   const navbarServices: NavbarService[] = [
     {
@@ -91,7 +95,7 @@ export function ServicesToolbar({ transparent, style }: ServicesToolbar) {
         return Routes.THINGS_TODO;
 
       case Routes.CAR_RENTAL:
-        return Routes.CAR_RENTAL;
+        return getCarRentalDefaultURL();
 
       default:
         return Routes.HOME;

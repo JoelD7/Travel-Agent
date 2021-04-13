@@ -1,7 +1,6 @@
 import { format, parseISO } from "date-fns";
 import { Routes } from "..";
 import { HotelBedAPI } from "../external-apis";
-import { ExchangeRate } from "../types";
 import {
   HotelBooking,
   HotelBookingParams,
@@ -10,7 +9,6 @@ import {
   HotelRooms,
 } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
-import { DEFAULT_CURRENCY } from "../constants";
 
 export function getHotelStars(hotel: HotelBooking) {
   let stars = Number(hotel.categoryCode.split("EST")[0]);

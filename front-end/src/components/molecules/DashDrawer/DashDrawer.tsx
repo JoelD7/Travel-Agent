@@ -1,23 +1,15 @@
-import {
-  convertReservationParamsToURLParams,
-  getLinkStyle,
-  HotelBookingParams,
-  Routes,
-  getRestaurantsDefaultRoute,
-  selectHotelReservationParams,
-  getHotelSearchURL,
-} from "../../../utils";
-import { DrawerOptions } from "../../../utils/types/drawerOption-types";
-import React, { useState } from "react";
+import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 import {
   faCalendar,
+  faCar,
+  faDice,
   faHeart,
-  faPlane,
   faHotel,
+  faPlane,
   faPlaneDeparture,
   faUtensils,
-  faDice,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Divider,
   Drawer,
@@ -26,11 +18,20 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
-import { dashDrawerStyles } from "./dashDrawer-styles";
-import { Link, useHistory } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import {
+  getCarRentalDefaultURL,
+  getHotelSearchURL,
+  getLinkStyle,
+  getRestaurantsDefaultRoute,
+  HotelBookingParams,
+  Routes,
+  selectHotelReservationParams,
+} from "../../../utils";
+import { DrawerOptions } from "../../../utils/types/drawerOption-types";
+import { dashDrawerStyles } from "./dashDrawer-styles";
 
 export function DashDrawer() {
   const style = dashDrawerStyles();
@@ -98,6 +99,13 @@ export function DashDrawer() {
       icon: faDice,
       route: Routes.THINGS_TODO,
       selected: page === Routes.THINGS_TODO,
+      user: false,
+    },
+    {
+      label: "Car rental",
+      icon: faCar,
+      route: getCarRentalDefaultURL(),
+      selected: page === Routes.CAR_RENTAL,
       user: false,
     },
   ];
