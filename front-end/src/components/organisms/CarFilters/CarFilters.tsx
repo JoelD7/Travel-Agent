@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { batchActions } from "redux-batched-actions";
 import { Colors } from "../../../styles";
 import {
@@ -21,8 +22,12 @@ import {
   selectCarSearchFeatures,
   selectCarSearchTransmission,
   setCarSearchBrands,
+  convertCarReducerToURLParams,
   setCarSearchFeatures,
   setCarSearchTransmission,
+  selectCarSearch,
+  CarSearch,
+  Routes,
 } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 import { carFiltersStyles } from "./carFilters-styles";
@@ -34,6 +39,8 @@ export function CarFilters({}: CarFilters) {
 
   const brandsRedux: CarCheckbox[] = useSelector(selectCarSearchBrands);
   const featuresRedux: CarCheckbox[] = useSelector(selectCarSearchFeatures);
+  const transmissionRedux: string = useSelector(selectCarSearchTransmission);
+  const carSearch: CarSearch = useSelector(selectCarSearch);
 
   const [brands, setBrands] = useState<CarCheckbox[]>(brandsRedux);
   const [features, setFeatures] = useState<CarCheckbox[]>(featuresRedux);
@@ -48,6 +55,8 @@ export function CarFilters({}: CarFilters) {
     { value: "manual", label: "Manual" },
     { value: "all", label: "All" },
   ];
+
+  const history = useHistory();
 
   useEffect(() => {
     setBrands(brandsRedux);
@@ -94,6 +103,15 @@ export function CarFilters({}: CarFilters) {
         setCarSearchTransmission(transmission),
       ])
     );
+
+    let urlParams = convertCarReducerToURLParams({
+      carSearch,
+      brands,
+      features,
+      transmission,
+    });
+
+    history.push(`${Routes.CAR_RENTAL}${urlParams}`);
   }
 
   return (

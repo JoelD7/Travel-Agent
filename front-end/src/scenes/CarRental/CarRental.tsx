@@ -12,10 +12,11 @@ import {
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import Axios from "axios";
-import { addDays, parseISO, format } from "date-fns";
+import { addDays, format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router";
 import { AnyAction } from "redux";
 import { batchActions } from "redux-batched-actions";
 import { Font } from "../../assets";
@@ -26,31 +27,46 @@ import {
   Footer,
   IataAutocomplete,
   Navbar,
+  NotAvailableCard,
   ProgressCircle,
   ServicesToolbar,
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
 import {
+  AvisToken,
   Car,
   CarCheckbox,
-  AvisToken,
+  CarReducer,
   CarSearch,
-  getAvisAccessToken,
   carsPlaceholder,
+  convertCarReducerToURLParams,
+  convertURLToCarReducer,
+  getAvisAccessToken,
+  getIataLocation,
   IATALocation,
   isDateAfterOrEqual,
   muiDateFormatter,
+  Routes,
   selectCarSearch,
   selectCarSearchBrands,
   selectCarSearchFeatures,
   selectCarSearchTransmission,
   selectDestinationCity,
+  setCarSearch,
   setCarSearchBrands,
   setCarSearchFeatures,
   setCarSearchTransmission,
+  setDestinationCity,
+  setFlightTo,
+  setFlightToAutocomplete,
 } from "../../utils";
 import { carRentalStyles } from "./carRental-styles";
+
+interface NoCarRentalsInfo {
+  code: string;
+  details: string;
+}
 
 export function CarRental() {
   const style = carRentalStyles();
@@ -160,13 +176,13 @@ export function CarRental() {
   const features: CarCheckbox[] = useSelector(selectCarSearchFeatures);
   const transmission: string = useSelector(selectCarSearchTransmission);
 
-  let batchedActions: AnyAction[] = [];
+  const location = useLocation();
 
-  const transmissions: { value: string; label: string }[] = [
-    { value: "automatic", label: "Automatic" },
-    { value: "manual", label: "Manual" },
-    { value: "all", label: "All" },
-  ];
+  const query = useQuery();
+
+  const history = useHistory();
+
+  let batchedActions: AnyAction[] = [];
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -178,11 +194,59 @@ export function CarRental() {
   const [loading, setLoading] = useState(true);
   const [loadingOnMount, setLoadingOnMount] = useState(true);
 
+  const [noCarRentalsInfo, setNoCarRentalsInfo] = useState<NoCarRentalsInfo>({
+    code: "",
+    details: "",
+  });
+
+  /**
+   * Contains the last city on which the list of brands
+   * was generated from.
+   *
+   * Each city will obviously have a specific set of available
+   * car brands, therefore each time the user changes the city a
+   * new list of brands will override the previous one, and if
+   * the user modifies the search params without modifying the
+   * city, the list shall remain the same with the possibiliy of
+   * having some brands checked.
+   *
+   * When a search is made, this variable will indicate whether an
+   * entirely new list of brands must be generated, or if the new brands
+   * must be added to existing list.
+   *
+   */
+  const [lastQueriedCityForBrand, setLastQueriedCityForBrand] = useState<string>(
+    carSearch.pickup_location
+  );
+
+  let carReducer: CarReducer;
+
   useEffect(() => {
-    fetchCarRentals();
+    carReducer = convertURLToCarReducer(query);
+
+    batchedActions.push(setCarSearch(carReducer.carSearch));
+    batchedActions.push(setCarSearchBrands(carReducer.brands));
+    batchedActions.push(setCarSearchFeatures(getCarFeatures(carReducer)));
+    batchedActions.push(setCarSearchTransmission(carReducer.transmission));
+
+    let destinationCity: IATALocation | undefined = getIataLocation(
+      carReducer.carSearch.pickup_location
+    );
+    if (destinationCity) {
+      batchedActions.push(setDestinationCity(destinationCity));
+      batchedActions.push(setFlightToAutocomplete(destinationCity));
+      batchedActions.push(setFlightTo(destinationCity.code));
+    }
+
+    dispatch(batchActions(batchedActions));
+
+    fetchCarRentals(carReducer);
   }, []);
 
-  function fetchCarRentals() {
+  function fetchCarRentals(carReducer?: CarReducer) {
+    let carSearchParams: CarSearch = carReducer ? carReducer.carSearch : carSearch;
+    let selectedBrands: CarCheckbox[] = carReducer ? carReducer.brands : [];
+
     getAvisAccessToken()
       .then((accessToken: AvisToken) => {
         Axios.get("https://stage.abgapiservices.com:443/cars/catalog/v1/vehicles", {
@@ -192,42 +256,67 @@ export function CarRental() {
           },
           params: {
             brand: "Avis",
-            pickup_date: carSearch.pickup_date,
-            pickup_location: carSearch.pickup_location,
-            dropoff_date: carSearch.dropoff_date,
-            dropoff_location: carSearch.pickup_location,
-            country_code: carSearch.country_code,
+            pickup_date: carSearchParams.pickup_date,
+            pickup_location: carSearchParams.pickup_location,
+            dropoff_date: carSearchParams.dropoff_date,
+            dropoff_location: carSearchParams.pickup_location,
+            country_code: carSearchParams.country_code,
           },
         })
           .then((res) => {
             setCars(res.data.vehicles);
-            setBrands(res.data.vehicles);
+            setBrands(res.data.vehicles, selectedBrands);
 
-            dispatch(batchActions(batchedActions));
             setLoading(false);
             setLoadingOnMount(false);
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            if (error.response) {
+              let errorDetail: any = error.response.data.status.errors[0];
+              setLoading(false);
+              setLoadingOnMount(false);
+
+              setNoCarRentalsInfo({
+                code: errorDetail.code,
+                details: errorDetail.details,
+              });
+            }
+          });
       })
       .catch((error) => console.log(error));
   }
 
-  function setBrands(vehicles: any[]) {
-    let brandsSet = new Set<string>();
+  function setBrands(vehicles: any[], brands: CarCheckbox[]) {
+    let brandsFromResponseSet = new Set<string>();
+    vehicles.forEach((vehicle) => brandsFromResponseSet.add(vehicle.category.make));
+
+    let brandsFromResponse: string[] = Array.from(brandsFromResponseSet.values());
+
     let existingBrands: string[] = brands.map((brand) => brand.name);
+
+    let selectedBrands: CarCheckbox[] = brands.filter((brand) => brand.checked);
     let brandsBuffer: CarCheckbox[] = [];
 
-    vehicles.forEach((vehicle) => brandsSet.add(vehicle.category.make));
-
-    Array.from(brandsSet.values()).forEach((make) => {
+    brandsFromResponse.forEach((make) => {
       if (!existingBrands.includes(make)) {
         brandsBuffer.push({ name: make, checked: false });
         existingBrands.push(make);
       }
     });
 
+    setLastQueriedCityForBrand(carSearch.pickup_location);
+
     brandsBuffer.sort((a, b) => a.name.localeCompare(b.name));
-    batchedActions.push(setCarSearchBrands(brandsBuffer));
+
+    if (hasTheCityChanged()) {
+      dispatch(setCarSearchBrands(brandsBuffer));
+    } else {
+      dispatch(setCarSearchBrands([...selectedBrands, ...brandsBuffer]));
+    }
+  }
+
+  function hasTheCityChanged(): boolean {
+    return lastQueriedCityForBrand !== carSearch.pickup_location;
   }
 
   function onDateChange(
@@ -244,14 +333,16 @@ export function CarRental() {
         if (dropoff_date && isDateAfterOrEqual(newDate, dropoff_date)) {
           setLocalCarSearch({
             ...localCarSearch,
+            pickup_date: format(newDate, `yyyy-MM-dd'T'HH:mm:ss`),
             dropoff_date: format(addDays(newDate, 1), `yyyy-MM-dd'T'HH:mm:ss`),
+          });
+        } else {
+          setLocalCarSearch({
+            ...localCarSearch,
+            pickup_date: format(newDate, `yyyy-MM-dd'T'HH:mm:ss`),
           });
         }
 
-        setLocalCarSearch({
-          ...localCarSearch,
-          pickup_date: format(newDate, `yyyy-MM-dd'T'HH:mm:ss`),
-        });
         break;
       case "dropoff_date":
         newDate = date === null ? new Date() : parseISO(date.toISOString());
@@ -271,6 +362,76 @@ export function CarRental() {
     child: React.ReactNode
   ) {
     setSortOption(event.target.value as string);
+  }
+
+  function useQuery() {
+    return new URLSearchParams(location.search);
+  }
+
+  /**
+   *
+   * @param carReducer uses this parameter to check if a feature was
+   * previously selected(it's in the url).
+   */
+  function getCarFeatures(carReducer: CarReducer) {
+    let featuresToShow: CarCheckbox[] = [];
+    let selectedFeatures: string[] = carReducer.features.map((f) => f.name);
+
+    features.forEach((feature) => {
+      if (selectedFeatures.includes(feature.name)) {
+        featuresToShow.push({ name: feature.name, checked: true });
+      } else {
+        featuresToShow.push({ name: feature.name, checked: false });
+      }
+    });
+
+    return featuresToShow;
+  }
+
+  function onSearchClick() {
+    setLoading(true);
+
+    let updatedCarSearch: CarSearch = {
+      ...carSearch,
+      pickup_date: localCarSearch.pickup_date,
+      dropoff_date: localCarSearch.dropoff_date,
+    };
+
+    dispatch(setCarSearch(updatedCarSearch));
+
+    //In this case, the brands in the URL should be deleted.
+    if (hasTheCityChanged()) {
+      carReducer = {
+        carSearch: updatedCarSearch,
+        brands: [],
+        features,
+        transmission,
+      };
+    } else {
+      carReducer = {
+        carSearch: updatedCarSearch,
+        brands,
+        features,
+        transmission,
+      };
+    }
+
+    let urlParams = convertCarReducerToURLParams(carReducer);
+    history.push(`${Routes.CAR_RENTAL}${urlParams}`);
+
+    fetchCarRentals(carReducer);
+  }
+
+  function areCarRentalCardsRenderable(): boolean {
+    return !loadingOnMount && noCarRentalsInfo.code !== "223";
+  }
+
+  function noCarRentalCardsFound(): boolean {
+    return noCarRentalsInfo.code === "223";
+  }
+
+  function getBlurStyle() {
+    return loading ? { filter: "blur(4px)" } : {};
   }
 
   return (
@@ -321,7 +482,7 @@ export function CarRental() {
                   Pickup
                 </Text>
                 <KeyboardDatePicker
-                  value={parseISO(carSearch.pickup_date)}
+                  value={parseISO(localCarSearch.pickup_date)}
                   labelFunc={(date, invalidLabel) =>
                     muiDateFormatter(date, invalidLabel, "date")
                   }
@@ -338,7 +499,7 @@ export function CarRental() {
                   Dropoff
                 </Text>
                 <KeyboardDatePicker
-                  value={parseISO(carSearch.dropoff_date)}
+                  value={parseISO(localCarSearch.dropoff_date)}
                   labelFunc={(date, invalidLabel) =>
                     muiDateFormatter(date, invalidLabel, "date")
                   }
@@ -359,7 +520,11 @@ export function CarRental() {
               justify="flex-end"
               alignItems="flex-end"
             >
-              <CustomButton style={{ fontSize: "18px" }} backgroundColor={Colors.GREEN}>
+              <CustomButton
+                style={{ fontSize: "18px" }}
+                onClick={() => onSearchClick()}
+                backgroundColor={Colors.GREEN}
+              >
                 Search
               </CustomButton>
             </Grid>
@@ -428,18 +593,21 @@ export function CarRental() {
         {/* Cars cards */}
         <Grid item className={style.carsGrid}>
           {loading && (
-            <Grid container justify="center">
+            <Grid container justify="center" className={style.progressCircleContainer}>
               <ProgressCircle />
             </Grid>
           )}
 
-          {!loadingOnMount && (
-            <Grid
-              container
-              spacing={2}
-              justify="center"
-              style={loading ? { filter: "blur(4px)" } : {}}
-            >
+          {noCarRentalCardsFound() && (
+            <Grid container justify="center" style={getBlurStyle()}>
+              <NotAvailableCard title="Sorry">
+                {noCarRentalsInfo.details}
+              </NotAvailableCard>
+            </Grid>
+          )}
+
+          {areCarRentalCardsRenderable() && (
+            <Grid container spacing={2} justify="center" style={getBlurStyle()}>
               {cars.map((car, i) => (
                 <Grid key={i} item className={style.carsGridItem}>
                   <CarsCard car={car} />

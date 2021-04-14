@@ -183,6 +183,10 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
       width: "97%",
     },
   },
+  progressCircleContainer: {
+    position: "relative",
+    top: "100px",
+  },
   pageTitleContainer: {
     width: "fit-content",
     padding: "35px",

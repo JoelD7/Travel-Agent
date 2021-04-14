@@ -31,6 +31,7 @@ export function NotAvailableCard({
   }));
 
   const style = notAvailableCardStyles();
+
   return (
     <Grid container className={style.noHotelsContainer}>
       {/* Message */}
@@ -39,11 +40,13 @@ export function NotAvailableCard({
           {title}
         </Text>
 
-        <Text component="h4">{children}</Text>
+        <Text component="h4" weight="normal">
+          {children}
+        </Text>
       </Grid>
 
       {/* Image */}
-      <Grid item xs={variant === "horizontal" ? 8 : 12}>
+      <Grid item xs={variant === "horizontal" ? 4 : 12}>
         <Grid alignItems="center" justify="center" container style={{ height: "100%" }}>
           <img
             src="/Travel-Agent/not-found.png"

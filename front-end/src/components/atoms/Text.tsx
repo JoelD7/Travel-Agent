@@ -23,7 +23,7 @@ export const Text: FunctionComponent<{
   className,
   bold,
   color = "black",
-  weight = "normal",
+  weight,
 }) => {
   let componentParser = {
     hm: "48px",
@@ -38,7 +38,7 @@ export const Text: FunctionComponent<{
   const textStyles = makeStyles({
     text: {
       fontSize: componentParser[component],
-      fontWeight: bold ? "bold" : component === "p" ? weight : "bold",
+      fontWeight: getFontWeight(),
       fontFamily: Font.Family,
       color: color,
       margin: `${component === "p" ? "0px 0px 10px 0px" : "2px 0px"}`,
@@ -47,6 +47,16 @@ export const Text: FunctionComponent<{
   });
 
   const styles = textStyles();
+
+  function getFontWeight() {
+    if (weight) {
+      return weight;
+    } else if (component === "p") {
+      return bold ? "bold" : "normal";
+    } else {
+      return "bold";
+    }
+  }
 
   return (
     <p id={id} className={`${styles.text} ${className}`}>

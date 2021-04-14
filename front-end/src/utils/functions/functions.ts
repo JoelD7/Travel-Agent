@@ -7,10 +7,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { CSSProperties } from "@material-ui/styles";
-import { compareAsc, format } from "date-fns";
+import { addDays, compareAsc, format } from "date-fns";
 import { DEFAULT_CURRENCY, isoCountryCodes } from "../constants";
 import { iataCodes } from "../constants/iataCodes";
 import { airportCityPlaceholder } from "../placeholders";
+import { CarReducer } from "../store";
 import { CityImage, EventType, ExchangeRate } from "../types";
 import { IATALocation } from "../types/location-types";
 export * from "./flight-functions";
@@ -675,4 +676,35 @@ export function isCityImageUpdated(
 
 export function getISOCodeFromCountry(country: string): string {
   return isoCountryCodes.filter((codes) => codes.name === country)[0]["alpha-2"];
+}
+
+export function getDefaultCarReducer(): CarReducer {
+  const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
+
+  const carReducerDefault: CarReducer = {
+    carSearch: {
+      pickup_date: format(addDays(new Date(), 2), `yyyy-MM-dd'T'HH:mm:ss`),
+      pickup_location: defaultDestinationCity.code,
+      dropoff_date: format(addDays(new Date(), 4), `yyyy-MM-dd'T'HH:mm:ss`),
+      country_code: getISOCodeFromCountry(defaultDestinationCity.country),
+    },
+    features: [
+      {
+        name: "Air conditioned",
+        checked: false,
+      },
+      {
+        name: "Bluetooth",
+        checked: false,
+      },
+      {
+        name: "Smoke free",
+        checked: false,
+      },
+    ],
+    brands: [],
+    transmission: "",
+  };
+
+  return carReducerDefault;
 }
