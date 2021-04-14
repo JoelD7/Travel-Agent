@@ -158,7 +158,7 @@ export function CarFilters({}: CarFilters) {
             <FormControlLabel
               key={i}
               label={transmission.label}
-              value={transmission.value}
+              value={transmission.label}
               classes={{ label: style.formLabel }}
               control={<Radio classes={{ colorSecondary: style.colorSecondary }} />}
             />

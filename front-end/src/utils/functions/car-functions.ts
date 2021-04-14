@@ -83,3 +83,21 @@ export function convertURLToCarReducer(query: URLSearchParams): CarReducer {
 export function getCarRentalDefaultURL(): string {
   return `${Routes.CAR_RENTAL}${convertCarReducerToURLParams(getDefaultCarReducer())}`;
 }
+
+/**
+ * Returns the feature label correspondent to the feature
+ * variable.
+ * @param variable
+ */
+export function featureVarToLabel(variable: string): string {
+  switch (variable) {
+    case "bluetooth_equipped":
+      return "Bluetooth";
+    case "smoke_free":
+      return "Smoke free";
+    case "air_conditioned":
+      return "Air conditioned";
+    default:
+      return "";
+  }
+}

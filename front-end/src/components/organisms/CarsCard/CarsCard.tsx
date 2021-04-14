@@ -105,9 +105,13 @@ export function CarsCard({ car }: CarsCard) {
             <IconText icon={faChair}>{`${car.capacity.seats} Seats`}</IconText>
             <IconText icon={faDoorClosed}>{`${car.capacity.doors} Doors`}</IconText>
           </Grid>
+
           <Grid item xs={6}>
             <Grid container>
-              <IconText icon={faGasPump}>{`${car.category.mpg} MPG`}</IconText>
+              {car.category.mpg && (
+                <IconText icon={faGasPump}>{`${car.category.mpg} MPG`}</IconText>
+              )}
+
               <IconText icon={faCogs}>{`${car.category.vehicle_transmission}`}</IconText>
             </Grid>
           </Grid>

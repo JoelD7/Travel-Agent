@@ -42,6 +42,7 @@ import {
   carsPlaceholder,
   convertCarReducerToURLParams,
   convertURLToCarReducer,
+  featureVarToLabel,
   getAvisAccessToken,
   getIataLocation,
   IATALocation,
@@ -50,6 +51,7 @@ import {
   Routes,
   selectCarSearch,
   selectCarSearchBrands,
+  hasAny,
   selectCarSearchFeatures,
   selectCarSearchTransmission,
   selectDestinationCity,
@@ -163,6 +165,8 @@ export function CarRental() {
 
   const carSearch: CarSearch = useSelector(selectCarSearch);
   const [cars, setCars] = useState<Car[]>(carsPlaceholder);
+  const [allCars, setAllCars] = useState<Car[]>([]);
+
   const destinationCity: IATALocation = useSelector(selectDestinationCity);
 
   const sortOptions: string[] = [
@@ -243,6 +247,74 @@ export function CarRental() {
     fetchCarRentals(carReducer);
   }, []);
 
+  useEffect(() => {
+    applyFilters();
+  }, [brands, features, transmission]);
+
+  function areAnyBrandsChecked(): boolean {
+    return brands.filter((b) => b.checked).length > 0;
+  }
+
+  function areAnyFeaturesChecked(): boolean {
+    return features.filter((f) => f.checked).length > 0;
+  }
+
+  function isTransmissionFilterApplied(): boolean {
+    return transmission !== "";
+  }
+
+  function applyFilters() {
+    let filteredCars: Car[] = [];
+    let bufferCarList: Car[] = [...allCars];
+
+    //Brands
+    if (areAnyBrandsChecked()) {
+      let selectedBrands: string[] = brands
+        .filter((brand) => brand.checked)
+        .map((brand) => brand.name);
+
+      filteredCars = bufferCarList.filter((car) =>
+        selectedBrands.includes(car.category.make)
+      );
+      bufferCarList = [...filteredCars];
+    }
+
+    //Features
+    if (areAnyFeaturesChecked()) {
+      let selectedFeatures: string[] = features
+        .filter((feature) => feature.checked)
+        .map((feature) => feature.name);
+
+      filteredCars = bufferCarList.filter((car) => {
+        let carFeatures: string[] = [];
+
+        for (const key in car.features) {
+          if (Object.prototype.hasOwnProperty.call(car.features, key)) {
+            const checked = car.features[key];
+
+            if (checked) {
+              carFeatures.push(featureVarToLabel(key));
+            }
+          }
+        }
+
+        return hasAny(selectedFeatures, carFeatures);
+      });
+
+      bufferCarList = [...filteredCars];
+    }
+
+    //Transmission
+    if (transmission !== "All" && transmission !== "") {
+      filteredCars = bufferCarList.filter(
+        (car) => car.category.vehicle_transmission === transmission
+      );
+      bufferCarList = [...filteredCars];
+    }
+
+    setCars(bufferCarList);
+  }
+
   function fetchCarRentals(carReducer?: CarReducer) {
     let carSearchParams: CarSearch = carReducer ? carReducer.carSearch : carSearch;
     let selectedBrands: CarCheckbox[] = carReducer ? carReducer.brands : [];
@@ -265,6 +337,7 @@ export function CarRental() {
         })
           .then((res) => {
             setCars(res.data.vehicles);
+            setAllCars(res.data.vehicles);
             setBrands(res.data.vehicles, selectedBrands);
 
             setLoading(false);
@@ -361,7 +434,51 @@ export function CarRental() {
     }>,
     child: React.ReactNode
   ) {
-    setSortOption(event.target.value as string);
+    let selectedSortOption = event.target.value as string;
+    setSortOption(selectedSortOption);
+
+    let sortedCars: Car[] = [];
+
+    switch (selectedSortOption) {
+      case "Name | A - Z":
+        sortedCars = allCars.sort((a, b) => {
+          let nameA = a.category.make + " " + a.category.model;
+          let nameB = b.category.make + " " + b.category.model;
+
+          return nameA.localeCompare(nameB);
+        });
+
+        setCars(sortedCars);
+        break;
+      case "Name | Z - A":
+        sortedCars = allCars.sort((a, b) => {
+          let nameA = a.category.make + " " + a.category.model;
+          let nameB = b.category.make + " " + b.category.model;
+
+          return nameB.localeCompare(nameA);
+        });
+
+        setCars(sortedCars);
+        break;
+      case "Price | desc":
+        sortedCars = allCars.sort(
+          (a, b) =>
+            b.rate_totals.pay_later.reservation_total -
+            a.rate_totals.pay_later.reservation_total
+        );
+        setCars(sortedCars);
+        break;
+      case "Price | asc":
+        sortedCars = allCars.sort(
+          (a, b) =>
+            a.rate_totals.pay_later.reservation_total -
+            b.rate_totals.pay_later.reservation_total
+        );
+        setCars(sortedCars);
+        break;
+      default:
+        break;
+    }
   }
 
   function useQuery() {
