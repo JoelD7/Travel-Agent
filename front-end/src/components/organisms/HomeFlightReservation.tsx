@@ -12,7 +12,7 @@ import {
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays, parseISO } from "date-fns";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { Family } from "../../assets/fonts";
@@ -26,12 +26,7 @@ import {
   selectFlightSearchParams,
   selectFlightToAutocomplete,
   setOpenRequiredFieldSnack,
-  updateAirportPredictions,
 } from "../../utils";
-import {
-  fetchAirportCitiesByInput,
-  startAirportCityPrediction,
-} from "../../utils/external-apis/amadeus-apis";
 import {
   FlightSearch,
   setFlightAdults,
@@ -124,31 +119,11 @@ export default function HomeFlightReservation() {
   const dispatch = useDispatch();
 
   const flight: FlightSearch = useSelector(selectFlightSearchParams);
-  const [focusedAutocomplete, setFocusedAutocomplete] = useState<string>("");
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
   const history = useHistory();
-
-  useEffect(() => {
-    if (focusedAutocomplete === "From") {
-      startAirportCityPrediction(flight.from, getAirportPredictions);
-    } else {
-      startAirportCityPrediction(flight.to, getAirportPredictions);
-    }
-  }, [flight.from, flight.to]);
-
-  function getAirportPredictions(searchQuery: string) {
-    if (searchQuery === "") {
-      return;
-    }
-    fetchAirportCitiesByInput(searchQuery, "AIRPORT")
-      .then((res) => {
-        dispatch(updateAirportPredictions(res.data.data));
-      })
-      .catch((error) => console.log(error));
-  }
 
   const locationParms: { label: string; prop: "from" | "to" }[] = [
     {
@@ -230,7 +205,7 @@ export default function HomeFlightReservation() {
 
           {/* Locations */}
           {locationParms.map((param) => (
-            <Grid item className={style.locationParamsGrid}>
+            <Grid key={param.label} item className={style.locationParamsGrid}>
               <h5 className={style.reservationParamText}>{param.label}</h5>
               <IataAutocomplete type="airport" flightDirection={param.prop} />
             </Grid>
@@ -250,7 +225,9 @@ export default function HomeFlightReservation() {
                 onChange={(e) => dispatch(setFlightAdults(e.target.value as number))}
               >
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                  <MenuItem value={n}>{n}</MenuItem>
+                  <MenuItem key={n} value={n}>
+                    {n}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>

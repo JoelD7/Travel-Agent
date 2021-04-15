@@ -202,7 +202,7 @@ export default function HomeHotelReservation() {
 
         <ThemeProvider theme={theme}>
           {hotelReservationParams.map((param) => (
-            <Grid item xs={4}>
+            <Grid item xs={4} key={param.field}>
               <h5 className={style.reservationParamText}>{param.label}</h5>
 
               <FormControl style={{ width: "100%" }}>
@@ -216,7 +216,9 @@ export default function HomeHotelReservation() {
                   onChange={(e) => setHotel({ ...hotel, [param.field]: e.target.value })}
                 >
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                    <MenuItem value={n}>{n}</MenuItem>
+                    <MenuItem key={n} value={n}>
+                      {n}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>

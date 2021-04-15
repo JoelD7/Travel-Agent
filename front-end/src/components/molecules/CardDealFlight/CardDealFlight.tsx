@@ -7,15 +7,14 @@ import { useHistory } from "react-router-dom";
 import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
 import {
-  getIataLocation,
-  Routes,
   ExchangeRate,
-  selectExchangeRate,
-  selectEndCurrency,
-  formatAsCurrency,
-  FlightTypes,
   FlightClass,
+  FlightTypes,
+  formatAsCurrency,
   getFlightSearchURL,
+  getIataLocation,
+  selectEndCurrency,
+  selectExchangeRate,
 } from "../../../utils";
 import {
   FlightSearch,

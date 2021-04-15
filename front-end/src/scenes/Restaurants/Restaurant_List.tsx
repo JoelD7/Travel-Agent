@@ -19,26 +19,25 @@ import {
   SortPageSize,
   Text,
 } from "../../components";
-import { Shadow } from "../../styles";
 import {
+  addRestaurantCuisines,
+  addRestaurantFeatures,
+  convertResFilterParamsToURLParams,
   filterByFeature,
+  getDistinctCuisines,
   hasAny,
+  Routes,
   selectDestinationCity,
   selectLoadingRestaurants,
   selectRestaurantCuisines,
   selectRestaurantFeatures,
+  selectRestaurantFilterParams,
   selectRestaurants,
-  Routes,
-  addRestaurantCuisines,
-  addRestaurantFeatures,
   setAllRestaurants,
   setLoadingRestaurants,
   setRestaurants,
-  updateRestaurantCheckedFeatures,
   updateResCheckedCuisinesFromURL,
-  convertResFilterParamsToURLParams,
-  selectRestaurantFilterParams,
-  getDistinctCuisines,
+  updateRestaurantCheckedFeatures,
 } from "../../utils";
 import { fetchRestaurants } from "../../utils/external-apis/yelp-apis";
 import { IATALocation } from "../../utils/types/location-types";
@@ -73,9 +72,7 @@ export function Restaurant_List() {
     RestaurantSearch[]
   >(filterByFeature("restaurant_reservation", restaurants));
 
-  const [urlParams, setURLParams] = useState<{ [index: string]: string }>(
-    getURLParamsAsKVP()
-  );
+  const urlParams: { [index: string]: string } = getURLParamsAsKVP();
 
   let defaultCuisines: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
   let defaultFeatures: RestaurantFeature[] = useSelector(selectRestaurantFeatures);

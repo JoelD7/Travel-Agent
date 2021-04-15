@@ -20,7 +20,7 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   getCarRentalDefaultURL,
   getHotelSearchURL,
@@ -109,8 +109,6 @@ export function DashDrawer() {
       user: false,
     },
   ];
-
-  const history = useHistory();
 
   /**
    * Sets a drawer list item as selected when clicked

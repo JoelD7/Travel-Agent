@@ -1,39 +1,26 @@
 import {
-  faBars,
   faCar,
   faConciergeBell,
-  faDice,
-  faHotel,
   faPlaneDeparture,
-  faSignInAlt,
-  faUtensils,
-  IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
-
 import {
-  AppBar,
-  Avatar,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
-  createMuiTheme,
-  Drawer,
   Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
   Snackbar,
-  Toolbar,
 } from "@material-ui/core";
-import { CreateCSSProperties, ThemeProvider } from "@material-ui/styles";
+import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
-
-import { carlos, Font, logoTypeWhiteFore } from "../../assets";
+import Helmet from "react-helmet";
+import { useDispatch, useSelector } from "react-redux";
+import Slider from "react-slick";
+import SwipeableViews from "react-swipeable-views";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import "swiper/swiper-bundle.css";
+import { Font } from "../../assets";
 import {
   CustomButton,
   Footer,
@@ -45,25 +32,12 @@ import {
   Text,
 } from "../../components";
 import { ButtonIcon } from "../../components/atoms/ButtonIcon";
-import { NavDrawer, Navbar, ServicesToolbar } from "../../components/molecules";
+import { Navbar, ServicesToolbar } from "../../components/molecules";
 import { Colors } from "../../styles";
-import { homeStyles, home_explore_button } from "../../styles/Home/home-styles";
-import SwipeableViews from "react-swipeable-views";
-import "./home.css";
 import * as styles from "../../styles/Home/home-styles";
-import "swiper/swiper-bundle.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
-import Helmet from "react-helmet";
-import { getRestaurantHours } from "../../utils/functions/restaurant";
-import {
-  restaurantPlaceholder,
-  selectOpenRequiredFieldSnack,
-  setOpenRequiredFieldSnack,
-} from "../../utils";
-import { Alert } from "@material-ui/lab";
-import { useDispatch, useSelector } from "react-redux";
+import { homeStyles } from "../../styles/Home/home-styles";
+import { selectOpenRequiredFieldSnack, setOpenRequiredFieldSnack } from "../../utils";
+import "./home.css";
 
 interface ServiceIconType {
   hotel: boolean;
@@ -239,8 +213,11 @@ export function Home() {
 
               <div className={style.servicesContainer}>
                 {services.map((service) => (
-                  <div>
-                    <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div key={service.name}>
+                    <div
+                      key={service.name}
+                      style={{ display: "flex", justifyContent: "center" }}
+                    >
                       <ButtonIcon
                         primary={Colors.PURPLE}
                         secondary={"white"}
@@ -252,7 +229,9 @@ export function Home() {
                         icon={service.icon}
                       />
                     </div>
-                    <p className={style.serviceName}>{service.name}</p>
+                    <Text color={Colors.BLUE} className={style.serviceName} bold>
+                      {service.name}
+                    </Text>
                   </div>
                 ))}
               </div>

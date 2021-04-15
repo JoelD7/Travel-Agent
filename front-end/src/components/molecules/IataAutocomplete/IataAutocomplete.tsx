@@ -232,9 +232,7 @@ export function IataAutocomplete({
         }
         popupIcon={
           type === "city" ? (
-            <IconButton>
-              <FontAwesomeIcon icon={faSearch} color={home ? "white" : "#cecece"} />
-            </IconButton>
+            <FontAwesomeIcon icon={faSearch} color={home ? "white" : "#cecece"} />
           ) : (
             <div />
           )

@@ -18,11 +18,9 @@ export function FullScreenImage({ source }: FullScreenImage) {
   const style = fullScreenImageStyles();
 
   let newImg = new Image();
-  const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
 
   newImg.onload = function () {
-    setHeight(newImg.height);
     setWidth(newImg.width);
   };
 

@@ -281,9 +281,8 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   },
   serviceName: {
     textAlign: "center",
-    marginTop: "2",
-    color: Colors.BLUE,
     fontSize: "14px",
+    marginTop: "5px",
   },
   searchBarInput: {
     backgroundColor: "rgba(0,0,0,0)",

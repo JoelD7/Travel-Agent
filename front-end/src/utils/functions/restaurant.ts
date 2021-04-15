@@ -18,7 +18,7 @@ export function getRestaurantHours(restaurant: Restaurant): string[] {
   let curRange: any[] = [];
 
   for (let i = 0; i < openHours.length; i++) {
-    if (i == 0) {
+    if (i === 0) {
       const element = openHours[i];
       curRange.push(element);
     } else {

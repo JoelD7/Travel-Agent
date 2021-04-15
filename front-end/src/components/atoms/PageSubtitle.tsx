@@ -1,4 +1,4 @@
-import { Divider, makeStyles, Typography } from "@material-ui/core";
+import { Divider, makeStyles } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React from "react";
 import { Font } from "../../assets";
@@ -15,7 +15,7 @@ export function PageSubtitle({ label, containerStyle }: PageSubtitleProps) {
       margin: "auto",
       textAlign: "center",
       zIndex: 2,
-      fontSize: '26px',
+      fontSize: "26px",
       fontWeight: "bold",
       fontFamily: Font.Family,
       padding: "0 5px 0 5px",

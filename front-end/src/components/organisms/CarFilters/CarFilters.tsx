@@ -2,12 +2,12 @@ import { faSquare } from "@fortawesome/free-regular-svg-icons";
 import { faCheckSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  FormGroup,
-  FormControlLabel,
   Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Grid,
   Radio,
   RadioGroup,
-  Grid,
 } from "@material-ui/core";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,26 +15,22 @@ import { useHistory } from "react-router";
 import { batchActions } from "redux-batched-actions";
 import { Colors } from "../../../styles";
 import {
-  carBrandPlaceholder,
   CarCheckbox,
-  carRentalFeatures,
+  CarSearch,
+  convertCarReducerToURLParams,
+  Routes,
+  selectCarSearch,
   selectCarSearchBrands,
   selectCarSearchFeatures,
   selectCarSearchTransmission,
   setCarSearchBrands,
-  convertCarReducerToURLParams,
   setCarSearchFeatures,
   setCarSearchTransmission,
-  selectCarSearch,
-  CarSearch,
-  Routes,
 } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 import { carFiltersStyles } from "./carFilters-styles";
 
-interface CarFilters {}
-
-export function CarFilters({}: CarFilters) {
+export function CarFilters() {
   const style = carFiltersStyles();
 
   const brandsRedux: CarCheckbox[] = useSelector(selectCarSearchBrands);

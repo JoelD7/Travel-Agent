@@ -5,7 +5,7 @@ import { Colors } from "../../../styles";
 export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
   autocompleteAdornment: {
     position: "absolute",
-    top: "-5px",
+    right: "12px !important",
   },
   autocompelteListbox: {
     fontFamily: Font.Family,

@@ -7,19 +7,18 @@ import { Colors } from "../../../styles";
 import {
   capitalizeString,
   convertReservationParamsToURLParams,
-  formatAsDecimal,
+  ExchangeRate,
+  formatAsCurrency,
   getHotelImages,
   getHotelStars,
-  selectEndCurrency,
   getMinRate,
   HotelBooking,
   HotelBookingParams,
   Routes,
+  selectEndCurrency,
+  selectExchangeRate,
   selectHotelReservationParams,
   setHotelDetail,
-  ExchangeRate,
-  selectExchangeRate,
-  formatAsCurrency,
 } from "../../../utils";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
 import { hotelCardStyles } from "./hotelCardStyles";

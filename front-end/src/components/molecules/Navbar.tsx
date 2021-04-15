@@ -3,19 +3,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   AppBar,
   Avatar,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
-  Toolbar,
-  Dialog,
-  Grid,
-  DialogContent,
-  DialogActions,
   Snackbar,
+  Toolbar,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { carlos, Font, logoIcon, logoType, logoTypeWhiteFore } from "../../assets";
 import { Colors } from "../../styles";
@@ -27,10 +27,8 @@ import {
   Routes,
   selectOriginCity,
   selectSearchQuery,
-  updateCityPredictions,
 } from "../../utils";
 import {
-  fetchAirportCitiesByInput,
   fetchNewAccessToken,
   isAccessTokenUpdatable,
   updateAccessToken,
@@ -103,6 +101,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
           className={style.logoLinkContainer}
         >
           <img
+            alt=" "
             src={transparent ? logoTypeWhiteFore : logoType}
             className={style.logotype}
           />
@@ -114,7 +113,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
           style={{ outline: "none", border: "none" }}
           className={style.logoLinkContainerSm}
         >
-          <img src={logoIcon} className={style.logotype} />
+          <img alt=" " src={logoIcon} className={style.logotype} />
         </Link>
 
         {/* Search box */}

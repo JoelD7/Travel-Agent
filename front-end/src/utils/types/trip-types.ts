@@ -1,5 +1,5 @@
-import { HotelBooking, HotelAvailability } from "./hotel-types";
 import * as EventType from "./event-types";
+import { HotelAvailability } from "./hotel-types";
 
 export interface Trip {
   id: string;

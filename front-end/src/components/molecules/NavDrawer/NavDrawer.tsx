@@ -183,7 +183,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
 
             <p style={{ color: "white", fontSize: "14px" }}>
               Or{" "}
-              <a style={{ color: "white" }} href="">
+              <a style={{ color: "white" }} href="#">
                 register
               </a>
             </p>
@@ -201,6 +201,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
       classes={{ paper: style.drawer }}
     >
       <img
+        alt="."
         src={logoTypeWhiteFore}
         style={{ height: "40px", margin: "20px auto 0px auto" }}
       />

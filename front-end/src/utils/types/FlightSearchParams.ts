@@ -1,5 +1,3 @@
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-
 export interface FlightSearchParams {
   flightType: FlightType;
   exitFlightDates: DatetimeRange;

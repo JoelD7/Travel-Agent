@@ -259,10 +259,6 @@ export function CarRental() {
     return features.filter((f) => f.checked).length > 0;
   }
 
-  function isTransmissionFilterApplied(): boolean {
-    return transmission !== "";
-  }
-
   function applyFilters() {
     let filteredCars: Car[] = [];
     let bufferCarList: Car[] = [...allCars];
