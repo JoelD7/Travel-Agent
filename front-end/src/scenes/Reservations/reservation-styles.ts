@@ -14,6 +14,8 @@ export const reservationStyles = makeStyles((theme: Theme) => ({
     position: "relative",
     zIndex: 3,
     marginTop: "250px",
+    width: "90%",
+    marginLeft: "auto",
   },
   hotelCard: {
     borderRadius: "10px",

@@ -167,7 +167,7 @@ export function TripDetails() {
         {/* Photos */}
         <Grid key="photos" item className={style.photosGrid}>
           <Grid container>
-            <Text weight="normal" component="h2">
+            <Text bold component="h2">
               Photos
             </Text>
             <CustomButton

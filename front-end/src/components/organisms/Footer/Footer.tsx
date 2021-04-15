@@ -144,7 +144,12 @@ export function Footer() {
 
               {bookLinks.map((link) => (
                 <Link key={link.route} className={style.link} to={link.route}>
-                  <Text color="white" component="h5" style={{ marginTop: "6px" }}>
+                  <Text
+                    color="white"
+                    weight="normal"
+                    component="h5"
+                    style={{ marginTop: "6px" }}
+                  >
                     {link.label}
                   </Text>
                 </Link>
@@ -159,7 +164,12 @@ export function Footer() {
 
               {seeLinks.map((link) => (
                 <Link key={link.route} className={style.link} to={link.route}>
-                  <Text color="white" component="h5" style={{ marginTop: "6px" }}>
+                  <Text
+                    color="white"
+                    weight="normal"
+                    component="h5"
+                    style={{ marginTop: "6px" }}
+                  >
                     {link.label}
                   </Text>
                 </Link>

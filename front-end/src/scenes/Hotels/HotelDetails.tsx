@@ -21,6 +21,7 @@ import {
 import { Colors } from "../../styles";
 import {
   convertURLToReservationParams,
+  ExchangeRate,
   formatAsCurrency,
   getMinRate,
   HotelBedAPI,
@@ -28,11 +29,10 @@ import {
   proxyUrl,
   Routes,
   selectDestinationCity,
+  selectEndCurrency,
+  selectExchangeRate,
   selectHotelDetail,
   selectHotelReservationParams,
-  selectEndCurrency,
-  ExchangeRate,
-  selectExchangeRate,
 } from "../../utils";
 import {
   getHotelBedHeaders,
@@ -77,6 +77,8 @@ export function HotelDetails() {
 
   const baseCurrency: string = useSelector(selectEndCurrency);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
+
+  const [openSnack, setOpenSnack] = useState(false);
 
   useEffect(() => {
     if (!hotel) {

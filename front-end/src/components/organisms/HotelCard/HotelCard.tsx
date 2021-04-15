@@ -85,7 +85,7 @@ export function HotelCard({ hotel }: HotelCard) {
               style={{ margin: "10px 0px", paddingLeft: "10px" }}
             >
               <Grid item xs={12}>
-                <Text component="h3" className={style.hotelName} bold>
+                <Text component="h3" className={style.hotelName} bold color={Colors.BLUE}>
                   {capitalizeString(hotel.name.content, "each word")}
                 </Text>
               </Grid>

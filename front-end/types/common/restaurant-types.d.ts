@@ -3,6 +3,7 @@ interface Restaurant {
   name: string;
   image_url: string;
   url: string;
+  favorite: boolean;
   categories: {
     alias: string;
     title: string;

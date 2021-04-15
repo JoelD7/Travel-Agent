@@ -30,10 +30,6 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
       "&.Mui-selected": {
         backgroundColor: "rgba(0,0,0,0)",
         borderBottom: `2px solid ${Colors.BLUE}`,
-
-        "&:hover": {
-          backgroundColor: "red",
-        },
       },
     },
   },

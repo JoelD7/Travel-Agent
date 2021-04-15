@@ -11,6 +11,8 @@ export const tripStyles = makeStyles((theme: Theme) => ({
   footerContainer: {
     position: "relative",
     zIndex: 3,
+    width: "90%",
+    marginLeft: "auto",
     marginTop: "250px",
   },
   itineraryButton: {

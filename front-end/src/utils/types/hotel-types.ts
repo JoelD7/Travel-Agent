@@ -28,6 +28,7 @@ export interface HotelAvailability {
 export interface HotelBooking {
   checkIn?: string;
   checkOut?: string;
+  favorite: boolean;
   code: number;
   name: {
     content: string;

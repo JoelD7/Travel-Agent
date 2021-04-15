@@ -1,15 +1,20 @@
+import { faHeart as faHeartReg } from "@fortawesome/free-regular-svg-icons";
 import {
   faClock,
   faGlobe,
+  faHeart,
   faMapMarkerAlt,
   faPhone,
   faStar,
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
-import { Grid } from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Grid, IconButton, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useParams } from "react-router-dom";
+import { Font } from "../../assets";
 import {
   CustomButton,
   Footer,
@@ -43,6 +48,9 @@ export function RestaurantDetails() {
   const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
   const [openPopover, setOpenPopover] = useState(false);
 
+  const [openSnack, setOpenSnack] = useState(false);
+  const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
+
   useEffect(() => {
     fetchRestaurant(id)
       .then((res) => {
@@ -55,6 +63,18 @@ export function RestaurantDetails() {
   function onIncludeTripClick(event: MouseEvent<HTMLButtonElement>) {
     setTripAnchor(event.currentTarget);
     setOpenPopover(true);
+  }
+
+  function addToFavorites() {
+    if (restaurant) {
+      if (!restaurant.favorite) {
+        setRestaurant({ ...restaurant, favorite: true });
+        setOpenSnack(true);
+      } else {
+        setRestaurant({ ...restaurant, favorite: false });
+        setOpenSnackRemoved(true);
+      }
+    }
   }
 
   return (
@@ -97,14 +117,26 @@ export function RestaurantDetails() {
             <IconText text={restaurant.display_phone} icon={faPhone} />
 
             <Grid item className={style.tripButtonGrid}>
-              <CustomButton
-                style={{ boxShadow: Shadow.LIGHT }}
-                onClick={(e) => onIncludeTripClick(e)}
-                backgroundColor={Colors.GREEN}
-                rounded
-              >
-                Include in trip
-              </CustomButton>
+              <Grid container>
+                <CustomButton
+                  style={{ boxShadow: Shadow.LIGHT }}
+                  onClick={(e) => onIncludeTripClick(e)}
+                  backgroundColor={Colors.GREEN}
+                  rounded
+                >
+                  Include in trip
+                </CustomButton>
+
+                <IconButton
+                  style={{ margin: "auto 0px auto 10px" }}
+                  onClick={() => addToFavorites()}
+                >
+                  <FontAwesomeIcon
+                    icon={restaurant.favorite ? faHeart : faHeartReg}
+                    color={Colors.PURPLE}
+                  />
+                </IconButton>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
@@ -222,6 +254,38 @@ export function RestaurantDetails() {
         openPopover={openPopover}
         setOpenPopover={setOpenPopover}
       />
+
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenSnack(false)}
+          severity="success"
+        >
+          {"Added to favorites."}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={openSnackRemoved}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackRemoved(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenSnackRemoved(false)}
+          severity="error"
+        >
+          {"Removed from favorites."}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

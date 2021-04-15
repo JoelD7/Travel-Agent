@@ -1,5 +1,21 @@
-import { Divider, Grid } from "@material-ui/core";
-import React, { useState, MouseEvent, useEffect } from "react";
+import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faHeart as faHeartReg } from "@fortawesome/free-regular-svg-icons";
+import {
+  faClock,
+  faGlobe,
+  faHeart,
+  faMapMarkerAlt,
+  faPhone,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Divider, Grid, IconButton, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import Axios from "axios";
+import React, { MouseEvent, useEffect, useState } from "react";
+import Helmet from "react-helmet";
+import { useParams } from "react-router";
+import { Font } from "../../assets";
 import {
   CustomButton,
   Footer,
@@ -12,25 +28,11 @@ import {
   ServicesToolbar,
   Text,
 } from "../../components";
-import { poiPlaceholder } from "../../utils";
-import { thingsToDoDetailsStyles as thingsToDoDetailsStyles } from "./thingsToDoDetails-styles";
-import Ratings from "react-ratings-declarative";
 import { Colors, Shadow } from "../../styles";
-import {
-  faClock,
-  faGlobe,
-  faMapMarkerAlt,
-  faPhone,
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
-import Helmet from "react-helmet";
-import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
-import { useParams } from "react-router";
-import Axios from "axios";
-import { NotFound } from "../NotFound/NotFound";
+import { thingsToDoDetailsStyles as thingsToDoDetailsStyles } from "./thingsToDoDetails-styles";
 
 export function ThingsToDoDetails() {
-  const [poi, sePOI] = useState<POI>();
+  const [poi, setPOI] = useState<POI>();
 
   const { id } = useParams<any>();
 
@@ -39,10 +41,13 @@ export function ThingsToDoDetails() {
 
   const [loading, setLoading] = useState(true);
 
+  const [openSnack, setOpenSnack] = useState(false);
+  const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
+
   useEffect(() => {
     fetchPOIDetail()
       .then((res) => {
-        sePOI(res.data.response.venue);
+        setPOI(res.data.response.venue);
         setLoading(false);
       })
       .catch((error) => console.log(error));
@@ -134,6 +139,18 @@ export function ThingsToDoDetails() {
     );
   }
 
+  function addToFavorites() {
+    if (poi) {
+      if (!poi.favorite) {
+        setPOI({ ...poi, favorite: true });
+        setOpenSnack(true);
+      } else {
+        setPOI({ ...poi, favorite: false });
+        setOpenSnackRemoved(true);
+      }
+    }
+  }
+
   const style = thingsToDoDetailsStyles();
   return (
     <div className={style.mainContainer}>
@@ -163,7 +180,7 @@ export function ThingsToDoDetails() {
           <>
             <Grid item key="title" xs={12}>
               {/* Title and include in trip */}
-              <Grid container alignItems="baseline">
+              <Grid container alignItems="center">
                 <Grid item className={style.titleRatingGrid}>
                   <Text component="h1" bold color={Colors.BLUE}>
                     {poi.name}
@@ -174,6 +191,7 @@ export function ThingsToDoDetails() {
                     <Rating size={30} type="star" readonly score={poi.rating} />
                   )}
                 </Grid>
+
                 <CustomButton
                   style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
                   onClick={(e) => onIncludeTripClick(e)}
@@ -182,6 +200,16 @@ export function ThingsToDoDetails() {
                 >
                   Include in trip
                 </CustomButton>
+
+                <IconButton
+                  style={{ margin: "auto 0px auto 10px" }}
+                  onClick={() => addToFavorites()}
+                >
+                  <FontAwesomeIcon
+                    icon={poi.favorite ? faHeart : faHeartReg}
+                    color={Colors.PURPLE}
+                  />
+                </IconButton>
               </Grid>
             </Grid>
 
@@ -351,6 +379,42 @@ export function ThingsToDoDetails() {
           openPopover={openPopover}
           setOpenPopover={setOpenPopover}
         />
+      )}
+
+      {poi && (
+        <Snackbar
+          open={openSnack}
+          autoHideDuration={6000}
+          onClose={() => setOpenSnack(false)}
+        >
+          <Alert
+            style={{ fontFamily: Font.Family }}
+            variant="filled"
+            elevation={6}
+            onClose={() => setOpenSnack(false)}
+            severity="success"
+          >
+            {"Added to favorites."}
+          </Alert>
+        </Snackbar>
+      )}
+
+      {poi && (
+        <Snackbar
+          open={openSnackRemoved}
+          autoHideDuration={6000}
+          onClose={() => setOpenSnackRemoved(false)}
+        >
+          <Alert
+            style={{ fontFamily: Font.Family }}
+            variant="filled"
+            elevation={6}
+            onClose={() => setOpenSnackRemoved(false)}
+            severity="error"
+          >
+            {"Removed from favorites."}
+          </Alert>
+        </Snackbar>
       )}
 
       <Footer />

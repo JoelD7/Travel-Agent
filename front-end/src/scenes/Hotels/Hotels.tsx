@@ -256,10 +256,6 @@ export function Hotels() {
   const firstRender = useRef(true);
 
   useEffect(() => {
-    if (!isCityImageUpdated(geolocation, cityImage)) {
-      getCityImage();
-    }
-
     if (isURLWithParams()) {
       reservationParams = convertURLToReservationParams(
         location.search,
@@ -279,10 +275,6 @@ export function Hotels() {
     if (!isFirstRender()) {
       setLoading(true);
 
-      if (!isCityImageUpdated(geolocation, cityImage)) {
-        getCityImage();
-      }
-
       searchHotels(reservationParams);
     }
   }, [state.stars, geolocation]);
@@ -293,12 +285,6 @@ export function Hotels() {
       updateURL();
     }
   }, [sortOption, page, pageSize]);
-
-  function getCityImage() {
-    fetchCityImage(geolocation.city).then((res) => {
-      dispatch(setCityImage({ city: geolocation.city, image: String(res) }));
-    });
-  }
 
   function searchHotels(reservationParams: HotelBookingParams) {
     if (!isFirstRender()) {
@@ -762,7 +748,7 @@ export function Hotels() {
         {/* Page title grid*/}
         <Grid item xs={12} className={style.pageTitleGrid}>
           <Grid container className={style.backgroundImageContainer}>
-            <img src={cityImage.image} className={style.backgroundImage} alt="" />
+            <img src="/Travel-Agent/hotel.jpg" className={style.backgroundImage} alt="" />
 
             <Grid container style={{ zIndex: 1 }}>
               {/* Services bar and title */}
@@ -771,7 +757,7 @@ export function Hotels() {
                 <Grid container>
                   {/* Services toolbar */}
                   <Grid item xs={12}>
-                    <ServicesToolbar transparent style={{ boxShadow: Shadow.MEDIUM }} />
+                    <ServicesToolbar transparent />
                   </Grid>
 
                   {/* Title */}

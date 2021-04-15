@@ -2,6 +2,7 @@ interface POI {
   id: string;
   name: string;
   contact: POIContact;
+  favorite: boolean;
   location: POILocation;
   categories: POICategory[];
   description?: string;

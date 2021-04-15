@@ -155,10 +155,6 @@ export function ThingsToDo() {
   const cityImage: CityImage = useSelector(selectCityImage);
 
   useEffect(() => {
-    if (!isCityImageUpdated(destinationCity, cityImage)) {
-      getCityImage();
-    }
-
     if (JSON.stringify(allPois) === JSON.stringify(poisPlaceholder)) {
       dispatch(fetchPOIs(`${destinationCity.lat}, ${destinationCity.lon}`));
     } else {
@@ -169,12 +165,6 @@ export function ThingsToDo() {
   useEffect(() => {
     goToToursTitle();
   }, [selectedCategory]);
-
-  function getCityImage() {
-    fetchCityImage(destinationCity.city).then((res) => {
-      dispatch(setCityImage({ city: destinationCity.city, image: String(res) }));
-    });
-  }
 
   /**
    * Clicks on the anchor element with a ref to
@@ -285,7 +275,11 @@ export function ThingsToDo() {
 
       {/* Page Title Container */}
       <Grid container className={style.pageTitleContainer}>
-        <img src={cityImage.image} className={style.backgroundImage} alt="" />
+        <img
+          src="/Travel-Agent/thingsToDo.jpg"
+          className={style.backgroundImage}
+          alt=""
+        />
 
         <Grid container style={{ zIndex: 1, width: "100%" }}>
           {/* Services toolbar and title */}

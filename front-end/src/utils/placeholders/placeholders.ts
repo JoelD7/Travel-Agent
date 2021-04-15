@@ -204,6 +204,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
 
 export const restaurantPlaceholder: Restaurant = {
   id: "3xTQT7qjZJIxc-eBiFMerQ",
+  favorite: false,
   name: "1803",
   image_url: "https://s3-media3.fl.yelpcdn.com/bphoto/f6_ZYxoZGbyGsCn6m_auog/o.jpg",
   url:
@@ -2070,6 +2071,7 @@ export const poisPlaceholderAPI = [
 export const poiPlaceholder: POI = {
   id: "49eeaf08f964a52078681fe3",
   name: "Vanessa's Dumpling House",
+  favorite: true,
   contact: {
     phone: "2126258008",
     formattedPhone: "(212) 625-8008",
@@ -2441,6 +2443,7 @@ export const hotelsPlaceholder: HotelAvailability = {
 export const hotelPlaceholder: HotelBooking = {
   checkIn: "2021-06-15",
   checkOut: "2021-06-16",
+  favorite: false,
   S2C: "4*",
   code: 128537,
   name: {
@@ -2805,6 +2808,7 @@ export const hotelPhotos = [
 const poiArray: POI[] = [
   {
     id: "49c54c1bf964a520ed561fe3",
+    favorite: false,
     name: "The Morgan Library & Museum",
     attributes: {
       groups: [],
@@ -2848,6 +2852,7 @@ const poiArray: POI[] = [
   },
   {
     id: "4e8c7d54e5fa774802eb9515",
+    favorite: false,
     name: "Hulu Theater",
     attributes: {
       groups: [],
@@ -2886,6 +2891,7 @@ const poiArray: POI[] = [
   },
   {
     id: "53866567498ea4ed73cabb0c",
+    favorite: false,
     name: "Dear Irving",
     attributes: {
       groups: [],

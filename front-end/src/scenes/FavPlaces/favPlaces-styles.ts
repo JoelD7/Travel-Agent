@@ -10,6 +10,8 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
     position: "relative",
     zIndex: 3,
     marginTop: "250px",
+    width: "90%",
+    marginLeft: "auto",
   },
   mainContainer: {
     fontFamily: Font.Family,
