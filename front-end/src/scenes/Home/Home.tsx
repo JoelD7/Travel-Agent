@@ -15,8 +15,11 @@ import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import Slider from "react-slick";
 import SwipeableViews from "react-swipeable-views";
+import { AnyAction } from "redux";
+import { batchActions } from "redux-batched-actions";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import "swiper/swiper-bundle.css";
@@ -36,7 +39,24 @@ import { Navbar, ServicesToolbar } from "../../components/molecules";
 import { Colors } from "../../styles";
 import * as styles from "../../styles/Home/home-styles";
 import { homeStyles } from "../../styles/Home/home-styles";
-import { selectOpenRequiredFieldSnack, setOpenRequiredFieldSnack } from "../../utils";
+import {
+  CarSearch,
+  FlightSearch,
+  getFlightSearchURL,
+  getIataLocation,
+  getRandomInt,
+  IATALocation,
+  mostVisitedCities,
+  selectCarSearch,
+  selectOpenRequiredFieldSnack,
+  setCarSearch,
+  setDestinationCity,
+  setFlightTo,
+  setFlightToAutocomplete,
+  setOpenRequiredFieldSnack,
+  store,
+  updateHotelCoordinates,
+} from "../../utils";
 import "./home.css";
 
 interface ServiceIconType {
@@ -46,29 +66,15 @@ interface ServiceIconType {
   [key: string]: ServiceIconType[keyof ServiceIconType];
 }
 
-interface CalendarItem {
-  a: string;
-}
-
-interface CalendarItemHolder {
-  holder: {
-    [dateIndex: number]: { calendarItems: CalendarItem[] };
-  };
+interface PopularDestination {
+  image: string;
+  country: string;
+  city: string;
+  iataCode: string;
 }
 
 export function Home() {
   const style = homeStyles();
-
-  let state: CalendarItemHolder = {
-    holder: {
-      12: { calendarItems: [] },
-    },
-  };
-
-  let stateTwo = {
-    ...state,
-    holder: { ...state.holder, [45]: { calendarItems: [{ a: "klk" }] } },
-  };
 
   const services = [
     {
@@ -100,44 +106,54 @@ export function Home() {
   const dispatch = useDispatch();
 
   const [index, setIndex] = useState(0);
+  const carSearch: CarSearch = useSelector(selectCarSearch);
 
   const openRequiredFieldSnack = useSelector(selectOpenRequiredFieldSnack);
+  const history = useHistory();
+  let batchedActions: AnyAction[] = [];
 
-  const popularDestinations = [
+  const popularDestinations: PopularDestination[] = [
     {
       image: "/Travel-Agent/destinations/paris.jpg",
       country: "France",
       city: "Paris",
+      iataCode: "PAR",
     },
     {
       image: "/Travel-Agent/destinations/tokio.jpg",
       country: "Japan",
       city: "Tokio",
+      iataCode: "HND",
     },
     {
       image: "/Travel-Agent/destinations/agra.jpg",
       country: "India",
       city: "Agra",
+      iataCode: "AGR",
     },
     {
       image: "/Travel-Agent/destinations/singapore.jpg",
       country: "Singapore",
       city: "Singapore",
+      iataCode: "SIN",
     },
     {
       image: "/Travel-Agent/destinations/rio.jpg",
       country: "Brazil",
       city: "Rio de Janeiro",
+      iataCode: "GIG",
     },
     {
       image: "/Travel-Agent/destinations/new-york.jpg",
       country: "United States",
       city: "New York",
+      iataCode: "JFK",
     },
     {
       image: "/Travel-Agent/destinations/rome.jpg",
       country: "Italy",
       city: "Rome",
+      iataCode: "FCO",
     },
   ];
 
@@ -192,9 +208,66 @@ export function Home() {
     ],
   };
 
+  function onRandomDestinationClick() {
+    batchedActions = [];
+
+    let randomDestination: IATALocation =
+      mostVisitedCities[getRandomInt(0, mostVisitedCities.length)];
+
+    batchedActions.push(
+      setCarSearch({
+        ...carSearch,
+        pickup_location: randomDestination.code,
+      })
+    );
+    batchedActions.push(setFlightTo(randomDestination.code));
+    batchedActions.push(setFlightToAutocomplete(randomDestination));
+    batchedActions.push(
+      updateHotelCoordinates({
+        latitude: Number(randomDestination.lat),
+        longitude: Number(randomDestination.lon),
+      })
+    );
+    batchedActions.push(setDestinationCity(randomDestination));
+
+    dispatch(batchActions(batchedActions));
+
+    let flightSearch: FlightSearch = store.getState().flightSlice;
+    history.push(getFlightSearchURL(flightSearch));
+  }
+
+  function onPopularDestinationClick(pDes: PopularDestination) {
+    let destination: IATALocation | undefined = getIataLocation(pDes.iataCode);
+
+    if (destination) {
+      batchedActions = [];
+
+      batchedActions.push(
+        setCarSearch({
+          ...carSearch,
+          pickup_location: destination.code,
+        })
+      );
+      batchedActions.push(setFlightTo(destination.code));
+      batchedActions.push(setFlightToAutocomplete(destination));
+      batchedActions.push(
+        updateHotelCoordinates({
+          latitude: Number(destination.lat),
+          longitude: Number(destination.lon),
+        })
+      );
+      batchedActions.push(setDestinationCity(destination));
+
+      dispatch(batchActions(batchedActions));
+
+      let flightSearch: FlightSearch = store.getState().flightSlice;
+      history.push(getFlightSearchURL(flightSearch));
+    }
+  }
+
   return (
     <>
-      <div className="mainContainer">
+      <div className={style.mainContainer}>
         <Helmet>
           <title>Tripper</title>
         </Helmet>
@@ -205,12 +278,19 @@ export function Home() {
             <ServicesToolbar transparent />
           </Grid>
 
+          {/* Reservation */}
           <Grid item className={style.reservationGrid}>
             <div className={style.reservationContainer}>
-              <h3 style={{ textAlign: "center", color: Colors.BLUE }}>
+              <Text
+                component="h3"
+                bold
+                color={Colors.BLUE}
+                className={style.servicesTitle}
+              >
                 What are you looking for?
-              </h3>
+              </Text>
 
+              {/* Services */}
               <div className={style.servicesContainer}>
                 {services.map((service) => (
                   <div key={service.name}>
@@ -246,6 +326,7 @@ export function Home() {
             </div>
           </Grid>
 
+          {/* Random location */}
           <Grid item className={style.mainPhotoGrid}>
             <Grid
               container
@@ -256,7 +337,9 @@ export function Home() {
               <div>
                 <h1 className={style.homeImageText}>Hey, where you're off to next?</h1>
                 <div className={style.exploreButtonContainer}>
-                  <CustomButton size={18}>Explore places</CustomButton>
+                  <CustomButton size={18} onClick={() => onRandomDestinationClick()}>
+                    Random destination
+                  </CustomButton>
                 </div>
               </div>
             </Grid>
@@ -329,18 +412,26 @@ export function Home() {
 
         <PageSubtitle label="Popular destinations" />
         <Grid id="section-3" container className={style.section}>
-          <Slider {...sliderSettings} slidesToScroll={1} slidesToShow={3}>
+          <Slider
+            {...sliderSettings}
+            slidesToScroll={1}
+            lazyLoad="progressive"
+            slidesToShow={3}
+          >
             {popularDestinations.map((destination, i) => (
               <div key={i}>
                 <Card className={style.card}>
-                  <CardActionArea>
+                  <CardActionArea onClick={() => onPopularDestinationClick(destination)}>
                     <CardMedia component="img" height="250" image={destination.image} />
                   </CardActionArea>
 
                   <CardContent>
-                    <div
-                      style={{ fontWeight: "bold" }}
-                    >{`${destination.city}, ${destination.country}`}</div>
+                    <div style={{ fontWeight: "bold" }}>
+                      <Text
+                        bold
+                        color={Colors.BLUE}
+                      >{`${destination.city}, ${destination.country}`}</Text>
+                    </div>
                   </CardContent>
                 </Card>
               </div>

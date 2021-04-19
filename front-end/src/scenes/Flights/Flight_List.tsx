@@ -1281,7 +1281,7 @@ export function Flight_List() {
       <div className={style.pageContentContainer}>
         <Grid container className={style.pageContentContainerGrid}>
           {/* Filters */}
-          <div>
+          <>
             <Grid item className={style.filtersGrid}>
               <div className={style.filtersContainer}>
                 <SearchFilters />
@@ -1298,7 +1298,7 @@ export function Flight_List() {
                 Filter
               </CustomButton>
             </Grid>
-          </div>
+          </>
 
           <Grid item className={style.flightsGrid}>
             <Grid container>

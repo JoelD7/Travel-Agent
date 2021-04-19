@@ -77701,4 +77701,10 @@ let a = [
   },
 ];
 
-console.log(a.length);
+console.log(
+  a
+    .sort((cur, next) => {
+      return Number(next.direct_flights) - Number(cur.direct_flights);
+    })
+    .slice(0, 20)
+);

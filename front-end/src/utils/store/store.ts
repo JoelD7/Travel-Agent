@@ -13,7 +13,7 @@ import { enableBatching } from "redux-batched-actions";
 export * from "./flight-slice";
 export * from "./restaurant-slice";
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     signUp: enableBatching(signUpReducer),
     searchNavbar: enableBatching(searchNavbarReducer),

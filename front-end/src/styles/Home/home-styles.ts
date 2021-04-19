@@ -279,10 +279,19 @@ export const homeStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
+  mainContainer: {
+    fontFamily: Font.Family,
+    backgroundColor: Colors.BACKGROUND,
+  },
   serviceName: {
     textAlign: "center",
-    fontSize: "14px",
-    marginTop: "5px",
+    fontSize: "14px !important",
+    marginTop: "6px !important",
+  },
+  servicesTitle: {
+    textAlign: "center",
+    marginTop: "25px !important",
+    marginBottom: "25px !important",
   },
   searchBarInput: {
     backgroundColor: "rgba(0,0,0,0)",
