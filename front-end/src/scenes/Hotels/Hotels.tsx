@@ -40,12 +40,11 @@ import {
   SortPageSize,
   Text,
 } from "../../components";
-import { Colors, Shadow } from "../../styles";
+import { Colors } from "../../styles";
 import {
   convertReservationParamsToURLParams,
   convertURLToReservationParams,
   formatAsDecimal,
-  fetchCityImage,
   getHotelStars,
   getMinRate,
   HotelAvailability,
@@ -62,10 +61,6 @@ import {
   selectOpenRedirecDialog,
   setOpenRedirecDialog,
   updateReservationParams,
-  setCityImage,
-  selectCityImage,
-  CityImage,
-  isCityImageUpdated,
 } from "../../utils";
 import { proxyUrl } from "../../utils/external-apis";
 import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
@@ -217,7 +212,6 @@ export function Hotels() {
   const [allHotels, setAllHotels] = useState<HotelBooking[]>([]);
 
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [image, setImage] = useState<string>("");
 
   const [openOccupancies, setOpenOccupancies] = useState<boolean>(false);
   const [occupanciesAnchor, setOccupanciesAnchor] = useState<HTMLButtonElement | null>(
@@ -249,7 +243,6 @@ export function Hotels() {
 
   const openRedirecDialog: boolean = useSelector(selectOpenRedirecDialog);
   const geolocation: IATALocation = useSelector(selectDestinationCity);
-  const cityImage: CityImage = useSelector(selectCityImage);
 
   const history = useHistory();
 
@@ -384,7 +377,8 @@ export function Hotels() {
     if (hotelsMounted) {
       setLoading(false);
     } else {
-      setLoadingOnMount(false);
+      // setLoadingOnMount(false);
+      setNoHotels(true);
       setHotelsMounted(true);
     }
 
@@ -548,9 +542,10 @@ export function Hotels() {
       Number(formatAsDecimal(sortedRates.reduce((a, b) => a + b, 0) / size))
     );
 
-    setMaxRate(mediumPrice);
-
-    setState({ ...state, priceRange: [state.priceRange[0], mediumPrice] });
+    if (hotelsForBooking.length > 0) {
+      setMaxRate(mediumPrice);
+      setState({ ...state, priceRange: [state.priceRange[0], mediumPrice] });
+    }
   }
 
   function onOccupanciesParamChange(e: ChangeEvent<SelectEvent>, param: Occupancy) {

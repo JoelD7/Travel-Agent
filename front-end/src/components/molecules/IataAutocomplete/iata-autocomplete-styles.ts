@@ -18,7 +18,6 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
     transform: "rotate(0deg)",
   },
   navbar: {
-    marginLeft: "10px",
     width: "300px",
     borderRadius: "10px",
     "& .MuiOutlinedInput-root": {
@@ -48,7 +47,6 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
   searchBarInput: {
     width: "100%",
     backgroundColor: "white",
-    // backgroundColor: "rgba(0,0,0,0)",
     color: Colors.BLUE,
     borderRadius: "5px",
     "& .MuiInputBase-input": {

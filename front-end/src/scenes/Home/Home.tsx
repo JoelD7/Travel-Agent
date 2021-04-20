@@ -117,7 +117,7 @@ export function Home() {
       image: "/Travel-Agent/destinations/paris.jpg",
       country: "France",
       city: "Paris",
-      iataCode: "PAR",
+      iataCode: "CDG",
     },
     {
       image: "/Travel-Agent/destinations/tokio.jpg",

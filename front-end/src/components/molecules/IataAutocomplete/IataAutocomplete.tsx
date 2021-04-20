@@ -1,35 +1,34 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconButton, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AnyAction } from "redux";
 import { batchActions } from "redux-batched-actions";
 import {
+  CarSearch,
   FlightSearch,
   getAutocompleteLabel,
+  getISOCodeFromCountry,
   iataCodes,
+  LocationType,
   onQueryChanged,
-  persistGeolocationInLocalStorage,
+  selectCarSearch,
   selectFlightFromAutocomplete,
   selectFlightSearchParams,
   selectFlightToAutocomplete,
   selectSearchQuery,
+  setCarSearch,
   setDestinationCity,
   setFlightFrom,
   setFlightFromAutocomplete,
   setFlightTo,
   setFlightToAutocomplete,
+  setOriginCity,
   updateAirportPredictions,
   updateCityPredictions,
-  LocationType,
   updateHotelCoordinates,
-  selectCarSearch,
-  setOriginCity,
-  CarSearch,
-  setCarSearch,
-  getISOCodeFromCountry,
 } from "../../../utils";
 import { IATALocation } from "../../../utils/types/location-types";
 import { iataAutocompleteStyles } from "./iata-autocomplete-styles";
@@ -160,8 +159,6 @@ export function IataAutocomplete({
 
       //This var may be undefined
       if (autocomplete) {
-        persistGeolocationInLocalStorage(autocomplete, cityType);
-
         if (cityType === LocationType.ORIGIN) {
           batchedActions.push(
             setCarSearch({

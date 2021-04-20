@@ -151,6 +151,9 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
+  notAvailableCardGrid: {
+    height: "auto",
+  },
   pagination: {
     margin: "20px 0px 40px 0px",
   },
@@ -227,6 +230,12 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     },
     [theme.breakpoints.down(1083)]: {
       width: "33%",
+    },
+    [theme.breakpoints.down(440)]: {
+      width: "50%",
+    },
+    [theme.breakpoints.down(330)]: {
+      width: "100%",
     },
   },
   reservationOptionsToolbar: {

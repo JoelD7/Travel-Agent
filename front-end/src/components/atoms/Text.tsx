@@ -3,10 +3,10 @@ import { CreateCSSProperties } from "@material-ui/styles";
 import React, { FunctionComponent } from "react";
 import { Font } from "../../assets";
 
-type Component = "hm" | "h1" | "h2" | "h3" | "h4" | "h5" | "p";
+export type TextComponent = "hm" | "h1" | "h2" | "h3" | "h4" | "h5" | "p";
 
 export const Text: FunctionComponent<{
-  component?: Component;
+  component?: TextComponent;
   id?: string;
   bold?: boolean;
   color?: string;

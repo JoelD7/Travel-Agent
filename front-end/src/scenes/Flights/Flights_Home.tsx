@@ -37,17 +37,17 @@ import { Colors } from "../../styles";
 import {
   fetchCityImage,
   getFlightSearchURL,
+  isCityImageUpdated,
   isDateAfterOrEqual,
   muiDateFormatter,
+  selectCityImage,
   selectDestinationCity,
   selectFlightFromAutocomplete,
   selectFlightSearchParams,
-  setFlightType,
   selectFlightToAutocomplete,
   selectFlightType,
-  isCityImageUpdated,
-  selectCityImage,
   setCityImage,
+  setFlightType,
 } from "../../utils";
 import { fetchGreatFlightDeals } from "../../utils/external-apis/amadeus-apis";
 import {
@@ -348,7 +348,10 @@ export function Flights_Home() {
       <Grid
         container
         className={style.topContainer}
-        style={{ backgroundImage: `url(${cityImage.image})` }}
+        style={{
+          backgroundImage: `url('/Travel-Agent/flights-home.jpg')`,
+          backgroundPosition: "50%",
+        }}
       >
         <Grid item xs={12}>
           <ServicesToolbar />

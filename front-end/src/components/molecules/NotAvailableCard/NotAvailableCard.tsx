@@ -1,7 +1,8 @@
-import { Grid, makeStyles } from "@material-ui/core";
+import { Grid, makeStyles, Theme, useMediaQuery } from "@material-ui/core";
 import React, { ReactNode } from "react";
 import { Colors, Shadow } from "../../../styles";
 import { Text } from "../../atoms";
+import { TextComponent } from "../../atoms/Text";
 
 interface NotAvailableCard {
   children: ReactNode; //Detailed info
@@ -16,37 +17,74 @@ export function NotAvailableCard({
   imageHeight = 250,
   variant = "horizontal",
 }: NotAvailableCard) {
-  const notAvailableCardStyles = makeStyles(() => ({
-    noHotelsContainer: {
+  const is610pxOrLess = useMediaQuery("(max-width:610px)");
+  const is330pxOrLess = useMediaQuery("(max-width:330px)");
+
+  const notAvailableCardStyles = makeStyles((theme: Theme) => ({
+    imageContainer: {
+      height: "100%",
+      width: variant === "horizontal" ? 4 : 12,
+      display: is330pxOrLess ? "none" : "block",
+    },
+    messageContainer: {
+      width: is330pxOrLess ? "100%" : variant === "horizontal" ? 8 : 12,
+    },
+    notAvailableContainer: {
+      height: "100%",
       borderRadius: "10px",
-      marginLeft: "15px",
       boxShadow: Shadow.LIGHT,
       backgroundColor: "white",
-      padding: "15px",
+      padding: "25px",
     },
     notFoundImg: {
-      objectFit: "cover",
-      height: `${imageHeight}px`,
+      objectFit: "contain",
+      width: "100%",
+      height: `100%`,
+      [theme.breakpoints.down(790)]: {
+        height: "27vw",
+      },
+    },
+    notFoundImg330: {
+      objectFit: "contain",
+      [theme.breakpoints.down(790)]: {
+        height: "27vw",
+      },
     },
   }));
 
   const style = notAvailableCardStyles();
 
+  function getTitleComponentType(): TextComponent {
+    return is610pxOrLess ? "h2" : "h1";
+  }
+
+  function getTextComponentType(): TextComponent {
+    return is610pxOrLess ? "h5" : "h4";
+  }
+
   return (
-    <Grid container className={style.noHotelsContainer}>
+    <Grid container className={style.notAvailableContainer}>
       {/* Message */}
-      <Grid item xs={variant === "horizontal" ? 8 : 12}>
-        <Text component="h1" bold color={Colors.BLUE}>
+      <Grid item className={style.messageContainer}>
+        <Text component={getTitleComponentType()} bold color={Colors.BLUE}>
           {title}
         </Text>
 
-        <Text component="h4" weight="normal">
+        {is330pxOrLess && (
+          <img
+            src="/Travel-Agent/not-found.png"
+            className={style.notFoundImg330}
+            alt="unavailable"
+          />
+        )}
+
+        <Text component={getTextComponentType()} weight="normal">
           {children}
         </Text>
       </Grid>
 
       {/* Image */}
-      <Grid item xs={variant === "horizontal" ? 4 : 12}>
+      <Grid item className={style.imageContainer}>
         <Grid alignItems="center" justify="center" container style={{ height: "100%" }}>
           <img
             src="/Travel-Agent/not-found.png"

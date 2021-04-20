@@ -94,101 +94,116 @@ export const Navbar: FunctionComponent<Navbar> = ({
 
   return (
     <AppBar position={position} className={transparent ? style.appbarHome : style.appbar}>
-      <Toolbar className={style.toolbar}>
-        <Link
-          to={Routes.HOME}
-          style={{ outline: "none", border: "none" }}
-          className={style.logoLinkContainer}
-        >
-          <img
-            alt=" "
-            src={transparent ? logoTypeWhiteFore : logoType}
-            className={style.logotype}
-          />
-        </Link>
+      <Toolbar style={{ padding: "15px" }}>
+        <Grid container alignItems="center">
+          <Link
+            to={Routes.HOME}
+            style={{ outline: "none", border: "none" }}
+            className={style.logoLinkContainer}
+          >
+            <img
+              alt=" "
+              src={transparent ? logoTypeWhiteFore : logoType}
+              className={style.logotype}
+            />
+          </Link>
 
-        {/* Home */}
-        <Link
-          to={Routes.HOME}
-          style={{ outline: "none", border: "none" }}
-          className={style.logoLinkContainerSm}
-        >
-          <img alt=" " src={logoIcon} className={style.logotype} />
-        </Link>
+          {/* Home */}
+          <Link
+            to={Routes.HOME}
+            style={{ outline: "none", border: "none" }}
+            className={style.logoLinkContainerSm}
+          >
+            <img alt=" " src={logoIcon} className={style.logotype} />
+          </Link>
 
-        {/* Search box */}
-        <div style={{ width: "350px" }}>
-          <IataAutocomplete
-            className={style.autocompleteContainer}
-            type="city"
-            isInNavbar
-            home={transparent}
-          />
-        </div>
+          {/* Search box */}
+          <Grid item className={style.searchBoxContainer}>
+            <IataAutocomplete
+              className={style.autocompleteContainer}
+              type="city"
+              isInNavbar
+              home={transparent}
+            />
+          </Grid>
 
-        <div className={style.rightChildrenContainer}>
-          <div className={style.defaultHomeNav}>
-            {/* Trip reservations */}
-            {userLoggedIn ? (
-              <>
-                <MenuItem
-                  // selected={page === }
-                  classes={{ root: style.menuItemRoot }}
-                >
-                  <Link
-                    style={
-                      transparent ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)
-                    }
-                    to={Routes.TRIPS}
+          <Grid item className={style.rightChildrenContainer}>
+            <div className={style.defaultHomeNav}>
+              {/* Trip reservations */}
+              {userLoggedIn ? (
+                <>
+                  <MenuItem
+                    // selected={page === }
+                    classes={{ root: style.menuItemRoot }}
                   >
-                    Trips
-                  </Link>
-                </MenuItem>
-                <MenuItem
-                  // selected={page === }
-                  classes={{ root: style.menuItemRoot }}
-                >
-                  <Link
-                    style={
-                      transparent ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)
-                    }
-                    to={Routes.RESERVATIONS}
+                    <Link
+                      style={
+                        transparent ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)
+                      }
+                      to={Routes.TRIPS}
+                    >
+                      Trips
+                    </Link>
+                  </MenuItem>
+                  <MenuItem
+                    // selected={page === }
+                    classes={{ root: style.menuItemRoot }}
                   >
-                    Reservations
-                  </Link>
-                </MenuItem>
-              </>
-            ) : (
-              // login
-              <>
-                <MenuItem
-                  onClick={() => {}}
-                  style={transparent ? { color: "white" } : {}}
-                  classes={{ root: style.menuItemRoot }}
-                >
-                  Login
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {}}
-                  style={transparent ? { color: "white" } : {}}
-                  classes={{ root: style.menuItemRoot }}
-                >
-                  Sign Up
-                </MenuItem>
-              </>
-            )}
+                    <Link
+                      style={
+                        transparent ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)
+                      }
+                      to={Routes.RESERVATIONS}
+                    >
+                      Reservations
+                    </Link>
+                  </MenuItem>
+                </>
+              ) : (
+                // login
+                <>
+                  <MenuItem
+                    onClick={() => {}}
+                    style={transparent ? { color: "white" } : {}}
+                    classes={{ root: style.menuItemRoot }}
+                  >
+                    Login
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {}}
+                    style={transparent ? { color: "white" } : {}}
+                    classes={{ root: style.menuItemRoot }}
+                  >
+                    Sign Up
+                  </MenuItem>
+                </>
+              )}
 
-            {userLoggedIn && (
-              <IconButton onClick={onAvatarClick} style={{ marginLeft: "10px" }}>
-                <Avatar src={carlos} />
-              </IconButton>
-            )}
-          </div>
+              {userLoggedIn && (
+                <IconButton onClick={onAvatarClick} style={{ marginLeft: "10px" }}>
+                  <Avatar src={carlos} />
+                </IconButton>
+              )}
+            </div>
 
-          <IconButton onClick={() => setOpenDrawer(true)}>
-            <FontAwesomeIcon color={transparent ? "white" : Colors.BLUE} icon={faBars} />
-          </IconButton>
-        </div>
+            <IconButton onClick={() => setOpenDrawer(true)}>
+              <FontAwesomeIcon
+                color={transparent ? "white" : Colors.BLUE}
+                icon={faBars}
+              />
+            </IconButton>
+          </Grid>
+
+          {/* Search box phones */}
+          <Grid item className={style.searchBoxContainerPhone}>
+            <IataAutocomplete
+              className={style.autocompleteContainer}
+              type="city"
+              isInNavbar
+              home={transparent}
+            />
+          </Grid>
+        </Grid>
       </Toolbar>
 
       <NavDrawer open={openDrawer} onClose={() => setOpenDrawer(false)} />

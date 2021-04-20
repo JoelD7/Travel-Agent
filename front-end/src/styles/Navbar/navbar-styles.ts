@@ -22,14 +22,12 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     fontWeight: "bold",
   },
   appbar: {
-    height: "60px",
     boxShadow: "0px 0px red",
     backgroundColor: "white",
     zIndex: 2,
   },
   appbarHome: {
     backgroundColor: "rgba(0,0,0,0)",
-    height: "60px",
     boxShadow: "0px 0px red",
   },
   closeDialogButton: {
@@ -48,11 +46,17 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(520)]: {
       display: "none",
     },
+    [theme.breakpoints.down(375)]: {
+      display: "block",
+    },
   },
   logoLinkContainerSm: {
     display: "none",
     [theme.breakpoints.down(520)]: {
       display: "block",
+    },
+    [theme.breakpoints.down(375)]: {
+      display: "none",
     },
   },
   logotype: {
@@ -123,6 +127,26 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     "&::placeholder": {
       color: "white",
       opacity: "1",
+    },
+  },
+  searchBoxContainer: {
+    width: "350px",
+    marginLeft: "10px",
+    [theme.breakpoints.down(490)]: {
+      width: "71%",
+    },
+    [theme.breakpoints.down(375)]: {
+      display: "none",
+    },
+  },
+  searchBoxContainerPhone: {
+    display: "none",
+    width: "90%",
+    [theme.breakpoints.down(375)]: {
+      width: "100%",
+      display: "block",
+      marginTop: "10px",
+      marginBottom: "20px",
     },
   },
   toolbar: {

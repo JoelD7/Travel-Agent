@@ -77,6 +77,7 @@ import {
   setFlightType,
   selectDestinationCity,
   iataCodes,
+  selectEndCurrency,
 } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
@@ -121,19 +122,19 @@ export function Flight_List() {
       },
       MuiTypography: {
         h4: {
-          fontFamily: Family,
+          fontFamily: Font.Family,
         },
         subtitle1: {
-          fontFamily: Family,
+          fontFamily: Font.Family,
         },
         body1: {
-          fontFamily: Family,
+          fontFamily: Font.Family,
         },
         body2: {
-          fontFamily: Family,
+          fontFamily: Font.Family,
         },
         caption: {
-          fontFamily: Family,
+          fontFamily: Font.Family,
         },
       },
       MuiOutlinedInput: {
@@ -261,8 +262,6 @@ export function Flight_List() {
   const pageSizeOptions = [20, 30, 40];
 
   const [firstRender, setFirstRender] = useState(true);
-
-  const geolocation: IATALocation = useSelector(selectDestinationCity);
 
   const flightClasses: FlightClassType[] = [
     "Economy",
@@ -428,8 +427,10 @@ export function Flight_List() {
 
     let maxPrice: number = Math.floor(prices[prices.length - 1]);
 
-    setPriceRange([0, maxPrice]);
-    setMaxPrice(maxPrice);
+    if (flights.length > 0) {
+      setMaxPrice(maxPrice);
+      setPriceRange([0, maxPrice]);
+    }
 
     setDatimeSliderValues(buffer);
 
@@ -862,6 +863,8 @@ export function Flight_List() {
   }
 
   function SearchFilters() {
+    const endCurrency: string = useSelector(selectEndCurrency);
+
     return (
       <div>
         <Text style={{ color: Colors.BLUE }} weight="bold" component="h3">
@@ -872,7 +875,7 @@ export function Flight_List() {
         </Text>
 
         <PriceRange
-          baseCurrency={flights[0].price.currency}
+          baseCurrency={flights[0] ? flights[0].price.currency : endCurrency}
           value={priceRange}
           max={maxPrice}
           updateState={(slider) => onPriceSliderChange(slider)}
@@ -1338,10 +1341,12 @@ export function Flight_List() {
                         ))}
                     </div>
                   ) : (
-                    <NotAvailableCard title="Oops...">
-                      There are no available flights for the selected booking parameters.
-                      Try with another ones.
-                    </NotAvailableCard>
+                    <Grid item className={style.notAvailableCardGrid}>
+                      <NotAvailableCard title="Oops...">
+                        There are no available flights for the selected booking
+                        parameters. Try with another ones.
+                      </NotAvailableCard>
+                    </Grid>
                   )}
                 </Grid>
               )}
