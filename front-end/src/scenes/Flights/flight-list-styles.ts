@@ -181,9 +181,13 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     },
     [theme.breakpoints.down(1040)]: {
       left: "12%",
+      top: "160px",
     },
     [theme.breakpoints.down(783)]: {
       left: "9%",
+    },
+    [theme.breakpoints.down(630)]: {
+      top: "200px",
     },
     [theme.breakpoints.down(736)]: {
       left: "0%",

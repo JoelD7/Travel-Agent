@@ -59,7 +59,7 @@ export const Text: FunctionComponent<{
   }
 
   return (
-    <p id={id} className={`${styles.text} ${className}`}>
+    <p id={id} className={`${className} ${styles.text}`}>
       {children}
     </p>
   );

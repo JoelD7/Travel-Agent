@@ -1,14 +1,22 @@
 import {
   faChevronCircleRight,
   faCircle,
+  faClock,
   faPlane,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Backdrop, Dialog, Divider, Grid, IconButton } from "@material-ui/core";
+import {
+  Backdrop,
+  Dialog,
+  Divider,
+  Grid,
+  IconButton,
+  useMediaQuery,
+} from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
-import { CustomButton } from "../../components";
+import { CustomButton, IconTP, Text } from "../../components";
 import { Colors } from "../../styles";
 import {
   capitalizeString,
@@ -53,6 +61,9 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
   const baseCurrency: string = useSelector(selectEndCurrency);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
+  const is730OrLess = useMediaQuery("(max-width:730px)");
+  const is660OrLess = useMediaQuery("(max-width:660px)");
+
   function getFlightPassengers() {
     let total: number = 0;
     total += flightSearch.adults;
@@ -83,51 +94,57 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
 
     const flightItinerary: FlightItinerary = flight.itineraries[itinerary];
 
+    function isFirstSegment(segment: FlightSegment): boolean {
+      return segment === flightItinerary.segments[0];
+    }
+
     return (
       <Grid key="flight card" item xs={12} className={style.flightCard}>
         {/* Card title */}
-        <Grid key="title" container alignItems="center">
-          <h2 style={{ fontSize: "20px", color: Colors.BLUE }}>
-            {itinerary === 0 ? "Depart" : "Return"}
-          </h2>
+        <Grid key="title" container alignItems="center" style={{ marginBottom: "6px" }}>
+          <Grid item className={style.dateGrid}>
+            <Grid container alignItems="center">
+              <Text component="h3" style={{ marginBottom: "5px" }} color={Colors.BLUE}>
+                {itinerary === 0 ? "Depart" : "Return"}
+              </Text>
 
-          <p className={style.flightCardDate}>
-            {formatFlightDate(flight, "departure", itinerary)}
-          </p>
-          <p className={style.flightCardCities}>
-            {`${getCityFromIata(flightItinerary.segments[0].departure.iataCode)} -` +
-              ` ${getCityFromIata(getLastSegment(flightItinerary).arrival.iataCode)}`}
-          </p>
-          <Grid key="second line" item xs={12}></Grid>
+              <Text className={style.flightCardDate} style={{ fontSize: "14px" }}>
+                {formatFlightDate(flight, "departure", itinerary)}
+              </Text>
+            </Grid>
+          </Grid>
+
+          <Grid item className={style.citiesGrid}>
+            <p className={style.flightCardCities}>
+              {`${getCityFromIata(flightItinerary.segments[0].departure.iataCode)} -` +
+                ` ${getCityFromIata(getLastSegment(flightItinerary).arrival.iataCode)}`}
+            </p>
+          </Grid>
         </Grid>
 
         <Divider />
+
         {flightItinerary.segments.map((segment, i) => (
           <Grid key={i} container style={{ paddingTop: "20px" }}>
             {/* Airline and logo */}
-            <Grid key="airline" item xs={2}>
+            <Grid key="airline" item className={style.airlineLogoGrid}>
               <Grid container alignItems="center">
                 <Grid item xs={12} style={{ display: "flex" }}>
-                  <FontAwesomeIcon
-                    size="2x"
-                    style={{ margin: "auto" }}
-                    color={Colors.PURPLE}
-                    icon={faPlane}
-                  />
+                  <IconTP style={{ margin: "auto" }} icon={faPlane} size={22} />
                 </Grid>
 
                 <Grid item xs={12}>
                   {dictionaries && (
-                    <p style={{ textAlign: "center" }}>
+                    <Text style={{ textAlign: "center" }}>
                       {getFlightSegmentCarrier(segment, dictionaries)}
-                    </p>
+                    </Text>
                   )}
                 </Grid>
               </Grid>
             </Grid>
 
             {/* Departure time */}
-            <Grid key="first time" item xs={3}>
+            <Grid key="first time" item className={style.timeGrid}>
               <p className={style.firstTime}>
                 {formatFlightSegmentTime(segment, "departure")}
               </p>
@@ -137,12 +154,17 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
               <p className={style.firstIata}>{`(${segment.departure.iataCode})`}</p>
             </Grid>
 
-            <Grid key="line" item xs={1} style={{ padding: "5px 10px" }}>
+            <Grid
+              key="line"
+              item
+              className={style.dividerGrid}
+              style={{ padding: "5px 10px" }}
+            >
               <Divider className={style.timeDivider} />
             </Grid>
 
             {/* Arrival time */}
-            <Grid key="second time" item xs={3}>
+            <Grid key="second time" item className={style.timeGrid}>
               <p className={style.secondTime}>
                 {formatFlightSegmentTime(segment, "arrival")}
               </p>
@@ -153,12 +175,42 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
             </Grid>
 
             {/* Duration */}
-            <Grid item xs={3}>
+            <Grid item className={style.durationGrid}>
               <p style={{ fontSize: "14px", textAlign: "end" }}>
                 <b>Duration</b>
                 {`: ${parseFlightDuration(segment.duration)}`}
               </p>
             </Grid>
+
+            {/* Airline and logo xs */}
+            <Grid key="airline" item className={style.airlineLogoGridXs}>
+              <Grid container alignItems="center">
+                <Grid item xs={12} style={{ display: "flex" }}>
+                  <IconTP style={{ margin: "auto" }} icon={faPlane} size={22} />
+                </Grid>
+
+                <Grid item xs={12}>
+                  {dictionaries && (
+                    <Text style={{ textAlign: "center" }}>
+                      {getFlightSegmentCarrier(segment, dictionaries)}
+                    </Text>
+                  )}
+                </Grid>
+              </Grid>
+            </Grid>
+
+            {/* Duration sm*/}
+            <Grid item className={style.durationGridSm}>
+              <IconTP style={{ margin: "auto" }} icon={faClock} size={22} />
+              <Text className={style.durationTextSm}>{`${parseFlightDuration(
+                segment.duration
+              )}`}</Text>
+            </Grid>
+
+            {/* Divider between segments */}
+            {is730OrLess && isFirstSegment(segment) && (
+              <Divider style={{ marginBottom: "10px", width: "100%" }} />
+            )}
           </Grid>
         ))}
       </Grid>
@@ -178,10 +230,10 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
       <Grid container className={style.mainContainer}>
         {/* Top title */}
         <Grid key="topTitle" item xs={12}>
-          <Grid container alignItems="center">
-            <h2 style={{ fontSize: "28px" }}>
+          <Grid container alignItems="center" style={{ marginTop: "20px" }}>
+            <Text component={is660OrLess ? "h3" : "h2"}>
               {getFlightCitiesLabel(flight, "departure")}
-            </h2>
+            </Text>
 
             <FontAwesomeIcon
               size="2x"
@@ -189,15 +241,11 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
               color={Colors.PURPLE}
               icon={faChevronCircleRight}
             />
-            <h2 style={{ fontSize: "28px" }}>
+            <Text component={is660OrLess ? "h3" : "h2"}>
               {getFlightCitiesLabel(flight, "arrival")}
-            </h2>
+            </Text>
 
-            <IconButton
-              style={{ width: "45px", height: "45px" }}
-              onClick={() => onClose()}
-              className={style.closeButton}
-            >
+            <IconButton onClick={() => onClose()} className={style.closeButton}>
               <FontAwesomeIcon size="sm" color={Colors.BLUE} icon={faTimes} />
             </IconButton>
           </Grid>

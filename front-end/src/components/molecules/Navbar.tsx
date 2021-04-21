@@ -12,6 +12,7 @@ import {
   MenuItem,
   Snackbar,
   Toolbar,
+  useMediaQuery,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { FunctionComponent, useEffect, useState } from "react";
@@ -71,6 +72,8 @@ export const Navbar: FunctionComponent<Navbar> = ({
 
   const originCity: IATALocation = useSelector(selectOriginCity);
 
+  const is450OrLess = useMediaQuery("(max-width:450px)");
+
   function onAvatarClick(e: React.MouseEvent<HTMLElement>) {
     setAnchorEl(e.currentTarget);
   }
@@ -94,7 +97,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
 
   return (
     <AppBar position={position} className={transparent ? style.appbarHome : style.appbar}>
-      <Toolbar style={{ padding: "15px" }}>
+      <Toolbar style={is450OrLess ? { padding: "15px" } : {}}>
         <Grid container alignItems="center">
           <Link
             to={Routes.HOME}
