@@ -65,6 +65,9 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    [theme.breakpoints.down(540)]: {
+      width: "13%",
+    },
   },
   timesIataGrid: {
     width: "50%",
@@ -76,6 +79,9 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(625)]: {
       width: "50%",
     },
+    [theme.breakpoints.down(350)]: {
+      width: "87%",
+    },
   },
   timeStopsGrid: {
     width: "10.6%",
@@ -85,6 +91,12 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(625)]: {
       width: "40%",
       justifyContent: "center",
+    },
+    [theme.breakpoints.down(540)]: {
+      width: "35%",
+    },
+    [theme.breakpoints.down(350)]: {
+      width: "100%",
     },
     alignItems: "center",
     justifyContent: "center",
@@ -144,11 +156,17 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
   durationText: {
     marginBottom: "2px",
     marginTop: "20px",
+    [theme.breakpoints.down(350)]: {
+      marginTop: "0px",
+    },
   },
   durationSubText: {
     fontSize: "14px",
     marginTop: "4px",
     color: Colors.GRAY,
+    [theme.breakpoints.down(350)]: {
+      marginBottom: "0px",
+    },
   },
   mainContainer: {
     fontFamily: Family,

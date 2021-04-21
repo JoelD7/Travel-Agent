@@ -158,9 +158,9 @@ export function SortPageSize({
         marginLeft: "0px",
         marginRight: "auto",
       },
-      
+
       [theme.breakpoints.down(620)]: {
-        width: '100%',
+        width: "100%",
       },
     },
     sortGrid: {
@@ -185,6 +185,10 @@ export function SortPageSize({
       width: "270px",
       [theme.breakpoints.down(420)]: {
         width: "70%",
+      },
+      [theme.breakpoints.down(310)]: {
+        width: "100%",
+        margin: "5px 10px auto 0px",
       },
     },
   }));
@@ -246,7 +250,10 @@ export function SortPageSize({
                 See
               </Text>
 
-              <FormControl className={style.sortFormControl} style={{ width: "70px" }}>
+              <FormControl
+                className={style.sortFormControl}
+                style={{ width: "70px", marginLeft: "15px" }}
+              >
                 <Select
                   value={pageSize}
                   variant="outlined"

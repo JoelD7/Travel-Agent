@@ -23,11 +23,11 @@ export function NotAvailableCard({
   const notAvailableCardStyles = makeStyles((theme: Theme) => ({
     imageContainer: {
       height: "100%",
-      width: variant === "horizontal" ? 4 : 12,
+      width: variant === "horizontal" ? "33.3%" : "100%",
       display: is330pxOrLess ? "none" : "block",
     },
     messageContainer: {
-      width: is330pxOrLess ? "100%" : variant === "horizontal" ? 8 : 12,
+      width: is330pxOrLess ? "100%" : variant === "horizontal" ? "66.6%" : "100%",
     },
     notAvailableContainer: {
       height: "100%",

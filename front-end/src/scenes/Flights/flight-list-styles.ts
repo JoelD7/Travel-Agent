@@ -122,6 +122,10 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(736)]: {
       width: "100%",
     },
+
+    [theme.breakpoints.down(500)]: {
+      paddingLeft: "0px",
+    },
   },
   filterButtonGrid: {
     display: "none",

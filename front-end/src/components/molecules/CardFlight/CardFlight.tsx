@@ -1,6 +1,12 @@
-import { faPlane, faPlaneDeparture } from "@fortawesome/free-solid-svg-icons";
-import { Grid, Card, CardHeader, CardContent, CardActionArea } from "@material-ui/core";
-import { CSSProperties } from "@material-ui/styles";
+import { faClock, faPlane, faPlaneDeparture } from "@fortawesome/free-solid-svg-icons";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardHeader,
+  Grid,
+  useMediaQuery,
+} from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,20 +14,18 @@ import { Font } from "../../../assets";
 import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
 import {
-  formatAsCurrency,
-  parseFlightDuration,
-  getFlightCitiesLabel,
-  formatFlightDateTime,
-  formatFlightDate,
-  selectFlightDictionaries,
-  capitalizeString,
-  getLastSegment,
-  selectEndCurrency,
   ExchangeRate,
-  selectExchangeRate,
+  formatAsCurrency,
+  formatFlightDate,
+  getFlightCitiesLabel,
   getFlightSegmentCarrier,
+  getLastSegment,
+  parseFlightDuration,
+  selectEndCurrency,
+  selectExchangeRate,
+  selectFlightDictionaries,
 } from "../../../utils";
-import { CustomButton, IconText, Text } from "../../atoms";
+import { CustomButton, IconText, IconTP, Text } from "../../atoms";
 import { cardFlightStyles } from "./cardFlightStyles";
 
 interface CardFlight {
@@ -45,6 +49,8 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
   );
 
   const [flightDetailsModal, setFlightDetailsModal] = useState(false);
+
+  const is350OrLess = useMediaQuery("(max-width:350px)");
 
   function parseStops(segments: FlightSegment[]) {
     let stopsSegments: FlightSegment[] = segments.slice(0, segments.length - 1);
@@ -189,7 +195,7 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
         <Grid container>
           {/* Plane icon */}
           <Grid item className={style.planeIconGrid}>
-            <IconText text="" icon={faPlane} size={22} />
+            <IconTP size={22} style={{ marginRight: "7px" }} icon={faPlane} />
           </Grid>
 
           {/* Departure-arrival times and airports */}
@@ -215,7 +221,16 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
 
           {/* Flight duration and stops */}
           <Grid item className={style.timeStopsGrid}>
-            <Grid container justify="flex-end">
+            <Grid
+              container
+              alignItems="center"
+              style={is350OrLess ? { marginBottom: "20px" } : {}}
+              justify={is350OrLess ? "flex-start" : "flex-end"}
+            >
+              {is350OrLess && (
+                <IconTP size={22} style={{ marginRight: "7px" }} icon={faClock} />
+              )}
+
               <div>
                 <p className={style.durationText}>{`${parseFlightDuration(
                   exitFlight.duration
@@ -246,9 +261,12 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
         <Grid container>
           {returnFlight && (
             <>
+              {/* Plane icon */}
               <Grid item className={style.planeIconGrid}>
-                <IconText text="" icon={faPlane} size={22} />
+                <IconTP size={22} style={{ marginRight: "7px" }} icon={faPlane} />
               </Grid>
+
+              {/* Departure-arrival times and airports */}
               <Grid item className={style.timesIataGrid}>
                 <p className={style.timesText}>{`${format(
                   new Date(getLastSegment(returnFlight).departure.at),
@@ -269,8 +287,17 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
                 )}
               </Grid>
 
+              {/* Flight duration and stops */}
               <Grid item className={style.timeStopsGrid}>
-                <Grid container justify="flex-end">
+                <Grid
+                  container
+                  style={is350OrLess ? { marginBottom: "20px" } : {}}
+                  justify={is350OrLess ? "flex-start" : "flex-end"}
+                >
+                  {is350OrLess && (
+                    <IconTP size={22} style={{ marginRight: "7px" }} icon={faClock} />
+                  )}
+
                   <div>
                     <p className={style.durationText}>{`${parseFlightDuration(
                       returnFlight.duration
