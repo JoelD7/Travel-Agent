@@ -17,3 +17,4 @@ export { Reservations } from "./Reservations/Reservations";
 export { Itinerary } from "./Itinerary/Itinerary";
 export { NotFound } from "./NotFound/NotFound";
 export { CarRental } from "./CarRental/CarRental";
+export { CreateTrip } from "./CreateTrip/CreateTrip";

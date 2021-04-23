@@ -26,6 +26,7 @@ import {
   ThingsToDoDetails,
   TripDetails,
   Trips,
+  CreateTrip,
 } from "./scenes";
 import { Colors } from "./styles";
 import { IATALocation, LocationType, Routes, selectOriginCity } from "./utils";
@@ -78,6 +79,7 @@ export default function App() {
           <Route exact path={Routes.RESERVATIONS} component={Reservations} />
           <Route exact path={Routes.ITINERARY} component={Itinerary} />
           <Route exact path={Routes.CAR_RENTAL} component={CarRental} />
+          <Route exact path={Routes.CREATE_TRIP} component={CreateTrip} />
           <Route component={NotFound} />
         </Switch>
       </Router>

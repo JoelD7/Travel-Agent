@@ -47,6 +47,7 @@ import {
   getRandomInt,
   IATALocation,
   mostVisitedCities,
+  Routes,
   selectCarSearch,
   selectOpenRequiredFieldSnack,
   setCarSearch,
@@ -372,6 +373,7 @@ export function Home() {
                 <CustomButton
                   backgroundColor={Colors.GREEN}
                   style={styles.style_createTripButton}
+                  onClick={() => history.push(Routes.CREATE_TRIP)}
                 >
                   Create trip
                 </CustomButton>

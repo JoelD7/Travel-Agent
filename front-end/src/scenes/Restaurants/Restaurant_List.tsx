@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid, useMediaQuery } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,7 @@ import {
   SortPageSize,
   Text,
 } from "../../components";
+import { Colors } from "../../styles";
 import {
   addRestaurantCuisines,
   addRestaurantFeatures,
@@ -102,6 +103,8 @@ export function Restaurant_List() {
   const topRestaurantId = "topRestaurantId";
 
   const firstRender = useRef(true);
+
+  const is430pxOrLess = useMediaQuery("(max-width:430px)");
 
   /**
    * The returned restaurants by the API.
@@ -458,12 +461,7 @@ export function Restaurant_List() {
    * image as background.
    */
   function getTitleColor() {
-    return (deliveryRestaurants.length === 0 &&
-      pickupRestaurants.length === 0 &&
-      reservationRestaurants.length === 0) ||
-      page > 0
-      ? "white"
-      : "black";
+    return areRestaurantSlidesAvailable() || is430pxOrLess ? Colors.BLUE : "white";
   }
 
   function onPageChange(newPage: number) {
@@ -477,6 +475,15 @@ export function Restaurant_List() {
     //@ts-ignore
     topRestaurantAnchorEl.current.click();
     setTimeout(() => setPage(0), 250);
+  }
+
+  function areRestaurantSlidesAvailable(): boolean {
+    return (
+      (deliveryRestaurants.length > 0 ||
+        pickupRestaurants.length > 0 ||
+        reservationRestaurants.length > 0) &&
+      page === 0
+    );
   }
 
   return (
@@ -538,7 +545,7 @@ export function Restaurant_List() {
             ) : (
               <>
                 {/* Slides */}
-                {page === 0 && (
+                {areRestaurantSlidesAvailable() && (
                   <div style={{ marginBottom: "50px" }}>
                     {deliveryRestaurants.length > 0 && page === 0 && (
                       <RestaurantSlides
@@ -572,7 +579,6 @@ export function Restaurant_List() {
                 <Text
                   id={topRestaurantId}
                   style={{ marginBottom: "20px" }}
-                  weight={500}
                   component="h2"
                   bold
                   color={getTitleColor()}

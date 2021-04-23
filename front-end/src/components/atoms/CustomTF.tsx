@@ -101,7 +101,7 @@ export function CustomTF({
       value={text}
       size={size}
       placeholder={placeholder}
-      className={`${style.textField} ${className}`}
+      className={` ${className} ${style.textField}`}
       onFocus={onFocus}
       variant={"outlined"}
       // onChange={onTextChanged}

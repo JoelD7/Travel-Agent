@@ -5,17 +5,13 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Colors } from "../../../styles";
 import {
-  CarSearch,
   getCarRentalDefaultURL,
   getHotelSearchURL,
   getLinkStyle,
   getRestaurantsDefaultRoute,
   Routes,
-  selectCarSearch,
-  selectDestinationCity,
   selectHotelReservationParams,
 } from "../../../utils";
-import { IATALocation } from "../../../utils/types/location-types";
 import { servicesToolbarStyles } from "../servicesToolbar-styles";
 
 interface NavbarService {
@@ -34,8 +30,6 @@ export function ServicesToolbar({ transparent, style }: ServicesToolbar) {
   let page = "/" + segmentedURL[segmentedURL.length - 1];
 
   const reservationParams = useSelector(selectHotelReservationParams);
-  const city: IATALocation = useSelector(selectDestinationCity);
-  const carSearch: CarSearch = useSelector(selectCarSearch);
 
   const navbarServices: NavbarService[] = [
     {
@@ -71,7 +65,7 @@ export function ServicesToolbar({ transparent, style }: ServicesToolbar) {
         button: {
           "&:hover": {
             backgroundColor: "rgba(0,0,0,0)",
-            borderBottom: `2px solid ${Colors.BLUE}`,
+            borderBottom: transparent ? `2px solid white` : `2px solid ${Colors.BLUE}`,
           },
         },
       },
@@ -105,7 +99,9 @@ export function ServicesToolbar({ transparent, style }: ServicesToolbar) {
   return (
     <ThemeProvider theme={theme}>
       <Toolbar
-        className={transparent ? styles.servicesToolbarHome : styles.servicesToolbar}
+        className={
+          transparent ? styles.servicesToolbarTransparent : styles.servicesToolbar
+        }
         style={{ ...style }}
       >
         {navbarServices.map((service, i) => (
@@ -118,7 +114,7 @@ export function ServicesToolbar({ transparent, style }: ServicesToolbar) {
               key={i}
               selected={service.selected}
               classes={{
-                root: transparent ? styles.menuItemRootHome : styles.menuItemRoot,
+                root: transparent ? styles.menuItemRootTransparent : styles.menuItemRoot,
               }}
             >
               {service.label}

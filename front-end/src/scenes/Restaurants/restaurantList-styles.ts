@@ -75,6 +75,12 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
       zIndex: 1,
     },
     height: "45vh",
+    [theme.breakpoints.down(1040)]: {
+      height: "40vh",
+    },
+    [theme.breakpoints.down(430)]: {
+      height: "55vh",
+    },
   },
   restaurantName: {
     fontSize: "14px",

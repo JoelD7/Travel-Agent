@@ -20,7 +20,7 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
-  menuItemRootHome: {
+  menuItemRootTransparent: {
     fontFamily: Family,
     fontWeight: "bold",
     borderBottom: `2px solid rgba(0,0,0,0)`,
@@ -29,7 +29,7 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
     "&.MuiListItem-root": {
       "&.Mui-selected": {
         backgroundColor: "rgba(0,0,0,0)",
-        borderBottom: `2px solid ${Colors.BLUE}`,
+        borderBottom: `2px solid white`,
       },
     },
   },
@@ -48,7 +48,7 @@ export const servicesToolbarStyles = makeStyles((theme: Theme) => ({
       display: "none",
     },
   },
-  servicesToolbarHome: {
+  servicesToolbarTransparent: {
     display: "flex",
     minHeight: "20px",
     height: "40px",

@@ -132,7 +132,10 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
   searchBoxContainer: {
     width: "350px",
     marginLeft: "10px",
-    [theme.breakpoints.down(490)]: {
+    [theme.breakpoints.down(610)]: {
+      width: "57%",
+    },
+    [theme.breakpoints.down(520)]: {
       width: "71%",
     },
     [theme.breakpoints.down(375)]: {

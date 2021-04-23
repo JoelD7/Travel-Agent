@@ -3,7 +3,7 @@ import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui
 import { format } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import {
   DashDrawer,

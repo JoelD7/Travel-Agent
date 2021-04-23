@@ -9,6 +9,7 @@ export const WHITE_TRANSPARENT = "rgba(255, 255, 255, 0.35)";
 export const WHITE_TRANSPARENT_HOVER = "rgba(255, 255, 255, 0.20)";
 export const GRAY = "#5f5f5f";
 export const BACKGROUND = "#f3f3f3";
+export const RED = "#f44336";
 export const TRANSPARENT = "rgba(0,0,0,0)";
 export const PAGE_BACKG =
   "linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 50%, rgba(255,255,255,1) 100%)";
