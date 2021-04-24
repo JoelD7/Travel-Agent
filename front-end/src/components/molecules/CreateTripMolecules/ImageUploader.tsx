@@ -3,11 +3,16 @@ import { Grid, makeStyles, Theme } from "@material-ui/core";
 import { CustomButton, Text } from "../../atoms";
 import { Colors } from "../../../styles";
 
-export function ImageUploader() {
+interface ImageUploader {
+  updateState: (value: string) => void;
+  image: string;
+}
+
+export function ImageUploader({ updateState, image: imageParam }: ImageUploader) {
   const EMPTY_IMAGE = "/Travel-Agent/gallery.png";
   const IMAGE_WIDTH = 385;
 
-  const [image, setImage] = useState(EMPTY_IMAGE);
+  const [image, setImage] = useState(imageParam);
 
   const imageUploaderStyles = makeStyles((theme: Theme) => ({
     button: {
@@ -61,7 +66,7 @@ export function ImageUploader() {
   }
 
   return (
-    <div>
+    <div onBlur={() => updateState(image)}>
       <Grid container className={style.uploaderContainer}>
         <Grid item xs={12} className={style.imageGrid}>
           <img src={image} className={style.image} alt="trip-cover" />

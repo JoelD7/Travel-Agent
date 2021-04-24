@@ -14,7 +14,7 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
-  formatAsCurrency,
+  convertCurrency,
   flightsPlaceholder,
   selectEndCurrency,
   ExchangeRate,
@@ -202,7 +202,7 @@ export function Reservations() {
                           component="h4"
                           bold
                         >
-                          {formatAsCurrency(hotel.cost, "USD", endCurrency, exchangeRate)}
+                          {convertCurrency(hotel.cost, "USD", endCurrency, exchangeRate)}
                         </Text>
                       </Grid>
                     </CardContent>

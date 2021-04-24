@@ -11,7 +11,7 @@ import { addDays, compareAsc, format } from "date-fns";
 import { DEFAULT_CURRENCY, isoCountryCodes } from "../constants";
 import { iataCodes } from "../constants/iataCodes";
 import { airportCityPlaceholder } from "../placeholders";
-import { CarReducer } from "../store";
+import { CarReducer, store } from "../store";
 import { CityImage, EventType, ExchangeRate } from "../types";
 import { IATALocation } from "../types/location-types";
 export * from "./flight-functions";
@@ -62,7 +62,7 @@ export function getLinkStyle(color: string = "initial"): CSSProperties {
  * @param exchangeRate
  * @returns
  */
-export function formatAsCurrency(
+export function convertCurrency(
   value: number,
   fromCurrency: string,
   toCurrency: string,
@@ -93,6 +93,17 @@ export function formatAsCurrency(
     let convertedValue = valueAsDollar * exchangeRate.rates[toCurrency];
     return formatter(convertedValue);
   }
+}
+
+export function formatAsCurrency(value: number): string {
+  const formatter = Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: store.getState().rootSlice.endCurrency,
+    currencyDisplay: "symbol",
+    maximumFractionDigits: 2,
+  }).format;
+
+  return formatter(value);
 }
 
 export const formatAsDecimal = Intl.NumberFormat("en-US", {

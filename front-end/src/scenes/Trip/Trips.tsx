@@ -140,7 +140,7 @@ export function Trips() {
                       weight={500}
                       style={{ textAlign: "center" }}
                     >
-                      {lastTrip.photos}
+                      {lastTrip.photosQty}
                     </Text>
                   </div>
 

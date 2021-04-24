@@ -1,23 +1,62 @@
-import Helmet from "react-helmet";
-import React, { useState } from "react";
-import { createTripStyles } from "./createTrip-styles";
 import {
-  Navbar,
-  DashDrawer,
-  Text,
+  faCalendar,
+  faDollarSign,
+  faFlag,
+  faFont,
+  faImage,
+} from "@fortawesome/free-solid-svg-icons";
+import { Grid } from "@material-ui/core";
+import { addDays } from "date-fns";
+import React, { useState } from "react";
+import Helmet from "react-helmet";
+import {
   CreateTripTF,
+  DashDrawer,
+  Footer,
   IconTP,
   ImageUploader,
+  Navbar,
+  Text,
+  TripDates,
+  CountrySelector,
+  CustomButton,
 } from "../../components";
-import { Grid } from "@material-ui/core";
 import { Colors } from "../../styles";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
+import { Trip } from "../../utils";
+import { createTripStyles } from "./createTrip-styles";
 
 export function CreateTrip() {
   const style = createTripStyles();
+  const EMPTY_IMAGE = "/Travel-Agent/gallery.png";
 
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(EMPTY_IMAGE);
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 1));
+  const [countries, setCountries] = useState<string[]>([]);
+
+  const [budget, setBudget] = useState<number>(0);
+
+  const [trip, setTrip] = useState<Trip | undefined>();
+
+  function updateDates(startDate: Date, endDate: Date) {
+    setStartDate(startDate);
+    setEndDate(endDate);
+  }
+
+  function onBudgetChange(value: string) {
+    setBudget(Number(value));
+  }
+
+  function onCreateTripClick() {
+    console.log({
+      name,
+      startDate,
+      endDate,
+      countries,
+      budget,
+    });
+  }
 
   return (
     <div className={style.mainContainer}>
@@ -40,30 +79,105 @@ export function CreateTrip() {
         {/* Params container */}
         <Grid item xs={12}>
           <Grid container className={style.paramsContainer}>
-            {/* left Pane */}
+            {/* Left Pane */}
             <Grid item className={style.leftPane}>
               {/* Trip name */}
-              <CreateTripTF value={name} updateState={(value) => setName(value)} />
+              <Text component="h3" color={Colors.BLUE}>
+                Name your trip
+              </Text>
+              <CreateTripTF
+                value={name}
+                updateState={(value) => setName(value)}
+                icon={faFont}
+                placeholder="Trip name"
+              />
 
               {/* Image upload */}
               <div style={{ marginTop: 45 }}>
                 <Grid container alignItems="center" style={{ width: 385 }}>
-                  <Text component="h2" color={Colors.BLUE}>
+                  <Text component="h3" color={Colors.BLUE}>
                     Add a cover
                   </Text>
 
                   <IconTP style={{ marginLeft: 10 }} icon={faImage} />
                 </Grid>
 
-                <ImageUploader />
+                <ImageUploader image={image} updateState={(value) => setImage(value)} />
               </div>
             </Grid>
 
-            {/* right Pane */}
-            <Grid item className={style.rightPane}></Grid>
+            {/* Right Pane */}
+            <Grid item className={style.rightPane}>
+              <Grid container style={{ height: "100%" }}>
+                {/* Dates */}
+                <Grid item xs={12}>
+                  <Grid container>
+                    <Text component="h3" color={Colors.BLUE}>
+                      Dates
+                    </Text>
+                    <IconTP style={{ marginLeft: 10 }} icon={faCalendar} />
+                  </Grid>
+
+                  {/* Pickers container */}
+                  <TripDates
+                    startDate={startDate}
+                    endDate={endDate}
+                    updateDates={updateDates}
+                  />
+                </Grid>
+
+                {/* Country selector */}
+                <Grid item xs={12}>
+                  <Grid container>
+                    <Text component="h3" color={Colors.BLUE}>
+                      Countries
+                    </Text>
+                    <IconTP style={{ marginLeft: 10 }} icon={faFlag} />
+                  </Grid>
+
+                  <CountrySelector
+                    selectedCountries={countries}
+                    updateState={(values) => {
+                      setCountries(values);
+                    }}
+                  />
+                </Grid>
+
+                {/* Budget */}
+                <Grid item xs={12}>
+                  <Grid container>
+                    <Text component="h3" color={Colors.BLUE}>
+                      Budget
+                    </Text>
+                  </Grid>
+
+                  <CreateTripTF
+                    value={String(budget)}
+                    updateState={(value) => onBudgetChange(value)}
+                    placeholder="Enter a budget"
+                    icon={faDollarSign}
+                    numeric
+                  />
+                </Grid>
+
+                {/* Save button */}
+                <Grid item xs={12} style={{ marginTop: "auto" }}>
+                  <CustomButton
+                    onClick={() => onCreateTripClick()}
+                    backgroundColor={Colors.GREEN}
+                  >
+                    Create trip
+                  </CustomButton>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
+
+      <div className={style.footerContainer}>
+        <Footer />
+      </div>
     </div>
   );
 }

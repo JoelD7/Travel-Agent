@@ -26,7 +26,7 @@ import {
   selectHotelDetail,
   HotelImage,
   HotelBedAPI,
-  formatAsCurrency,
+  convertCurrency,
   getMinRate,
   selectHotelReservationParams,
   HotelBookingParams,
@@ -233,7 +233,7 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
                       </Text>
                       {/* Min Price */}
                       <Text color="white" component="h3" bold>
-                        {formatAsCurrency(
+                        {convertCurrency(
                           getMinRateForRoom(),
                           "USD",
                           baseCurrency,

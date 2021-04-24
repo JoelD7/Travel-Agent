@@ -5,8 +5,9 @@ export interface Trip {
   id: string;
   name: string;
   countries: string[];
-  photos: number;
+  photosQty: number;
   places: number;
+  budget: number;
   days: number;
   startDate: Date;
   endDate: Date;

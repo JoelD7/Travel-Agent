@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
 import {
   capitalizeString,
-  formatAsCurrency,
+  convertCurrency,
   getRoomTotalPrice,
   HotelBooking,
   HotelRoomRate,
@@ -135,7 +135,7 @@ export const RoomAccordion = React.memo(function Component({
                     <Grid container alignItems="center">
                       <Text bold>Total: </Text>
                       <Text style={{ marginLeft: "3px" }}>
-                        {formatAsCurrency(
+                        {convertCurrency(
                           getRoomTotalPrice(rate),
                           "USD",
                           baseCurrency,

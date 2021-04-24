@@ -21,7 +21,7 @@ import { Colors } from "../../styles";
 import {
   capitalizeString,
   FlightSearch,
-  formatAsCurrency,
+  convertCurrency,
   formatFlightDate,
   formatFlightSegmentTime,
   getFlightCitiesLabel,
@@ -305,7 +305,7 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
         {/* Button */}
         <Grid item xs={12} style={{ marginTop: "20px" }}>
           <Grid container justify="flex-end">
-            <h2 style={{ fontSize: "20px", marginRight: "10px" }}>{`${formatAsCurrency(
+            <h2 style={{ fontSize: "20px", marginRight: "10px" }}>{`${convertCurrency(
               flight.price.total,
               flight.price.currency,
               baseCurrency,

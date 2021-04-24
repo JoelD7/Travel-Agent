@@ -130,7 +130,7 @@ export function TripDetails() {
                     Photos
                   </Text>
                   <Text color="white" component="h4" style={{ textAlign: "center" }}>
-                    {trip.photos}
+                    {trip.photosQty}
                   </Text>
                 </div>
 
@@ -143,7 +143,7 @@ export function TripDetails() {
                     Places
                   </Text>
                   <Text color="white" component="h4" style={{ textAlign: "center" }}>
-                    {trip.photos}
+                    {trip.photosQty}
                   </Text>
                 </div>
 

@@ -25,7 +25,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import Axios from "axios";
 import { addDays, compareDesc, format, parseISO, subDays } from "date-fns";
 import { compareAsc } from "date-fns/esm";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router";
@@ -52,20 +52,22 @@ import {
   addFlightDuration,
   convertFlightToURLParams,
   convertURLParamsToFlight,
+  FlightSearch,
   flightsPlaceholder,
   getAccessToken,
   getFlightClassForAPI,
   getMaxDate,
   getMinDate,
+  iataCodes,
   isDateAfterOrEqual,
   isDateBetweenRange,
   muiDateFormatter,
   Routes,
+  selectEndCurrency,
   selectFlightFromAutocomplete,
   selectFlightSearchParams,
-  selectFlightType,
   selectFlightToAutocomplete,
-  FlightSearch,
+  selectFlightType,
   setFlightAdults,
   setFlightChildren,
   setFlightClass,
@@ -75,9 +77,6 @@ import {
   setFlightParams,
   setFlightReturn,
   setFlightType,
-  selectDestinationCity,
-  iataCodes,
-  selectEndCurrency,
 } from "../../utils";
 import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
