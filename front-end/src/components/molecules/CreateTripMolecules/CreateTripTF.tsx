@@ -1,5 +1,6 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { makeStyles, TextField, Theme } from "@material-ui/core";
+import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
 import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
@@ -11,6 +12,7 @@ interface CreateTripTF {
   updateState: (v: string) => void;
   placeholder: string;
   numeric?: boolean;
+  style?: CSSProperties;
   icon: IconDefinition;
 }
 
@@ -23,6 +25,7 @@ export function CreateTripTF({
   updateState,
   placeholder,
   numeric,
+  style: styleParam,
   icon,
 }: CreateTripTF) {
   const textFieldStyles = makeStyles((theme: Theme) => ({
@@ -49,6 +52,7 @@ export function CreateTripTF({
           borderColor: "red",
         },
       },
+      ...styleParam,
     },
   }));
 

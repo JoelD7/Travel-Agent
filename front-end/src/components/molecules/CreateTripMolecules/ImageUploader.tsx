@@ -24,6 +24,7 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
     image: {
       objectFit: "cover",
       height: "100%",
+      width: "100%",
       margin: "auto",
       borderRadius: 10,
     },
@@ -37,6 +38,10 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
       padding: isImageEmpty() ? 10 : 0,
       width: IMAGE_WIDTH,
       height: 265,
+
+      [theme.breakpoints.down(1255)]: {
+        width: "84%",
+      },
     },
   }));
 
@@ -57,7 +62,6 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
       setImage(URL.createObjectURL(img));
-      console.log(URL.createObjectURL(img));
     }
   }
 

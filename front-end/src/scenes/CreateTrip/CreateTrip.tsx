@@ -5,12 +5,14 @@ import {
   faFont,
   faImage,
 } from "@fortawesome/free-solid-svg-icons";
-import { Grid } from "@material-ui/core";
+import { Grid, useMediaQuery } from "@material-ui/core";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
 import {
+  CountrySelector,
   CreateTripTF,
+  CustomButton,
   DashDrawer,
   Footer,
   IconTP,
@@ -18,8 +20,6 @@ import {
   Navbar,
   Text,
   TripDates,
-  CountrySelector,
-  CustomButton,
 } from "../../components";
 import { Colors } from "../../styles";
 import { Trip } from "../../utils";
@@ -39,6 +39,9 @@ export function CreateTrip() {
 
   const [trip, setTrip] = useState<Trip | undefined>();
 
+  const is1255OrLess = useMediaQuery("(max-width:1255px)");
+  const is720OrLess = useMediaQuery("(max-width:720px)");
+
   function updateDates(startDate: Date, endDate: Date) {
     setStartDate(startDate);
     setEndDate(endDate);
@@ -48,14 +51,10 @@ export function CreateTrip() {
     setBudget(Number(value));
   }
 
-  function onCreateTripClick() {
-    console.log({
-      name,
-      startDate,
-      endDate,
-      countries,
-      budget,
-    });
+  function onCreateTripClick() {}
+
+  function getNameTFWidth() {
+    return is1255OrLess ? "83%" : "62%";
   }
 
   return (
@@ -86,6 +85,7 @@ export function CreateTrip() {
                 Name your trip
               </Text>
               <CreateTripTF
+                style={{ width: getNameTFWidth() }}
                 value={name}
                 updateState={(value) => setName(value)}
                 icon={faFont}
@@ -127,7 +127,7 @@ export function CreateTrip() {
                 </Grid>
 
                 {/* Country selector */}
-                <Grid item xs={12}>
+                <Grid item xs={12} style={is720OrLess ? { marginTop: 30 } : {}}>
                   <Grid container>
                     <Text component="h3" color={Colors.BLUE}>
                       Countries
@@ -144,7 +144,7 @@ export function CreateTrip() {
                 </Grid>
 
                 {/* Budget */}
-                <Grid item xs={12}>
+                <Grid item xs={12} style={is720OrLess ? { marginTop: 30 } : {}}>
                   <Grid container>
                     <Text component="h3" color={Colors.BLUE}>
                       Budget
@@ -161,7 +161,11 @@ export function CreateTrip() {
                 </Grid>
 
                 {/* Save button */}
-                <Grid item xs={12} style={{ marginTop: "auto" }}>
+                <Grid
+                  item
+                  xs={12}
+                  style={is720OrLess ? { marginTop: 30 } : { marginTop: "auto" }}
+                >
                   <CustomButton
                     onClick={() => onCreateTripClick()}
                     backgroundColor={Colors.GREEN}

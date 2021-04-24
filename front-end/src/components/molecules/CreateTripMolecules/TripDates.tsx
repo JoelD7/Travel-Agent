@@ -5,6 +5,7 @@ import {
   makeStyles,
   Theme,
   ThemeProvider,
+  useMediaQuery,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
@@ -90,10 +91,18 @@ export function TripDates({ startDate: start, endDate: end, updateDates }: TripD
     },
   });
 
+  const is1170OrLess = useMediaQuery("(max-width:1170px)");
+
   const tripDateStyles = makeStyles((theme: Theme) => ({
     dateGrid: {
       width: "40%",
       marginRight: 15,
+      [theme.breakpoints.down(1310)]: {
+        width: "45%",
+      },
+      [theme.breakpoints.down(1170)]: {
+        width: "100%",
+      },
     },
     datepicker: {
       backgroundColor: "white",
@@ -157,7 +166,15 @@ export function TripDates({ startDate: start, endDate: end, updateDates }: TripD
           </Grid>
 
           {/* To */}
-          <Grid item className={style.dateGrid} style={{ marginLeft: "auto" }}>
+          <Grid
+            item
+            className={style.dateGrid}
+            style={
+              is1170OrLess
+                ? { marginLeft: "auto", marginTop: 15 }
+                : { marginLeft: "auto" }
+            }
+          >
             <Text component="h4" color={Colors.GRAY}>
               To
             </Text>
