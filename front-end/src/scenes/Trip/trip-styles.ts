@@ -1,6 +1,6 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 
 export const tripStyles = makeStyles((theme: Theme) => ({
   detailsContainer: {
@@ -36,7 +36,7 @@ export const tripStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
   },
   pageContentGrid: {
     marginLeft: "265px",
@@ -85,6 +85,7 @@ export const tripStyles = makeStyles((theme: Theme) => ({
   },
   tripCard: {
     width: "95%",
+    boxShadow: Shadow.LIGHT3D,
   },
   tripCardGrid: {
     marginTop: "20px",

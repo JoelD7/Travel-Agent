@@ -5,7 +5,7 @@ export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
   card: {
     width: "91%",
     margin: "auto 5px",
-    boxShadow: Shadow.LIGHT,
+    boxShadow: Shadow.LIGHT3D,
   },
   cardImage: {
     maxWidth: "100%",

@@ -21,7 +21,7 @@ import {
   Text,
   TripDates,
 } from "../../components";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 import { Trip } from "../../utils";
 import { createTripStyles } from "./createTrip-styles";
 
@@ -51,7 +51,9 @@ export function CreateTrip() {
     setBudget(Number(value));
   }
 
-  function onCreateTripClick() {}
+  function onCreateTripClick() {
+    console.log(image);
+  }
 
   function getNameTFWidth() {
     return is1255OrLess ? "83%" : "62%";
@@ -168,6 +170,7 @@ export function CreateTrip() {
                 >
                   <CustomButton
                     onClick={() => onCreateTripClick()}
+                    style={{ boxShadow: Shadow.LIGHT3D }}
                     backgroundColor={Colors.GREEN}
                   >
                     Create trip

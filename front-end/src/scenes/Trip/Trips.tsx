@@ -3,9 +3,10 @@ import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui
 import { format } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import {
+  CustomButton,
   DashDrawer,
   Footer,
   IconText,
@@ -13,7 +14,7 @@ import {
   SliderArrow,
   Text,
 } from "../../components";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 import { getLinkStyle, Routes, tripPlaceholder, tripsPlaceholder } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -22,6 +23,8 @@ export function Trips() {
 
   const [trips, setTrips] = useState(tripsPlaceholder);
   const lastTrip = tripPlaceholder;
+
+  const history = useHistory();
 
   const sliderSettings = {
     className: style.slider,
@@ -124,7 +127,7 @@ export function Trips() {
               </Grid>
 
               {/* Trip quick info */}
-              <Grid item xs={12} style={{ alignSelf: "center" }}>
+              <Grid item xs={12} style={{ alignSelf: "flex-end" }}>
                 <Grid container>
                   <div style={{ width: "105px" }}>
                     <Text
@@ -181,6 +184,18 @@ export function Trips() {
                   </div>
                 </Grid>
               </Grid>
+
+              <Grid item xs={12} style={{ height: "fit-content", alignSelf: "flex-end" }}>
+                <Grid container justify="flex-end">
+                  <CustomButton
+                    backgroundColor={Colors.GREEN}
+                    style={{ boxShadow: Shadow.DARK3D }}
+                    onClick={() => history.push(Routes.CREATE_TRIP)}
+                  >
+                    Create trip
+                  </CustomButton>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
 
@@ -190,7 +205,7 @@ export function Trips() {
               Trips
             </Text>
 
-            <Grid key="trip cards" container>
+            <Grid key="trip cards" container style={{ marginTop: 10 }}>
               {trips.length > 4 ? (
                 <Slider {...sliderSettings} slidesToShow={getSlidesToShow(4)}>
                   {TripCards()}

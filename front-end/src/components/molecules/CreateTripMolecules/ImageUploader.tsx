@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Grid, makeStyles, Theme } from "@material-ui/core";
 import { CustomButton, Text } from "../../atoms";
-import { Colors } from "../../../styles";
+import { Colors, Shadow } from "../../../styles";
 
 interface ImageUploader {
   updateState: (value: string) => void;
@@ -17,6 +17,7 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
   const imageUploaderStyles = makeStyles((theme: Theme) => ({
     button: {
       fontSize: "14px !important",
+      boxShadow: Shadow.LIGHT3D,
     },
     buttonContainer: {
       marginTop: 10,
@@ -24,7 +25,7 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
     image: {
       objectFit: "cover",
       height: "100%",
-      width: "100%",
+      width: isImageEmpty() ? "auto" : "100%",
       margin: "auto",
       borderRadius: 10,
     },
@@ -61,6 +62,7 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
   function onImageChange(event: any) {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
+      console.log(img);
       setImage(URL.createObjectURL(img));
     }
   }
@@ -112,7 +114,7 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
             <CustomButton
               className={style.button}
               backgroundColor={Colors.RED}
-              style={{ marginTop: 10 }}
+              style={{ marginTop: 10, boxShadow: Shadow.LIGHT3D }}
               rounded
               onClick={() => onRemoveImageClick()}
             >
