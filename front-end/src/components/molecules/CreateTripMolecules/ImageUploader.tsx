@@ -62,7 +62,6 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
   function onImageChange(event: any) {
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
-      console.log(img);
       setImage(URL.createObjectURL(img));
     }
   }

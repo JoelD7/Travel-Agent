@@ -10,7 +10,7 @@ export const iataCodes: IATALocation[] = [
     name: "Anaa Airport",
     city: "Anaa",
     state: "Tuamotu-Gambier",
-    country: "French Polynesia",
+    country: "French Polynesia",  
     woeid: "12512819",
     tz: "Pacific/Midway",
     phone: "",

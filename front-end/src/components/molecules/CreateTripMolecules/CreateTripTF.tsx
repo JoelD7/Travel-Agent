@@ -30,8 +30,12 @@ export function CreateTripTF({
 }: CreateTripTF) {
   const textFieldStyles = makeStyles((theme: Theme) => ({
     textField: {
+      backgroundColor: Colors.TF_BACKGROUND,
+      borderRadius: 10,
+
       "& .MuiInputBase-root": {
         fontSize: 18,
+        borderRadius: 10,
         fontFamily: Font.Family,
       },
 
@@ -95,6 +99,8 @@ export function CreateTripTF({
   return (
     <TextField
       value={text}
+      variant="outlined"
+      size="small"
       onBlur={() => onBlur()}
       onFocus={() => setText(unformattedText)}
       placeholder={placeholder}

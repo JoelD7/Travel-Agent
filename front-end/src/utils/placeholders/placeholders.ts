@@ -2980,7 +2980,7 @@ export const tripPlaceholder: Trip = {
       end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at),
       detail: flightPlaceholder,
       location: "SIN, Singapore",
-      time: true,
+      includesTime: true,
     },
     {
       name: "Flight to Singapore",
@@ -2989,16 +2989,16 @@ export const tripPlaceholder: Trip = {
       end: new Date(flightPlaceholder.itineraries[1].segments[0].arrival.at),
       detail: flightPlaceholder,
       location: "DXB, Dubai",
-      time: true,
+      includesTime: true,
     },
     {
       name: "Arrival at Hotel Sheraton Santo Domingo",
       type: EventType.Hotel,
       start: new Date(2021, 0, 13, 14, 35),
       end: new Date(2021, 0, 17, 11, 35),
-      detail: hotelsPlaceholder,
+      detail: hotelPlaceholder,
       location: "Santo Domingo, Dominican Republic",
-      time: true,
+      includesTime: true,
     },
     {
       name: "Visit to The Morgan Library & Museum",
@@ -3007,7 +3007,7 @@ export const tripPlaceholder: Trip = {
       end: new Date(2021, 0, 16, 17, 0),
       detail: poiArray[0],
       location: "225 Madison Ave (btwn E 36th & E 37th St) New York, United States",
-      time: true,
+      includesTime: true,
     },
     {
       name: "Visit to Hulu Theater",
@@ -3016,7 +3016,7 @@ export const tripPlaceholder: Trip = {
       end: new Date(2021, 0, 19, 14, 0),
       detail: poiArray[1],
       location: "4 Penn Plz, New York, United States",
-      time: true,
+      includesTime: true,
     },
     {
       name: "Visit to Dear Irving",
@@ -3025,7 +3025,7 @@ export const tripPlaceholder: Trip = {
       end: new Date(2021, 0, 21, 3, 0),
       detail: poiArray[2],
       location: "55 Irving Pl (at E 17th St), New York, United States",
-      time: true,
+      includesTime: true,
     },
   ],
 };

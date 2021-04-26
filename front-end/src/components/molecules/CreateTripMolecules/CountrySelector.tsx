@@ -33,6 +33,12 @@ export function CountrySelector({ selectedCountries, updateState }: CountrySelec
     },
     formControl: {
       width: "98%",
+      backgroundColor: Colors.TF_BACKGROUND,
+
+      "& .MuiOutlinedInput-root": {
+        height: 46,
+        borderRadius: 10,
+      },
     },
     menuList: {
       "& .MuiMenuItem-root": {
@@ -43,6 +49,9 @@ export function CountrySelector({ selectedCountries, updateState }: CountrySelec
     menuPaper: {
       maxHeight: "calc(100% - 400px)",
       borderRadius: "10px",
+    },
+    selectOutlined: {
+      padding: 5,
     },
   }));
 
@@ -287,11 +296,12 @@ export function CountrySelector({ selectedCountries, updateState }: CountrySelec
       <Select
         labelId="demo-mutiple-chip-label"
         id="demo-mutiple-chip"
+        variant="outlined"
+        classes={{ outlined: style.selectOutlined }}
         multiple
         onClose={() => updateState(countries)}
         value={countries}
         onChange={onChange}
-        input={<Input id="select-multiple-chip" />}
         renderValue={(selected) => (
           <div className={style.chips}>
             {(selected as string[]).map((value) => (

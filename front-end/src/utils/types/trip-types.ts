@@ -1,5 +1,5 @@
 import * as EventType from "./event-types";
-import { HotelAvailability } from "./hotel-types";
+import { HotelBooking } from "./hotel-types";
 
 export interface Trip {
   id: string;
@@ -22,8 +22,8 @@ export interface TripEvent {
   type: EventType.EventType;
   start: Date;
   end: Date;
-  time: boolean; //whether the date of the event includes time
-  detail: Flight | HotelAvailability | Restaurant | POI;
+  includesTime: boolean; //whether the date of the event includes time
+  detail: Flight | HotelBooking | Restaurant | POI;
 }
 
 interface TripAlbum {

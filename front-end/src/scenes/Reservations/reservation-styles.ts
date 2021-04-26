@@ -1,6 +1,6 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 
 export const reservationStyles = makeStyles((theme: Theme) => ({
   flightCard: {
@@ -22,6 +22,7 @@ export const reservationStyles = makeStyles((theme: Theme) => ({
     width: "25%",
     minWidth: "290px",
     margin: "5px",
+    boxShadow: Shadow.LIGHT3D,
 
     [theme.breakpoints.only("md")]: {
       width: "35%",
@@ -38,7 +39,7 @@ export const reservationStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
   },
   pageContentGrid: {
     marginLeft: "265px",

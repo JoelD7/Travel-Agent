@@ -85,12 +85,12 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
                   textColor="white"
                   backgroundColor={Colors.BLUE}
                 >
-                  {event.time
+                  {event.includesTime
                     ? format(event.start, "PP 'at' p")
                     : format(event.start, "PP")}
                 </IconText>
                 <CustomButton
-                  backgroundColor={Colors.PURPLE}
+                  backgroundColor={Colors.GREEN}
                   style={{ fontSize: "16px", marginLeft: "auto", color: "white" }}
                 >
                   {getDetailButtonText()}

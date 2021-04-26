@@ -24,7 +24,7 @@ export interface HotelAvailability {
   hotels: HotelBooking[];
 }
 
-//Information about a hotel in relation with booking parameters.
+//Information about a hotel in relation to booking parameters.
 export interface HotelBooking {
   checkIn?: string;
   checkOut?: string;

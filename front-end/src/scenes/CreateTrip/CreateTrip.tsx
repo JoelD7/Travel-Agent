@@ -5,7 +5,15 @@ import {
   faFont,
   faImage,
 } from "@fortawesome/free-solid-svg-icons";
-import { Grid, useMediaQuery } from "@material-ui/core";
+import {
+  Grid,
+  Input,
+  useMediaQuery,
+  FormControl,
+  Select,
+  MenuItem,
+  Chip,
+} from "@material-ui/core";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
@@ -35,7 +43,7 @@ export function CreateTrip() {
   const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 1));
   const [countries, setCountries] = useState<string[]>([]);
 
-  const [budget, setBudget] = useState<number>(0);
+  const [budget, setBudget] = useState<string>("");
 
   const [trip, setTrip] = useState<Trip | undefined>();
 
@@ -48,7 +56,7 @@ export function CreateTrip() {
   }
 
   function onBudgetChange(value: string) {
-    setBudget(Number(value));
+    setBudget(value);
   }
 
   function onCreateTripClick() {

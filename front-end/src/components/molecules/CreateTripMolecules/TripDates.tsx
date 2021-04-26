@@ -115,8 +115,14 @@ export function TripDates({ startDate: start, endDate: end, updateDates }: TripD
         color: Colors.BLUE,
       },
 
+      "& .MuiOutlinedInput-root": {
+        borderRadius: 10,
+      },
+      "& .MuiOutlinedInput-input": {
+        padding: 15,
+      },
+
       "& .MuiInputBase-input": {
-        padding: "5px 0px 5px 0px",
         fontFamily: Font.Family,
       },
     },
@@ -155,6 +161,7 @@ export function TripDates({ startDate: start, endDate: end, updateDates }: TripD
             </Text>
             <KeyboardDatePicker
               value={startDate}
+              inputVariant="outlined"
               labelFunc={(date, invalidLabel) =>
                 muiDateFormatter(date, invalidLabel, "date")
               }
@@ -180,6 +187,7 @@ export function TripDates({ startDate: start, endDate: end, updateDates }: TripD
             </Text>
             <KeyboardDatePicker
               value={endDate}
+              inputVariant="outlined"
               labelFunc={(date, invalidLabel) =>
                 muiDateFormatter(date, invalidLabel, "date")
               }

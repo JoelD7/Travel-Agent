@@ -1,10 +1,11 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 
 export const favPlacesStyles = makeStyles((theme: Theme) => ({
   favCard: {
     margin: "10px",
+    boxShadow: Shadow.LIGHT3D,
   },
   footerContainer: {
     position: "relative",
@@ -15,7 +16,7 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
   },
   mainGrid: {
     marginLeft: "290px",

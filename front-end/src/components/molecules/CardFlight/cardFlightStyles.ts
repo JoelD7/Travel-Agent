@@ -16,7 +16,8 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
   },
   card: {
     width: "100%",
-
+    boxShadow: Shadow.LIGHT3D,
+    borderRadius: 10,
     [theme.breakpoints.down(518)]: {
       margin: "10px 0px",
     },

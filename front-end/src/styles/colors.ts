@@ -13,3 +13,4 @@ export const RED = "#f44336";
 export const TRANSPARENT = "rgba(0,0,0,0)";
 export const PAGE_BACKG =
   "linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 50%, rgba(255,255,255,1) 100%)";
+export const TF_BACKGROUND = "#f5f5f578";
