@@ -15,7 +15,7 @@ import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
 import {
   ExchangeRate,
-  convertCurrency,
+  convertToUserCurrency,
   formatFlightDate,
   getFlightCitiesLabel,
   getFlightSegmentCarrier,
@@ -139,11 +139,9 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
               {/* Price */}
               <div id="price grid" className={style.priceGrid}>
                 <Grid container alignItems="center" justify="flex-end">
-                  <Text bold component="h4">{`${convertCurrency(
+                  <Text bold component="h4">{`${convertToUserCurrency(
                     Number(flight.price.total),
-                    flight.price.currency,
-                    baseCurrency,
-                    exchangeRate
+                    flight.price.currency
                   )}`}</Text>
                 </Grid>
               </div>
@@ -165,11 +163,9 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
               <Grid container justify="flex-end">
                 {/* Price responsive */}
                 <Grid id="price grid" item className={style.priceGridRes}>
-                  <Text bold component="h4">{`${convertCurrency(
+                  <Text bold component="h4">{`${convertToUserCurrency(
                     Number(flight.price.total),
-                    flight.price.currency,
-                    baseCurrency,
-                    exchangeRate
+                    flight.price.currency
                   )}`}</Text>
                 </Grid>
 
@@ -244,11 +240,9 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
 
           {/* Flight price */}
           <Grid item className={style.priceButtonGrid}>
-            <h2 style={{ marginTop: "12px" }}>{`${convertCurrency(
+            <h2 style={{ marginTop: "12px" }}>{`${convertToUserCurrency(
               flight.price.total,
-              flight.price.currency,
-              baseCurrency,
-              exchangeRate
+              flight.price.currency
             )}`}</h2>
           </Grid>
         </Grid>
@@ -327,12 +321,9 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
 
       <Grid key="price & button xs" item xs={12} className={style.priceButtonXS}>
         <Grid container alignItems="center">
-          <h2 style={{ marginRight: "auto", marginTop: "12px" }}>{`${convertCurrency(
-            flight.price.total,
-            flight.price.currency,
-            baseCurrency,
-            exchangeRate
-          )}`}</h2>
+          <h2
+            style={{ marginRight: "auto", marginTop: "12px" }}
+          >{`${convertToUserCurrency(flight.price.total, flight.price.currency)}`}</h2>
           <CustomButton
             style={{ marginLeft: "auto" }}
             onClick={() => setFlightDetailsModal(true)}

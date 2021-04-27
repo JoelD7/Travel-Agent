@@ -1,12 +1,13 @@
 import { format, parseISO } from "date-fns";
 import { Routes } from "..";
 import { HotelBedAPI } from "../external-apis";
+import { store } from "../store";
 import {
   HotelBooking,
   HotelBookingParams,
   HotelPax,
   HotelRoomRate,
-  HotelRooms,
+  HotelRoom,
 } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
 
@@ -188,7 +189,7 @@ export function getRoomTotalPrice(rate: HotelRoomRate): number {
   return Number(total);
 }
 
-export function getMinRate(rooms: HotelRooms[]): number {
+export function getMinRate(rooms: HotelRoom[]): number {
   let rates: HotelRoomRate[] = [];
 
   rooms.forEach((room) => {

@@ -16,7 +16,7 @@ import { Colors } from "../../../styles";
 import {
   Car,
   ExchangeRate,
-  convertCurrency,
+  convertToUserCurrency,
   selectEndCurrency,
   selectExchangeRate,
 } from "../../../utils";
@@ -122,11 +122,9 @@ export function CarsCard({ car }: CarsCard) {
       <Grid item xs={12} style={{ marginTop: "10px" }}>
         <Grid container alignItems="center">
           <Text component="h3" color={Colors.BLUE}>
-            {convertCurrency(
+            {convertToUserCurrency(
               car.rate_totals.pay_later.reservation_total,
-              car.rate_totals.rate.currency,
-              endCurrency,
-              exchangeRate
+              car.rate_totals.rate.currency
             )}
           </Text>
 

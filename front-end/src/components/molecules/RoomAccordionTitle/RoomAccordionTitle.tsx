@@ -22,11 +22,11 @@ import { Colors, Shadow } from "../../../styles";
 import {
   HotelBooking,
   capitalizeString,
-  HotelRooms,
+  HotelRoom,
   selectHotelDetail,
   HotelImage,
   HotelBedAPI,
-  convertCurrency,
+  convertToUserCurrency,
   getMinRate,
   selectHotelReservationParams,
   HotelBookingParams,
@@ -39,7 +39,7 @@ import {
 import { Text, IconText } from "../../atoms";
 
 interface RoomAccordionTitle {
-  room: HotelRooms;
+  room: HotelRoom;
 }
 
 export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
@@ -233,12 +233,7 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
                       </Text>
                       {/* Min Price */}
                       <Text color="white" component="h3" bold>
-                        {convertCurrency(
-                          getMinRateForRoom(),
-                          "USD",
-                          baseCurrency,
-                          exchangeRate
-                        )}
+                        {convertToUserCurrency(getMinRateForRoom(), "USD")}
                       </Text>
                     </Grid>
 

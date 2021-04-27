@@ -1,8 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays } from "date-fns";
 import { getDefaultCity } from "../functions";
-import { hotelPlaceholder } from "../placeholders";
-import { HotelBooking, HotelBookingParams, HotelCoordinates } from "../types/hotel-types";
+import { hotelPlaceholder, hotelRsvPlaceholder } from "../placeholders";
+import {
+  HotelBooking,
+  HotelBookingParams,
+  HotelCoordinates,
+  HotelReservation,
+} from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
 
 interface HotelReducer {
@@ -11,6 +16,7 @@ interface HotelReducer {
   allRoomAccordionsExpanded: boolean;
   openRedirecDialog: boolean;
   isHotelDetailsBlurred: boolean;
+  hotelRsv?: HotelReservation;
 }
 
 const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
@@ -46,6 +52,7 @@ const initialState: HotelReducer = {
   allRoomAccordionsExpanded: false,
   openRedirecDialog: false,
   isHotelDetailsBlurred: false,
+  // hotelRsv: hotelRsvPlaceholder,
   reservationParams: {
     ...initialStateReservationParams,
     id: JSON.stringify(initialStateReservationParams),
@@ -58,6 +65,10 @@ const hotelSlice = createSlice({
   reducers: {
     setHotelDetail(state, action: PayloadAction<HotelBooking>) {
       state.hotelDetail = action.payload;
+    },
+
+    setHotelRsv(state, action: PayloadAction<HotelReservation>) {
+      state.hotelRsv = action.payload;
     },
 
     updateReservationParams: {
@@ -101,6 +112,7 @@ export const {
   setOpenRedirecDialog,
   blurHotelDetails,
   setRoomAccordionExpanded,
+  setHotelRsv,
   updateHotelCoordinates,
 } = hotelSlice.actions;
 

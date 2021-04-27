@@ -117,7 +117,7 @@ export function Footer() {
     setCurrency(newCurrency);
 
     dispatch(setEndCurrency(newCurrency));
-    localStorage.setItem("endCurrency", newCurrency);
+    localStorage.setItem("userCurrency", newCurrency);
   }
 
   return (

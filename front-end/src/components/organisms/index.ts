@@ -13,3 +13,4 @@ export { AboutHotel } from "./AboutHotel/AboutHotel";
 export { FullScreenImage } from "./FullScreenImage/FullScreenImage";
 export { CarsCard } from "./CarsCard/CarsCard";
 export { CarFilters } from "./CarFilters/CarFilters";
+export { HotelRsvDetail } from "./HotelRsvDetail";

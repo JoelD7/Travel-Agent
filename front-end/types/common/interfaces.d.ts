@@ -1,4 +1,4 @@
-interface HotelReservation {
+interface HotelReservationTemp {
   id: string;
   name: string;
   picture: string;

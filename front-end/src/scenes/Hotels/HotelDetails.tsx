@@ -22,7 +22,7 @@ import { Colors } from "../../styles";
 import {
   convertURLToReservationParams,
   ExchangeRate,
-  convertCurrency,
+  convertToUserCurrency,
   getMinRate,
   HotelBedAPI,
   isValueInRange,
@@ -251,12 +251,7 @@ export function HotelDetails() {
 
                   <Grid item xs={12}>
                     <Text color={Colors.BLUE} component="h2" bold>
-                      {convertCurrency(
-                        getMinRate(hotel.rooms),
-                        "USD",
-                        baseCurrency,
-                        exchangeRate
-                      )}
+                      {convertToUserCurrency(getMinRate(hotel.rooms), "USD")}
                     </Text>
                   </Grid>
 

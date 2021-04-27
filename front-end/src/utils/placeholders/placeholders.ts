@@ -1,5 +1,5 @@
 import { Car, CarCheckbox, EventType } from "../types";
-import { HotelAvailability, HotelBooking } from "../types/hotel-types";
+import { HotelAvailability, HotelBooking, HotelReservation } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
 import { Trip } from "../types/trip-types";
 
@@ -2396,13 +2396,13 @@ export const flightPlaceholder: Flight = {
           departure: {
             iataCode: "SIN",
             city: "Singapore",
-            at: "2021-01-13T07:15:00",
+            at: "2021-04-13T07:15:00",
             terminal: "2",
           },
           arrival: {
             iataCode: "DXB",
             city: "Dubai",
-            at: "2021-01-13T13:15:00",
+            at: "2021-04-13T13:15:00",
             terminal: "31",
           },
           carrierCode: "Egyptair",
@@ -2417,13 +2417,13 @@ export const flightPlaceholder: Flight = {
           departure: {
             iataCode: "DXB",
             city: "Dubai",
-            at: "2021-01-23T13:39:00",
+            at: "2021-04-23T13:39:00",
             terminal: "2",
           },
           arrival: {
             iataCode: "SIN",
             city: "Singapore",
-            at: "2021-01-23T20:35:00",
+            at: "2021-04-23T20:35:00",
             terminal: "31",
           },
           carrierCode: "Emirates",
@@ -2796,6 +2796,200 @@ export const hotelPlaceholder: HotelBooking = {
   ],
 };
 
+export const hotelRsvPlaceholder: HotelReservation = {
+  checkIn: new Date(2021, 5, 15),
+  checkOut: new Date(2021, 5, 26),
+  hotelCode: 128537,
+  stars: 5,
+  name: "Coco Key Hotel and Water Park Resort",
+  address: "11400 Marbella Palm Ct.",
+  phoneNumber: "+14072399550",
+  adults: 4,
+  children: 4,
+  rooms: [
+    {
+      code: "DBL.GR",
+      name: "DOUBLE GUEST ROOM EXTERIOR CORRIDORS",
+      image: "/Travel-Agent/george6.jpg",
+      cost: 955,
+      rates: [
+        {
+          net: "153.48",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "153.48",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "159.94",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "159.94",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "190.24",
+          boardName: "ROOM ONLY",
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "208.00",
+          boardName: "ROOM ONLY",
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+      ],
+    },
+    {
+      code: "DBL.GR",
+      name: "DOUBLE GUEST ROOM EXTERIOR CORRIDORS",
+      image: "/Travel-Agent/george6.jpg",
+      cost: 955,
+      rates: [
+        {
+          net: "153.48",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "153.48",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "159.94",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "159.94",
+          boardName: "ROOM ONLY",
+          taxes: {
+            taxes: [
+              {
+                amount: "50.00",
+                currency: "USD",
+                clientAmount: "41.13",
+                clientCurrency: "EUR",
+              },
+            ],
+          },
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "190.24",
+          boardName: "ROOM ONLY",
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+        {
+          net: "208.00",
+          boardName: "ROOM ONLY",
+          rooms: 2,
+          adults: 4,
+          children: 0,
+        },
+      ],
+    },
+  ],
+};
+
 export const hotelPhotos = [
   "/Travel-Agent/george1.jpg",
   "/Travel-Agent/george2.jpg",
@@ -2943,7 +3137,7 @@ export const tripPlaceholder: Trip = {
   places: 13,
   days: 30,
   budget: 2500,
-  startDate: new Date(2021, 0, 13),
+  startDate: new Date(2021, 3, 13),
   albums: [
     {
       albumRoute: "",
@@ -2971,7 +3165,7 @@ export const tripPlaceholder: Trip = {
     },
   ],
   coverPhoto: "",
-  endDate: new Date(2021, 0, 23),
+  endDate: new Date(2021, 3, 23),
   itinerary: [
     {
       name: "Flight to Dubai",
@@ -2994,8 +3188,8 @@ export const tripPlaceholder: Trip = {
     {
       name: "Arrival at Hotel Sheraton Santo Domingo",
       type: EventType.Hotel,
-      start: new Date(2021, 0, 13, 14, 35),
-      end: new Date(2021, 0, 17, 11, 35),
+      start: new Date(2021, 3, 13, 14, 35),
+      end: new Date(2021, 3, 17, 11, 35),
       detail: hotelPlaceholder,
       location: "Santo Domingo, Dominican Republic",
       includesTime: true,
@@ -3003,8 +3197,8 @@ export const tripPlaceholder: Trip = {
     {
       name: "Visit to The Morgan Library & Museum",
       type: EventType.POI,
-      start: new Date(2021, 0, 16, 16, 0),
-      end: new Date(2021, 0, 16, 17, 0),
+      start: new Date(2021, 3, 16, 16, 0),
+      end: new Date(2021, 3, 16, 17, 0),
       detail: poiArray[0],
       location: "225 Madison Ave (btwn E 36th & E 37th St) New York, United States",
       includesTime: true,
@@ -3012,8 +3206,8 @@ export const tripPlaceholder: Trip = {
     {
       name: "Visit to Hulu Theater",
       type: EventType.POI,
-      start: new Date(2021, 0, 19, 12, 0),
-      end: new Date(2021, 0, 19, 14, 0),
+      start: new Date(2021, 3, 19, 12, 0),
+      end: new Date(2021, 3, 19, 14, 0),
       detail: poiArray[1],
       location: "4 Penn Plz, New York, United States",
       includesTime: true,
@@ -3021,8 +3215,8 @@ export const tripPlaceholder: Trip = {
     {
       name: "Visit to Dear Irving",
       type: EventType.POI,
-      start: new Date(2021, 0, 21, 0, 0),
-      end: new Date(2021, 0, 21, 3, 0),
+      start: new Date(2021, 3, 21, 0, 0),
+      end: new Date(2021, 3, 21, 3, 0),
       detail: poiArray[2],
       location: "55 Irving Pl (at E 17th St), New York, United States",
       includesTime: true,

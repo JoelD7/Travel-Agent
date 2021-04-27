@@ -12,11 +12,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
 import {
   capitalizeString,
-  convertCurrency,
+  convertToUserCurrency,
   getRoomTotalPrice,
   HotelBooking,
   HotelRoomRate,
-  HotelRooms,
+  HotelRoom,
   selectRoomAccordionExpanded,
   ExchangeRate,
   selectExchangeRate,
@@ -28,7 +28,7 @@ import { RoomAccordionTitle } from "../RoomAccordionTitle/RoomAccordionTitle";
 
 interface RoomAccordion {
   hotel: HotelBooking;
-  room: HotelRooms;
+  room: HotelRoom;
 }
 
 export const RoomAccordion = React.memo(function Component({
@@ -135,12 +135,7 @@ export const RoomAccordion = React.memo(function Component({
                     <Grid container alignItems="center">
                       <Text bold>Total: </Text>
                       <Text style={{ marginLeft: "3px" }}>
-                        {convertCurrency(
-                          getRoomTotalPrice(rate),
-                          "USD",
-                          baseCurrency,
-                          exchangeRate
-                        )}
+                        {convertToUserCurrency(getRoomTotalPrice(rate), "USD")}
                       </Text>
 
                       <CustomButton

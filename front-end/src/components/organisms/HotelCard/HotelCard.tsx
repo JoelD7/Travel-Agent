@@ -8,7 +8,7 @@ import {
   capitalizeString,
   convertReservationParamsToURLParams,
   ExchangeRate,
-  convertCurrency,
+  convertToUserCurrency,
   getHotelImages,
   getHotelStars,
   getMinRate,
@@ -100,11 +100,9 @@ export function HotelCard({ hotel }: HotelCard) {
             {/* Price and details button */}
             <Grid item className={style.priceAndDetailsGrid}>
               <div>
-                <h4 style={{ textAlign: "center" }}>{`From ${convertCurrency(
+                <h4 style={{ textAlign: "center" }}>{`From ${convertToUserCurrency(
                   getMinRate(hotel.rooms),
-                  "USD",
-                  baseCurrency,
-                  exchangeRate
+                  "USD"
                 )}`}</h4>
                 <CustomButton
                   backgroundColor={Colors.PURPLE}
@@ -160,11 +158,9 @@ export function HotelCard({ hotel }: HotelCard) {
 
             <Grid item xs={12} style={{ padding: "10px" }}>
               <Grid container>
-                <Text component="h3" bold>{`From ${convertCurrency(
+                <Text component="h3" bold>{`From ${convertToUserCurrency(
                   getMinRate(hotel.rooms),
-                  "USD",
-                  baseCurrency,
-                  exchangeRate
+                  "USD"
                 )}`}</Text>
                 <CustomButton
                   style={{

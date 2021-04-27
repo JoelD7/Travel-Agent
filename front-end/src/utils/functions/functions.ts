@@ -53,21 +53,18 @@ export function getLinkStyle(color: string = "initial"): CSSProperties {
 }
 
 /**
- * Converts between currencies.
+ * Converts a value in one currency to the currency
+ * specified by the user.
  *
  * @param value
  * @param fromCurrency If this parameter is specifically indicated as a string and not as variable,
  * this means that the API in question always returns prices in the same currency.
- * @param toCurrency
- * @param exchangeRate
  * @returns
  */
-export function convertCurrency(
-  value: number,
-  fromCurrency: string,
-  toCurrency: string,
-  exchangeRate: ExchangeRate
-) {
+export function convertToUserCurrency(value: number, fromCurrency: string) {
+  const exchangeRate: ExchangeRate = store.getState().rootSlice.exchangeRate;
+  const toCurrency: string = store.getState().rootSlice.userCurrency;
+
   const formatter = Intl.NumberFormat("en-US", {
     style: "currency",
     currency: toCurrency,
@@ -98,7 +95,7 @@ export function convertCurrency(
 export function formatAsCurrency(value: number): string {
   const formatter = Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: store.getState().rootSlice.endCurrency,
+    currency: store.getState().rootSlice.userCurrency,
     currencyDisplay: "symbol",
     maximumFractionDigits: 2,
   }).format;

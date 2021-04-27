@@ -377,8 +377,7 @@ export function Hotels() {
     if (hotelsMounted) {
       setLoading(false);
     } else {
-      // setLoadingOnMount(false);
-      setNoHotels(true);
+      setLoadingOnMount(false);
       setHotelsMounted(true);
     }
 

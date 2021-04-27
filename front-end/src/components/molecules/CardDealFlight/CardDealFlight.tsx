@@ -10,7 +10,7 @@ import {
   ExchangeRate,
   FlightClass,
   FlightTypes,
-  convertCurrency,
+  convertToUserCurrency,
   getFlightSearchURL,
   getIataLocation,
   selectEndCurrency,
@@ -140,11 +140,11 @@ export function CardDealFlight({ deal, className, animate }: CardDealFlight) {
 
                 <Grid id="price grid" item xs={4}>
                   <Grid container alignItems="center">
-                    <h5 style={{ margin: "auto 0px auto auto" }}>{`${convertCurrency(
+                    <h5
+                      style={{ margin: "auto 0px auto auto" }}
+                    >{`${convertToUserCurrency(
                       Number(deal.price.total),
-                      deal.price.currency,
-                      baseCurrency,
-                      exchangeRate
+                      deal.price.currency
                     )}`}</h5>
                   </Grid>
                 </Grid>

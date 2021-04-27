@@ -24,6 +24,20 @@ export interface HotelAvailability {
   hotels: HotelBooking[];
 }
 
+//Information about a hotel reservation.
+export interface HotelReservation {
+  hotelCode: number;
+  name: string;
+  checkIn: Date;
+  checkOut: Date;
+  stars: number;
+  adults: number;
+  children: number;
+  address: string;
+  phoneNumber: string;
+  rooms: HotelRoom[];
+}
+
 //Information about a hotel in relation to booking parameters.
 export interface HotelBooking {
   checkIn?: string;
@@ -64,7 +78,7 @@ export interface HotelBooking {
     phoneNumber: string;
   }[];
   images: HotelImage[];
-  rooms: HotelRooms[];
+  rooms: HotelRoom[];
 }
 
 export interface HotelCoordinates {
@@ -72,10 +86,12 @@ export interface HotelCoordinates {
   latitude: number;
 }
 
-export interface HotelRooms {
+export interface HotelRoom {
   id?: string; //Room reservation identifier.
   code: string; //Internal room code
   name: string;
+  image?: string;
+  cost?: number;
   rates: HotelRoomRate[];
 }
 
@@ -204,17 +220,6 @@ export interface Offer {
   price: {
     currency: string;
     total: string;
-  };
-}
-
-interface HotelRoom {
-  typeEstimated: {
-    category: string;
-    beds?: number;
-    bedType?: string;
-  };
-  description: {
-    text: string;
   };
 }
 

@@ -39,7 +39,7 @@ export const selectOpenRequiredFieldSnack = (state: RootState) =>
 
 export const selectExchangeRate = (state: RootState) => state.rootSlice.exchangeRate;
 
-export const selectEndCurrency = (state: RootState) => state.rootSlice.endCurrency;
+export const selectEndCurrency = (state: RootState) => state.rootSlice.userCurrency;
 
 export const selectCityImage = (state: RootState) => state.rootSlice.cityImage;
 //#endregion
@@ -84,6 +84,8 @@ export const selectOpenRedirecDialog = (state: RootState) =>
 
 export const selectIsHotelDetailsBlurred = (state: RootState) =>
   state.hotelReducer.isHotelDetailsBlurred;
+
+export const selectHotelRsv = (state: RootState) => state.hotelReducer.hotelRsv;
 
 //#endregion
 

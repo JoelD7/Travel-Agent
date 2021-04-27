@@ -1,30 +1,34 @@
 import { faCalendar, faRestroom, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import Rating from "react-rating";
 import {
   CardFlight,
   CustomButton,
   DashDrawer,
   Footer,
+  HotelRsvDetail,
   IconText,
   Navbar,
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
 import {
-  convertCurrency,
+  convertToUserCurrency,
   flightsPlaceholder,
   selectEndCurrency,
   ExchangeRate,
   selectExchangeRate,
+  setHotelRsv,
+  hotelRsvPlaceholder,
+  HotelReservation,
 } from "../../utils";
 import { reservationStyles } from "./reservation-styles";
 import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
 import { format } from "date-fns";
 import Helmet from "react-helmet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export function Reservations() {
   const style = reservationStyles();
@@ -33,8 +37,12 @@ export function Reservations() {
 
   const endCurrency: string = useSelector(selectEndCurrency);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
+  const dispatch = useDispatch();
+  const [openHotelDialog, setOpenHotelDialog] = useState(false);
 
-  const hotels: HotelReservation[] = [
+  const hotelRsv: HotelReservation = hotelRsvPlaceholder;
+
+  const hotels: HotelReservationTemp[] = [
     {
       name: "Sheraton Santo Domingo",
       adults: 2,
@@ -73,11 +81,16 @@ export function Reservations() {
     },
   ];
 
-  function getHotelGuests(hotel: HotelReservation) {
+  function getHotelGuests(hotel: HotelReservationTemp) {
     let adultWord = hotel.adults > 1 ? "adults" : "adult";
     let childrenWord = hotel.children > 1 ? "children" : "child";
 
     return `${hotel.adults} ${adultWord}, ${hotel.children} ${childrenWord}`;
+  }
+
+  function seeHotelReservationDetails() {
+    setOpenHotelDialog(true);
+    dispatch(setHotelRsv(hotelRsv));
   }
 
   return (
@@ -156,7 +169,7 @@ export function Reservations() {
             <Grid container>
               {hotels.map((hotel, i) => (
                 <Card key={i} className={style.hotelCard}>
-                  <CardActionArea>
+                  <CardActionArea onClick={() => seeHotelReservationDetails()}>
                     <CardMedia component="img" src={hotel.picture} height="200" />
 
                     <CardContent>
@@ -202,7 +215,7 @@ export function Reservations() {
                           component="h4"
                           bold
                         >
-                          {convertCurrency(hotel.cost, "USD", endCurrency, exchangeRate)}
+                          {convertToUserCurrency(hotel.cost, "USD")}
                         </Text>
                       </Grid>
                     </CardContent>
@@ -213,6 +226,8 @@ export function Reservations() {
           </Grid>
         </Grid>
       </Grid>
+
+      <HotelRsvDetail open={openHotelDialog} onClose={() => setOpenHotelDialog(false)} />
 
       <div className={style.footerContainer}>
         <Footer />
