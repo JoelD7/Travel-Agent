@@ -27,6 +27,7 @@ export interface HotelAvailability {
 //Information about a hotel reservation.
 export interface HotelReservation {
   hotelCode: number;
+  hotelImage: string;
   name: string;
   checkIn: Date;
   checkOut: Date;

@@ -3,6 +3,13 @@ import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
 
 export const tripStyles = makeStyles((theme: Theme) => ({
+  appbarColor: {
+    backgroundColor: Colors.GREEN,
+  },
+  appColorSecondary: {
+    backgroundColor: "white",
+    color: "white",
+  },
   detailsContainer: {
     borderRadius: "10px",
     border: "1px solid #CECECE",
@@ -15,6 +22,7 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     marginLeft: "auto",
     marginTop: "250px",
   },
+
   itineraryButton: {
     fontSize: "16px",
     alignSelf: "flex-start",
@@ -37,6 +45,19 @@ export const tripStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
     fontFamily: Font.Family,
     backgroundColor: "white",
+  },
+  menuItemRoot: {
+    fontFamily: Font.Family,
+    fontWeight: "bold",
+    borderBottom: `2px solid rgba(0,0,0,0)`,
+    margin: "0px 5px",
+    color: "white",
+    "&.MuiListItem-root": {
+      "&.Mui-selected": {
+        backgroundColor: "rgba(0,0,0,0)",
+        borderBottom: `2px solid white`,
+      },
+    },
   },
   pageContentGrid: {
     marginLeft: "265px",
@@ -82,6 +103,17 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     width: "100%",
     display: "flex",
     alignItems: "center",
+  },
+
+  toolbar: {
+    display: "flex",
+    minHeight: "20px",
+    height: "40px",
+    boxShadow: Shadow.LIGHT,
+    margin: "20px 0px",
+    borderRadius: "5px",
+    width: "59%",
+    backgroundColor: Colors.GREEN,
   },
   tripCard: {
     width: "95%",

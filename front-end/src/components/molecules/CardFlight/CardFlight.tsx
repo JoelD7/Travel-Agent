@@ -1,6 +1,5 @@
 import { faClock, faPlane, faPlaneDeparture } from "@fortawesome/free-solid-svg-icons";
 import {
-  Card,
   CardActionArea,
   CardContent,
   CardHeader,
@@ -14,15 +13,12 @@ import { Font } from "../../../assets";
 import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
 import {
-  ExchangeRate,
   convertToUserCurrency,
   formatFlightDate,
   getFlightCitiesLabel,
   getFlightSegmentCarrier,
   getLastSegment,
   parseFlightDuration,
-  selectEndCurrency,
-  selectExchangeRate,
   selectFlightDictionaries,
 } from "../../../utils";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
@@ -40,9 +36,6 @@ export function CardFlight({ flight, variant = "deal", className, animate }: Car
   const exitFlight: FlightItinerary = flight.itineraries[0];
   const returnFlight: FlightItinerary | undefined =
     flight.itineraries.length > 1 ? flight.itineraries[1] : undefined;
-
-  const baseCurrency: string = useSelector(selectEndCurrency);
-  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   const dictionaries: FlightDictionary | undefined = useSelector(
     selectFlightDictionaries

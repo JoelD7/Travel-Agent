@@ -1,3 +1,15 @@
+interface RsvPOI {
+  id: string;
+  name: string;
+  favorite: boolean;
+  rating: number;
+  category: string;
+  categoryIconUrl: string;
+  visitDate: Date;
+  imageUrl: string;
+  formattedAddress: string;
+}
+
 interface POI {
   id: string;
   name: string;

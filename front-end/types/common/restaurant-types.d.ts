@@ -1,3 +1,19 @@
+/**
+ * Restaurant that has been added to
+ * a trip. This is the model that will
+ * be used by the database.
+ */
+interface RsvRestaurant {
+  id: string;
+  name: string;
+  imageUrl: string;
+  rating: number;
+  displayAddress: string;
+  cuisines: string;
+  visitDate: Date;
+  favorite: boolean;
+}
+
 interface Restaurant {
   id: string;
   name: string;

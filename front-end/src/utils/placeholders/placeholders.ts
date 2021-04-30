@@ -202,6 +202,29 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
   },
 ];
 
+export const rsvRestaurantsPlaceholder: RsvRestaurant[] = [
+  {
+    id: "asjdf9",
+    name: "Hazelwood Food and Drinks",
+    imageUrl: "/Travel-Agent/restaurant.jpg",
+    rating: 4,
+    displayAddress: "Park Av 188, New York",
+    favorite: true,
+    visitDate: new Date(),
+    cuisines: "American (Traditional), Pizza, Seafood",
+  },
+  {
+    id: "asf9",
+    name: "Robertson’s burger",
+    imageUrl: "/Travel-Agent/restaurant.jpg",
+    rating: 5,
+    displayAddress: "Mike Dawson Lane, Wichita, Arksansas",
+    favorite: false,
+    cuisines: "Burgers, Seafood",
+    visitDate: new Date(2021, 8, 15, 10, 30),
+  },
+];
+
 export const restaurantPlaceholder: Restaurant = {
   id: "3xTQT7qjZJIxc-eBiFMerQ",
   favorite: false,
@@ -899,6 +922,33 @@ export const poisPlaceholder: POISearch[] = [
         },
       },
     ],
+  },
+];
+
+export const rsvPoisPlaceholder: RsvPOI[] = [
+  {
+    id: "adjhf7fa9",
+    name: "H&M",
+    favorite: false,
+    rating: 5,
+    category: "Clothing Store",
+    imageUrl:
+      "https://fastly.4sqi.net/img/general/619x412/87388367_WYz8Av0IXESHmRGYmpl0hg32N3wvS24K8v9SpclZlBE.jpg",
+    categoryIconUrl: "",
+    visitDate: new Date(),
+    formattedAddress: "7601 South Cicero Avenue, Chicago, IL 60652, United States",
+  },
+  {
+    id: "adjhfa9",
+    name: "Wigwam at ULC",
+    favorite: false,
+    rating: 5,
+    formattedAddress: "Chicago, IL 60603",
+    imageUrl:
+      "https://fastly.4sqi.net/img/general/1440x1920/81679595_DMhmpfeLJ5-fv-N27ULxqn1qq-lw8AEJNGVsayR_2u8.jpg",
+    categoryIconUrl: "",
+    visitDate: new Date(),
+    category: "Movie Theater",
   },
 ];
 
@@ -2800,6 +2850,7 @@ export const hotelRsvPlaceholder: HotelReservation = {
   checkIn: new Date(2021, 5, 15),
   checkOut: new Date(2021, 5, 26),
   hotelCode: 128537,
+  hotelImage: "/Travel-Agent/h1.jpg",
   stars: 5,
   name: "Coco Key Hotel and Water Park Resort",
   address: "11400 Marbella Palm Ct.",

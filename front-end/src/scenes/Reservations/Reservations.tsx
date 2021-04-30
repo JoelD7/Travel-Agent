@@ -1,8 +1,12 @@
+import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
 import { faCalendar, faRestroom, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui/core";
+import { format } from "date-fns";
 import React, { useState } from "react";
+import Helmet from "react-helmet";
 import Rating from "react-rating";
+import { useDispatch } from "react-redux";
 import {
   CardFlight,
   CustomButton,
@@ -12,31 +16,23 @@ import {
   IconText,
   Navbar,
   Text,
+  RsvHotels,
 } from "../../components";
 import { Colors } from "../../styles";
 import {
   convertToUserCurrency,
   flightsPlaceholder,
-  selectEndCurrency,
-  ExchangeRate,
-  selectExchangeRate,
-  setHotelRsv,
-  hotelRsvPlaceholder,
   HotelReservation,
+  hotelRsvPlaceholder,
+  setHotelRsv,
 } from "../../utils";
 import { reservationStyles } from "./reservation-styles";
-import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
-import { format } from "date-fns";
-import Helmet from "react-helmet";
-import { useDispatch, useSelector } from "react-redux";
 
 export function Reservations() {
   const style = reservationStyles();
 
   const flights: Flight[] = flightsPlaceholder;
 
-  const endCurrency: string = useSelector(selectEndCurrency);
-  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
   const dispatch = useDispatch();
   const [openHotelDialog, setOpenHotelDialog] = useState(false);
 
@@ -166,63 +162,7 @@ export function Reservations() {
 
           {/* Hotels */}
           <Grid item xs={12}>
-            <Grid container>
-              {hotels.map((hotel, i) => (
-                <Card key={i} className={style.hotelCard}>
-                  <CardActionArea onClick={() => seeHotelReservationDetails()}>
-                    <CardMedia component="img" src={hotel.picture} height="200" />
-
-                    <CardContent>
-                      <Text color={Colors.BLUE} component="h4" bold>
-                        {hotel.name}
-                      </Text>
-
-                      <Rating
-                        initialRating={hotel.stars}
-                        readonly
-                        emptySymbol={
-                          <FontAwesomeIcon
-                            style={{ margin: "0px 1px" }}
-                            icon={faStarReg}
-                            color={Colors.PURPLE}
-                          />
-                        }
-                        fullSymbol={
-                          <FontAwesomeIcon
-                            style={{ margin: "0px 1px" }}
-                            icon={faStar}
-                            color={Colors.PURPLE}
-                          />
-                        }
-                      />
-
-                      <IconText style={{ marginTop: "10px" }} icon={faRestroom}>
-                        {getHotelGuests(hotel)}
-                      </IconText>
-
-                      <IconText
-                        icon={faCalendar}
-                        text={`${format(hotel.checkIn, "dd/MM/yyyy")} - ${format(
-                          hotel.checkOut,
-                          "dd/MM/yyyy"
-                        )}`}
-                      />
-
-                      <Grid container>
-                        <Text
-                          style={{ marginLeft: "auto" }}
-                          color={Colors.BLUE}
-                          component="h4"
-                          bold
-                        >
-                          {convertToUserCurrency(hotel.cost, "USD")}
-                        </Text>
-                      </Grid>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              ))}
-            </Grid>
+            <RsvHotels />
           </Grid>
         </Grid>
       </Grid>

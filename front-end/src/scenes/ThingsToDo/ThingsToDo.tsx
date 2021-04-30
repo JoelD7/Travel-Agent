@@ -23,29 +23,19 @@ import {
   SliderArrow,
   Text,
 } from "../../components";
-import { Colors, Shadow } from "../../styles";
+import { Colors } from "../../styles";
 import {
-  CityImage,
-  ExchangeRate,
-  fetchCityImage,
   fetchPOIs,
   getPOICategoryParent,
-  isCityImageUpdated,
   POICategory,
   poisPlaceholder,
   selectAllPOIs,
-  selectEndCurrency,
-  selectCityImage,
   selectConsultedCategories,
   selectConsultedCoordinates,
   selectDestinationCity,
-  selectExchangeRate,
-  selectLoadingCategories,
   selectLoadingPOICard,
   selectPOIs,
   selectPOIsByCategory,
-  setAvailableCategories,
-  setCityImage,
   useAppDispatch,
 } from "../../utils";
 import { POICategoryFetch, POICategorySearch } from "../../utils/POICategory";
@@ -109,7 +99,6 @@ export function ThingsToDo() {
   const [poiSliderRows, setPoiSliderRows] = useState(2);
 
   const loadingPOICard = useSelector(selectLoadingPOICard);
-  const loadingCategories = useSelector(selectLoadingCategories);
 
   const consultedCategories = useSelector(selectConsultedCategories);
   const consultedCoordinates = useSelector(selectConsultedCoordinates);
@@ -138,11 +127,6 @@ export function ThingsToDo() {
     ],
   };
 
-  const [activities, setActivities] = useState<Activity[]>([]);
-
-  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-  const baseCurrency: string = useSelector(selectEndCurrency);
-
   const dispatch = useAppDispatch();
 
   const [sortOption, setSortOption] = useState<SortOption>("");
@@ -152,7 +136,6 @@ export function ThingsToDo() {
   const poisByCategory = useSelector(selectPOIsByCategory);
 
   const destinationCity: IATALocation = useSelector(selectDestinationCity);
-  const cityImage: CityImage = useSelector(selectCityImage);
 
   useEffect(() => {
     if (JSON.stringify(allPois) === JSON.stringify(poisPlaceholder)) {
@@ -328,7 +311,7 @@ export function ThingsToDo() {
         <>
           {/* POI cards header and sort */}
           <Grid container alignContent="flex-end" style={{ marginTop: "20px" }}>
-            <Text component="h2" bold>{`${
+            <Text component="h2" bold color={Colors.BLUE}>{`${
               selectedCategory.name === categoryPlaceholder.name
                 ? "Places to go"
                 : selectedCategory.pluralName

@@ -58,7 +58,7 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
   },
   menuItemRoot: {
     fontFamily: Font.Family,

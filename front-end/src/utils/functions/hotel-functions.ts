@@ -8,6 +8,7 @@ import {
   HotelPax,
   HotelRoomRate,
   HotelRoom,
+  HotelReservation,
 } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
 
@@ -212,4 +213,19 @@ export function getHotelSearchURL(
     reservationParams,
     "hotel"
   )}&sortBy=Stars | desc&page=${1}&pageSize=${20}`;
+}
+
+export function getHotelReservationCost(hotelRsv: HotelReservation | undefined): number {
+  if (hotelRsv) {
+    let total = 0;
+    hotelRsv.rooms.forEach((room) => {
+      if (room.cost) {
+        total += room.cost;
+      }
+    });
+
+    return total;
+  }
+
+  return 0;
 }

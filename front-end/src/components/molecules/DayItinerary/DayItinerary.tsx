@@ -2,11 +2,19 @@ import { faClock, faMapMarkerAlt, faTimes } from "@fortawesome/free-solid-svg-ic
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Grid, IconButton } from "@material-ui/core";
 import { format } from "date-fns";
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Colors } from "../../../styles";
-import { eventToIcon, EventType } from "../../../utils";
+import {
+  eventToIcon,
+  EventType,
+  HotelReservation,
+  hotelRsvPlaceholder,
+  setHotelRsv,
+} from "../../../utils";
 import { TripEvent } from "../../../utils/types/trip-types";
 import { CustomButton, IconText, Text } from "../../atoms";
+import { HotelRsvDetail } from "../../organisms";
 import { NotAvailableCard } from "../NotAvailableCard/NotAvailableCard";
 import { dayItineraryStyles } from "./dayItinerary-styles";
 
@@ -24,6 +32,10 @@ interface DayItineraryCard {
 export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
   const style = dayItineraryStyles();
 
+  const dispatch = useDispatch();
+  const [openHotelDialog, setOpenHotelDialog] = useState(false);
+  const hotelRsv: HotelReservation = hotelRsvPlaceholder;
+
   function DayItineraryCard({ event }: DayItineraryCard) {
     function getDetailButtonText(): string {
       switch (event.type) {
@@ -33,6 +45,19 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
           return "Reservation details";
         default:
           return "Check out place";
+      }
+    }
+
+    function onDetailButtonClick() {
+      switch (event.type) {
+        case EventType.Flight:
+          break;
+        case EventType.Hotel:
+          setOpenHotelDialog(true);
+          dispatch(setHotelRsv(hotelRsv));
+          break;
+        default:
+          break;
       }
     }
 
@@ -90,6 +115,7 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
                     : format(event.start, "PP")}
                 </IconText>
                 <CustomButton
+                  onClick={() => onDetailButtonClick()}
                   backgroundColor={Colors.GREEN}
                   style={{ fontSize: "16px", marginLeft: "auto", color: "white" }}
                 >
@@ -104,46 +130,50 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
   }
 
   return (
-    <Dialog
-      open={open}
-      className={style.mainContainer}
-      classes={{ paper: style.paper }}
-      onClose={onClose}
-    >
-      <Grid container>
-        {/* Title */}
-        <Grid item xs={12}>
-          <Grid container>
-            <Text
-              color={Colors.BLUE}
-              style={{ padding: "20px" }}
-              bold
-              component="h1"
-            >{`Events on ${format(date, "MMM. dd, yyyy")}`}</Text>
+    <>
+      <Dialog
+        open={open}
+        className={style.mainContainer}
+        classes={{ paper: style.paper }}
+        onClose={onClose}
+      >
+        <Grid container>
+          {/* Title */}
+          <Grid item xs={12}>
+            <Grid container>
+              <Text
+                color={Colors.BLUE}
+                style={{ padding: "20px" }}
+                bold
+                component="h1"
+              >{`Events on ${format(date, "MMM. dd, yyyy")}`}</Text>
 
-            <IconButton
-              style={{ width: "45px", height: "45px" }}
-              className={style.iconButton}
-              onClick={() => onClose()}
-            >
-              <FontAwesomeIcon size="sm" icon={faTimes} color={Colors.BLUE} />
-            </IconButton>
+              <IconButton
+                style={{ width: "45px", height: "45px" }}
+                className={style.iconButton}
+                onClick={() => onClose()}
+              >
+                <FontAwesomeIcon size="sm" icon={faTimes} color={Colors.BLUE} />
+              </IconButton>
+            </Grid>
           </Grid>
+
+          {events.length > 0 ? (
+            // Cards
+            <Grid item xs={12} className={style.cardsContainer}>
+              {events.map((event, i) => (
+                <DayItineraryCard key={i} event={event} />
+              ))}
+            </Grid>
+          ) : (
+            <NotAvailableCard title="Hey!" imageHeight={185}>
+              Looks like you have no events scheduled for this day.
+            </NotAvailableCard>
+          )}
         </Grid>
+      </Dialog>
 
-        {events.length > 0 ? (
-          // Cards
-          <Grid item xs={12} className={style.cardsContainer}>
-            {events.map((event, i) => (
-              <DayItineraryCard key={i} event={event} />
-            ))}
-          </Grid>
-        ) : (
-          <NotAvailableCard title="Hey!" imageHeight={185}>
-            Looks like you have no events scheduled for this day.
-          </NotAvailableCard>
-        )}
-      </Grid>
-    </Dialog>
+      <HotelRsvDetail open={openHotelDialog} onClose={() => setOpenHotelDialog(false)} />
+    </>
   );
 }
