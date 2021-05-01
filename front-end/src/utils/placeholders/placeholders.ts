@@ -1,4 +1,4 @@
-import { Car, CarCheckbox, EventType } from "../types";
+import { Car, CarCheckbox, CarRsv, EventType } from "../types";
 import { HotelAvailability, HotelBooking, HotelReservation } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
 import { Trip } from "../types/trip-types";
@@ -3852,5 +3852,38 @@ export const carsPlaceholder: Car[] = [
         reservation_total: 301.5,
       },
     },
+  },
+];
+
+export const carRsvPlaceholder: CarRsv[] = [
+  {
+    name: "Toyota Corolla",
+    id: "aszza",
+    features: ["smokeFree", "airConditioned"],
+    cost: 285,
+    doors: 3,
+    seats: 4,
+    image:
+      "https://www.avis.com/content/dam/cars/l/2020/toyota/2020-toyota-corolla-le-sedan-grey.png",
+    pickupDate: new Date(),
+    dropoffDate: new Date(),
+    location: "St Paul Intl Airport, Minnesota, United States",
+    mpg: "25/33",
+    transmission: "Automatic",
+  },
+  {
+    name: "Kia Sorento",
+    id: "asa",
+    features: ["smokeFree", "airConditioned"],
+    cost: 285,
+    doors: 3,
+    seats: 4,
+    image:
+      "https://www.avis.com/content/dam/cars/l/2019/ford/2019-ford-fiesta-se-5door-2wd-hatchback-grey.png",
+    pickupDate: new Date(),
+    dropoffDate: new Date(),
+    location: "St Paul Intl Airport, Minnesota, United States",
+    mpg: "21/28",
+    transmission: "Automatic",
   },
 ];

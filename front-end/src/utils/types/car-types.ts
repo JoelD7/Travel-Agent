@@ -13,6 +13,28 @@ export interface CarSearch {
   country_code: string;
 }
 
+export type CarRsvFeatures =
+  | "airConditioned"
+  | "bluetooth"
+  | "smokeFree"
+  | "connectedCar";
+type CarRsvTransmission = "Automatic" | "Manual";
+
+export interface CarRsv {
+  id: string;
+  name: string;
+  features: CarRsvFeatures[];
+  seats: number;
+  doors: number;
+  cost: number;
+  image: string;
+  pickupDate: Date;
+  dropoffDate: Date;
+  location: string;
+  mpg: string;
+  transmission: CarRsvTransmission;
+}
+
 export interface Car {
   category: CarCategory;
   features: CarFeatures;

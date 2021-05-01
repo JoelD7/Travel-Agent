@@ -104,7 +104,9 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     alignItems: "center",
   },
-
+  tabSlide: {
+    width: "100%",
+  },
   toolbar: {
     display: "flex",
     minHeight: "20px",

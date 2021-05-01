@@ -11,15 +11,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { useSelector } from "react-redux";
 import { Colors } from "../../../styles";
-import {
-  Car,
-  ExchangeRate,
-  convertToUserCurrency,
-  selectEndCurrency,
-  selectExchangeRate,
-} from "../../../utils";
+import { Car, convertToUserCurrency } from "../../../utils";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
 import { carsCardStyles } from "./carsCard-styles";
 
@@ -29,9 +22,6 @@ interface CarsCard {
 
 export function CarsCard({ car }: CarsCard) {
   const style = carsCardStyles();
-
-  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-  const endCurrency: string = useSelector(selectEndCurrency);
 
   function getCarName() {
     return `${car.category.make} ${car.category.model}`;

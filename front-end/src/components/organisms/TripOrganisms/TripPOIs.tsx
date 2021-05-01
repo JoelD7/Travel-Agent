@@ -20,7 +20,7 @@ export function TripPOIs({ showAll }: TripPOIs) {
     },
     card: {
       borderRadius: "10px",
-      margin: "10px auto",
+      margin: 5,
       boxShadow: Shadow.LIGHT3D,
       width: "25%",
     },
