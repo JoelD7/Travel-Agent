@@ -1,3 +1,4 @@
+import { faWindowClose } from "@fortawesome/free-regular-svg-icons";
 import {
   faCalendar,
   faChevronLeft,
@@ -5,16 +6,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  ClickAwayListener,
   Direction,
   Divider,
   Grid,
+  Grow,
   IconButton,
   MenuItem,
+  MenuList,
+  Paper,
+  Popper,
   Toolbar,
+  useMediaQuery,
   useTheme,
 } from "@material-ui/core";
 import { format } from "date-fns";
-import React, { ReactNode, useState } from "react";
+import React, { MouseEvent, ReactNode, useLayoutEffect, useState } from "react";
 import Helmet from "react-helmet";
 import Slider from "react-slick";
 import SwipeableViews from "react-swipeable-views";
@@ -87,6 +94,14 @@ export function TripDetails() {
   const [tabIndex, setTabIndex] = useState(0);
   const MUtheme = useTheme();
 
+  const [openMenu, setOpenMenu] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const is858OrMore = useMediaQuery("(min-width:858px)");
+  const is857OrLess = useMediaQuery("(max-width:857px)");
+  const is620OrLess = useMediaQuery("(max-width:620px)");
+  const is450OrLess = useMediaQuery("(max-width:450px)");
+
   const tabOptions = [
     "All",
     "Photos",
@@ -98,6 +113,8 @@ export function TripDetails() {
   ];
 
   const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+
+  const tabsToShow = getMenuItemsToShow();
 
   function getSlidesToShow(def: number) {
     return trip.albums.length > def ? def : trip.albums.length;
@@ -336,6 +353,31 @@ export function TripDetails() {
     setTabIndex(index);
   }
 
+  function openTabsMenu(event: MouseEvent<HTMLElement>) {
+    if (event.currentTarget !== anchorEl) {
+      setAnchorEl(event.currentTarget);
+      setOpenMenu(true);
+    }
+  }
+
+  function closeTabMenu() {
+    setOpenMenu(false);
+    setAnchorEl(null);
+  }
+
+  function getMenuItemsToShow(): number {
+    if (is450OrLess) {
+      return 3;
+    } else if (is620OrLess) {
+      return 4;
+    } else if (is857OrLess) {
+      return 5;
+    } else if (is858OrMore) {
+      return 7;
+    }
+    return 0;
+  }
+
   return (
     <div className={style.mainContainer}>
       <Helmet>
@@ -344,7 +386,7 @@ export function TripDetails() {
 
       <Navbar position="sticky" />
 
-      <DashDrawer />
+      <DashDrawer hiddenBreakpoint={1025} />
 
       <Grid container className={style.pageContentGrid}>
         <Grid item xs={12} style={{ marginBottom: "10px" }}>
@@ -437,7 +479,7 @@ export function TripDetails() {
         {/* Tab bar */}
         <Grid item xs={12}>
           <Toolbar className={style.toolbar}>
-            {tabOptions.map((option, i) => (
+            {tabOptions.slice(0, tabsToShow).map((option, i) => (
               <MenuItem
                 onClick={() => onTabIndexChange(i)}
                 key={option}
@@ -447,6 +489,15 @@ export function TripDetails() {
                 {option}
               </MenuItem>
             ))}
+
+            {is857OrLess && (
+              <MenuItem
+                onClick={(e) => openTabsMenu(e)}
+                classes={{ root: style.menuItemRoot }}
+              >
+                More
+              </MenuItem>
+            )}
           </Toolbar>
         </Grid>
 
@@ -461,6 +512,40 @@ export function TripDetails() {
           />
         </Grid>
       </Grid>
+
+      <Popper
+        open={openMenu}
+        anchorEl={anchorEl}
+        role={undefined}
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin: placement === "bottom" ? "center top" : "center bottom",
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={() => closeTabMenu()}>
+                <MenuList autoFocusItem={openMenu} id="menu-list-grow">
+                  {tabOptions.slice(tabsToShow).map((option, i) => (
+                    <MenuItem
+                      id={option}
+                      onClick={() => onTabIndexChange(tabsToShow + i)}
+                      classes={{ root: style.menuItemChild }}
+                      key={option}
+                    >
+                      {option}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
 
       <div className={style.footerContainer}>
         <Footer />

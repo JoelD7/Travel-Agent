@@ -46,6 +46,22 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     fontFamily: Font.Family,
     backgroundColor: "white",
   },
+  menuItemChild: {
+    fontFamily: Font.Family,
+    borderBottom: `3px solid rgba(0,0,0,0)`,
+    margin: "0px 5px",
+    "&.MuiListItem-root": {
+      "&.Mui-selected": {
+        backgroundColor: "rgba(0,0,0,0)",
+        borderBottom: `3px solid ${Colors.GREEN}`,
+      },
+    },
+    "&.MuiListItem-button": {
+      "&:hover": {
+        borderBottom: `3px solid ${Colors.GREEN}`,
+      },
+    },
+  },
   menuItemRoot: {
     fontFamily: Font.Family,
     fontWeight: "bold",
@@ -62,7 +78,7 @@ export const tripStyles = makeStyles((theme: Theme) => ({
   pageContentGrid: {
     marginLeft: "265px",
     width: "calc(100% - 300px)",
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down(1025)]: {
       margin: "auto",
       width: "85%",
     },
@@ -114,8 +130,13 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     boxShadow: Shadow.LIGHT,
     margin: "20px 0px",
     borderRadius: "5px",
-    width: "59%",
+    justifyContent: "space-evenly",
+    width: "750px",
     backgroundColor: Colors.GREEN,
+
+    [theme.breakpoints.down(1116)]: {
+      width: "94%",
+    },
   },
   tripCard: {
     width: "95%",

@@ -17,10 +17,14 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  makeStyles,
+  Theme,
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { Font } from "../../../assets";
+import { Colors } from "../../../styles";
 import {
   getCarRentalDefaultURL,
   getHotelSearchURL,
@@ -31,9 +35,46 @@ import {
   selectHotelReservationParams,
 } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
-import { dashDrawerStyles } from "./dashDrawer-styles";
 
-export function DashDrawer() {
+interface DashDrawer {
+  hiddenBreakpoint?: number;
+}
+
+export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
+  const dashDrawerStyles = makeStyles((theme: Theme) => ({
+    drawer: {
+      width: "250px",
+      backgroundColor: Colors.BLUE,
+      zIndex: 1,
+      paddingTop: "30px",
+
+      [theme.breakpoints.down(hiddenBreakpoint)]: {
+        display: "none",
+      },
+    },
+    drawerText: {
+      fontFamily: Font.Family,
+      color: "white",
+    },
+    listItem: {
+      "&:hover": {
+        backgroundColor: Colors.BLUE_HOVER,
+      },
+    },
+    listItemRoot: {
+      borderBottom: `2px solid ${Colors.BLUE}`,
+      "&.Mui-selected": {
+        backgroundColor: Colors.GREEN,
+        borderBottom: `2px solid ${Colors.GREEN}`,
+        color: Colors.BLUE,
+
+        "&:hover": {
+          backgroundColor: Colors.GREEN,
+        },
+      },
+    },
+  }));
+
   const style = dashDrawerStyles();
 
   let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
