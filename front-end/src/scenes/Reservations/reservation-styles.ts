@@ -16,6 +16,10 @@ export const reservationStyles = makeStyles((theme: Theme) => ({
     marginTop: "250px",
     width: "90%",
     marginLeft: "auto",
+
+    [theme.breakpoints.down(1000)]: {
+      width: "100%",
+    },
   },
   hotelCard: {
     borderRadius: "10px",

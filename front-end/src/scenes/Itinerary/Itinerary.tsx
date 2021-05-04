@@ -2,6 +2,7 @@ import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 import {
   faChevronCircleLeft,
   faChevronCircleRight,
+  faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CardActionArea, Grid, IconButton, useMediaQuery } from "@material-ui/core";
@@ -19,7 +20,7 @@ import {
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
-import { areDatesEqual, eventToIcon, tripPlaceholder } from "../../utils";
+import { areDatesEqual, tripPlaceholder } from "../../utils";
 import { calendarItemHolderSelect } from "../../utils/store/calendar-slice";
 import { CalendarItem, Trip, TripEvent } from "../../utils/types/trip-types";
 import { itineraryStyles } from "./itinerary-styles";
@@ -58,30 +59,31 @@ export function Itinerary() {
   });
 
   const is1170OrLess = useMediaQuery("(max-width:1170px)");
+  const is405OrLess = useMediaQuery("(max-width:405px)");
 
   function getWeekDayLabel(weekDay: string): string {
-    if (!is1170OrLess) {
-      return weekDay;
+    if (is1170OrLess) {
+      switch (weekDay) {
+        case "Sunday":
+          return is405OrLess ? "S" : "Sun.";
+        case "Monday":
+          return is405OrLess ? "M" : "Mon.";
+        case "Tuesday":
+          return is405OrLess ? "T" : "Tue.";
+        case "Wednesday":
+          return is405OrLess ? "W" : "Wed.";
+        case "Thursday":
+          return is405OrLess ? "T" : "Thu.";
+        case "Friday":
+          return is405OrLess ? "F" : "Fri.";
+        case "Saturday":
+          return is405OrLess ? "S" : "Sat.";
+        default:
+          return "";
+      }
     }
 
-    switch (weekDay) {
-      case "Sunday":
-        return "Sun.";
-      case "Monday":
-        return "Mon.";
-      case "Tuesday":
-        return "Tue.";
-      case "Wednesday":
-        return "Wed.";
-      case "Thursday":
-        return "Thu.";
-      case "Friday":
-        return "Fri.";
-      case "Saturday":
-        return "Sat.";
-      default:
-        return "";
-    }
+    return weekDay;
   }
 
   function Calendar({ baseDate }: Calendar) {
@@ -175,6 +177,11 @@ export function Itinerary() {
       return includes;
     }
 
+    /**
+     * Indicates whether this day has any events.
+     * @param day
+     * @returns
+     */
     function dayHasEvents(day: Date) {
       let hasEvents = false;
       if (trip.itinerary) {
@@ -190,17 +197,6 @@ export function Itinerary() {
 
     function dateToMS(date: Date) {
       return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
-    }
-
-    /**
-     * Returns the events that occur on date
-     * @param events
-     * @param date
-     */
-    function getEventsOnDay(events: TripEvent[], date: Date): TripEvent[] {
-      return events.filter(
-        (event) => areDatesEqual(event.start, date) || areDatesEqual(event.end, date)
-      );
     }
 
     function getCalendarTextColor(item: CalendarItem) {
@@ -264,15 +260,9 @@ export function Itinerary() {
 
                 {/* Icon grid */}
                 {trip.itinerary && dayHasEvents(item.date) ? (
-                  <Grid
-                    item
-                    xs={12}
-                    style={{ alignSelf: "flex-end", marginLeft: "auto" }}
-                  >
+                  <Grid item xs={12} className={style.iconGrid}>
                     <Grid container>
-                      {getEventsOnDay(trip.itinerary, item.date).map((event, i) => (
-                        <IconText key={event.name} icon={eventToIcon(event.type)} />
-                      ))}
+                      <FontAwesomeIcon size="xs" color={Colors.PURPLE} icon={faCircle} />
                     </Grid>
                   </Grid>
                 ) : (

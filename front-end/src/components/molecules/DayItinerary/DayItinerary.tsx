@@ -1,6 +1,6 @@
 import { faClock, faMapMarkerAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dialog, Grid, IconButton } from "@material-ui/core";
+import { Dialog, Grid, IconButton, useMediaQuery } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -13,7 +13,7 @@ import {
   setHotelRsv,
 } from "../../../utils";
 import { TripEvent } from "../../../utils/types/trip-types";
-import { CustomButton, IconText, Text } from "../../atoms";
+import { CustomButton, IconText, IconTP, Text } from "../../atoms";
 import { HotelRsvDetail } from "../../organisms";
 import { NotAvailableCard } from "../NotAvailableCard/NotAvailableCard";
 import { dayItineraryStyles } from "./dayItinerary-styles";
@@ -35,6 +35,8 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
   const dispatch = useDispatch();
   const [openHotelDialog, setOpenHotelDialog] = useState(false);
   const hotelRsv: HotelReservation = hotelRsvPlaceholder;
+
+  const is430pxOrLess = useMediaQuery("(max-width:430px)");
 
   function DayItineraryCard({ event }: DayItineraryCard) {
     function getDetailButtonText(): string {
@@ -71,10 +73,9 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
             justify="center"
             alignContent="center"
           >
-            <IconText
-              iconStyle={{ padding: "12px" }}
-              shadow
-              size={25}
+            <IconTP
+              style={{ padding: 10 }}
+              size={is430pxOrLess ? 20 : 25}
               icon={eventToIcon(event.type)}
             />
           </Grid>
@@ -101,26 +102,36 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
               </IconText>
             </Grid>
 
+            {/* Datetime and detail button */}
             <Grid item xs={12}>
               <Grid container>
-                <IconText
-                  style={{ fontSize: "14px" }}
-                  icon={faClock}
-                  iconColor="white"
-                  textColor="white"
-                  backgroundColor={Colors.BLUE}
-                >
-                  {event.includesTime
-                    ? format(event.start, "PP 'at' p")
-                    : format(event.start, "PP")}
-                </IconText>
-                <CustomButton
-                  onClick={() => onDetailButtonClick()}
-                  backgroundColor={Colors.GREEN}
-                  style={{ fontSize: "16px", marginLeft: "auto", color: "white" }}
-                >
-                  {getDetailButtonText()}
-                </CustomButton>
+                {/* Datetime grid */}
+                <Grid item className={style.datetimeGrid}>
+                  <IconText
+                    style={{ fontSize: "14px" }}
+                    icon={faClock}
+                    iconColor="white"
+                    textColor="white"
+                    backgroundColor={Colors.BLUE}
+                  >
+                    {event.includesTime
+                      ? format(event.start, "PP 'at' p")
+                      : format(event.start, "PP")}
+                  </IconText>
+                </Grid>
+
+                {/* Button grid */}
+                <Grid item className={style.detailButtonGrid}>
+                  <Grid container>
+                    <CustomButton
+                      onClick={() => onDetailButtonClick()}
+                      backgroundColor={Colors.GREEN}
+                      style={{ fontSize: "16px", marginLeft: "auto", color: "white" }}
+                    >
+                      {getDetailButtonText()}
+                    </CustomButton>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -136,6 +147,7 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
         className={style.mainContainer}
         classes={{ paper: style.paper }}
         onClose={onClose}
+        fullScreen={is430pxOrLess}
       >
         <Grid container>
           {/* Title */}
@@ -143,16 +155,12 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
             <Grid container>
               <Text
                 color={Colors.BLUE}
-                style={{ padding: "20px" }}
+                className={style.dialogTitle}
                 bold
                 component="h1"
               >{`Events on ${format(date, "MMM. dd, yyyy")}`}</Text>
 
-              <IconButton
-                style={{ width: "45px", height: "45px" }}
-                className={style.iconButton}
-                onClick={() => onClose()}
-              >
+              <IconButton className={style.iconButton} onClick={() => onClose()}>
                 <FontAwesomeIcon size="sm" icon={faTimes} color={Colors.BLUE} />
               </IconButton>
             </Grid>

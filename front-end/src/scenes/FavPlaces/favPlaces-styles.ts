@@ -13,6 +13,10 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
     marginTop: "250px",
     width: "90%",
     marginLeft: "auto",
+
+    [theme.breakpoints.down(1000)]: {
+      width: "100%",
+    },
   },
   mainContainer: {
     fontFamily: Font.Family,

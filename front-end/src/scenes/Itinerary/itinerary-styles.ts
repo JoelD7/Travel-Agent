@@ -7,8 +7,12 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
     width: "100%",
   },
   calendarItemContainer: {
-    width: "13.65%",
+    width: "12.65%",
+    padding: 3,
     height: "75px",
+    [theme.breakpoints.down(405)]: {
+      width: "12%",
+    },
   },
   calendarItem: {
     paddingLeft: "5px",
@@ -49,7 +53,12 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
     marginTop: "30px",
   },
   dayItemContainer: {
-    width: "13.65%",
+    width: "12.65%",
+    padding: 3,
+    height: 23,
+    [theme.breakpoints.down(405)]: {
+      width: "12%",
+    },
   },
   footerContainer: {
     position: "relative",
@@ -57,6 +66,16 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
     marginTop: "250px",
     width: "90%",
     marginLeft: "auto",
+
+    [theme.breakpoints.down(1000)]: {
+      width: "100%",
+    },
+  },
+  iconGrid: {
+    width: "100%",
+    alignSelf: "flex-end",
+    marginLeft: "auto",
+    marginBottom: 3,
   },
   mainContainer: {
     backgroundColor: "white",
