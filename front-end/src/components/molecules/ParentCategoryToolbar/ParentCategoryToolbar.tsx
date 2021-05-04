@@ -223,7 +223,6 @@ export function ParentCategoryToolbar({
           role={undefined}
           transition
           disablePortal
-          // placement="top"
           style={{ zIndex: 2 }}
         >
           {({ TransitionProps, placement }) => (

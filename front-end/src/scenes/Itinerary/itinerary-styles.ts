@@ -4,15 +4,17 @@ import { Colors, Shadow } from "../../styles";
 
 export const itineraryStyles = makeStyles((theme: Theme) => ({
   calendarGrid: {
-    width: "79vw",
+    width: "100%",
+  },
+  calendarItemContainer: {
+    width: "13.65%",
+    height: "75px",
   },
   calendarItem: {
-    width: "calc(75.5vw / 7)",
-    height: "75px",
-    margin: "3px",
     paddingLeft: "5px",
     display: "flex",
     alignItems: "flex-start",
+    height: "100%",
     justifyContent: "flex-start",
     border: "1px solid #cecece",
     borderRadius: "5px",
@@ -27,7 +29,6 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
   contentBackgroundContainer: {
     backgroundColor: "white",
     height: "611px",
-    boxShadow: Shadow.LIGHT,
     padding: "10px",
     borderRadius: "5px",
   },
@@ -44,11 +45,11 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
     alignItems: "center",
   },
   daysContainer: {
-    width: "79vw",
+    width: "100%",
     marginTop: "30px",
   },
-  dayItem: {
-    width: "calc(78.5vw / 7)",
+  dayItemContainer: {
+    width: "13.65%",
   },
   footerContainer: {
     position: "relative",
@@ -58,11 +59,22 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
     marginLeft: "auto",
   },
   mainContainer: {
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
     fontFamily: Font.Family,
   },
+  navbar: {
+    width: "calc(100% - 251px)",
+    marginLeft: "auto",
+    [theme.breakpoints.down(960)]: {
+      width: "100%",
+    },
+  },
   pageContentContainer: {
-    marginLeft: "265px",
-    width: "calc(100% - 300px)",
+    marginLeft: "260px",
+    width: "calc(100% - 260px)",
+    [theme.breakpoints.down(960)]: {
+      margin: "auto",
+      width: "97%",
+    },
   },
 }));

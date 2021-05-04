@@ -20,9 +20,19 @@ export function TripPOIs({ showAll }: TripPOIs) {
     },
     card: {
       borderRadius: "10px",
-      margin: 5,
+      margin: "10px 5px",
       boxShadow: Shadow.LIGHT3D,
       width: "25%",
+
+      [theme.breakpoints.only("md")]: {
+        width: "35%",
+      },
+      [theme.breakpoints.down("sm")]: {
+        width: "48%",
+      },
+      [theme.breakpoints.down(686)]: {
+        width: "90%",
+      },
     },
   }));
 

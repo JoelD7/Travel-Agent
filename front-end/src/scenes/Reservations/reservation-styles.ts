@@ -41,6 +41,13 @@ export const reservationStyles = makeStyles((theme: Theme) => ({
     fontFamily: Font.Family,
     backgroundColor: "white",
   },
+  navbar: {
+    width: "calc(100% - 251px)",
+    marginLeft: "auto",
+    [theme.breakpoints.down(960)]: {
+      width: "100%",
+    },
+  },
   pageContentGrid: {
     marginLeft: "265px",
     width: "81%",

@@ -95,7 +95,7 @@ export function Reservations() {
         <title>Reservations</title>
       </Helmet>
 
-      <Navbar />
+      <Navbar className={style.navbar} dashboard position="sticky" />
       <DashDrawer />
 
       <Grid container>

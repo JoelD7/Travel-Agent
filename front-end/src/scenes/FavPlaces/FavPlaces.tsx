@@ -1,6 +1,12 @@
+import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
+import { faCircle, faHeart, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui/core";
+import React from "react";
+import Helmet from "react-helmet";
+import Rating from "react-rating";
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
-import React, { useEffect, useState } from "react";
 import {
   CustomButton,
   DashDrawer,
@@ -10,15 +16,9 @@ import {
   SliderArrow,
   Text,
 } from "../../components";
-import { favPlacesStyles } from "./favPlaces-styles";
-import { getLinkStyle, POICategory, poisPlaceholder } from "../../utils";
-import { faCircle, faHeart, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { Colors } from "../../styles";
-import Rating from "react-rating";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
-import { Link } from "react-router-dom";
-import Helmet from "react-helmet";
+import { getLinkStyle, POICategory, poisPlaceholder } from "../../utils";
+import { favPlacesStyles } from "./favPlaces-styles";
 
 interface POICategoryGroup {
   name: string;
@@ -31,11 +31,6 @@ export function FavPlaces() {
 
   const pois: POISearch[] = poisPlaceholder;
   let poiCategories = POICategory.POICategories;
-
-  const [categoryGroups, setCategoryGroups] = useState<POICategoryGroup[]>([]);
-
-  let categoryGroupsMap: { [index: string]: POICategoryGroup } = {};
-  let categoryGroupsTemp: POICategoryGroup[] = [];
 
   const sliderSettings = {
     className: styles.slider,
@@ -75,7 +70,7 @@ export function FavPlaces() {
       <Helmet>
         <title>Favorite Places</title>
       </Helmet>
-      <Navbar position="sticky" />
+      <Navbar className={styles.navbar} dashboard position="sticky" />
       <DashDrawer />
 
       <Grid container className={styles.mainGrid}>

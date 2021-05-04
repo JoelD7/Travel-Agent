@@ -1,5 +1,5 @@
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import { Card, CardActionArea, CardContent, CardMedia } from "@material-ui/core";
+import { Card, CardContent, CardMedia } from "@material-ui/core";
 import React from "react";
 import { Colors } from "../../../styles";
 import { CustomButton, IconText, Text } from "../../atoms";
@@ -32,7 +32,8 @@ export function PhotoAlbumCard({ cover, albumRoute, name, photosQant }: PhotoAlb
         />
         <div>
           <CustomButton
-            style={{ marginLeft: "auto", display: "block" }}
+            style={{ marginLeft: "auto", marginTop: 20, display: "block" }}
+            rounded
             backgroundColor={Colors.PURPLE}
           >
             View album

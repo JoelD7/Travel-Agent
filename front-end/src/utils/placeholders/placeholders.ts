@@ -2446,13 +2446,13 @@ export const flightPlaceholder: Flight = {
           departure: {
             iataCode: "SIN",
             city: "Singapore",
-            at: "2021-04-13T07:15:00",
+            at: "2021-05-13T07:15:00",
             terminal: "2",
           },
           arrival: {
             iataCode: "DXB",
             city: "Dubai",
-            at: "2021-04-13T13:15:00",
+            at: "2021-05-13T13:15:00",
             terminal: "31",
           },
           carrierCode: "Egyptair",
@@ -2467,13 +2467,13 @@ export const flightPlaceholder: Flight = {
           departure: {
             iataCode: "DXB",
             city: "Dubai",
-            at: "2021-04-23T13:39:00",
+            at: "2021-05-23T13:39:00",
             terminal: "2",
           },
           arrival: {
             iataCode: "SIN",
             city: "Singapore",
-            at: "2021-04-23T20:35:00",
+            at: "2021-05-23T20:35:00",
             terminal: "31",
           },
           carrierCode: "Emirates",
@@ -3188,7 +3188,7 @@ export const tripPlaceholder: Trip = {
   places: 13,
   days: 30,
   budget: 2500,
-  startDate: new Date(2021, 3, 13),
+  startDate: new Date(2021, 4, 13),
   albums: [
     {
       albumRoute: "",
@@ -3216,7 +3216,7 @@ export const tripPlaceholder: Trip = {
     },
   ],
   coverPhoto: "",
-  endDate: new Date(2021, 3, 23),
+  endDate: new Date(2021, 4, 23),
   itinerary: [
     {
       name: "Flight to Dubai",
@@ -3239,8 +3239,8 @@ export const tripPlaceholder: Trip = {
     {
       name: "Arrival at Hotel Sheraton Santo Domingo",
       type: EventType.Hotel,
-      start: new Date(2021, 3, 13, 14, 35),
-      end: new Date(2021, 3, 17, 11, 35),
+      start: new Date(2021, 4, 13, 14, 35),
+      end: new Date(2021, 4, 17, 11, 35),
       detail: hotelPlaceholder,
       location: "Santo Domingo, Dominican Republic",
       includesTime: true,
@@ -3248,8 +3248,8 @@ export const tripPlaceholder: Trip = {
     {
       name: "Visit to The Morgan Library & Museum",
       type: EventType.POI,
-      start: new Date(2021, 3, 16, 16, 0),
-      end: new Date(2021, 3, 16, 17, 0),
+      start: new Date(2021, 4, 16, 16, 0),
+      end: new Date(2021, 4, 16, 17, 0),
       detail: poiArray[0],
       location: "225 Madison Ave (btwn E 36th & E 37th St) New York, United States",
       includesTime: true,
@@ -3257,8 +3257,8 @@ export const tripPlaceholder: Trip = {
     {
       name: "Visit to Hulu Theater",
       type: EventType.POI,
-      start: new Date(2021, 3, 19, 12, 0),
-      end: new Date(2021, 3, 19, 14, 0),
+      start: new Date(2021, 4, 19, 12, 0),
+      end: new Date(2021, 4, 19, 14, 0),
       detail: poiArray[1],
       location: "4 Penn Plz, New York, United States",
       includesTime: true,
@@ -3266,8 +3266,8 @@ export const tripPlaceholder: Trip = {
     {
       name: "Visit to Dear Irving",
       type: EventType.POI,
-      start: new Date(2021, 3, 21, 0, 0),
-      end: new Date(2021, 3, 21, 3, 0),
+      start: new Date(2021, 4, 21, 0, 0),
+      end: new Date(2021, 4, 21, 3, 0),
       detail: poiArray[2],
       location: "55 Irving Pl (at E 17th St), New York, United States",
       includesTime: true,

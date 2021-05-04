@@ -17,7 +17,6 @@ import {
   Paper,
   Popper,
   Toolbar,
-  useMediaQuery,
   useTheme,
 } from "@material-ui/core";
 import { format } from "date-fns";
@@ -26,6 +25,7 @@ import Helmet from "react-helmet";
 import Slider from "react-slick";
 import SwipeableViews from "react-swipeable-views";
 import { virtualize } from "react-swipeable-views-utils";
+import { useMediaQuery } from "react-responsive";
 import {
   CustomButton,
   DashDrawer,
@@ -39,6 +39,7 @@ import {
   TripFlights,
   TripPOIs,
   TripRestaurants,
+  TripTabBar,
 } from "../../components";
 import { Colors } from "../../styles";
 import { tripPlaceholder } from "../../utils";
@@ -94,27 +95,7 @@ export function TripDetails() {
   const [tabIndex, setTabIndex] = useState(0);
   const MUtheme = useTheme();
 
-  const [openMenu, setOpenMenu] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const is858OrMore = useMediaQuery("(min-width:858px)");
-  const is857OrLess = useMediaQuery("(max-width:857px)");
-  const is620OrLess = useMediaQuery("(max-width:620px)");
-  const is450OrLess = useMediaQuery("(max-width:450px)");
-
-  const tabOptions = [
-    "All",
-    "Photos",
-    "Flights",
-    "Hotels",
-    "Restaurants",
-    "Things to do",
-    "Car rental",
-  ];
-
   const VirtualizeSwipeableViews = virtualize(SwipeableViews);
-
-  const tabsToShow = getMenuItemsToShow();
 
   function getSlidesToShow(def: number) {
     return trip.albums.length > def ? def : trip.albums.length;
@@ -123,7 +104,7 @@ export function TripDetails() {
   function TabPanel({ children, index, value, dir }: TabPanel) {
     return (
       <div dir={dir} hidden={value !== index}>
-        {children}
+        {value === index && children}
       </div>
     );
   }
@@ -353,40 +334,15 @@ export function TripDetails() {
     setTabIndex(index);
   }
 
-  function openTabsMenu(event: MouseEvent<HTMLElement>) {
-    if (event.currentTarget !== anchorEl) {
-      setAnchorEl(event.currentTarget);
-      setOpenMenu(true);
-    }
-  }
-
-  function closeTabMenu() {
-    setOpenMenu(false);
-    setAnchorEl(null);
-  }
-
-  function getMenuItemsToShow(): number {
-    if (is450OrLess) {
-      return 3;
-    } else if (is620OrLess) {
-      return 4;
-    } else if (is857OrLess) {
-      return 5;
-    } else if (is858OrMore) {
-      return 7;
-    }
-    return 0;
-  }
-
   return (
     <div className={style.mainContainer}>
       <Helmet>
         <title>{trip.name}</title>
       </Helmet>
 
-      <Navbar position="sticky" />
+      <Navbar className={style.navbar} dashboard position="sticky" />
 
-      <DashDrawer hiddenBreakpoint={1025} />
+      <DashDrawer />
 
       <Grid container className={style.pageContentGrid}>
         <Grid item xs={12} style={{ marginBottom: "10px" }}>
@@ -422,7 +378,7 @@ export function TripDetails() {
                   </Grid>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item className={style.countryListGrid}>
                   <Text color="white" component="h4" style={{ fontWeight: "normal" }}>
                     {trip.countries.join(", ")}
                   </Text>
@@ -431,9 +387,9 @@ export function TripDetails() {
             </Grid>
 
             {/* Trip quick info */}
-            <Grid item xs={12} style={{ alignSelf: "center" }}>
+            <Grid item xs={12} style={{ alignSelf: "flex-end" }}>
               <Grid container>
-                <div style={{ width: "105px" }}>
+                <div className={style.photosPlacesDaysContainer}>
                   <Text
                     color="white"
                     component="h3"
@@ -446,7 +402,7 @@ export function TripDetails() {
                   </Text>
                 </div>
 
-                <div style={{ width: "105px" }}>
+                <div className={style.photosPlacesDaysContainer}>
                   <Text
                     color="white"
                     component="h3"
@@ -459,7 +415,7 @@ export function TripDetails() {
                   </Text>
                 </div>
 
-                <div style={{ width: "105px" }}>
+                <div className={style.photosPlacesDaysContainer}>
                   <Text
                     color="white"
                     component="h3"
@@ -478,27 +434,7 @@ export function TripDetails() {
 
         {/* Tab bar */}
         <Grid item xs={12}>
-          <Toolbar className={style.toolbar}>
-            {tabOptions.slice(0, tabsToShow).map((option, i) => (
-              <MenuItem
-                onClick={() => onTabIndexChange(i)}
-                key={option}
-                selected={tabIndex === i}
-                classes={{ root: style.menuItemRoot }}
-              >
-                {option}
-              </MenuItem>
-            ))}
-
-            {is857OrLess && (
-              <MenuItem
-                onClick={(e) => openTabsMenu(e)}
-                classes={{ root: style.menuItemRoot }}
-              >
-                More
-              </MenuItem>
-            )}
-          </Toolbar>
+          <TripTabBar tabIndex={tabIndex} onTabIndexChange={onTabIndexChange} />
         </Grid>
 
         {/* Tabs */}
@@ -512,40 +448,6 @@ export function TripDetails() {
           />
         </Grid>
       </Grid>
-
-      <Popper
-        open={openMenu}
-        anchorEl={anchorEl}
-        role={undefined}
-        transition
-        disablePortal
-      >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin: placement === "bottom" ? "center top" : "center bottom",
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={() => closeTabMenu()}>
-                <MenuList autoFocusItem={openMenu} id="menu-list-grow">
-                  {tabOptions.slice(tabsToShow).map((option, i) => (
-                    <MenuItem
-                      id={option}
-                      onClick={() => onTabIndexChange(tabsToShow + i)}
-                      classes={{ root: style.menuItemChild }}
-                      key={option}
-                    >
-                      {option}
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
 
       <div className={style.footerContainer}>
         <Footer />

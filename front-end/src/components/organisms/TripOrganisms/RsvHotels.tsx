@@ -31,8 +31,7 @@ export function RsvHotels({ showAll = true }: RsvHotels) {
     hotelCard: {
       borderRadius: "10px",
       width: "25%",
-      minWidth: "290px",
-      margin: "5px",
+      margin: "10px 5px",
       boxShadow: Shadow.LIGHT3D,
 
       [theme.breakpoints.only("md")]: {
@@ -42,10 +41,7 @@ export function RsvHotels({ showAll = true }: RsvHotels) {
         width: "48%",
       },
       [theme.breakpoints.down(686)]: {
-        width: "70%",
-      },
-      [theme.breakpoints.down(401)]: {
-        width: "70%",
+        width: "90%",
       },
     },
   }));

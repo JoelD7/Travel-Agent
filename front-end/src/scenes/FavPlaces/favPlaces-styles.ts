@@ -26,6 +26,13 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
       margin: "auto",
     },
   },
+  navbar: {
+    width: "calc(100% - 251px)",
+    marginLeft: "auto",
+    [theme.breakpoints.down(960)]: {
+      width: "100%",
+    },
+  },
   slider: {
     width: "100%",
     display: "flex",

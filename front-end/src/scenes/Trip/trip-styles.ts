@@ -10,6 +10,12 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "white",
     color: "white",
   },
+  countryListGrid: {
+    width: "100%",
+    [theme.breakpoints.down(430)]: {
+      display: "none",
+    },
+  },
   detailsContainer: {
     borderRadius: "10px",
     border: "1px solid #CECECE",
@@ -21,6 +27,10 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     width: "90%",
     marginLeft: "auto",
     marginTop: "250px",
+
+    [theme.breakpoints.down(1000)]: {
+      width: "100%",
+    },
   },
 
   itineraryButton: {
@@ -75,12 +85,19 @@ export const tripStyles = makeStyles((theme: Theme) => ({
       },
     },
   },
+  navbar: {
+    width: "calc(100% - 251px)",
+    marginLeft: "auto",
+    [theme.breakpoints.down(960)]: {
+      width: "100%",
+    },
+  },
   pageContentGrid: {
     marginLeft: "265px",
     width: "calc(100% - 300px)",
-    [theme.breakpoints.down(1025)]: {
+    [theme.breakpoints.down(960)]: {
       margin: "auto",
-      width: "85%",
+      width: "90%",
     },
   },
   detailsGrid: {
@@ -103,14 +120,16 @@ export const tripStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
-
+  photosPlacesDaysContainer: {
+    width: "105px",
+    marginBottom: 15,
+  },
   photoTitleContainer: {
     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/journey.jpg")`,
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "50%",
     padding: "10px",
-    minWidth: "450px",
     borderRadius: "5px",
     color: "white",
     height: "345px",

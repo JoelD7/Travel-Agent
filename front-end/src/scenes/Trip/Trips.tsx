@@ -98,7 +98,7 @@ export function Trips() {
         <title>Trips</title>
       </Helmet>
 
-      <Navbar position="sticky" />
+      <Navbar className={style.navbar} dashboard position="sticky" />
       <DashDrawer />
 
       <Grid container>

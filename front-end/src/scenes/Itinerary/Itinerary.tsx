@@ -4,7 +4,7 @@ import {
   faChevronCircleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CardActionArea, Grid, IconButton } from "@material-ui/core";
+import { CardActionArea, Grid, IconButton, useMediaQuery } from "@material-ui/core";
 import { addDays, addMonths, eachDayOfInterval, format, subMonths } from "date-fns";
 import { endOfMonth, subDays } from "date-fns/esm";
 import React, { useEffect, useState } from "react";
@@ -38,7 +38,7 @@ export function Itinerary() {
 
   const trip: Trip = tripPlaceholder;
 
-  const days = [
+  const weekDays = [
     "Sunday",
     "Monday",
     "Tuesday",
@@ -56,6 +56,33 @@ export function Itinerary() {
     events: [],
     date: new Date(Date.now()),
   });
+
+  const is1170OrLess = useMediaQuery("(max-width:1170px)");
+
+  function getWeekDayLabel(weekDay: string): string {
+    if (!is1170OrLess) {
+      return weekDay;
+    }
+
+    switch (weekDay) {
+      case "Sunday":
+        return "Sun.";
+      case "Monday":
+        return "Mon.";
+      case "Tuesday":
+        return "Tue.";
+      case "Wednesday":
+        return "Wed.";
+      case "Thursday":
+        return "Thu.";
+      case "Friday":
+        return "Fri.";
+      case "Saturday":
+        return "Sat.";
+      default:
+        return "";
+    }
+  }
 
   function Calendar({ baseDate }: Calendar) {
     const trip: Trip = tripPlaceholder;
@@ -214,39 +241,46 @@ export function Itinerary() {
     return (
       <Grid container className={style.calendarGrid}>
         {calendarItems.map((item, i) => (
-          <CardActionArea
-            disabled={!item.active}
-            style={{ backgroundColor: getCalendarItemBackground(item) }}
-            className={`${style.calendarItem}`}
-            onClick={() => seeDayItinerary(item.date)}
-          >
-            <Grid container style={{ height: "100%" }}>
-              <Grid item xs={12}>
-                {item.tripDay ? (
-                  <Text bold color={getCalendarTextColor(item)} component="h4">
-                    {item.day}
-                  </Text>
+          <div key={item.date.valueOf()} className={style.calendarItemContainer}>
+            <CardActionArea
+              disabled={!item.active}
+              style={{ backgroundColor: getCalendarItemBackground(item) }}
+              className={`${style.calendarItem}`}
+              onClick={() => seeDayItinerary(item.date)}
+            >
+              <Grid container style={{ height: "100%" }}>
+                {/* Day number grid */}
+                <Grid item xs={12}>
+                  {item.tripDay ? (
+                    <Text bold color={getCalendarTextColor(item)} component="h4">
+                      {item.day}
+                    </Text>
+                  ) : (
+                    <Text color={getCalendarTextColor(item)} component="h4">
+                      {item.day}
+                    </Text>
+                  )}
+                </Grid>
+
+                {/* Icon grid */}
+                {trip.itinerary && dayHasEvents(item.date) ? (
+                  <Grid
+                    item
+                    xs={12}
+                    style={{ alignSelf: "flex-end", marginLeft: "auto" }}
+                  >
+                    <Grid container>
+                      {getEventsOnDay(trip.itinerary, item.date).map((event, i) => (
+                        <IconText key={event.name} icon={eventToIcon(event.type)} />
+                      ))}
+                    </Grid>
+                  </Grid>
                 ) : (
-                  <Text color={getCalendarTextColor(item)} component="h4">
-                    {item.day}
-                  </Text>
+                  <div></div>
                 )}
               </Grid>
-
-              {/* Icon grid */}
-              {trip.itinerary && dayHasEvents(item.date) ? (
-                <Grid item xs={12} style={{ alignSelf: "flex-end", marginLeft: "auto" }}>
-                  <Grid container>
-                    {getEventsOnDay(trip.itinerary, item.date).map((event, i) => (
-                      <IconText icon={eventToIcon(event.type)} />
-                    ))}
-                  </Grid>
-                </Grid>
-              ) : (
-                <div></div>
-              )}
-            </Grid>
-          </CardActionArea>
+            </CardActionArea>
+          </div>
         ))}
       </Grid>
     );
@@ -254,7 +288,7 @@ export function Itinerary() {
 
   return (
     <div className={style.mainContainer}>
-      <Navbar />
+      <Navbar className={style.navbar} dashboard position="sticky" />
       <DashDrawer />
 
       <div className={style.pageContentContainer}>
@@ -298,14 +332,16 @@ export function Itinerary() {
             </IconButton>
           </Grid>
 
-          {/* Days container */}
+          {/* Week Days container */}
           <Grid container className={style.daysContainer}>
-            {days.map((day, i) => (
-              <Grid key={i} item className={style.dayItem}>
-                <Text color={"#8d8d8d"} component="h4">
-                  {day}
-                </Text>
-              </Grid>
+            {weekDays.map((weekDay, i) => (
+              <div key={i} className={style.dayItemContainer}>
+                <Grid key={i} item>
+                  <Text color={"#8d8d8d"} style={{ fontSize: 18 }}>
+                    {getWeekDayLabel(weekDay)}
+                  </Text>
+                </Grid>
+              </div>
             ))}
           </Grid>
 

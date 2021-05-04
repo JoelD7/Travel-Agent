@@ -46,7 +46,6 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
       width: "250px",
       backgroundColor: Colors.BLUE,
       zIndex: 1,
-      paddingTop: "30px",
 
       [theme.breakpoints.down(hiddenBreakpoint)]: {
         display: "none",
@@ -169,7 +168,7 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
 
   return (
     <Drawer anchor="left" variant="permanent" classes={{ paper: style.drawer }}>
-      <List style={{ marginTop: "40px" }}>
+      <List>
         {topDrawerOptions.map((option, i) => (
           <Link key={i} style={getLinkStyle("white")} to={option.route}>
             <ListItem

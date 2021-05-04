@@ -28,9 +28,18 @@ export function TripRestaurants({ showAll = true }: TripRestaurants) {
     card: {
       borderRadius: "10px",
       width: "25%",
-      minWidth: "290px",
-      margin: "5px",
+      margin: "10px 5px",
       boxShadow: Shadow.LIGHT3D,
+
+      [theme.breakpoints.only("md")]: {
+        width: "35%",
+      },
+      [theme.breakpoints.down("sm")]: {
+        width: "48%",
+      },
+      [theme.breakpoints.down(686)]: {
+        width: "90%",
+      },
     },
   }));
 

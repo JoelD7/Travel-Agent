@@ -49,9 +49,19 @@ export function TripCars({ showAll = true }: TripCars) {
   const carsCardStyles = makeStyles((theme: Theme) => ({
     card: {
       borderRadius: "10px",
-      margin: "5px",
+      margin: "10px 5px",
       boxShadow: Shadow.LIGHT3D,
       width: "25%",
+
+      [theme.breakpoints.only("md")]: {
+        width: "35%",
+      },
+      [theme.breakpoints.down("sm")]: {
+        width: "48%",
+      },
+      [theme.breakpoints.down(686)]: {
+        width: "90%",
+      },
     },
     cardImage: {
       objectFit: "contain",

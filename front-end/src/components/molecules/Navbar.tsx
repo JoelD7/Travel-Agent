@@ -15,7 +15,7 @@ import {
   useMediaQuery,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { CSSProperties, FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { carlos, Font, logoIcon, logoType, logoTypeWhiteFore } from "../../assets";
@@ -41,10 +41,20 @@ import { NavDrawer } from "./NavDrawer/NavDrawer";
 interface Navbar {
   transparent?: boolean;
   position?: "fixed" | "absolute" | "sticky" | "static" | "relative";
+  className?: string;
+  style?: CSSProperties;
+  /**
+   * Indicates if the navbar is on a page that includes
+   * a dashboard. In this case, the navbar should be smaller.
+   */
+  dashboard?: boolean;
 }
 
 export const Navbar: FunctionComponent<Navbar> = ({
   transparent,
+  dashboard,
+  className,
+  style: styleParam,
   position = "relative",
 }: Navbar) => {
   const style = navbarStyles();
@@ -95,8 +105,12 @@ export const Navbar: FunctionComponent<Navbar> = ({
     setOpenOriginCityDialog(true);
   }
 
+  function getAppbarClassname() {
+    return `${className} ${transparent ? style.appbarHome : style.appbar}`;
+  }
+
   return (
-    <AppBar position={position} className={transparent ? style.appbarHome : style.appbar}>
+    <AppBar style={styleParam} position={position} className={getAppbarClassname()}>
       <Toolbar style={is450OrLess ? { padding: "15px" } : {}}>
         <Grid container alignItems="center">
           <Link
@@ -131,7 +145,9 @@ export const Navbar: FunctionComponent<Navbar> = ({
           </Grid>
 
           <Grid item className={style.rightChildrenContainer}>
-            <div className={style.defaultHomeNav}>
+            <div
+              className={dashboard ? style.defaultHomeNavDashboard : style.defaultHomeNav}
+            >
               {/* Trip reservations */}
               {userLoggedIn ? (
                 <>

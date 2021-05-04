@@ -22,13 +22,14 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     fontWeight: "bold",
   },
   appbar: {
-    boxShadow: "0px 0px red",
+    boxShadow: "0px 0px rgba(0,0,0,0)",
     backgroundColor: "white",
     zIndex: 2,
   },
+
   appbarHome: {
     backgroundColor: "rgba(0,0,0,0)",
-    boxShadow: "0px 0px red",
+    boxShadow: "0px 0px rgba(0,0,0,0)",
   },
   closeDialogButton: {
     bottom: "20px",
@@ -39,6 +40,14 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     marginRight: "30px",
     alignItems: "center",
     [theme.breakpoints.down(1000)]: {
+      display: "none",
+    },
+  },
+  defaultHomeNavDashboard: {
+    display: "flex",
+    marginRight: "30px",
+    alignItems: "center",
+    [theme.breakpoints.down(1195)]: {
       display: "none",
     },
   },
