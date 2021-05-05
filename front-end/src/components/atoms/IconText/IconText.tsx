@@ -14,6 +14,7 @@ interface IconTextProps {
   iconColor?: string;
   size?: number;
   style?: CreateCSSProperties<{}>;
+  textStyle?: CreateCSSProperties<{}>;
   //style for the icon container
   iconStyle?: CreateCSSProperties<{}>;
   children?: ReactNode;
@@ -26,6 +27,7 @@ export function IconText({
   text = "",
   icon,
   iconStyle,
+  textStyle,
   children,
   style,
   fontSize = 14,
@@ -62,6 +64,7 @@ export function IconText({
       fontFamily: Font.Family,
       fontSize: `${fontSize}px`,
       margin: "0px",
+      ...textStyle,
     },
   }));
 

@@ -241,7 +241,7 @@ export function Itinerary() {
             <CardActionArea
               disabled={!item.active}
               style={{ backgroundColor: getCalendarItemBackground(item) }}
-              className={`${style.calendarItem}`}
+              className={style.calendarItem}
               onClick={() => seeDayItinerary(item.date)}
             >
               <Grid container style={{ height: "100%" }}>

@@ -25,7 +25,7 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
     transition: "all .2s ease-in-out",
     zIndex: 1,
     "&:hover": {
-      transform: "scale(1.1)",
+      transform: "scale(1.05)",
       filter: "brightness(80%)",
       zIndex: 2,
     },

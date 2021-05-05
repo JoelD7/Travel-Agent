@@ -72,7 +72,7 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
   },
   flightCard: {
     borderRadius: "5px",
-    boxShadow: Shadow.LIGHT,
+    boxShadow: "2px 2px 8px rgb(118 118 118 / 50%)",
     padding: "0px 15px",
     margin: "10px",
     backgroundColor: "white",
@@ -121,7 +121,6 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
     width: "750px",
     padding: "10px 30px",
     borderRadius: "5px",
-    backgroundColor: Colors.BACKGROUND,
 
     [theme.breakpoints.down(820)]: {
       width: "100%",

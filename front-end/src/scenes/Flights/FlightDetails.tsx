@@ -17,11 +17,11 @@ import {
 import React from "react";
 import { useSelector } from "react-redux";
 import { CustomButton, IconTP, Text } from "../../components";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 import {
   capitalizeString,
-  FlightSearch,
   convertToUserCurrency,
+  FlightSearch,
   formatFlightDate,
   formatFlightSegmentTime,
   getFlightCitiesLabel,
@@ -31,9 +31,6 @@ import {
   parseFlightDuration,
   selectFlightDictionaries,
   selectFlightSearchParams,
-  selectEndCurrency,
-  ExchangeRate,
-  selectExchangeRate,
 } from "../../utils";
 import { flightDetailsStyles } from "./flightDetails-styles";
 
@@ -57,9 +54,6 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
   const dictionaries: FlightDictionary | undefined = useSelector(
     selectFlightDictionaries
   );
-
-  const baseCurrency: string = useSelector(selectEndCurrency);
-  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   const is730OrLess = useMediaQuery("(max-width:730px)");
   const is660OrLess = useMediaQuery("(max-width:660px)");
@@ -308,7 +302,11 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
             <h2
               style={{ fontSize: "20px", marginRight: "10px" }}
             >{`${convertToUserCurrency(flight.price.total, flight.price.currency)}`}</h2>
-            <CustomButton backgroundColor={Colors.GREEN} onClick={() => {}}>
+            <CustomButton
+              backgroundColor={Colors.GREEN}
+              style={{ boxShadow: Shadow.LIGHT3D }}
+              onClick={() => {}}
+            >
               Purchase flight
             </CustomButton>
           </Grid>

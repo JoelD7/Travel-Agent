@@ -2,7 +2,6 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays, format } from "date-fns";
 import { getDefaultCity } from "../functions";
-import { airportCityPlaceholder, airportCityPlaceholderTwo } from "../placeholders";
 import { FlightTypes } from "../types";
 import { IATALocation } from "../types/location-types";
 
@@ -20,6 +19,7 @@ export interface FlightSearch {
   flightFromAutocomplete?: IATALocation | null;
   flightToAutocomplete?: IATALocation | null;
   flightListURL?: string;
+  flightDetail?: Flight;
   [key: string]: FlightSearch[keyof FlightSearch];
 }
 
@@ -55,6 +55,9 @@ const flightSlice = createSlice({
   name: "flightSlice",
   initialState,
   reducers: {
+    setFlightDetail(state, action: PayloadAction<Flight>) {
+      state.flightDetail = action.payload;
+    },
     setFlightParams(state, action: PayloadAction<FlightSearch>) {
       return { ...state, ...action.payload };
     },
@@ -122,6 +125,7 @@ export const {
   setFlightListURL,
   setFlightClass,
   setFlightDictionaries,
+  setFlightDetail,
   setFlightChildren,
   setFlightInfants,
   setFlightFromAutocomplete,

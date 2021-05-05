@@ -1,31 +1,16 @@
-import { faWindowClose } from "@fortawesome/free-regular-svg-icons";
 import {
   faCalendar,
   faChevronLeft,
   faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  ClickAwayListener,
-  Direction,
-  Divider,
-  Grid,
-  Grow,
-  IconButton,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-  Toolbar,
-  useTheme,
-} from "@material-ui/core";
+import { Direction, Divider, Grid, IconButton, useTheme } from "@material-ui/core";
 import { format } from "date-fns";
-import React, { MouseEvent, ReactNode, useLayoutEffect, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import Helmet from "react-helmet";
 import Slider from "react-slick";
 import SwipeableViews from "react-swipeable-views";
 import { virtualize } from "react-swipeable-views-utils";
-import { useMediaQuery } from "react-responsive";
 import {
   CustomButton,
   DashDrawer,

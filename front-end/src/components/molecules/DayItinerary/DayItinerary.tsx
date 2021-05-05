@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Grid, IconButton, useMediaQuery } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../../styles";
 import {
   eventToIcon,
@@ -11,12 +11,16 @@ import {
   HotelReservation,
   hotelRsvPlaceholder,
   setHotelRsv,
+  selectFlightDetail,
+  setFlightDetail,
+  flightPlaceholder,
 } from "../../../utils";
 import { TripEvent } from "../../../utils/types/trip-types";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
 import { HotelRsvDetail } from "../../organisms";
 import { NotAvailableCard } from "../NotAvailableCard/NotAvailableCard";
 import { dayItineraryStyles } from "./dayItinerary-styles";
+import { FlightDetails } from "../../../scenes";
 
 interface DayItinerary {
   open: boolean;
@@ -34,7 +38,11 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
 
   const dispatch = useDispatch();
   const [openHotelDialog, setOpenHotelDialog] = useState(false);
+  const [openFlightDialog, setOpenFlightDialog] = useState(false);
+
   const hotelRsv: HotelReservation = hotelRsvPlaceholder;
+
+  const flightDetail: Flight | undefined = useSelector(selectFlightDetail);
 
   const is430pxOrLess = useMediaQuery("(max-width:430px)");
 
@@ -53,6 +61,8 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
     function onDetailButtonClick() {
       switch (event.type) {
         case EventType.Flight:
+          setOpenFlightDialog(true);
+          dispatch(setFlightDetail(flightPlaceholder));
           break;
         case EventType.Hotel:
           setOpenHotelDialog(true);
@@ -180,6 +190,14 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
           )}
         </Grid>
       </Dialog>
+
+      {flightDetail && (
+        <FlightDetails
+          flight={flightDetail}
+          open={openFlightDialog}
+          onClose={() => setOpenFlightDialog(false)}
+        />
+      )}
 
       <HotelRsvDetail open={openHotelDialog} onClose={() => setOpenHotelDialog(false)} />
     </>

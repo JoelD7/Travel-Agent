@@ -12,7 +12,7 @@ interface Rating {
   size?: number;
 }
 
-export function Rating({ score, onChange, type, size = 16, readonly }: Rating) {
+export function Rating({ score, onChange, type, size = 16, readonly = true }: Rating) {
   return (
     <ReactRating
       initialRating={score}

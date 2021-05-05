@@ -112,6 +112,8 @@ export const selectFlightDictionaries = (state: RootState) =>
 
 export const selectFlightType = (state: RootState) => state.flightSlice.flightType;
 
+export const selectFlightDetail = (state: RootState) => state.flightSlice.flightDetail;
+
 //#endregion
 
 //#region Restaurant
