@@ -64,6 +64,18 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
+  noSliderCard: {
+    width: "25%",
+    [theme.breakpoints.down(1205)]: {
+      width: "33%",
+    },
+    [theme.breakpoints.down(1010)]: {
+      width: "50%",
+    },
+    [theme.breakpoints.down(520)]: {
+      width: "90%",
+    },
+  },
   slider: {
     width: "100%",
     display: "flex",

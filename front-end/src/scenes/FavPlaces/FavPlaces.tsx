@@ -1,12 +1,9 @@
-import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
 import {
-  faCircle,
   faHeart,
   faMapMarkerAlt,
   faPhone,
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Card,
   CardActionArea,
@@ -33,29 +30,44 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
+  getHotelImages,
+  getHotelStars,
   getLinkStyle,
+  getRestaurantCategoriesList,
   HotelBooking,
   hotelPlaceholder,
   POICategory,
-  getHotelStars,
   poisPlaceholder,
-  getHotelImages,
   restaurantsPlaceholder,
-  getRestaurantCategoriesList,
 } from "../../utils";
 import { favPlacesStyles } from "./favPlaces-styles";
 
+interface RestaurantCardProps {
+  restaurant: RestaurantSearch;
+}
+
+interface HotelCardProps {
+  hotel: HotelBooking;
+}
+
+interface POICardProps {
+  poi: POISearch;
+}
+
 export function FavPlaces() {
-  const styles = favPlacesStyles();
+  const style = favPlacesStyles();
 
   const pois: POISearch[] = poisPlaceholder;
   let poiCategories = POICategory.POICategories;
+  let poiCategoryNames: string[] = POICategory.POICategories.map(
+    (category) => category.pluralName
+  );
 
   const hotels: HotelBooking[] = [hotelPlaceholder, hotelPlaceholder, hotelPlaceholder];
   const restaurants: RestaurantSearch[] = restaurantsPlaceholder;
 
   const sliderSettings = {
-    className: styles.slider,
+    className: style.slider,
     nextArrow: <SliderArrow direction="right" />,
     prevArrow: <SliderArrow direction="left" />,
   };
@@ -128,15 +140,114 @@ export function FavPlaces() {
     );
   }
 
+  function RestaurantCard({ restaurant }: RestaurantCardProps) {
+    return (
+      <Card className={style.favCard}>
+        <CardActionArea>
+          <CardMedia component="img" src={restaurant.image_url} height="175" />
+
+          <CardContent>
+            <Text component="h4" className={style.cardText} color={Colors.BLUE}>
+              {restaurant.name}
+            </Text>
+
+            <Rating type="circle" score={restaurant.rating} />
+
+            <IconText
+              className={style.cardText}
+              style={{ marginTop: "10px" }}
+              icon={faUtensils}
+            >
+              {getRestaurantCategoriesList(restaurant)}
+            </IconText>
+
+            <IconText className={style.cardText} icon={faMapMarkerAlt}>
+              {restaurant.location.display_address.join(", ")}
+            </IconText>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    );
+  }
+
+  function HotelCard({ hotel }: HotelCardProps) {
+    return (
+      <Card className={style.favCard}>
+        <CardActionArea>
+          <CardMedia component="img" src={getHotelImages(hotel)[0]} height="175" />
+
+          <CardContent>
+            <Text color={Colors.BLUE} className={style.cardText} component="h4" bold>
+              {hotel.name.content}
+            </Text>
+
+            <Rating type="star" score={getHotelStars(hotel)} />
+
+            <IconText
+              style={{ marginTop: 10 }}
+              className={style.cardText}
+              icon={faMapMarkerAlt}
+            >
+              {hotel.address.content}
+            </IconText>
+
+            <IconText className={style.cardText} icon={faPhone}>
+              {hotel.phones[0].phoneNumber}
+            </IconText>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    );
+  }
+
+  function POICard({ poi }: POICardProps) {
+    return (
+      <Card className={style.favCard}>
+        <CardActionArea>
+          <Link style={getLinkStyle()} to="#">
+            <CardMedia component="img" height="150" src={poi.photo} />
+            <CardContent>
+              <Text
+                weight={700}
+                style={{ color: Colors.BLUE }}
+                component="h4"
+                className={style.cardText}
+              >
+                {poi.name}
+              </Text>
+
+              <Rating type="circle" score={poi.rating ? poi.rating : 0} />
+
+              <IconText
+                style={{ marginTop: "10px" }}
+                className={style.cardText}
+                icon={faMapMarkerAlt}
+                text={
+                  poi.location.formattedAddress
+                    ? poi.location.formattedAddress.join(", ")
+                    : "No address"
+                }
+              />
+            </CardContent>
+          </Link>
+        </CardActionArea>
+      </Card>
+    );
+  }
+
+  function isACategoryFilterSelected(): boolean {
+    return poiCategoryNames.includes(selectedFilter);
+  }
+
   return (
-    <div className={styles.mainContainer}>
+    <div className={style.mainContainer}>
       <Helmet>
         <title>Favorite Places</title>
       </Helmet>
-      <Navbar className={styles.navbar} dashboard position="sticky" />
+      <Navbar className={style.navbar} dashboard position="sticky" />
       <DashDrawer />
 
-      <Grid container className={styles.mainGrid}>
+      <Grid container className={style.mainGrid}>
         {/* Page Title */}
         <Grid item xs={12} style={{ marginTop: "10px" }}>
           <IconText iconStyle={{ padding: "12px" }} shadow size={44} icon={faHeart}>
@@ -154,17 +265,17 @@ export function FavPlaces() {
             </Text>
 
             {/* Select */}
-            <FormControl className={styles.sortFormControl}>
+            <FormControl className={style.sortFormControl}>
               <Select
                 value={selectedFilter}
                 variant="outlined"
-                classes={{ icon: styles.selectIcon }}
-                className={styles.select}
+                classes={{ icon: style.selectIcon }}
+                className={style.select}
                 onChange={onFilterOptionChange}
               >
                 {filterOptions.map((option, i) => (
                   <MenuItem
-                    classes={{ root: styles.menuItemSelect }}
+                    classes={{ root: style.menuItemSelect }}
                     key={i}
                     value={option}
                   >
@@ -200,49 +311,27 @@ export function FavPlaces() {
               </Grid>
             </Grid>
 
-            <Slider
-              {...sliderSettings}
-              responsive={getResponsiveSlider(restaurants)}
-              slidesToShow={getSlidesToShow(4, restaurants)}
-            >
-              {restaurants.map((restaurant) => (
-                <div key={restaurant.id}>
-                  <Card className={styles.favCard}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        src={restaurant.image_url}
-                        height="175"
-                      />
-
-                      <CardContent>
-                        <Text
-                          component="h4"
-                          className={styles.cardText}
-                          color={Colors.BLUE}
-                        >
-                          {restaurant.name}
-                        </Text>
-
-                        <Rating type="circle" score={restaurant.rating} />
-
-                        <IconText
-                          className={styles.cardText}
-                          style={{ marginTop: "10px" }}
-                          icon={faUtensils}
-                        >
-                          {getRestaurantCategoriesList(restaurant)}
-                        </IconText>
-
-                        <IconText className={styles.cardText} icon={faMapMarkerAlt}>
-                          {restaurant.location.display_address.join(", ")}
-                        </IconText>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </div>
-              ))}
-            </Slider>
+            {selectedFilter === "Restaurants" ? (
+              <Grid container>
+                {restaurants.map((restaurant) => (
+                  <div key={restaurant.id} className={style.noSliderCard}>
+                    <RestaurantCard restaurant={restaurant} />
+                  </div>
+                ))}
+              </Grid>
+            ) : (
+              <Slider
+                {...sliderSettings}
+                responsive={getResponsiveSlider(restaurants)}
+                slidesToShow={getSlidesToShow(4, restaurants)}
+              >
+                {restaurants.map((restaurant) => (
+                  <div key={restaurant.id}>
+                    <RestaurantCard restaurant={restaurant} />
+                  </div>
+                ))}
+              </Slider>
+            )}
           </Grid>
         )}
 
@@ -270,50 +359,27 @@ export function FavPlaces() {
               </Grid>
             </Grid>
 
-            <Slider
-              {...sliderSettings}
-              responsive={getResponsiveSlider(hotels)}
-              slidesToShow={getSlidesToShow(4, hotels)}
-            >
-              {hotels.map((hotel) => (
-                <div key={hotel.code}>
-                  <Card className={styles.favCard}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        src={getHotelImages(hotel)[0]}
-                        height="175"
-                      />
-
-                      <CardContent>
-                        <Text
-                          color={Colors.BLUE}
-                          className={styles.cardText}
-                          component="h4"
-                          bold
-                        >
-                          {hotel.name.content}
-                        </Text>
-
-                        <Rating type="star" score={getHotelStars(hotel)} />
-
-                        <IconText
-                          style={{ marginTop: 10 }}
-                          className={styles.cardText}
-                          icon={faMapMarkerAlt}
-                        >
-                          {hotel.address.content}
-                        </IconText>
-
-                        <IconText className={styles.cardText} icon={faPhone}>
-                          {hotel.phones[0].phoneNumber}
-                        </IconText>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </div>
-              ))}
-            </Slider>
+            {selectedFilter === "Hotels" ? (
+              <Grid container>
+                {hotels.map((hotel) => (
+                  <div key={hotel.code} className={style.noSliderCard}>
+                    <HotelCard hotel={hotel} />
+                  </div>
+                ))}
+              </Grid>
+            ) : (
+              <Slider
+                {...sliderSettings}
+                responsive={getResponsiveSlider(hotels)}
+                slidesToShow={getSlidesToShow(4, hotels)}
+              >
+                {hotels.map((hotel) => (
+                  <div key={hotel.code}>
+                    <HotelCard hotel={hotel} />
+                  </div>
+                ))}
+              </Slider>
+            )}
           </Grid>
         )}
 
@@ -331,7 +397,7 @@ export function FavPlaces() {
                         <Text
                           bold
                           color={Colors.BLUE}
-                          className={styles.cardText}
+                          className={style.cardText}
                           component="h2"
                         >
                           {category.pluralName}
@@ -351,56 +417,32 @@ export function FavPlaces() {
                       </Grid>
                     </Grid>
 
-                    <Slider
-                      {...sliderSettings}
-                      responsive={getResponsiveSlider(getPlacesOfCategory(category.name))}
-                      slidesToShow={getSlidesToShow(
-                        4,
-                        getPlacesOfCategory(category.name)
-                      )}
-                    >
-                      {getPlacesOfCategory(category.name).map((place: POISearch, i) => (
-                        <div key={i}>
-                          <Card className={styles.favCard}>
-                            <CardActionArea>
-                              <Link style={getLinkStyle()} to="#">
-                                <CardMedia
-                                  component="img"
-                                  height="150"
-                                  src={place.photo}
-                                />
-                                <CardContent>
-                                  <Text
-                                    weight={700}
-                                    style={{ color: Colors.BLUE }}
-                                    component="h4"
-                                    className={styles.cardText}
-                                  >
-                                    {place.name}
-                                  </Text>
-
-                                  <Rating
-                                    type="circle"
-                                    score={place.rating ? place.rating : 0}
-                                  />
-
-                                  <IconText
-                                    style={{ marginTop: "10px" }}
-                                    className={styles.cardText}
-                                    icon={faMapMarkerAlt}
-                                    text={
-                                      place.location.formattedAddress
-                                        ? place.location.formattedAddress.join(", ")
-                                        : "No address"
-                                    }
-                                  />
-                                </CardContent>
-                              </Link>
-                            </CardActionArea>
-                          </Card>
-                        </div>
-                      ))}
-                    </Slider>
+                    {isACategoryFilterSelected() ? (
+                      <Grid container>
+                        {getPlacesOfCategory(category.name).map((poi: POISearch, i) => (
+                          <div key={poi.id} className={style.noSliderCard}>
+                            <POICard poi={poi} />
+                          </div>
+                        ))}
+                      </Grid>
+                    ) : (
+                      <Slider
+                        {...sliderSettings}
+                        responsive={getResponsiveSlider(
+                          getPlacesOfCategory(category.name)
+                        )}
+                        slidesToShow={getSlidesToShow(
+                          4,
+                          getPlacesOfCategory(category.name)
+                        )}
+                      >
+                        {getPlacesOfCategory(category.name).map((poi: POISearch, i) => (
+                          <div key={poi.id}>
+                            <POICard poi={poi} />
+                          </div>
+                        ))}
+                      </Slider>
+                    )}
                   </Grid>
                 )}
               </div>
@@ -408,7 +450,7 @@ export function FavPlaces() {
         </Grid>
       </Grid>
 
-      <div className={styles.footerContainer}>
+      <div className={style.footerContainer}>
         <Footer />
       </div>
     </div>
