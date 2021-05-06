@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import {
   CustomButton,
@@ -39,6 +39,7 @@ import {
   POICategory,
   poisPlaceholder,
   restaurantsPlaceholder,
+  Routes,
 } from "../../utils";
 import { favPlacesStyles } from "./favPlaces-styles";
 
@@ -65,6 +66,8 @@ export function FavPlaces() {
 
   const hotels: HotelBooking[] = [hotelPlaceholder, hotelPlaceholder, hotelPlaceholder];
   const restaurants: RestaurantSearch[] = restaurantsPlaceholder;
+
+  const history = useHistory();
 
   const sliderSettings = {
     className: style.slider,
@@ -143,7 +146,7 @@ export function FavPlaces() {
   function RestaurantCard({ restaurant }: RestaurantCardProps) {
     return (
       <Card className={style.favCard}>
-        <CardActionArea>
+        <CardActionArea onClick={() => goToRestaurant(restaurant)}>
           <CardMedia component="img" src={restaurant.image_url} height="175" />
 
           <CardContent>
@@ -173,7 +176,7 @@ export function FavPlaces() {
   function HotelCard({ hotel }: HotelCardProps) {
     return (
       <Card className={style.favCard}>
-        <CardActionArea>
+        <CardActionArea onClick={() => goToHotel(hotel)}>
           <CardMedia component="img" src={getHotelImages(hotel)[0]} height="175" />
 
           <CardContent>
@@ -203,7 +206,7 @@ export function FavPlaces() {
   function POICard({ poi }: POICardProps) {
     return (
       <Card className={style.favCard}>
-        <CardActionArea>
+        <CardActionArea onClick={() => goToPOI(poi)}>
           <Link style={getLinkStyle()} to="#">
             <CardMedia component="img" height="150" src={poi.photo} />
             <CardContent>
@@ -237,6 +240,18 @@ export function FavPlaces() {
 
   function isACategoryFilterSelected(): boolean {
     return poiCategoryNames.includes(selectedFilter);
+  }
+
+  function goToRestaurant(restaurant: RestaurantSearch) {
+    history.push(`${Routes.RESTAURANTS}/${restaurant.id}`);
+  }
+
+  function goToHotel(hotel: HotelBooking) {
+    history.push(`${Routes.HOTELS}/${hotel.code}`);
+  }
+
+  function goToPOI(poi: POISearch) {
+    history.push(`${Routes.THINGS_TODO}/${poi.id}`);
   }
 
   return (

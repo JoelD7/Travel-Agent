@@ -1,7 +1,9 @@
 import { Backdrop, CardActionArea, Dialog } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Slider from "react-slick";
+import { setBlurredScreen } from "../../../utils";
 import { SliderArrow } from "../../atoms";
 import { restaurantDetailSliderStyles } from "./restaurantDetailSliderStyles";
 
@@ -14,6 +16,8 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
 
   const [viewerOpen, setViewerOpen] = useState(false);
   const [initialImageSlide, setInitialImageSlide] = useState(0);
+
+  const dispatch = useDispatch();
 
   const sliderSettings = {
     className: style.slider,
@@ -42,8 +46,14 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
   };
 
   function openFullScreenImageSlider(initialSlide: number) {
+    dispatch(setBlurredScreen(true));
     setInitialImageSlide(initialSlide);
     setViewerOpen(true);
+  }
+
+  function onFullScreenViewerClose() {
+    setViewerOpen(false);
+    dispatch(setBlurredScreen(false));
   }
 
   return (
@@ -64,7 +74,7 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
       {/* Fullscreen images */}
       <Dialog
         open={viewerOpen}
-        onClose={() => setViewerOpen(false)}
+        onClose={() => onFullScreenViewerClose()}
         BackdropComponent={Backdrop}
         classes={{ paper: style.paperImage, paperScrollPaper: style.paperScrollPaper }}
         BackdropProps={{

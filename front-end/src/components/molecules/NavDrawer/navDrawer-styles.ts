@@ -22,6 +22,7 @@ export const drawerStyles = makeStyles((theme: Theme) => ({
   listItem: {
     "&:hover": {
       backgroundColor: Colors.BLUE_HOVER,
+      borderBottom: "2px solid rgba(0,0,0,0)",
     },
   },
   listItemRoot: {

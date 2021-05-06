@@ -58,6 +58,7 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
     listItem: {
       "&:hover": {
         backgroundColor: Colors.BLUE_HOVER,
+        borderBottom: "2px solid rgba(0,0,0,0)",
       },
     },
     listItemRoot: {

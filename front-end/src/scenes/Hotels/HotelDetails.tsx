@@ -20,17 +20,15 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
-  convertURLToReservationParams,
-  ExchangeRate,
   convertToUserCurrency,
+  convertURLToReservationParams,
   getMinRate,
   HotelBedAPI,
   isValueInRange,
   proxyUrl,
   Routes,
+  selectBlurredScreen,
   selectDestinationCity,
-  selectEndCurrency,
-  selectExchangeRate,
   selectHotelDetail,
   selectHotelReservationParams,
 } from "../../utils";
@@ -75,10 +73,7 @@ export function HotelDetails() {
 
   const geolocation: IATALocation = useSelector(selectDestinationCity);
 
-  const baseCurrency: string = useSelector(selectEndCurrency);
-  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-
-  const [openSnack, setOpenSnack] = useState(false);
+  const blurredScreen: boolean = useSelector(selectBlurredScreen);
 
   useEffect(() => {
     if (!hotel) {
@@ -205,7 +200,10 @@ export function HotelDetails() {
   }
 
   return (
-    <div className={style.mainContainer}>
+    <div
+      className={style.mainContainer}
+      style={blurredScreen ? { filter: "blur(4px)" } : {}}
+    >
       <a href={`#${roomTitleId}`} ref={roomAnchorEl} hidden></a>
 
       {hotel && (

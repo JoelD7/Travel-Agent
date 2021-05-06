@@ -42,6 +42,8 @@ export const selectExchangeRate = (state: RootState) => state.rootSlice.exchange
 export const selectEndCurrency = (state: RootState) => state.rootSlice.userCurrency;
 
 export const selectCityImage = (state: RootState) => state.rootSlice.cityImage;
+
+export const selectBlurredScreen = (state: RootState) => state.rootSlice.blurredScreen;
 //#endregion
 
 //#region Search

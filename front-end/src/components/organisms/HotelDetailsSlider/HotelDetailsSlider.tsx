@@ -8,9 +8,10 @@ import {
 } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Slider from "react-slick";
 import { Colors, Shadow } from "../../../styles";
-import { getHotelImages, HotelBooking } from "../../../utils";
+import { getHotelImages, HotelBooking, setBlurredScreen } from "../../../utils";
 import { SliderArrow } from "../../atoms";
 
 interface HotelDetailsSlider {
@@ -100,6 +101,8 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
 
   const style = hotelDetailsSliderStyles();
 
+  const dispatch = useDispatch();
+
   const hotelPhotos = getHotelImages(hotel);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [initialImageSlide, setInitialImageSlide] = useState(0);
@@ -148,8 +151,14 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
   };
 
   function openFullScreenImageSlider(initialSlide: number) {
+    dispatch(setBlurredScreen(true));
     setInitialImageSlide(initialSlide);
     setViewerOpen(true);
+  }
+
+  function onFullScreenViewerClose() {
+    setViewerOpen(false);
+    dispatch(setBlurredScreen(false));
   }
 
   return (
@@ -170,7 +179,7 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
       {/* Fullscreen images */}
       <Dialog
         open={viewerOpen}
-        onClose={() => setViewerOpen(false)}
+        onClose={() => onFullScreenViewerClose()}
         BackdropComponent={Backdrop}
         classes={{ paper: style.paperImage }}
         BackdropProps={{

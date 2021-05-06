@@ -56,6 +56,9 @@ export const restaurantDetailSliderStyles = makeStyles((theme: Theme) => ({
   },
   photoContainerImage: {
     maxWidth: "1004px",
+    height: "90vh",
+    display: "flex",
+    width: "100%",
   },
   photo: {
     objectFit: "cover",
@@ -67,9 +70,10 @@ export const restaurantDetailSliderStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(1140)]: {},
   },
   photoInSlider: {
-    objectFit: "cover",
-    height: "100%",
-    width: "100%",
+    objectFit: "contain",
+    height: "90vh",
+    width: "inherit",
+    margin: "auto",
     borderRadius: "10px",
   },
   slider: {

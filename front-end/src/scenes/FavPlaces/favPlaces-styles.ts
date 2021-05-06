@@ -8,6 +8,10 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
     margin: 0,
+    [theme.breakpoints.down(620)]: {
+      whiteSpace: "inherit",
+      overflow: "visible",
+    },
   },
   favCard: {
     borderRadius: "10px",
