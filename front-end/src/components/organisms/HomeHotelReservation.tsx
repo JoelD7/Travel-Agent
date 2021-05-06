@@ -28,7 +28,7 @@ import {
   selectHotelReservationParams,
 } from "../../utils";
 import { CustomButton } from "../atoms";
-import { IataAutocomplete } from "../molecules";
+import { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 
 interface HotelType {
   checkIn: MaterialUiPickersDate;

@@ -1,7 +1,7 @@
 import { makeStyles, Grid, Theme } from "@material-ui/core";
 import React from "react";
 import { flightsPlaceholder } from "../../../utils";
-import { CardFlight } from "../../molecules";
+import { CardFlight } from "../CardFlight/CardFlight";
 
 interface TripFlights {
   showAll?: boolean;

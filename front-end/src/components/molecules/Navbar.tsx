@@ -35,8 +35,7 @@ import {
   updateAccessToken,
 } from "../../utils/external-apis/amadeus-apis";
 import { CustomButton, IconTP, Text } from "../atoms";
-import { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
-import { NavDrawer } from "./NavDrawer/NavDrawer";
+import { IataAutocomplete, NavDrawer } from "../organisms";
 
 interface Navbar {
   transparent?: boolean;

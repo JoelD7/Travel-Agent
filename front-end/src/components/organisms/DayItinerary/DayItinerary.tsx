@@ -18,9 +18,9 @@ import {
 import { TripEvent } from "../../../utils/types/trip-types";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
 import { HotelRsvDetail } from "../../organisms";
-import { NotAvailableCard } from "../NotAvailableCard/NotAvailableCard";
 import { dayItineraryStyles } from "./dayItinerary-styles";
 import { FlightDetails } from "../../../scenes";
+import { NotAvailableCard } from "../../molecules";
 
 interface DayItinerary {
   open: boolean;

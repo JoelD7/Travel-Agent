@@ -22,7 +22,8 @@ import {
 } from "../../utils/store/restaurant-slice";
 import { IATALocation } from "../../utils/types/location-types";
 import { CustomButton, Text } from "../atoms";
-import { ResCuisineSelector, ResFeatureSelector } from "../molecules";
+import { ResCuisineSelector } from "./RestaurantCuisinesSelec/ResCuisineSelector";
+import { ResFeatureSelector } from "./RestaurantFeature/ResFeatureSelector";
 
 interface RestaurantFilters {
   setLoading?: (value: boolean) => void;
@@ -40,7 +41,6 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
   const dispatch = useDispatch();
 
   const allRestaurants: RestaurantSearch[] = useSelector(selectAllRestaurants);
-  const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
 
   const currentCity: IATALocation = useSelector(selectDestinationCity);
 

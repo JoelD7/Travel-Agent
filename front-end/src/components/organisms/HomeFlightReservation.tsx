@@ -35,7 +35,7 @@ import {
   setFlightReturn,
 } from "../../utils/store/flight-slice";
 import { CustomButton } from "../atoms";
-import { IataAutocomplete } from "../molecules";
+import { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 
 export default function HomeFlightReservation() {
   const theme = createMuiTheme({

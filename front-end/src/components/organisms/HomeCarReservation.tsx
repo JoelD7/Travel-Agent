@@ -19,7 +19,7 @@ import {
   setCarSearch,
 } from "../../utils";
 import { CustomButton, Text } from "../atoms";
-import { IataAutocomplete } from "../molecules";
+import { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 
 export default function HomeCarReservation() {
   const theme = createMuiTheme({
