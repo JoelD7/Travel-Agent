@@ -45,6 +45,9 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
   let image: string = getRoomImage();
 
   const accordionTitleStyles = makeStyles((theme: Theme) => ({
+    backdrop: {
+      backdropFilter: "blur(4px)",
+    },
     cardArea: {
       width: "auto",
       height: "100%",
@@ -309,6 +312,10 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
         classes={{ paperWidthSm: style.paperWidth, paper: style.paper }}
         onClose={() => setOpenDialog(false)}
         BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+          classes: { root: style.backdrop },
+        }}
       >
         <img src={`${image}`} alt="" />
       </Dialog>

@@ -218,6 +218,7 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
       classes={{ paper: style.paper }}
       BackdropProps={{
         timeout: 500,
+        classes: { root: style.backdrop },
       }}
       onClose={onClose}
     >

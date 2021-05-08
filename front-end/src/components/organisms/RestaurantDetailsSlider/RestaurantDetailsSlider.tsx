@@ -79,6 +79,7 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
         classes={{ paper: style.paperImage, paperScrollPaper: style.paperScrollPaper }}
         BackdropProps={{
           timeout: 500,
+          classes: { root: style.backdrop },
         }}
       >
         <Slider {...imageSliderSettings} lazyLoad="ondemand">

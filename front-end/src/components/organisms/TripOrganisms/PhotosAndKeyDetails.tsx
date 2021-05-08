@@ -1,12 +1,11 @@
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { Divider, Grid, makeStyles, Theme } from "@material-ui/core";
 import { format } from "date-fns";
-import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import { Colors } from "../../../styles";
-import { setBlurredScreen, Trip } from "../../../utils";
-import { Text, CustomButton, SliderArrow } from "../../atoms";
+import { Trip } from "../../../utils";
+import { CustomButton, SliderArrow, Text } from "../../atoms";
 import { PhotoAlbumCard } from "../../molecules";
 import { PhotoUploader } from "./PhotoUploader";
 
@@ -109,8 +108,6 @@ export const PhotosAndKeyDetails = React.memo(function PhotosAndKeyDetails({
     setOpenDialog(false);
   }
 
-  const onCloseDialogClick = useCallback(() => closePhotoUploader(), [trip]);
-
   return (
     <Grid item xs={12}>
       <Grid container>
@@ -185,7 +182,7 @@ export const PhotosAndKeyDetails = React.memo(function PhotosAndKeyDetails({
         </Grid>
       </Grid>
 
-      <PhotoUploader open={openDialog} onClose={() => onCloseDialogClick()} trip={trip} />
+      <PhotoUploader open={openDialog} onClose={() => closePhotoUploader()} trip={trip} />
     </Grid>
   );
 });

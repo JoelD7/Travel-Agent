@@ -47,6 +47,9 @@ interface RoomCard {
 
 export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
   const hotelRsvStyles = makeStyles((theme: Theme) => ({
+    backdrop: {
+      backdropFilter: "blur(4px)",
+    },
     contentContainer: {
       backgroundColor: "white",
       fontFamily: Font.Family,
@@ -182,6 +185,7 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
       classes={{ paper: style.paper }}
       BackdropProps={{
         timeout: 500,
+        classes: { root: style.backdrop },
       }}
     >
       {hotelRsv && (

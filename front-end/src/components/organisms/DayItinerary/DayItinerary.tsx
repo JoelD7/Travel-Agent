@@ -158,6 +158,10 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
         classes={{ paper: style.paper }}
         onClose={onClose}
         fullScreen={is430pxOrLess}
+        BackdropProps={{
+          timeout: 500,
+          classes: { root: style.backdrop },
+        }}
       >
         <Grid container>
           {/* Title */}

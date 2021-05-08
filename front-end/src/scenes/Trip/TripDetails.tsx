@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Direction, Grid, IconButton, useTheme } from "@material-ui/core";
 import React, { ReactNode, useState } from "react";
 import Helmet from "react-helmet";
-import { useSelector } from "react-redux";
 import SwipeableViews from "react-swipeable-views";
 import { virtualize } from "react-swipeable-views-utils";
 import {
@@ -21,7 +20,7 @@ import {
   TripTabBar,
 } from "../../components";
 import { Colors } from "../../styles";
-import { selectBlurredScreen, Trip, tripPlaceholder } from "../../utils";
+import { Trip, tripPlaceholder } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
 interface TabPanel {
@@ -37,8 +36,6 @@ export function TripDetails() {
 
   const [tabIndex, setTabIndex] = useState(0);
   const MUtheme = useTheme();
-
-  const blurredScreen: boolean = useSelector(selectBlurredScreen);
 
   const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
@@ -254,10 +251,7 @@ export function TripDetails() {
   }
 
   return (
-    <div
-      className={style.mainContainer}
-      style={blurredScreen ? { filter: "blur(4px)" } : {}}
-    >
+    <div className={style.mainContainer}>
       <Helmet>
         <title>{trip.name}</title>
       </Helmet>

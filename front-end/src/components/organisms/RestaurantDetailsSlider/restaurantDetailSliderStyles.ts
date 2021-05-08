@@ -2,6 +2,9 @@ import { makeStyles, Theme } from "@material-ui/core";
 import { Colors, Shadow } from "../../../styles";
 
 export const restaurantDetailSliderStyles = makeStyles((theme: Theme) => ({
+  backdrop: {
+    backdropFilter: "blur(4px)",
+  },
   imageSlider: {
     width: "68vw",
     display: "flex",

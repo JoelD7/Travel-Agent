@@ -20,6 +20,9 @@ interface HotelDetailsSlider {
 
 export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
   const hotelDetailsSliderStyles = makeStyles((theme: Theme) => ({
+    backdrop: {
+      backdropFilter: "blur(4px)",
+    },
     imageSlider: {
       width: "68vw",
       display: "flex",
@@ -184,6 +187,7 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
         classes={{ paper: style.paperImage }}
         BackdropProps={{
           timeout: 500,
+          classes: { root: style.backdrop },
         }}
       >
         <Slider {...imageSliderSettings} lazyLoad="ondemand">

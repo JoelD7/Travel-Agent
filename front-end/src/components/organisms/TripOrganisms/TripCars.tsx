@@ -47,6 +47,9 @@ interface FeatureIconsProps {
 
 export const TripCars = React.memo(function TripCars({ showAll = true }: TripCars) {
   const carsCardStyles = makeStyles((theme: Theme) => ({
+    backdrop: {
+      backdropFilter: "blur(4px)",
+    },
     card: {
       borderRadius: "10px",
       margin: "10px 5px",
@@ -165,6 +168,7 @@ export const TripCars = React.memo(function TripCars({ showAll = true }: TripCar
         classes={{ paper: style.paper }}
         BackdropProps={{
           timeout: 500,
+          classes: { root: style.backdrop },
         }}
       >
         <Grid container>

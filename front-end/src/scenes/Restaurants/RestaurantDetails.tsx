@@ -13,7 +13,6 @@ import { Grid, IconButton, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Font } from "../../assets";
 import {
@@ -34,7 +33,6 @@ import {
   getRestaurantHours,
   getRestaurantTransactions,
   restaurantPlaceholder,
-  selectBlurredScreen,
 } from "../../utils";
 import { fetchRestaurant } from "../../utils/external-apis/yelp-apis";
 import { restaurantDetailsStyles } from "./restaurantDetails-styles";
@@ -52,8 +50,6 @@ export function RestaurantDetails() {
 
   const [openSnack, setOpenSnack] = useState(false);
   const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
-
-  const blurredScreen: boolean = useSelector(selectBlurredScreen);
 
   useEffect(() => {
     fetchRestaurant(id)
@@ -82,10 +78,7 @@ export function RestaurantDetails() {
   }
 
   return (
-    <div
-      className={style.mainContainer}
-      style={blurredScreen ? { filter: "blur(4px)" } : {}}
-    >
+    <div className={style.mainContainer}>
       <Helmet>
         <title>{`Restaurant | ${restaurant.name}`}</title>
       </Helmet>

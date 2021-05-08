@@ -3,16 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Backdrop,
   Dialog,
+  FormControl,
   Grid,
   IconButton,
   makeStyles,
-  Theme,
-  FormControl,
-  Select,
   MenuItem,
+  Select,
   TextField,
-  useTheme,
+  Theme,
   useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
@@ -39,6 +39,9 @@ export const PhotoUploader = React.memo(function PhotoUploader({
       [theme.breakpoints.down(810)]: {
         width: "100%",
       },
+    },
+    backdrop: {
+      backdropFilter: "blur(4px)",
     },
     closeButton: {
       marginLeft: "auto",
@@ -215,6 +218,7 @@ export const PhotoUploader = React.memo(function PhotoUploader({
       classes={{ paper: style.paper }}
       BackdropProps={{
         timeout: 500,
+        classes: { root: style.backdrop },
       }}
     >
       <Grid container>

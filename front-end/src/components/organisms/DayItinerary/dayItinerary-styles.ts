@@ -3,6 +3,9 @@ import { Font } from "../../../assets";
 import { Colors, Shadow } from "../../../styles";
 
 export const dayItineraryStyles = makeStyles((theme: Theme) => ({
+  backdrop: {
+    backdropFilter: "blur(4px)",
+  },
   cardsContainer: {
     width: "95%",
     borderRadius: "10px",

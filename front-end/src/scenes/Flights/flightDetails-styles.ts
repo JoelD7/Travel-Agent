@@ -16,6 +16,9 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
       display: "block",
     },
   },
+  backdrop: {
+    backdropFilter: "blur(4px)",
+  },
   closeButton: {
     marginLeft: "auto",
     marginBottom: "32px",
