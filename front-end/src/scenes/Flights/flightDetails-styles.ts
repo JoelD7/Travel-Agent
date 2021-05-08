@@ -79,7 +79,7 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
   },
   flightCardCities: {
     marginLeft: "auto",
-    color: Colors.GRAY,
+    color: Colors.GRAY_TEXT,
     textAlign: "end",
     marginBottom: "0px",
     fontSize: "14px",

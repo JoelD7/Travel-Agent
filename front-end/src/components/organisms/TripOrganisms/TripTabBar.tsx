@@ -52,7 +52,7 @@ export function TripTabBar({ tabIndex, onTabIndexChange }: TripTabBar) {
     },
     moreMenuItem: {
       display: "none",
-      [theme.breakpoints.down(857)]: {
+      [theme.breakpoints.down(1060)]: {
         display: "flex",
       },
     },

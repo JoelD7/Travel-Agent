@@ -26,7 +26,7 @@ interface RsvHotels {
   showAll?: boolean;
 }
 
-export function RsvHotels({ showAll = true }: RsvHotels) {
+export const RsvHotels = React.memo(function RsvHotels({ showAll = true }: RsvHotels) {
   const rsvHotelsStyles = makeStyles((theme: Theme) => ({
     hotelCard: {
       borderRadius: "10px",
@@ -122,4 +122,4 @@ export function RsvHotels({ showAll = true }: RsvHotels) {
       <HotelRsvDetail open={openHotelDialog} onClose={() => setOpenHotelDialog(false)} />
     </Grid>
   );
-}
+});

@@ -117,6 +117,12 @@ export function TripDates({ startDate: start, endDate: end, updateDates }: TripD
 
       "& .MuiOutlinedInput-root": {
         borderRadius: 10,
+        "&:hover fieldset": {
+          borderColor: Colors.GRAY_BORDER_HOVER,
+        },
+        "&.Mui-focused fieldset": {
+          borderColor: Colors.GREEN,
+        },
       },
       "& .MuiOutlinedInput-input": {
         padding: 15,
@@ -156,7 +162,7 @@ export function TripDates({ startDate: start, endDate: end, updateDates }: TripD
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           {/* From */}
           <Grid item className={style.dateGrid}>
-            <Text component="h4" color={Colors.GRAY}>
+            <Text component="h5" color={Colors.GRAY_TEXT}>
               From
             </Text>
             <KeyboardDatePicker
@@ -182,7 +188,7 @@ export function TripDates({ startDate: start, endDate: end, updateDates }: TripD
                 : { marginLeft: "auto" }
             }
           >
-            <Text component="h4" color={Colors.GRAY}>
+            <Text component="h5" color={Colors.GRAY_TEXT}>
               To
             </Text>
             <KeyboardDatePicker

@@ -164,7 +164,7 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
   durationSubText: {
     fontSize: "14px",
     marginTop: "4px",
-    color: Colors.GRAY,
+    color: Colors.GRAY_TEXT,
     [theme.breakpoints.down(350)]: {
       marginBottom: "0px",
     },

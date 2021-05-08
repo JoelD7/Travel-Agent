@@ -2,19 +2,15 @@ import DateFnsUtils from "@date-io/date-fns";
 import { faClock, faPlaneDeparture, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  createMuiTheme, FormControl, Grid,
-
-
-
-  IconButton, MenuItem, Popover,
-
-
-
+  createMuiTheme,
+  FormControl,
+  Grid,
+  IconButton,
+  MenuItem,
+  Popover,
   Select,
-
-
-
-  Snackbar, ThemeProvider
+  Snackbar,
+  ThemeProvider,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";

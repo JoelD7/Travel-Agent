@@ -7,7 +7,9 @@ interface TripFlights {
   showAll?: boolean;
 }
 
-export function TripFlights({ showAll = true }: TripFlights) {
+export const TripFlights = React.memo(function TripFlights({
+  showAll = true,
+}: TripFlights) {
   const tripFlightStyles = makeStyles((theme: Theme) => ({
     flightCard: {
       width: "48%",
@@ -33,4 +35,4 @@ export function TripFlights({ showAll = true }: TripFlights) {
       ))}
     </Grid>
   );
-}
+});

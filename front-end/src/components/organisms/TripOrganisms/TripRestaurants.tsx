@@ -23,7 +23,9 @@ interface TripRestaurants {
   showAll?: boolean;
 }
 
-export function TripRestaurants({ showAll = true }: TripRestaurants) {
+export const TripRestaurants = React.memo(function TripRestaurants({
+  showAll = true,
+}: TripRestaurants) {
   const tripRestaurantStyles = makeStyles((theme: Theme) => ({
     card: {
       borderRadius: "10px",
@@ -79,4 +81,4 @@ export function TripRestaurants({ showAll = true }: TripRestaurants) {
       ))}
     </Grid>
   );
-}
+});

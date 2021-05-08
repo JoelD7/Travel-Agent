@@ -30,6 +30,13 @@ export const createTripStyles = makeStyles((theme: Theme) => ({
     fontFamily: Font.Family,
     backgroundColor: "white",
   },
+  navbar: {
+    width: "calc(100% - 251px)",
+    marginLeft: "auto",
+    [theme.breakpoints.down(960)]: {
+      width: "100%",
+    },
+  },
   pageContainer: {
     marginLeft: "275px",
     width: "calc(100% - 320px)",

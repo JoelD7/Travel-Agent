@@ -45,7 +45,7 @@ interface FeatureIconsProps {
   car: CarRsv;
 }
 
-export function TripCars({ showAll = true }: TripCars) {
+export const TripCars = React.memo(function TripCars({ showAll = true }: TripCars) {
   const carsCardStyles = makeStyles((theme: Theme) => ({
     card: {
       borderRadius: "10px",
@@ -248,4 +248,4 @@ export function TripCars({ showAll = true }: TripCars) {
       </Dialog>
     </Grid>
   );
-}
+});

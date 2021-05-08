@@ -119,7 +119,7 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
   },
   searchBarInput: {
     backgroundColor: "rgba(0,0,0,0)",
-    color: Colors.GRAY,
+    color: Colors.GRAY_TEXT,
   },
   searchBarText: {
     fontFamily: Family,

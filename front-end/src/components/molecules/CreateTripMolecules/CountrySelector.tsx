@@ -38,6 +38,13 @@ export function CountrySelector({ selectedCountries, updateState }: CountrySelec
       "& .MuiOutlinedInput-root": {
         height: 46,
         borderRadius: 10,
+
+        "&:hover fieldset": {
+          borderColor: Colors.GRAY_BORDER_HOVER,
+        },
+        "&.Mui-focused fieldset": {
+          borderColor: Colors.GREEN,
+        },
       },
     },
     menuList: {

@@ -25,7 +25,7 @@ export function NotFound() {
             Ups... Error 404
           </Text>
 
-          <Text component="h4" color={Colors.GRAY} style={{ maxWidth: "242px" }}>
+          <Text component="h4" color={Colors.GRAY_TEXT} style={{ maxWidth: "242px" }}>
             It seems like the page you requested doesn’t exists
           </Text>
 

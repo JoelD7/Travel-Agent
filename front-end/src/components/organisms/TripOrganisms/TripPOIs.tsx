@@ -10,7 +10,7 @@ import React from "react";
 interface TripPOIs {
   showAll?: boolean;
 }
-export function TripPOIs({ showAll }: TripPOIs) {
+export const TripPOIs = React.memo(function TripPOIs({ showAll }: TripPOIs) {
   const tripPoisStyles = makeStyles((theme: Theme) => ({
     categoryIcon: {
       backgroundColor: Colors.PURPLE,
@@ -106,4 +106,4 @@ export function TripPOIs({ showAll }: TripPOIs) {
       ))}
     </Grid>
   );
-}
+});

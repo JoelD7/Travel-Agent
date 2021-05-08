@@ -1,18 +1,26 @@
-import React, { useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { Grid, makeStyles, Theme } from "@material-ui/core";
 import { CustomButton, Text } from "../../atoms";
 import { Colors, Shadow } from "../../../styles";
 
 interface ImageUploader {
-  updateState: (value: string) => void;
-  image: string;
+  updateState: (values: string[]) => void;
+  images: string[];
+  multiple?: boolean; //To upload several images
+  buttonText?: string;
+  noImageText?: string;
 }
 
-export function ImageUploader({ updateState, image: imageParam }: ImageUploader) {
+export function ImageUploader({
+  updateState,
+  multiple,
+  images: imagesParam,
+  noImageText = "Upload an image",
+}: ImageUploader) {
   const EMPTY_IMAGE = "/Travel-Agent/gallery.png";
   const IMAGE_WIDTH = 385;
 
-  const [image, setImage] = useState(imageParam);
+  const [images, setImages] = useState<string[]>(imagesParam);
 
   const imageUploaderStyles = makeStyles((theme: Theme) => ({
     button: {
@@ -56,31 +64,46 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
   }
 
   function onRemoveImageClick() {
-    setImage(EMPTY_IMAGE);
+    setImages([EMPTY_IMAGE]);
   }
 
-  function onImageChange(event: any) {
+  function onImageChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files && event.target.files[0]) {
-      let img = event.target.files[0];
-      setImage(URL.createObjectURL(img));
+      let imageFiles: string[] = [];
+
+      for (const key in event.target.files) {
+        if (Object.prototype.hasOwnProperty.call(event.target.files, key)) {
+          const imageFile = event.target.files[key];
+          imageFiles.push(URL.createObjectURL(imageFile));
+        }
+      }
+      setImages(imageFiles);
     }
   }
 
   function isImageEmpty() {
-    return image === EMPTY_IMAGE;
+    return images[0] === EMPTY_IMAGE;
+  }
+
+  function getButtonText() {
+    if (multiple) {
+      return `Choose your images`;
+    } else {
+      return isImageEmpty() ? "Choose an image" : "Change the image";
+    }
   }
 
   return (
-    <div onBlur={() => updateState(image)}>
+    <div onBlur={() => updateState(images)}>
       <Grid container className={style.uploaderContainer}>
         <Grid item xs={12} className={style.imageGrid}>
-          <img src={image} className={style.image} alt="trip-cover" />
+          <img src={images[0]} className={style.image} alt="trip-cover" />
         </Grid>
 
         {isImageEmpty() && (
           <Grid item xs={12} style={{ display: "flex" }}>
             <Text style={{ margin: "auto" }} color="#cecece">
-              Upload an image
+              {noImageText}
             </Text>
           </Grid>
         )}
@@ -88,6 +111,7 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
         <input
           hidden
           ref={hiddenInputFileRef}
+          multiple={multiple}
           type="file"
           name="trip-cover"
           onChange={onImageChange}
@@ -100,10 +124,11 @@ export function ImageUploader({ updateState, image: imageParam }: ImageUploader)
         <Grid item xs={12}>
           <CustomButton
             className={style.button}
+            backgroundColor={Colors.PURPLE}
             rounded
             onClick={() => onUploadButtonClick()}
           >
-            {isImageEmpty() ? `Choose an image` : `Change the image`}
+            {getButtonText()}
           </CustomButton>
         </Grid>
 

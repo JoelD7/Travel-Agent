@@ -5,15 +5,7 @@ import {
   faFont,
   faImage,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  Grid,
-  Input,
-  useMediaQuery,
-  FormControl,
-  Select,
-  MenuItem,
-  Chip,
-} from "@material-ui/core";
+import { Grid, useMediaQuery } from "@material-ui/core";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
@@ -30,7 +22,6 @@ import {
   TripDates,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import { Trip } from "../../utils";
 import { createTripStyles } from "./createTrip-styles";
 
 export function CreateTrip() {
@@ -44,8 +35,6 @@ export function CreateTrip() {
   const [countries, setCountries] = useState<string[]>([]);
 
   const [budget, setBudget] = useState<string>("");
-
-  const [trip, setTrip] = useState<Trip | undefined>();
 
   const is1255OrLess = useMediaQuery("(max-width:1255px)");
   const is720OrLess = useMediaQuery("(max-width:720px)");
@@ -73,7 +62,7 @@ export function CreateTrip() {
         <title>Create a trip</title>
       </Helmet>
 
-      <Navbar position="sticky" />
+      <Navbar className={style.navbar} dashboard position="sticky" />
       <DashDrawer />
 
       {/* Page container */}
@@ -91,7 +80,7 @@ export function CreateTrip() {
             {/* Left Pane */}
             <Grid item className={style.leftPane}>
               {/* Trip name */}
-              <Text component="h3" color={Colors.BLUE}>
+              <Text component="h4" color={Colors.BLUE}>
                 Name your trip
               </Text>
               <CreateTripTF
@@ -105,14 +94,17 @@ export function CreateTrip() {
               {/* Image upload */}
               <div style={{ marginTop: 45 }}>
                 <Grid container alignItems="center" style={{ width: 385 }}>
-                  <Text component="h3" color={Colors.BLUE}>
+                  <Text component="h4" color={Colors.BLUE}>
                     Add a cover
                   </Text>
 
                   <IconTP style={{ marginLeft: 10 }} icon={faImage} />
                 </Grid>
 
-                <ImageUploader image={image} updateState={(value) => setImage(value)} />
+                <ImageUploader
+                  images={[image]}
+                  updateState={(images) => setImage(images[0])}
+                />
               </div>
             </Grid>
 
@@ -122,7 +114,7 @@ export function CreateTrip() {
                 {/* Dates */}
                 <Grid item xs={12}>
                   <Grid container>
-                    <Text component="h3" color={Colors.BLUE}>
+                    <Text component="h4" color={Colors.BLUE}>
                       Dates
                     </Text>
                     <IconTP style={{ marginLeft: 10 }} icon={faCalendar} />
@@ -139,7 +131,7 @@ export function CreateTrip() {
                 {/* Country selector */}
                 <Grid item xs={12} style={is720OrLess ? { marginTop: 30 } : {}}>
                   <Grid container>
-                    <Text component="h3" color={Colors.BLUE}>
+                    <Text component="h4" color={Colors.BLUE}>
                       Countries
                     </Text>
                     <IconTP style={{ marginLeft: 10 }} icon={faFlag} />
@@ -156,7 +148,7 @@ export function CreateTrip() {
                 {/* Budget */}
                 <Grid item xs={12} style={is720OrLess ? { marginTop: 30 } : {}}>
                   <Grid container>
-                    <Text component="h3" color={Colors.BLUE}>
+                    <Text component="h4" color={Colors.BLUE}>
                       Budget
                     </Text>
                   </Grid>

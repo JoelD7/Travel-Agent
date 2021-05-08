@@ -34,9 +34,18 @@ export function CreateTripTF({
       borderRadius: 10,
 
       "& .MuiInputBase-root": {
-        fontSize: 18,
+        fontSize: 16,
         borderRadius: 10,
         fontFamily: Font.Family,
+      },
+
+      "& .MuiOutlinedInput-root": {
+        "&:hover fieldset": {
+          borderColor: Colors.GRAY_BORDER_HOVER,
+        },
+        "&.Mui-focused fieldset": {
+          borderColor: Colors.GREEN,
+        },
       },
 
       "& .MuiInput-underline": {
@@ -51,9 +60,6 @@ export function CreateTripTF({
         "&::after": {
           borderColor: Colors.GREEN,
           content: '" "',
-        },
-        "&.Mui-focused fieldset": {
-          borderColor: "red",
         },
       },
       ...styleParam,

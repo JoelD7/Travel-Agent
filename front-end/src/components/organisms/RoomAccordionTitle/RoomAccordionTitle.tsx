@@ -1,9 +1,9 @@
 import {
-  faCalendar,
   faBed,
-  faUser,
-  faChild,
+  faCalendar,
   faCamera,
+  faChild,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,23 +20,19 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
 import {
-  HotelBooking,
   capitalizeString,
-  HotelRoom,
-  selectHotelDetail,
-  HotelImage,
-  HotelBedAPI,
   convertToUserCurrency,
-  getMinRate,
-  selectHotelReservationParams,
-  HotelBookingParams,
   getRoomTotalPrice,
+  HotelBedAPI,
+  HotelBooking,
+  HotelBookingParams,
+  HotelImage,
+  HotelRoom,
   HotelRoomRate,
-  selectEndCurrency,
-  ExchangeRate,
-  selectExchangeRate,
+  selectHotelDetail,
+  selectHotelReservationParams,
 } from "../../../utils";
-import { Text, IconText } from "../../atoms";
+import { IconText, Text } from "../../atoms";
 
 interface RoomAccordionTitle {
   room: HotelRoom;
@@ -45,9 +41,6 @@ interface RoomAccordionTitle {
 export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
   const hotel: HotelBooking | undefined = useSelector(selectHotelDetail);
   const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
-
-  const baseCurrency: string = useSelector(selectEndCurrency);
-  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
 
   let image: string = getRoomImage();
 

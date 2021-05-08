@@ -155,7 +155,7 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
           {room.cost && (
             <Grid container alignItems="flex-end" style={{ height: "100%" }}>
               <Grid item>
-                <Text color={Colors.GRAY} style={{ marginBottom: 2 }}>
+                <Text color={Colors.GRAY_TEXT} style={{ marginBottom: 2 }}>
                   Total for room
                 </Text>
                 <Text component="h4" color={Colors.BLUE}>
@@ -282,7 +282,7 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
             <Divider />
 
             <Grid container alignItems="center">
-              <Text color={Colors.GRAY} component="h4">
+              <Text color={Colors.GRAY_TEXT} component="h4">
                 Total
               </Text>
 
