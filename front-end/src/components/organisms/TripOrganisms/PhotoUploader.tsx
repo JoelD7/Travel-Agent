@@ -11,10 +11,13 @@ import {
   Select,
   MenuItem,
   TextField,
+  useTheme,
+  useMediaQuery,
 } from "@material-ui/core";
+import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
 import { Font } from "../../../assets";
-import { Colors } from "../../../styles";
+import { Colors, Shadow } from "../../../styles";
 import { Trip } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 import { ImageUploader } from "../../molecules";
@@ -33,6 +36,9 @@ export const PhotoUploader = React.memo(function PhotoUploader({
   const stylesFunction = makeStyles((theme: Theme) => ({
     albumPane: {
       width: "50%",
+      [theme.breakpoints.down(810)]: {
+        width: "100%",
+      },
     },
     closeButton: {
       marginLeft: "auto",
@@ -45,7 +51,13 @@ export const PhotoUploader = React.memo(function PhotoUploader({
         left: "89%",
       },
       [theme.breakpoints.down(420)]: {
-        left: "84%",
+        left: "87%",
+      },
+      [theme.breakpoints.down(470)]: {
+        top: 20,
+      },
+      [theme.breakpoints.down(450)]: {
+        top: 30,
       },
     },
     menuItemSelect: {
@@ -69,11 +81,39 @@ export const PhotoUploader = React.memo(function PhotoUploader({
       },
     },
     paper: {
-      maxWidth: 715,
-      padding: 20,
+      maxWidth: 855,
+      padding: 30,
+      height: 641,
+      [theme.breakpoints.down(810)]: {
+        maxWidth: 455,
+      },
+      [theme.breakpoints.down(585)]: {
+        maxWidth: 855,
+      },
+    },
+    photoSelectionGrid: {
+      [theme.breakpoints.down(810)]: {
+        width: "100%",
+      },
+    },
+    saveButton: {
+      boxShadow: Shadow.LIGHT3D,
+      marginLeft: "auto",
+      fontSize: 18,
+    },
+    saveButtonGrid: {
+      marginTop: "auto",
+      [theme.breakpoints.down(810)]: {
+        width: "100%",
+        marginTop: 20,
+      },
     },
     selectPhotosPane: {
       width: "50%",
+      [theme.breakpoints.down(810)]: {
+        width: "100%",
+        marginTop: 20,
+      },
     },
 
     select: {
@@ -110,7 +150,9 @@ export const PhotoUploader = React.memo(function PhotoUploader({
     },
     textfield: {
       backgroundColor: Colors.TF_BACKGROUND,
-      borderRadius: 10,
+      marginBottom: 15,
+      width: "84%",
+      maxWidth: 335,
 
       "& .MuiInputBase-root": {
         fontSize: 16,
@@ -135,10 +177,27 @@ export const PhotoUploader = React.memo(function PhotoUploader({
 
   const style = stylesFunction();
 
+  const theme = useTheme();
+
+  const imageUploaderStyles: CSSProperties = {
+    maxWidth: 400,
+    [theme.breakpoints.down(1255)]: {
+      width: "385px",
+    },
+    [theme.breakpoints.down(930)]: {
+      width: "95%",
+    },
+    [theme.breakpoints.down(850)]: {
+      width: "90%",
+    },
+  };
+
   const [newAlbumName, setNewAlbumName] = useState<string>("");
   const [images, setImages] = useState<string[]>([""]);
 
   const [albumCover, setAlbumCover] = useState<string>("");
+
+  const is585pxOrLess = useMediaQuery("(max-width:585px)");
 
   const albumOptions: string[] = [
     "Journey Through the Alps",
@@ -151,6 +210,7 @@ export const PhotoUploader = React.memo(function PhotoUploader({
     <Dialog
       open={open}
       onClose={onClose}
+      fullScreen={is585pxOrLess}
       BackdropComponent={Backdrop}
       classes={{ paper: style.paper }}
       BackdropProps={{
@@ -159,7 +219,7 @@ export const PhotoUploader = React.memo(function PhotoUploader({
     >
       <Grid container>
         {/* Title */}
-        <Grid item xs={12} style={{ marginBottom: 20 }}>
+        <Grid item xs={12} style={{ marginBottom: 20, marginRight: 20 }}>
           <Text component="h1" color={Colors.BLUE}>
             Upload photos
           </Text>
@@ -222,13 +282,36 @@ export const PhotoUploader = React.memo(function PhotoUploader({
 
             <ImageUploader
               images={[albumCover]}
+              containerStyles={imageUploaderStyles}
               updateState={(values) => setAlbumCover(values[0])}
             />
           </>
         </Grid>
 
         {/* Select photos pane */}
-        <Grid item className={style.selectPhotosPane}></Grid>
+        <Grid item className={style.selectPhotosPane}>
+          <Grid container style={{ height: "100%" }}>
+            {/* Photo selection */}
+            <Grid item className={style.photoSelectionGrid}>
+              <Text component="h2" color={Colors.BLUE} style={{ marginBottom: 15 }}>
+                Select photos
+              </Text>
+              <ImageUploader
+                images={images}
+                multiple
+                containerStyles={imageUploaderStyles}
+                updateState={(values) => setImages(values)}
+              />
+            </Grid>
+
+            {/* Save button */}
+            <Grid item className={style.saveButtonGrid}>
+              <CustomButton className={style.saveButton} backgroundColor={Colors.GREEN}>
+                Save
+              </CustomButton>
+            </Grid>
+          </Grid>
+        </Grid>
       </Grid>
     </Dialog>
   );

@@ -2,6 +2,7 @@ import React, { ChangeEvent, useRef, useState } from "react";
 import { Grid, makeStyles, Theme } from "@material-ui/core";
 import { CustomButton, Text } from "../../atoms";
 import { Colors, Shadow } from "../../../styles";
+import { CSSProperties } from "@material-ui/styles";
 
 interface ImageUploader {
   updateState: (values: string[]) => void;
@@ -9,10 +10,12 @@ interface ImageUploader {
   multiple?: boolean; //To upload several images
   buttonText?: string;
   noImageText?: string;
+  containerStyles?: CSSProperties;
 }
 
 export function ImageUploader({
   updateState,
+  containerStyles,
   multiple,
   images: imagesParam,
   noImageText = "Upload an image",
@@ -20,7 +23,7 @@ export function ImageUploader({
   const EMPTY_IMAGE = "/Travel-Agent/gallery.png";
   const IMAGE_WIDTH = 385;
 
-  const [images, setImages] = useState<string[]>(imagesParam);
+  const [images, setImages] = useState<string[]>([EMPTY_IMAGE]);
 
   const imageUploaderStyles = makeStyles((theme: Theme) => ({
     button: {
@@ -51,6 +54,7 @@ export function ImageUploader({
       [theme.breakpoints.down(1255)]: {
         width: "84%",
       },
+      ...containerStyles,
     },
   }));
 
@@ -82,7 +86,7 @@ export function ImageUploader({
   }
 
   function isImageEmpty() {
-    return images[0] === EMPTY_IMAGE;
+    return images[0] === EMPTY_IMAGE || images[0] === "";
   }
 
   function getButtonText() {
@@ -91,6 +95,11 @@ export function ImageUploader({
     } else {
       return isImageEmpty() ? "Choose an image" : "Change the image";
     }
+  }
+
+  function getPhotoQtyLabel(): string {
+    let label = images.length > 1 ? "photos" : "photo";
+    return `${images.length} ${label} selected`;
   }
 
   return (
@@ -122,6 +131,8 @@ export function ImageUploader({
       <Grid container className={style.buttonContainer}>
         {/* Choose an image */}
         <Grid item xs={12}>
+          {multiple && <Text style={{ marginLeft: "auto" }}>{getPhotoQtyLabel()}</Text>}
+
           <CustomButton
             className={style.button}
             backgroundColor={Colors.PURPLE}
