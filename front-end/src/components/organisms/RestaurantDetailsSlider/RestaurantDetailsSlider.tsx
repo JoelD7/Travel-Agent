@@ -3,7 +3,6 @@ import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Slider from "react-slick";
-import { setBlurredScreen } from "../../../utils";
 import { SliderArrow } from "../../atoms";
 import { restaurantDetailSliderStyles } from "./restaurantDetailSliderStyles";
 
@@ -46,14 +45,12 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
   };
 
   function openFullScreenImageSlider(initialSlide: number) {
-    dispatch(setBlurredScreen(true));
     setInitialImageSlide(initialSlide);
     setViewerOpen(true);
   }
 
   function onFullScreenViewerClose() {
     setViewerOpen(false);
-    dispatch(setBlurredScreen(false));
   }
 
   return (

@@ -27,7 +27,6 @@ import {
   isValueInRange,
   proxyUrl,
   Routes,
-  selectBlurredScreen,
   selectDestinationCity,
   selectHotelDetail,
   selectHotelReservationParams,
@@ -72,8 +71,6 @@ export function HotelDetails() {
   const [cardsToRender, setCardsToRender] = useState<number>(3);
 
   const geolocation: IATALocation = useSelector(selectDestinationCity);
-
-  const blurredScreen: boolean = useSelector(selectBlurredScreen);
 
   useEffect(() => {
     if (!hotel) {
@@ -200,10 +197,7 @@ export function HotelDetails() {
   }
 
   return (
-    <div
-      className={style.mainContainer}
-      style={blurredScreen ? { filter: "blur(4px)" } : {}}
-    >
+    <div className={style.mainContainer}>
       <a href={`#${roomTitleId}`} ref={roomAnchorEl} hidden></a>
 
       {hotel && (

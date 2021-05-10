@@ -6,16 +6,16 @@ import Slider from "react-slick";
 import { Colors } from "../../../styles";
 import { Trip } from "../../../utils";
 import { CustomButton, SliderArrow, Text } from "../../atoms";
-import { PhotoAlbumCard } from "../../molecules";
-import { PhotoUploader } from "./PhotoUploader";
+import { AlbumCard } from "../../molecules";
+import { TripPictureUploader } from "./TripPictureUploader";
 
-interface PhotosAndKeyDetailsProps {
+interface PicturesAndKeyDetailsProps {
   trip: Trip;
 }
 
-export const PhotosAndKeyDetails = React.memo(function PhotosAndKeyDetails({
+export const PicturesAndKeyDetails = React.memo(function Component({
   trip,
-}: PhotosAndKeyDetailsProps) {
+}: PicturesAndKeyDetailsProps) {
   const photosKeyDetailsStyles = makeStyles((theme: Theme) => ({
     detailsContainer: {
       borderRadius: "10px",
@@ -133,23 +133,23 @@ export const PhotosAndKeyDetails = React.memo(function PhotosAndKeyDetails({
             {trip.albums.length > 3 ? (
               <Slider {...sliderSettings} slidesToShow={getSlidesToShow(3)}>
                 {trip.albums.map((album, i) => (
-                  <PhotoAlbumCard
+                  <AlbumCard
                     key={album.name}
-                    albumRoute={album.albumRoute}
+                    id={album.id}
                     name={album.name}
                     cover={album.cover}
-                    photosQant={23}
+                    picturesQant={23}
                   />
                 ))}
               </Slider>
             ) : (
               trip.albums.map((album, i) => (
-                <PhotoAlbumCard
+                <AlbumCard
                   key={album.name}
-                  albumRoute={album.albumRoute}
+                  id={album.id}
                   name={album.name}
                   cover={album.cover}
-                  photosQant={23}
+                  picturesQant={23}
                 />
               ))
             )}
@@ -182,7 +182,11 @@ export const PhotosAndKeyDetails = React.memo(function PhotosAndKeyDetails({
         </Grid>
       </Grid>
 
-      <PhotoUploader open={openDialog} onClose={() => closePhotoUploader()} trip={trip} />
+      <TripPictureUploader
+        open={openDialog}
+        onClose={() => closePhotoUploader()}
+        trip={trip}
+      />
     </Grid>
   );
 });

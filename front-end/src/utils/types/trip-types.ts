@@ -26,11 +26,17 @@ export interface TripEvent {
   detail: Flight | HotelBooking | Restaurant | POI;
 }
 
-interface TripAlbum {
+export interface TripAlbum {
+  id: string;
   name: string;
   cover: string;
-  albumRoute: string;
-  photos: string[];
+  pictures: TripPictures[];
+}
+
+export interface TripPictures {
+  id: string;
+  picture: string;
+  date: Date;
 }
 
 export interface CalendarItem {

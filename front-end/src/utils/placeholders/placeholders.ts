@@ -1,7 +1,7 @@
 import { Car, CarCheckbox, CarRsv, EventType } from "../types";
 import { HotelAvailability, HotelBooking, HotelReservation } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
-import { Trip } from "../types/trip-types";
+import { Trip, TripAlbum } from "../types/trip-types";
 
 export const restaurantsPlaceholder: RestaurantSearch[] = [
   {
@@ -3180,6 +3180,86 @@ const poiArray: POI[] = [
   },
 ];
 
+export const tripAlbumPlaceholder: TripAlbum = {
+  id: "qec",
+  name: "Ballon day!",
+  cover: "/Travel-Agent/globes.jpg",
+  pictures: [
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      date: new Date(2021, 4, 25),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      date: new Date(2021, 4, 25),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      date: new Date(2021, 4, 25),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      date: new Date(),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      date: new Date(),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+      date: new Date(),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      date: new Date(2021, 4, 25),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      date: new Date(2021, 4, 25),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      date: new Date(2021, 4, 25),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      date: new Date(),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      date: new Date(),
+    },
+    {
+      id: "asd",
+      picture:
+        "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+      date: new Date(),
+    },
+  ],
+};
+
 export const tripPlaceholder: Trip = {
   id: "498650",
   name: "Journey through the alps",
@@ -3190,29 +3270,42 @@ export const tripPlaceholder: Trip = {
   budget: 2500,
   startDate: new Date(2021, 4, 13),
   albums: [
+    tripAlbumPlaceholder,
     {
-      albumRoute: "",
-      name: "Ballon day!",
-      cover: "/Travel-Agent/globes.jpg",
-      photos: ["", "", "", ""],
-    },
-    {
-      albumRoute: "",
+      id: "1223asa",
       name: "Villages",
       cover: "/Travel-Agent/country.jpg",
-      photos: ["", "", "", ""],
+      pictures: [
+        {
+          id: "asd",
+          picture: "",
+          date: new Date(),
+        },
+      ],
     },
     {
-      albumRoute: "",
+      id: "fsdgf",
       name: "Ballon day!",
       cover: "/Travel-Agent/globes.jpg",
-      photos: ["", "", "", ""],
+      pictures: [
+        {
+          id: "asd",
+          picture: "",
+          date: new Date(),
+        },
+      ],
     },
     {
-      albumRoute: "",
+      id: "5a4sd",
       name: "Villages",
       cover: "/Travel-Agent/country.jpg",
-      photos: ["", "", "", ""],
+      pictures: [
+        {
+          id: "asd",
+          picture: "",
+          date: new Date(),
+        },
+      ],
     },
   ],
   coverPhoto: "",
@@ -3289,16 +3382,90 @@ export const tripsPlaceholder: Trip[] = [
     coverPhoto: "journey.jpg",
     albums: [
       {
-        albumRoute: "",
+        id: "",
         name: "Ballon day!",
         cover: "/Travel-Agent/globes.jpg",
-        photos: ["", "", "", ""],
+        pictures: [
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+        ],
       },
       {
-        albumRoute: "",
+        id: "",
         name: "Villages",
         cover: "/Travel-Agent/country.jpg",
-        photos: ["", "", "", ""],
+        pictures: [
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+        ],
       },
     ],
   },
@@ -3308,16 +3475,90 @@ export const tripsPlaceholder: Trip[] = [
     budget: 2500,
     albums: [
       {
-        albumRoute: "",
+        id: "",
         name: "Ballon day!",
         cover: "/Travel-Agent/globes.jpg",
-        photos: ["", "", "", ""],
+        pictures: [
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+        ],
       },
       {
-        albumRoute: "",
+        id: "",
         name: "Villages",
         cover: "/Travel-Agent/country.jpg",
-        photos: ["", "", "", ""],
+        pictures: [
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+        ],
       },
     ],
     countries: ["Guatemala", "Mexico"],
@@ -3339,16 +3580,90 @@ export const tripsPlaceholder: Trip[] = [
     startDate: new Date(2019, 4, 5),
     albums: [
       {
-        albumRoute: "",
+        id: "",
         name: "Ballon day!",
         cover: "/Travel-Agent/globes.jpg",
-        photos: ["", "", "", ""],
+        pictures: [
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+        ],
       },
       {
-        albumRoute: "",
+        id: "",
         name: "Villages",
         cover: "/Travel-Agent/country.jpg",
-        photos: ["", "", "", ""],
+        pictures: [
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(2021, 4, 25),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+          {
+            id: "asd",
+            picture:
+              "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+            date: new Date(),
+          },
+        ],
       },
     ],
     endDate: new Date(2019, 5, 5),

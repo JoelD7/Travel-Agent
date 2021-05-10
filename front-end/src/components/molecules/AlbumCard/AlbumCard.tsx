@@ -1,23 +1,24 @@
 import { Card, CardActionArea, Grid, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
+import { useHistory, useRouteMatch } from "react-router";
 import { Colors, Shadow } from "../../../styles";
-import { Trip } from "../../../utils";
+import { Routes } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 
-interface PhotoAlbumCard {
-  albumRoute: string;
+interface AlbumCard {
+  id: string;
   cover: string;
   name: string;
-  photosQant: number;
+  picturesQant: number;
 }
 
-export const PhotoAlbumCard = React.memo(function PhotoAlbumCard({
+export const AlbumCard = React.memo(function PhotoAlbumCard({
   cover,
-  albumRoute,
+  id,
   name,
-  photosQant,
-}: PhotoAlbumCard) {
-  const photoAlbumStyles = makeStyles((theme: Theme) => ({
+  picturesQant,
+}: AlbumCard) {
+  const albumCardStyles = makeStyles((theme: Theme) => ({
     buttonGrid: {
       width: "50%",
       [theme.breakpoints.down(1140)]: {
@@ -52,11 +53,21 @@ export const PhotoAlbumCard = React.memo(function PhotoAlbumCard({
     },
   }));
 
-  const style = photoAlbumStyles();
+  const style = albumCardStyles();
+
+  const history = useHistory();
+  const match = useRouteMatch();
+
+  function onAlbumClick() {
+    history.push(`${match.url}/album/${id}`);
+  }
 
   return (
     <Card className={style.card}>
-      <CardActionArea style={{ padding: "10px", height: "100%" }}>
+      <CardActionArea
+        style={{ padding: "10px", height: "100%" }}
+        onClick={() => onAlbumClick()}
+      >
         <Grid container style={{ height: "100%" }} alignContent="flex-end">
           {/* Name */}
           <Grid item className={style.nameGrid}>
@@ -65,9 +76,9 @@ export const PhotoAlbumCard = React.memo(function PhotoAlbumCard({
             </Text>
 
             <Text style={{ color: "white" }}>
-              {photosQant > 1
-                ? `${String(photosQant)} photos`
-                : `${String(photosQant)} photo`}
+              {picturesQant > 1
+                ? `${String(picturesQant)} photos`
+                : `${String(picturesQant)} photo`}
             </Text>
           </Grid>
 

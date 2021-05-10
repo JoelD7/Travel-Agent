@@ -43,7 +43,6 @@ export const selectEndCurrency = (state: RootState) => state.rootSlice.userCurre
 
 export const selectCityImage = (state: RootState) => state.rootSlice.cityImage;
 
-export const selectBlurredScreen = (state: RootState) => state.rootSlice.blurredScreen;
 //#endregion
 
 //#region Search

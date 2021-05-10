@@ -3,7 +3,7 @@ export { ServicesToolbar } from "./ServicesToolbar/ServicesToolbar";
 export { DatetimeRange } from "./DatetimeRange/DatetimeRange";
 export { FlightTimesRange } from "./FlightTimesRange/FlightTimesRange";
 export { RestaurantCard } from "./RestaurantCard/RestaurantCard";
-export { PhotoAlbumCard } from "./PhotoAlbumCard/PhotoAlbumCard";
+export { AlbumCard } from "./AlbumCard/AlbumCard";
 export { ParentCategoryToolbar } from "./ParentCategoryToolbar/ParentCategoryToolbar";
 export { POICard } from "./POICard/POICard";
 export { NotAvailableCard } from "./NotAvailableCard/NotAvailableCard";

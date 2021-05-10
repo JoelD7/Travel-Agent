@@ -10,7 +10,7 @@ import {
   DashDrawer,
   Footer,
   Navbar,
-  PhotosAndKeyDetails,
+  PicturesAndKeyDetails,
   RsvHotels,
   Text,
   TripCars,
@@ -54,7 +54,7 @@ export function TripDetails() {
           <div key={key}>
             <TabPanel value={tabIndex} index={0} dir={MUtheme.direction}>
               {/* Photos, details grid */}
-              <PhotosAndKeyDetails trip={trip} />
+              <PicturesAndKeyDetails trip={trip} />
 
               {/* Flights */}
               <Grid item xs={12} style={{ marginTop: 30 }}>
@@ -157,7 +157,7 @@ export function TripDetails() {
         return (
           <div key={key}>
             <TabPanel value={tabIndex} index={1} dir={MUtheme.direction}>
-              <PhotosAndKeyDetails trip={trip} />
+              <PicturesAndKeyDetails trip={trip} />
             </TabPanel>
           </div>
         );

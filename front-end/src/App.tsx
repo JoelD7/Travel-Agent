@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { appStyles } from "./app-styles";
 import { Font } from "./assets";
-import { CustomButton, IataAutocomplete, IconTP, Text } from "./components";
+import { Album, CustomButton, IataAutocomplete, IconTP, Text } from "./components";
 import {
   CarRental,
   FavPlaces,
@@ -75,6 +75,7 @@ export default function App() {
           <Route exact path={`${Routes.THINGS_TODO}/:id`} component={ThingsToDoDetails} />
           <Route exact path={Routes.TRIPS} component={Trips} />
           <Route exact path={`${Routes.TRIPS}/:id`} component={TripDetails} />
+          <Route exact path={`${Routes.TRIPS}/:id/album/:id`} component={Album} />
           <Route exact path={Routes.FAVORITE_PLACES} component={FavPlaces} />
           <Route exact path={Routes.RESERVATIONS} component={Reservations} />
           <Route exact path={Routes.ITINERARY} component={Itinerary} />

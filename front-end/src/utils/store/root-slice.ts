@@ -7,7 +7,6 @@ interface RootSlice {
   exchangeRate: ExchangeRate;
   userCurrency: string;
   cityImage: CityImage;
-  blurredScreen: boolean;
 }
 
 const initialState: RootSlice = {
@@ -15,7 +14,6 @@ const initialState: RootSlice = {
   exchangeRate: JSON.parse(String(localStorage.getItem("rates"))),
   userCurrency: getUserCurrency(),
   cityImage: getDefaultCityImage(),
-  blurredScreen: false,
 };
 
 function getUserCurrency(): string {
@@ -43,9 +41,6 @@ const rootSlice = createSlice({
     setCityImage(state, action: PayloadAction<CityImage>) {
       state.cityImage = action.payload;
     },
-    setBlurredScreen(state, action: PayloadAction<boolean>) {
-      state.blurredScreen = action.payload;
-    },
   },
 });
 
@@ -53,7 +48,6 @@ export const {
   setOpenRequiredFieldSnack,
   setExchangeRate,
   setEndCurrency,
-  setBlurredScreen,
   setCityImage,
 } = rootSlice.actions;
 

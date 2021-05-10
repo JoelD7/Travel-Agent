@@ -4,5 +4,6 @@ export * from "./TripRestaurants";
 export * from "./TripPOIs";
 export * from "./TripCars";
 export * from "./TripTabBar";
-export * from "./PhotosAndKeyDetails";
-export * from "./PhotoUploader";
+export * from "./PicturesAndKeyDetails";
+export * from "./TripPictureUploader";
+export * from "./Album";

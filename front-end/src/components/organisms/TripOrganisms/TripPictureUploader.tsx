@@ -22,17 +22,17 @@ import { Trip } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 import { ImageUploader } from "../../molecules";
 
-interface PhotoUploaderProps {
+interface TripPictureUploaderProps {
   trip: Trip;
   open: boolean;
   onClose: () => void;
 }
 
-export const PhotoUploader = React.memo(function PhotoUploader({
+export const TripPictureUploader = React.memo(function Component({
   trip,
   open,
   onClose,
-}: PhotoUploaderProps) {
+}: TripPictureUploaderProps) {
   const stylesFunction = makeStyles((theme: Theme) => ({
     albumPane: {
       width: "50%",

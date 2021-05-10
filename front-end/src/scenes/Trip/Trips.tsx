@@ -3,7 +3,7 @@ import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui
 import { format } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
 import {
   CustomButton,
@@ -22,8 +22,9 @@ export function Trips() {
   const style = tripStyles();
 
   const [trips, setTrips] = useState(tripsPlaceholder);
-  const lastTrip = tripPlaceholder;
 
+  const lastTrip = tripPlaceholder;
+  const match = useRouteMatch();
   const history = useHistory();
 
   const sliderSettings = {
@@ -65,7 +66,7 @@ export function Trips() {
       >
         <Card className={style.tripCard}>
           <CardActionArea>
-            <Link style={getLinkStyle()} to={`${Routes.TRIPS}/${trip.id}`}>
+            <Link style={getLinkStyle()} to={`${match.url}/${trip.id}`}>
               <CardMedia component="img" height="150" src={`${trip.coverPhoto}`} />
 
               <CardContent>

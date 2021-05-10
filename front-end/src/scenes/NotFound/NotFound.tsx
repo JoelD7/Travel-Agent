@@ -11,7 +11,7 @@ export function NotFound() {
   const style = notFoundStyles();
 
   return (
-    <div style={{ backgroundColor: Colors.BACKGROUND }}>
+    <div>
       <Helmet>
         <title>{`404 | Not found`}</title>
       </Helmet>
@@ -25,7 +25,12 @@ export function NotFound() {
             Ups... Error 404
           </Text>
 
-          <Text component="h4" color={Colors.GRAY_TEXT} style={{ maxWidth: "242px" }}>
+          <Text
+            component="h4"
+            weight="normal"
+            color={Colors.GRAY_TEXT}
+            style={{ maxWidth: "242px" }}
+          >
             It seems like the page you requested doesn’t exists
           </Text>
 

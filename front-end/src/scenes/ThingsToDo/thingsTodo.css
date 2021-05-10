@@ -10,6 +10,11 @@
 }
 .slick-initialized .slick-slide > div {
   width: inherit;
+  height: fit-content;
+}
+.slick-track {
+  align-items: center;
+  display: flex;
 }
 .slick-slide {
   float: none;
