@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Direction, Grid, IconButton, useTheme } from "@material-ui/core";
 import React, { ReactNode, useState } from "react";
 import Helmet from "react-helmet";
+import { useHistory } from "react-router";
 import SwipeableViews from "react-swipeable-views";
 import { virtualize } from "react-swipeable-views-utils";
 import {
@@ -20,7 +21,7 @@ import {
   TripTabBar,
 } from "../../components";
 import { Colors } from "../../styles";
-import { Trip, tripPlaceholder } from "../../utils";
+import { Routes, Trip, tripPlaceholder } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
 interface TabPanel {
@@ -37,6 +38,7 @@ export function TripDetails() {
   const [tabIndex, setTabIndex] = useState(0);
   const MUtheme = useTheme();
 
+  const history = useHistory();
   const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
   function TabPanel({ children, index, value, dir }: TabPanel) {
@@ -284,7 +286,11 @@ export function TripDetails() {
 
                 <Grid item xs={3}>
                   <Grid container>
-                    <CustomButton className={style.itineraryButton} icon={faCalendar}>
+                    <CustomButton
+                      className={style.itineraryButton}
+                      onClick={() => history.push(Routes.ITINERARY)}
+                      icon={faCalendar}
+                    >
                       Itinerary
                     </CustomButton>
 

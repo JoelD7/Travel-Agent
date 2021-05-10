@@ -26,7 +26,7 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
     height: "45px",
     position: "absolute",
     left: "92%",
-    [theme.breakpoints.down(730)]: {
+    [theme.breakpoints.down(790)]: {
       top: "5px",
     },
     [theme.breakpoints.down(500)]: {
@@ -48,20 +48,20 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
   },
   dividerGrid: {
     width: "8.3%",
-    [theme.breakpoints.down(730)]: {
+    [theme.breakpoints.down(790)]: {
       width: "15%",
     },
   },
   durationGrid: {
-    width: "25%",
-    [theme.breakpoints.down(730)]: {
+    width: "20%",
+    [theme.breakpoints.down(790)]: {
       display: "none",
     },
   },
   durationGridSm: {
     display: "none",
     marginBottom: "10px",
-    [theme.breakpoints.down(730)]: {
+    [theme.breakpoints.down(790)]: {
       display: "block",
       width: "21%",
     },
@@ -76,7 +76,7 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
   flightCard: {
     borderRadius: "5px",
     boxShadow: "2px 2px 8px rgb(118 118 118 / 50%)",
-    padding: "0px 15px",
+    padding: "0px 15px 20px",
     margin: "10px",
     backgroundColor: "white",
   },
@@ -143,7 +143,7 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
   },
   timeGrid: {
     width: "25%",
-    [theme.breakpoints.down(730)]: {
+    [theme.breakpoints.down(790)]: {
       width: "32%",
     },
     [theme.breakpoints.down(405)]: {

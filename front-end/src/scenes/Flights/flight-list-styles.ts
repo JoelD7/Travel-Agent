@@ -31,7 +31,6 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Family,
-    backgroundColor: Colors.BACKGROUND,
   },
   datepicker: {
     fontFamily: Family,
@@ -96,7 +95,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   filtersContainer: {
     backgroundColor: "white",
-    boxShadow: Shadow.MEDIUM3D,
+    boxShadow: Shadow.LIGHT3D,
     borderRadius: "5px",
     padding: "15px",
   },

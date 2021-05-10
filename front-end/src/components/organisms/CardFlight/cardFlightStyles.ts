@@ -175,7 +175,7 @@ export const cardFlightStyles = makeStyles((theme: Theme) => ({
     padding: "15px",
     backgroundColor: "white",
     borderRadius: "10px",
-    boxShadow: Shadow.MEDIUM3D,
+    boxShadow: Shadow.LIGHT3D,
   },
   flightsDataGrid: {
     width: "66.6%",

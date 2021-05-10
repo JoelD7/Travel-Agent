@@ -88,7 +88,6 @@ export const flightStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Family,
-    backgroundColor: Colors.BACKGROUND,
   },
   menuItemRoot: {
     fontFamily: Family,
