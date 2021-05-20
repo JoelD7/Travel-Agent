@@ -196,9 +196,9 @@ export const TripPictureUploader = React.memo(function Component({
   };
 
   const [newAlbumName, setNewAlbumName] = useState<string>("");
-  const [images, setImages] = useState<string[]>([""]);
+  const [images, setImages] = useState<File[]>([]);
 
-  const [albumCover, setAlbumCover] = useState<string>("");
+  const [albumCover, setAlbumCover] = useState<File>(new File([""], ""));
 
   const is585pxOrLess = useMediaQuery("(max-width:585px)");
 

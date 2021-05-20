@@ -1,5 +1,7 @@
 package com.tripper.Tripper.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.io.ByteArrayInputStream;
 import java.sql.Blob;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,8 +12,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.sql.rowset.serial.SerialBlob;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,11 +34,23 @@ public class Trip {
     private Double budget;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Blob coverPhoto;
+    @Lob
+    private byte[] coverPhoto;
 
     @ManyToOne
     @JoinColumn(name = "idPerson")
+    @JsonBackReference
     private Person person;
+
+    public Trip(String name, String countries, Double budget, LocalDate startDate, LocalDate endDate,
+            byte[] coverPhoto) {
+        this.name = name;
+        this.countries = countries;
+        this.budget = budget;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.coverPhoto = coverPhoto;
+    }
 
     @OneToMany(mappedBy = "trip")
     private List<Album> albums = new ArrayList<>();

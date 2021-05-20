@@ -12,3 +12,4 @@ export const FAVORITE_PLACES = "/favorite-places";
 export const TRIPS = "/trips";
 export const ITINERARY = "/itinerary";
 export const CREATE_TRIP = "/create-trip";
+export const BACKEND_ROOT = "http://localhost:8080/api";

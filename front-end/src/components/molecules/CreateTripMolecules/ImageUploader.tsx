@@ -5,8 +5,8 @@ import { Colors, Shadow } from "../../../styles";
 import { CSSProperties } from "@material-ui/styles";
 
 interface ImageUploader {
-  updateState: (values: string[]) => void;
-  images: string[];
+  updateState: (values: File[]) => void;
+  images?: File[];
   multiple?: boolean; //To upload several images
   buttonText?: string;
   noImageText?: string;
@@ -23,7 +23,8 @@ export function ImageUploader({
   const EMPTY_IMAGE = "/Travel-Agent/gallery.png";
   const IMAGE_WIDTH = 385;
 
-  const [images, setImages] = useState<string[]>([EMPTY_IMAGE]);
+  const [images, setImages] = useState<File[]>([]);
+  const [displayImage, setDisplayImage] = useState<string>(EMPTY_IMAGE);
 
   const imageUploaderStyles = makeStyles((theme: Theme) => ({
     button: {
@@ -60,7 +61,7 @@ export function ImageUploader({
 
   const style = imageUploaderStyles();
 
-  const hiddenInputFileRef = useRef(null);
+  const hiddenInputFileRef = useRef<HTMLInputElement>(null);
 
   function onUploadButtonClick() {
     //@ts-ignore
@@ -68,25 +69,29 @@ export function ImageUploader({
   }
 
   function onRemoveImageClick() {
-    setImages([EMPTY_IMAGE]);
+    setDisplayImage(EMPTY_IMAGE);
+    setImages([new File([""], "")]);
+    //To remove the img from the <input> element.
+    //@ts-ignore
+    hiddenInputFileRef.current.value = null;
   }
 
   function onImageChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files && event.target.files[0]) {
-      let imageFiles: string[] = [];
-
+      let imageFiles: File[] = [];
       for (const key in event.target.files) {
         if (Object.prototype.hasOwnProperty.call(event.target.files, key)) {
           const imageFile = event.target.files[key];
-          imageFiles.push(URL.createObjectURL(imageFile));
+          imageFiles.push(imageFile);
         }
       }
       setImages(imageFiles);
+      setDisplayImage(URL.createObjectURL(imageFiles[0]));
     }
   }
 
   function isImageEmpty() {
-    return images[0] === EMPTY_IMAGE || images[0] === "";
+    return displayImage === EMPTY_IMAGE;
   }
 
   function getButtonText() {
@@ -106,7 +111,7 @@ export function ImageUploader({
     <div onBlur={() => updateState(images)}>
       <Grid container className={style.uploaderContainer}>
         <Grid item xs={12} className={style.imageGrid}>
-          <img src={images[0]} className={style.image} alt="trip-cover" />
+          <img src={displayImage} className={style.image} alt="trip-cover" />
         </Grid>
 
         {isImageEmpty() && (

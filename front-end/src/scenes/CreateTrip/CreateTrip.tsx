@@ -5,10 +5,13 @@ import {
   faFont,
   faImage,
 } from "@fortawesome/free-solid-svg-icons";
-import { Grid, useMediaQuery } from "@material-ui/core";
+import { Grid, Snackbar, useMediaQuery } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import Axios from "axios";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
+import { Font } from "../../assets";
 import {
   CountrySelector,
   CreateTripTF,
@@ -22,6 +25,7 @@ import {
   TripDates,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
+import { Routes } from "../../utils";
 import { createTripStyles } from "./createTrip-styles";
 
 export function CreateTrip() {
@@ -29,7 +33,7 @@ export function CreateTrip() {
   const EMPTY_IMAGE = "/Travel-Agent/gallery.png";
 
   const [name, setName] = useState("");
-  const [image, setImage] = useState(EMPTY_IMAGE);
+  const [image, setImage] = useState<File>(new File([""], ""));
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 1));
   const [countries, setCountries] = useState<string[]>([]);
@@ -38,6 +42,7 @@ export function CreateTrip() {
 
   const is1255OrLess = useMediaQuery("(max-width:1255px)");
   const is720OrLess = useMediaQuery("(max-width:720px)");
+  const [openSnack, setOpenSnack] = useState(false);
 
   function updateDates(startDate: Date, endDate: Date) {
     setStartDate(startDate);
@@ -49,7 +54,24 @@ export function CreateTrip() {
   }
 
   function onCreateTripClick() {
-    console.log(image);
+    Axios.post(
+      `${Routes.BACKEND_ROOT}/trip/create`,
+      {
+        idPerson: 2,
+        name,
+        countries: countries.join(", "),
+        budget: Number(budget),
+        startDate,
+        endDate,
+        coverPhoto: image,
+      },
+      { withCredentials: true }
+    )
+      .then((res) => {
+        console.log("Response: ", res);
+        setOpenSnack(true);
+      })
+      .catch((err) => console.log(err));
   }
 
   function getNameTFWidth() {
@@ -185,6 +207,22 @@ export function CreateTrip() {
       <div className={style.footerContainer}>
         <Footer />
       </div>
+
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenSnack(false)}
+          severity="success"
+        >
+          Trip created.
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

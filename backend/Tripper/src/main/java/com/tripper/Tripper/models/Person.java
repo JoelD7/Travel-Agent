@@ -1,5 +1,6 @@
 package com.tripper.Tripper.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,10 @@ public class Person implements Serializable {
     private String password;
 
     @OneToMany(mappedBy = "person")
+    @JsonManagedReference
+    private List<Trip> trips = new ArrayList<>();
+
+    @OneToMany(mappedBy = "person")
     private List<Favorite> favoritePlaces = new ArrayList<>();
 
     @OneToMany(mappedBy = "person")
@@ -39,7 +44,8 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "person")
     private List<HotelReservation> hotelReservations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "person")
-    private List<Trip> trips = new ArrayList<>();
-
+    public void addTrip(Trip trip) {
+        this.trips.add(trip);
+        trip.setPerson(this);
+    }
 }
