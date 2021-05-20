@@ -291,7 +291,6 @@ export function Flight_List() {
 
   useEffect(() => {
     if (!firstRender) {
-      console.log("setOccupancyParamsChanged(true)");
       setOccupancyParamsChanged(true);
     }
   }, [flightFromAutocomplete, flightToAutocomplete]);
