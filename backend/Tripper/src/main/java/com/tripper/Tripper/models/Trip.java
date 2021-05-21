@@ -42,14 +42,13 @@ public class Trip {
     @JsonBackReference
     private Person person;
 
-    public Trip(String name, String countries, Double budget, LocalDate startDate, LocalDate endDate,
-            byte[] coverPhoto) {
+    public Trip(String name, String countries, Double budget, LocalDate startDate, LocalDate endDate
+    ) {
         this.name = name;
         this.countries = countries;
         this.budget = budget;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.coverPhoto = coverPhoto;
     }
 
     @OneToMany(mappedBy = "trip")

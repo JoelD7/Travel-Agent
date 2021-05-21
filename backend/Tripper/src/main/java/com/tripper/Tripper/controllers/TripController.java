@@ -3,16 +3,22 @@ package com.tripper.Tripper.controllers;
 import com.tripper.Tripper.assemblers.TripModelAssembler;
 import com.tripper.Tripper.data.PersonRepository;
 import com.tripper.Tripper.data.TripRepository;
+import com.tripper.Tripper.dtos.CoverImageTrip;
 import com.tripper.Tripper.dtos.TripDTO;
 import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.exceptions.TripNotFoundException;
 import com.tripper.Tripper.models.Person;
 import com.tripper.Tripper.models.Trip;
+import java.io.IOException;
+import java.util.Arrays;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/trip")
-//@CrossOrigin(origins = "http://localhost:3000")
 public class TripController {
 
     private final TripRepository tripRepo;
@@ -50,7 +55,7 @@ public class TripController {
     public ResponseEntity<Trip> createTrip(@RequestBody TripDTO tripDto) {
         Trip newTrip = new Trip(tripDto.getName(), tripDto.getCountries(),
                 tripDto.getBudget(), tripDto.getStartDate(),
-                tripDto.getEndDate(), tripDto.getCoverPhoto());
+                tripDto.getEndDate());
 
         Long idPerson = tripDto.getIdPerson();
         Person person = personRepo.findById(idPerson).orElseThrow(() -> new PersonNotFoundException(idPerson));
@@ -59,6 +64,25 @@ public class TripController {
 
         EntityModel<Trip> tripModel = assembler.toModel(newTrip);
         return ResponseEntity.created(tripModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(newTrip);
+    }
+
+    @PostMapping("/create/coverPhoto")
+    public ResponseEntity<?> uploadCoverPhoto(@ModelAttribute CoverImageTrip image) throws IOException {
+        Trip trip = tripRepo.findById(image.getIdTrip())
+                .orElseThrow(() -> new TripNotFoundException("This Trip does not exists."));
+
+        trip.setCoverPhoto(image.getImage().getBytes());
+        tripRepo.save(trip);
+
+        return ResponseEntity.ok().body("Image uploaded!");
+    }
+
+    @GetMapping(value = "/coverPhoto/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<?> getTripCoverImage(@PathVariable Long id) {
+        Trip trip = tripRepo.findById(id)
+                .orElseThrow(() -> new TripNotFoundException("This Trip does not exists."));
+
+        return ResponseEntity.ok().body(trip.getCoverPhoto());
     }
 
     private void persistUserTrip(Person person, Trip trip) {

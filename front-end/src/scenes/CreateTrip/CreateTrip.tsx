@@ -53,7 +53,12 @@ export function CreateTrip() {
     setBudget(value);
   }
 
-  function onCreateTripClick() {
+  async function onCreateTripClick() {
+    // console.log("image stream: ", image.stream());
+    let blob = new Blob([new Uint8Array(await image.arrayBuffer())], {
+      type: image.type,
+    });
+
     Axios.post(
       `${Routes.BACKEND_ROOT}/trip/create`,
       {
@@ -63,19 +68,35 @@ export function CreateTrip() {
         budget: Number(budget),
         startDate,
         endDate,
-        coverPhoto: image,
       },
       { withCredentials: true }
     )
       .then((res) => {
         console.log("Response: ", res);
-        setOpenSnack(true);
+
+        const formData = new FormData();
+        formData.append("idTrip", res.data.idTrip);
+        formData.append("image", image);
+
+        Axios.post(`${Routes.BACKEND_ROOT}/trip/create/coverPhoto`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+          .then((res) => {
+            setOpenSnack(true);
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   }
 
   function getNameTFWidth() {
     return is1255OrLess ? "83%" : "62%";
+  }
+
+  function onAlbumCoverChange(images: File[]) {
+    setImage(images[0]);
   }
 
   return (
@@ -125,7 +146,7 @@ export function CreateTrip() {
 
                 <ImageUploader
                   images={[image]}
-                  updateState={(images) => setImage(images[0])}
+                  updateState={(images) => onAlbumCoverChange(images)}
                 />
               </div>
             </Grid>

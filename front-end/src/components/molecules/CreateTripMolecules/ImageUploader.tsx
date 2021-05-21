@@ -86,6 +86,7 @@ export function ImageUploader({
         }
       }
       setImages(imageFiles);
+      console.log("Inside ImageUploader: ", imageFiles[0]);
       setDisplayImage(URL.createObjectURL(imageFiles[0]));
     }
   }

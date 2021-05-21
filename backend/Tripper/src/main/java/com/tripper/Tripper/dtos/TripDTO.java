@@ -18,6 +18,6 @@ public class TripDTO {
     private Double budget;
     private LocalDate startDate;
     private LocalDate endDate;
-    @JsonIgnore
-    private byte[] coverPhoto;
+//    @JsonIgnore
+//    private byte[] coverPhoto;
 }
