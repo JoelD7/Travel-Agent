@@ -2,11 +2,12 @@ import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { Divider, Grid, makeStyles, Theme } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 import Slider from "react-slick";
 import { Colors } from "../../../styles";
 import { Trip } from "../../../utils";
 import { CustomButton, SliderArrow, Text } from "../../atoms";
-import { AlbumCard } from "../../molecules";
+import { AlbumCard, NotCreatedMessage } from "../../molecules";
 import { TripPictureUploader } from "./TripPictureUploader";
 
 interface PicturesAndKeyDetailsProps {
@@ -130,7 +131,7 @@ export const PicturesAndKeyDetails = React.memo(function Component({
 
           {/* Album cards */}
           <Grid container>
-            {trip.albums.length > 3 ? (
+            {trip.albums.length > 3 && (
               <Slider {...sliderSettings} slidesToShow={getSlidesToShow(3)}>
                 {trip.albums.map((album, i) => (
                   <AlbumCard
@@ -142,7 +143,10 @@ export const PicturesAndKeyDetails = React.memo(function Component({
                   />
                 ))}
               </Slider>
-            ) : (
+            )}
+
+            {trip.albums.length > 0 &&
+              trip.albums.length < 3 &&
               trip.albums.map((album, i) => (
                 <AlbumCard
                   key={album.name}
@@ -151,7 +155,14 @@ export const PicturesAndKeyDetails = React.memo(function Component({
                   cover={album.cover}
                   picturesQant={23}
                 />
-              ))
+              ))}
+
+            {trip.albums.length === 0 && (
+              <NotCreatedMessage
+                actionFunction={() => openPhotoUploader()}
+                type="ALBUMS"
+                message="You have no albums created."
+              />
             )}
           </Grid>
         </Grid>

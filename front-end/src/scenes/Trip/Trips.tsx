@@ -1,7 +1,8 @@
 import { faCalendar, faFlag } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui/core";
-import { format } from "date-fns";
-import React, { useState } from "react";
+import Axios from "axios";
+import { differenceInCalendarDays, format, parseISO } from "date-fns";
+import React, { useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
@@ -15,7 +16,14 @@ import {
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import { getLinkStyle, Routes, tripPlaceholder, tripsPlaceholder } from "../../utils";
+import {
+  getLinkStyle,
+  Routes,
+  tripPlaceholder,
+  tripsPlaceholder,
+  responseTripToDomainTrip,
+  backend,
+} from "../../utils";
 import { tripStyles } from "./trip-styles";
 
 export function Trips() {
@@ -56,6 +64,19 @@ export function Trips() {
     ],
   };
 
+  useEffect(() => {
+    backend
+      .get("/trip/all")
+      .then((res: any) => {
+        let tripsInResponse = res.data._embedded.tripList;
+        let tripsBuffer = tripsInResponse.map((resTrip: any) =>
+          responseTripToDomainTrip(resTrip)
+        );
+        setTrips(tripsBuffer);
+      })
+      .catch((err: any) => console.log(err));
+  }, []);
+
   function TripCards() {
     return trips.map((trip, i) => (
       <div
@@ -66,7 +87,7 @@ export function Trips() {
       >
         <Card className={style.tripCard}>
           <CardActionArea>
-            <Link style={getLinkStyle()} to={`${match.url}/${trip.id}`}>
+            <Link style={getLinkStyle()} to={`${match.url}/${trip.idTrip}`}>
               <CardMedia component="img" height="150" src={`${trip.coverPhoto}`} />
 
               <CardContent>

@@ -2,7 +2,7 @@ import * as EventType from "./event-types";
 import { HotelBooking } from "./hotel-types";
 
 export interface Trip {
-  id: string;
+  idTrip: string;
   name: string;
   countries: string[];
   photosQty: number;

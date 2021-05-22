@@ -10,4 +10,7 @@ export type Restaurant = typeof Restaurant;
 export const POI = "Point of interest";
 export type POI = typeof POI;
 
-export type EventType = Flight | Hotel | Restaurant | POI;
+export const CAR_RENTAL = "Car Rental";
+export type CAR_RENTAL = typeof CAR_RENTAL;
+
+export type EventType = Flight | Hotel | Restaurant | POI | CAR_RENTAL;

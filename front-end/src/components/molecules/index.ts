@@ -9,4 +9,5 @@ export { POICard } from "./POICard/POICard";
 export { NotAvailableCard } from "./NotAvailableCard/NotAvailableCard";
 export { Pagination } from "./Pagination/Pagination";
 export { RestaurantFilterDrawer } from "./RestaurantFilterDrawer";
+export { NotCreatedMessage } from "./NotCreatedMessage";
 export * from "./CreateTripMolecules";

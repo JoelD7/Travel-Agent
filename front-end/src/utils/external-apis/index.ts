@@ -2,6 +2,7 @@ import * as HotelBedAPI from "./hotelbeds-apis";
 export * from "./google-places-apis";
 export { HotelBedAPI };
 export * from "./amadeus-apis";
+export * from "./backend";
 export * from "./avis-apis";
 
 /**

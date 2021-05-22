@@ -36,6 +36,7 @@ import {
   convertToUserCurrency,
 } from "../../../utils";
 import { IconText, IconTP, Text } from "../../atoms";
+import { NotCreatedMessage } from "../../molecules";
 
 interface TripCars {
   showAll?: boolean;
@@ -133,32 +134,39 @@ export const TripCars = React.memo(function TripCars({ showAll = true }: TripCar
   return (
     <Grid container>
       {/* Card */}
-      {getCarsToShow().map((car) => (
-        <Card key={car.id} className={style.card}>
-          <CardActionArea onClick={() => seeCarRentalDetails(car)}>
-            <img src={car.image} className={style.cardImage} alt="" />
+      {getCarsToShow().length > 0 ? (
+        getCarsToShow().map((car) => (
+          <Card key={car.id} className={style.card}>
+            <CardActionArea onClick={() => seeCarRentalDetails(car)}>
+              <img src={car.image} className={style.cardImage} alt="" />
 
-            <CardContent>
-              <Text component="h4" color={Colors.BLUE}>
-                {car.name}
-              </Text>
+              <CardContent>
+                <Text component="h4" color={Colors.BLUE}>
+                  {car.name}
+                </Text>
 
-              <FeatureIcons car={car} />
+                <FeatureIcons car={car} />
 
-              <IconText style={{ marginTop: 15 }} icon={faChair}>
-                {car.seats > 1 ? `${car.seats} seats` : `1 seat`}
-              </IconText>
-              <IconText icon={faDoorClosed}>
-                {car.doors > 1 ? `${car.doors} doors` : `1 door`}
-              </IconText>
+                <IconText style={{ marginTop: 15 }} icon={faChair}>
+                  {car.seats > 1 ? `${car.seats} seats` : `1 seat`}
+                </IconText>
+                <IconText icon={faDoorClosed}>
+                  {car.doors > 1 ? `${car.doors} doors` : `1 door`}
+                </IconText>
 
-              <Text component="h3" style={{ marginTop: 20 }} color={Colors.BLUE}>
-                {convertToUserCurrency(car.cost, "USD")}
-              </Text>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      ))}
+                <Text component="h3" style={{ marginTop: 20 }} color={Colors.BLUE}>
+                  {convertToUserCurrency(car.cost, "USD")}
+                </Text>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        ))
+      ) : (
+        <NotCreatedMessage
+          type="CAR_RENTAL"
+          message="This trip does not include any car rentals"
+        />
+      )}
 
       {/* Dialog */}
       <Dialog

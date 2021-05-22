@@ -18,6 +18,7 @@ import React from "react";
 import { Colors, Shadow } from "../../../styles";
 import { rsvRestaurantsPlaceholder } from "../../../utils";
 import { IconText, Rating, Text } from "../../atoms";
+import { NotCreatedMessage } from "../../molecules";
 
 interface TripRestaurants {
   showAll?: boolean;
@@ -55,30 +56,37 @@ export const TripRestaurants = React.memo(function TripRestaurants({
 
   return (
     <Grid container>
-      {getRestaurantsToShow().map((restaurant) => (
-        <Card key={restaurant.id} className={style.card}>
-          <CardActionArea>
-            <CardMedia component="img" src={restaurant.imageUrl} height="200" />
+      {getRestaurantsToShow().length > 0 ? (
+        getRestaurantsToShow().map((restaurant) => (
+          <Card key={restaurant.id} className={style.card}>
+            <CardActionArea>
+              <CardMedia component="img" src={restaurant.imageUrl} height="200" />
 
-            <CardContent>
-              <Text component="h4" color={Colors.BLUE}>
-                {restaurant.name}
-              </Text>
-              <Rating type="circle" score={restaurant.rating} />
+              <CardContent>
+                <Text component="h4" color={Colors.BLUE}>
+                  {restaurant.name}
+                </Text>
+                <Rating type="circle" score={restaurant.rating} />
 
-              <IconText style={{ marginTop: "10px" }} icon={faUtensils}>
-                {restaurant.cuisines}
-              </IconText>
+                <IconText style={{ marginTop: "10px" }} icon={faUtensils}>
+                  {restaurant.cuisines}
+                </IconText>
 
-              <IconText icon={faCalendar}>
-                {format(restaurant.visitDate, "dd/MM/yyyy 'at' HH:mm")}
-              </IconText>
+                <IconText icon={faCalendar}>
+                  {format(restaurant.visitDate, "dd/MM/yyyy 'at' HH:mm")}
+                </IconText>
 
-              <IconText icon={faMapMarkerAlt}>{restaurant.displayAddress}</IconText>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      ))}
+                <IconText icon={faMapMarkerAlt}>{restaurant.displayAddress}</IconText>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        ))
+      ) : (
+        <NotCreatedMessage
+          type="RESTAURANT"
+          message="This trip has no restaurants added."
+        />
+      )}
     </Grid>
   );
 });

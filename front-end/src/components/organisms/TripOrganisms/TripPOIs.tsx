@@ -6,6 +6,7 @@ import { Colors, Shadow } from "../../../styles";
 import { Routes, rsvPoisPlaceholder } from "../../../utils";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
 import React from "react";
+import { NotCreatedMessage } from "../../molecules";
 
 interface TripPOIs {
   showAll?: boolean;
@@ -48,62 +49,73 @@ export const TripPOIs = React.memo(function TripPOIs({ showAll }: TripPOIs) {
 
   return (
     <Grid container>
-      {getPOIsToShow().map((poi) => (
-        <Card className={style.card}>
-          <CardActionArea
-            style={{ padding: "10px" }}
-            onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
-          >
-            <Text
-              bold
-              style={{
-                color: Colors.BLUE,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-              component="h4"
+      {getPOIsToShow().length > 0 ? (
+        getPOIsToShow().map((poi) => (
+          <Card className={style.card}>
+            <CardActionArea
+              style={{ padding: "10px" }}
+              onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
             >
-              {poi.name}
-            </Text>
-
-            {/* POI Rating */}
-            <Rating score={poi.rating} type="circle" />
-
-            <IconText
-              style={{ marginTop: 15 }}
-              icon={faMapMarkerAlt}
-              text={poi.formattedAddress}
-            />
-
-            {/* Category icon and text */}
-            <Grid container alignItems="center">
-              <img className={style.categoryIcon} src={`${poi.categoryIconUrl}`} alt="" />
-              <Text style={{ fontSize: "14px", marginBottom: "0px" }}>
-                {poi.category}
-              </Text>
-            </Grid>
-
-            <IconText icon={faCalendar}>
-              {format(poi.visitDate, "dd/MM/yyyy 'at' HH:mm")}
-            </IconText>
-
-            <div style={{ display: "flex" }}>
-              <CustomButton
-                onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
-                backgroundColor={Colors.PURPLE}
+              <Text
+                bold
                 style={{
-                  borderRadius: "10px",
-                  fontSize: "16px",
-                  marginLeft: "auto",
+                  color: Colors.BLUE,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
+                component="h4"
               >
-                Check out
-              </CustomButton>
-            </div>
-          </CardActionArea>
-        </Card>
-      ))}
+                {poi.name}
+              </Text>
+
+              {/* POI Rating */}
+              <Rating score={poi.rating} type="circle" />
+
+              <IconText
+                style={{ marginTop: 15 }}
+                icon={faMapMarkerAlt}
+                text={poi.formattedAddress}
+              />
+
+              {/* Category icon and text */}
+              <Grid container alignItems="center">
+                <img
+                  className={style.categoryIcon}
+                  src={`${poi.categoryIconUrl}`}
+                  alt=""
+                />
+                <Text style={{ fontSize: "14px", marginBottom: "0px" }}>
+                  {poi.category}
+                </Text>
+              </Grid>
+
+              <IconText icon={faCalendar}>
+                {format(poi.visitDate, "dd/MM/yyyy 'at' HH:mm")}
+              </IconText>
+
+              <div style={{ display: "flex" }}>
+                <CustomButton
+                  onClick={() => history.push(`${Routes.THINGS_TODO}/${poi.id}`)}
+                  backgroundColor={Colors.PURPLE}
+                  style={{
+                    borderRadius: "10px",
+                    fontSize: "16px",
+                    marginLeft: "auto",
+                  }}
+                >
+                  Check out
+                </CustomButton>
+              </div>
+            </CardActionArea>
+          </Card>
+        ))
+      ) : (
+        <NotCreatedMessage
+          type="POI"
+          message="You have no places of interest added to this trip."
+        />
+      )}
     </Grid>
   );
 });

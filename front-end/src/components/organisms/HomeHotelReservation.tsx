@@ -158,7 +158,7 @@ export default function HomeHotelReservation() {
   }
 
   function onSearchClick() {
-    history.push(getHotelSearchURL(reservationParams));
+    history.push(getHotelSearchURL());
   }
 
   return (

@@ -1,4 +1,4 @@
-import { Car, CarCheckbox, CarRsv, EventType } from "../types";
+import { Car, CarCheckbox, CarRsv, EventTypes } from "../types";
 import { HotelAvailability, HotelBooking, HotelReservation } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
 import { Trip, TripAlbum } from "../types/trip-types";
@@ -8,8 +8,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
     id: "3xTQT7qjZJIxc-eBiFMerQ",
     name: "1803",
     image_url: "https://s3-media3.fl.yelpcdn.com/bphoto/f6_ZYxoZGbyGsCn6m_auog/o.jpg",
-    url:
-      "https://www.yelp.com/biz/1803-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    url: "https://www.yelp.com/biz/1803-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
     categories: [
       {
         alias: "cajun",
@@ -44,8 +43,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
     id: "A0saPXtRGKl-SVJGQyQAOw",
     name: "Brooklyn Chop House",
     image_url: "https://s3-media1.fl.yelpcdn.com/bphoto/v_C5TFckFT2rfH-DXIousw/o.jpg",
-    url:
-      "https://www.yelp.com/biz/brooklyn-chop-house-new-york-3?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    url: "https://www.yelp.com/biz/brooklyn-chop-house-new-york-3?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
     categories: [
       {
         alias: "dimsum",
@@ -80,8 +78,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
     id: "rCS4w1A24k33FFTzZ52Vog",
     name: "Oh K-Dog",
     image_url: "https://s3-media2.fl.yelpcdn.com/bphoto/GHVdc3P2hEO0TknfI2O8Tg/o.jpg",
-    url:
-      "https://www.yelp.com/biz/oh-k-dog-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    url: "https://www.yelp.com/biz/oh-k-dog-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
     categories: [
       {
         alias: "korean",
@@ -116,8 +113,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
     id: "8uuMkezIN1c8zGEWkaMRqg",
     name: "Los Tacos No. 1",
     image_url: "https://s3-media3.fl.yelpcdn.com/bphoto/Ug-RpXxf5dWvhGBkO85eIw/o.jpg",
-    url:
-      "https://www.yelp.com/biz/los-tacos-no-1-new-york-5?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    url: "https://www.yelp.com/biz/los-tacos-no-1-new-york-5?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
     categories: [
       {
         alias: "tacos",
@@ -144,8 +140,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
     id: "f8ipr8Wdy1_wHhw7JgNqPQ",
     name: "Da Claudio",
     image_url: "https://s3-media1.fl.yelpcdn.com/bphoto/OUy0ve7CHI2x7_bMb0wAEw/o.jpg",
-    url:
-      "https://www.yelp.com/biz/da-claudio-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    url: "https://www.yelp.com/biz/da-claudio-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
     categories: [
       {
         alias: "italian",
@@ -176,8 +171,7 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
     id: "BKMCAYb9EAivUm3p-vrC9w",
     name: "Khe-Yo",
     image_url: "https://s3-media3.fl.yelpcdn.com/bphoto/Ars_y_Fis_3n-H4neUv9Fw/o.jpg",
-    url:
-      "https://www.yelp.com/biz/khe-yo-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+    url: "https://www.yelp.com/biz/khe-yo-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
     categories: [
       {
         alias: "laotian",
@@ -230,8 +224,7 @@ export const restaurantPlaceholder: Restaurant = {
   favorite: false,
   name: "1803",
   image_url: "https://s3-media3.fl.yelpcdn.com/bphoto/f6_ZYxoZGbyGsCn6m_auog/o.jpg",
-  url:
-    "https://www.yelp.com/biz/1803-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_lookup&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
+  url: "https://www.yelp.com/biz/1803-new-york?adjust_creative=2rcWu7IBP84xEJVOm6j7Cw&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_lookup&utm_source=2rcWu7IBP84xEJVOm6j7Cw",
   phone: "+12122673000",
   display_phone: "(212) 267-3000",
   categories: [
@@ -3261,7 +3254,7 @@ export const tripAlbumPlaceholder: TripAlbum = {
 };
 
 export const tripPlaceholder: Trip = {
-  id: "498650",
+  idTrip: "498650",
   name: "Journey through the alps",
   countries: ["Switzerland", "Austria", "France"],
   photosQty: 184,
@@ -3313,7 +3306,7 @@ export const tripPlaceholder: Trip = {
   itinerary: [
     {
       name: "Flight to Dubai",
-      type: EventType.Flight,
+      type: EventTypes.Flight,
       start: new Date(flightPlaceholder.itineraries[0].segments[0].departure.at),
       end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at),
       detail: flightPlaceholder,
@@ -3322,7 +3315,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       name: "Flight to Singapore",
-      type: EventType.Flight,
+      type: EventTypes.Flight,
       start: new Date(flightPlaceholder.itineraries[1].segments[0].departure.at),
       end: new Date(flightPlaceholder.itineraries[1].segments[0].arrival.at),
       detail: flightPlaceholder,
@@ -3331,7 +3324,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       name: "Arrival at Hotel Sheraton Santo Domingo",
-      type: EventType.Hotel,
+      type: EventTypes.Hotel,
       start: new Date(2021, 4, 13, 14, 35),
       end: new Date(2021, 4, 17, 11, 35),
       detail: hotelPlaceholder,
@@ -3340,7 +3333,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       name: "Visit to The Morgan Library & Museum",
-      type: EventType.POI,
+      type: EventTypes.POI,
       start: new Date(2021, 4, 16, 16, 0),
       end: new Date(2021, 4, 16, 17, 0),
       detail: poiArray[0],
@@ -3349,7 +3342,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       name: "Visit to Hulu Theater",
-      type: EventType.POI,
+      type: EventTypes.POI,
       start: new Date(2021, 4, 19, 12, 0),
       end: new Date(2021, 4, 19, 14, 0),
       detail: poiArray[1],
@@ -3358,7 +3351,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       name: "Visit to Dear Irving",
-      type: EventType.POI,
+      type: EventTypes.POI,
       start: new Date(2021, 4, 21, 0, 0),
       end: new Date(2021, 4, 21, 3, 0),
       detail: poiArray[2],
@@ -3370,7 +3363,7 @@ export const tripPlaceholder: Trip = {
 
 export const tripsPlaceholder: Trip[] = [
   {
-    id: "498650",
+    idTrip: "498650",
     name: "Journey through the alps",
     countries: ["Switzerland", "Austria", "France"],
     photosQty: 184,
@@ -3470,7 +3463,7 @@ export const tripsPlaceholder: Trip[] = [
     ],
   },
   {
-    id: "7008965",
+    idTrip: "7008965",
     name: "Meso-american Tour",
     budget: 2500,
     albums: [
@@ -3570,7 +3563,7 @@ export const tripsPlaceholder: Trip[] = [
     coverPhoto: "globes.jpg",
   },
   {
-    id: "1235",
+    idTrip: "1235",
     name: "Indonesia in a month",
     countries: ["Indonesia"],
     budget: 2500,

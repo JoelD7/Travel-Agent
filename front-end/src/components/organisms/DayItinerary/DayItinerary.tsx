@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../../styles";
 import {
   eventToIcon,
-  EventType,
+  EventTypes,
   HotelReservation,
   hotelRsvPlaceholder,
   setHotelRsv,
@@ -49,9 +49,9 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
   function DayItineraryCard({ event }: DayItineraryCard) {
     function getDetailButtonText(): string {
       switch (event.type) {
-        case EventType.Flight:
+        case EventTypes.Flight:
           return "Flight details";
-        case EventType.Hotel:
+        case EventTypes.Hotel:
           return "Reservation details";
         default:
           return "Check out place";
@@ -60,11 +60,11 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
 
     function onDetailButtonClick() {
       switch (event.type) {
-        case EventType.Flight:
+        case EventTypes.Flight:
           setOpenFlightDialog(true);
           dispatch(setFlightDetail(flightPlaceholder));
           break;
-        case EventType.Hotel:
+        case EventTypes.Hotel:
           setOpenHotelDialog(true);
           dispatch(setHotelRsv(hotelRsv));
           break;

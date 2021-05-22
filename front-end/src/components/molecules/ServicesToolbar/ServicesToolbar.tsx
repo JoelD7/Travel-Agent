@@ -77,7 +77,7 @@ export function ServicesToolbar({ transparent, style }: ServicesToolbar) {
   function getServiceRoute(route: string) {
     switch (route) {
       case Routes.HOTELS:
-        return getHotelSearchURL(reservationParams);
+        return getHotelSearchURL();
 
       case Routes.FLIGHTS:
         return Routes.FLIGHTS;

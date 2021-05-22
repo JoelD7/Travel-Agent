@@ -32,7 +32,7 @@ export function Footer() {
   const bookLinks = [
     {
       label: "Hotels",
-      route: getHotelSearchURL(reservationParams),
+      route: getHotelSearchURL(),
     },
     {
       label: "Flights",

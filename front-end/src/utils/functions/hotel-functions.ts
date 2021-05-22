@@ -205,10 +205,10 @@ export function getMinRate(rooms: HotelRoom[]): number {
   return rateTotals[0];
 }
 
-export function getHotelSearchURL(
-  reservationParams: HotelBookingParams
-  // city: IATALocation
-): string {
+export function getHotelSearchURL(): string {
+  let reservationParams: HotelBookingParams =
+    store.getState().hotelReducer.reservationParams;
+
   return `${Routes.HOTELS}${convertReservationParamsToURLParams(
     reservationParams,
     "hotel"

@@ -20,6 +20,7 @@ import {
   setHotelRsv,
 } from "../../../utils";
 import { IconText, Rating, Text } from "../../atoms";
+import { NotCreatedMessage } from "../../molecules";
 import { HotelRsvDetail } from "../HotelRsvDetail";
 
 interface RsvHotels {
@@ -76,48 +77,52 @@ export const RsvHotels = React.memo(function RsvHotels({ showAll = true }: RsvHo
 
   return (
     <Grid container>
-      {getHotels().map((hotel, i) => (
-        <Card key={i} className={style.hotelCard}>
-          <CardActionArea onClick={() => seeHotelReservationDetails()}>
-            <CardMedia component="img" src={hotel.hotelImage} height="200" />
+      {getHotels().length > 0 ? (
+        getHotels().map((hotel, i) => (
+          <Card key={i} className={style.hotelCard}>
+            <CardActionArea onClick={() => seeHotelReservationDetails()}>
+              <CardMedia component="img" src={hotel.hotelImage} height="200" />
 
-            <CardContent>
-              <Text color={Colors.BLUE} component="h4" bold>
-                {hotel.name}
-              </Text>
-
-              <Rating type="star" score={hotel.stars} />
-
-              <IconText style={{ marginTop: "10px" }} icon={faRestroom}>
-                {getHotelGuests(hotel)}
-              </IconText>
-
-              <IconText
-                icon={faCalendar}
-                text={`${format(hotel.checkIn, "dd/MM/yyyy")} - ${format(
-                  hotel.checkOut,
-                  "dd/MM/yyyy"
-                )}`}
-              />
-
-              <IconText icon={faBed}>
-                {hotel.rooms.length > 1 ? `${hotel.rooms.length} rooms` : `1 room`}
-              </IconText>
-
-              <Grid container>
-                <Text
-                  style={{ marginLeft: "auto" }}
-                  color={Colors.BLUE}
-                  component="h4"
-                  bold
-                >
-                  {convertToUserCurrency(getHotelReservationCost(hotel), "USD")}
+              <CardContent>
+                <Text color={Colors.BLUE} component="h4" bold>
+                  {hotel.name}
                 </Text>
-              </Grid>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      ))}
+
+                <Rating type="star" score={hotel.stars} />
+
+                <IconText style={{ marginTop: "10px" }} icon={faRestroom}>
+                  {getHotelGuests(hotel)}
+                </IconText>
+
+                <IconText
+                  icon={faCalendar}
+                  text={`${format(hotel.checkIn, "dd/MM/yyyy")} - ${format(
+                    hotel.checkOut,
+                    "dd/MM/yyyy"
+                  )}`}
+                />
+
+                <IconText icon={faBed}>
+                  {hotel.rooms.length > 1 ? `${hotel.rooms.length} rooms` : `1 room`}
+                </IconText>
+
+                <Grid container>
+                  <Text
+                    style={{ marginLeft: "auto" }}
+                    color={Colors.BLUE}
+                    component="h4"
+                    bold
+                  >
+                    {convertToUserCurrency(getHotelReservationCost(hotel), "USD")}
+                  </Text>
+                </Grid>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        ))
+      ) : (
+        <NotCreatedMessage type="HOTEL" message="You have no booked hotels." />
+      )}
 
       <HotelRsvDetail open={openHotelDialog} onClose={() => setOpenHotelDialog(false)} />
     </Grid>

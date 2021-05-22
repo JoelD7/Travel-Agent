@@ -1,5 +1,6 @@
 package com.tripper.Tripper.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.tripper.Tripper.models.enums.TripEventType;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
@@ -30,6 +32,11 @@ public class TripEvent {
     private Boolean includesTime;
     private LocalDate start;
     private LocalDate end;
+
+    @ManyToOne
+    @JoinColumn(name = "idTrip")
+    @JsonBackReference
+    private Trip trip;
 
     @OneToOne
     @JoinColumn(name = "idEvent")

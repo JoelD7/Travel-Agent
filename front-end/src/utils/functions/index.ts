@@ -3,3 +3,4 @@ export * from "./functions";
 export * from "./hotel-functions";
 export * from "./restaurant";
 export * from "./car-functions";
+export * from "./trip-functions";

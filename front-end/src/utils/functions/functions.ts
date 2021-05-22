@@ -1,5 +1,6 @@
 import {
   faHotel,
+  faCircle,
   faLocationArrow,
   faPlaneDeparture,
   faUtensils,
@@ -12,7 +13,7 @@ import { DEFAULT_CURRENCY, isoCountryCodes } from "../constants";
 import { iataCodes } from "../constants/iataCodes";
 import { airportCityPlaceholder } from "../placeholders";
 import { CarReducer, store } from "../store";
-import { CityImage, EventType, ExchangeRate } from "../types";
+import { CityImage, EventTypes, ExchangeRate } from "../types";
 import { IATALocation } from "../types/location-types";
 export * from "./flight-functions";
 export * from "./hotel-functions";
@@ -112,19 +113,22 @@ export const formatAsDecimal = Intl.NumberFormat("en-US", {
  * Returns an icon related to an event type.
  * @param type type of the event.
  */
-export function eventToIcon(type: EventType.EventType): IconDefinition {
+export function eventToIcon(type: EventTypes.EventType): IconDefinition {
   switch (type) {
-    case EventType.Flight:
+    case EventTypes.Flight:
       return faPlaneDeparture;
 
-    case EventType.Hotel:
+    case EventTypes.Hotel:
       return faHotel;
 
-    case EventType.Restaurant:
+    case EventTypes.Restaurant:
       return faUtensils;
 
-    case EventType.POI:
+    case EventTypes.POI:
       return faLocationArrow;
+
+    default:
+      return faCircle;
   }
 }
 
@@ -728,4 +732,29 @@ export function getDefaultCarReducer(): CarReducer {
   };
 
   return carReducerDefault;
+}
+
+/**
+ * Transforms a 64 binary encoded image to a Blob.
+ * For an explanation of the code see this:
+ * https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+ */
+export function b64toBlob(b64Data: any, contentType = "", sliceSize = 512) {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, { type: contentType });
+  return blob;
 }

@@ -1,8 +1,7 @@
 package com.tripper.Tripper.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import java.io.ByteArrayInputStream;
-import java.sql.Blob;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.sql.rowset.serial.SerialBlob;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -53,4 +51,8 @@ public class Trip {
 
     @OneToMany(mappedBy = "trip")
     private List<Album> albums = new ArrayList<>();
+
+    @OneToMany(mappedBy = "trip")
+    @JsonManagedReference
+    private List<TripEvent> itinerary = new ArrayList<>();
 }

@@ -100,7 +100,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
     {
       label: "Hotels",
       icon: faHotel,
-      route: getHotelSearchURL(hotelReservationParams),
+      route: getHotelSearchURL(),
       selected: page === Routes.HOTELS,
       user: false,
     },

@@ -66,6 +66,14 @@ public class TripController {
         return ResponseEntity.created(tripModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(newTrip);
     }
 
+    private void persistUserTrip(Person person, Trip trip) {
+        person.getTrips().add(trip);
+        trip.setPerson(person);
+
+        personRepo.save(person);
+        tripRepo.save(trip);
+    }
+
     @PostMapping("/create/coverPhoto")
     public ResponseEntity<?> uploadCoverPhoto(@ModelAttribute CoverImageTrip image) throws IOException {
         Trip trip = tripRepo.findById(image.getIdTrip())
@@ -77,19 +85,4 @@ public class TripController {
         return ResponseEntity.ok().body("Image uploaded!");
     }
 
-    @GetMapping(value = "/coverPhoto/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<?> getTripCoverImage(@PathVariable Long id) {
-        Trip trip = tripRepo.findById(id)
-                .orElseThrow(() -> new TripNotFoundException("This Trip does not exists."));
-
-        return ResponseEntity.ok().body(trip.getCoverPhoto());
-    }
-
-    private void persistUserTrip(Person person, Trip trip) {
-        person.getTrips().add(trip);
-        trip.setPerson(person);
-
-        personRepo.save(person);
-        tripRepo.save(trip);
-    }
 }

@@ -117,7 +117,7 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
     {
       label: "Hotels",
       icon: faHotel,
-      route: getHotelSearchURL(reservationParams),
+      route: getHotelSearchURL(),
       selected: page === Routes.HOTELS,
       user: false,
     },
