@@ -17,8 +17,8 @@ export function responseTripToDomainTrip(resTrip: any) {
     places: 1,
     budget: resTrip.budget,
     days: differenceInCalendarDays(
-      parseISO(resTrip.startDate),
-      parseISO(resTrip.endDate)
+      parseISO(resTrip.endDate),
+      parseISO(resTrip.startDate)
     ),
     startDate: parseISO(resTrip.startDate),
     endDate: parseISO(resTrip.endDate),

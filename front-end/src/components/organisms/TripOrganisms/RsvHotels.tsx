@@ -25,9 +25,13 @@ import { HotelRsvDetail } from "../HotelRsvDetail";
 
 interface RsvHotels {
   showAll?: boolean;
+  hotels: HotelReservation[];
 }
 
-export const RsvHotels = React.memo(function RsvHotels({ showAll = true }: RsvHotels) {
+export const RsvHotels = React.memo(function RsvHotels({
+  showAll = true,
+  hotels,
+}: RsvHotels) {
   const rsvHotelsStyles = makeStyles((theme: Theme) => ({
     hotelCard: {
       borderRadius: "10px",
@@ -53,11 +57,6 @@ export const RsvHotels = React.memo(function RsvHotels({ showAll = true }: RsvHo
   const [openHotelDialog, setOpenHotelDialog] = useState(false);
 
   const hotelRsv: HotelReservation = hotelRsvPlaceholder;
-  const hotels: HotelReservation[] = [
-    hotelRsvPlaceholder,
-    hotelRsvPlaceholder,
-    hotelRsvPlaceholder,
-  ];
 
   function seeHotelReservationDetails() {
     setOpenHotelDialog(true);

@@ -125,10 +125,6 @@ export const tripStyles = makeStyles((theme: Theme) => ({
     marginBottom: 15,
   },
   photoTitleContainer: {
-    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/Travel-Agent/journey.jpg")`,
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "50%",
     padding: "10px",
     borderRadius: "5px",
     color: "white",

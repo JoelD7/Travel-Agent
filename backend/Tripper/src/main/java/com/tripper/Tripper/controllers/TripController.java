@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class TripController {
 
     private final TripRepository tripRepo;
-    private final TripModelAssembler assembler;
     private final PersonRepository personRepo;
+    private final TripModelAssembler assembler;
 
     public TripController(TripRepository tripRepo, TripModelAssembler assembler, PersonRepository personRepo) {
         this.tripRepo = tripRepo;

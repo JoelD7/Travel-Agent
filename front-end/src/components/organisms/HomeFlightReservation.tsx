@@ -136,7 +136,7 @@ export default function HomeFlightReservation() {
     },
   ];
 
-  const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
+  const classes: FlightClassType[] = ["ECONOMY", "PREMIUM_ECONOMY", "BUSINESS", "FIRST"];
 
   const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
 

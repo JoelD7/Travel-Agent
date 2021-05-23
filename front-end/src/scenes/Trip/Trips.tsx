@@ -4,6 +4,7 @@ import Axios from "axios";
 import { differenceInCalendarDays, format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import Helmet from "react-helmet";
+import { useDispatch } from "react-redux";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
 import {
@@ -23,6 +24,8 @@ import {
   tripsPlaceholder,
   responseTripToDomainTrip,
   backend,
+  setTripDetail,
+  Trip,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -34,6 +37,8 @@ export function Trips() {
   const lastTrip = tripPlaceholder;
   const match = useRouteMatch();
   const history = useHistory();
+
+  const dispatch = useDispatch();
 
   const sliderSettings = {
     className: style.slider,
@@ -76,6 +81,10 @@ export function Trips() {
       })
       .catch((err: any) => console.log(err));
   }, []);
+
+  function onTripClick(trip: Trip) {
+    dispatch(setTripDetail(trip));
+  }
 
   function TripCards() {
     return trips.map((trip, i) => (

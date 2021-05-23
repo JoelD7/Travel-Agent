@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
 import { useHistory } from "react-router";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 import {
   getHotelSearchURL,
   Routes,
@@ -80,10 +80,12 @@ export function NotCreatedMessage({
       <Grid item xs={12}>
         {message}
       </Grid>
-      <Grid item xs={12}>
-        <Grid container justify="flex-end">
+      <Grid item xs={12} style={{ marginTop: 20 }}>
+        <Grid container>
           <CustomButton
             onClick={() => getRedirectAction()}
+            rounded
+            style={{ boxShadow: Shadow.LIGHT3D }}
             backgroundColor={Colors.GREEN}
           >
             {getButtonLabel()}

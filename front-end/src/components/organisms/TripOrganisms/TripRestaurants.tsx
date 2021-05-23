@@ -22,10 +22,12 @@ import { NotCreatedMessage } from "../../molecules";
 
 interface TripRestaurants {
   showAll?: boolean;
+  restaurants: RsvRestaurant[];
 }
 
 export const TripRestaurants = React.memo(function TripRestaurants({
   showAll = true,
+  restaurants,
 }: TripRestaurants) {
   const tripRestaurantStyles = makeStyles((theme: Theme) => ({
     card: {
@@ -47,8 +49,6 @@ export const TripRestaurants = React.memo(function TripRestaurants({
   }));
 
   const style = tripRestaurantStyles();
-
-  const restaurants: RsvRestaurant[] = rsvRestaurantsPlaceholder;
 
   function getRestaurantsToShow(): RsvRestaurant[] {
     return showAll ? restaurants : restaurants.slice(0, 3);

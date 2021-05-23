@@ -5,7 +5,7 @@ import { iataCodes } from "../constants";
 import { FlightSearch } from "../store";
 import { FlightTypes } from "../types";
 import { IATALocation } from "../types/location-types";
-import { capitalizeString, getIataLocation } from "./functions";
+import { capitalizeString, convertToUserCurrency, getIataLocation } from "./functions";
 
 /**
  * Returns the city name of the place on which the flight takes off or lands.
@@ -285,4 +285,45 @@ export function getFlightSearchURL(flightSearch: FlightSearch) {
   return `${Routes.FLIGHT_LIST}${convertFlightToURLParams(
     flightSearch
   )}&page=1&pageSize=20&sortBy=Price | asc`;
+}
+
+/**
+ * Transforms a Flight object to the Flight object
+ * understandable by the backend.
+ * @param flight
+ * @returns
+ */
+export function getFlightDTO(flight: Flight) {
+  return {
+    total: convertToUserCurrency(flight.price.total, flight.price.currency),
+    flightClass: flight.class,
+    itineraries: flight.itineraries.map((itinerary) => {
+      return {
+        duration: itinerary.duration,
+        segments: itinerary.segments.map((segment) => {
+          let departure = {
+            iataCode: segment.departure.iataCode,
+            city: segment.departure.city,
+            terminal: segment.departure.terminal,
+            at: segment.departure.at,
+            type: "D",
+          };
+
+          let arrival = {
+            iataCode: segment.arrival.iataCode,
+            city: segment.arrival.city,
+            terminal: segment.arrival.terminal,
+            at: segment.arrival.at,
+            type: "A",
+          };
+
+          return {
+            duration: segment.duration,
+            placeRelations: [departure, arrival],
+            carrierCode: segment.carrierCode,
+          };
+        }),
+      };
+    }),
+  };
 }

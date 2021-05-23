@@ -1,5 +1,6 @@
+import { CarRsv } from "./car-types";
 import * as EventType from "./event-types";
-import { HotelBooking } from "./hotel-types";
+import { HotelBooking, HotelReservation } from "./hotel-types";
 
 export interface Trip {
   idTrip: string;
@@ -23,7 +24,11 @@ export interface TripEvent {
   start: Date;
   end: Date;
   includesTime: boolean; //whether the date of the event includes time
-  detail: Flight | HotelBooking | Restaurant | POI;
+  flight?: Flight | null;
+  hotelReservation?: HotelReservation | null;
+  restaurant?: RsvRestaurant | null;
+  poi?: RsvPOI | null;
+  carRental?: CarRsv | null;
 }
 
 export interface TripAlbum {

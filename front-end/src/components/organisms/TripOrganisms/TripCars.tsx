@@ -40,13 +40,14 @@ import { NotCreatedMessage } from "../../molecules";
 
 interface TripCars {
   showAll?: boolean;
+  cars: CarRsv[];
 }
 
 interface FeatureIconsProps {
   car: CarRsv;
 }
 
-export const TripCars = React.memo(function TripCars({ showAll = true }: TripCars) {
+export const TripCars = React.memo(function TripCars({ showAll = true, cars }: TripCars) {
   const carsCardStyles = makeStyles((theme: Theme) => ({
     backdrop: {
       backdropFilter: "blur(4px)",
@@ -96,7 +97,6 @@ export const TripCars = React.memo(function TripCars({ showAll = true }: TripCar
 
   const style = carsCardStyles();
 
-  const cars: CarRsv[] = carRsvPlaceholder;
   const [carDetail, setCarDetail] = useState<CarRsv>(carRsvPlaceholder[0]);
 
   const [openDialog, setOpenDialog] = useState(false);

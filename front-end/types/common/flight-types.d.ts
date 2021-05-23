@@ -5,16 +5,16 @@ interface Flight {
   class: FlightClassType;
 }
 
-const Economy = "Economy";
+const Economy = "ECONOMY";
 type Economy = typeof Economy;
 
-const PremiumEconomy = "Premium Economy";
+const PremiumEconomy = "PREMIUM_ECONOMY";
 type PremiumEconomy = typeof PremiumEconomy;
 
-const Business = "Business";
+const Business = "BUSINESS";
 type Business = typeof Business;
 
-const First = "First";
+const First = "FIRST";
 type First = typeof First;
 
 type FlightClassType = Economy | PremiumEconomy | Business | First | "";

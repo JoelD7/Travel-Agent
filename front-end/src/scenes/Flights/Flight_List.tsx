@@ -52,6 +52,7 @@ import {
   addFlightDuration,
   convertFlightToURLParams,
   convertURLParamsToFlight,
+  FlightClass,
   FlightSearch,
   flightsPlaceholder,
   getAccessToken,
@@ -263,10 +264,10 @@ export function Flight_List() {
   const [firstRender, setFirstRender] = useState(true);
 
   const flightClasses: FlightClassType[] = [
-    "Economy",
-    "Premium Economy",
-    "Business",
-    "First",
+    "ECONOMY",
+    "PREMIUM_ECONOMY",
+    "BUSINESS",
+    "FIRST",
   ];
 
   const history = useHistory();
@@ -1098,6 +1099,21 @@ export function Flight_List() {
     return iataCodes.filter((iata: IATALocation) => iata.code === code)[0].city;
   }
 
+  function getFlightClassLabel(flightClass: FlightClassType) {
+    switch (flightClass) {
+      case "ECONOMY":
+        return "Economy";
+      case "PREMIUM_ECONOMY":
+        return "Premium Economy";
+      case "BUSINESS":
+        return "Business";
+      case "FIRST":
+        return "First";
+      default:
+        return "";
+    }
+  }
+
   return (
     <div className={style.mainContainer}>
       <Helmet>
@@ -1247,7 +1263,7 @@ export function Flight_List() {
                     >
                       {flightClasses.map((n, i) => (
                         <MenuItem key={i} value={n}>
-                          {n}
+                          {getFlightClassLabel(n)}
                         </MenuItem>
                       ))}
                     </Select>

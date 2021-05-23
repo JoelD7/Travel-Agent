@@ -25,6 +25,7 @@ import {
   formatFlightDate,
   formatFlightSegmentTime,
   getFlightCitiesLabel,
+  getFlightDTO,
   getFlightSegmentCarrier,
   getIataLocation,
   getLastSegment,
@@ -209,6 +210,10 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
         ))}
       </Grid>
     );
+  }
+
+  function bookFlight() {
+    let flightDTO = getFlightDTO(flight);
   }
 
   return (

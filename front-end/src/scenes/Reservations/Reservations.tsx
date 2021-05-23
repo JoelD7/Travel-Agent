@@ -162,7 +162,7 @@ export function Reservations() {
 
           {/* Hotels */}
           <Grid item xs={12}>
-            <RsvHotels />
+            <RsvHotels hotels={[hotelRsv]} />
           </Grid>
         </Grid>
       </Grid>

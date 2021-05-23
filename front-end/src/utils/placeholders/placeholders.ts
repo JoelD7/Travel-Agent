@@ -2329,7 +2329,7 @@ export const flightsPlaceholder: Flight[] = [
       currency: "USD",
       total: 245,
     },
-    class: "Economy",
+    class: "ECONOMY",
     itineraries: [
       {
         duration: "PT8H15M",
@@ -2368,7 +2368,7 @@ export const flightsPlaceholder: Flight[] = [
       currency: "USD",
       total: 198,
     },
-    class: "Economy",
+    class: "ECONOMY",
     itineraries: [
       {
         duration: "PT6H15M",
@@ -2430,7 +2430,7 @@ export const flightPlaceholder: Flight = {
     currency: "USD",
     total: 198,
   },
-  class: "Economy",
+  class: "ECONOMY",
   itineraries: [
     {
       duration: "PT6H15M",
@@ -3173,6 +3173,19 @@ const poiArray: POI[] = [
   },
 ];
 
+const poiRsv: RsvPOI = {
+  id: "49c54c1bf964a520ed561fe3",
+  favorite: false,
+  name: "The Morgan Library & Museum",
+
+  rating: 5,
+  category: "Music Venues",
+  categoryIconUrl: "a",
+  formattedAddress: "",
+  imageUrl: "",
+  visitDate: new Date(),
+};
+
 export const tripAlbumPlaceholder: TripAlbum = {
   id: "qec",
   name: "Ballon day!",
@@ -3309,7 +3322,7 @@ export const tripPlaceholder: Trip = {
       type: EventTypes.Flight,
       start: new Date(flightPlaceholder.itineraries[0].segments[0].departure.at),
       end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at),
-      detail: flightPlaceholder,
+      flight: flightPlaceholder,
       location: "SIN, Singapore",
       includesTime: true,
     },
@@ -3318,7 +3331,7 @@ export const tripPlaceholder: Trip = {
       type: EventTypes.Flight,
       start: new Date(flightPlaceholder.itineraries[1].segments[0].departure.at),
       end: new Date(flightPlaceholder.itineraries[1].segments[0].arrival.at),
-      detail: flightPlaceholder,
+      flight: flightPlaceholder,
       location: "DXB, Dubai",
       includesTime: true,
     },
@@ -3327,7 +3340,7 @@ export const tripPlaceholder: Trip = {
       type: EventTypes.Hotel,
       start: new Date(2021, 4, 13, 14, 35),
       end: new Date(2021, 4, 17, 11, 35),
-      detail: hotelPlaceholder,
+      hotelReservation: hotelRsvPlaceholder,
       location: "Santo Domingo, Dominican Republic",
       includesTime: true,
     },
@@ -3336,7 +3349,7 @@ export const tripPlaceholder: Trip = {
       type: EventTypes.POI,
       start: new Date(2021, 4, 16, 16, 0),
       end: new Date(2021, 4, 16, 17, 0),
-      detail: poiArray[0],
+      poi: poiRsv,
       location: "225 Madison Ave (btwn E 36th & E 37th St) New York, United States",
       includesTime: true,
     },
@@ -3345,7 +3358,7 @@ export const tripPlaceholder: Trip = {
       type: EventTypes.POI,
       start: new Date(2021, 4, 19, 12, 0),
       end: new Date(2021, 4, 19, 14, 0),
-      detail: poiArray[1],
+      poi: poiRsv,
       location: "4 Penn Plz, New York, United States",
       includesTime: true,
     },
@@ -3354,7 +3367,7 @@ export const tripPlaceholder: Trip = {
       type: EventTypes.POI,
       start: new Date(2021, 4, 21, 0, 0),
       end: new Date(2021, 4, 21, 3, 0),
-      detail: poiArray[2],
+      poi: poiRsv,
       location: "55 Irving Pl (at E 17th St), New York, United States",
       includesTime: true,
     },

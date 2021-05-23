@@ -232,7 +232,7 @@ export function Flights_Home() {
     },
   ];
 
-  const classes: FlightClassType[] = ["Economy", "Premium Economy", "Business", "First"];
+  const classes: FlightClassType[] = ["ECONOMY", "PREMIUM_ECONOMY", "BUSINESS", "FIRST"];
 
   const [deals, setDeals] = useState<FlightDeal[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

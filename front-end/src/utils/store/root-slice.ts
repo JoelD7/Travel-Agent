@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getDefaultCityImage } from "../functions";
 import { tripPlaceholder } from "../placeholders";
-import { CityImage, ExchangeRate } from "../types";
+import { CityImage, ExchangeRate, Trip } from "../types";
 
 interface RootSlice {
   openRequiredFieldSnack: boolean;
@@ -44,6 +44,9 @@ const rootSlice = createSlice({
     setCityImage(state, action: PayloadAction<CityImage>) {
       state.cityImage = action.payload;
     },
+    setTripDetail(state, action: PayloadAction<Trip>) {
+      state.tripDetail = action.payload;
+    },
   },
 });
 
@@ -52,6 +55,7 @@ export const {
   setExchangeRate,
   setEndCurrency,
   setCityImage,
+  setTripDetail,
 } = rootSlice.actions;
 
 export default rootSlice.reducer;

@@ -10,8 +10,9 @@ import { NotCreatedMessage } from "../../molecules";
 
 interface TripPOIs {
   showAll?: boolean;
+  pois: RsvPOI[];
 }
-export const TripPOIs = React.memo(function TripPOIs({ showAll }: TripPOIs) {
+export const TripPOIs = React.memo(function TripPOIs({ showAll, pois }: TripPOIs) {
   const tripPoisStyles = makeStyles((theme: Theme) => ({
     categoryIcon: {
       backgroundColor: Colors.PURPLE,
@@ -36,8 +37,6 @@ export const TripPOIs = React.memo(function TripPOIs({ showAll }: TripPOIs) {
       },
     },
   }));
-
-  const pois: RsvPOI[] = rsvPoisPlaceholder;
 
   const style = tripPoisStyles();
 

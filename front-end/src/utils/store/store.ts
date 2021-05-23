@@ -43,6 +43,8 @@ export const selectEndCurrency = (state: RootState) => state.rootSlice.userCurre
 
 export const selectCityImage = (state: RootState) => state.rootSlice.cityImage;
 
+export const selectTripDetail = (state: RootState) => state.rootSlice.tripDetail;
+
 //#endregion
 
 //#region Search
