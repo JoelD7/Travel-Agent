@@ -2,7 +2,7 @@ import { format, parseISO } from "date-fns";
 import { URLSearchParams } from "url";
 import { Routes } from "..";
 import { iataCodes } from "../constants";
-import { FlightSearch } from "../store";
+import { FlightSearch, store } from "../store";
 import { FlightTypes } from "../types";
 import { IATALocation } from "../types/location-types";
 import { capitalizeString, convertToUserCurrency, getIataLocation } from "./functions";
@@ -281,10 +281,37 @@ export function getFlightClassForAPI(value: string): string {
   }
 }
 
+/**
+ * Transforms a backend-returned flight class to a cilent
+ * friendly format.
+ * @param value
+ */
+function flightClassBackendToClient(value: string) {
+  switch (value) {
+    case "ECONOMY":
+      return "Economy";
+    case "PREMIUM_ECONOMY":
+      return "Premium Economy";
+    case "BUSINESS":
+      return "Business";
+    case "FIRST":
+      return "First";
+    default:
+      return "Economy";
+  }
+}
+
 export function getFlightSearchURL(flightSearch: FlightSearch) {
   return `${Routes.FLIGHT_LIST}${convertFlightToURLParams(
     flightSearch
   )}&page=1&pageSize=20&sortBy=Price | asc`;
+}
+
+export function getFlightClass(flight: Flight): string {
+  return capitalizeString(
+    flight.travelerPricings[0].fareDetailsBySegment[0].cabin,
+    "each word"
+  );
 }
 
 /**
@@ -296,7 +323,7 @@ export function getFlightSearchURL(flightSearch: FlightSearch) {
 export function getFlightDTO(flight: Flight) {
   return {
     total: convertToUserCurrency(flight.price.total, flight.price.currency),
-    flightClass: flight.class,
+    flightClass: getFlightClassForAPI(getFlightClass(flight)),
     itineraries: flight.itineraries.map((itinerary) => {
       return {
         duration: itinerary.duration,
@@ -320,6 +347,46 @@ export function getFlightDTO(flight: Flight) {
           return {
             duration: segment.duration,
             placeRelations: [departure, arrival],
+            carrierCode: segment.carrierCode,
+          };
+        }),
+      };
+    }),
+  };
+}
+
+/**
+ * Maps a flight returned by the backend to a
+ * client Flight object;
+ * @param flight
+ */
+export function mapFlightToDomainType(flight: any): Flight {
+  return {
+    travelerPricings: [
+      {
+        fareDetailsBySegment: [
+          {
+            cabin: flightClassBackendToClient(flight.flightClass),
+          },
+        ],
+      },
+    ],
+    price: {
+      currency: "USD",
+      total: flight.total,
+    },
+    class: flight.flightClass,
+    itineraries: flight.itineraries.map((itinerary: any) => {
+      return {
+        duration: itinerary.duration,
+        segments: itinerary.segments.map((segment: any) => {
+          let departure = segment.placeRelations[0];
+          let arrival = segment.placeRelations[1];
+
+          return {
+            duration: segment.duration,
+            departure,
+            arrival,
             carrierCode: segment.carrierCode,
           };
         }),

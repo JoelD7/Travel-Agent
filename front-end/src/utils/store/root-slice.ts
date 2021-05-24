@@ -4,6 +4,7 @@ import { tripPlaceholder } from "../placeholders";
 import { CityImage, ExchangeRate, Trip } from "../types";
 
 interface RootSlice {
+  idPerson: number;
   openRequiredFieldSnack: boolean;
   exchangeRate: ExchangeRate;
   userCurrency: string;
@@ -12,6 +13,7 @@ interface RootSlice {
 }
 
 const initialState: RootSlice = {
+  idPerson: 2,
   openRequiredFieldSnack: false,
   exchangeRate: JSON.parse(String(localStorage.getItem("rates"))),
   userCurrency: getUserCurrency(),
@@ -32,6 +34,10 @@ const rootSlice = createSlice({
   name: "rootSlice",
   initialState,
   reducers: {
+    setIdPerson(state, action: PayloadAction<number>) {
+      state.idPerson = action.payload;
+    },
+
     setOpenRequiredFieldSnack(state, action: PayloadAction<boolean>) {
       state.openRequiredFieldSnack = action.payload;
     },
@@ -54,6 +60,7 @@ export const {
   setOpenRequiredFieldSnack,
   setExchangeRate,
   setEndCurrency,
+  setIdPerson,
   setCityImage,
   setTripDetail,
 } = rootSlice.actions;

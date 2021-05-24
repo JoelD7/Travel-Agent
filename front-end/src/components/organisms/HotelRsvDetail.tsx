@@ -25,6 +25,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   capitalizeString,
   convertToUserCurrency,
+  formatAsCurrency,
   getHotelReservationCost,
   HotelReservation,
   HotelRoom,
@@ -162,7 +163,7 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
                   Total for room
                 </Text>
                 <Text component="h4" color={Colors.BLUE}>
-                  {convertToUserCurrency(room.cost, "USD")}
+                  {formatAsCurrency(convertToUserCurrency(room.cost, "USD"))}
                 </Text>
               </Grid>
             </Grid>
@@ -291,7 +292,9 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
               </Text>
 
               <Text style={{ marginLeft: "auto" }} color={Colors.BLUE} component="h3">
-                {convertToUserCurrency(getHotelReservationCost(hotelRsv), "USD")}
+                {formatAsCurrency(
+                  convertToUserCurrency(getHotelReservationCost(hotelRsv), "USD")
+                )}
               </Text>
             </Grid>
           </Grid>

@@ -7,7 +7,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Grid, Snackbar, useMediaQuery } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import Axios from "axios";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
@@ -25,7 +24,7 @@ import {
   TripDates,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import { Routes } from "../../utils";
+import { backend } from "../../utils";
 import { createTripStyles } from "./createTrip-styles";
 
 export function CreateTrip() {
@@ -59,18 +58,15 @@ export function CreateTrip() {
       type: image.type,
     });
 
-    Axios.post(
-      `${Routes.BACKEND_ROOT}/trip/create`,
-      {
+    backend
+      .post(`/trip/create`, {
         idPerson: 2,
         name,
         countries: countries.join(", "),
         budget: Number(budget),
         startDate,
         endDate,
-      },
-      { withCredentials: true }
-    )
+      })
       .then((res) => {
         console.log("Response: ", res);
 
@@ -78,11 +74,12 @@ export function CreateTrip() {
         formData.append("idTrip", res.data.idTrip);
         formData.append("image", image);
 
-        Axios.post(`${Routes.BACKEND_ROOT}/trip/create/coverPhoto`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        backend
+          .post(`/trip/create/coverPhoto`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
           .then((res) => {
             setOpenSnack(true);
           })

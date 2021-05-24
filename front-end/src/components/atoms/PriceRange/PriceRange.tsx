@@ -6,6 +6,7 @@ import {
   ExchangeRate,
   selectEndCurrency,
   convertToUserCurrency,
+  formatAsCurrency,
 } from "../../../utils";
 import { priceRangeStyles } from "./priceRange-styles";
 
@@ -33,10 +34,9 @@ export function PriceRange({ updateState, value, max, baseCurrency }: PriceRange
 
   return (
     <div onBlur={() => updateState(slider)}>
-      <p style={{ textAlign: "center", fontSize: "16px" }}>{` ${convertToUserCurrency(
-        slider[0],
-        baseCurrency
-      )} -  ${convertToUserCurrency(slider[1], baseCurrency)}+`}</p>
+      <p style={{ textAlign: "center", fontSize: "16px" }}>{` ${formatAsCurrency(
+        convertToUserCurrency(slider[0], baseCurrency)
+      )} -  ${formatAsCurrency(convertToUserCurrency(slider[1], baseCurrency))}+`}</p>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Slider

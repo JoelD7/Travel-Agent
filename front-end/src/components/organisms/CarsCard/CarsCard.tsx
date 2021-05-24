@@ -12,7 +12,7 @@ import {
 import { Grid } from "@material-ui/core";
 import React from "react";
 import { Colors } from "../../../styles";
-import { Car, convertToUserCurrency } from "../../../utils";
+import { Car, convertToUserCurrency, formatAsCurrency } from "../../../utils";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
 import { carsCardStyles } from "./carsCard-styles";
 
@@ -112,9 +112,11 @@ export function CarsCard({ car }: CarsCard) {
       <Grid item xs={12} style={{ marginTop: "10px" }}>
         <Grid container alignItems="center">
           <Text component="h3" color={Colors.BLUE}>
-            {convertToUserCurrency(
-              car.rate_totals.pay_later.reservation_total,
-              car.rate_totals.rate.currency
+            {formatAsCurrency(
+              convertToUserCurrency(
+                car.rate_totals.pay_later.reservation_total,
+                car.rate_totals.rate.currency
+              )
             )}
           </Text>
 

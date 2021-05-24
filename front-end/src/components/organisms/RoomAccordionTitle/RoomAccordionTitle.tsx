@@ -22,6 +22,7 @@ import { Colors, Shadow } from "../../../styles";
 import {
   capitalizeString,
   convertToUserCurrency,
+  formatAsCurrency,
   getRoomTotalPrice,
   HotelBedAPI,
   HotelBooking,
@@ -229,7 +230,9 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
                       </Text>
                       {/* Min Price */}
                       <Text color="white" component="h3" bold>
-                        {convertToUserCurrency(getMinRateForRoom(), "USD")}
+                        {formatAsCurrency(
+                          convertToUserCurrency(getMinRateForRoom(), "USD")
+                        )}
                       </Text>
                     </Grid>
 

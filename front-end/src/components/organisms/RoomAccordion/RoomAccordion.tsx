@@ -13,6 +13,7 @@ import { Colors, Shadow } from "../../../styles";
 import {
   capitalizeString,
   convertToUserCurrency,
+  formatAsCurrency,
   getRoomTotalPrice,
   HotelBooking,
   HotelRoom,
@@ -129,7 +130,9 @@ export const RoomAccordion = React.memo(function Component({
                     <Grid container alignItems="center">
                       <Text bold>Total: </Text>
                       <Text style={{ marginLeft: "3px" }}>
-                        {convertToUserCurrency(getRoomTotalPrice(rate), "USD")}
+                        {formatAsCurrency(
+                          convertToUserCurrency(getRoomTotalPrice(rate), "USD")
+                        )}
                       </Text>
 
                       <CustomButton

@@ -45,6 +45,8 @@ export const selectCityImage = (state: RootState) => state.rootSlice.cityImage;
 
 export const selectTripDetail = (state: RootState) => state.rootSlice.tripDetail;
 
+export const selectIdPerson = (state: RootState) => state.rootSlice.idPerson;
+
 //#endregion
 
 //#region Search

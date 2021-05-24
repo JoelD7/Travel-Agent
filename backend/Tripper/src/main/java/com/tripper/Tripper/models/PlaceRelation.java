@@ -1,9 +1,13 @@
 package com.tripper.Tripper.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tripper.Tripper.models.enums.PlaceRelationType;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +21,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PlaceRelation {
 
+    @ManyToOne
+    @JoinColumn(name = "idFlightSegment")
+    @JsonIgnore
+    private FlightSegment flightSegment;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idPlaceRelation")
@@ -24,11 +33,9 @@ public class PlaceRelation {
 
     private String iataCode;
     private String city;
-    private Integer terminal;
+    private String terminal;
     private LocalDateTime at;
+    @Enumerated(EnumType.STRING)
     private PlaceRelationType type;
 
-    @ManyToOne
-    @JoinColumn(name = "idFlightSegment")
-    private FlightSegment flightSegment;
 }

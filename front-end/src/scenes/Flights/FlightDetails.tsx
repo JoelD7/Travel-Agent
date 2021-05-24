@@ -12,19 +12,25 @@ import {
   Divider,
   Grid,
   IconButton,
+  Snackbar,
   useMediaQuery,
 } from "@material-ui/core";
-import React from "react";
+import { Alert } from "@material-ui/lab";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { Font } from "../../assets";
 import { CustomButton, IconTP, Text } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
+  backend,
   capitalizeString,
   convertToUserCurrency,
   FlightSearch,
+  formatAsCurrency,
   formatFlightDate,
   formatFlightSegmentTime,
   getFlightCitiesLabel,
+  getFlightClass,
   getFlightDTO,
   getFlightSegmentCarrier,
   getIataLocation,
@@ -32,6 +38,7 @@ import {
   parseFlightDuration,
   selectFlightDictionaries,
   selectFlightSearchParams,
+  selectIdPerson,
 } from "../../utils";
 import { flightDetailsStyles } from "./flightDetails-styles";
 
@@ -59,6 +66,10 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
   const is730OrLess = useMediaQuery("(max-width:730px)");
   const is660OrLess = useMediaQuery("(max-width:660px)");
 
+  const [openSnack, setOpenSnack] = useState(false);
+
+  const idPerson: number = useSelector(selectIdPerson);
+
   function getFlightPassengers() {
     let total: number = 0;
     total += flightSearch.adults;
@@ -72,13 +83,6 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
     }
 
     return total;
-  }
-
-  function getFlightClass(): string {
-    return capitalizeString(
-      flight.travelerPricings[0].fareDetailsBySegment[0].cabin,
-      "each word"
-    );
   }
 
   function FlightCard({ itinerary }: FlightCard) {
@@ -214,6 +218,13 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
 
   function bookFlight() {
     let flightDTO = getFlightDTO(flight);
+
+    backend
+      .post(`/flight?idPerson=${idPerson}`, flightDTO)
+      .then((res) => {
+        setOpenSnack(true);
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -295,7 +306,7 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
               icon={faCircle}
             />
 
-            <p className={style.subtitle}>{getFlightClass()}</p>
+            <p className={style.subtitle}>{getFlightClass(flight)}</p>
           </Grid>
         </Grid>
 
@@ -305,19 +316,35 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
         {/* Button */}
         <Grid item xs={12} style={{ marginTop: "20px" }}>
           <Grid container justify="flex-end">
-            <h2
-              style={{ fontSize: "20px", marginRight: "10px" }}
-            >{`${convertToUserCurrency(flight.price.total, flight.price.currency)}`}</h2>
+            <h2 style={{ fontSize: "20px", marginRight: "10px" }}>{`${formatAsCurrency(
+              convertToUserCurrency(flight.price.total, flight.price.currency)
+            )}`}</h2>
             <CustomButton
               backgroundColor={Colors.GREEN}
               style={{ boxShadow: Shadow.LIGHT3D }}
-              onClick={() => {}}
+              onClick={() => bookFlight()}
             >
               Purchase flight
             </CustomButton>
           </Grid>
         </Grid>
       </Grid>
+
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenSnack(false)}
+          severity="success"
+        >
+          Flight booked.
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 }

@@ -62,37 +62,35 @@ export function getLinkStyle(color: string = "initial"): CSSProperties {
  * this means that the API in question always returns prices in the same currency.
  * @returns
  */
-export function convertToUserCurrency(value: number, fromCurrency: string) {
+export function convertToUserCurrency(value: number, fromCurrency: string): number {
   const exchangeRate: ExchangeRate = store.getState().rootSlice.exchangeRate;
   const toCurrency: string = store.getState().rootSlice.userCurrency;
 
-  const formatter = Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: toCurrency,
-    currencyDisplay: "symbol",
-    maximumFractionDigits: 2,
-  }).format;
-
   // From USD to anything
   if (fromCurrency === DEFAULT_CURRENCY) {
-    let convertedValue = value * exchangeRate.rates[toCurrency];
-    return formatter(convertedValue);
+    let convertedValue: number = value * exchangeRate.rates[toCurrency];
+    return convertedValue;
 
     // From anything to USD
   } else if (toCurrency === DEFAULT_CURRENCY) {
-    let convertedValue = value * (1 / exchangeRate.rates[fromCurrency]);
-    return formatter(convertedValue);
+    let convertedValue: number = value * (1 / exchangeRate.rates[fromCurrency]);
+    return convertedValue;
 
     // From anything to anything
   } else {
     //fromCurrency to USD
     let valueAsDollar = value * (1 / exchangeRate.rates[fromCurrency]);
     //From USD to toCurrency
-    let convertedValue = valueAsDollar * exchangeRate.rates[toCurrency];
-    return formatter(convertedValue);
+    let convertedValue: number = valueAsDollar * exchangeRate.rates[toCurrency];
+    return convertedValue;
   }
 }
 
+/**
+ * Formats a value to an user-selected currency format.
+ * @param value
+ * @returns
+ */
 export function formatAsCurrency(value: number): string {
   const formatter = Intl.NumberFormat("en-US", {
     style: "currency",

@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
 import {
   convertToUserCurrency,
+  formatAsCurrency,
   getHotelReservationCost,
   HotelReservation,
   hotelRsvPlaceholder,
@@ -112,7 +113,9 @@ export const RsvHotels = React.memo(function RsvHotels({
                     component="h4"
                     bold
                   >
-                    {convertToUserCurrency(getHotelReservationCost(hotel), "USD")}
+                    {formatAsCurrency(
+                      convertToUserCurrency(getHotelReservationCost(hotel), "USD")
+                    )}
                   </Text>
                 </Grid>
               </CardContent>

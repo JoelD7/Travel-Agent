@@ -34,6 +34,7 @@ import {
   carRsvPlaceholder,
   CarRsvFeatures,
   convertToUserCurrency,
+  formatAsCurrency,
 } from "../../../utils";
 import { IconText, IconTP, Text } from "../../atoms";
 import { NotCreatedMessage } from "../../molecules";
@@ -155,7 +156,7 @@ export const TripCars = React.memo(function TripCars({ showAll = true, cars }: T
                 </IconText>
 
                 <Text component="h3" style={{ marginTop: 20 }} color={Colors.BLUE}>
-                  {convertToUserCurrency(car.cost, "USD")}
+                  {formatAsCurrency(convertToUserCurrency(car.cost, "USD"))}
                 </Text>
               </CardContent>
             </CardActionArea>
@@ -253,7 +254,7 @@ export const TripCars = React.memo(function TripCars({ showAll = true, cars }: T
 
             <IconText icon={faDollarSign} fontSize={16} style={{ marginBottom: 10 }}>
               <b>Cost: </b>
-              {convertToUserCurrency(carDetail.cost, "USD")}
+              {formatAsCurrency(convertToUserCurrency(carDetail.cost, "USD"))}
             </IconText>
           </Grid>
         </Grid>

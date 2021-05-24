@@ -19,6 +19,7 @@ import {
   selectExchangeRate,
   selectHotelReservationParams,
   setHotelDetail,
+  formatAsCurrency,
 } from "../../../utils";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
 import { hotelCardStyles } from "./hotelCardStyles";
@@ -100,9 +101,8 @@ export function HotelCard({ hotel }: HotelCard) {
             {/* Price and details button */}
             <Grid item className={style.priceAndDetailsGrid}>
               <div>
-                <h4 style={{ textAlign: "center" }}>{`From ${convertToUserCurrency(
-                  getMinRate(hotel.rooms),
-                  "USD"
+                <h4 style={{ textAlign: "center" }}>{`From ${formatAsCurrency(
+                  convertToUserCurrency(getMinRate(hotel.rooms), "USD")
                 )}`}</h4>
                 <CustomButton
                   backgroundColor={Colors.PURPLE}
@@ -158,9 +158,8 @@ export function HotelCard({ hotel }: HotelCard) {
 
             <Grid item xs={12} style={{ padding: "10px" }}>
               <Grid container>
-                <Text component="h3" bold>{`From ${convertToUserCurrency(
-                  getMinRate(hotel.rooms),
-                  "USD"
+                <Text component="h3" bold>{`From ${formatAsCurrency(
+                  convertToUserCurrency(getMinRate(hotel.rooms), "USD")
                 )}`}</Text>
                 <CustomButton
                   style={{

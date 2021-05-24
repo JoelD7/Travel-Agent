@@ -1,8 +1,12 @@
 package com.tripper.Tripper.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,8 +32,9 @@ public class FlightItinerary implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idFlight")
+    @JsonIgnore
     private Flight flight;
 
-    @OneToMany(mappedBy = "flightItinerary")
+    @OneToMany(mappedBy = "flightItinerary", cascade = CascadeType.ALL)
     List<FlightSegment> segments = new ArrayList<>();
 }
