@@ -53,6 +53,6 @@ public class Trip {
     private List<Album> albums = new ArrayList<>();
 
     @OneToMany(mappedBy = "trip")
-    @JsonManagedReference
+    @JsonManagedReference(value = "tripReference")
     private List<TripEvent> itinerary = new ArrayList<>();
 }

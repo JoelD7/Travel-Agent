@@ -1,7 +1,7 @@
 import { Car, CarCheckbox, CarRsv, EventTypes } from "../types";
 import { HotelAvailability, HotelBooking, HotelReservation } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
-import { Trip, TripAlbum } from "../types/trip-types";
+import { Trip, TripAlbum, TripEvent } from "../types/trip-types";
 
 export const restaurantsPlaceholder: RestaurantSearch[] = [
   {
@@ -2316,6 +2316,8 @@ export const activitiesPlaceholder: Activity[] = [
 
 export const flightsPlaceholder: Flight[] = [
   {
+    id: "1",
+    idFlight: "0",
     travelerPricings: [
       {
         fareDetailsBySegment: [
@@ -2355,6 +2357,8 @@ export const flightsPlaceholder: Flight[] = [
     ],
   },
   {
+    idFlight: "0",
+    id: "2",
     travelerPricings: [
       {
         fareDetailsBySegment: [
@@ -2417,6 +2421,8 @@ export const flightsPlaceholder: Flight[] = [
 ];
 
 export const flightPlaceholder: Flight = {
+  id: "3",
+  idFlight: "12",
   travelerPricings: [
     {
       fareDetailsBySegment: [
@@ -3319,7 +3325,8 @@ export const tripPlaceholder: Trip = {
   itinerary: [
     {
       name: "Flight to Dubai",
-      type: EventTypes.Flight,
+      idTripEvent: 12,
+      type: EventTypes.FLIGHT,
       start: new Date(flightPlaceholder.itineraries[0].segments[0].departure.at),
       end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at),
       flight: flightPlaceholder,
@@ -3328,7 +3335,8 @@ export const tripPlaceholder: Trip = {
     },
     {
       name: "Flight to Singapore",
-      type: EventTypes.Flight,
+      type: EventTypes.FLIGHT,
+      idTripEvent: 11,
       start: new Date(flightPlaceholder.itineraries[1].segments[0].departure.at),
       end: new Date(flightPlaceholder.itineraries[1].segments[0].arrival.at),
       flight: flightPlaceholder,
@@ -3336,8 +3344,9 @@ export const tripPlaceholder: Trip = {
       includesTime: true,
     },
     {
+      idTripEvent: 46,
       name: "Arrival at Hotel Sheraton Santo Domingo",
-      type: EventTypes.Hotel,
+      type: EventTypes.HOTEL,
       start: new Date(2021, 4, 13, 14, 35),
       end: new Date(2021, 4, 17, 11, 35),
       hotelReservation: hotelRsvPlaceholder,
@@ -3345,6 +3354,7 @@ export const tripPlaceholder: Trip = {
       includesTime: true,
     },
     {
+      idTripEvent: 78,
       name: "Visit to The Morgan Library & Museum",
       type: EventTypes.POI,
       start: new Date(2021, 4, 16, 16, 0),
@@ -3356,6 +3366,7 @@ export const tripPlaceholder: Trip = {
     {
       name: "Visit to Hulu Theater",
       type: EventTypes.POI,
+      idTripEvent: 44,
       start: new Date(2021, 4, 19, 12, 0),
       end: new Date(2021, 4, 19, 14, 0),
       poi: poiRsv,
@@ -3364,6 +3375,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       name: "Visit to Dear Irving",
+      idTripEvent: 18,
       type: EventTypes.POI,
       start: new Date(2021, 4, 21, 0, 0),
       end: new Date(2021, 4, 21, 3, 0),
@@ -3676,6 +3688,17 @@ export const tripsPlaceholder: Trip[] = [
     coverPhoto: "country.jpg",
   },
 ];
+
+export const tripEventPlaceholder: TripEvent = {
+  name: "Flight to Dubai",
+  idTripEvent: 12,
+  type: EventTypes.FLIGHT,
+  start: new Date(flightPlaceholder.itineraries[0].segments[0].departure.at),
+  end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at),
+  flight: flightPlaceholder,
+  location: "SIN, Singapore",
+  includesTime: true,
+};
 
 export const airportCityPlaceholder: IATALocation = {
   code: "MIA",

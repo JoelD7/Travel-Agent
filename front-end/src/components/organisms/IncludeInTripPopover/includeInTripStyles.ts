@@ -29,6 +29,9 @@ export const includeInTripStyles = makeStyles((theme: Theme) => ({
     maxHeight: "280px",
     padding: "15px",
     borderRadius: "10px",
+    [theme.breakpoints.down(430)]: {
+      width: "85vw",
+    },
   },
   select: {
     "& .MuiOutlinedInput-input": {

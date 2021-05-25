@@ -3,8 +3,11 @@ package com.tripper.Tripper.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.tripper.Tripper.models.enums.TripEventType;
 import java.time.LocalDate;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,33 +31,45 @@ public class TripEvent {
 
     private String name;
     private String location;
+
+    @Enumerated(EnumType.STRING)
     private TripEventType type;
     private Boolean includesTime;
     private LocalDate start;
     private LocalDate end;
 
+    public TripEvent(String name, String location, TripEventType type, Boolean includesTime,
+            LocalDate start, LocalDate end) {
+        this.name = name;
+        this.location = location;
+        this.type = type;
+        this.includesTime = includesTime;
+        this.start = start;
+        this.end = end;
+    }
+
     @ManyToOne
     @JoinColumn(name = "idTrip")
-    @JsonBackReference
+    @JsonBackReference(value = "tripReference")
     private Trip trip;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idEvent")
     private Restaurant restaurant;
 
-    @OneToOne
-    @JoinColumn(name = "idEvent")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event")
+    @JsonBackReference(value = "flightReference")
     private Flight flight;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idEvent")
     private CarRental carRental;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idEvent")
     private HotelReservation hotelReservation;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idEvent")
     private POI poi;
 }

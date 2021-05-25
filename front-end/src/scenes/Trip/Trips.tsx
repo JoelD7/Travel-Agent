@@ -1,8 +1,8 @@
 import { faCalendar, faFlag } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui/core";
 import Axios from "axios";
-import { differenceInCalendarDays, format, parseISO } from "date-fns";
-import React, { useEffect, useState } from "react";
+import { compareAsc, differenceInCalendarDays, format, parseISO } from "date-fns";
+import React, { CSSProperties, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch } from "react-redux";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
@@ -34,9 +34,19 @@ export function Trips() {
 
   const [trips, setTrips] = useState(tripsPlaceholder);
 
-  const lastTrip = tripPlaceholder;
+  let lastTrip: Trip = getLastTrip();
+
   const match = useRouteMatch();
   const history = useHistory();
+
+  const tripCoverBackground: CSSProperties = {
+    backgroundImage: lastTrip
+      ? `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${lastTrip.coverPhoto})`
+      : "",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "50%",
+  };
 
   const dispatch = useDispatch();
 
@@ -84,6 +94,10 @@ export function Trips() {
 
   function onTripClick(trip: Trip) {
     dispatch(setTripDetail(trip));
+  }
+
+  function getLastTrip(): Trip {
+    return trips.sort((a, b) => compareAsc(b.endDate, a.endDate))[0];
   }
 
   function TripCards() {
@@ -135,7 +149,13 @@ export function Trips() {
       <Grid container>
         <Grid item className={style.pageContentGrid}>
           {/* Photo title */}
-          <Grid key="photoTitle" item xs={12} className={style.photoTitleContainer}>
+          <Grid
+            key="photoTitle"
+            item
+            xs={12}
+            className={style.photoTitleContainer}
+            style={tripCoverBackground}
+          >
             <Grid container style={{ height: "100%" }}>
               <Grid item xs={12}>
                 <Text color="white" component="h4" style={{ fontWeight: "normal" }}>

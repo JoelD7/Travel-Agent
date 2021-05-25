@@ -1,4 +1,4 @@
-package com.tripper.Tripper.data;
+package com.tripper.Tripper.data.specifications;
 
 import com.tripper.Tripper.models.Flight;
 import com.tripper.Tripper.models.Person;

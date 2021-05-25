@@ -113,13 +113,13 @@ export const formatAsDecimal = Intl.NumberFormat("en-US", {
  */
 export function eventToIcon(type: EventTypes.EventType): IconDefinition {
   switch (type) {
-    case EventTypes.Flight:
+    case EventTypes.FLIGHT:
       return faPlaneDeparture;
 
-    case EventTypes.Hotel:
+    case EventTypes.HOTEL:
       return faHotel;
 
-    case EventTypes.Restaurant:
+    case EventTypes.RESTAURANT:
       return faUtensils;
 
     case EventTypes.POI:

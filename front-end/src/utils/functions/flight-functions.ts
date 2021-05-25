@@ -136,10 +136,10 @@ export function parseFlightDuration(duration: string) {
  * Returns the last segment of a flight.
  * The last segment is the part of the flight
  * that takes the passenger to the ultimate destination.
- * @param flight
+ * @param flightItinerary
  */
-export function getLastSegment(flight: FlightItinerary) {
-  return flight.segments[flight.segments.length - 1];
+export function getLastSegment(flightItinerary: FlightItinerary): FlightSegment {
+  return flightItinerary.segments[flightItinerary.segments.length - 1];
 }
 
 export function getFlightSegmentCarrier(
@@ -362,6 +362,8 @@ export function getFlightDTO(flight: Flight) {
  */
 export function mapFlightToDomainType(flight: any): Flight {
   return {
+    id: "0",
+    idFlight: flight.idFlight,
     travelerPricings: [
       {
         fareDetailsBySegment: [

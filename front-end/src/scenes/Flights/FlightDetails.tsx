@@ -16,15 +16,15 @@ import {
   useMediaQuery,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import { Font } from "../../assets";
-import { CustomButton, IconTP, Text } from "../../components";
+import { CustomButton, IconTP, IncludeInTripPopover, Text } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
   backend,
-  capitalizeString,
   convertToUserCurrency,
+  EventTypes,
   FlightSearch,
   formatAsCurrency,
   formatFlightDate,
@@ -39,6 +39,10 @@ import {
   selectFlightDictionaries,
   selectFlightSearchParams,
   selectIdPerson,
+  selectUserTrips,
+  Trip,
+  TripEvent,
+  tripEventPlaceholder,
 } from "../../utils";
 import { flightDetailsStyles } from "./flightDetails-styles";
 
@@ -46,13 +50,21 @@ interface FlightDetails {
   open: boolean;
   flight: Flight;
   onClose: () => void;
+  bookedFlight?: boolean;
+  isFlightInTrip?: boolean;
 }
 
 interface FlightCard {
   itinerary: number;
 }
 
-export function FlightDetails({ flight, open, onClose }: FlightDetails) {
+export function FlightDetails({
+  flight,
+  isFlightInTrip,
+  open,
+  bookedFlight,
+  onClose,
+}: FlightDetails) {
   const style = flightDetailsStyles();
 
   const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
@@ -69,6 +81,15 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
   const [openSnack, setOpenSnack] = useState(false);
 
   const idPerson: number = useSelector(selectIdPerson);
+
+  const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
+  const [openPopover, setOpenPopover] = useState(false);
+
+  const [idEvent, setIdEvent] = useState(0);
+
+  const userTrips: Trip[] = useSelector(selectUserTrips);
+
+  // const isFlightIncludedInTrip: boolean =
 
   function getFlightPassengers() {
     let total: number = 0;
@@ -223,8 +244,56 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
       .post(`/flight?idPerson=${idPerson}`, flightDTO)
       .then((res) => {
         setOpenSnack(true);
+        setIdEvent(res.data.idEvent);
       })
       .catch((err) => console.log(err));
+  }
+
+  function onIncludeTripClick(event: MouseEvent<HTMLButtonElement>) {
+    setTripAnchor(event.currentTarget);
+    setOpenPopover(true);
+  }
+
+  function isFlightIncludedInTrip() {
+    let included: boolean = false;
+    userTrips.forEach((trip) => {
+      if (trip.itinerary) {
+        trip.itinerary
+          .filter((event) => event.type === EventTypes.FLIGHT)
+          .forEach((event) => {
+            if (event.flight && event.flight.id === flight.id) {
+              included = true;
+              return;
+            }
+          });
+      }
+    });
+
+    return included;
+  }
+
+  function deleteFlightFromTrip() {
+    let tripEventOfFlight: TripEvent = tripEventPlaceholder;
+
+    userTrips.forEach((trip) => {
+      if (trip.itinerary) {
+        trip.itinerary
+          .filter((event) => event.type === EventTypes.FLIGHT)
+          .forEach((event) => {
+            if (event.flight && event.flight.idFlight === flight.idFlight) {
+              tripEventOfFlight = event;
+              return;
+            }
+          });
+      }
+    });
+
+    if (tripEventOfFlight.idTripEvent) {
+      backend
+        .delete(`/trip-event/delete/${tripEventOfFlight.idTripEvent}`)
+        .then((res) => {})
+        .catch((err) => console.log(err));
+    }
   }
 
   return (
@@ -310,6 +379,30 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
           </Grid>
         </Grid>
 
+        {/* Include in trip */}
+        {!isFlightIncludedInTrip() && (
+          <CustomButton
+            style={{ boxShadow: Shadow.LIGHT }}
+            onClick={(e) => onIncludeTripClick(e)}
+            backgroundColor={Colors.GREEN}
+            rounded
+          >
+            Include in trip
+          </CustomButton>
+        )}
+
+        {/* Delete from trip */}
+        {isFlightIncludedInTrip() && (
+          <CustomButton
+            rounded
+            backgroundColor={Colors.RED}
+            style={{ boxShadow: Shadow.LIGHT3D }}
+            onClick={() => deleteFlightFromTrip()}
+          >
+            Delete from trip
+          </CustomButton>
+        )}
+
         <FlightCard itinerary={0} />
         {flight.itineraries.length > 1 && <FlightCard itinerary={1} />}
 
@@ -319,16 +412,28 @@ export function FlightDetails({ flight, open, onClose }: FlightDetails) {
             <h2 style={{ fontSize: "20px", marginRight: "10px" }}>{`${formatAsCurrency(
               convertToUserCurrency(flight.price.total, flight.price.currency)
             )}`}</h2>
-            <CustomButton
-              backgroundColor={Colors.GREEN}
-              style={{ boxShadow: Shadow.LIGHT3D }}
-              onClick={() => bookFlight()}
-            >
-              Purchase flight
-            </CustomButton>
+
+            {!bookedFlight && !isFlightIncludedInTrip() && (
+              <CustomButton
+                backgroundColor={Colors.GREEN}
+                style={{ boxShadow: Shadow.LIGHT3D }}
+                onClick={() => bookFlight()}
+              >
+                Purchase flight
+              </CustomButton>
+            )}
           </Grid>
         </Grid>
       </Grid>
+
+      <IncludeInTripPopover
+        place={flight}
+        tripAnchor={tripAnchor}
+        eventType={EventTypes.FLIGHT}
+        setTripAnchor={setTripAnchor}
+        openPopover={openPopover}
+        setOpenPopover={setOpenPopover}
+      />
 
       <Snackbar
         open={openSnack}

@@ -29,6 +29,7 @@ import {
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
+import { EventTypes } from "../../utils";
 import { thingsToDoDetailsStyles as thingsToDoDetailsStyles } from "./thingsToDoDetails-styles";
 
 export function ThingsToDoDetails() {
@@ -375,6 +376,7 @@ export function ThingsToDoDetails() {
         <IncludeInTripPopover
           place={poi}
           tripAnchor={tripAnchor}
+          eventType={EventTypes.POI}
           setTripAnchor={setTripAnchor}
           openPopover={openPopover}
           setOpenPopover={setOpenPopover}

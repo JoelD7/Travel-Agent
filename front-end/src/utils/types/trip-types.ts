@@ -1,6 +1,6 @@
 import { CarRsv } from "./car-types";
 import * as EventType from "./event-types";
-import { HotelBooking, HotelReservation } from "./hotel-types";
+import { HotelReservation } from "./hotel-types";
 
 export interface Trip {
   idTrip: string;
@@ -18,6 +18,7 @@ export interface Trip {
 }
 
 export interface TripEvent {
+  idTripEvent?: number;
   name: string;
   location: string;
   type: EventType.EventType;

@@ -5,7 +5,6 @@ import com.tripper.Tripper.models.Flight;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -13,7 +12,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.stereotype.Component;
 
 @Component
-@Lazy
 public class FlightModelAssembler implements RepresentationModelAssembler<Flight, EntityModel<Flight>> {
 
     @Override

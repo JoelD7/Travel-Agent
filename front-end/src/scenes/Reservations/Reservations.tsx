@@ -102,6 +102,7 @@ export function Reservations() {
                 <CardFlight
                   className={style.flightCard}
                   key={i}
+                  bookedFlight
                   flight={flight}
                   variant="deal"
                 />

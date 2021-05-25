@@ -49,9 +49,9 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
   function DayItineraryCard({ event }: DayItineraryCard) {
     function getDetailButtonText(): string {
       switch (event.type) {
-        case EventTypes.Flight:
+        case EventTypes.FLIGHT:
           return "Flight details";
-        case EventTypes.Hotel:
+        case EventTypes.HOTEL:
           return "Reservation details";
         default:
           return "Check out place";
@@ -60,11 +60,11 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
 
     function onDetailButtonClick() {
       switch (event.type) {
-        case EventTypes.Flight:
+        case EventTypes.FLIGHT:
           setOpenFlightDialog(true);
           dispatch(setFlightDetail(flightPlaceholder));
           break;
-        case EventTypes.Hotel:
+        case EventTypes.HOTEL:
           setOpenHotelDialog(true);
           dispatch(setHotelRsv(hotelRsv));
           break;

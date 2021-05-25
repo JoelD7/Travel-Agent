@@ -16,15 +16,32 @@ import { Alert } from "@material-ui/lab";
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addHours, compareAsc, parseISO } from "date-fns";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
-import { muiDateFormatter } from "../../../utils";
+import {
+  backend,
+  getFlightDTO,
+  TripEvent,
+  CarRsv,
+  EventTypes,
+  flightPlaceholder,
+  getLastSegment,
+  muiDateFormatter,
+  responseTripToDomainTrip,
+  getIataLocation,
+  selectUserTrips,
+  Trip,
+  IATALocation,
+} from "../../../utils";
+import { setUserTrips } from "../../../utils/store/trip-slice";
 import { IconText, Text } from "../../atoms";
 import { includeInTripStyles } from "./includeInTripStyles";
 
 interface IncludeInTripPopover {
-  place: Restaurant | POI;
+  place: Restaurant | POI | Flight | CarRsv;
+  eventType: EventTypes.EventType;
   tripAnchor: HTMLButtonElement | null;
   openPopover: boolean;
   setOpenPopover: (value: React.SetStateAction<boolean>) => void;
@@ -33,6 +50,7 @@ interface IncludeInTripPopover {
 
 export function IncludeInTripPopover({
   place,
+  eventType,
   tripAnchor,
   openPopover,
   setOpenPopover,
@@ -156,9 +174,6 @@ export function IncludeInTripPopover({
 
   const style = includeInTripStyles();
 
-  const [trip, setTrip] = useState<string>("Journey Through the Alps");
-  const tripOptions = ["Journey Through the Alps", "Andes Walk", "Europe in the Snow"];
-
   const datetimePopoverParams = [
     {
       label: "Start",
@@ -170,12 +185,53 @@ export function IncludeInTripPopover({
     },
   ];
 
-  const [datetimePopover, setDatetimePopover] = useState<{ [index: string]: Date }>({
-    start: new Date(),
-    end: addHours(new Date(), 1),
-  });
+  const [datetimePopover, setDatetimePopover] = useState<{ [index: string]: Date }>(
+    getDates()
+  );
 
-  const [openSnack, setOpenSnack] = useState(false);
+  const [openErrorSnack, setOpenErrorSnack] = useState(false);
+  const [openSuccessSnack, setOpenSuccessSnack] = useState(false);
+
+  const userTrips: Trip[] = useSelector(selectUserTrips);
+
+  const tripOptions: string[] = userTrips.map((trip) => trip.name);
+  const [tripOption, setTripOption] = useState<string>(tripOptions[0]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userTrips.length === 0) {
+      backend
+        .get("/trip/all")
+        .then((res: any) => {
+          let tripsInResponse = res.data._embedded.tripList;
+          let tripsBuffer = tripsInResponse.map((resTrip: any) =>
+            responseTripToDomainTrip(resTrip)
+          );
+
+          dispatch(setUserTrips(tripsBuffer));
+        })
+        .catch((err: any) => console.log(err));
+    }
+  }, []);
+
+  function getDates() {
+    if (eventType === EventTypes.FLIGHT) {
+      let flight: Flight = place as Flight;
+
+      return {
+        start: parseISO(flight.itineraries[0].segments[0].departure.at),
+        end: parseISO(
+          getLastSegment(flight.itineraries[flight.itineraries.length - 1]).arrival.at
+        ),
+      };
+    } else {
+      return {
+        start: new Date(),
+        end: addHours(new Date(), 1),
+      };
+    }
+  }
 
   function onPopoverClose() {
     setTripAnchor(null);
@@ -192,7 +248,7 @@ export function IncludeInTripPopover({
     }
 
     if (variable === "start" && isStartDateAfterEndDate(date)) {
-      setOpenSnack(true);
+      setOpenErrorSnack(true);
       setDatetimePopover({
         start: new Date(),
         end: addHours(new Date(), 1),
@@ -209,6 +265,71 @@ export function IncludeInTripPopover({
   function isStartDateAfterEndDate(start: MaterialUiPickersDate): boolean {
     let parsedDate: Date = start === null ? new Date() : parseISO(start.toISOString());
     return compareAsc(parsedDate, datetimePopover.end) !== -1;
+  }
+
+  function addToTrip() {
+    let tripEventDTO = {};
+    let selectedTrip: Trip = userTrips.filter((trip) => trip.name === tripOption)[0];
+
+    switch (eventType) {
+      case EventTypes.CAR_RENTAL:
+        break;
+      case EventTypes.FLIGHT:
+        let flight: Flight = place as Flight;
+        let destination: IATALocation | undefined = getIataLocation(
+          getLastSegment(flight.itineraries[0]).arrival.iataCode
+        );
+
+        tripEventDTO = {
+          name: destination ? `Flight to ${destination.city}` : "Flight",
+          location: destination ? `${destination.city}` : "",
+          type: EventTypes.FLIGHT,
+          start: datetimePopover.start,
+          end: datetimePopover.end,
+          flight: getFlightDTO(flight),
+          includesTime: false,
+        };
+
+        let updatedUserTrips = userTrips.map((trip) => {
+          if (trip.name === tripOption) {
+            let newEvent: TripEvent = {
+              name: destination ? `Flight to ${destination.city}` : "Flight",
+              location: destination ? `${destination.city}` : "",
+              type: EventTypes.FLIGHT,
+              start: datetimePopover.start,
+              end: datetimePopover.end,
+              flight: flight,
+              includesTime: false,
+            };
+
+            return {
+              ...selectedTrip,
+              itinerary: selectedTrip.itinerary
+                ? [...selectedTrip.itinerary, newEvent]
+                : [],
+            };
+          } else {
+            return trip;
+          }
+        });
+        dispatch(setUserTrips(updatedUserTrips));
+        break;
+      case EventTypes.HOTEL:
+        break;
+      case EventTypes.POI:
+        break;
+      case EventTypes.RESTAURANT:
+        break;
+      default:
+        break;
+    }
+
+    backend
+      .post(`/trip-event/add-new?idTrip=${selectedTrip.idTrip}`, tripEventDTO)
+      .then((res) => {
+        setOpenSuccessSnack(true);
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -243,12 +364,12 @@ export function IncludeInTripPopover({
               <Grid item className={style.selectGrid}>
                 <FormControl>
                   <Select
-                    value={trip}
+                    value={tripOption}
                     style={{ height: "30px", width: "276px" }}
                     classes={{ icon: style.selectIcon }}
                     variant="outlined"
                     className={style.select}
-                    onChange={(e) => setTrip(e.target.value as string)}
+                    onChange={(e) => setTripOption(e.target.value as string)}
                   >
                     {tripOptions.map((option) => (
                       <MenuItem value={option}>{option}</MenuItem>
@@ -289,6 +410,7 @@ export function IncludeInTripPopover({
               {/* Add button */}
               <Grid container>
                 <IconButton
+                  onClick={() => addToTrip()}
                   style={{ margin: "10px 0px 0px auto", backgroundColor: Colors.GREEN }}
                 >
                   <FontAwesomeIcon icon={faPlus} color="white" />
@@ -300,18 +422,34 @@ export function IncludeInTripPopover({
       </Popover>
 
       <Snackbar
-        open={openSnack}
+        open={openErrorSnack}
         autoHideDuration={6000}
-        onClose={() => setOpenSnack(false)}
+        onClose={() => setOpenErrorSnack(false)}
       >
         <Alert
           style={{ fontFamily: Font.Family }}
           variant="filled"
           elevation={6}
-          onClose={() => setOpenSnack(false)}
+          onClose={() => setOpenErrorSnack(false)}
           severity="error"
         >
           The start date and time cannot be after the end date and time.
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={openSuccessSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenSuccessSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenSuccessSnack(false)}
+          severity="success"
+        >
+          Added to trip.
         </Alert>
       </Snackbar>
     </>

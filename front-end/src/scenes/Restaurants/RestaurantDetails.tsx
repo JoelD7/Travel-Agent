@@ -29,6 +29,7 @@ import {
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
+  EventTypes,
   getRestaurantCategoriesList,
   getRestaurantHours,
   getRestaurantTransactions,
@@ -250,6 +251,7 @@ export function RestaurantDetails() {
       <IncludeInTripPopover
         place={restaurant}
         tripAnchor={tripAnchor}
+        eventType={EventTypes.RESTAURANT}
         setTripAnchor={setTripAnchor}
         openPopover={openPopover}
         setOpenPopover={setOpenPopover}

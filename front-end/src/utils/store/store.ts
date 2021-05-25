@@ -8,10 +8,9 @@ import flightSlice from "./flight-slice";
 import rootSlice from "./root-slice";
 import restaurantSlice from "./restaurant-slice";
 import carSlice from "./car-slice";
+import tripSlice from "./trip-slice";
 import { useDispatch } from "react-redux";
 import { enableBatching } from "redux-batched-actions";
-export * from "./flight-slice";
-export * from "./restaurant-slice";
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +23,7 @@ export const store = configureStore({
     restaurantSlice: enableBatching(restaurantSlice),
     carSlice: enableBatching(carSlice),
     rootSlice: enableBatching(rootSlice),
+    tripSlice: enableBatching(tripSlice),
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
@@ -43,10 +43,13 @@ export const selectEndCurrency = (state: RootState) => state.rootSlice.userCurre
 
 export const selectCityImage = (state: RootState) => state.rootSlice.cityImage;
 
-export const selectTripDetail = (state: RootState) => state.rootSlice.tripDetail;
-
 export const selectIdPerson = (state: RootState) => state.rootSlice.idPerson;
 
+//#endregion
+
+//#region Trip
+export const selectTripDetail = (state: RootState) => state.tripSlice.tripDetail;
+export const selectUserTrips = (state: RootState) => state.tripSlice.userTrips;
 //#endregion
 
 //#region Search

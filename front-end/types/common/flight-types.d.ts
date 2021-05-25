@@ -1,4 +1,6 @@
 interface Flight {
+  id: string;
+  idFlight: string;
   itineraries: FlightItinerary[];
   price: FlightPrice;
   travelerPricings: FlightTravelerPricing[];

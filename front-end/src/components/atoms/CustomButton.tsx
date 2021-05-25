@@ -91,6 +91,9 @@ export function CustomButton({
 
       case Colors.WHITE_TRANSPARENT:
         return Colors.WHITE_TRANSPARENT_HOVER;
+
+      case Colors.RED:
+        return Colors.RED_HOVER;
       default:
         return color ? color : "inherit";
     }

@@ -1,16 +1,16 @@
-export const Flight = "Flight";
-export type Flight = typeof Flight;
+export const FLIGHT = "FLIGHT";
+export type FLIGHT = typeof FLIGHT;
 
-export const Hotel = "Hotel";
-export type Hotel = typeof Hotel;
+export const HOTEL = "HOTEL";
+export type HOTEL = typeof HOTEL;
 
-export const Restaurant = "Restaurant";
-export type Restaurant = typeof Restaurant;
+export const RESTAURANT = "RESTAURANT";
+export type RESTAURANT = typeof RESTAURANT;
 
-export const POI = "Point of interest";
+export const POI = "POI";
 export type POI = typeof POI;
 
-export const CAR_RENTAL = "Car Rental";
+export const CAR_RENTAL = "CAR_RENTAL";
 export type CAR_RENTAL = typeof CAR_RENTAL;
 
-export type EventType = Flight | Hotel | Restaurant | POI | CAR_RENTAL;
+export type EventType = FLIGHT | HOTEL | RESTAURANT | POI | CAR_RENTAL;

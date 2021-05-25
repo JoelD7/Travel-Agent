@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Direction, Grid, IconButton, useTheme } from "@material-ui/core";
 import React, { CSSProperties, ReactNode, useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import SwipeableViews from "react-swipeable-views";
 import { virtualize } from "react-swipeable-views-utils";
@@ -23,16 +22,13 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
+  backend,
+  CarRsv,
+  EventTypes,
+  HotelReservation,
+  responseTripToDomainTrip,
   Routes,
   Trip,
-  tripPlaceholder,
-  selectTripDetail,
-  EventTypes,
-  backend,
-  responseTripToDomainTrip,
-  HotelReservation,
-  Restaurant,
-  CarRsv,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -87,7 +83,7 @@ export function TripDetails() {
 
     if (trip && trip.itinerary) {
       trip.itinerary
-        .filter((event) => event.type === EventTypes.Flight)
+        .filter((event) => event.type === EventTypes.FLIGHT)
         .forEach((event) => {
           if (event.flight !== null && event.flight) {
             flights.push(event.flight);
@@ -103,7 +99,7 @@ export function TripDetails() {
 
     if (trip && trip.itinerary) {
       trip.itinerary
-        .filter((event) => event.type === EventTypes.Hotel)
+        .filter((event) => event.type === EventTypes.HOTEL)
         .forEach((event) => {
           if (event.hotelReservation !== null && event.hotelReservation) {
             hotels.push(event.hotelReservation);
@@ -119,7 +115,7 @@ export function TripDetails() {
 
     if (trip && trip.itinerary) {
       trip.itinerary
-        .filter((event) => event.type === EventTypes.Restaurant)
+        .filter((event) => event.type === EventTypes.RESTAURANT)
         .forEach((event) => {
           if (event.restaurant !== null && event.restaurant) {
             restaurants.push(event.restaurant);

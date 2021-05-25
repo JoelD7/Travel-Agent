@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getDefaultCityImage } from "../functions";
-import { tripPlaceholder } from "../placeholders";
 import { CityImage, ExchangeRate, Trip } from "../types";
 
 interface RootSlice {
@@ -9,7 +8,6 @@ interface RootSlice {
   exchangeRate: ExchangeRate;
   userCurrency: string;
   cityImage: CityImage;
-  tripDetail: Trip;
 }
 
 const initialState: RootSlice = {
@@ -18,7 +16,6 @@ const initialState: RootSlice = {
   exchangeRate: JSON.parse(String(localStorage.getItem("rates"))),
   userCurrency: getUserCurrency(),
   cityImage: getDefaultCityImage(),
-  tripDetail: tripPlaceholder,
 };
 
 function getUserCurrency(): string {
@@ -50,9 +47,6 @@ const rootSlice = createSlice({
     setCityImage(state, action: PayloadAction<CityImage>) {
       state.cityImage = action.payload;
     },
-    setTripDetail(state, action: PayloadAction<Trip>) {
-      state.tripDetail = action.payload;
-    },
   },
 });
 
@@ -62,7 +56,6 @@ export const {
   setEndCurrency,
   setIdPerson,
   setCityImage,
-  setTripDetail,
 } = rootSlice.actions;
 
 export default rootSlice.reducer;

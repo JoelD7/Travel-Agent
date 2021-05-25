@@ -39,6 +39,8 @@ export const TripFlights = React.memo(function TripFlights({
             className={style.flightCard}
             key={i}
             flight={flight}
+            bookedFlight
+            isFlightInTrip
             variant="deal"
           />
         ))
