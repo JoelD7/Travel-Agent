@@ -3,7 +3,7 @@ import { URLSearchParams } from "url";
 import { Routes } from "..";
 import { iataCodes } from "../constants";
 import { FlightSearch, store } from "../store";
-import { FlightTypes } from "../types";
+import { EventTypes, FlightTypes, Trip } from "../types";
 import { IATALocation } from "../types/location-types";
 import { capitalizeString, convertToUserCurrency, getIataLocation } from "./functions";
 
@@ -142,13 +142,16 @@ export function getLastSegment(flightItinerary: FlightItinerary): FlightSegment 
   return flightItinerary.segments[flightItinerary.segments.length - 1];
 }
 
-export function getFlightSegmentCarrier(
-  segment: FlightSegment,
-  dictionaries: FlightDictionary
-) {
-  if (dictionaries.carriers[segment.carrierCode]) {
-    return capitalizeString(dictionaries.carriers[segment.carrierCode], "each word");
+export function getFlightSegmentCarrier(segment: FlightSegment) {
+  const dictionaries: FlightDictionary | undefined =
+    store.getState().flightSlice.dictionaries;
+
+  if (dictionaries) {
+    if (dictionaries.carriers[segment.carrierCode]) {
+      return capitalizeString(dictionaries.carriers[segment.carrierCode], "each word");
+    }
   }
+
   return "Not available";
 }
 
@@ -347,7 +350,7 @@ export function getFlightDTO(flight: Flight) {
           return {
             duration: segment.duration,
             placeRelations: [departure, arrival],
-            carrierCode: segment.carrierCode,
+            carrier: getFlightSegmentCarrier(segment),
           };
         }),
       };
@@ -395,4 +398,31 @@ export function mapFlightToDomainType(flight: any): Flight {
       };
     }),
   };
+}
+
+/**
+ * Scans through all the events in a trip to detect wheter a
+ * particular flight is one of them or not.
+ * @param flight
+ * @param trip
+ * @returns
+ */
+export function isFlightInTrip(flight: Flight, trip: Trip) {
+  let included: boolean = false;
+
+  if (trip.itinerary) {
+    trip.itinerary
+      .filter((event) => event.type === EventTypes.FLIGHT)
+      .forEach((event) => {
+        if (
+          event.flight &&
+          (event.flight.id === flight.id || event.flight.idFlight === flight.idFlight)
+        ) {
+          included = true;
+          return;
+        }
+      });
+  }
+
+  return included;
 }

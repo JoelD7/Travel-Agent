@@ -197,7 +197,6 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
 
       {flightDetail && (
         <FlightDetails
-          flight={flightDetail}
           open={openFlightDialog}
           onClose={() => setOpenFlightDialog(false)}
         />

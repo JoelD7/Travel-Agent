@@ -17,7 +17,7 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Font } from "../../assets";
 import { CustomButton, IconTP, IncludeInTripPopover, Text } from "../../components";
 import { Colors, Shadow } from "../../styles";
@@ -25,6 +25,7 @@ import {
   backend,
   convertToUserCurrency,
   EventTypes,
+  responseTripToDomainTrip,
   FlightSearch,
   formatAsCurrency,
   formatFlightDate,
@@ -32,11 +33,14 @@ import {
   getFlightCitiesLabel,
   getFlightClass,
   getFlightDTO,
+  setUserTrips,
   getFlightSegmentCarrier,
   getIataLocation,
   getLastSegment,
   parseFlightDuration,
+  selectFlightDetail,
   selectFlightDictionaries,
+  isFlightInTrip,
   selectFlightSearchParams,
   selectIdPerson,
   selectUserTrips,
@@ -48,7 +52,6 @@ import { flightDetailsStyles } from "./flightDetails-styles";
 
 interface FlightDetails {
   open: boolean;
-  flight: Flight;
   onClose: () => void;
   bookedFlight?: boolean;
   isFlightInTrip?: boolean;
@@ -59,15 +62,16 @@ interface FlightCard {
 }
 
 export function FlightDetails({
-  flight,
-  isFlightInTrip,
+  isFlightInTrip: isFlightInTripProp,
   open,
-  bookedFlight,
+  bookedFlight: bookedFlightProp,
   onClose,
 }: FlightDetails) {
   const style = flightDetailsStyles();
 
   const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
+
+  const flight: Flight = useSelector(selectFlightDetail);
 
   const passengers = getFlightPassengers();
 
@@ -80,10 +84,14 @@ export function FlightDetails({
 
   const [openSnack, setOpenSnack] = useState(false);
 
+  const [bookedFlight, setBookedFlight] = useState(bookedFlightProp);
+
   const idPerson: number = useSelector(selectIdPerson);
 
   const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
   const [openPopover, setOpenPopover] = useState(false);
+
+  const dispatch = useDispatch();
 
   const [idEvent, setIdEvent] = useState(0);
 
@@ -156,7 +164,7 @@ export function FlightDetails({
                 <Grid item xs={12}>
                   {dictionaries && (
                     <Text style={{ textAlign: "center" }}>
-                      {getFlightSegmentCarrier(segment, dictionaries)}
+                      {getFlightSegmentCarrier(segment)}
                     </Text>
                   )}
                 </Grid>
@@ -212,7 +220,7 @@ export function FlightDetails({
                 <Grid item xs={12}>
                   {dictionaries && (
                     <Text style={{ textAlign: "center" }}>
-                      {getFlightSegmentCarrier(segment, dictionaries)}
+                      {getFlightSegmentCarrier(segment)}
                     </Text>
                   )}
                 </Grid>
@@ -245,6 +253,7 @@ export function FlightDetails({
       .then((res) => {
         setOpenSnack(true);
         setIdEvent(res.data.idEvent);
+        setBookedFlight(true);
       })
       .catch((err) => console.log(err));
   }
@@ -254,18 +263,13 @@ export function FlightDetails({
     setOpenPopover(true);
   }
 
-  function isFlightIncludedInTrip() {
+  function isFlightIncludedInAnyTrip() {
     let included: boolean = false;
+
     userTrips.forEach((trip) => {
-      if (trip.itinerary) {
-        trip.itinerary
-          .filter((event) => event.type === EventTypes.FLIGHT)
-          .forEach((event) => {
-            if (event.flight && event.flight.id === flight.id) {
-              included = true;
-              return;
-            }
-          });
+      if (isFlightInTrip(flight, trip)) {
+        included = true;
+        return;
       }
     });
 
@@ -288,10 +292,24 @@ export function FlightDetails({
       }
     });
 
-    if (tripEventOfFlight.idTripEvent) {
+    if (tripEventOfFlight.idEvent) {
       backend
-        .delete(`/trip-event/delete/${tripEventOfFlight.idTripEvent}`)
-        .then((res) => {})
+        .delete(`/trip-event/delete/${tripEventOfFlight.idEvent}`)
+        .then((res) => {
+          let resTrip: Trip = responseTripToDomainTrip(res.data);
+
+          let newUserTrips: Trip[] = [];
+
+          userTrips.forEach((trip) => {
+            if (trip.idTrip === resTrip.idTrip) {
+              newUserTrips.push(resTrip);
+            } else {
+              newUserTrips.push(trip);
+            }
+          });
+
+          dispatch(setUserTrips(newUserTrips));
+        })
         .catch((err) => console.log(err));
     }
   }
@@ -380,7 +398,7 @@ export function FlightDetails({
         </Grid>
 
         {/* Include in trip */}
-        {!isFlightIncludedInTrip() && (
+        {!isFlightIncludedInAnyTrip() && (
           <CustomButton
             style={{ boxShadow: Shadow.LIGHT }}
             onClick={(e) => onIncludeTripClick(e)}
@@ -392,7 +410,7 @@ export function FlightDetails({
         )}
 
         {/* Delete from trip */}
-        {isFlightIncludedInTrip() && (
+        {isFlightIncludedInAnyTrip() && (
           <CustomButton
             rounded
             backgroundColor={Colors.RED}
@@ -413,7 +431,7 @@ export function FlightDetails({
               convertToUserCurrency(flight.price.total, flight.price.currency)
             )}`}</h2>
 
-            {!bookedFlight && !isFlightIncludedInTrip() && (
+            {!bookedFlight && !isFlightIncludedInAnyTrip() && (
               <CustomButton
                 backgroundColor={Colors.GREEN}
                 style={{ boxShadow: Shadow.LIGHT3D }}

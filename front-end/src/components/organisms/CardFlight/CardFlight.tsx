@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Font } from "../../../assets";
 import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
@@ -21,6 +21,7 @@ import {
   getLastSegment,
   parseFlightDuration,
   selectFlightDictionaries,
+  setFlightDetail,
 } from "../../../utils";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
 import { cardFlightStyles } from "./cardFlightStyles";
@@ -55,6 +56,8 @@ export function CardFlight({
 
   const is350OrLess = useMediaQuery("(max-width:350px)");
 
+  const dispatch = useDispatch();
+
   function parseStops(segments: FlightSegment[]) {
     let stopsSegments: FlightSegment[] = segments.slice(0, segments.length - 1);
     let stops = "";
@@ -73,13 +76,18 @@ export function CardFlight({
     return segments.length > 1 ? `${quant} stops, ${stops}` : `1 stop, ${stops}`;
   }
 
+  function seeFlightDetails() {
+    dispatch(setFlightDetail(flight));
+    setFlightDetailsModal(true);
+  }
+
   return (
     <>
       {variant === "deal" ? (
         <Grid item className={`${style.dealGrid} ${className}`}>
           <CardActionArea
             className={animate ? style.cardAnimated : style.card}
-            onClick={bookedFlight ? () => setFlightDetailsModal(true) : () => {}}
+            onClick={bookedFlight ? () => seeFlightDetails() : () => {}}
           >
             <CardHeader
               title={
@@ -191,7 +199,7 @@ export function CardFlight({
 
                     <CustomButton
                       style={{ fontSize: "14px" }}
-                      onClick={() => {}}
+                      onClick={() => seeFlightDetails()}
                       backgroundColor={Colors.PURPLE}
                     >
                       View details
@@ -227,8 +235,7 @@ export function CardFlight({
                     exitFlight.segments[0].departure.iataCode
                   } - 
               ${getLastSegment(exitFlight).arrival.iataCode}, ${getFlightSegmentCarrier(
-                    exitFlight.segments[0],
-                    dictionaries
+                    exitFlight.segments[0]
                   )}`}</p>
                 )}
               </Grid>
@@ -293,10 +300,7 @@ export function CardFlight({
                       } - 
                 ${
                   getLastSegment(returnFlight).arrival.iataCode
-                }, ${getFlightSegmentCarrier(
-                        getLastSegment(returnFlight),
-                        dictionaries
-                      )}`}</p>
+                }, ${getFlightSegmentCarrier(getLastSegment(returnFlight))}`}</p>
                     )}
                   </Grid>
 
@@ -334,7 +338,7 @@ export function CardFlight({
               >
                 <CustomButton
                   backgroundColor={Colors.GREEN}
-                  onClick={() => setFlightDetailsModal(true)}
+                  onClick={() => seeFlightDetails()}
                 >
                   View details
                 </CustomButton>
@@ -349,7 +353,7 @@ export function CardFlight({
               )}`}</h2>
               <CustomButton
                 style={{ marginLeft: "auto" }}
-                onClick={() => setFlightDetailsModal(true)}
+                onClick={() => seeFlightDetails()}
                 backgroundColor={Colors.GREEN}
               >
                 View details
@@ -362,7 +366,6 @@ export function CardFlight({
       <FlightDetails
         bookedFlight={bookedFlight}
         isFlightInTrip={isFlightInTrip}
-        flight={flight}
         onClose={() => setFlightDetailsModal(false)}
         open={flightDetailsModal}
       />

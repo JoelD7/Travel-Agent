@@ -43,7 +43,7 @@ public class Flight implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "idEvent")
-    @JsonManagedReference(value = "flightReference")
+    @JsonBackReference(value = "flightReference")
     private TripEvent event;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)

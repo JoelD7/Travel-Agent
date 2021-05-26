@@ -2,20 +2,18 @@ import { faCalendar, faFlag, faPlane } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardActionArea, CardContent, CardHeader, Grid } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
 import {
-  ExchangeRate,
-  FlightClass,
-  FlightTypes,
   convertToUserCurrency,
+  FlightClass,
+  flightPlaceholder,
+  FlightTypes,
+  formatAsCurrency,
   getFlightSearchURL,
   getIataLocation,
-  selectEndCurrency,
-  selectExchangeRate,
-  formatAsCurrency,
 } from "../../../utils";
 import {
   FlightSearch,
@@ -39,9 +37,6 @@ export function CardDealFlight({ deal, className, animate }: CardDealFlight) {
 
   const origin: IATALocation | undefined = getIataLocation(deal.origin);
   const destination: IATALocation | undefined = getIataLocation(deal.destination);
-
-  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-  const baseCurrency: string = useSelector(selectEndCurrency);
 
   function getCardTitle(location: IATALocation | undefined) {
     if (location) {
@@ -87,6 +82,7 @@ export function CardDealFlight({ deal, className, animate }: CardDealFlight) {
       adults: Number(kvp["adults"]),
       flightType: FlightTypes.ROUND,
       class: FlightClass.Economy,
+      flightDetail: flightPlaceholder,
     };
 
     history.push(getFlightSearchURL(flightSearch));

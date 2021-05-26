@@ -26,6 +26,7 @@ import {
   CarRsv,
   EventTypes,
   HotelReservation,
+  mapFlightToDomainType,
   responseTripToDomainTrip,
   Routes,
   Trip,
@@ -86,11 +87,12 @@ export function TripDetails() {
         .filter((event) => event.type === EventTypes.FLIGHT)
         .forEach((event) => {
           if (event.flight !== null && event.flight) {
-            flights.push(event.flight);
+            flights.push(mapFlightToDomainType(event.flight));
           }
         });
     }
 
+    console.log("total flights: ", flights.length);
     return flights;
   }
 

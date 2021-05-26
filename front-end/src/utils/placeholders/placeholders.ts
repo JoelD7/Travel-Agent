@@ -3325,7 +3325,7 @@ export const tripPlaceholder: Trip = {
   itinerary: [
     {
       name: "Flight to Dubai",
-      idTripEvent: 12,
+      idEvent: 12,
       type: EventTypes.FLIGHT,
       start: new Date(flightPlaceholder.itineraries[0].segments[0].departure.at),
       end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at),
@@ -3336,7 +3336,7 @@ export const tripPlaceholder: Trip = {
     {
       name: "Flight to Singapore",
       type: EventTypes.FLIGHT,
-      idTripEvent: 11,
+      idEvent: 11,
       start: new Date(flightPlaceholder.itineraries[1].segments[0].departure.at),
       end: new Date(flightPlaceholder.itineraries[1].segments[0].arrival.at),
       flight: flightPlaceholder,
@@ -3344,7 +3344,7 @@ export const tripPlaceholder: Trip = {
       includesTime: true,
     },
     {
-      idTripEvent: 46,
+      idEvent: 46,
       name: "Arrival at Hotel Sheraton Santo Domingo",
       type: EventTypes.HOTEL,
       start: new Date(2021, 4, 13, 14, 35),
@@ -3354,7 +3354,7 @@ export const tripPlaceholder: Trip = {
       includesTime: true,
     },
     {
-      idTripEvent: 78,
+      idEvent: 78,
       name: "Visit to The Morgan Library & Museum",
       type: EventTypes.POI,
       start: new Date(2021, 4, 16, 16, 0),
@@ -3366,7 +3366,7 @@ export const tripPlaceholder: Trip = {
     {
       name: "Visit to Hulu Theater",
       type: EventTypes.POI,
-      idTripEvent: 44,
+      idEvent: 44,
       start: new Date(2021, 4, 19, 12, 0),
       end: new Date(2021, 4, 19, 14, 0),
       poi: poiRsv,
@@ -3375,7 +3375,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       name: "Visit to Dear Irving",
-      idTripEvent: 18,
+      idEvent: 18,
       type: EventTypes.POI,
       start: new Date(2021, 4, 21, 0, 0),
       end: new Date(2021, 4, 21, 3, 0),
@@ -3691,7 +3691,7 @@ export const tripsPlaceholder: Trip[] = [
 
 export const tripEventPlaceholder: TripEvent = {
   name: "Flight to Dubai",
-  idTripEvent: 12,
+  idEvent: 12,
   type: EventTypes.FLIGHT,
   start: new Date(flightPlaceholder.itineraries[0].segments[0].departure.at),
   end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at),

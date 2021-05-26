@@ -22,18 +22,18 @@ import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
 import {
   backend,
-  getFlightDTO,
-  TripEvent,
   CarRsv,
   EventTypes,
-  flightPlaceholder,
+  getFlightDTO,
+  getIataLocation,
   getLastSegment,
+  IATALocation,
+  mapFlightToDomainType,
   muiDateFormatter,
   responseTripToDomainTrip,
-  getIataLocation,
   selectUserTrips,
+  setFlightDetail,
   Trip,
-  IATALocation,
 } from "../../../utils";
 import { setUserTrips } from "../../../utils/store/trip-slice";
 import { IconText, Text } from "../../atoms";
@@ -268,8 +268,23 @@ export function IncludeInTripPopover({
   }
 
   function addToTrip() {
-    let tripEventDTO = {};
+    let tripEventDTO = getTripEventDTO();
     let selectedTrip: Trip = userTrips.filter((trip) => trip.name === tripOption)[0];
+
+    backend
+      .post(`/trip-event/add-new?idTrip=${selectedTrip.idTrip}`, tripEventDTO)
+      .then((res) => {
+        let newEvent = res.data;
+        updateUserTripsEvents(newEvent, selectedTrip);
+
+        onPopoverClose();
+        setOpenSuccessSnack(true);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function getTripEventDTO() {
+    let tripEventDTO = {};
 
     switch (eventType) {
       case EventTypes.CAR_RENTAL:
@@ -290,29 +305,6 @@ export function IncludeInTripPopover({
           includesTime: false,
         };
 
-        let updatedUserTrips = userTrips.map((trip) => {
-          if (trip.name === tripOption) {
-            let newEvent: TripEvent = {
-              name: destination ? `Flight to ${destination.city}` : "Flight",
-              location: destination ? `${destination.city}` : "",
-              type: EventTypes.FLIGHT,
-              start: datetimePopover.start,
-              end: datetimePopover.end,
-              flight: flight,
-              includesTime: false,
-            };
-
-            return {
-              ...selectedTrip,
-              itinerary: selectedTrip.itinerary
-                ? [...selectedTrip.itinerary, newEvent]
-                : [],
-            };
-          } else {
-            return trip;
-          }
-        });
-        dispatch(setUserTrips(updatedUserTrips));
         break;
       case EventTypes.HOTEL:
         break;
@@ -324,12 +316,31 @@ export function IncludeInTripPopover({
         break;
     }
 
-    backend
-      .post(`/trip-event/add-new?idTrip=${selectedTrip.idTrip}`, tripEventDTO)
-      .then((res) => {
-        setOpenSuccessSnack(true);
-      })
-      .catch((err) => console.log(err));
+    return tripEventDTO;
+  }
+
+  /**
+   * Adds the newly created event to the trip selected
+   * by the user.
+   * @param newEvent
+   * @param selectedTrip
+   */
+  function updateUserTripsEvents(newEvent: any, selectedTrip: Trip) {
+    let updatedUserTrips = userTrips.map((trip) => {
+      if (trip.name === tripOption) {
+        return {
+          ...selectedTrip,
+          itinerary: selectedTrip.itinerary ? [...selectedTrip.itinerary, newEvent] : [],
+        };
+      } else {
+        return trip;
+      }
+    });
+
+    if (newEvent.type === EventTypes.FLIGHT) {
+      dispatch(setFlightDetail(mapFlightToDomainType(newEvent.flight)));
+    }
+    dispatch(setUserTrips(updatedUserTrips));
   }
 
   return (

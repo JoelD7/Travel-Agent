@@ -63,8 +63,8 @@ public class TripController {
         Person person = personRepo.findById(idPerson).orElseThrow(() -> new PersonNotFoundException(idPerson));
 
         persistUserTrip(person, newTrip);
-        t EntityModel<Trip> 
-        tripModel = assembler.toModel(newTrip);
+
+        EntityModel<Trip> tripModel = assembler.toModel(newTrip);
         return ResponseEntity.created(tripModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(newTrip);
     }
 

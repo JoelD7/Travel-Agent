@@ -27,7 +27,7 @@ public class FlightSegment {
     @Column(name = "idFlightSegment")
     private Long idFlightSegment;
     private String duration;
-    private String carrierCode;
+    private String carrier;
 
     @ManyToOne
     @JoinColumn(name = "idFlightItinerary")

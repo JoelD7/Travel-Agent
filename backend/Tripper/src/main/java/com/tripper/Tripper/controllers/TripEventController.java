@@ -70,17 +70,23 @@ public class TripEventController {
         newTripEvent.setTrip(trip);
         setEventTypeEntity(newTripEvent, event, person);
 
-        tripEventRepo.save(newTripEvent);
+        TripEvent tripEventResponse = tripEventRepo.save(newTripEvent);
+        EntityModel<TripEvent> entityModel = assembler.toModel(tripEventResponse);
 
-        EntityModel<TripEvent> entityModel = assembler.toModel(newTripEvent);
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(newTripEvent);
+        return ResponseEntity
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(tripEventResponse);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteEvent(@PathVariable Long idTripEvent) {
-        tripEventRepo.deleteById(idTripEvent);
+    @DeleteMapping("/delete/{idEvent}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long idEvent) {
+        TripEvent tripEvent = tripEventRepo.findById(idEvent)
+                .orElseThrow(() -> new TripEventNotFoundException(idEvent));
 
-        return ResponseEntity.noContent().build();
+        Trip trip = tripEvent.getTrip();
+        tripEventRepo.deleteById(idEvent);
+
+        return ResponseEntity.ok(trip);
     }
 
     //<editor-fold defaultstate="collapsed" desc="comment">

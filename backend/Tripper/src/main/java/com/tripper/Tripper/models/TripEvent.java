@@ -1,6 +1,7 @@
 package com.tripper.Tripper.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tripper.Tripper.models.enums.TripEventType;
 import java.time.LocalDate;
 import javax.persistence.CascadeType;
@@ -58,7 +59,7 @@ public class TripEvent {
     private Restaurant restaurant;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event")
-    @JsonBackReference(value = "flightReference")
+    @JsonManagedReference(value = "flightReference")
     private Flight flight;
 
     @OneToOne(cascade = CascadeType.ALL)
