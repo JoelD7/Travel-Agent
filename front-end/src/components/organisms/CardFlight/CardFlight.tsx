@@ -21,6 +21,7 @@ import {
   getLastSegment,
   parseFlightDuration,
   selectFlightDictionaries,
+  flightClassBackendToClient,
   setFlightDetail,
 } from "../../../utils";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
@@ -181,7 +182,9 @@ export function CardFlight({
                 <Grid item className={style.airlineClassGrid}>
                   <IconText
                     icon={faPlaneDeparture}
-                    text={`${flight.itineraries[0].segments[0].carrierCode}, ${flight.class}`}
+                    text={`${
+                      flight.itineraries[0].segments[0].carrierCode
+                    }, ${flightClassBackendToClient(flight.class)}`}
                   />
                 </Grid>
 

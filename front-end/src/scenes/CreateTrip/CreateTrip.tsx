@@ -68,8 +68,6 @@ export function CreateTrip() {
         endDate,
       })
       .then((res) => {
-        console.log("Response: ", res);
-
         const formData = new FormData();
         formData.append("idTrip", res.data.idTrip);
         formData.append("image", image);

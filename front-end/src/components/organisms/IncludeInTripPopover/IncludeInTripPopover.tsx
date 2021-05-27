@@ -283,45 +283,9 @@ export function IncludeInTripPopover({
       .catch((err) => console.log(err));
   }
 
-  function getTripEventDTO() {
-    let tripEventDTO = {};
-
-    switch (eventType) {
-      case EventTypes.CAR_RENTAL:
-        break;
-      case EventTypes.FLIGHT:
-        let flight: Flight = place as Flight;
-        let destination: IATALocation | undefined = getIataLocation(
-          getLastSegment(flight.itineraries[0]).arrival.iataCode
-        );
-
-        tripEventDTO = {
-          name: destination ? `Flight to ${destination.city}` : "Flight",
-          location: destination ? `${destination.city}` : "",
-          type: EventTypes.FLIGHT,
-          start: datetimePopover.start,
-          end: datetimePopover.end,
-          flight: getFlightDTO(flight),
-          includesTime: false,
-        };
-
-        break;
-      case EventTypes.HOTEL:
-        break;
-      case EventTypes.POI:
-        break;
-      case EventTypes.RESTAURANT:
-        break;
-      default:
-        break;
-    }
-
-    return tripEventDTO;
-  }
-
   /**
-   * Adds the newly created event to the trip selected
-   * by the user.
+   * Adds the newly created event to the itinerary of the
+   * trip selected by the user.
    * @param newEvent
    * @param selectedTrip
    */
@@ -341,6 +305,58 @@ export function IncludeInTripPopover({
       dispatch(setFlightDetail(mapFlightToDomainType(newEvent.flight)));
     }
     dispatch(setUserTrips(updatedUserTrips));
+  }
+
+  /**
+   *
+   * @returns A trip event DTO of the indicated event type.
+   */
+  function getTripEventDTO() {
+    let tripEventDTO = {};
+
+    switch (eventType) {
+      case EventTypes.CAR_RENTAL:
+        break;
+
+      case EventTypes.FLIGHT:
+        tripEventDTO = getFlightTripEventDTO();
+        break;
+
+      case EventTypes.HOTEL:
+        break;
+
+      case EventTypes.POI:
+        break;
+
+      case EventTypes.RESTAURANT:
+        break;
+
+      default:
+        break;
+    }
+
+    return tripEventDTO;
+  }
+
+  /**
+   *
+   * @returns A trip event DTO of type Flight.
+   */
+  function getFlightTripEventDTO() {
+    let flight: Flight = place as Flight;
+    let destination: IATALocation | undefined = getIataLocation(
+      getLastSegment(flight.itineraries[0]).arrival.iataCode
+    );
+
+    return {
+      name: destination ? `Flight to ${destination.city}` : "Flight",
+      location: destination ? `${destination.city}` : "",
+      type: EventTypes.FLIGHT,
+      start: datetimePopover.start,
+      end: datetimePopover.end,
+      flight: getFlightDTO(flight),
+      includesTime: false,
+    };
   }
 
   return (

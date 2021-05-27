@@ -183,7 +183,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Family,
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
   },
   menuItemSelect: {
     borderBottom: `3px solid rgba(0,0,0,0)`,

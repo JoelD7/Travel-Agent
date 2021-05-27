@@ -4,6 +4,7 @@ import com.tripper.Tripper.assemblers.TripEventModelAssembler;
 import com.tripper.Tripper.data.FlightRepository;
 import com.tripper.Tripper.data.TripEventRepository;
 import com.tripper.Tripper.data.TripRepository;
+import com.tripper.Tripper.exceptions.FlightNotFoundException;
 import com.tripper.Tripper.exceptions.TripEventNotFoundException;
 import com.tripper.Tripper.exceptions.TripNotFoundException;
 import com.tripper.Tripper.models.CarRental;
@@ -78,17 +79,6 @@ public class TripEventController {
                 .body(tripEventResponse);
     }
 
-    @DeleteMapping("/delete/{idEvent}")
-    public ResponseEntity<?> deleteEvent(@PathVariable Long idEvent) {
-        TripEvent tripEvent = tripEventRepo.findById(idEvent)
-                .orElseThrow(() -> new TripEventNotFoundException(idEvent));
-
-        Trip trip = tripEvent.getTrip();
-        tripEventRepo.deleteById(idEvent);
-
-        return ResponseEntity.ok(trip);
-    }
-
     //<editor-fold defaultstate="collapsed" desc="comment">
     /*
      * Sets the entity corresponding to the event type in the TripEvent object.
@@ -104,26 +94,53 @@ public class TripEventController {
                 carRental.setPerson(person);
                 newEvent.setCarRental(carRental);
                 break;
+
             case FLIGHT:
-                Flight flight = eventDTO.getFlight();
-                flight.setPerson(person);
-                flight.setEvent(newEvent);
-                Flight.persistFlight(flight);
+                Flight flight;
+                Long idFlight = eventDTO.getFlight().getIdFlight();
+
+                if (idFlight == null) {
+                    flight = eventDTO.getFlight();
+                    flight.setPerson(person);
+                    flight.setEvent(newEvent);
+                    Flight.persistFlight(flight);
+                } else {
+                    flight = flightRepo.findById(idFlight)
+                            .orElseThrow(() -> new FlightNotFoundException(idFlight));
+                    flight.setEvent(newEvent);
+                }
+
                 newEvent.setFlight(flight);
                 break;
+
             case HOTEL:
                 HotelReservation hotelReservation = eventDTO.getHotelReservation();
                 hotelReservation.setPerson(person);
                 newEvent.setHotelReservation(hotelReservation);
                 break;
+
             case POI:
                 newEvent.setPoi(eventDTO.getPoi());
                 break;
+
             case RESTAURANT:
                 newEvent.setRestaurant(eventDTO.getRestaurant());
                 break;
+
             default:
                 break;
         }
     }
+
+    @DeleteMapping("/delete/{idEvent}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long idEvent) {
+        TripEvent tripEvent = tripEventRepo.findById(idEvent)
+                .orElseThrow(() -> new TripEventNotFoundException(idEvent));
+
+        Trip trip = tripEvent.getTrip();
+        tripEventRepo.deleteById(idEvent);
+
+        return ResponseEntity.ok(trip);
+    }
+
 }

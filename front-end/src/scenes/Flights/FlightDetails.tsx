@@ -97,8 +97,6 @@ export function FlightDetails({
 
   const userTrips: Trip[] = useSelector(selectUserTrips);
 
-  // const isFlightIncludedInTrip: boolean =
-
   function getFlightPassengers() {
     let total: number = 0;
     total += flightSearch.adults;
@@ -277,6 +275,32 @@ export function FlightDetails({
   }
 
   function deleteFlightFromTrip() {
+    let tripEventOfFlight: TripEvent = getTripEventOfFlight();
+
+    if (tripEventOfFlight.idEvent) {
+      backend
+        .delete(`/trip-event/delete/${tripEventOfFlight.idEvent}`)
+        .then((res) => {
+          //Trip without the deleted event in its itinerary.
+          let updatedEventsTrip: Trip = responseTripToDomainTrip(res.data);
+
+          let newUserTrips: Trip[] = [];
+
+          userTrips.forEach((trip) => {
+            if (trip.idTrip === updatedEventsTrip.idTrip) {
+              newUserTrips.push(updatedEventsTrip);
+            } else {
+              newUserTrips.push(trip);
+            }
+          });
+
+          dispatch(setUserTrips(newUserTrips));
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
+  function getTripEventOfFlight(): TripEvent {
     let tripEventOfFlight: TripEvent = tripEventPlaceholder;
 
     userTrips.forEach((trip) => {
@@ -292,26 +316,7 @@ export function FlightDetails({
       }
     });
 
-    if (tripEventOfFlight.idEvent) {
-      backend
-        .delete(`/trip-event/delete/${tripEventOfFlight.idEvent}`)
-        .then((res) => {
-          let resTrip: Trip = responseTripToDomainTrip(res.data);
-
-          let newUserTrips: Trip[] = [];
-
-          userTrips.forEach((trip) => {
-            if (trip.idTrip === resTrip.idTrip) {
-              newUserTrips.push(resTrip);
-            } else {
-              newUserTrips.push(trip);
-            }
-          });
-
-          dispatch(setUserTrips(newUserTrips));
-        })
-        .catch((err) => console.log(err));
-    }
+    return tripEventOfFlight;
   }
 
   return (

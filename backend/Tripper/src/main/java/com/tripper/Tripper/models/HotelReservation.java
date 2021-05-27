@@ -1,5 +1,6 @@
 package com.tripper.Tripper.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Data;
@@ -26,6 +28,7 @@ public class HotelReservation {
 
     @ManyToOne
     @JoinColumn(name = "idPerson")
+    @JsonBackReference
     private Person person;
 
     private String hotelCode;
@@ -37,8 +40,10 @@ public class HotelReservation {
     private Integer children;
     private String address;
     private String phoneNumber;
+    @Lob
+    private byte[] hotelImage;
 
     @OneToMany(mappedBy = "hotelReservation")
-    private List<HotelRoom> hotelRooms = new ArrayList<>();
+    private List<HotelRoom> rooms = new ArrayList<>();
 
 }

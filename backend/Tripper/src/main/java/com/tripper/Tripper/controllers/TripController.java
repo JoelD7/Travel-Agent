@@ -9,22 +9,17 @@ import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.exceptions.TripNotFoundException;
 import com.tripper.Tripper.models.Person;
 import com.tripper.Tripper.models.Trip;
-import com.tripper.Tripper.models.TripEvent;
 import java.io.IOException;
-import java.util.Arrays;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

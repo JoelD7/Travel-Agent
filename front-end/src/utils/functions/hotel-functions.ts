@@ -9,6 +9,8 @@ import {
   HotelRoomRate,
   HotelRoom,
   HotelReservation,
+  HotelRoomReservation,
+  HotelImage,
 } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
 
@@ -219,8 +221,8 @@ export function getHotelReservationCost(hotelRsv: HotelReservation | undefined):
   if (hotelRsv) {
     let total = 0;
     hotelRsv.rooms.forEach((room) => {
-      if (room.cost) {
-        total += room.cost;
+      if (room.totalAmount) {
+        total += room.totalAmount;
       }
     });
 
@@ -228,4 +230,35 @@ export function getHotelReservationCost(hotelRsv: HotelReservation | undefined):
   }
 
   return 0;
+}
+
+/**
+ * Returns the highest rated image of a hotel room.
+ * @param room
+ * @returns
+ */
+export function getRoomImage(room: HotelRoom): string {
+  const hotel: HotelBooking | undefined = store.getState().hotelReducer.hotelDetail;
+
+  if (!hotel) {
+    return "";
+  }
+
+  let roomCode: string = room.code.split("-")[0];
+
+  let roomImages: HotelImage[] = hotel.images
+    .filter((image) => image.roomCode === roomCode)
+    .sort((a, b) => a.visualOrder - b.visualOrder);
+
+  return roomImages.length > 0 ? HotelBedAPI.imageURL.bigger + roomImages[0].path : "";
+}
+
+export function areAllRoomsToBookBooked(): boolean {
+  let reservationParams: HotelBookingParams =
+    store.getState().hotelReducer.reservationParams;
+
+  let hotelRsv: HotelReservation = store.getState().hotelReducer.hotelRsv;
+  let roomsToBook: number = reservationParams.occupancies[0].rooms as number;
+
+  return hotelRsv.rooms.length === roomsToBook;
 }

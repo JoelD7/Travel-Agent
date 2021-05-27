@@ -6,7 +6,7 @@ export const aboutHotelStyles = makeStyles((theme: Theme) => ({
     borderRadius: "10px",
     backgroundColor: "white",
     padding: "35px",
-    boxShadow: Shadow.MEDIUM,
+    boxShadow: Shadow.LIGHT3D,
   },
 
   limitedAboutText: {

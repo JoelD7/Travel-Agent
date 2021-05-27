@@ -43,6 +43,7 @@ public class Person implements Serializable {
     private List<CarRental> carRentals = new ArrayList<>();
 
     @OneToMany(mappedBy = "person")
+    @JsonManagedReference
     private List<HotelReservation> hotelReservations = new ArrayList<>();
 
     public void addTrip(Trip trip) {

@@ -16,7 +16,7 @@ interface HotelReducer {
   allRoomAccordionsExpanded: boolean;
   openRedirecDialog: boolean;
   isHotelDetailsBlurred: boolean;
-  hotelRsv?: HotelReservation;
+  hotelRsv: HotelReservation;
 }
 
 const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
@@ -52,7 +52,7 @@ const initialState: HotelReducer = {
   allRoomAccordionsExpanded: false,
   openRedirecDialog: false,
   isHotelDetailsBlurred: false,
-  // hotelRsv: hotelRsvPlaceholder,
+  hotelRsv: hotelRsvPlaceholder,
   reservationParams: {
     ...initialStateReservationParams,
     id: JSON.stringify(initialStateReservationParams),

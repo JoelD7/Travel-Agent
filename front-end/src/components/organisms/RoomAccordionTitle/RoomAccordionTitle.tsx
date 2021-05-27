@@ -3,6 +3,7 @@ import {
   faCalendar,
   faCamera,
   faChild,
+  faCheck,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,16 +14,20 @@ import {
   Grid,
   IconButton,
   makeStyles,
+  Snackbar,
   Theme,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Font } from "../../../assets";
 import { Colors, Shadow } from "../../../styles";
 import {
   capitalizeString,
   convertToUserCurrency,
   formatAsCurrency,
+  getRoomImage,
   getRoomTotalPrice,
   HotelBedAPI,
   HotelBooking,
@@ -31,19 +36,27 @@ import {
   HotelRoom,
   HotelRoomRate,
   selectHotelDetail,
+  HotelReservation,
+  HotelRoomReservation,
+  setHotelRsv,
+  areAllRoomsToBookBooked,
+  selectHotelRsv,
   selectHotelReservationParams,
 } from "../../../utils";
-import { IconText, Text } from "../../atoms";
+import { CustomButton, IconText, Text } from "../../atoms";
 
 interface RoomAccordionTitle {
   room: HotelRoom;
+  totalRoomCost: number;
 }
 
-export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
+export function RoomAccordionTitle({ room, totalRoomCost }: RoomAccordionTitle) {
   const hotel: HotelBooking | undefined = useSelector(selectHotelDetail);
   const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
-  let image: string = getRoomImage();
+  const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
+
+  let image: string = getRoomImage(room);
 
   const accordionTitleStyles = makeStyles((theme: Theme) => ({
     backdrop: {
@@ -146,26 +159,16 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
   const style = accordionTitleStyles();
   const [openDialog, setOpenDialog] = useState(false);
 
+  // const [totalRoomCost, setTotalRoomCost] = useState<number>(0);
+
+  const [roomsToBookLabel, setRoomsToBookLabel] = useState<string>("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    image = getRoomImage();
+    image = getRoomImage(room);
   }, [room]);
-
-  /**
-   * Returns the highest rated image of a hotel room.
-   */
-  function getRoomImage(): string {
-    if (!hotel) {
-      return "";
-    }
-
-    let roomCode: string = room.code.split("-")[0];
-
-    let roomImages: HotelImage[] = hotel.images
-      .filter((image) => image.roomCode === roomCode)
-      .sort((a, b) => a.visualOrder - b.visualOrder);
-
-    return roomImages.length > 0 ? HotelBedAPI.imageURL.bigger + roomImages[0].path : "";
-  }
 
   function getOccupancyText(param: "room" | "adult") {
     let roomQty = reservationParams.occupancies[0].rooms > 1 ? "rooms" : "room";
@@ -192,6 +195,46 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
   function onImageClicked(e: React.MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     e.stopPropagation();
     setOpenDialog(true);
+  }
+
+  function addRoomToReservation() {
+    let newRoom = mapRoomToRoomReservation(room);
+    let updatedRooms: HotelRoomReservation[] = [...hotelRsv.rooms, newRoom];
+    let newHotelRsv: HotelReservation = { ...hotelRsv, rooms: updatedRooms };
+
+    setRoomsToBookCounterLabel(updatedRooms);
+
+    dispatch(setHotelRsv(newHotelRsv));
+  }
+
+  function mapRoomToRoomReservation(room: HotelRoom): HotelRoomReservation {
+    return {
+      code: room.code,
+      image: getRoomImage(room),
+      name: room.name,
+      totalAmount: totalRoomCost,
+    };
+  }
+
+  function setRoomsToBookCounterLabel(bookedRooms: HotelRoomReservation[]) {
+    let bookedSoFar: number = bookedRooms.length;
+    let toBook: number = reservationParams.occupancies[0].rooms as number;
+
+    setRoomsToBookLabel(`${bookedSoFar} of ${toBook} rooms booked.`);
+    setOpenSnackbar(true);
+  }
+
+  function removeRoomFromReservation() {
+    let updatedRooms: HotelRoomReservation[] = hotelRsv.rooms.filter(
+      (r) => r.code !== room.code
+    );
+    let newHotelRsv: HotelReservation = { ...hotelRsv, rooms: updatedRooms };
+
+    dispatch(setHotelRsv(newHotelRsv));
+  }
+
+  function isRoomBooked(): boolean {
+    return hotelRsv.rooms.filter((r) => r.code === room.code).length > 0;
   }
 
   return (
@@ -294,6 +337,40 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
                 )}
               </Grid>
             </Grid>
+
+            {/* Booked button */}
+            {isRoomBooked() ? (
+              <>
+                <IconText
+                  icon={faCheck}
+                  backgroundColor={Colors.GREEN}
+                  iconColor={"white"}
+                >
+                  Room booked
+                </IconText>
+                <CustomButton
+                  rounded
+                  style={{ marginLeft: "5px", boxShadow: Shadow.LIGHT3D }}
+                  onClick={() => removeRoomFromReservation()}
+                  backgroundColor={Colors.ORANGE}
+                >
+                  Change board
+                </CustomButton>
+              </>
+            ) : (
+              <>
+                {!areAllRoomsToBookBooked() && (
+                  <CustomButton
+                    rounded
+                    style={{ marginLeft: "5px", boxShadow: Shadow.LIGHT3D }}
+                    onClick={() => addRoomToReservation()}
+                    backgroundColor={Colors.PURPLE}
+                  >
+                    Book room
+                  </CustomButton>
+                )}
+              </>
+            )}
           </Grid>
 
           {/* Photo popup icon */}
@@ -308,6 +385,22 @@ export function RoomAccordionTitle({ room }: RoomAccordionTitle) {
           </Grid>
         </Grid>
       )}
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenSnackbar(false)}
+          severity="success"
+        >
+          {roomsToBookLabel}
+        </Alert>
+      </Snackbar>
 
       {/* Fullimage Dialog */}
       <Dialog

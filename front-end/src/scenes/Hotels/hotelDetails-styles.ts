@@ -29,7 +29,7 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
     reservationInfoGrid: {
       width: "35%",
       [theme.breakpoints.down(1060)]: {
-        width: "64%",
+        width: "100%",
         marginTop: "20px",
       },
       [theme.breakpoints.down(675)]: {
@@ -42,11 +42,37 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
       width: "85%",
       borderRadius: "10px",
       backgroundColor: "white",
-      boxShadow: Shadow.MEDIUM,
+      boxShadow: Shadow.LIGHT3D,
       [theme.breakpoints.down(1060)]: {
         marginLeft: "0px",
+        width: "46%",
       },
       [theme.breakpoints.down(675)]: {
+        width: "100%",
+      },
+      [theme.breakpoints.down(770)]: {
+        width: "100%",
+      },
+    },
+    reservationStatusContainer: {
+      marginTop: 20,
+      padding: "20px",
+      marginLeft: "auto",
+      width: "85%",
+      borderRadius: "10px",
+      backgroundColor: "white",
+      boxShadow: Shadow.LIGHT3D,
+
+      [theme.breakpoints.down(1060)]: {
+        marginLeft: "20px",
+        marginTop: 0,
+        width: "46%",
+      },
+      [theme.breakpoints.down(900)]: {
+        marginLeft: 0,
+      },
+      [theme.breakpoints.down(770)]: {
+        marginTop: 20,
         width: "100%",
       },
     },
@@ -61,7 +87,7 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
     },
     mainContainer: {
       fontFamily: Font.Family,
-      backgroundColor: Colors.BACKGROUND,
+      backgroundColor: "white",
     },
     notFoundImg: {
       objectFit: "cover",

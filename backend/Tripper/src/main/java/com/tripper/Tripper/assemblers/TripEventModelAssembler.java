@@ -21,7 +21,8 @@ public class TripEventModelAssembler implements RepresentationModelAssembler<Tri
         return EntityModel.of(entity,
                 linkTo(methodOn(TripEventController.class).getTripEvent(entity.getIdEvent())).withSelfRel(),
                 linkTo(methodOn(TripEventController.class).getAllOfTrip(idTrip)).withRel("eventsOfTrip"),
-                linkTo(methodOn(TripEventController.class).addNewEventToTrip(entity, idTrip)).withRel("addEvent")
+                linkTo(methodOn(TripEventController.class).addNewEventToTrip(entity, idTrip)).withRel("addEvent"),
+                linkTo(methodOn(TripEventController.class).deleteEvent(entity.getIdEvent())).withRel("deleteEvent")
         );
     }
 

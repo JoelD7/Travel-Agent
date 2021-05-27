@@ -36,7 +36,14 @@ export interface HotelReservation {
   children: number;
   address: string;
   phoneNumber: string;
-  rooms: HotelRoom[];
+  rooms: HotelRoomReservation[];
+}
+
+export interface HotelRoomReservation {
+  code: string;
+  name: string;
+  image: string;
+  totalAmount: number;
 }
 
 //Information about a hotel in relation to booking parameters.
@@ -124,6 +131,7 @@ export interface HotelBookingParams {
 }
 
 export interface HotelRoomRate {
+  rateKey: string;
   net: string;
   boardName: string;
   taxes?: {

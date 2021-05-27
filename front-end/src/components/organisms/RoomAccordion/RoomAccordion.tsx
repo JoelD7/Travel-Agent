@@ -5,23 +5,29 @@ import {
   AccordionSummary,
   Divider,
   Grid,
+  Radio,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
 import {
+  areAllRoomsToBookBooked,
   capitalizeString,
   convertToUserCurrency,
   formatAsCurrency,
+  getRoomImage,
   getRoomTotalPrice,
   HotelBooking,
+  HotelReservation,
   HotelRoom,
   HotelRoomRate,
+  HotelRoomReservation,
+  selectHotelRsv,
   selectRoomAccordionExpanded,
 } from "../../../utils";
 import { setRoomAccordionExpanded } from "../../../utils/store/hotel-slice";
-import { CustomButton, IconTP, Text } from "../../atoms";
+import { IconTP, Text } from "../../atoms";
 import { RoomAccordionTitle } from "../RoomAccordionTitle/RoomAccordionTitle";
 
 interface RoomAccordion {
@@ -36,7 +42,7 @@ export const RoomAccordion = React.memo(function Component({
   const accordionStyles = makeStyles(() => ({
     accordionRoot: {
       backgroundColor: "white",
-      boxShadow: Shadow.MEDIUM3D,
+      boxShadow: Shadow.LIGHT3D,
       marginBottom: "10px",
 
       "&:before": {
@@ -54,6 +60,18 @@ export const RoomAccordion = React.memo(function Component({
         borderRadius: "10px",
       },
     },
+    colorSecondary: {
+      "&:hover": {
+        backgroundColor: "rgba(149, 46, 228, 0.2)",
+      },
+      "&.Mui-checked": {
+        color: Colors.PURPLE,
+
+        "&:hover": {
+          backgroundColor: "rgba(149, 46, 228, 0.2)",
+        },
+      },
+    },
   }));
 
   const style = accordionStyles();
@@ -62,6 +80,12 @@ export const RoomAccordion = React.memo(function Component({
   const [expanded, setExpanded] = useState<boolean>(allRoomAccordionsExpanded);
 
   const [uniqueRates, setUniqueRates] = useState<HotelRoomRate[]>([]);
+
+  const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
+
+  const [selectedBoard, setSelectedBoard] = useState<string>("");
+
+  const [totalRoomCost, setTotalRoomCost] = useState<number>(0);
 
   useEffect(() => {
     if (allRoomAccordionsExpanded) {
@@ -96,6 +120,24 @@ export const RoomAccordion = React.memo(function Component({
     return uniqueRates;
   }
 
+  function isRoomBooked(): boolean {
+    return hotelRsv.rooms.filter((r) => r.code === room.code).length > 0;
+  }
+
+  function onBoardChange(event: ChangeEvent<HTMLInputElement>, rate: HotelRoomRate) {
+    setSelectedBoard(event.target.value);
+    setTotalRoomCost(getRoomTotalPrice(rate));
+  }
+
+  function mapRoomToRoomReservation(room: HotelRoom): HotelRoomReservation {
+    return {
+      code: room.code,
+      image: getRoomImage(room),
+      name: room.name,
+      totalAmount: totalRoomCost,
+    };
+  }
+
   return (
     <>
       {hotel && (
@@ -111,7 +153,7 @@ export const RoomAccordion = React.memo(function Component({
               <IconTP icon={faChevronDown} backgroundColor={Colors.GREEN} size={28} />
             }
           >
-            <RoomAccordionTitle room={room} />
+            <RoomAccordionTitle totalRoomCost={totalRoomCost} room={room} />
           </AccordionSummary>
 
           <AccordionDetails style={{ background: "white" }}>
@@ -135,12 +177,14 @@ export const RoomAccordion = React.memo(function Component({
                         )}
                       </Text>
 
-                      <CustomButton
+                      <Radio
                         style={{ marginLeft: "auto" }}
-                        backgroundColor={Colors.PURPLE}
-                      >
-                        Book room
-                      </CustomButton>
+                        checked={selectedBoard === rate.rateKey}
+                        onChange={(e) => onBoardChange(e, rate)}
+                        disabled={isRoomBooked() || areAllRoomsToBookBooked()}
+                        value={rate.rateKey}
+                        classes={{ colorSecondary: style.colorSecondary }}
+                      />
                     </Grid>
                   </Grid>
 

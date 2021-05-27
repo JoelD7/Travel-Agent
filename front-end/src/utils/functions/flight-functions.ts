@@ -152,7 +152,7 @@ export function getFlightSegmentCarrier(segment: FlightSegment) {
     }
   }
 
-  return "Not available";
+  return segment.carrierCode;
 }
 
 export function getAutocompleteLabel(
@@ -289,7 +289,7 @@ export function getFlightClassForAPI(value: string): string {
  * friendly format.
  * @param value
  */
-function flightClassBackendToClient(value: string) {
+export function flightClassBackendToClient(value: string) {
   switch (value) {
     case "ECONOMY":
       return "Economy";
@@ -325,6 +325,7 @@ export function getFlightClass(flight: Flight): string {
  */
 export function getFlightDTO(flight: Flight) {
   return {
+    idFlight: flight.idFlight,
     total: convertToUserCurrency(flight.price.total, flight.price.currency),
     flightClass: getFlightClassForAPI(getFlightClass(flight)),
     itineraries: flight.itineraries.map((itinerary) => {
@@ -392,7 +393,7 @@ export function mapFlightToDomainType(flight: any): Flight {
             duration: segment.duration,
             departure,
             arrival,
-            carrierCode: segment.carrierCode,
+            carrierCode: segment.carrier,
           };
         }),
       };

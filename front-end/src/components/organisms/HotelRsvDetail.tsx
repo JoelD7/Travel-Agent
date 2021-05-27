@@ -29,6 +29,7 @@ import {
   getHotelReservationCost,
   HotelReservation,
   HotelRoom,
+  HotelRoomReservation,
   hotelRsvPlaceholder,
   Routes,
   selectHotelRsv,
@@ -43,7 +44,7 @@ interface HotelRsvDetail {
 }
 
 interface RoomCard {
-  room: HotelRoom;
+  room: HotelRoomReservation;
 }
 
 export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
@@ -156,14 +157,14 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
 
         {/* Price */}
         <Grid item className={style.roomPriceGrid}>
-          {room.cost && (
+          {room.totalAmount && (
             <Grid container alignItems="flex-end" style={{ height: "100%" }}>
               <Grid item>
                 <Text color={Colors.GRAY_TEXT} style={{ marginBottom: 2 }}>
                   Total for room
                 </Text>
                 <Text component="h4" color={Colors.BLUE}>
-                  {formatAsCurrency(convertToUserCurrency(room.cost, "USD"))}
+                  {formatAsCurrency(convertToUserCurrency(room.totalAmount, "USD"))}
                 </Text>
               </Grid>
             </Grid>

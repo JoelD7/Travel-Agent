@@ -2539,6 +2539,7 @@ export const hotelPlaceholder: HotelBooking = {
       rates: [
         {
           net: "153.48",
+          rateKey: "",
           boardName: "ROOM ONLY",
           taxes: {
             taxes: [
@@ -2557,6 +2558,7 @@ export const hotelPlaceholder: HotelBooking = {
         {
           net: "153.48",
           boardName: "ROOM ONLY",
+          rateKey: "",
           taxes: {
             taxes: [
               {
@@ -2573,6 +2575,7 @@ export const hotelPlaceholder: HotelBooking = {
         },
         {
           net: "159.94",
+          rateKey: "",
           boardName: "ROOM ONLY",
           taxes: {
             taxes: [
@@ -2590,6 +2593,7 @@ export const hotelPlaceholder: HotelBooking = {
         },
         {
           net: "159.94",
+          rateKey: "",
           boardName: "ROOM ONLY",
           taxes: {
             taxes: [
@@ -2607,6 +2611,7 @@ export const hotelPlaceholder: HotelBooking = {
         },
         {
           net: "190.24",
+          rateKey: "",
           boardName: "ROOM ONLY",
           rooms: 2,
           adults: 4,
@@ -2614,6 +2619,7 @@ export const hotelPlaceholder: HotelBooking = {
         },
         {
           net: "208.00",
+          rateKey: "",
           boardName: "ROOM ONLY",
           rooms: 2,
           adults: 4,
@@ -2856,188 +2862,7 @@ export const hotelRsvPlaceholder: HotelReservation = {
   phoneNumber: "+14072399550",
   adults: 4,
   children: 4,
-  rooms: [
-    {
-      code: "DBL.GR",
-      name: "DOUBLE GUEST ROOM EXTERIOR CORRIDORS",
-      image: "/Travel-Agent/george6.jpg",
-      cost: 955,
-      rates: [
-        {
-          net: "153.48",
-          boardName: "ROOM ONLY",
-          taxes: {
-            taxes: [
-              {
-                amount: "50.00",
-                currency: "USD",
-                clientAmount: "41.13",
-                clientCurrency: "EUR",
-              },
-            ],
-          },
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-        {
-          net: "153.48",
-          boardName: "ROOM ONLY",
-          taxes: {
-            taxes: [
-              {
-                amount: "50.00",
-                currency: "USD",
-                clientAmount: "41.13",
-                clientCurrency: "EUR",
-              },
-            ],
-          },
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-        {
-          net: "159.94",
-          boardName: "ROOM ONLY",
-          taxes: {
-            taxes: [
-              {
-                amount: "50.00",
-                currency: "USD",
-                clientAmount: "41.13",
-                clientCurrency: "EUR",
-              },
-            ],
-          },
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-        {
-          net: "159.94",
-          boardName: "ROOM ONLY",
-          taxes: {
-            taxes: [
-              {
-                amount: "50.00",
-                currency: "USD",
-                clientAmount: "41.13",
-                clientCurrency: "EUR",
-              },
-            ],
-          },
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-        {
-          net: "190.24",
-          boardName: "ROOM ONLY",
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-        {
-          net: "208.00",
-          boardName: "ROOM ONLY",
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-      ],
-    },
-    {
-      code: "DBL.GR",
-      name: "DOUBLE GUEST ROOM EXTERIOR CORRIDORS",
-      image: "/Travel-Agent/george6.jpg",
-      cost: 955,
-      rates: [
-        {
-          net: "153.48",
-          boardName: "ROOM ONLY",
-          taxes: {
-            taxes: [
-              {
-                amount: "50.00",
-                currency: "USD",
-                clientAmount: "41.13",
-                clientCurrency: "EUR",
-              },
-            ],
-          },
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-        {
-          net: "153.48",
-          boardName: "ROOM ONLY",
-          taxes: {
-            taxes: [
-              {
-                amount: "50.00",
-                currency: "USD",
-                clientAmount: "41.13",
-                clientCurrency: "EUR",
-              },
-            ],
-          },
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-        {
-          net: "159.94",
-          boardName: "ROOM ONLY",
-          taxes: {
-            taxes: [
-              {
-                amount: "50.00",
-                currency: "USD",
-                clientAmount: "41.13",
-                clientCurrency: "EUR",
-              },
-            ],
-          },
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-        {
-          net: "159.94",
-          boardName: "ROOM ONLY",
-          taxes: {
-            taxes: [
-              {
-                amount: "50.00",
-                currency: "USD",
-                clientAmount: "41.13",
-                clientCurrency: "EUR",
-              },
-            ],
-          },
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-        {
-          net: "190.24",
-          boardName: "ROOM ONLY",
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-        {
-          net: "208.00",
-          boardName: "ROOM ONLY",
-          rooms: 2,
-          adults: 4,
-          children: 0,
-        },
-      ],
-    },
-  ],
+  rooms: [],
 };
 
 export const hotelPhotos = [
