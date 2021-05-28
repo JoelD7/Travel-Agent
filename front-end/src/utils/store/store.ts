@@ -95,6 +95,9 @@ export const selectIsHotelDetailsBlurred = (state: RootState) =>
 
 export const selectHotelRsv = (state: RootState) => state.hotelReducer.hotelRsv;
 
+export const selectHotelReservations = (state: RootState) =>
+  state.hotelReducer.hotelReservations;
+
 //#endregion
 
 //#region AirportCity search

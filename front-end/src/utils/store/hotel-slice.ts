@@ -17,6 +17,7 @@ interface HotelReducer {
   openRedirecDialog: boolean;
   isHotelDetailsBlurred: boolean;
   hotelRsv: HotelReservation;
+  hotelReservations: HotelReservation[];
 }
 
 const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
@@ -53,6 +54,7 @@ const initialState: HotelReducer = {
   openRedirecDialog: false,
   isHotelDetailsBlurred: false,
   hotelRsv: hotelRsvPlaceholder,
+  hotelReservations: [],
   reservationParams: {
     ...initialStateReservationParams,
     id: JSON.stringify(initialStateReservationParams),
@@ -69,6 +71,10 @@ const hotelSlice = createSlice({
 
     setHotelRsv(state, action: PayloadAction<HotelReservation>) {
       state.hotelRsv = action.payload;
+    },
+
+    setHotelReservations(state, action: PayloadAction<HotelReservation[]>) {
+      state.hotelReservations = action.payload;
     },
 
     updateReservationParams: {
@@ -110,6 +116,7 @@ export const {
   updateReservationParams,
   setHotelDetail,
   setOpenRedirecDialog,
+  setHotelReservations,
   blurHotelDetails,
   setRoomAccordionExpanded,
   setHotelRsv,

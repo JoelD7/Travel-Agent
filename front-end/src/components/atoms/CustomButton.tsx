@@ -16,6 +16,7 @@ interface CustomButtonProps {
   className: string;
   icon: IconDefinition;
   iconColor?: string;
+  disabled?: boolean;
   submit: boolean;
   children?: ReactNode;
   textColor: string;
@@ -48,6 +49,7 @@ export function CustomButton({
   icon,
   onClick,
   submit,
+  disabled,
   textColor = "white",
   iconColor,
   type,
@@ -123,6 +125,7 @@ export function CustomButton({
   return (
     <Button
       className={`${styles.button} ${className}`}
+      disabled={disabled}
       startIcon={renderIcon()}
       onClick={onClick}
       type={submit ? "submit" : "button"}

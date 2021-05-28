@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Data;
@@ -31,7 +32,7 @@ public class HotelReservation {
     @JsonBackReference
     private Person person;
 
-    private String hotelCode;
+    private Integer hotelCode;
     private String name;
     private LocalDate checkIn;
     private LocalDate checkOut;
@@ -40,10 +41,20 @@ public class HotelReservation {
     private Integer children;
     private String address;
     private String phoneNumber;
-    @Lob
-    private byte[] hotelImage;
+    private String hotelImage;
 
-    @OneToMany(mappedBy = "hotelReservation")
+    @OneToMany(mappedBy = "hotelReservation", cascade = CascadeType.ALL)
     private List<HotelRoom> rooms = new ArrayList<>();
 
+    public static void persistHotelReservation(HotelReservation hotelRsv) {
+        List<HotelRoom> rooms = hotelRsv.getRooms()
+                .stream()
+                .map(room -> {
+                    room.setHotelReservation(hotelRsv);
+                    return room;
+                })
+                .collect(Collectors.toList());
+
+        hotelRsv.setRooms(rooms);
+    }
 }

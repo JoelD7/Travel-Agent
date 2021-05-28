@@ -4,13 +4,18 @@ import com.tripper.Tripper.assemblers.HotelReservationModelAssembler;
 import com.tripper.Tripper.data.HotelReservationRepository;
 import com.tripper.Tripper.data.PersonRepository;
 import com.tripper.Tripper.exceptions.HotelReservationNotFoundException;
+import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.models.HotelReservation;
+import com.tripper.Tripper.models.Person;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,7 +49,23 @@ public class HotelReservationController {
     }
 
     @PostMapping("/book")
-    public ResponseEntity<?> bookHotel() {
+    public ResponseEntity<?> bookHotel(@RequestBody HotelReservation hotelRsv, @RequestParam Long idPerson) {
+        Person person = personRepo.findById(idPerson).orElseThrow(() -> new PersonNotFoundException(idPerson));
+        hotelRsv.setPerson(person);
+        person.getHotelReservations().add(hotelRsv);
 
+        HotelReservation.persistHotelReservation(hotelRsv);
+        EntityModel<HotelReservation> entityModel = assembler.toModel(hotelRepo.save(hotelRsv));
+
+        return ResponseEntity
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(hotelRsv);
+    }
+
+    @DeleteMapping("/{idHotelReservation}")
+    public ResponseEntity<?> deleteReservation(@PathVariable Long idHotelReservation) {
+        hotelRepo.deleteById(idHotelReservation);
+
+        return ResponseEntity.noContent().build();
     }
 }

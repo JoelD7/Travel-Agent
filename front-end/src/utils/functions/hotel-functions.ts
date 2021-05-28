@@ -2,6 +2,7 @@ import { format, parseISO } from "date-fns";
 import { Routes } from "..";
 import { HotelBedAPI } from "../external-apis";
 import { store } from "../store";
+import { EventTypes, Trip } from "../types";
 import {
   HotelBooking,
   HotelBookingParams,
@@ -261,4 +262,44 @@ export function areAllRoomsToBookBooked(): boolean {
   let roomsToBook: number = reservationParams.occupancies[0].rooms as number;
 
   return hotelRsv.rooms.length === roomsToBook;
+}
+
+export function getHotelReservation(hotelDetail: HotelBooking): HotelReservation {
+  let reservationParams: HotelBookingParams =
+    store.getState().hotelReducer.reservationParams;
+
+  return {
+    idHotelReservation: null,
+    address: hotelDetail.address.content,
+    name: hotelDetail.name.content,
+    adults: reservationParams.occupancies[0].adults,
+    children: reservationParams.occupancies[0].children,
+    rooms: [],
+    checkIn: reservationParams.stay.checkIn,
+    checkOut: reservationParams.stay.checkOut,
+    hotelCode: hotelDetail.code,
+    phoneNumber: hotelDetail.phones.map((phone) => phone.phoneNumber).join(" | "),
+    stars: getHotelStars(hotelDetail),
+    hotelImage: getHotelImages(hotelDetail)[0],
+  };
+}
+
+export function isHotelRsvInTrip(hotelRsv: HotelReservation, trip: Trip) {
+  let included: boolean = false;
+
+  if (trip.itinerary) {
+    trip.itinerary
+      .filter((event) => event.type === EventTypes.HOTEL)
+      .forEach((event) => {
+        if (
+          event.hotelReservation &&
+          event.hotelReservation.hotelCode === hotelRsv.hotelCode
+        ) {
+          included = true;
+          return;
+        }
+      });
+  }
+
+  return included;
 }

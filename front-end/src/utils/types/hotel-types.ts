@@ -26,6 +26,7 @@ export interface HotelAvailability {
 
 //Information about a hotel reservation.
 export interface HotelReservation {
+  idHotelReservation: number | null;
   hotelCode: number;
   hotelImage: string;
   name: string;

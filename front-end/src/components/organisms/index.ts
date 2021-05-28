@@ -27,4 +27,5 @@ export { RoomAccordion } from "./RoomAccordion/RoomAccordion";
 export { CardDealFlight } from "./CardDealFlight/CardDealFlight";
 export { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 export { RoomAccordionTitle } from "./RoomAccordionTitle/RoomAccordionTitle";
+export { ConfirmRsvDialog } from "./ConfirmRsvDialog";
 export * from "./TripOrganisms";

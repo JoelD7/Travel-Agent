@@ -5,15 +5,18 @@ import {
   faDollarSign,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { Grid } from "@material-ui/core";
+import { Grid, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import Axios from "axios";
 import { format, parseISO } from "date-fns";
 import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
+import { Font } from "../../assets";
 import {
   AboutHotel,
+  ConfirmRsvDialog,
   CustomButton,
   Footer,
   HotelDetailsSlider,
@@ -26,21 +29,32 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
+  areAllRoomsToBookBooked,
+  backend,
   capitalizeString,
   convertToUserCurrency,
   convertURLToReservationParams,
   formatAsCurrency,
+  getHotelReservation,
   getHotelReservationCost,
   getMinRate,
   HotelBedAPI,
   HotelReservation,
+  isHotelRsvInTrip,
   isValueInRange,
   proxyUrl,
   Routes,
   selectDestinationCity,
   selectHotelDetail,
   selectHotelReservationParams,
+  selectHotelReservations,
   selectHotelRsv,
+  setHotelReservations,
+  selectUserTrips,
+  selectIdPerson,
+  setHotelRsv,
+  store,
+  Trip,
 } from "../../utils";
 import {
   getHotelBedHeaders,
@@ -69,6 +83,7 @@ export function HotelDetails() {
   const location = useLocation();
 
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
+  const hotelReservations: HotelReservation[] = useSelector(selectHotelReservations);
 
   const [loading, setLoading] = useState<boolean>(hotel ? false : true);
 
@@ -85,15 +100,56 @@ export function HotelDetails() {
 
   const geolocation: IATALocation = useSelector(selectDestinationCity);
 
+  const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [openErrorSnack, setOpenErrorSnack] = useState(false);
+
+  const userTrips: Trip[] = useSelector(selectUserTrips);
+  const idPerson: number = useSelector(selectIdPerson);
+
   useEffect(() => {
-    if (!hotel) {
-      initComponent();
+    if (!areAnyReservations()) {
+      fetchReservations();
+    }
+  }, []);
+
+  function areAnyReservations(): boolean {
+    return hotelReservations.length > 0;
+  }
+
+  function fetchReservations() {
+    backend
+      .get(`/hotel/all?idPerson=${idPerson}`)
+      .then((res) => {
+        let hotels: HotelReservation[] = res.data._embedded.hotelReservationList;
+        dispatch(setHotelReservations(hotels));
+      })
+      .catch((err) => console.log(err));
+  }
+
+  useEffect(() => {
+    if (!isHotelDefined()) {
+      setReservationParams();
+      fetchHotel();
     }
 
     window.addEventListener("scroll", roomAccordionRenderController, { passive: true });
 
     return () => window.removeEventListener("scroll", roomAccordionRenderController);
   }, [renderedHeights, cardsToRender]);
+
+  function isHotelDefined(): boolean {
+    return hotel !== undefined;
+  }
+
+  function setReservationParams() {
+    reservationParams = convertURLToReservationParams(
+      location.search,
+      geolocation,
+      "hotel"
+    );
+
+    dispatch(updateReservationParams(reservationParams));
+  }
 
   /**
    * Controls how many RoomAccordion cards are rendered using the
@@ -123,35 +179,17 @@ export function HotelDetails() {
     }
   }
 
-  function initComponent() {
-    reservationParams = convertURLToReservationParams(
-      location.search,
-      geolocation,
-      "hotel"
-    );
-
-    dispatch(updateReservationParams(reservationParams));
-
+  function fetchHotel() {
     fetchHotelAvailability().then((availabilityRes) => {
       getHotelDetails(id)
-        .then((res) => {
+        .then((hotelDetailRes) => {
           let availableHotels: number = availabilityRes.data.hotels.total;
 
           if (availableHotels === 0) {
             redirectToHotels();
             dispatch(setOpenRedirecDialog(true));
           } else {
-            let checkIn = availabilityRes.data.hotels.checkIn;
-            let checkOut = availabilityRes.data.hotels.checkOut;
-
-            let hotelForBooking = {
-              ...availabilityRes.data.hotels.hotels[0],
-              checkIn,
-              checkOut,
-            };
-            let hotelDetails = res.data.hotels[0];
-
-            dispatch(setHotelDetail(mergeHotelResponses(hotelForBooking, hotelDetails)));
+            setHotelDetails(availabilityRes, hotelDetailRes);
             setLoading(false);
           }
         })
@@ -177,10 +215,52 @@ export function HotelDetails() {
     });
   }
 
+  function setHotelDetails(availabilityRes: any, hotelDetailRes: any) {
+    let checkIn = availabilityRes.data.hotels.checkIn;
+    let checkOut = availabilityRes.data.hotels.checkOut;
+
+    let hotelForBooking = {
+      ...availabilityRes.data.hotels.hotels[0],
+      checkIn,
+      checkOut,
+    };
+
+    let hotelDetails = hotelDetailRes.data.hotels[0];
+
+    dispatch(setHotelDetail(mergeHotelResponses(hotelForBooking, hotelDetails)));
+
+    setHotelReservation();
+  }
+
   function mergeHotelResponses(hotelForBooking: any, hotelDetails: any) {
     //To prevent the overriding of the "rooms" prop in hotelForBooking
     let { rooms, ...hotelDetail } = hotelDetails;
     return { ...hotelForBooking, ...hotelDetail };
+  }
+
+  /**
+   * Determines if this hotel has already been booked, if
+   * so, sets the store's current hotelReservation to the one
+   * obtained from the backend, otherwise sets its to its
+   * default value.
+   */
+  function setHotelReservation() {
+    let hotelDetail: HotelBooking | undefined = store.getState().hotelReducer.hotelDetail;
+
+    let reservations: HotelReservation[] =
+      store.getState().hotelReducer.hotelReservations;
+
+    if (hotelDetail) {
+      let reservation: HotelReservation = reservations.filter(
+        (hotel) => hotel.hotelCode === Number(id)
+      )[0];
+
+      if (reservation) {
+        dispatch(setHotelRsv(reservation));
+      } else {
+        dispatch(setHotelRsv(getHotelReservation(hotelDetail)));
+      }
+    }
   }
 
   function redirectToHotels() {
@@ -207,6 +287,59 @@ export function HotelDetails() {
     }
 
     return cardsToRender >= hotel.rooms.length;
+  }
+
+  function isHotelRsvInAnyTrip(): boolean {
+    let included: boolean = false;
+
+    userTrips.forEach((trip) => {
+      if (isHotelRsvInTrip(hotelRsv, trip)) {
+        included = true;
+        return;
+      }
+    });
+
+    return included;
+  }
+
+  function isHotelBooked(): boolean {
+    return (
+      hotelReservations.filter((hotel) => hotel.hotelCode === hotelRsv.hotelCode).length >
+      0
+    );
+  }
+
+  function deleteHotelRsvFromTrip() {
+    // let tripEventOfHotel: TripEvent = getTripEventOfHotel();
+    // if (tripEventOfHotel.idEvent) {
+    //   backend
+    //     .delete(`/trip-event/delete/${tripEventOfHotel.idEvent}`)
+    //     .then((res) => {
+    //       //Trip without the deleted event in its itinerary.
+    //       let updatedEventsTrip: Trip = responseTripToDomainTrip(res.data);
+    //       let newUserTrips: Trip[] = [];
+    //       userTrips.forEach((trip) => {
+    //         if (trip.idTrip === updatedEventsTrip.idTrip) {
+    //           newUserTrips.push(updatedEventsTrip);
+    //         } else {
+    //           newUserTrips.push(trip);
+    //         }
+    //       });
+    //       dispatch(setUserTrips(newUserTrips));
+    //     })
+    //     .catch((err) => console.log(err));
+    // }
+  }
+
+  function getTripEventOfHotel() {}
+
+  function cancelReservation() {
+    backend
+      .delete(`/${hotelRsv.idHotelReservation}`)
+      .then((res) => {
+        setOpenErrorSnack(true);
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -360,12 +493,36 @@ export function HotelDetails() {
                     </Grid>
 
                     <Grid container style={{ marginTop: 15 }}>
-                      <CustomButton
-                        backgroundColor={Colors.GREEN}
-                        style={{ marginLeft: "auto" }}
-                      >
-                        Confirm Reservation
-                      </CustomButton>
+                      {!isHotelRsvInAnyTrip() && !isHotelBooked() && (
+                        <CustomButton
+                          backgroundColor={Colors.GREEN}
+                          disabled={!areAllRoomsToBookBooked()}
+                          style={{ marginLeft: "auto" }}
+                          onClick={() => setOpenConfirmation(true)}
+                        >
+                          Confirm Reservation
+                        </CustomButton>
+                      )}
+
+                      {isHotelRsvInAnyTrip() && (
+                        <CustomButton
+                          backgroundColor={Colors.RED}
+                          style={{ marginLeft: "auto" }}
+                          onClick={() => setOpenConfirmation(true)}
+                        >
+                          Delete from trip
+                        </CustomButton>
+                      )}
+
+                      {isHotelBooked() && !isHotelRsvInAnyTrip() && (
+                        <CustomButton
+                          backgroundColor={Colors.RED}
+                          style={{ marginLeft: "auto" }}
+                          onClick={() => cancelReservation()}
+                        >
+                          Cancel reservation
+                        </CustomButton>
+                      )}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -402,6 +559,27 @@ export function HotelDetails() {
               )}
             </Grid>
           </div>
+
+          <ConfirmRsvDialog
+            open={openConfirmation}
+            onClose={() => setOpenConfirmation(false)}
+          />
+
+          <Snackbar
+            open={openErrorSnack}
+            autoHideDuration={6000}
+            onClose={() => setOpenErrorSnack(false)}
+          >
+            <Alert
+              style={{ fontFamily: Font.Family }}
+              variant="filled"
+              elevation={6}
+              onClose={() => setOpenErrorSnack(false)}
+              severity="error"
+            >
+              Reservation canceled.
+            </Alert>
+          </Snackbar>
 
           <Footer />
         </>

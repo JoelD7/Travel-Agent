@@ -83,7 +83,7 @@ export const RoomAccordion = React.memo(function Component({
 
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
 
-  const [selectedBoard, setSelectedBoard] = useState<string>("");
+  const [selectedRateKey, setSelectedRateKey] = useState<string>("");
 
   const [totalRoomCost, setTotalRoomCost] = useState<number>(0);
 
@@ -94,7 +94,11 @@ export const RoomAccordion = React.memo(function Component({
   }, [allRoomAccordionsExpanded]);
 
   useEffect(() => {
-    setUniqueRates(getUniqueRates());
+    let rates: HotelRoomRate[] = getUniqueRates();
+
+    setSelectedRateKey(rates[0].rateKey);
+    setTotalRoomCost(getRoomTotalPrice(rates[0]));
+    setUniqueRates(rates);
   }, []);
 
   function onAccordionChange(isExpanded: boolean) {
@@ -125,7 +129,7 @@ export const RoomAccordion = React.memo(function Component({
   }
 
   function onBoardChange(event: ChangeEvent<HTMLInputElement>, rate: HotelRoomRate) {
-    setSelectedBoard(event.target.value);
+    setSelectedRateKey(event.target.value);
     setTotalRoomCost(getRoomTotalPrice(rate));
   }
 
@@ -179,7 +183,7 @@ export const RoomAccordion = React.memo(function Component({
 
                       <Radio
                         style={{ marginLeft: "auto" }}
-                        checked={selectedBoard === rate.rateKey}
+                        checked={selectedRateKey === rate.rateKey}
                         onChange={(e) => onBoardChange(e, rate)}
                         disabled={isRoomBooked() || areAllRoomsToBookBooked()}
                         value={rate.rateKey}

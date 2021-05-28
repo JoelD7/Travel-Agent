@@ -2852,6 +2852,7 @@ export const hotelPlaceholder: HotelBooking = {
 };
 
 export const hotelRsvPlaceholder: HotelReservation = {
+  idHotelReservation: null,
   checkIn: new Date(2021, 5, 15),
   checkOut: new Date(2021, 5, 26),
   hotelCode: 128537,

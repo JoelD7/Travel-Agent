@@ -43,6 +43,8 @@ export function Reservations() {
 
   const hotelRsv: HotelReservation = hotelRsvPlaceholder;
 
+  const [hotelReservations, setHotelReservations] = useState<HotelReservation[]>([]);
+
   useEffect(() => {
     backend
       .get(`/flight/all?idPerson=${idPerson}`)
@@ -51,6 +53,14 @@ export function Reservations() {
           mapFlightToDomainType(flight)
         );
         setFlights(mappedFlights);
+      })
+      .catch((err) => console.log(err));
+
+    backend
+      .get(`/hotel/all?idPerson=${idPerson}`)
+      .then((res) => {
+        let hotels: HotelReservation[] = res.data._embedded.hotelReservationList;
+        setHotelReservations(hotels);
       })
       .catch((err) => console.log(err));
   }, []);

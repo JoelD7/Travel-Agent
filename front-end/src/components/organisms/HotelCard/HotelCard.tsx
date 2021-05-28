@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { Colors } from "../../../styles";
 import {
+  getHotelReservation,
   capitalizeString,
   convertReservationParamsToURLParams,
   ExchangeRate,
@@ -16,6 +17,7 @@ import {
   HotelBookingParams,
   Routes,
   selectEndCurrency,
+  setHotelRsv,
   selectExchangeRate,
   selectHotelReservationParams,
   setHotelDetail,
@@ -35,9 +37,6 @@ export function HotelCard({ hotel }: HotelCard) {
 
   const dispatch = useDispatch();
 
-  const baseCurrency: string = useSelector(selectEndCurrency);
-  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-
   let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
   function getFormattedAddress(hotel: HotelBooking) {
@@ -46,6 +45,8 @@ export function HotelCard({ hotel }: HotelCard) {
 
   function onHotelCardClick(hotel: HotelBooking) {
     dispatch(setHotelDetail(hotel));
+    dispatch(setHotelRsv(getHotelReservation(hotel)));
+
     history.push(
       `${Routes.HOTELS}/${hotel.code}${convertReservationParamsToURLParams(
         reservationParams,

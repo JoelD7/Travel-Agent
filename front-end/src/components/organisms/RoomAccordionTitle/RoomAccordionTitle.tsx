@@ -2,8 +2,8 @@ import {
   faBed,
   faCalendar,
   faCamera,
-  faChild,
   faCheck,
+  faChild,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,24 +24,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { Font } from "../../../assets";
 import { Colors, Shadow } from "../../../styles";
 import {
+  areAllRoomsToBookBooked,
   capitalizeString,
   convertToUserCurrency,
   formatAsCurrency,
   getRoomImage,
   getRoomTotalPrice,
-  HotelBedAPI,
   HotelBooking,
   HotelBookingParams,
-  HotelImage,
+  HotelReservation,
   HotelRoom,
   HotelRoomRate,
-  selectHotelDetail,
-  HotelReservation,
   HotelRoomReservation,
-  setHotelRsv,
-  areAllRoomsToBookBooked,
-  selectHotelRsv,
+  selectHotelDetail,
   selectHotelReservationParams,
+  selectHotelRsv,
+  setHotelRsv,
 } from "../../../utils";
 import { CustomButton, IconText, Text } from "../../atoms";
 

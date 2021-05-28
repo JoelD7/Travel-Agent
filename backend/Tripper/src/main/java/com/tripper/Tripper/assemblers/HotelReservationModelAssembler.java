@@ -23,7 +23,11 @@ public class HotelReservationModelAssembler
                 linkTo(methodOn(HotelReservationController.class)
                         .getHotelReservation(entity.getIdHotelReservation())).withSelfRel(),
                 linkTo(methodOn(HotelReservationController.class)
-                        .getAllHotelReservations(idPerson)).withRel("hotelReservations")
+                        .getAllHotelReservations(idPerson)).withRel("hotelReservations"),
+                linkTo(methodOn(HotelReservationController.class)
+                        .bookHotel(entity, idPerson)).withRel("bookHotel"),
+                linkTo(methodOn(HotelReservationController.class)
+                        .deleteReservation(entity.getIdHotelReservation())).withRel("deleteReservation")
         );
     }
 

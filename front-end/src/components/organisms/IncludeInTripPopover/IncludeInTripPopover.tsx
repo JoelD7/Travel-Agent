@@ -27,10 +27,13 @@ import {
   getFlightDTO,
   getIataLocation,
   getLastSegment,
+  HotelReservation,
   IATALocation,
   mapFlightToDomainType,
   muiDateFormatter,
   responseTripToDomainTrip,
+  getHotelReservation,
+  selectHotelRsv,
   selectUserTrips,
   setFlightDetail,
   Trip,
@@ -40,7 +43,7 @@ import { IconText, Text } from "../../atoms";
 import { includeInTripStyles } from "./includeInTripStyles";
 
 interface IncludeInTripPopover {
-  place: Restaurant | POI | Flight | CarRsv;
+  place: Restaurant | POI | Flight | CarRsv | HotelReservation;
   eventType: EventTypes.EventType;
   tripAnchor: HTMLButtonElement | null;
   openPopover: boolean;
@@ -197,6 +200,8 @@ export function IncludeInTripPopover({
   const tripOptions: string[] = userTrips.map((trip) => trip.name);
   const [tripOption, setTripOption] = useState<string>(tripOptions[0]);
 
+  const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -304,6 +309,7 @@ export function IncludeInTripPopover({
     if (newEvent.type === EventTypes.FLIGHT) {
       dispatch(setFlightDetail(mapFlightToDomainType(newEvent.flight)));
     }
+
     dispatch(setUserTrips(updatedUserTrips));
   }
 
@@ -323,6 +329,7 @@ export function IncludeInTripPopover({
         break;
 
       case EventTypes.HOTEL:
+        tripEventDTO = getHotelTripEventDTO();
         break;
 
       case EventTypes.POI:
@@ -355,6 +362,18 @@ export function IncludeInTripPopover({
       start: datetimePopover.start,
       end: datetimePopover.end,
       flight: getFlightDTO(flight),
+      includesTime: false,
+    };
+  }
+
+  function getHotelTripEventDTO() {
+    return {
+      name: `Check in at hotel ${hotelRsv.name}`,
+      location: hotelRsv.address,
+      type: EventTypes.HOTEL,
+      start: datetimePopover.start,
+      end: datetimePopover.end,
+      hotelReservation: hotelRsv,
       includesTime: false,
     };
   }
