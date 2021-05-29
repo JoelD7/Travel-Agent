@@ -13,6 +13,7 @@ import {
 import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { Font } from "../../assets";
 import { Colors } from "../../styles";
 import {
@@ -25,6 +26,8 @@ import {
   selectIdPerson,
   selectHotelReservations,
   setHotelRsv,
+  Routes,
+  mapHotelDTOToDomainType,
 } from "../../utils";
 import { CustomButton, Text } from "../atoms";
 import { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopover";
@@ -73,6 +76,7 @@ export function ConfirmRsvDialog({ onClose, open }: ConfirmRsvDialogProps) {
 
   const idPerson: number = useSelector(selectIdPerson);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   function onIncludeInTripOpen(event: MouseEvent<HTMLButtonElement>) {
     setTripAnchor(event.currentTarget);
@@ -87,9 +91,11 @@ export function ConfirmRsvDialog({ onClose, open }: ConfirmRsvDialogProps) {
       .then((res) => {
         setOpenSuccessSnack(true);
 
-        let newHotelRsv: HotelReservation = res.data;
+        let newHotelRsv: HotelReservation = mapHotelDTOToDomainType(res.data);
         dispatch(setHotelRsv(newHotelRsv));
         dispatch(setHotelReservations([...hotelReservations, newHotelRsv]));
+
+        history.push(`${Routes.RESERVATIONS}`);
       })
       .catch((err) => console.log(err));
   }

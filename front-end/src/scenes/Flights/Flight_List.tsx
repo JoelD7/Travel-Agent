@@ -64,7 +64,7 @@ import {
   isDateBetweenRange,
   muiDateFormatter,
   Routes,
-  selectEndCurrency,
+  selectUserCurrency,
   selectFlightFromAutocomplete,
   selectFlightSearchParams,
   selectFlightToAutocomplete,
@@ -857,7 +857,7 @@ export function Flight_List() {
   }
 
   function SearchFilters() {
-    const endCurrency: string = useSelector(selectEndCurrency);
+    const endCurrency: string = useSelector(selectUserCurrency);
 
     return (
       <div>

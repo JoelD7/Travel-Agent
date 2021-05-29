@@ -8,7 +8,7 @@ import {
   makeStyles,
   Theme,
 } from "@material-ui/core";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
@@ -27,11 +27,14 @@ import { HotelRsvDetail } from "../HotelRsvDetail";
 interface RsvHotels {
   showAll?: boolean;
   hotels: HotelReservation[];
+  //This prop is required here to force a re-render(update of costs)
+  userCurrency: string;
 }
 
 export const RsvHotels = React.memo(function RsvHotels({
   showAll = true,
   hotels,
+  userCurrency,
 }: RsvHotels) {
   const rsvHotelsStyles = makeStyles((theme: Theme) => ({
     hotelCard: {
@@ -59,9 +62,9 @@ export const RsvHotels = React.memo(function RsvHotels({
 
   const hotelRsv: HotelReservation = hotelRsvPlaceholder;
 
-  function seeHotelReservationDetails() {
+  function seeHotelReservationDetails(hotel: HotelReservation) {
     setOpenHotelDialog(true);
-    dispatch(setHotelRsv(hotelRsv));
+    dispatch(setHotelRsv(hotel));
   }
 
   function getHotelGuests(hotel: HotelReservation) {
@@ -80,7 +83,7 @@ export const RsvHotels = React.memo(function RsvHotels({
       {getHotels().length > 0 ? (
         getHotels().map((hotel, i) => (
           <Card key={i} className={style.hotelCard}>
-            <CardActionArea onClick={() => seeHotelReservationDetails()}>
+            <CardActionArea onClick={() => seeHotelReservationDetails(hotel)}>
               <CardMedia component="img" src={hotel.hotelImage} height="200" />
 
               <CardContent>

@@ -5,7 +5,7 @@ import {
   faDollarSign,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { Grid, Snackbar } from "@material-ui/core";
+import { Divider, Grid, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Axios from "axios";
 import { format, parseISO } from "date-fns";
@@ -247,19 +247,8 @@ export function HotelDetails() {
   function setHotelReservation() {
     let hotelDetail: HotelBooking | undefined = store.getState().hotelReducer.hotelDetail;
 
-    let reservations: HotelReservation[] =
-      store.getState().hotelReducer.hotelReservations;
-
     if (hotelDetail) {
-      let reservation: HotelReservation = reservations.filter(
-        (hotel) => hotel.hotelCode === Number(id)
-      )[0];
-
-      if (reservation) {
-        dispatch(setHotelRsv(reservation));
-      } else {
-        dispatch(setHotelRsv(getHotelReservation(hotelDetail)));
-      }
+      dispatch(setHotelRsv(getHotelReservation(hotelDetail)));
     }
   }
 
@@ -332,15 +321,6 @@ export function HotelDetails() {
   }
 
   function getTripEventOfHotel() {}
-
-  function cancelReservation() {
-    backend
-      .delete(`/${hotelRsv.idHotelReservation}`)
-      .then((res) => {
-        setOpenErrorSnack(true);
-      })
-      .catch((err) => console.log(err));
-  }
 
   return (
     <div className={style.mainContainer}>
@@ -515,13 +495,20 @@ export function HotelDetails() {
                       )}
 
                       {isHotelBooked() && !isHotelRsvInAnyTrip() && (
-                        <CustomButton
-                          backgroundColor={Colors.RED}
-                          style={{ marginLeft: "auto" }}
-                          onClick={() => cancelReservation()}
-                        >
-                          Cancel reservation
-                        </CustomButton>
+                        <div style={{ width: "100%" }}>
+                          <Divider className={style.reservationLinkDivider} />
+                          <Text color={Colors.GRAY_TEXT} style={{ marginBottom: 0 }}>
+                            You have a reservation on this hotel
+                          </Text>
+                          <CustomButton
+                            type="text"
+                            textColor={Colors.BLUE}
+                            style={{ padding: "10px 0px", fontWeight: "bold" }}
+                            onClick={() => history.push(Routes.RESERVATIONS)}
+                          >
+                            Wanna see it?
+                          </CustomButton>
+                        </div>
                       )}
                     </Grid>
                   </Grid>
@@ -564,22 +551,6 @@ export function HotelDetails() {
             open={openConfirmation}
             onClose={() => setOpenConfirmation(false)}
           />
-
-          <Snackbar
-            open={openErrorSnack}
-            autoHideDuration={6000}
-            onClose={() => setOpenErrorSnack(false)}
-          >
-            <Alert
-              style={{ fontFamily: Font.Family }}
-              variant="filled"
-              elevation={6}
-              onClose={() => setOpenErrorSnack(false)}
-              severity="error"
-            >
-              Reservation canceled.
-            </Alert>
-          </Snackbar>
 
           <Footer />
         </>

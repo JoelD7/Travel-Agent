@@ -78,11 +78,11 @@ const hotelSlice = createSlice({
     },
 
     updateReservationParams: {
-      reducer(state, action) {
+      reducer(state, action: PayloadAction<HotelBookingParams>) {
         state.reservationParams = action.payload;
       },
 
-      prepare(reservationParams: any) {
+      prepare(reservationParams: HotelBookingParams) {
         let id = JSON.stringify({ ...reservationParams });
         return {
           payload: { ...reservationParams, id },

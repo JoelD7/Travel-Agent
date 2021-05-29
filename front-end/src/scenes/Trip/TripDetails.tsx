@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Direction, Grid, IconButton, useTheme } from "@material-ui/core";
 import React, { CSSProperties, ReactNode, useEffect, useState } from "react";
 import Helmet from "react-helmet";
+import { useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import SwipeableViews from "react-swipeable-views";
 import { virtualize } from "react-swipeable-views-utils";
@@ -25,6 +26,7 @@ import {
   backend,
   CarRsv,
   EventTypes,
+  selectUserCurrency,
   HotelReservation,
   mapFlightToDomainType,
   responseTripToDomainTrip,
@@ -52,6 +54,7 @@ export function TripDetails() {
 
   const history = useHistory();
   const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+  const userCurrency: string = useSelector(selectUserCurrency);
 
   const tripCoverBackground: CSSProperties = {
     backgroundImage: trip
@@ -92,7 +95,6 @@ export function TripDetails() {
         });
     }
 
-    console.log("total flights: ", flights.length);
     return flights;
   }
 
@@ -205,7 +207,11 @@ export function TripDetails() {
                     </CustomButton>
                   </Grid>
 
-                  <RsvHotels hotels={getTripHotelRsv()} showAll={false} />
+                  <RsvHotels
+                    userCurrency={userCurrency}
+                    hotels={getTripHotelRsv()}
+                    showAll={false}
+                  />
                 </Grid>
 
                 {/* Restaurants */}
@@ -309,7 +315,7 @@ export function TripDetails() {
                 >
                   Hotels
                 </Text>
-                <RsvHotels hotels={getTripHotelRsv()} />
+                <RsvHotels userCurrency={userCurrency} hotels={getTripHotelRsv()} />
               </TabPanel>
             )}
           </div>

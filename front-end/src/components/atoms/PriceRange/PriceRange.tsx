@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import {
   selectExchangeRate,
   ExchangeRate,
-  selectEndCurrency,
+  selectUserCurrency,
   convertToUserCurrency,
   formatAsCurrency,
 } from "../../../utils";
@@ -22,7 +22,7 @@ export function PriceRange({ updateState, value, max, baseCurrency }: PriceRange
 
   const [slider, setSlider] = useState<number[]>(value);
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-  const endCurrency: string = useSelector(selectEndCurrency);
+  const endCurrency: string = useSelector(selectUserCurrency);
 
   useEffect(() => {
     setSlider(value);

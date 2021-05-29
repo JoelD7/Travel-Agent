@@ -303,3 +303,20 @@ export function isHotelRsvInTrip(hotelRsv: HotelReservation, trip: Trip) {
 
   return included;
 }
+
+export function mapHotelDTOToDomainType(hotel: any): HotelReservation {
+  return {
+    idHotelReservation: hotel.idHotelReservation,
+    hotelCode: hotel.hotelCode,
+    hotelImage: hotel.hotelImage,
+    name: hotel.name,
+    checkIn: parseISO(hotel.checkIn),
+    checkOut: parseISO(hotel.checkOut),
+    stars: hotel.stars,
+    adults: hotel.adults,
+    children: hotel.children,
+    address: hotel.address,
+    phoneNumber: hotel.phoneNumber,
+    rooms: hotel.rooms,
+  };
+}

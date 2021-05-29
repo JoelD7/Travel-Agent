@@ -205,18 +205,16 @@ export function Hotels() {
 
   const dispatch = useDispatch();
 
-  const [hotelAvailability, setHotelAvailability] = useState<HotelAvailability>(
-    hotelsPlaceholder
-  );
+  const [hotelAvailability, setHotelAvailability] =
+    useState<HotelAvailability>(hotelsPlaceholder);
 
   const [allHotels, setAllHotels] = useState<HotelBooking[]>([]);
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const [openOccupancies, setOpenOccupancies] = useState<boolean>(false);
-  const [occupanciesAnchor, setOccupanciesAnchor] = useState<HTMLButtonElement | null>(
-    null
-  );
+  const [occupanciesAnchor, setOccupanciesAnchor] =
+    useState<HTMLButtonElement | null>(null);
 
   const sortOptions: string[] = [
     "Name | A - Z",
@@ -561,16 +559,12 @@ export function Hotels() {
         { ...reservationParams.occupancies[0], children: value, paxes: paxes },
       ];
 
-      dispatch(updateReservationParams({ occupancies }));
+      dispatch(updateReservationParams({ ...reservationParams, occupancies }));
 
       setState({ ...state, occupancyParamsChanged: true });
     } else {
       let occupancies = [{ ...reservationParams.occupancies[0], [param.field]: value }];
-      dispatch(
-        updateReservationParams({
-          occupancies,
-        })
-      );
+      dispatch(updateReservationParams({ ...reservationParams, occupancies }));
       setState({ ...state, occupancyParamsChanged: true });
     }
   }
@@ -587,7 +581,7 @@ export function Hotels() {
 
     let occupancies = [{ ...reservationParams.occupancies[0], paxes: newPaxes }];
 
-    dispatch(updateReservationParams({ occupancies }));
+    dispatch(updateReservationParams({ ...reservationParams, occupancies }));
     setState({ ...state, occupancyParamsChanged: true });
   }
 
@@ -712,6 +706,23 @@ export function Hotels() {
 
   function onStarChange(star: number) {
     setState({ ...state, stars: star });
+
+    if (reservationParams.filter) {
+      dispatch(
+        updateReservationParams({
+          ...reservationParams,
+          filter: { ...reservationParams.filter, minCategory: star },
+        })
+      );
+    } else {
+      dispatch(
+        updateReservationParams({
+          ...reservationParams,
+          filter: { maxHotels: 250, minRate: 0, minCategory: star },
+        })
+      );
+    }
+
     setLoading(true);
   }
 
@@ -988,7 +999,7 @@ export function Hotels() {
         <h3 style={{ marginBottom: "10px" }}>Stars</h3>
         <HotelStarSelector
           value={state.stars}
-          updateState={(star) => dispatch(updateReservationParams({ stars: star }))}
+          updateState={(star) => onStarChange(star)}
         />
       </Drawer>
 

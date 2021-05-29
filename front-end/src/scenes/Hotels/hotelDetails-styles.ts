@@ -26,6 +26,12 @@ export const hotelDetailsStyles = makeStyles((theme: Theme) =>
         width: "100%",
       },
     },
+    reservationLinkDivider: {
+      backgroundColor: "#cecece",
+      marginTop: 20,
+      width: "100%",
+      marginBottom: 10,
+    },
     reservationInfoGrid: {
       width: "35%",
       [theme.breakpoints.down(1060)]: {

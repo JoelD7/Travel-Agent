@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Backdrop,
   Dialog,
@@ -6,6 +6,7 @@ import {
   Grid,
   IconButton,
   makeStyles,
+  Snackbar,
   Theme,
   useMediaQuery,
 } from "@material-ui/core";
@@ -23,20 +24,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  backend,
   capitalizeString,
+  convertReservationParamsToURLParams,
   convertToUserCurrency,
   formatAsCurrency,
   getHotelReservationCost,
+  HotelBookingParams,
   HotelReservation,
   HotelRoom,
   HotelRoomReservation,
   hotelRsvPlaceholder,
   Routes,
+  selectHotelReservationParams,
   selectHotelRsv,
 } from "../../utils";
 import { useHistory } from "react-router";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
+import { Alert } from "@material-ui/lab";
 
 interface HotelRsvDetail {
   open: boolean;
@@ -123,10 +129,12 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
 
   const style = hotelRsvStyles();
   const history = useHistory();
+  const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
-  const hotelRsv: HotelReservation | undefined = useSelector(selectHotelRsv);
+  const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
 
   const is363OrLess = useMediaQuery("(max-width:363px)");
+  const [openRsvDeletedSnack, setOpenRsvDeletedSnack] = useState(false);
 
   function getOccupancyText(param: "room" | "adult") {
     if (hotelRsv) {
@@ -178,6 +186,25 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
     );
   }
 
+  function seeHotel() {
+    history.push(
+      `${Routes.HOTELS}/${hotelRsv.hotelCode}${convertReservationParamsToURLParams(
+        reservationParams,
+        "hotelDetails"
+      )}`
+    );
+  }
+
+  function cancelReservation() {
+    backend
+      .delete(`/hotel/${hotelRsv.idHotelReservation}`)
+      .then((res) => {
+        setOpenRsvDeletedSnack(true);
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
+  }
+
   return (
     <Dialog
       open={open}
@@ -223,13 +250,28 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
                   {hotelRsv.phoneNumber}
                 </IconText>
 
-                <CustomButton
-                  style={{ marginTop: 20, boxShadow: Shadow.LIGHT3D }}
-                  backgroundColor={Colors.GREEN}
-                  onClick={() => history.push(`${Routes.HOTELS}/${hotelRsv.hotelCode}`)}
-                >
-                  See hotel
-                </CustomButton>
+                {/* Buttons */}
+                <Grid container style={{ marginTop: 20 }}>
+                  <Grid item xs={12}>
+                    <CustomButton
+                      style={{ boxShadow: Shadow.LIGHT3D }}
+                      backgroundColor={Colors.GREEN}
+                      onClick={() => seeHotel()}
+                    >
+                      See hotel
+                    </CustomButton>
+                  </Grid>
+
+                  <Grid container style={{ marginTop: 10 }}>
+                    <CustomButton
+                      style={{ boxShadow: Shadow.LIGHT3D }}
+                      backgroundColor={Colors.RED}
+                      onClick={() => cancelReservation()}
+                    >
+                      Cancel reservation
+                    </CustomButton>
+                  </Grid>
+                </Grid>
               </Grid>
 
               {/* Reservation info */}
@@ -301,6 +343,22 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
           </Grid>
         </Grid>
       )}
+
+      <Snackbar
+        open={openRsvDeletedSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenRsvDeletedSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenRsvDeletedSnack(false)}
+          severity="error"
+        >
+          Reservation canceled.
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 }

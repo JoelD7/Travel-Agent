@@ -24,9 +24,11 @@ import {
   convertToUserCurrency,
   flightsPlaceholder,
   HotelReservation,
+  selectUserCurrency,
   hotelRsvPlaceholder,
   mapFlightToDomainType,
   selectIdPerson,
+  mapHotelDTOToDomainType,
   setHotelRsv,
 } from "../../utils";
 import { reservationStyles } from "./reservation-styles";
@@ -42,6 +44,8 @@ export function Reservations() {
   const [openHotelDialog, setOpenHotelDialog] = useState(false);
 
   const hotelRsv: HotelReservation = hotelRsvPlaceholder;
+
+  const userCurrency: string = useSelector(selectUserCurrency);
 
   const [hotelReservations, setHotelReservations] = useState<HotelReservation[]>([]);
 
@@ -59,8 +63,11 @@ export function Reservations() {
     backend
       .get(`/hotel/all?idPerson=${idPerson}`)
       .then((res) => {
-        let hotels: HotelReservation[] = res.data._embedded.hotelReservationList;
-        setHotelReservations(hotels);
+        let mappedHotels: HotelReservation[] =
+          res.data._embedded.hotelReservationList.map((hotel: any) =>
+            mapHotelDTOToDomainType(hotel)
+          );
+        setHotelReservations(mappedHotels);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -139,7 +146,7 @@ export function Reservations() {
 
           {/* Hotels */}
           <Grid item xs={12}>
-            <RsvHotels hotels={[hotelRsv]} />
+            <RsvHotels userCurrency={userCurrency} hotels={hotelReservations} />
           </Grid>
         </Grid>
       </Grid>

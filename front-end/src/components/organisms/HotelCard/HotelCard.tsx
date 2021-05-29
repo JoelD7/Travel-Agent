@@ -16,7 +16,7 @@ import {
   HotelBooking,
   HotelBookingParams,
   Routes,
-  selectEndCurrency,
+  selectUserCurrency,
   setHotelRsv,
   selectExchangeRate,
   selectHotelReservationParams,

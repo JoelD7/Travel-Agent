@@ -15,7 +15,7 @@ import {
   getHotelSearchURL,
   getRestaurantsDefaultRoute,
   Routes,
-  selectEndCurrency,
+  selectUserCurrency,
   selectExchangeRate,
   selectHotelReservationParams,
   setEndCurrency,
@@ -69,7 +69,7 @@ export function Footer() {
   ];
 
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-  const baseCurrencyStore: string = useSelector(selectEndCurrency);
+  const baseCurrencyStore: string = useSelector(selectUserCurrency);
   const [currency, setCurrency] = useState<string>(baseCurrencyStore);
 
   const dispatch = useDispatch();
