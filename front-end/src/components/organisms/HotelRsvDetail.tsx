@@ -1,4 +1,13 @@
-import React, { useState } from "react";
+import {
+  faBed,
+  faCalendar,
+  faChild,
+  faMapMarkerAlt,
+  faPhone,
+  faTimes,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Backdrop,
   Dialog,
@@ -10,19 +19,13 @@ import {
   Theme,
   useMediaQuery,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import { format } from "date-fns";
+import React, { MouseEvent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { Font } from "../../assets";
-import { CustomButton, IconText, IconTP, Rating, Text } from "../atoms";
 import { Colors, Shadow } from "../../styles";
-import {
-  faCalendar,
-  faMapMarkerAlt,
-  faPhone,
-  faTimes,
-  faBed,
-  faUser,
-  faChild,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   backend,
   capitalizeString,
@@ -32,17 +35,21 @@ import {
   getHotelReservationCost,
   HotelBookingParams,
   HotelReservation,
-  HotelRoom,
   HotelRoomReservation,
-  hotelRsvPlaceholder,
+  isHotelRsvInTrip,
   Routes,
   selectHotelReservationParams,
   selectHotelRsv,
+  Trip,
+  selectUserTrips,
+  setUserTrips,
+  responseTripToDomainTrip,
+  TripEvent,
+  tripEventPlaceholder,
+  EventTypes,
 } from "../../utils";
-import { useHistory } from "react-router";
-import { useSelector } from "react-redux";
-import { format } from "date-fns";
-import { Alert } from "@material-ui/lab";
+import { CustomButton, IconText, Rating, Text } from "../atoms";
+import { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopover";
 
 interface HotelRsvDetail {
   open: boolean;
@@ -88,7 +95,7 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
       },
     },
     paper: {
-      maxWidth: 715,
+      maxWidth: 745,
       padding: "20px 0px",
     },
     reservationContainer: {
@@ -131,10 +138,15 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
   const history = useHistory();
   const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
+  const userTrips: Trip[] = useSelector(selectUserTrips);
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
+  const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
+  const [openPopover, setOpenPopover] = useState(false);
 
   const is363OrLess = useMediaQuery("(max-width:363px)");
   const [openRsvDeletedSnack, setOpenRsvDeletedSnack] = useState(false);
+
+  const dispatch = useDispatch();
 
   function getOccupancyText(param: "room" | "adult") {
     if (hotelRsv) {
@@ -147,6 +159,19 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
     }
 
     return "";
+  }
+
+  function isHotelRsvInAnyTrip(): boolean {
+    let included: boolean = false;
+
+    userTrips.forEach((trip) => {
+      if (isHotelRsvInTrip(hotelRsv, trip)) {
+        included = true;
+        return;
+      }
+    });
+
+    return included;
   }
 
   function RoomCard({ room }: RoomCard) {
@@ -195,6 +220,60 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
     );
   }
 
+  function deleteHotelRsvFromTrip() {
+    let tripEventOfHotel: TripEvent = getTripEventOfHotel();
+
+    if (tripEventOfHotel.idEvent) {
+      backend
+        .delete(`/trip-event/delete/${tripEventOfHotel.idEvent}`)
+        .then((res) => {
+          setOpenRsvDeletedSnack(true);
+
+          //Trip without the deleted event in its itinerary.
+          let updatedEventsTrip: Trip = responseTripToDomainTrip(res.data);
+          let newUserTrips: Trip[] = [];
+
+          userTrips.forEach((trip) => {
+            if (trip.idTrip === updatedEventsTrip.idTrip) {
+              newUserTrips.push(updatedEventsTrip);
+            } else {
+              newUserTrips.push(trip);
+            }
+          });
+          dispatch(setUserTrips(newUserTrips));
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
+  function getTripEventOfHotel() {
+    let tripEvent: TripEvent = tripEventPlaceholder;
+
+    userTrips.forEach((trip) => {
+      if (trip.itinerary) {
+        trip.itinerary.forEach((event) => {
+          if (
+            event.hotelReservation &&
+            event.hotelReservation.idHotelReservation === hotelRsv.idHotelReservation
+          ) {
+            tripEvent = event;
+            return;
+          }
+        });
+      }
+
+      if (tripEvent) {
+        return;
+      }
+    });
+
+    return tripEvent;
+  }
+
   function cancelReservation() {
     backend
       .delete(`/hotel/${hotelRsv.idHotelReservation}`)
@@ -203,6 +282,11 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
         window.location.reload();
       })
       .catch((err) => console.log(err));
+  }
+
+  function onIncludeInTripOpen(event: MouseEvent<HTMLButtonElement>) {
+    setTripAnchor(event.currentTarget);
+    setOpenPopover(true);
   }
 
   return (
@@ -263,19 +347,42 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
                   </Grid>
 
                   <Grid container style={{ marginTop: 10 }}>
-                    <CustomButton
-                      style={{ boxShadow: Shadow.LIGHT3D }}
-                      backgroundColor={Colors.RED}
-                      onClick={() => cancelReservation()}
-                    >
-                      Cancel reservation
-                    </CustomButton>
+                    {isHotelRsvInAnyTrip() ? (
+                      <CustomButton
+                        style={{ boxShadow: Shadow.LIGHT3D }}
+                        backgroundColor={Colors.RED}
+                        onClick={() => deleteHotelRsvFromTrip()}
+                      >
+                        Delete from trip
+                      </CustomButton>
+                    ) : (
+                      <CustomButton
+                        style={{ boxShadow: Shadow.LIGHT3D }}
+                        backgroundColor={Colors.RED}
+                        onClick={() => cancelReservation()}
+                      >
+                        Cancel reservation
+                      </CustomButton>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
 
               {/* Reservation info */}
               <Grid item className={style.reservationInfoGrid}>
+                {!isHotelRsvInAnyTrip() && (
+                  <Grid container style={{ marginTop: 10, width: "100%" }}>
+                    <CustomButton
+                      style={{ boxShadow: Shadow.LIGHT3D, marginLeft: "auto" }}
+                      backgroundColor={Colors.GREEN}
+                      onClick={(e) => onIncludeInTripOpen(e)}
+                      rounded
+                    >
+                      Include in trip
+                    </CustomButton>
+                  </Grid>
+                )}
+
                 <div className={style.reservationContainer}>
                   {/* Dates */}
                   <>
@@ -343,6 +450,15 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
           </Grid>
         </Grid>
       )}
+
+      <IncludeInTripPopover
+        place={hotelRsv}
+        openPopover={openPopover}
+        setOpenPopover={setOpenPopover}
+        eventType={EventTypes.HOTEL}
+        tripAnchor={tripAnchor}
+        setTripAnchor={setTripAnchor}
+      />
 
       <Snackbar
         open={openRsvDeletedSnack}

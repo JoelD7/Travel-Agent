@@ -2,7 +2,7 @@ import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { Dialog, DialogActions, DialogContent, Grid, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { appStyles } from "./app-styles";
 import { Font } from "./assets";
@@ -29,7 +29,17 @@ import {
   CreateTrip,
 } from "./scenes";
 import { Colors } from "./styles";
-import { IATALocation, LocationType, Routes, selectOriginCity } from "./utils";
+import {
+  IATALocation,
+  LocationType,
+  Routes,
+  selectOriginCity,
+  Trip,
+  selectUserTrips,
+  backend,
+  setUserTrips,
+  responseTripToDomainTrip,
+} from "./utils";
 
 export default function App() {
   const style = appStyles();
@@ -37,11 +47,28 @@ export default function App() {
   const [openOriginCityDialog, setOpenOriginCityDialog] = useState(false);
 
   const originCity: IATALocation = useSelector(selectOriginCity);
+  const userTrips: Trip[] = useSelector(selectUserTrips);
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!isOriginCityDefined()) {
       setOpenOriginCityDialog(true);
+    }
+
+    if (userTrips.length === 0) {
+      backend
+        .get("/trip/all")
+        .then((res: any) => {
+          let tripsInResponse = res.data._embedded.tripList;
+          let tripsBuffer = tripsInResponse.map((resTrip: any) =>
+            responseTripToDomainTrip(resTrip)
+          );
+
+          dispatch(setUserTrips(tripsBuffer));
+        })
+        .catch((err: any) => console.log(err));
     }
   }, []);
 

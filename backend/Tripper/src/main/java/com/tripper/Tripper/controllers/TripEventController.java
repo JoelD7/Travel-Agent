@@ -2,9 +2,11 @@ package com.tripper.Tripper.controllers;
 
 import com.tripper.Tripper.assemblers.TripEventModelAssembler;
 import com.tripper.Tripper.data.FlightRepository;
+import com.tripper.Tripper.data.HotelReservationRepository;
 import com.tripper.Tripper.data.TripEventRepository;
 import com.tripper.Tripper.data.TripRepository;
 import com.tripper.Tripper.exceptions.FlightNotFoundException;
+import com.tripper.Tripper.exceptions.HotelReservationNotFoundException;
 import com.tripper.Tripper.exceptions.TripEventNotFoundException;
 import com.tripper.Tripper.exceptions.TripNotFoundException;
 import com.tripper.Tripper.models.CarRental;
@@ -35,13 +37,15 @@ public class TripEventController {
     private final TripEventModelAssembler assembler;
     private final TripRepository tripRepo;
     private final FlightRepository flightRepo;
+    private final HotelReservationRepository hotelRepo;
 
     public TripEventController(TripEventRepository tripEventRepo, TripEventModelAssembler assembler,
-            TripRepository tripRepo, FlightRepository flightRepo) {
+            TripRepository tripRepo, FlightRepository flightRepo, HotelReservationRepository hotelRepo) {
         this.tripEventRepo = tripEventRepo;
         this.assembler = assembler;
         this.tripRepo = tripRepo;
         this.flightRepo = flightRepo;
+        this.hotelRepo = hotelRepo;
     }
 
     @GetMapping("/{idTripEvent}")
@@ -58,7 +62,7 @@ public class TripEventController {
     }
 
     @PostMapping("/add-new")
-    public ResponseEntity<?> addNewEventToTrip(@RequestBody TripEvent event, @RequestParam Long idTrip) {
+    public ResponseEntity<?> addEventToTrip(@RequestBody TripEvent event, @RequestParam Long idTrip) {
         Trip trip = tripRepo.findById(idTrip)
                 .orElseThrow(() -> new TripNotFoundException("This Trip does not exists."));
 
@@ -114,9 +118,19 @@ public class TripEventController {
                 break;
 
             case HOTEL:
-                HotelReservation hotelReservation = eventDTO.getHotelReservation();
-                hotelReservation.setPerson(person);
-                newEvent.setHotelReservation(hotelReservation);
+                HotelReservation hotelReservation;
+                Long idHotelReservation = eventDTO.getHotelReservation().getIdHotelReservation();
+
+                if (idHotelReservation == null) {
+                    hotelReservation = eventDTO.getHotelReservation();
+                    hotelReservation.setPerson(person);
+                    hotelReservation.setTripEvent(newEvent);
+                    hotelReservation.setHotelReservationChildren();
+                } else {
+                    hotelReservation = hotelRepo.findById(idHotelReservation)
+                            .orElseThrow(() -> new HotelReservationNotFoundException(idHotelReservation));
+                    hotelReservation.setTripEvent(newEvent);
+                }
                 break;
 
             case POI:

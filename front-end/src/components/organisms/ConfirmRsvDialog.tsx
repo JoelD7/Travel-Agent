@@ -20,14 +20,13 @@ import {
   backend,
   EventTypes,
   HotelReservation,
-  selectHotelRsv,
-  getHotelReservation,
-  setHotelReservations,
-  selectIdPerson,
-  selectHotelReservations,
-  setHotelRsv,
-  Routes,
   mapHotelDTOToDomainType,
+  Routes,
+  selectHotelReservations,
+  selectHotelRsv,
+  selectIdPerson,
+  setHotelReservations,
+  setHotelRsv,
 } from "../../utils";
 import { CustomButton, Text } from "../atoms";
 import { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopover";
@@ -84,8 +83,6 @@ export function ConfirmRsvDialog({ onClose, open }: ConfirmRsvDialogProps) {
   }
 
   function bookHotel() {
-    // let hotelRsvDTO = getHotelReservation(hotelRsv);
-
     backend
       .post(`/hotel/book?idPerson=${idPerson}`, hotelRsv)
       .then((res) => {

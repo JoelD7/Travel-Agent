@@ -54,7 +54,7 @@ public class HotelReservationController {
         hotelRsv.setPerson(person);
         person.getHotelReservations().add(hotelRsv);
 
-        HotelReservation.persistHotelReservation(hotelRsv);
+        hotelRsv.setHotelReservationChildren();
         EntityModel<HotelReservation> entityModel = assembler.toModel(hotelRepo.save(hotelRsv));
 
         return ResponseEntity

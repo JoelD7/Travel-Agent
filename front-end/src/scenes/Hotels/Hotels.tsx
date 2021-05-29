@@ -883,6 +883,7 @@ export function Hotels() {
                 </Text>
                 <Rating
                   type="star"
+                  readonly={false}
                   score={state.stars}
                   onChange={onStarChange}
                   size={40}

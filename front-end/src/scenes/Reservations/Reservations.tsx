@@ -1,11 +1,7 @@
-import { faStar as faStarReg } from "@fortawesome/free-regular-svg-icons";
-import { faCalendar, faRestroom, faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui/core";
-import { format } from "date-fns";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import Rating from "react-rating";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CardFlight,
@@ -15,21 +11,18 @@ import {
   HotelRsvDetail,
   IconText,
   Navbar,
-  Text,
   RsvHotels,
+  Text,
 } from "../../components";
 import { Colors } from "../../styles";
 import {
   backend,
-  convertToUserCurrency,
-  flightsPlaceholder,
   HotelReservation,
-  selectUserCurrency,
   hotelRsvPlaceholder,
   mapFlightToDomainType,
-  selectIdPerson,
   mapHotelDTOToDomainType,
-  setHotelRsv,
+  selectIdPerson,
+  selectUserCurrency,
 } from "../../utils";
 import { reservationStyles } from "./reservation-styles";
 

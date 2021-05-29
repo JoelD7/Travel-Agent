@@ -18,6 +18,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addHours, compareAsc, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
 import {
@@ -37,6 +38,7 @@ import {
   selectUserTrips,
   setFlightDetail,
   Trip,
+  Routes,
 } from "../../../utils";
 import { setUserTrips } from "../../../utils/store/trip-slice";
 import { IconText, Text } from "../../atoms";
@@ -201,7 +203,7 @@ export function IncludeInTripPopover({
   const [tripOption, setTripOption] = useState<string>(tripOptions[0]);
 
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
-
+  const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -284,8 +286,18 @@ export function IncludeInTripPopover({
 
         onPopoverClose();
         setOpenSuccessSnack(true);
+
+        if (newEvent.type === EventTypes.HOTEL) {
+          setTimeout(() => {
+            redirectToTripDetail(selectedTrip);
+          }, 1000);
+        }
       })
       .catch((err) => console.log(err));
+  }
+
+  function redirectToTripDetail(trip: Trip) {
+    history.push(`${Routes.TRIPS}/${trip.idTrip}`);
   }
 
   /**

@@ -298,30 +298,6 @@ export function HotelDetails() {
     );
   }
 
-  function deleteHotelRsvFromTrip() {
-    // let tripEventOfHotel: TripEvent = getTripEventOfHotel();
-    // if (tripEventOfHotel.idEvent) {
-    //   backend
-    //     .delete(`/trip-event/delete/${tripEventOfHotel.idEvent}`)
-    //     .then((res) => {
-    //       //Trip without the deleted event in its itinerary.
-    //       let updatedEventsTrip: Trip = responseTripToDomainTrip(res.data);
-    //       let newUserTrips: Trip[] = [];
-    //       userTrips.forEach((trip) => {
-    //         if (trip.idTrip === updatedEventsTrip.idTrip) {
-    //           newUserTrips.push(updatedEventsTrip);
-    //         } else {
-    //           newUserTrips.push(trip);
-    //         }
-    //       });
-    //       dispatch(setUserTrips(newUserTrips));
-    //     })
-    //     .catch((err) => console.log(err));
-    // }
-  }
-
-  function getTripEventOfHotel() {}
-
   return (
     <div className={style.mainContainer}>
       <a href={`#${roomTitleId}`} ref={roomAnchorEl} hidden></a>

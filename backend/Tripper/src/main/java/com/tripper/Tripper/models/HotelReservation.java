@@ -14,8 +14,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Data
@@ -43,18 +46,29 @@ public class HotelReservation {
     private String phoneNumber;
     private String hotelImage;
 
+    @OneToOne
+    @JoinColumn(name = "idEvent")
+    @JsonBackReference(value = "hotelReference")
+    @Setter(AccessLevel.PRIVATE)
+    private TripEvent event;
+
     @OneToMany(mappedBy = "hotelReservation", cascade = CascadeType.ALL)
     private List<HotelRoom> rooms = new ArrayList<>();
 
-    public static void persistHotelReservation(HotelReservation hotelRsv) {
-        List<HotelRoom> rooms = hotelRsv.getRooms()
+    public void setHotelReservationChildren() {
+        List<HotelRoom> rooms = this.getRooms()
                 .stream()
                 .map(room -> {
-                    room.setHotelReservation(hotelRsv);
+                    room.setHotelReservation(this);
                     return room;
                 })
                 .collect(Collectors.toList());
 
-        hotelRsv.setRooms(rooms);
+        this.setRooms(rooms);
+    }
+
+    public void setTripEvent(TripEvent event) {
+        this.setEvent(event);
+        event.setHotelReservation(this);
     }
 }

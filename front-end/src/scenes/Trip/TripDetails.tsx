@@ -32,6 +32,7 @@ import {
   responseTripToDomainTrip,
   Routes,
   Trip,
+  mapHotelDTOToDomainType,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -106,7 +107,7 @@ export function TripDetails() {
         .filter((event) => event.type === EventTypes.HOTEL)
         .forEach((event) => {
           if (event.hotelReservation !== null && event.hotelReservation) {
-            hotels.push(event.hotelReservation);
+            hotels.push(mapHotelDTOToDomainType(event.hotelReservation));
           }
         });
     }
