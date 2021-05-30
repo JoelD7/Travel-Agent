@@ -1,21 +1,13 @@
 package com.tripper.Tripper.controllers;
 
 import com.tripper.Tripper.assemblers.TripEventModelAssembler;
-import com.tripper.Tripper.data.FlightRepository;
-import com.tripper.Tripper.data.HotelReservationRepository;
 import com.tripper.Tripper.data.TripEventRepository;
 import com.tripper.Tripper.data.TripRepository;
-import com.tripper.Tripper.exceptions.FlightNotFoundException;
-import com.tripper.Tripper.exceptions.HotelReservationNotFoundException;
 import com.tripper.Tripper.exceptions.TripEventNotFoundException;
 import com.tripper.Tripper.exceptions.TripNotFoundException;
-import com.tripper.Tripper.models.CarRental;
-import com.tripper.Tripper.models.Flight;
-import com.tripper.Tripper.models.HotelReservation;
-import com.tripper.Tripper.models.Person;
 import com.tripper.Tripper.models.Trip;
 import com.tripper.Tripper.models.TripEvent;
-import com.tripper.Tripper.models.enums.TripEventType;
+import com.tripper.Tripper.services.TripEventService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -36,16 +28,14 @@ public class TripEventController {
     private final TripEventRepository tripEventRepo;
     private final TripEventModelAssembler assembler;
     private final TripRepository tripRepo;
-    private final FlightRepository flightRepo;
-    private final HotelReservationRepository hotelRepo;
+    private final TripEventService service;
 
     public TripEventController(TripEventRepository tripEventRepo, TripEventModelAssembler assembler,
-            TripRepository tripRepo, FlightRepository flightRepo, HotelReservationRepository hotelRepo) {
+            TripRepository tripRepo, TripEventService service) {
         this.tripEventRepo = tripEventRepo;
         this.assembler = assembler;
         this.tripRepo = tripRepo;
-        this.flightRepo = flightRepo;
-        this.hotelRepo = hotelRepo;
+        this.service = service;
     }
 
     @GetMapping("/{idTripEvent}")
@@ -66,84 +56,12 @@ public class TripEventController {
         Trip trip = tripRepo.findById(idTrip)
                 .orElseThrow(() -> new TripNotFoundException("This Trip does not exists."));
 
-        Person person = trip.getPerson();
-
-        TripEvent newTripEvent = new TripEvent(event.getName(), event.getLocation(),
-                event.getType(), event.getIncludesTime(), event.getStart(),
-                event.getEnd());
-
-        newTripEvent.setTrip(trip);
-        setEventTypeEntity(newTripEvent, event, person);
-
-        TripEvent tripEventResponse = tripEventRepo.save(newTripEvent);
-        EntityModel<TripEvent> entityModel = assembler.toModel(tripEventResponse);
+        TripEvent newTripEvent = service.addEventToTrip(event, trip);
+        EntityModel<TripEvent> entityModel = assembler.toModel(newTripEvent);
 
         return ResponseEntity
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(tripEventResponse);
-    }
-
-    //<editor-fold defaultstate="collapsed" desc="comment">
-    /*
-     * Sets the entity corresponding to the event type in the TripEvent object.
-     * This is required given the fact that there is a bidirectional relation-
-     * ship between TripEvent and its children.
-     */ //</editor-fold>
-    private void setEventTypeEntity(TripEvent newEvent, TripEvent eventDTO, Person person) {
-        TripEventType type = eventDTO.getType();
-
-        switch (type) {
-            case CAR_RENTAL:
-                CarRental carRental = eventDTO.getCarRental();
-                carRental.setPerson(person);
-                newEvent.setCarRental(carRental);
-                break;
-
-            case FLIGHT:
-                Flight flight;
-                Long idFlight = eventDTO.getFlight().getIdFlight();
-
-                if (idFlight == null) {
-                    flight = eventDTO.getFlight();
-                    flight.setPerson(person);
-                    flight.setEvent(newEvent);
-                    Flight.persistFlight(flight);
-                } else {
-                    flight = flightRepo.findById(idFlight)
-                            .orElseThrow(() -> new FlightNotFoundException(idFlight));
-                    flight.setEvent(newEvent);
-                }
-
-                newEvent.setFlight(flight);
-                break;
-
-            case HOTEL:
-                HotelReservation hotelReservation;
-                Long idHotelReservation = eventDTO.getHotelReservation().getIdHotelReservation();
-
-                if (idHotelReservation == null) {
-                    hotelReservation = eventDTO.getHotelReservation();
-                    hotelReservation.setPerson(person);
-                    hotelReservation.setTripEvent(newEvent);
-                    hotelReservation.setHotelReservationChildren();
-                } else {
-                    hotelReservation = hotelRepo.findById(idHotelReservation)
-                            .orElseThrow(() -> new HotelReservationNotFoundException(idHotelReservation));
-                    hotelReservation.setTripEvent(newEvent);
-                }
-                break;
-
-            case POI:
-                newEvent.setPoi(eventDTO.getPoi());
-                break;
-
-            case RESTAURANT:
-                newEvent.setRestaurant(eventDTO.getRestaurant());
-                break;
-
-            default:
-                break;
-        }
+                .body(newTripEvent);
     }
 
     @DeleteMapping("/delete/{idEvent}")

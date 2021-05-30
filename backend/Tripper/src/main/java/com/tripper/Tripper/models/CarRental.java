@@ -1,5 +1,6 @@
 package com.tripper.Tripper.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.tripper.Tripper.models.enums.CarFeatures;
 import com.tripper.Tripper.models.enums.CarTransmission;
 import java.sql.Blob;
@@ -11,8 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Data
@@ -28,6 +32,12 @@ public class CarRental {
     @JoinColumn(name = "idPerson")
     private Person person;
 
+    @OneToOne
+    @JoinColumn(name = "idEvent")
+    @JsonBackReference(value = "carReference")
+    @Setter(AccessLevel.PRIVATE)
+    private TripEvent event;
+
     private String name;
     private CarFeatures features;
     private Integer seats;
@@ -39,4 +49,9 @@ public class CarRental {
     private String location;
     private CarTransmission transmission;
     private String mpg;
+
+    public void setTripEvent(TripEvent event) {
+        this.setEvent(event);
+        event.setCarRental(this);
+    }
 }

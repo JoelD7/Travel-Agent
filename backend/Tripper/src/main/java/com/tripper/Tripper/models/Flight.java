@@ -19,8 +19,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Data
@@ -44,6 +46,7 @@ public class Flight implements Serializable {
     @OneToOne
     @JoinColumn(name = "idEvent")
     @JsonBackReference(value = "flightReference")
+    @Setter(AccessLevel.PRIVATE)
     private TripEvent event;
 
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
@@ -56,11 +59,11 @@ public class Flight implements Serializable {
      * required to prevent the foreign keys from having null values.
      */
     //</editor-fold>
-    public static void persistFlight(Flight flight) {
-        List<FlightItinerary> itineraries = flight.getItineraries()
+    public void setFlightChildren() {
+        List<FlightItinerary> itineraries = this.getItineraries()
                 .stream()
                 .map(itinerary -> {
-                    itinerary.setFlight(flight);
+                    itinerary.setFlight(this);
 
                     List<FlightSegment> segments = itinerary.getSegments()
                             .stream()
@@ -84,7 +87,12 @@ public class Flight implements Serializable {
                 })
                 .collect(Collectors.toList());
 
-        flight.setItineraries(itineraries);
+        this.setItineraries(itineraries);
 
+    }
+
+    public void setTripEvent(TripEvent event) {
+        this.setEvent(event);
+        event.setFlight(this);
     }
 }
