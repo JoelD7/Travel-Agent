@@ -9,11 +9,19 @@ import {
   faSmokingBan,
   faSnowflake,
 } from "@fortawesome/free-solid-svg-icons";
-import { Grid } from "@material-ui/core";
-import React from "react";
+import { Backdrop, Dialog, Grid } from "@material-ui/core";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Colors } from "../../../styles";
-import { Car, convertToUserCurrency, formatAsCurrency } from "../../../utils";
+import {
+  Car,
+  convertToUserCurrency,
+  formatAsCurrency,
+  setCarRsv,
+  carToCarRsv,
+} from "../../../utils";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
+import { ConfirmRsvDialog } from "../ConfirmRsvDialog";
 import { carsCardStyles } from "./carsCard-styles";
 
 interface CarsCard {
@@ -22,6 +30,9 @@ interface CarsCard {
 
 export function CarsCard({ car }: CarsCard) {
   const style = carsCardStyles();
+
+  const dispatch = useDispatch();
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   function getCarName() {
     return `${car.category.make} ${car.category.model}`;
@@ -59,6 +70,11 @@ export function CarsCard({ car }: CarsCard) {
     }
 
     return icons;
+  }
+
+  function onReserveClick() {
+    dispatch(setCarRsv(carToCarRsv(car)));
+    setOpenConfirmation(true);
   }
 
   return (
@@ -120,11 +136,21 @@ export function CarsCard({ car }: CarsCard) {
             )}
           </Text>
 
-          <CustomButton style={{ marginLeft: "auto" }} backgroundColor={Colors.GREEN}>
+          <CustomButton
+            onClick={() => onReserveClick()}
+            style={{ marginLeft: "auto" }}
+            backgroundColor={Colors.GREEN}
+          >
             Reserve
           </CustomButton>
         </Grid>
       </Grid>
+
+      <ConfirmRsvDialog
+        open={openConfirmation}
+        type="Car_rental"
+        onClose={() => setOpenConfirmation(false)}
+      />
     </Grid>
   );
 }

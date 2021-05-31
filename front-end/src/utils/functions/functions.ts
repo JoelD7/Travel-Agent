@@ -11,7 +11,7 @@ import { CSSProperties } from "@material-ui/styles";
 import { addDays, compareAsc, format } from "date-fns";
 import { DEFAULT_CURRENCY, isoCountryCodes } from "../constants";
 import { iataCodes } from "../constants/iataCodes";
-import { airportCityPlaceholder } from "../placeholders";
+import { airportCityPlaceholder, carRsvPlaceholder } from "../placeholders";
 import { CarReducer, store } from "../store";
 import { CityImage, EventTypes, ExchangeRate } from "../types";
 import { IATALocation } from "../types/location-types";
@@ -65,6 +65,40 @@ export function getLinkStyle(color: string = "initial"): CSSProperties {
 export function convertToUserCurrency(value: number, fromCurrency: string): number {
   const exchangeRate: ExchangeRate = store.getState().rootSlice.exchangeRate;
   const toCurrency: string = store.getState().rootSlice.userCurrency;
+
+  // From USD to anything
+  if (fromCurrency === DEFAULT_CURRENCY) {
+    let convertedValue: number = value * exchangeRate.rates[toCurrency];
+    return convertedValue;
+
+    // From anything to USD
+  } else if (toCurrency === DEFAULT_CURRENCY) {
+    let convertedValue: number = value * (1 / exchangeRate.rates[fromCurrency]);
+    return convertedValue;
+
+    // From anything to anything
+  } else {
+    //fromCurrency to USD
+    let valueAsDollar = value * (1 / exchangeRate.rates[fromCurrency]);
+    //From USD to toCurrency
+    let convertedValue: number = valueAsDollar * exchangeRate.rates[toCurrency];
+    return convertedValue;
+  }
+}
+
+/**
+ * Converts a <value> from one currency to another.
+ * @param value
+ * @param fromCurrency
+ * @param toCurrency
+ * @returns
+ */
+export function convertToCurrency(
+  value: number,
+  fromCurrency: string,
+  toCurrency: string
+): number {
+  const exchangeRate: ExchangeRate = store.getState().rootSlice.exchangeRate;
 
   // From USD to anything
   if (fromCurrency === DEFAULT_CURRENCY) {
@@ -705,6 +739,7 @@ export function getDefaultCarReducer(): CarReducer {
   const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
 
   const carReducerDefault: CarReducer = {
+    carRsv: carRsvPlaceholder[0],
     carSearch: {
       pickup_date: format(addDays(new Date(), 2), `yyyy-MM-dd'T'HH:mm:ss`),
       pickup_location: defaultDestinationCity.code,

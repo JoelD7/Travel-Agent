@@ -18,10 +18,12 @@ import { Font } from "../../assets";
 import { Colors } from "../../styles";
 import {
   backend,
+  CarRsv,
   EventTypes,
   HotelReservation,
   mapHotelDTOToDomainType,
   Routes,
+  selectCarRsv,
   selectHotelReservations,
   selectHotelRsv,
   selectIdPerson,
@@ -33,10 +35,11 @@ import { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopove
 
 interface ConfirmRsvDialogProps {
   open: boolean;
+  type: "Hotel" | "Car_rental";
   onClose: () => void;
 }
 
-export function ConfirmRsvDialog({ onClose, open }: ConfirmRsvDialogProps) {
+export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps) {
   const dialogStyles = makeStyles((theme: Theme) => ({
     backdrop: {
       backdropFilter: "blur(4px)",
@@ -72,6 +75,7 @@ export function ConfirmRsvDialog({ onClose, open }: ConfirmRsvDialogProps) {
 
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
   const hotelReservations: HotelReservation[] = useSelector(selectHotelReservations);
+  const carRsv: CarRsv = useSelector(selectCarRsv);
 
   const idPerson: number = useSelector(selectIdPerson);
   const dispatch = useDispatch();
@@ -82,19 +86,30 @@ export function ConfirmRsvDialog({ onClose, open }: ConfirmRsvDialogProps) {
     setOpenPopover(true);
   }
 
-  function bookHotel() {
-    backend
-      .post(`/hotel/book?idPerson=${idPerson}`, hotelRsv)
-      .then((res) => {
-        setOpenSuccessSnack(true);
+  function makeBooking() {
+    if (type === "Hotel") {
+      backend
+        .post(`/hotel/book?idPerson=${idPerson}`, hotelRsv)
+        .then((res) => {
+          setOpenSuccessSnack(true);
 
-        let newHotelRsv: HotelReservation = mapHotelDTOToDomainType(res.data);
-        dispatch(setHotelRsv(newHotelRsv));
-        dispatch(setHotelReservations([...hotelReservations, newHotelRsv]));
+          let newHotelRsv: HotelReservation = mapHotelDTOToDomainType(res.data);
+          dispatch(setHotelRsv(newHotelRsv));
+          dispatch(setHotelReservations([...hotelReservations, newHotelRsv]));
 
-        history.push(`${Routes.RESERVATIONS}`);
-      })
-      .catch((err) => console.log(err));
+          history.push(`${Routes.RESERVATIONS}`);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      backend
+        .post(`/car-rental/book?idPerson=${idPerson}`, carRsv)
+        .then((res) => {
+          setOpenSuccessSnack(true);
+
+          history.push(`${Routes.RESERVATIONS}`);
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   return (
@@ -129,7 +144,7 @@ export function ConfirmRsvDialog({ onClose, open }: ConfirmRsvDialogProps) {
 
         <CustomButton
           backgroundColor={Colors.PURPLE}
-          onClick={() => bookHotel()}
+          onClick={() => makeBooking()}
           style={{ marginLeft: "auto" }}
         >
           No, proceed with reservation
@@ -137,7 +152,7 @@ export function ConfirmRsvDialog({ onClose, open }: ConfirmRsvDialogProps) {
       </Grid>
 
       <IncludeInTripPopover
-        place={hotelRsv}
+        place={type === "Hotel" ? hotelRsv : carRsv}
         openPopover={openPopover}
         setOpenPopover={setOpenPopover}
         eventType={EventTypes.HOTEL}
@@ -157,7 +172,7 @@ export function ConfirmRsvDialog({ onClose, open }: ConfirmRsvDialogProps) {
           onClose={() => setOpenSuccessSnack(false)}
           severity="success"
         >
-          Hotel booked.
+          {type === "Hotel" ? "Hotel booked." : "Car rental booked."}
         </Alert>
       </Snackbar>
     </Dialog>

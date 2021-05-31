@@ -15,7 +15,7 @@ import {
   PicturesAndKeyDetails,
   RsvHotels,
   Text,
-  TripCars,
+  RsvCars,
   TripFlights,
   TripPOIs,
   TripRestaurants,
@@ -33,6 +33,7 @@ import {
   Routes,
   Trip,
   mapHotelDTOToDomainType,
+  carRsvPlaceholder,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -160,7 +161,8 @@ export function TripDetails() {
         });
     }
 
-    return cars;
+    // return cars
+    return carRsvPlaceholder;
   }
 
   function TabViews(index: number, key: number) {
@@ -269,7 +271,7 @@ export function TripDetails() {
                     </CustomButton>
                   </Grid>
 
-                  <TripCars cars={getTripCarRentals()} showAll={false} />
+                  <RsvCars cars={getTripCarRentals()} showAll={false} />
                 </Grid>
               </TabPanel>
             )}
@@ -370,7 +372,7 @@ export function TripDetails() {
                 >
                   Car rental
                 </Text>
-                <TripCars cars={getTripCarRentals()} />
+                <RsvCars cars={getTripCarRentals()} />
               </TabPanel>
             )}
           </div>

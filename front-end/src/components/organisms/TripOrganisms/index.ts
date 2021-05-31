@@ -2,7 +2,7 @@ export * from "./TripFlights";
 export * from "./RsvHotels";
 export * from "./TripRestaurants";
 export * from "./TripPOIs";
-export * from "./TripCars";
+export * from "./RsvCars";
 export * from "./TripTabBar";
 export * from "./PicturesAndKeyDetails";
 export * from "./TripPictureUploader";

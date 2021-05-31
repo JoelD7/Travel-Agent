@@ -16,6 +16,7 @@ import { batchActions } from "redux-batched-actions";
 import { Colors } from "../../../styles";
 import {
   CarCheckbox,
+  carRsvPlaceholder,
   CarSearch,
   convertCarReducerToURLParams,
   Routes,
@@ -35,7 +36,6 @@ export function CarFilters() {
 
   const brandsRedux: CarCheckbox[] = useSelector(selectCarSearchBrands);
   const featuresRedux: CarCheckbox[] = useSelector(selectCarSearchFeatures);
-  const transmissionRedux: string = useSelector(selectCarSearchTransmission);
   const carSearch: CarSearch = useSelector(selectCarSearch);
 
   const [brands, setBrands] = useState<CarCheckbox[]>(brandsRedux);
@@ -101,6 +101,7 @@ export function CarFilters() {
     );
 
     let urlParams = convertCarReducerToURLParams({
+      carRsv: carRsvPlaceholder[0],
       carSearch,
       brands,
       features,

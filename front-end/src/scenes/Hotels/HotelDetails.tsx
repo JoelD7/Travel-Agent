@@ -101,7 +101,6 @@ export function HotelDetails() {
   const geolocation: IATALocation = useSelector(selectDestinationCity);
 
   const [openConfirmation, setOpenConfirmation] = useState(false);
-  const [openErrorSnack, setOpenErrorSnack] = useState(false);
 
   const userTrips: Trip[] = useSelector(selectUserTrips);
   const idPerson: number = useSelector(selectIdPerson);
@@ -525,6 +524,7 @@ export function HotelDetails() {
 
           <ConfirmRsvDialog
             open={openConfirmation}
+            type="Hotel"
             onClose={() => setOpenConfirmation(false)}
           />
 

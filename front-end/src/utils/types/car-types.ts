@@ -14,14 +14,14 @@ export interface CarSearch {
 }
 
 export type CarRsvFeatures =
-  | "airConditioned"
-  | "bluetooth"
-  | "smokeFree"
-  | "connectedCar";
-type CarRsvTransmission = "Automatic" | "Manual";
+  | "AIR_CONDITIONED"
+  | "BLUETOOTH"
+  | "SMOKE_FREE"
+  | "CONNECTED_CAR";
+type CarRsvTransmission = "AUTOMATIC" | "MANUAL";
 
 export interface CarRsv {
-  id: string;
+  idCarRental: number | null;
   name: string;
   features: CarRsvFeatures[];
   seats: number;
@@ -56,6 +56,7 @@ export interface CarFeatures {
   bluetooth_equipped: boolean;
   smoke_free: boolean;
   air_conditioned: boolean;
+  connected_car: boolean;
   [index: string]: boolean;
 }
 

@@ -18,11 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import static com.tripper.Tripper.data.specifications.FlightRepositorySpecs.*;
-import com.tripper.Tripper.models.FlightItinerary;
-import com.tripper.Tripper.models.FlightSegment;
-import com.tripper.Tripper.models.PlaceRelation;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/flight")
@@ -55,8 +50,7 @@ public class FlightController {
     public ResponseEntity<?> bookFlight(@RequestBody Flight flight, @RequestParam Long idPerson) {
         Person person = personRepo.findById(idPerson).orElseThrow(() -> new PersonNotFoundException(idPerson));
         flight.setPerson(person);
-
-        Flight.persistFlight(flight);
+        flight.setFlightChildren();
         flightRepo.save(flight);
 
         return ResponseEntity.accepted().body("Flight booked");

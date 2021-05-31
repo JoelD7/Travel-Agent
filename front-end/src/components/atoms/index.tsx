@@ -10,3 +10,4 @@ export { Text } from "./Text";
 export { AmenityIcon } from "./AmenityIcon";
 export { CustomTF } from "./CustomTF";
 export { IconTP } from "./IconTP/IconTP";
+export { FeatureIcons } from "./FeatureIcons";

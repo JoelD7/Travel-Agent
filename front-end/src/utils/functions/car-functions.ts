@@ -1,7 +1,18 @@
+import { parseISO } from "date-fns";
 import { Routes } from "..";
-import { CarReducer } from "../store";
-import { CarCheckbox, CarSearch } from "../types";
-import { getDefaultCarReducer } from "./functions";
+import { carRsvPlaceholder } from "../placeholders";
+import { CarReducer, store } from "../store";
+import {
+  Car,
+  CarCheckbox,
+  CarSearch,
+  CarRsv,
+  CarFeatures,
+  CarRsvFeatures,
+  Trip,
+  EventTypes,
+} from "../types";
+import { convertToCurrency, getDefaultCarReducer } from "./functions";
 
 export function convertCarReducerToURLParams(carReducer: CarReducer): string {
   let params: string[] = [];
@@ -66,6 +77,7 @@ export function convertURLToCarReducer(query: URLSearchParams): CarReducer {
   }
 
   carReducer = {
+    carRsv: carRsvPlaceholder[0],
     carSearch: {
       pickup_date: parameters.pickup_date,
       pickup_location: parameters.pickup_location,
@@ -100,4 +112,67 @@ export function featureVarToLabel(variable: string): string {
     default:
       return "";
   }
+}
+
+export function carToCarRsv(car: Car): CarRsv {
+  const carSearch: CarSearch = store.getState().carSlice.carSearch;
+
+  return {
+    idCarRental: null,
+    name: `${car.category.make} ${car.category.model}`,
+    cost: convertToCurrency(
+      car.rate_totals.pay_later.reservation_total,
+      car.rate_totals.rate.currency,
+      "USD"
+    ),
+    doors: Number(car.capacity.doors),
+    seats: Number(car.capacity.seats),
+    pickupDate: parseISO(carSearch.pickup_date),
+    dropoffDate: parseISO(carSearch.dropoff_date),
+    location: carSearch.pickup_location,
+    features: featuresToCarRsvFeatures(car.features),
+    image: car.category.image_url,
+    mpg: car.category.mpg,
+    transmission:
+      car.category.vehicle_transmission === "Automatic" ? "AUTOMATIC" : "MANUAL",
+  };
+}
+
+function featuresToCarRsvFeatures(features: CarFeatures): CarRsvFeatures[] {
+  let rsvFeatures: CarRsvFeatures[] = [];
+
+  if (features.air_conditioned) {
+    rsvFeatures.push("AIR_CONDITIONED");
+  }
+
+  if (features.bluetooth_equipped) {
+    rsvFeatures.push("BLUETOOTH");
+  }
+
+  if (features.smoke_free) {
+    rsvFeatures.push("SMOKE_FREE");
+  }
+
+  if (features.connected_car) {
+    rsvFeatures.push("CONNECTED_CAR");
+  }
+
+  return rsvFeatures;
+}
+
+export function isCarRsvInTrip(carRsv: CarRsv, trip: Trip) {
+  let included: boolean = false;
+
+  if (trip.itinerary) {
+    trip.itinerary
+      .filter((event) => event.type === EventTypes.CAR_RENTAL)
+      .forEach((event) => {
+        if (event.carRental && event.carRental.idCarRental === carRsv.idCarRental) {
+          included = true;
+          return;
+        }
+      });
+  }
+
+  return included;
 }

@@ -62,6 +62,7 @@ import {
   setDestinationCity,
   setFlightTo,
   setFlightToAutocomplete,
+  carRsvPlaceholder,
 } from "../../utils";
 import { carRentalStyles } from "./carRental-styles";
 
@@ -515,6 +516,7 @@ export function CarRental() {
     //In this case, the brands in the URL should be deleted.
     if (hasTheCityChanged()) {
       carReducer = {
+        carRsv: carRsvPlaceholder[0],
         carSearch: updatedCarSearch,
         brands: [],
         features,
@@ -522,6 +524,7 @@ export function CarRental() {
       };
     } else {
       carReducer = {
+        carRsv: carRsvPlaceholder[0],
         carSearch: updatedCarSearch,
         brands,
         features,

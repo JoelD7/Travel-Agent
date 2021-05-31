@@ -11,12 +11,14 @@ import {
   HotelRsvDetail,
   IconText,
   Navbar,
+  RsvCars,
   RsvHotels,
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
 import {
   backend,
+  CarRsv,
   HotelReservation,
   hotelRsvPlaceholder,
   mapFlightToDomainType,
@@ -41,6 +43,7 @@ export function Reservations() {
   const userCurrency: string = useSelector(selectUserCurrency);
 
   const [hotelReservations, setHotelReservations] = useState<HotelReservation[]>([]);
+  const [carRentalReservations, setCarRentalReservations] = useState<CarRsv[]>([]);
 
   useEffect(() => {
     backend
@@ -140,6 +143,28 @@ export function Reservations() {
           {/* Hotels */}
           <Grid item xs={12}>
             <RsvHotels userCurrency={userCurrency} hotels={hotelReservations} />
+          </Grid>
+
+          {/* Cars title */}
+          <Grid item xs={12} style={{ marginTop: "30px" }}>
+            <Grid id="Cars" container>
+              <Text bold color={Colors.BLUE} component="h2">
+                Car rentals
+              </Text>
+              <CustomButton
+                style={{ paddingBottom: "0px" }}
+                iconColor="#7e7e7e"
+                backgroundColor="rgba(0,0,0,0)"
+                textColor="#7e7e7e"
+              >
+                See all
+              </CustomButton>
+            </Grid>
+          </Grid>
+
+          {/* Car rentals */}
+          <Grid item xs={12}>
+            <RsvCars cars={carRentalReservations} />
           </Grid>
         </Grid>
       </Grid>

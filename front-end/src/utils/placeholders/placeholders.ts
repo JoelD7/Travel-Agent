@@ -3603,6 +3603,7 @@ export const carsPlaceholder: Car[] = [
       bluetooth_equipped: false,
       smoke_free: true,
       air_conditioned: true,
+      connected_car: false,
     },
     capacity: {
       doors: "4",
@@ -3632,6 +3633,7 @@ export const carsPlaceholder: Car[] = [
       bluetooth_equipped: false,
       smoke_free: true,
       air_conditioned: true,
+      connected_car: false,
     },
     capacity: {
       doors: "4",
@@ -3660,6 +3662,7 @@ export const carsPlaceholder: Car[] = [
     features: {
       bluetooth_equipped: false,
       smoke_free: true,
+      connected_car: false,
       air_conditioned: true,
     },
     capacity: {
@@ -3689,6 +3692,7 @@ export const carsPlaceholder: Car[] = [
     features: {
       smoke_free: true,
       bluetooth_equipped: false,
+      connected_car: false,
       air_conditioned: true,
     },
     capacity: {
@@ -3717,6 +3721,7 @@ export const carsPlaceholder: Car[] = [
     },
     features: {
       bluetooth_equipped: false,
+      connected_car: false,
       air_conditioned: true,
       smoke_free: true,
     },
@@ -3747,6 +3752,7 @@ export const carsPlaceholder: Car[] = [
     features: {
       bluetooth_equipped: false,
       smoke_free: true,
+      connected_car: false,
       air_conditioned: true,
     },
     capacity: {
@@ -3775,6 +3781,7 @@ export const carsPlaceholder: Car[] = [
     },
     features: {
       bluetooth_equipped: false,
+      connected_car: false,
       air_conditioned: true,
       smoke_free: true,
     },
@@ -3803,6 +3810,7 @@ export const carsPlaceholder: Car[] = [
         "https://www.avis.com/content/dam/cars/l/2021/volkswagen/2021-volkswagen-passat-se-sedan-black.png",
     },
     features: {
+      connected_car: false,
       bluetooth_equipped: false,
       smoke_free: true,
       air_conditioned: true,
@@ -3833,6 +3841,7 @@ export const carsPlaceholder: Car[] = [
     },
     features: {
       smoke_free: true,
+      connected_car: false,
       bluetooth_equipped: false,
       air_conditioned: true,
     },
@@ -3861,6 +3870,7 @@ export const carsPlaceholder: Car[] = [
         "https://www.avis.com/content/dam/cars/l/2020/ford/2020-ford-expedition-xlt-suv-black.png",
     },
     features: {
+      connected_car: false,
       bluetooth_equipped: false,
       smoke_free: true,
       air_conditioned: true,
@@ -3892,6 +3902,7 @@ export const carsPlaceholder: Car[] = [
     features: {
       bluetooth_equipped: false,
       smoke_free: true,
+      connected_car: false,
       air_conditioned: true,
     },
     capacity: {
@@ -3920,6 +3931,7 @@ export const carsPlaceholder: Car[] = [
     },
     features: {
       bluetooth_equipped: false,
+      connected_car: false,
       smoke_free: true,
       air_conditioned: true,
     },
@@ -3950,6 +3962,7 @@ export const carsPlaceholder: Car[] = [
     features: {
       bluetooth_equipped: false,
       air_conditioned: true,
+      connected_car: false,
       smoke_free: true,
     },
     capacity: {
@@ -3980,6 +3993,7 @@ export const carsPlaceholder: Car[] = [
       bluetooth_equipped: false,
       smoke_free: true,
       air_conditioned: true,
+      connected_car: false,
     },
     capacity: {
       doors: "4",
@@ -4008,6 +4022,7 @@ export const carsPlaceholder: Car[] = [
     features: {
       bluetooth_equipped: false,
       smoke_free: true,
+      connected_car: false,
       air_conditioned: true,
     },
     capacity: {
@@ -4028,8 +4043,8 @@ export const carsPlaceholder: Car[] = [
 export const carRsvPlaceholder: CarRsv[] = [
   {
     name: "Toyota Corolla",
-    id: "aszza",
-    features: ["smokeFree", "airConditioned"],
+    idCarRental: 12,
+    features: ["AIR_CONDITIONED", "BLUETOOTH"],
     cost: 285,
     doors: 3,
     seats: 4,
@@ -4039,12 +4054,12 @@ export const carRsvPlaceholder: CarRsv[] = [
     dropoffDate: new Date(),
     location: "St Paul Intl Airport, Minnesota, United States",
     mpg: "25/33",
-    transmission: "Automatic",
+    transmission: "AUTOMATIC",
   },
   {
     name: "Kia Sorento",
-    id: "asa",
-    features: ["smokeFree", "airConditioned"],
+    idCarRental: 111,
+    features: ["AIR_CONDITIONED", "BLUETOOTH"],
     cost: 285,
     doors: 3,
     seats: 4,
@@ -4054,6 +4069,6 @@ export const carRsvPlaceholder: CarRsv[] = [
     dropoffDate: new Date(),
     location: "St Paul Intl Airport, Minnesota, United States",
     mpg: "21/28",
-    transmission: "Automatic",
+    transmission: "AUTOMATIC",
   },
 ];

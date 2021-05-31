@@ -1,20 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addDays, format } from "date-fns";
-import {
-  getDefaultCarReducer,
-  getDefaultCity,
-  getISOCodeFromCountry,
-} from "../functions";
-import { CarCheckbox, CarSearch, IATALocation } from "../types";
+import { getDefaultCarReducer } from "../functions";
+import { CarCheckbox, CarRsv, CarSearch } from "../types";
 
 export interface CarReducer {
   carSearch: CarSearch;
+  carRsv: CarRsv;
   brands: CarCheckbox[];
   transmission: string;
   features: CarCheckbox[];
 }
-
-const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
 
 const initialState: CarReducer = getDefaultCarReducer();
 
@@ -24,6 +18,10 @@ const carSlice = createSlice({
   reducers: {
     setCarSearch(state, action: PayloadAction<CarSearch>) {
       state.carSearch = action.payload;
+    },
+
+    setCarRsv(state, action: PayloadAction<CarRsv>) {
+      state.carRsv = action.payload;
     },
 
     setCarSearchBrands(state, action: PayloadAction<CarCheckbox[]>) {
@@ -44,6 +42,7 @@ export const {
   setCarSearch,
   setCarSearchBrands,
   setCarSearchFeatures,
+  setCarRsv,
   setCarSearchTransmission,
 } = carSlice.actions;
 export default carSlice.reducer;
