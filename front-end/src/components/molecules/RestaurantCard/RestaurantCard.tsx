@@ -8,7 +8,7 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Colors } from "../../../styles";
 import { getLinkStyle, Routes } from "../../../utils";
-import { getRestaurantCategoriesList } from "../../../utils/functions/restaurant";
+import { getRestaurantCategoriesList } from "../../../utils/functions/restaurant-functions";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
 import { restaurantCardStyles } from "./restaurantCard-styles";
 

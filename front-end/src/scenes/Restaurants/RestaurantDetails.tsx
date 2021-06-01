@@ -13,6 +13,7 @@ import { Grid, IconButton, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Font } from "../../assets";
 import {
@@ -31,9 +32,16 @@ import { Colors, Shadow } from "../../styles";
 import {
   EventTypes,
   getRestaurantCategoriesList,
+  isRestaurantInAnyTrip,
   getRestaurantHours,
   getRestaurantTransactions,
   restaurantPlaceholder,
+  TripEvent,
+  backend,
+  deleteTripEventFromStore,
+  tripEventPlaceholder,
+  selectUserTrips,
+  Trip,
 } from "../../utils";
 import { fetchRestaurant } from "../../utils/external-apis/yelp-apis";
 import { restaurantDetailsStyles } from "./restaurantDetails-styles";
@@ -48,9 +56,11 @@ export function RestaurantDetails() {
 
   const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
   const [openPopover, setOpenPopover] = useState(false);
-
   const [openSnack, setOpenSnack] = useState(false);
   const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
+  const [removedSnackText, setRemovedSnackText] = useState("");
+
+  const userTrips: Trip[] = useSelector(selectUserTrips);
 
   useEffect(() => {
     fetchRestaurant(id)
@@ -76,6 +86,43 @@ export function RestaurantDetails() {
         setOpenSnackRemoved(true);
       }
     }
+  }
+
+  function deleteFromTrip() {
+    setRemovedSnackText("Deleted from trip");
+
+    let tripEvent: TripEvent = getTripEventOfRestaurant();
+
+    if (tripEvent.idEvent) {
+      backend
+        .delete(`/trip-event/delete/${tripEvent.idEvent}`)
+        .then((res) => {
+          setOpenSnackRemoved(true);
+          deleteTripEventFromStore(tripEvent.idEvent);
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
+  function getTripEventOfRestaurant(): TripEvent {
+    let tripEvent: TripEvent = tripEventPlaceholder;
+
+    userTrips.forEach((trip) => {
+      if (trip.itinerary) {
+        trip.itinerary.forEach((event) => {
+          if (event.restaurant && event.restaurant.id === restaurant.id) {
+            tripEvent = event;
+            return;
+          }
+        });
+      }
+
+      if (tripEvent) {
+        return;
+      }
+    });
+
+    return tripEvent;
   }
 
   return (
@@ -119,14 +166,25 @@ export function RestaurantDetails() {
 
             <Grid item className={style.tripButtonGrid}>
               <Grid container>
-                <CustomButton
-                  style={{ boxShadow: Shadow.LIGHT }}
-                  onClick={(e) => onIncludeTripClick(e)}
-                  backgroundColor={Colors.GREEN}
-                  rounded
-                >
-                  Include in trip
-                </CustomButton>
+                {isRestaurantInAnyTrip(restaurant) ? (
+                  <CustomButton
+                    style={{ boxShadow: Shadow.LIGHT }}
+                    onClick={() => deleteFromTrip()}
+                    backgroundColor={Colors.RED}
+                    rounded
+                  >
+                    Delete from trip
+                  </CustomButton>
+                ) : (
+                  <CustomButton
+                    style={{ boxShadow: Shadow.LIGHT }}
+                    onClick={(e) => onIncludeTripClick(e)}
+                    backgroundColor={Colors.GREEN}
+                    rounded
+                  >
+                    Include in trip
+                  </CustomButton>
+                )}
 
                 <IconButton
                   style={{ margin: "auto 0px auto 10px" }}
@@ -273,6 +331,7 @@ export function RestaurantDetails() {
         </Alert>
       </Snackbar>
 
+      {/* Removed from favorites or trip*/}
       <Snackbar
         open={openSnackRemoved}
         autoHideDuration={6000}
@@ -285,7 +344,7 @@ export function RestaurantDetails() {
           onClose={() => setOpenSnackRemoved(false)}
           severity="error"
         >
-          {"Removed from favorites."}
+          {removedSnackText}
         </Alert>
       </Snackbar>
     </div>

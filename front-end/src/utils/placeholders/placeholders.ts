@@ -199,23 +199,23 @@ export const restaurantsPlaceholder: RestaurantSearch[] = [
 export const rsvRestaurantsPlaceholder: RsvRestaurant[] = [
   {
     id: "asjdf9",
+    idRestaurant: 12,
     name: "Hazelwood Food and Drinks",
     imageUrl: "/Travel-Agent/restaurant.jpg",
     rating: 4,
     displayAddress: "Park Av 188, New York",
-    favorite: true,
-    visitDate: new Date(),
+    visitDate: new Date().toISOString(),
     cuisines: "American (Traditional), Pizza, Seafood",
   },
   {
     id: "asf9",
+    idRestaurant: 121,
     name: "Robertson’s burger",
     imageUrl: "/Travel-Agent/restaurant.jpg",
     rating: 5,
     displayAddress: "Mike Dawson Lane, Wichita, Arksansas",
-    favorite: false,
     cuisines: "Burgers, Seafood",
-    visitDate: new Date(2021, 8, 15, 10, 30),
+    visitDate: new Date(2021, 8, 15, 10, 30).toISOString(),
   },
 ];
 

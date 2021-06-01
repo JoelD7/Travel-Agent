@@ -792,3 +792,17 @@ export function b64toBlob(b64Data: any, contentType = "", sliceSize = 512) {
   const blob = new Blob(byteArrays, { type: contentType });
   return blob;
 }
+
+/**
+ * Returns a date in ISO format with the current locale applied.
+ * This solves the problem of the default toISOString() method
+ * always returning the datetime in the GMT+0 timezone.
+ * @param date
+ * @returns
+ */
+export function getISODatetimeWithOffset(date: Date): string {
+  let tzoffset = new Date().getTimezoneOffset() * 60000;
+  let localISOTime = new Date(date.valueOf() - tzoffset).toISOString();
+
+  return localISOTime;
+}

@@ -20,7 +20,7 @@ import Rating from "react-rating";
 import {
   getRestaurantCategoriesList,
   getRestaurantTransactions,
-} from "../../../utils/functions/restaurant";
+} from "../../../utils/functions/restaurant-functions";
 
 interface RestaurantSlides {
   restaurants: RestaurantSearch[];

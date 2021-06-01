@@ -54,8 +54,9 @@ public class TripEvent {
     @JsonBackReference(value = "tripReference")
     private Trip trip;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event")
     @JoinColumn(name = "idEvent")
+    @JsonManagedReference(value = "restaurantReference")
     private Restaurant restaurant;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "event")
@@ -72,7 +73,7 @@ public class TripEvent {
     @JsonManagedReference(value = "hotelReference")
     private HotelReservation hotelReservation;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event")
     @JoinColumn(name = "idEvent")
     @JsonManagedReference(value = "poiReference")
     private POI poi;

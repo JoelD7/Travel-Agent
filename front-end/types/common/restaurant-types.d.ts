@@ -4,14 +4,14 @@
  * be used by the database.
  */
 interface RsvRestaurant {
+  idRestaurant: number | null;
   id: string;
   name: string;
   imageUrl: string;
   rating: number;
   displayAddress: string;
   cuisines: string;
-  visitDate: Date;
-  favorite: boolean;
+  visitDate: string;
 }
 
 interface Restaurant {

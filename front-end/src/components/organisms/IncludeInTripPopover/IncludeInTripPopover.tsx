@@ -44,6 +44,8 @@ import {
   Routes,
   selectCarRsv,
   HotelBookingParams,
+  getRestaurantDTO,
+  getISODatetimeWithOffset,
 } from "../../../utils";
 import { setUserTrips } from "../../../utils/store/trip-slice";
 import { IconText, Text } from "../../atoms";
@@ -201,7 +203,6 @@ export function IncludeInTripPopover({
   const userTrips: Trip[] = useSelector(selectUserTrips);
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
   const carRsv: CarRsv = useSelector(selectCarRsv);
-  const carSearch: CarSearch = useSelector(selectCarSearch);
   const hotelReservationParams: HotelBookingParams = useSelector(
     selectHotelReservationParams
   );
@@ -253,6 +254,9 @@ export function IncludeInTripPopover({
       case EventTypes.CAR_RENTAL:
         start = parseISO(carRsv.pickupDate);
         end = parseISO(carRsv.dropoffDate);
+        break;
+
+      default:
         break;
     }
 
@@ -374,6 +378,7 @@ export function IncludeInTripPopover({
         break;
 
       case EventTypes.RESTAURANT:
+        tripEventDTO = getRestaurantTripEventDTO();
         break;
 
       default:
@@ -426,6 +431,28 @@ export function IncludeInTripPopover({
       carRental: carRsv,
       includesTime: true,
     };
+  }
+
+  function getRestaurantTripEventDTO() {
+    let restaurant: Restaurant = place as Restaurant;
+    let restaurantRsv: RsvRestaurant = getRestaurantDTO(
+      restaurant,
+      datetimePopover.start
+    );
+
+    return {
+      name: `Visit to ${restaurantRsv.name}`,
+      location: restaurantRsv.displayAddress,
+      type: EventTypes.RESTAURANT,
+      start: getISODatetimeWithOffset(datetimePopover.start),
+      end: getISODatetimeWithOffset(datetimePopover.end),
+      restaurant: restaurantRsv,
+      includesTime: true,
+    };
+  }
+
+  function areDatesEditable(): boolean {
+    return eventType === EventTypes.RESTAURANT || eventType === EventTypes.POI;
   }
 
   return (
@@ -490,7 +517,7 @@ export function IncludeInTripPopover({
                   {/* Select */}
                   <Grid item className={style.selectGrid}>
                     <KeyboardDateTimePicker
-                      disabled
+                      disabled={!areDatesEditable()}
                       value={datetimePopover[param.variable]}
                       labelFunc={(date, invalidLabel) =>
                         muiDateFormatter(date, invalidLabel, "datetime")

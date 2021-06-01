@@ -1,5 +1,7 @@
 import { Routes } from "..";
-import { capitalizeString } from "./functions";
+import { store } from "../store";
+import { EventTypes, Trip } from "../types";
+import { capitalizeString, getISODatetimeWithOffset } from "./functions";
 
 export function getRestaurantCategoriesList(
   restaurant: Restaurant | RestaurantSearch
@@ -174,4 +176,37 @@ export function sortCuisines(unsortedCuisines: RestaurantCuisine[]): RestaurantC
 
 export function getRestaurantsDefaultRoute(): string {
   return `${Routes.RESTAURANTS}?page=${1}&pageSize=${20}`;
+}
+
+export function getRestaurantDTO(restaurant: Restaurant, visitDate: Date): RsvRestaurant {
+  return {
+    idRestaurant: null,
+    name: restaurant.name,
+    imageUrl: restaurant.image_url,
+    id: restaurant.id,
+    rating: restaurant.rating,
+    displayAddress: restaurant.location.display_address.join(", "),
+    cuisines: getRestaurantCategoriesList(restaurant),
+    visitDate: getISODatetimeWithOffset(visitDate),
+  };
+}
+
+export function isRestaurantInAnyTrip(restaurant: Restaurant): boolean {
+  const userTrips: Trip[] = store.getState().tripSlice.userTrips;
+  let included: boolean = false;
+
+  userTrips.forEach((trip) => {
+    if (trip.itinerary) {
+      trip.itinerary
+        .filter((event) => event.type === EventTypes.RESTAURANT)
+        .forEach((event) => {
+          if (event.restaurant && event.restaurant.id === restaurant.id) {
+            included = true;
+            return;
+          }
+        });
+    }
+  });
+
+  return included;
 }

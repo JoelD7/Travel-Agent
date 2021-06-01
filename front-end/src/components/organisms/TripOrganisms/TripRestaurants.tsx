@@ -13,7 +13,7 @@ import {
   CardMedia,
   Grid,
 } from "@material-ui/core";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import React from "react";
 import { Colors, Shadow } from "../../../styles";
 import { rsvRestaurantsPlaceholder } from "../../../utils";
@@ -73,7 +73,7 @@ export const TripRestaurants = React.memo(function TripRestaurants({
                 </IconText>
 
                 <IconText icon={faCalendar}>
-                  {format(restaurant.visitDate, "dd/MM/yyyy 'at' HH:mm")}
+                  {format(parseISO(restaurant.visitDate), "dd/MM/yyyy 'at' HH:mm")}
                 </IconText>
 
                 <IconText icon={faMapMarkerAlt}>{restaurant.displayAddress}</IconText>

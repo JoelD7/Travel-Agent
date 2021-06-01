@@ -1,12 +1,12 @@
 import {
   faCalendar,
-  faTimes,
   faChair,
+  faCogs,
+  faDollarSign,
   faDoorClosed,
   faGasPump,
   faMapMarkerAlt,
-  faDollarSign,
-  faCogs,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,30 +19,27 @@ import {
   Theme,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import { AxiosResponse } from "axios";
 import { format, parseISO } from "date-fns";
 import React, { MouseEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
 import {
+  backend,
+  capitalizeString,
   CarRsv,
   convertToUserCurrency,
-  formatAsCurrency,
-  Trip,
-  selectUserTrips,
-  isCarRsvInTrip,
-  capitalizeString,
+  deleteTripEventFromStore,
   EventTypes,
-  backend,
+  formatAsCurrency,
+  isCarRsvInTrip,
+  selectCarReservations,
   selectCarRsv,
+  selectUserTrips,
+  setCarReservations,
+  Trip,
   TripEvent,
   tripEventPlaceholder,
-  responseTripToDomainTrip,
-  setUserTrips,
-  selectCarReservations,
-  setCarReservations,
-  deleteTripEventFromStore,
 } from "../../utils";
 import { CustomButton, FeatureIcons, IconText, Text } from "../atoms";
 import { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopover";
@@ -121,9 +118,6 @@ export function CarRsvDetails({ open, onClose }: CarRsvDetailsProps) {
       backend
         .delete(`/trip-event/delete/${tripEvent.idEvent}`)
         .then((res) => {
-          //Trip without the deleted event in its itinerary.
-          let updatedEventsTrip: Trip = responseTripToDomainTrip(res.data);
-
           setOpenRemovedSnack(true);
           deleteTripEventFromStore(tripEvent.idEvent);
 

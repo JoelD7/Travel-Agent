@@ -10,7 +10,9 @@ import com.tripper.Tripper.exceptions.HotelReservationNotFoundException;
 import com.tripper.Tripper.models.CarRental;
 import com.tripper.Tripper.models.Flight;
 import com.tripper.Tripper.models.HotelReservation;
+import com.tripper.Tripper.models.POI;
 import com.tripper.Tripper.models.Person;
+import com.tripper.Tripper.models.Restaurant;
 import com.tripper.Tripper.models.Trip;
 import com.tripper.Tripper.models.TripEvent;
 import com.tripper.Tripper.models.enums.TripEventType;
@@ -69,11 +71,11 @@ public class TripEventServiceImpl implements TripEventService {
                 break;
 
             case POI:
-                newEvent.setPoi(eventDTO.getPoi());
+                addPOIEvent(newEvent, eventDTO);
                 break;
 
             case RESTAURANT:
-                newEvent.setRestaurant(eventDTO.getRestaurant());
+                addRestaurantEvent(newEvent, eventDTO);
                 break;
 
             default:
@@ -126,6 +128,16 @@ public class TripEventServiceImpl implements TripEventService {
                     .orElseThrow(() -> new HotelReservationNotFoundException(idHotelReservation));
             hotelReservation.setTripEvent(newEvent);
         }
+    }
+
+    private void addRestaurantEvent(TripEvent newEvent, TripEvent eventDTO) {
+        Restaurant restaurant = eventDTO.getRestaurant();
+        restaurant.setTripEvent(newEvent);
+    }
+
+    private void addPOIEvent(TripEvent newEvent, TripEvent eventDTO) {
+        POI poi = eventDTO.getPoi();
+        poi.setTripEvent(newEvent);
     }
 
 }
