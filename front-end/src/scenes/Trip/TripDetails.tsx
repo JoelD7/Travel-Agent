@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Direction, Grid, IconButton, useTheme } from "@material-ui/core";
 import React, { CSSProperties, ReactNode, useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import SwipeableViews from "react-swipeable-views";
 import { virtualize } from "react-swipeable-views-utils";
@@ -15,7 +15,7 @@ import {
   PicturesAndKeyDetails,
   RsvHotels,
   Text,
-  RsvCars,
+  ReservedCars,
   TripFlights,
   TripPOIs,
   TripRestaurants,
@@ -34,6 +34,7 @@ import {
   Trip,
   mapHotelDTOToDomainType,
   carRsvPlaceholder,
+  setCarReservations,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -55,6 +56,8 @@ export function TripDetails() {
   const { id } = useParams();
 
   const history = useHistory();
+  const dispatch = useDispatch();
+
   const VirtualizeSwipeableViews = virtualize(SwipeableViews);
   const userCurrency: string = useSelector(selectUserCurrency);
 
@@ -75,6 +78,13 @@ export function TripDetails() {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    if (trip) {
+      console.log("hey");
+      setTripCarRentals();
+    }
+  }, [trip]);
 
   function TabPanel({ children, index, value, dir }: TabPanel) {
     return (
@@ -148,7 +158,7 @@ export function TripDetails() {
     return pois;
   }
 
-  function getTripCarRentals(): CarRsv[] {
+  function setTripCarRentals() {
     let cars: CarRsv[] = [];
 
     if (trip && trip.itinerary) {
@@ -161,8 +171,7 @@ export function TripDetails() {
         });
     }
 
-    // return cars
-    return carRsvPlaceholder;
+    dispatch(setCarReservations(cars));
   }
 
   function TabViews(index: number, key: number) {
@@ -271,7 +280,7 @@ export function TripDetails() {
                     </CustomButton>
                   </Grid>
 
-                  <RsvCars cars={getTripCarRentals()} showAll={false} />
+                  <ReservedCars showAll={false} />
                 </Grid>
               </TabPanel>
             )}
@@ -372,7 +381,7 @@ export function TripDetails() {
                 >
                   Car rental
                 </Text>
-                <RsvCars cars={getTripCarRentals()} />
+                <ReservedCars />
               </TabPanel>
             )}
           </div>

@@ -170,7 +170,7 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
     },
   },
   mainContainer: {
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
     fontFamily: Font.Family,
   },
   pageContainer: {

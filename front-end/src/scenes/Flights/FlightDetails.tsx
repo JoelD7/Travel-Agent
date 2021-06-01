@@ -16,6 +16,7 @@ import {
   useMediaQuery,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
+import { format } from "date-fns";
 import React, { MouseEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Font } from "../../assets";
@@ -319,6 +320,18 @@ export function FlightDetails({
     return tripEventOfFlight;
   }
 
+  function getFlightDateRange() {
+    let firstDate: Date = new Date(flight.itineraries[0].segments[0].departure.at);
+
+    if (flight.itineraries.length > 1) {
+      let lastDate: Date = new Date(getLastSegment(flight.itineraries[1]).arrival.at);
+
+      return `${format(firstDate, "EEE, d/MMM")} - ${format(lastDate, "EEE, d/MMM")}`;
+    }
+
+    return format(firstDate, "EEE, d/MMM");
+  }
+
   return (
     <Dialog
       open={open}
@@ -357,17 +370,7 @@ export function FlightDetails({
         {/* Dates, flight params */}
         <Grid key="subtitle" item xs={12}>
           <Grid container alignItems="center">
-            {flight.itineraries.length > 1 ? (
-              <p className={style.subtitle}>{`${formatFlightDate(
-                flight,
-                "departure"
-              )} - ${formatFlightDate(flight, "departure", 1)}`}</p>
-            ) : (
-              <p className={style.subtitle}>{`${formatFlightDate(
-                flight,
-                "departure"
-              )}`}</p>
-            )}
+            <p className={style.subtitle}>{getFlightDateRange()}</p>
 
             <FontAwesomeIcon
               size="xs"
@@ -405,7 +408,7 @@ export function FlightDetails({
         {/* Include in trip */}
         {!isFlightIncludedInAnyTrip() && (
           <CustomButton
-            style={{ boxShadow: Shadow.LIGHT }}
+            style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
             onClick={(e) => onIncludeTripClick(e)}
             backgroundColor={Colors.GREEN}
             rounded
@@ -419,7 +422,7 @@ export function FlightDetails({
           <CustomButton
             rounded
             backgroundColor={Colors.RED}
-            style={{ boxShadow: Shadow.LIGHT3D }}
+            style={{ boxShadow: Shadow.LIGHT3D, fontSize: 14 }}
             onClick={() => deleteFlightFromTrip()}
           >
             Delete from trip

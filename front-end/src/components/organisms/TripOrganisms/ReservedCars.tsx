@@ -1,51 +1,31 @@
-import { IconDefinition } from "@fortawesome/fontawesome-common-types";
-import { faBluetooth } from "@fortawesome/free-brands-svg-icons";
+import { faChair, faDoorClosed } from "@fortawesome/free-solid-svg-icons";
 import {
-  faSnowflake,
-  faSmokingBan,
-  faDoorClosed,
-  faGlobe,
-  faChair,
-  faTimes,
-  faGasPump,
-  faCogs,
-  faCalendar,
-  faMapMarkerAlt,
-  faDollarSign,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Backdrop,
   Card,
   CardActionArea,
   CardContent,
-  CardMedia,
-  Dialog,
   Grid,
-  IconButton,
   makeStyles,
   Theme,
 } from "@material-ui/core";
-import { format } from "date-fns";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
 import {
   CarRsv,
-  carRsvPlaceholder,
-  CarRsvFeatures,
   convertToUserCurrency,
   formatAsCurrency,
+  selectCarReservations,
+  setCarRsv,
 } from "../../../utils";
-import { FeatureIcons, IconText, IconTP, Text } from "../../atoms";
+import { FeatureIcons, IconText, Text } from "../../atoms";
 import { NotCreatedMessage } from "../../molecules";
 import { CarRsvDetails } from "../CarRsvDetails";
 
 interface RsvCars {
   showAll?: boolean;
-  cars: CarRsv[];
 }
 
-export const RsvCars = React.memo(function TripCars({ showAll = true, cars }: RsvCars) {
+export const ReservedCars = React.memo(function TripCars({ showAll = true }: RsvCars) {
   const carsCardStyles = makeStyles((theme: Theme) => ({
     card: {
       borderRadius: "10px",
@@ -72,16 +52,18 @@ export const RsvCars = React.memo(function TripCars({ showAll = true, cars }: Rs
 
   const style = carsCardStyles();
 
-  const [carDetail, setCarDetail] = useState<CarRsv>(carRsvPlaceholder[0]);
-
   const [openDialog, setOpenDialog] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const carReservations: CarRsv[] = useSelector(selectCarReservations);
+
   function getCarsToShow(): CarRsv[] {
-    return showAll ? cars : cars.slice(0, 3);
+    return showAll ? carReservations : carReservations.slice(0, 3);
   }
 
-  function seeCarRentalDetails(car: CarRsv) {
-    setCarDetail(car);
+  function seeCarRentalDetails(carRsv: CarRsv) {
+    dispatch(setCarRsv(carRsv));
     setOpenDialog(true);
   }
 
@@ -123,11 +105,7 @@ export const RsvCars = React.memo(function TripCars({ showAll = true, cars }: Rs
       )}
 
       {/* Dialog */}
-      <CarRsvDetails
-        carDetail={carDetail}
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-      />
+      <CarRsvDetails open={openDialog} onClose={() => setOpenDialog(false)} />
     </Grid>
   );
 });

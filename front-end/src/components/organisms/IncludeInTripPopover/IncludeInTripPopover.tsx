@@ -23,9 +23,11 @@ import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
 import {
   backend,
+  CarSearch,
   CarRsv,
   EventTypes,
   getFlightDTO,
+  selectHotelReservationParams,
   getIataLocation,
   getLastSegment,
   HotelReservation,
@@ -33,12 +35,15 @@ import {
   mapFlightToDomainType,
   muiDateFormatter,
   responseTripToDomainTrip,
+  selectCarSearch,
   getHotelReservation,
   selectHotelRsv,
   selectUserTrips,
   setFlightDetail,
   Trip,
   Routes,
+  selectCarRsv,
+  HotelBookingParams,
 } from "../../../utils";
 import { setUserTrips } from "../../../utils/store/trip-slice";
 import { IconText, Text } from "../../atoms";
@@ -190,19 +195,23 @@ export function IncludeInTripPopover({
     },
   ];
 
-  const [datetimePopover, setDatetimePopover] = useState<{ [index: string]: Date }>(
-    getDates()
-  );
-
   const [openErrorSnack, setOpenErrorSnack] = useState(false);
   const [openSuccessSnack, setOpenSuccessSnack] = useState(false);
 
   const userTrips: Trip[] = useSelector(selectUserTrips);
+  const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
+  const carRsv: CarRsv = useSelector(selectCarRsv);
+  const carSearch: CarSearch = useSelector(selectCarSearch);
+  const hotelReservationParams: HotelBookingParams = useSelector(
+    selectHotelReservationParams
+  );
 
   const tripOptions: string[] = userTrips.map((trip) => trip.name);
   const [tripOption, setTripOption] = useState<string>(tripOptions[0]);
+  const [datetimePopover, setDatetimePopover] = useState<{ [index: string]: Date }>(
+    getDates()
+  );
 
-  const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -223,21 +232,34 @@ export function IncludeInTripPopover({
   }, []);
 
   function getDates() {
-    if (eventType === EventTypes.FLIGHT) {
-      let flight: Flight = place as Flight;
+    let start: Date = new Date();
+    let end: Date = addHours(new Date(), 1);
 
-      return {
-        start: parseISO(flight.itineraries[0].segments[0].departure.at),
-        end: parseISO(
+    switch (eventType) {
+      case EventTypes.FLIGHT:
+        let flight: Flight = place as Flight;
+
+        start = parseISO(flight.itineraries[0].segments[0].departure.at);
+        end = parseISO(
           getLastSegment(flight.itineraries[flight.itineraries.length - 1]).arrival.at
-        ),
-      };
-    } else {
-      return {
-        start: new Date(),
-        end: addHours(new Date(), 1),
-      };
+        );
+        break;
+
+      case EventTypes.HOTEL:
+        start = hotelReservationParams.stay.checkIn;
+        end = hotelReservationParams.stay.checkOut;
+        break;
+
+      case EventTypes.CAR_RENTAL:
+        start = parseISO(carRsv.pickupDate);
+        end = parseISO(carRsv.dropoffDate);
+        break;
     }
+
+    return {
+      start,
+      end,
+    };
   }
 
   function onPopoverClose() {
@@ -287,7 +309,10 @@ export function IncludeInTripPopover({
         onPopoverClose();
         setOpenSuccessSnack(true);
 
-        if (newEvent.type === EventTypes.HOTEL) {
+        if (
+          newEvent.type === EventTypes.HOTEL ||
+          newEvent.type === EventTypes.CAR_RENTAL
+        ) {
           setTimeout(() => {
             redirectToTripDetail(selectedTrip);
           }, 1000);
@@ -334,6 +359,7 @@ export function IncludeInTripPopover({
 
     switch (eventType) {
       case EventTypes.CAR_RENTAL:
+        tripEventDTO = getCarRentalTripEventDTO();
         break;
 
       case EventTypes.FLIGHT:
@@ -371,8 +397,8 @@ export function IncludeInTripPopover({
       name: destination ? `Flight to ${destination.city}` : "Flight",
       location: destination ? `${destination.city}` : "",
       type: EventTypes.FLIGHT,
-      start: datetimePopover.start,
-      end: datetimePopover.end,
+      start: datetimePopover.start.toISOString(),
+      end: datetimePopover.end.toISOString(),
       flight: getFlightDTO(flight),
       includesTime: false,
     };
@@ -383,10 +409,22 @@ export function IncludeInTripPopover({
       name: `Check in at hotel ${hotelRsv.name}`,
       location: hotelRsv.address,
       type: EventTypes.HOTEL,
-      start: datetimePopover.start,
-      end: datetimePopover.end,
+      start: datetimePopover.start.toISOString(),
+      end: datetimePopover.end.toISOString(),
       hotelReservation: hotelRsv,
       includesTime: false,
+    };
+  }
+
+  function getCarRentalTripEventDTO() {
+    return {
+      name: `Car rental | ${carRsv.name}`,
+      location: carRsv.location,
+      type: EventTypes.CAR_RENTAL,
+      start: datetimePopover.start.toISOString(),
+      end: datetimePopover.end.toISOString(),
+      carRental: carRsv,
+      includesTime: true,
     };
   }
 
@@ -452,6 +490,7 @@ export function IncludeInTripPopover({
                   {/* Select */}
                   <Grid item className={style.selectGrid}>
                     <KeyboardDateTimePicker
+                      disabled
                       value={datetimePopover[param.variable]}
                       labelFunc={(date, invalidLabel) =>
                         muiDateFormatter(date, invalidLabel, "datetime")

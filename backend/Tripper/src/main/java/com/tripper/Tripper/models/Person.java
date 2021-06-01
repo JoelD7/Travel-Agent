@@ -41,7 +41,7 @@ public class Person implements Serializable {
     private List<Flight> flights = new ArrayList<>();
 
     @OneToMany(mappedBy = "person")
-    @JsonManagedReference(value = "carRentalReference")
+//    @JsonManagedReference(value = "carRentalReference")
     private List<CarRental> carRentals = new ArrayList<>();
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)

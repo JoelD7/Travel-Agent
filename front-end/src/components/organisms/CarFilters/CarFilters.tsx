@@ -102,6 +102,7 @@ export function CarFilters() {
 
     let urlParams = convertCarReducerToURLParams({
       carRsv: carRsvPlaceholder[0],
+      carReservations: [],
       carSearch,
       brands,
       features,

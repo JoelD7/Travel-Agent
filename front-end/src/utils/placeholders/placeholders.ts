@@ -4050,8 +4050,8 @@ export const carRsvPlaceholder: CarRsv[] = [
     seats: 4,
     image:
       "https://www.avis.com/content/dam/cars/l/2020/toyota/2020-toyota-corolla-le-sedan-grey.png",
-    pickupDate: new Date(),
-    dropoffDate: new Date(),
+    pickupDate: new Date().toISOString(),
+    dropoffDate: new Date().toISOString(),
     location: "St Paul Intl Airport, Minnesota, United States",
     mpg: "25/33",
     transmission: "AUTOMATIC",
@@ -4065,8 +4065,8 @@ export const carRsvPlaceholder: CarRsv[] = [
     seats: 4,
     image:
       "https://www.avis.com/content/dam/cars/l/2019/ford/2019-ford-fiesta-se-5door-2wd-hatchback-grey.png",
-    pickupDate: new Date(),
-    dropoffDate: new Date(),
+    pickupDate: new Date().toISOString(),
+    dropoffDate: new Date().toISOString(),
     location: "St Paul Intl Airport, Minnesota, United States",
     mpg: "21/28",
     transmission: "AUTOMATIC",

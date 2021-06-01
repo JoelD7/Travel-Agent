@@ -5,6 +5,7 @@ import { CarCheckbox, CarRsv, CarSearch } from "../types";
 export interface CarReducer {
   carSearch: CarSearch;
   carRsv: CarRsv;
+  carReservations: CarRsv[];
   brands: CarCheckbox[];
   transmission: string;
   features: CarCheckbox[];
@@ -22,6 +23,10 @@ const carSlice = createSlice({
 
     setCarRsv(state, action: PayloadAction<CarRsv>) {
       state.carRsv = action.payload;
+    },
+
+    setCarReservations(state, action: PayloadAction<CarRsv[]>) {
+      state.carReservations = action.payload;
     },
 
     setCarSearchBrands(state, action: PayloadAction<CarCheckbox[]>) {
@@ -43,6 +48,7 @@ export const {
   setCarSearchBrands,
   setCarSearchFeatures,
   setCarRsv,
+  setCarReservations,
   setCarSearchTransmission,
 } = carSlice.actions;
 export default carSlice.reducer;

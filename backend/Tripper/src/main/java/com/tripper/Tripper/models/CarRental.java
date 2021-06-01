@@ -1,11 +1,13 @@
 package com.tripper.Tripper.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tripper.Tripper.models.enums.CarFeatures;
 import com.tripper.Tripper.models.enums.CarTransmission;
 import com.tripper.Tripper.utils.CarFeaturesSetConverter;
 import java.sql.Blob;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +40,7 @@ public class CarRental {
 
     @ManyToOne
     @JoinColumn(name = "idPerson")
-    @JsonBackReference(value = "carRentalReference")
+    @JsonIgnore
     private Person person;
 
     @OneToOne
@@ -57,9 +59,10 @@ public class CarRental {
     private Integer doors;
     private Double cost;
     private String image;
-    private LocalDate pickupDate;
-    private LocalDate dropoffDate;
+    private LocalDateTime pickupDate;
+    private LocalDateTime dropoffDate;
     private String location;
+
     @Enumerated(EnumType.STRING)
     private CarTransmission transmission;
     private String mpg;

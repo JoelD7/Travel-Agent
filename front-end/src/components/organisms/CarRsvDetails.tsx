@@ -9,11 +9,22 @@ import {
   faCogs,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Backdrop, Dialog, Grid, IconButton, makeStyles, Theme } from "@material-ui/core";
-import { format } from "date-fns";
-import React from "react";
-import { useSelector } from "react-redux";
-import { Colors } from "../../styles";
+import {
+  Backdrop,
+  Dialog,
+  Grid,
+  IconButton,
+  makeStyles,
+  Snackbar,
+  Theme,
+} from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import { AxiosResponse } from "axios";
+import { format, parseISO } from "date-fns";
+import React, { MouseEvent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Font } from "../../assets";
+import { Colors, Shadow } from "../../styles";
 import {
   CarRsv,
   convertToUserCurrency,
@@ -21,16 +32,27 @@ import {
   Trip,
   selectUserTrips,
   isCarRsvInTrip,
+  capitalizeString,
+  EventTypes,
+  backend,
+  selectCarRsv,
+  TripEvent,
+  tripEventPlaceholder,
+  responseTripToDomainTrip,
+  setUserTrips,
+  selectCarReservations,
+  setCarReservations,
+  deleteTripEventFromStore,
 } from "../../utils";
-import { FeatureIcons, IconText, Text } from "../atoms";
+import { CustomButton, FeatureIcons, IconText, Text } from "../atoms";
+import { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopover";
 
 interface CarRsvDetailsProps {
-  carDetail: CarRsv;
   open: boolean;
   onClose: () => void;
 }
 
-export function CarRsvDetails({ carDetail, open, onClose }: CarRsvDetailsProps) {
+export function CarRsvDetails({ open, onClose }: CarRsvDetailsProps) {
   const carRsvDetailsStyles = makeStyles((theme: Theme) => ({
     backdrop: {
       backdropFilter: "blur(4px)",
@@ -64,16 +86,97 @@ export function CarRsvDetails({ carDetail, open, onClose }: CarRsvDetailsProps) 
 
   const style = carRsvDetailsStyles();
   const userTrips: Trip[] = useSelector(selectUserTrips);
+  const carRsv: CarRsv = useSelector(selectCarRsv);
+  const carReservations: CarRsv[] = useSelector(selectCarReservations);
+
+  const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
+  const [openPopover, setOpenPopover] = useState(false);
+  const [openRemovedSnack, setOpenRemovedSnack] = useState(false);
+  const [snackbarText, setSnackbarText] = useState("");
+
+  const dispatch = useDispatch();
 
   function isCarRsvInAnyTrip(): boolean {
     let included: boolean = false;
     userTrips.forEach((trip) => {
-      if (isCarRsvInTrip(carDetail, trip)) {
+      if (isCarRsvInTrip(carRsv, trip)) {
         included = true;
         return;
       }
     });
     return included;
+  }
+
+  function onIncludeInTripOpen(event: MouseEvent<HTMLButtonElement>) {
+    setTripAnchor(event.currentTarget);
+    setOpenPopover(true);
+  }
+
+  function deleteCarRentalFromTrip() {
+    setSnackbarText("Deleted from trip");
+
+    let tripEvent: TripEvent = getTripEventOfCarRental();
+
+    if (tripEvent.idEvent) {
+      backend
+        .delete(`/trip-event/delete/${tripEvent.idEvent}`)
+        .then((res) => {
+          //Trip without the deleted event in its itinerary.
+          let updatedEventsTrip: Trip = responseTripToDomainTrip(res.data);
+
+          setOpenRemovedSnack(true);
+          deleteTripEventFromStore(tripEvent.idEvent);
+
+          deleteCarRsvFromStore();
+
+          setTimeout(() => {
+            onClose();
+          }, 1000);
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
+  function deleteCarRsvFromStore() {
+    const newCarReservations: CarRsv[] = carReservations.filter(
+      (carRental) => carRental.idCarRental !== carRsv.idCarRental
+    );
+    dispatch(setCarReservations(newCarReservations));
+  }
+
+  function getTripEventOfCarRental(): TripEvent {
+    let tripEvent: TripEvent = tripEventPlaceholder;
+
+    userTrips.forEach((trip) => {
+      if (trip.itinerary) {
+        trip.itinerary.forEach((event) => {
+          if (event.carRental && event.carRental.idCarRental === carRsv.idCarRental) {
+            tripEvent = event;
+            return;
+          }
+        });
+      }
+
+      if (tripEvent) {
+        return;
+      }
+    });
+
+    return tripEvent;
+  }
+
+  function cancelReservation() {
+    setSnackbarText("Booking removed");
+
+    backend
+      .delete(`/car-rental/${carRsv.idCarRental}`)
+      .then((res) => {
+        setOpenRemovedSnack(true);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -104,61 +207,133 @@ export function CarRsvDetails({ carDetail, open, onClose }: CarRsvDetailsProps) 
             About the vehicle
           </Text>
 
-          <img src={carDetail.image} className={style.cardImage} alt="" />
+          <img src={carRsv.image} className={style.cardImage} alt="" />
           <Text component="h4" color={Colors.BLUE}>
-            {carDetail.name}
+            {carRsv.name}
           </Text>
 
-          <FeatureIcons car={carDetail} />
+          <FeatureIcons car={carRsv} />
 
           {/* Detail icons */}
           <Grid container style={{ marginTop: 15 }}>
             <Grid item xs={6}>
               <IconText icon={faChair} fontSize={16}>
-                {carDetail.seats > 1 ? `${carDetail.seats} seats` : `1 seat`}
+                {carRsv.seats > 1 ? `${carRsv.seats} seats` : `1 seat`}
               </IconText>
               <IconText icon={faDoorClosed} fontSize={16}>
-                {carDetail.doors > 1 ? `${carDetail.doors} doors` : `1 door`}
+                {carRsv.doors > 1 ? `${carRsv.doors} doors` : `1 door`}
               </IconText>
             </Grid>
 
             <Grid item xs={6}>
-              <IconText icon={faGasPump} fontSize={16}>{`${carDetail.mpg} MPG`}</IconText>
-              <IconText
-                icon={faCogs}
-                fontSize={16}
-              >{`${carDetail.transmission}`}</IconText>
+              <IconText icon={faGasPump} fontSize={16}>{`${carRsv.mpg} MPG`}</IconText>
+              <IconText icon={faCogs} fontSize={16}>{`${capitalizeString(
+                carRsv.transmission,
+                "full sentence"
+              )}`}</IconText>
             </Grid>
           </Grid>
         </Grid>
 
         {/* Reservation data */}
         <Grid item className={style.reservationDataGrid}>
-          <Text component="h2" color={Colors.BLUE}>
-            Reservation data
-          </Text>
+          <Grid container style={{ height: "100%" }}>
+            <div>
+              <Text component="h2" color={Colors.BLUE}>
+                Reservation data
+              </Text>
 
-          <IconText icon={faCalendar} fontSize={16} style={{ marginBottom: 10 }}>
-            <b>Pickup: </b>
-            {format(carDetail.pickupDate, "dd/MM/yyyy")}
-          </IconText>
+              <IconText icon={faCalendar} fontSize={16} style={{ marginBottom: 10 }}>
+                <b>Pickup: </b>
+                {format(parseISO(carRsv.pickupDate), "dd/MM/yyyy")}
+              </IconText>
 
-          <IconText icon={faCalendar} fontSize={16} style={{ marginBottom: 10 }}>
-            <b>Dropoff: </b>
-            {format(carDetail.pickupDate, "dd/MM/yyyy")}
-          </IconText>
+              <IconText icon={faCalendar} fontSize={16} style={{ marginBottom: 10 }}>
+                <b>Dropoff: </b>
+                {format(parseISO(carRsv.pickupDate), "dd/MM/yyyy")}
+              </IconText>
 
-          <IconText icon={faMapMarkerAlt} fontSize={16} style={{ marginBottom: 10 }}>
-            <b>Location: </b>
-            {carDetail.location}
-          </IconText>
+              <IconText icon={faMapMarkerAlt} fontSize={16} style={{ marginBottom: 10 }}>
+                <b>Location: </b>
+                {carRsv.location}
+              </IconText>
 
-          <IconText icon={faDollarSign} fontSize={16} style={{ marginBottom: 10 }}>
-            <b>Cost: </b>
-            {formatAsCurrency(convertToUserCurrency(carDetail.cost, "USD"))}
-          </IconText>
+              <IconText icon={faDollarSign} fontSize={16} style={{ marginBottom: 10 }}>
+                <b>Cost: </b>
+                {formatAsCurrency(convertToUserCurrency(carRsv.cost, "USD"))}
+              </IconText>
+            </div>
+
+            <Grid container justify="flex-end" style={{ marginTop: "auto" }}>
+              {!isCarRsvInAnyTrip() && (
+                <Grid item xs={12}>
+                  <CustomButton
+                    style={{
+                      boxShadow: Shadow.LIGHT3D,
+                      marginLeft: "auto",
+                      fontSize: 14,
+                    }}
+                    backgroundColor={Colors.GREEN}
+                    onClick={(e) => onIncludeInTripOpen(e)}
+                    rounded
+                  >
+                    Include in trip
+                  </CustomButton>
+                </Grid>
+              )}
+
+              {isCarRsvInAnyTrip() ? (
+                <Grid item xs={12}>
+                  <CustomButton
+                    style={{ boxShadow: Shadow.LIGHT3D, fontSize: 14, marginTop: 10 }}
+                    rounded
+                    backgroundColor={Colors.RED}
+                    onClick={() => deleteCarRentalFromTrip()}
+                  >
+                    Delete from trip
+                  </CustomButton>
+                </Grid>
+              ) : (
+                <Grid item xs={12}>
+                  <CustomButton
+                    style={{ boxShadow: Shadow.LIGHT3D, fontSize: 14, marginTop: 10 }}
+                    rounded
+                    backgroundColor={Colors.RED}
+                    onClick={() => cancelReservation()}
+                  >
+                    Cancel reservation
+                  </CustomButton>
+                </Grid>
+              )}
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
+
+      <IncludeInTripPopover
+        place={carRsv}
+        openPopover={openPopover}
+        setOpenPopover={setOpenPopover}
+        eventType={EventTypes.CAR_RENTAL}
+        tripAnchor={tripAnchor}
+        setTripAnchor={setTripAnchor}
+      />
+
+      <Snackbar
+        open={openRemovedSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenRemovedSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenRemovedSnack(false)}
+          severity="error"
+        >
+          {snackbarText}
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 }

@@ -11,8 +11,9 @@ import {
   CarRsvFeatures,
   Trip,
   EventTypes,
+  IATALocation,
 } from "../types";
-import { convertToCurrency, getDefaultCarReducer } from "./functions";
+import { convertToCurrency, getDefaultCarReducer, getIataLocation } from "./functions";
 
 export function convertCarReducerToURLParams(carReducer: CarReducer): string {
   let params: string[] = [];
@@ -78,6 +79,7 @@ export function convertURLToCarReducer(query: URLSearchParams): CarReducer {
 
   carReducer = {
     carRsv: carRsvPlaceholder[0],
+    carReservations: [],
     carSearch: {
       pickup_date: parameters.pickup_date,
       pickup_location: parameters.pickup_location,
@@ -116,6 +118,9 @@ export function featureVarToLabel(variable: string): string {
 
 export function carToCarRsv(car: Car): CarRsv {
   const carSearch: CarSearch = store.getState().carSlice.carSearch;
+  let iataLocation: IATALocation | undefined = getIataLocation(carSearch.pickup_location);
+  let location =
+    iataLocation !== undefined ? iataLocation.name : carSearch.pickup_location;
 
   return {
     idCarRental: null,
@@ -127,9 +132,9 @@ export function carToCarRsv(car: Car): CarRsv {
     ),
     doors: Number(car.capacity.doors),
     seats: Number(car.capacity.seats),
-    pickupDate: parseISO(carSearch.pickup_date),
-    dropoffDate: parseISO(carSearch.dropoff_date),
-    location: carSearch.pickup_location,
+    pickupDate: carSearch.pickup_date,
+    dropoffDate: carSearch.dropoff_date,
+    location,
     features: featuresToCarRsvFeatures(car.features),
     image: car.category.image_url,
     mpg: car.category.mpg,
@@ -175,4 +180,21 @@ export function isCarRsvInTrip(carRsv: CarRsv, trip: Trip) {
   }
 
   return included;
+}
+
+export function mapCarDTOToDomainType(dto: any): CarRsv {
+  return {
+    idCarRental: dto.idCarRental,
+    name: dto.name,
+    features: dto.features,
+    seats: dto.seats,
+    doors: dto.doors,
+    cost: dto.cost,
+    image: dto.image,
+    pickupDate: dto.pickupDate,
+    dropoffDate: dto.dropoffDate,
+    location: dto.location,
+    mpg: dto.mpg,
+    transmission: dto.transmission,
+  };
 }

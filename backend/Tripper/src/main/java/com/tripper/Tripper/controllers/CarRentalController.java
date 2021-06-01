@@ -11,6 +11,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +60,12 @@ public class CarRentalController {
         return ResponseEntity
                 .created(carRentalModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(newCarRental);
+    }
+
+    @DeleteMapping("/{idCarRental}")
+    public ResponseEntity<?> deleteCarRental(@PathVariable Long idCarRental) {
+        carRepo.deleteById(idCarRental);
+        return ResponseEntity.noContent().build();
     }
 
 }

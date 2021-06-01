@@ -11,7 +11,7 @@ import {
   HotelRsvDetail,
   IconText,
   Navbar,
-  RsvCars,
+  ReservedCars,
   RsvHotels,
   Text,
 } from "../../components";
@@ -21,10 +21,12 @@ import {
   CarRsv,
   HotelReservation,
   hotelRsvPlaceholder,
+  mapCarDTOToDomainType,
   mapFlightToDomainType,
   mapHotelDTOToDomainType,
   selectIdPerson,
   selectUserCurrency,
+  setCarReservations,
 } from "../../utils";
 import { reservationStyles } from "./reservation-styles";
 
@@ -46,6 +48,12 @@ export function Reservations() {
   const [carRentalReservations, setCarRentalReservations] = useState<CarRsv[]>([]);
 
   useEffect(() => {
+    fetchBookedFlights();
+    fetchBookedHotels();
+    fetchBookedCarRentals();
+  }, []);
+
+  function fetchBookedFlights() {
     backend
       .get(`/flight/all?idPerson=${idPerson}`)
       .then((res) => {
@@ -55,7 +63,9 @@ export function Reservations() {
         setFlights(mappedFlights);
       })
       .catch((err) => console.log(err));
+  }
 
+  function fetchBookedHotels() {
     backend
       .get(`/hotel/all?idPerson=${idPerson}`)
       .then((res) => {
@@ -66,7 +76,19 @@ export function Reservations() {
         setHotelReservations(mappedHotels);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }
+
+  function fetchBookedCarRentals() {
+    backend
+      .get(`/car-rental/all?idPerson=${idPerson}`)
+      .then((res) => {
+        let mappedCarReservations: CarRsv[] = res.data._embedded.carRentalList.map(
+          (car: any) => mapCarDTOToDomainType(car)
+        );
+        dispatch(setCarReservations(mappedCarReservations));
+      })
+      .catch((err) => console.log(err));
+  }
 
   return (
     <div className={style.mainContainer}>
@@ -164,7 +186,7 @@ export function Reservations() {
 
           {/* Car rentals */}
           <Grid item xs={12}>
-            <RsvCars cars={carRentalReservations} />
+            <ReservedCars />
           </Grid>
         </Grid>
       </Grid>

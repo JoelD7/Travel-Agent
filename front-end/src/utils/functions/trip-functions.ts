@@ -1,4 +1,6 @@
 import { differenceInCalendarDays, parseISO } from "date-fns";
+import { setUserTrips, store } from "../store";
+import { Trip, TripEvent } from "../types";
 import { b64toBlob } from "./functions";
 
 /**
@@ -26,4 +28,23 @@ export function responseTripToDomainTrip(resTrip: any) {
     albums: resTrip.albums,
     itinerary: resTrip.itinerary,
   };
+}
+
+export function deleteTripEventFromStore(idEvent: number | undefined) {
+  if (idEvent) {
+    const userTrips: Trip[] = store.getState().tripSlice.userTrips;
+
+    const newUserTrips: Trip[] = userTrips.map((trip) => {
+      if (trip.itinerary) {
+        const newItinerary: TripEvent[] = trip.itinerary.filter(
+          (event) => event.idEvent !== idEvent
+        );
+        return { ...trip, itinerary: newItinerary };
+      }
+
+      return trip;
+    });
+
+    store.dispatch(setUserTrips(newUserTrips));
+  }
 }

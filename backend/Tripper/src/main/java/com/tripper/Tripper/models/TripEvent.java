@@ -62,7 +62,7 @@ public class TripEvent {
     @JsonManagedReference(value = "flightReference")
     private Flight flight;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "event")
     @JoinColumn(name = "idEvent")
     @JsonManagedReference(value = "carReference")
     private CarRental carRental;

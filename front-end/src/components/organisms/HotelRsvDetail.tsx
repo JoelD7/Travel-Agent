@@ -47,6 +47,7 @@ import {
   TripEvent,
   tripEventPlaceholder,
   EventTypes,
+  deleteTripEventFromStore,
 } from "../../utils";
 import { CustomButton, IconText, Rating, Text } from "../atoms";
 import { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopover";
@@ -229,18 +230,7 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
         .then((res) => {
           setOpenRsvDeletedSnack(true);
 
-          //Trip without the deleted event in its itinerary.
-          let updatedEventsTrip: Trip = responseTripToDomainTrip(res.data);
-          let newUserTrips: Trip[] = [];
-
-          userTrips.forEach((trip) => {
-            if (trip.idTrip === updatedEventsTrip.idTrip) {
-              newUserTrips.push(updatedEventsTrip);
-            } else {
-              newUserTrips.push(trip);
-            }
-          });
-          dispatch(setUserTrips(newUserTrips));
+          deleteTripEventFromStore(tripEventOfHotel.idEvent);
 
           setTimeout(() => {
             window.location.reload();
@@ -338,7 +328,7 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
                 <Grid container style={{ marginTop: 20 }}>
                   <Grid item xs={12}>
                     <CustomButton
-                      style={{ boxShadow: Shadow.LIGHT3D }}
+                      style={{ boxShadow: Shadow.LIGHT3D, fontSize: 14 }}
                       backgroundColor={Colors.GREEN}
                       onClick={() => seeHotel()}
                     >
@@ -349,7 +339,7 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
                   <Grid container style={{ marginTop: 10 }}>
                     {isHotelRsvInAnyTrip() ? (
                       <CustomButton
-                        style={{ boxShadow: Shadow.LIGHT3D }}
+                        style={{ boxShadow: Shadow.LIGHT3D, fontSize: 14 }}
                         backgroundColor={Colors.RED}
                         onClick={() => deleteHotelRsvFromTrip()}
                       >
@@ -357,7 +347,7 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
                       </CustomButton>
                     ) : (
                       <CustomButton
-                        style={{ boxShadow: Shadow.LIGHT3D }}
+                        style={{ boxShadow: Shadow.LIGHT3D, fontSize: 14 }}
                         backgroundColor={Colors.RED}
                         onClick={() => cancelReservation()}
                       >
@@ -373,7 +363,11 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
                 {!isHotelRsvInAnyTrip() && (
                   <Grid container style={{ marginTop: 10, width: "100%" }}>
                     <CustomButton
-                      style={{ boxShadow: Shadow.LIGHT3D, marginLeft: "auto" }}
+                      style={{
+                        boxShadow: Shadow.LIGHT3D,
+                        marginLeft: "auto",
+                        fontSize: 14,
+                      }}
                       backgroundColor={Colors.GREEN}
                       onClick={(e) => onIncludeInTripOpen(e)}
                       rounded

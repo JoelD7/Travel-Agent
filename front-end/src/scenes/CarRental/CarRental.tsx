@@ -9,7 +9,11 @@ import {
   Select,
   ThemeProvider,
 } from "@material-ui/core";
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {
+  KeyboardDatePicker,
+  KeyboardDateTimePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import Axios from "axios";
 import { addDays, format, parseISO } from "date-fns";
@@ -516,6 +520,7 @@ export function CarRental() {
     //In this case, the brands in the URL should be deleted.
     if (hasTheCityChanged()) {
       carReducer = {
+        carReservations: [],
         carRsv: carRsvPlaceholder[0],
         carSearch: updatedCarSearch,
         brands: [],
@@ -524,6 +529,7 @@ export function CarRental() {
       };
     } else {
       carReducer = {
+        carReservations: [],
         carRsv: carRsvPlaceholder[0],
         carSearch: updatedCarSearch,
         brands,
@@ -597,14 +603,14 @@ export function CarRental() {
                 <Text color="white" className={style.whiteParamText} bold>
                   Pickup
                 </Text>
-                <KeyboardDatePicker
+                <KeyboardDateTimePicker
                   value={parseISO(localCarSearch.pickup_date)}
                   labelFunc={(date, invalidLabel) =>
-                    muiDateFormatter(date, invalidLabel, "date")
+                    muiDateFormatter(date, invalidLabel, "datetime")
                   }
                   className={style.datepicker}
                   minDate={new Date()}
-                  format="dd MMM., yyyy"
+                  format="EEE. d/MMM, yyyy 'at' h:mm"
                   onChange={(d) => onDateChange(d, "pickup_date")}
                 />
               </Grid>
@@ -614,14 +620,14 @@ export function CarRental() {
                 <Text color="white" className={style.whiteParamText} bold>
                   Dropoff
                 </Text>
-                <KeyboardDatePicker
+                <KeyboardDateTimePicker
                   value={parseISO(localCarSearch.dropoff_date)}
                   labelFunc={(date, invalidLabel) =>
-                    muiDateFormatter(date, invalidLabel, "date")
+                    muiDateFormatter(date, invalidLabel, "datetime")
                   }
                   className={style.datepicker}
                   minDate={new Date()}
-                  format="dd MMM., yyyy"
+                  format="EEE. d/MMM, yyyy 'at' h:mm"
                   onChange={(d) => onDateChange(d, "dropoff_date")}
                 />
               </Grid>

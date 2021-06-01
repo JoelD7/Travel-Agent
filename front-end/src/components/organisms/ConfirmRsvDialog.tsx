@@ -155,7 +155,7 @@ export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps)
         place={type === "Hotel" ? hotelRsv : carRsv}
         openPopover={openPopover}
         setOpenPopover={setOpenPopover}
-        eventType={EventTypes.HOTEL}
+        eventType={type === "Hotel" ? EventTypes.HOTEL : EventTypes.CAR_RENTAL}
         tripAnchor={tripAnchor}
         setTripAnchor={setTripAnchor}
       />

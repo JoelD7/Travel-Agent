@@ -28,8 +28,8 @@ export interface CarRsv {
   doors: number;
   cost: number;
   image: string;
-  pickupDate: Date;
-  dropoffDate: Date;
+  pickupDate: string;
+  dropoffDate: string;
   location: string;
   mpg: string;
   transmission: CarRsvTransmission;
