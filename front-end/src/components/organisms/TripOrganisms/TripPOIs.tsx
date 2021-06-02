@@ -1,11 +1,11 @@
 import { faCalendar, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
-import { Grid, Card, CardActionArea, makeStyles, Theme } from "@material-ui/core";
-import { format } from "date-fns";
+import { Card, CardActionArea, Grid, makeStyles, Theme } from "@material-ui/core";
+import { format, parseISO } from "date-fns";
+import React from "react";
 import { useHistory } from "react-router";
 import { Colors, Shadow } from "../../../styles";
-import { Routes, rsvPoisPlaceholder } from "../../../utils";
+import { Routes } from "../../../utils";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
-import React from "react";
 import { NotCreatedMessage } from "../../molecules";
 
 interface TripPOIs {
@@ -90,7 +90,7 @@ export const TripPOIs = React.memo(function TripPOIs({ showAll, pois }: TripPOIs
               </Grid>
 
               <IconText icon={faCalendar}>
-                {format(poi.visitDate, "dd/MM/yyyy 'at' HH:mm")}
+                {format(parseISO(poi.visitDate), "dd/MM/yyyy 'at' HH:mm")}
               </IconText>
 
               <div style={{ display: "flex" }}>

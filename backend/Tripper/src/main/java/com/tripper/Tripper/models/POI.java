@@ -2,6 +2,7 @@ package com.tripper.Tripper.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +33,7 @@ public class POI {
 
     private String id;
     private String name;
-    private LocalDate visitDate;
+    private LocalDateTime visitDate;
     private String formattedAddress;
     private String imageUrl;
     private Integer rating;

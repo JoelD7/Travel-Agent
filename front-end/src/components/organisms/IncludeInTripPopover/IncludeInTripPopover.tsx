@@ -23,29 +23,27 @@ import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
 import {
   backend,
-  CarSearch,
   CarRsv,
   EventTypes,
   getFlightDTO,
-  selectHotelReservationParams,
   getIataLocation,
+  getISODatetimeWithOffset,
   getLastSegment,
+  getPoiDTO,
+  getRestaurantDTO,
+  HotelBookingParams,
   HotelReservation,
   IATALocation,
   mapFlightToDomainType,
   muiDateFormatter,
   responseTripToDomainTrip,
-  selectCarSearch,
-  getHotelReservation,
+  Routes,
+  selectCarRsv,
+  selectHotelReservationParams,
   selectHotelRsv,
   selectUserTrips,
   setFlightDetail,
   Trip,
-  Routes,
-  selectCarRsv,
-  HotelBookingParams,
-  getRestaurantDTO,
-  getISODatetimeWithOffset,
 } from "../../../utils";
 import { setUserTrips } from "../../../utils/store/trip-slice";
 import { IconText, Text } from "../../atoms";
@@ -375,6 +373,7 @@ export function IncludeInTripPopover({
         break;
 
       case EventTypes.POI:
+        tripEventDTO = getPoiTripEventDTO();
         break;
 
       case EventTypes.RESTAURANT:
@@ -447,6 +446,21 @@ export function IncludeInTripPopover({
       start: getISODatetimeWithOffset(datetimePopover.start),
       end: getISODatetimeWithOffset(datetimePopover.end),
       restaurant: restaurantRsv,
+      includesTime: true,
+    };
+  }
+
+  function getPoiTripEventDTO() {
+    let poi: POI = place as POI;
+    let poiDTO: RsvPOI = getPoiDTO(poi, datetimePopover.start);
+
+    return {
+      name: `Visit to ${poiDTO.name}`,
+      location: poiDTO.formattedAddress,
+      type: EventTypes.POI,
+      start: getISODatetimeWithOffset(datetimePopover.start),
+      end: getISODatetimeWithOffset(datetimePopover.end),
+      poi: poiDTO,
       includesTime: true,
     };
   }

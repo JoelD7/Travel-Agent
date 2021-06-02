@@ -14,6 +14,7 @@ import { Alert } from "@material-ui/lab";
 import Axios from "axios";
 import React, { MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Font } from "../../assets";
 import {
@@ -29,7 +30,17 @@ import {
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import { EventTypes } from "../../utils";
+import {
+  backend,
+  deleteTripEventFromStore,
+  EventTypes,
+  isPoiInAnyTrip,
+  parsePOIAddress,
+  selectUserTrips,
+  Trip,
+  TripEvent,
+  tripEventPlaceholder,
+} from "../../utils";
 import { thingsToDoDetailsStyles as thingsToDoDetailsStyles } from "./thingsToDoDetails-styles";
 
 export function ThingsToDoDetails() {
@@ -39,11 +50,12 @@ export function ThingsToDoDetails() {
 
   const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
   const [openPopover, setOpenPopover] = useState(false);
-
   const [loading, setLoading] = useState(true);
-
   const [openSnack, setOpenSnack] = useState(false);
   const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
+  const [removedSnackText, setRemovedSnackText] = useState("");
+
+  const userTrips: Trip[] = useSelector(selectUserTrips);
 
   useEffect(() => {
     fetchPOIDetail()
@@ -72,20 +84,6 @@ export function ThingsToDoDetails() {
       return `${photo.prefix}${photo.width}x${photo.height}${photo.suffix}`;
     }
     return " ";
-  }
-
-  function parseAddress(poi: POI) {
-    if (poi.location.formattedAddress === undefined) {
-      return;
-    }
-
-    if (poi.location.formattedAddress.length === 1) {
-      return `${poi.location.formattedAddress[0]}`;
-    }
-
-    return `${poi.location.formattedAddress[0]}, ${
-      poi.location.formattedAddress[1].split(",")[0]
-    }`;
   }
 
   function parseHours(poi: POI) {
@@ -152,6 +150,45 @@ export function ThingsToDoDetails() {
     }
   }
 
+  function deleteFromTrip() {
+    setRemovedSnackText("Deleted from trip");
+
+    let tripEvent: TripEvent = getTripEventOfPOI();
+
+    if (tripEvent.idEvent) {
+      backend
+        .delete(`/trip-event/delete/${tripEvent.idEvent}`)
+        .then((res) => {
+          setOpenSnackRemoved(true);
+          deleteTripEventFromStore(tripEvent.idEvent);
+        })
+        .catch((err) => console.log(err));
+    }
+  }
+
+  function getTripEventOfPOI(): TripEvent {
+    let tripEvent: TripEvent = tripEventPlaceholder;
+
+    if (poi) {
+      userTrips.forEach((trip) => {
+        if (trip.itinerary) {
+          trip.itinerary.forEach((event) => {
+            if (event.poi && event.poi.id === poi.id) {
+              tripEvent = event;
+              return;
+            }
+          });
+        }
+
+        if (tripEvent) {
+          return;
+        }
+      });
+    }
+
+    return tripEvent;
+  }
+
   const style = thingsToDoDetailsStyles();
   return (
     <div className={style.mainContainer}>
@@ -193,14 +230,25 @@ export function ThingsToDoDetails() {
                   )}
                 </Grid>
 
-                <CustomButton
-                  style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
-                  onClick={(e) => onIncludeTripClick(e)}
-                  backgroundColor={Colors.GREEN}
-                  rounded
-                >
-                  Include in trip
-                </CustomButton>
+                {isPoiInAnyTrip(poi) ? (
+                  <CustomButton
+                    style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
+                    onClick={() => deleteFromTrip()}
+                    backgroundColor={Colors.RED}
+                    rounded
+                  >
+                    Delete from trip
+                  </CustomButton>
+                ) : (
+                  <CustomButton
+                    style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
+                    onClick={(e) => onIncludeTripClick(e)}
+                    backgroundColor={Colors.GREEN}
+                    rounded
+                  >
+                    Include in trip
+                  </CustomButton>
+                )}
 
                 <IconButton
                   style={{ margin: "auto 0px auto 10px" }}
@@ -290,7 +338,7 @@ export function ThingsToDoDetails() {
                       style={{ marginBottom: "20px" }}
                       icon={faMapMarkerAlt}
                       fontSize={15}
-                      text={parseAddress(poi)}
+                      text={parsePOIAddress(poi)}
                     />
                   </div>
                 )}
@@ -414,7 +462,7 @@ export function ThingsToDoDetails() {
             onClose={() => setOpenSnackRemoved(false)}
             severity="error"
           >
-            {"Removed from favorites."}
+            {removedSnackText}
           </Alert>
         </Snackbar>
       )}

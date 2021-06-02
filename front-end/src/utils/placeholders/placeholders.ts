@@ -922,25 +922,23 @@ export const rsvPoisPlaceholder: RsvPOI[] = [
   {
     id: "adjhf7fa9",
     name: "H&M",
-    favorite: false,
     rating: 5,
     category: "Clothing Store",
     imageUrl:
       "https://fastly.4sqi.net/img/general/619x412/87388367_WYz8Av0IXESHmRGYmpl0hg32N3wvS24K8v9SpclZlBE.jpg",
     categoryIconUrl: "",
-    visitDate: new Date(),
+    visitDate: new Date().toISOString(),
     formattedAddress: "7601 South Cicero Avenue, Chicago, IL 60652, United States",
   },
   {
     id: "adjhfa9",
     name: "Wigwam at ULC",
-    favorite: false,
     rating: 5,
     formattedAddress: "Chicago, IL 60603",
     imageUrl:
       "https://fastly.4sqi.net/img/general/1440x1920/81679595_DMhmpfeLJ5-fv-N27ULxqn1qq-lw8AEJNGVsayR_2u8.jpg",
     categoryIconUrl: "",
-    visitDate: new Date(),
+    visitDate: new Date().toISOString(),
     category: "Movie Theater",
   },
 ];
@@ -3007,7 +3005,6 @@ const poiArray: POI[] = [
 
 const poiRsv: RsvPOI = {
   id: "49c54c1bf964a520ed561fe3",
-  favorite: false,
   name: "The Morgan Library & Museum",
 
   rating: 5,
@@ -3015,7 +3012,7 @@ const poiRsv: RsvPOI = {
   categoryIconUrl: "a",
   formattedAddress: "",
   imageUrl: "",
-  visitDate: new Date(),
+  visitDate: new Date().toISOString(),
 };
 
 export const tripAlbumPlaceholder: TripAlbum = {
