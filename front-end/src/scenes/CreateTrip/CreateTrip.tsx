@@ -10,6 +10,7 @@ import { Alert } from "@material-ui/lab";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
+import { useSelector } from "react-redux";
 import { Font } from "../../assets";
 import {
   CountrySelector,
@@ -24,7 +25,7 @@ import {
   TripDates,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import { backend } from "../../utils";
+import { backend, firebase, selectIdPerson, storage, compressImage } from "../../utils";
 import { createTripStyles } from "./createTrip-styles";
 
 export function CreateTrip() {
@@ -42,6 +43,12 @@ export function CreateTrip() {
   const is1255OrLess = useMediaQuery("(max-width:1255px)");
   const is720OrLess = useMediaQuery("(max-width:720px)");
   const [openSnack, setOpenSnack] = useState(false);
+  const idPerson: number = useSelector(selectIdPerson);
+
+  const userTripRef: firebase.storage.Reference = storage
+    .ref()
+    .child(`images/trips/${idPerson}`);
+  const [coverRef, setCoverRef] = useState<firebase.storage.Reference>(userTripRef);
 
   function updateDates(startDate: Date, endDate: Date) {
     setStartDate(startDate);
@@ -53,35 +60,35 @@ export function CreateTrip() {
   }
 
   async function onCreateTripClick() {
-    // console.log("image stream: ", image.stream());
-    let blob = new Blob([new Uint8Array(await image.arrayBuffer())], {
-      type: image.type,
-    });
+    let fileToSave: File = image;
 
+    if (image.size > 250000) {
+      fileToSave = await compressImage(image);
+    }
+
+    coverRef.put(fileToSave).then((snapshot) => {
+      snapshot.ref
+        .getDownloadURL()
+        .then((url) => {
+          createTrip(url);
+        })
+        .catch((error) => console.log(error));
+    });
+  }
+
+  function createTrip(coverUrl: string) {
     backend
-      .post(`/trip/create`, {
-        idPerson: 2,
+      .post(`/trip/create?idPerson=${idPerson}`, {
+        idPerson,
         name,
         countries: countries.join(", "),
         budget: Number(budget),
+        coverPhoto: coverUrl,
         startDate,
         endDate,
       })
       .then((res) => {
-        const formData = new FormData();
-        formData.append("idTrip", res.data.idTrip);
-        formData.append("image", image);
-
-        backend
-          .post(`/trip/create/coverPhoto`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-            setOpenSnack(true);
-          })
-          .catch((err) => console.log(err));
+        setOpenSnack(true);
       })
       .catch((err) => console.log(err));
   }
@@ -91,7 +98,12 @@ export function CreateTrip() {
   }
 
   function onAlbumCoverChange(images: File[]) {
-    setImage(images[0]);
+    let file = images[0];
+    setImage(file);
+
+    if (file) {
+      setCoverRef(userTripRef.child(`${file.name}`));
+    }
   }
 
   return (

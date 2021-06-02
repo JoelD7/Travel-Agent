@@ -25,7 +25,7 @@ public class Album {
     private Long idAlbum;
 
     private String name;
-    private Blob cover;
+    private String cover;
 
     @ManyToOne
     @JoinColumn(name = "idTrip")

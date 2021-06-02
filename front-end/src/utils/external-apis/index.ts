@@ -4,6 +4,7 @@ export { HotelBedAPI };
 export * from "./amadeus-apis";
 export * from "./backend";
 export * from "./avis-apis";
+export * from "./firebase";
 
 /**
  * To use Google Places API and HotelBeds API on the client side, a proxy is required to add the

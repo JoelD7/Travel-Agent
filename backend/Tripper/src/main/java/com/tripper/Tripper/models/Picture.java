@@ -22,7 +22,7 @@ public class Picture {
     @Column(name = "idPicture")
     private Long idPicture;
 
-    private Blob picture;
+    private String picture;
     private LocalDateTime date;
 
     @ManyToOne

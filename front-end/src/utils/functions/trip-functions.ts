@@ -1,16 +1,13 @@
 import { differenceInCalendarDays, parseISO } from "date-fns";
+import Compress from "react-image-file-resizer";
 import { setUserTrips, store } from "../store";
 import { Trip, TripEvent } from "../types";
-import { b64toBlob } from "./functions";
 
 /**
  * Converts data returned by the backend to a
  * client-defined Trip type.
  */
 export function responseTripToDomainTrip(resTrip: any) {
-  const blob = b64toBlob(resTrip.coverPhoto);
-  const imageUrl = URL.createObjectURL(blob);
-
   return {
     idTrip: resTrip.idTrip,
     name: resTrip.name,
@@ -24,7 +21,7 @@ export function responseTripToDomainTrip(resTrip: any) {
     ),
     startDate: parseISO(resTrip.startDate),
     endDate: parseISO(resTrip.endDate),
-    coverPhoto: imageUrl,
+    coverPhoto: resTrip.coverPhoto,
     albums: resTrip.albums,
     itinerary: resTrip.itinerary,
   };
@@ -47,4 +44,22 @@ export function deleteTripEventFromStore(idEvent: number | undefined) {
 
     store.dispatch(setUserTrips(newUserTrips));
   }
+}
+
+export function compressImage(file: File) {
+  return new Promise<File>((resolve) => {
+    Compress.imageFileResizer(
+      file, // the file from input
+      480, // width
+      480, // height
+      "JPEG", // compress format WEBP, JPEG, PNG
+      100, // quality
+      0, // rotation
+      (uri) => {
+        resolve(uri as File);
+        // You upload logic goes here
+      },
+      "file" // blob, base64 or file default base64
+    );
+  });
 }

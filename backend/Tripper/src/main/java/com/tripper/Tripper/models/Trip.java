@@ -32,8 +32,7 @@ public class Trip {
     private Double budget;
     private LocalDate startDate;
     private LocalDate endDate;
-    @Lob
-    private byte[] coverPhoto;
+    private String coverPhoto;
 
     @ManyToOne
     @JoinColumn(name = "idPerson")
