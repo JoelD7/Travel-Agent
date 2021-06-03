@@ -3016,81 +3016,81 @@ const poiRsv: RsvPOI = {
 };
 
 export const tripAlbumPlaceholder: TripAlbum = {
-  id: "qec",
+  idAlbum: "qec",
   name: "Ballon day!",
   cover: "/Travel-Agent/globes.jpg",
   pictures: [
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      date: new Date(2021, 4, 25),
+      date: new Date(2021, 4, 25).toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      date: new Date(2021, 4, 25),
+      date: new Date(2021, 4, 25).toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      date: new Date(2021, 4, 25),
+      date: new Date(2021, 4, 25).toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      date: new Date(),
+      date: new Date().toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      date: new Date(),
+      date: new Date().toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-      date: new Date(),
+      date: new Date().toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      date: new Date(2021, 4, 25),
+      date: new Date(2021, 4, 25).toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      date: new Date(2021, 4, 25),
+      date: new Date(2021, 4, 25).toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      date: new Date(2021, 4, 25),
+      date: new Date(2021, 4, 25).toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      date: new Date(),
+      date: new Date().toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      date: new Date(),
+      date: new Date().toISOString(),
     },
     {
-      id: "asd",
-      picture:
+      idPicture: "asd",
+      pictureUrl:
         "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-      date: new Date(),
+      date: new Date().toISOString(),
     },
   ],
 };
@@ -3107,38 +3107,38 @@ export const tripPlaceholder: Trip = {
   albums: [
     tripAlbumPlaceholder,
     {
-      id: "1223asa",
+      idAlbum: "1223asa",
       name: "Villages",
       cover: "/Travel-Agent/country.jpg",
       pictures: [
         {
-          id: "asd",
-          picture: "",
-          date: new Date(),
+          idPicture: "asd",
+          pictureUrl: "",
+          date: new Date().toISOString(),
         },
       ],
     },
     {
-      id: "fsdgf",
+      idAlbum: "fsdgf",
       name: "Ballon day!",
       cover: "/Travel-Agent/globes.jpg",
       pictures: [
         {
-          id: "asd",
-          picture: "",
-          date: new Date(),
+          idPicture: "asd",
+          pictureUrl: "",
+          date: new Date().toISOString(),
         },
       ],
     },
     {
-      id: "5a4sd",
+      idAlbum: "5a4sd",
       name: "Villages",
       cover: "/Travel-Agent/country.jpg",
       pictures: [
         {
-          id: "asd",
-          picture: "",
-          date: new Date(),
+          idPicture: "asd",
+          pictureUrl: "",
+          date: new Date().toISOString(),
         },
       ],
     },
@@ -3223,88 +3223,88 @@ export const tripsPlaceholder: Trip[] = [
     coverPhoto: "journey.jpg",
     albums: [
       {
-        id: "",
+        idAlbum: "",
         name: "Ballon day!",
         cover: "/Travel-Agent/globes.jpg",
         pictures: [
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
         ],
       },
       {
-        id: "",
+        idAlbum: "",
         name: "Villages",
         cover: "/Travel-Agent/country.jpg",
         pictures: [
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
         ],
       },
@@ -3316,88 +3316,88 @@ export const tripsPlaceholder: Trip[] = [
     budget: 2500,
     albums: [
       {
-        id: "",
+        idAlbum: "",
         name: "Ballon day!",
         cover: "/Travel-Agent/globes.jpg",
         pictures: [
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
         ],
       },
       {
-        id: "",
+        idAlbum: "",
         name: "Villages",
         cover: "/Travel-Agent/country.jpg",
         pictures: [
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
         ],
       },
@@ -3421,88 +3421,88 @@ export const tripsPlaceholder: Trip[] = [
     startDate: new Date(2019, 4, 5),
     albums: [
       {
-        id: "",
+        idAlbum: "",
         name: "Ballon day!",
         cover: "/Travel-Agent/globes.jpg",
         pictures: [
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
         ],
       },
       {
-        id: "",
+        idAlbum: "",
         name: "Villages",
         cover: "/Travel-Agent/country.jpg",
         pictures: [
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(2021, 4, 25),
+            date: new Date(2021, 4, 25).toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
           {
-            id: "asd",
-            picture:
+            idPicture: "asd",
+            pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-            date: new Date(),
+            date: new Date().toISOString(),
           },
         ],
       },

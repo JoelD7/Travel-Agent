@@ -136,7 +136,7 @@ export const PicturesAndKeyDetails = React.memo(function Component({
                 {trip.albums.map((album, i) => (
                   <AlbumCard
                     key={album.name}
-                    id={album.id}
+                    id={album.idAlbum}
                     name={album.name}
                     cover={album.cover}
                     picturesQant={23}
@@ -150,7 +150,7 @@ export const PicturesAndKeyDetails = React.memo(function Component({
               trip.albums.map((album, i) => (
                 <AlbumCard
                   key={album.name}
-                  id={album.id}
+                  id={album.idAlbum}
                   name={album.name}
                   cover={album.cover}
                   picturesQant={23}

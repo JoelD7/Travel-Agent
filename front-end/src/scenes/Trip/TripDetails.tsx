@@ -81,7 +81,6 @@ export function TripDetails() {
 
   useEffect(() => {
     if (trip) {
-      console.log("hey");
       setTripCarRentals();
     }
   }, [trip]);

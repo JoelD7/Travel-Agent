@@ -16,9 +16,16 @@ import {
 } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Font } from "../../../assets";
 import { Colors, Shadow } from "../../../styles";
-import { Trip } from "../../../utils";
+import {
+  AlbumPicture,
+  selectAlbumPictures,
+  setAlbumPictures,
+  setAutoDeletePicture,
+  Trip,
+} from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 import { ImageUploader } from "../../molecules";
 
@@ -86,7 +93,7 @@ export const TripPictureUploader = React.memo(function Component({
     paper: {
       maxWidth: 855,
       padding: 30,
-      height: 641,
+      height: "90vh",
       [theme.breakpoints.down(810)]: {
         maxWidth: 455,
       },
@@ -105,7 +112,7 @@ export const TripPictureUploader = React.memo(function Component({
       fontSize: 18,
     },
     saveButtonGrid: {
-      marginTop: "auto",
+      marginTop: 20,
       [theme.breakpoints.down(810)]: {
         width: "100%",
         marginTop: 20,
@@ -181,6 +188,7 @@ export const TripPictureUploader = React.memo(function Component({
   const style = stylesFunction();
 
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const imageUploaderStyles: CSSProperties = {
     maxWidth: 400,
@@ -197,9 +205,8 @@ export const TripPictureUploader = React.memo(function Component({
 
   const [newAlbumName, setNewAlbumName] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
-
   const [albumCover, setAlbumCover] = useState<File>(new File([""], ""));
-
+  const albumPictures: AlbumPicture[] = useSelector(selectAlbumPictures);
   const is585pxOrLess = useMediaQuery("(max-width:585px)");
 
   const albumOptions: string[] = [
@@ -209,10 +216,34 @@ export const TripPictureUploader = React.memo(function Component({
   ];
   const [album, setAlbum] = useState<string>("");
 
+  function areAllPicturesUploaded(): boolean {
+    return albumPictures.length === images.length;
+  }
+
+  function closeDialog() {
+    if (albumPictures.length > 0) {
+      dispatch(setAutoDeletePicture(true));
+    }
+
+    onClose();
+
+    setTimeout(() => {
+      dispatch(setAutoDeletePicture(false));
+      dispatch(setAlbumPictures([]));
+      setImages([]);
+    }, 1000);
+  }
+
+  function saveAlbum() {
+    onClose();
+    dispatch(setAlbumPictures([]));
+    setImages([]);
+  }
+
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={() => closeDialog()}
       fullScreen={is585pxOrLess}
       BackdropComponent={Backdrop}
       classes={{ paper: style.paper }}
@@ -233,7 +264,7 @@ export const TripPictureUploader = React.memo(function Component({
           </Text>
 
           {/* Close dialog button */}
-          <IconButton className={style.closeButton} onClick={() => onClose()}>
+          <IconButton className={style.closeButton} onClick={() => closeDialog()}>
             <FontAwesomeIcon icon={faTimes} color={Colors.BLUE} />
           </IconButton>
         </Grid>
@@ -310,7 +341,12 @@ export const TripPictureUploader = React.memo(function Component({
 
             {/* Save button */}
             <Grid item className={style.saveButtonGrid}>
-              <CustomButton className={style.saveButton} backgroundColor={Colors.GREEN}>
+              <CustomButton
+                disabled={!areAllPicturesUploaded()}
+                className={style.saveButton}
+                onClick={() => saveAlbum()}
+                backgroundColor={Colors.GREEN}
+              >
                 Save
               </CustomButton>
             </Grid>

@@ -33,16 +33,16 @@ export interface TripEvent {
 }
 
 export interface TripAlbum {
-  id: string;
+  idAlbum: string;
   name: string;
   cover: string;
-  pictures: TripPictures[];
+  pictures: AlbumPicture[];
 }
 
-export interface TripPictures {
-  id: string;
-  picture: string;
-  date: Date;
+export interface AlbumPicture {
+  idPicture: string | null;
+  pictureUrl: string;
+  date: string;
 }
 
 export interface CalendarItem {

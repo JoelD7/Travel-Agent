@@ -1,5 +1,6 @@
 package com.tripper.Tripper.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.sql.Blob;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -22,10 +23,11 @@ public class Picture {
     @Column(name = "idPicture")
     private Long idPicture;
 
-    private String picture;
+    private String pictureUrl;
     private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "idAlbum")
+    @JsonBackReference(value = "pictureReference")
     private Album album;
 }

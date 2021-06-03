@@ -50,6 +50,9 @@ export const selectIdPerson = (state: RootState) => state.rootSlice.idPerson;
 //#region Trip
 export const selectTripDetail = (state: RootState) => state.tripSlice.tripDetail;
 export const selectUserTrips = (state: RootState) => state.tripSlice.userTrips;
+export const selectAlbumPictures = (state: RootState) => state.tripSlice.albumPictures;
+export const selectAutoDeletePicture = (state: RootState) =>
+  state.tripSlice.autoDeletePicture;
 //#endregion
 
 //#region Search

@@ -56,11 +56,4 @@ public class TripController {
         return ResponseEntity.created(tripModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(newTrip);
     }
 
-    private void persistUserTrip(Person person, Trip trip) {
-        person.getTrips().add(trip);
-
-        personRepo.save(person);
-
-    }
-
 }

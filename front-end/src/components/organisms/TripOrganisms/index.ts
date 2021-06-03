@@ -7,3 +7,4 @@ export * from "./TripTabBar";
 export * from "./PicturesAndKeyDetails";
 export * from "./TripPictureUploader";
 export * from "./Album";
+export * from "./SinglePictureUploader";

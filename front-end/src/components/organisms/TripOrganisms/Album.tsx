@@ -7,13 +7,13 @@ import {
   Theme,
 } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router";
 import Slider from "react-slick";
 import { Colors, Shadow } from "../../../styles";
-import { TripAlbum, tripAlbumPlaceholder, TripPictures } from "../../../utils";
+import { TripAlbum, tripAlbumPlaceholder, AlbumPicture } from "../../../utils";
 import { SliderArrow, Text } from "../../atoms";
 import { Navbar } from "../../molecules";
 import { DashDrawer } from "../DashDrawer/DashDrawer";
@@ -26,7 +26,7 @@ interface AlbumRouteParams {
 interface AlbumProps {}
 
 interface PictureGroup {
-  [index: string]: TripPictures[];
+  [index: string]: AlbumPicture[];
 }
 
 export function Album({}: AlbumProps) {
@@ -175,7 +175,7 @@ export function Album({}: AlbumProps) {
   const album: TripAlbum = tripAlbumPlaceholder;
 
   let pictureGroup: PictureGroup = {};
-  const [pictureGroupArr, setPictureGroupArr] = useState<TripPictures[][]>([]);
+  const [pictureGroupArr, setPictureGroupArr] = useState<AlbumPicture[][]>([]);
 
   const [openFullImage, setOpenFullImage] = useState(false);
 
@@ -207,10 +207,10 @@ export function Album({}: AlbumProps) {
   function groupPicturesByDate() {
     //   Group pictures
     album.pictures.forEach((picture) => {
-      let dateAsString: string = picture.date.toISOString();
+      let dateAsString: string = picture.date;
 
       if (pictureGroup.hasOwnProperty(dateAsString)) {
-        let curPicturesInGroup: TripPictures[] = pictureGroup[dateAsString];
+        let curPicturesInGroup: AlbumPicture[] = pictureGroup[dateAsString];
         pictureGroup = {
           ...pictureGroup,
           [dateAsString]: [...curPicturesInGroup, picture],
@@ -224,7 +224,7 @@ export function Album({}: AlbumProps) {
     });
 
     // Add groups to array
-    let buffer: TripPictures[][] = [];
+    let buffer: AlbumPicture[][] = [];
     for (const key in pictureGroup) {
       if (Object.prototype.hasOwnProperty.call(pictureGroup, key)) {
         const pictures = pictureGroup[key];
@@ -256,20 +256,20 @@ export function Album({}: AlbumProps) {
         </Text>
 
         {pictureGroupArr.map((group) => (
-          <div key={group[0].id}>
+          <div key={group[0].idPicture}>
             <Text component="h2" color={Colors.BLUE}>
-              {format(group[0].date, "MMM. dd, yyyy")}
+              {format(parseISO(group[0].date), "MMM. dd, yyyy")}
             </Text>
 
             {/* Picture cards */}
             <Grid container>
               {group.map((picture, i) => (
                 <CardActionArea
-                  key={picture.picture}
+                  key={picture.pictureUrl}
                   className={style.cardContainer}
                   onClick={() => openFullScreenImageSlider(i)}
                 >
-                  <img src={picture.picture} className={style.cardPicture} alt="" />
+                  <img src={picture.pictureUrl} className={style.cardPicture} alt="" />
                 </CardActionArea>
               ))}
             </Grid>
@@ -296,12 +296,12 @@ export function Album({}: AlbumProps) {
             <Grid
               container
               justify="center"
-              key={picture.picture}
+              key={picture.pictureUrl}
               className={style.photoContainerImage}
             >
               <img
-                src={`${picture.picture}`}
-                alt={`${picture.picture}`}
+                src={`${picture.pictureUrl}`}
+                alt={`${picture.pictureUrl}`}
                 className={style.photoInSlider}
               />
             </Grid>

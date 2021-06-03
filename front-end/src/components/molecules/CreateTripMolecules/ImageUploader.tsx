@@ -3,6 +3,7 @@ import { Grid, makeStyles, Theme } from "@material-ui/core";
 import { CustomButton, Text } from "../../atoms";
 import { Colors, Shadow } from "../../../styles";
 import { CSSProperties } from "@material-ui/styles";
+import { SinglePictureUploader } from "../../organisms";
 
 interface ImageUploader {
   updateState: (values: File[]) => void;
@@ -32,7 +33,7 @@ export function ImageUploader({
       boxShadow: Shadow.LIGHT3D,
     },
     buttonContainer: {
-      marginTop: 10,
+      marginTop: 2,
     },
     image: {
       objectFit: "cover",
@@ -85,6 +86,11 @@ export function ImageUploader({
           imageFiles.push(imageFile);
         }
       }
+
+      if (multiple) {
+        updateState(imageFiles);
+      }
+
       setImages(imageFiles);
       setDisplayImage(URL.createObjectURL(imageFiles[0]));
     }
@@ -103,12 +109,11 @@ export function ImageUploader({
   }
 
   function getPhotoQtyLabel(): string {
-    let label = images.length > 1 ? "photos" : "photo";
-    return `${images.length} ${label} selected`;
+    return `Selected photos: ${images.length}`;
   }
 
   return (
-    <div onBlur={() => updateState(images)}>
+    <div onBlur={multiple ? () => {} : () => updateState(images)}>
       <Grid container className={style.uploaderContainer}>
         <Grid item xs={12} className={style.imageGrid}>
           <img src={displayImage} className={style.image} alt="trip-cover" />
@@ -136,8 +141,21 @@ export function ImageUploader({
       <Grid container className={style.buttonContainer}>
         {/* Choose an image */}
         <Grid item xs={12}>
-          {multiple && <Text style={{ marginLeft: "auto" }}>{getPhotoQtyLabel()}</Text>}
+          {multiple && (
+            <Text style={{ marginLeft: "auto", fontSize: 14 }}>{getPhotoQtyLabel()}</Text>
+          )}
 
+          {multiple && images.length > 0 && (
+            <>
+              {images.map((image) => (
+                // Image upload progress
+                <SinglePictureUploader key={image.name} picture={image} />
+              ))}
+            </>
+          )}
+        </Grid>
+
+        <Grid item xs={12} style={{ marginTop: 15 }}>
           <CustomButton
             className={style.button}
             backgroundColor={Colors.PURPLE}
