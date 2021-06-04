@@ -33,7 +33,7 @@ export interface TripEvent {
 }
 
 export interface TripAlbum {
-  idAlbum: string;
+  idAlbum: string | null;
   name: string;
   cover: string;
   pictures: AlbumPicture[];

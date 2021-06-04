@@ -9,11 +9,13 @@ import {
   makeStyles,
   MenuItem,
   Select,
+  Snackbar,
   TextField,
   Theme,
   useMediaQuery,
   useTheme,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,10 +23,18 @@ import { Font } from "../../../assets";
 import { Colors, Shadow } from "../../../styles";
 import {
   AlbumPicture,
+  backend,
+  compressImage,
+  deleteImageFromFirebase,
+  firebase,
+  getISODatetimeWithOffset,
   selectAlbumPictures,
+  selectIdPerson,
   setAlbumPictures,
-  setAutoDeletePicture,
+  storage,
+  store,
   Trip,
+  TripAlbum,
 } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 import { ImageUploader } from "../../molecules";
@@ -206,7 +216,11 @@ export const TripPictureUploader = React.memo(function Component({
   const [newAlbumName, setNewAlbumName] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
   const [albumCover, setAlbumCover] = useState<File>(new File([""], ""));
+  const [albumCoverUrl, setAlbumCoverUrl] = useState<string>("");
+
+  const idPerson: number = useSelector(selectIdPerson);
   const albumPictures: AlbumPicture[] = useSelector(selectAlbumPictures);
+
   const is585pxOrLess = useMediaQuery("(max-width:585px)");
 
   const albumOptions: string[] = [
@@ -215,6 +229,7 @@ export const TripPictureUploader = React.memo(function Component({
     "Europe in the Snow",
   ];
   const [album, setAlbum] = useState<string>("");
+  const [openSnack, setOpenSnack] = useState(false);
 
   function areAllPicturesUploaded(): boolean {
     return albumPictures.length === images.length;
@@ -222,22 +237,60 @@ export const TripPictureUploader = React.memo(function Component({
 
   function closeDialog() {
     if (albumPictures.length > 0) {
-      dispatch(setAutoDeletePicture(true));
+      deleteAllUploadedPictures();
     }
 
     onClose();
 
     setTimeout(() => {
-      dispatch(setAutoDeletePicture(false));
       dispatch(setAlbumPictures([]));
       setImages([]);
     }, 1000);
   }
 
-  function saveAlbum() {
+  async function saveAlbum() {
     onClose();
     dispatch(setAlbumPictures([]));
-    setImages([]);
+
+    let albumDTO: TripAlbum = {
+      idAlbum: null,
+      name: newAlbumName,
+      cover: albumCoverUrl,
+      pictures: albumPictures,
+    };
+
+    let response = await backend.post(`/album/create?idTrip=${trip.idTrip}`, albumDTO);
+    setOpenSnack(true);
+  }
+
+  function onPictureUploadSucess(url: string, image: File) {
+    let newAlbumPicture: AlbumPicture = {
+      idPicture: null,
+      pictureUrl: url,
+      date: getISODatetimeWithOffset(new Date(image.lastModified)),
+    };
+
+    const albumPictures: AlbumPicture[] = store.getState().tripSlice.albumPictures;
+    let updatedAlbumPictures: AlbumPicture[] = [...albumPictures, newAlbumPicture];
+    dispatch(setAlbumPictures(updatedAlbumPictures));
+  }
+
+  function onAlbumCoverUploadSuccess(url: string, image: File) {
+    setAlbumCoverUrl(url);
+  }
+
+  function deleteAllUploadedPictures() {
+    images.forEach((image) => {
+      deleteImageFromFirebase(image);
+    });
+  }
+
+  function onAlbumCoverChange(values: File[]) {
+    if (values.length > 0) {
+      setAlbumCover(values[0]);
+    } else {
+      setAlbumCoverUrl("");
+    }
   }
 
   return (
@@ -317,8 +370,9 @@ export const TripPictureUploader = React.memo(function Component({
 
             <ImageUploader
               images={[albumCover]}
+              onPictureUploadSucess={onAlbumCoverUploadSuccess}
               containerStyles={imageUploaderStyles}
-              updateState={(values) => setAlbumCover(values[0])}
+              updateState={(values) => onAlbumCoverChange(values)}
             />
           </>
         </Grid>
@@ -333,6 +387,7 @@ export const TripPictureUploader = React.memo(function Component({
               </Text>
               <ImageUploader
                 images={images}
+                onPictureUploadSucess={onPictureUploadSucess}
                 multiple
                 containerStyles={imageUploaderStyles}
                 updateState={(values) => setImages(values)}
@@ -353,6 +408,22 @@ export const TripPictureUploader = React.memo(function Component({
           </Grid>
         </Grid>
       </Grid>
+
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenSnack(false)}
+          severity="success"
+        >
+          Album created
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 });

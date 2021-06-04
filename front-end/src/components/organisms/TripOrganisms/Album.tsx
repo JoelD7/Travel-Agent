@@ -13,7 +13,7 @@ import { Helmet } from "react-helmet";
 import { useParams } from "react-router";
 import Slider from "react-slick";
 import { Colors, Shadow } from "../../../styles";
-import { TripAlbum, tripAlbumPlaceholder, AlbumPicture } from "../../../utils";
+import { TripAlbum, tripAlbumPlaceholder, AlbumPicture, backend } from "../../../utils";
 import { SliderArrow, Text } from "../../atoms";
 import { Navbar } from "../../molecules";
 import { DashDrawer } from "../DashDrawer/DashDrawer";
@@ -172,7 +172,7 @@ export function Album({}: AlbumProps) {
   const style = stylesFunction();
 
   const { id } = useParams<AlbumRouteParams>();
-  const album: TripAlbum = tripAlbumPlaceholder;
+  const [album, setAlbum] = useState<TripAlbum>(tripAlbumPlaceholder);
 
   let pictureGroup: PictureGroup = {};
   const [pictureGroupArr, setPictureGroupArr] = useState<AlbumPicture[][]>([]);
@@ -201,8 +201,17 @@ export function Album({}: AlbumProps) {
   };
 
   useEffect(() => {
-    groupPicturesByDate();
+    fetchAlbum();
   }, []);
+
+  useEffect(() => {
+    groupPicturesByDate();
+  }, [album]);
+
+  async function fetchAlbum() {
+    let response = await backend.get(`/album/${id}`);
+    setAlbum(response.data);
+  }
 
   function groupPicturesByDate() {
     //   Group pictures

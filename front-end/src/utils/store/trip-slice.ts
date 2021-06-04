@@ -6,14 +6,12 @@ interface TripSlice {
   tripDetail: Trip;
   userTrips: Trip[];
   albumPictures: AlbumPicture[];
-  autoDeletePicture: boolean;
 }
 
 const initialState: TripSlice = {
   tripDetail: tripPlaceholder,
   userTrips: [],
   albumPictures: [],
-  autoDeletePicture: false,
 };
 
 const tripSlice = createSlice({
@@ -32,14 +30,9 @@ const tripSlice = createSlice({
     setUserTrips(state, action: PayloadAction<Trip[]>) {
       state.userTrips = action.payload;
     },
-
-    setAutoDeletePicture(state, action: PayloadAction<boolean>) {
-      state.autoDeletePicture = action.payload;
-    },
   },
 });
 
-export const { setTripDetail, setAutoDeletePicture, setUserTrips, setAlbumPictures } =
-  tripSlice.actions;
+export const { setTripDetail, setUserTrips, setAlbumPictures } = tripSlice.actions;
 
 export default tripSlice.reducer;

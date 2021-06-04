@@ -2,7 +2,6 @@ import { Card, CardActionArea, Grid, makeStyles, Theme } from "@material-ui/core
 import React from "react";
 import { useHistory, useRouteMatch } from "react-router";
 import { Colors, Shadow } from "../../../styles";
-import { Routes } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 
 interface AlbumCard {

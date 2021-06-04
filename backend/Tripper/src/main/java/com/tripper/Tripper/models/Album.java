@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +15,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Data
@@ -37,5 +40,18 @@ public class Album {
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "pictureReference")
+    @Setter(AccessLevel.PRIVATE)
     private List<Picture> pictures = new ArrayList<>();
+
+    public void setAlbumPictures(List<Picture> pictures) {
+        List<Picture> albumAwarePictures = pictures
+                .stream()
+                .map(picture -> {
+                    picture.setAlbum(this);
+                    return picture;
+                })
+                .collect(Collectors.toList());
+
+        this.setPictures(albumAwarePictures);
+    }
 }

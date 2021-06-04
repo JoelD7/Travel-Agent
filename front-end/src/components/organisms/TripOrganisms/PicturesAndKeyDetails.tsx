@@ -136,10 +136,10 @@ export const PicturesAndKeyDetails = React.memo(function Component({
                 {trip.albums.map((album, i) => (
                   <AlbumCard
                     key={album.name}
-                    id={album.idAlbum}
+                    id={album.idAlbum as string}
                     name={album.name}
                     cover={album.cover}
-                    picturesQant={23}
+                    picturesQant={album.pictures.length}
                   />
                 ))}
               </Slider>
@@ -150,10 +150,10 @@ export const PicturesAndKeyDetails = React.memo(function Component({
               trip.albums.map((album, i) => (
                 <AlbumCard
                   key={album.name}
-                  id={album.idAlbum}
+                  id={album.idAlbum as string}
                   name={album.name}
                   cover={album.cover}
-                  picturesQant={23}
+                  picturesQant={album.pictures.length}
                 />
               ))}
 

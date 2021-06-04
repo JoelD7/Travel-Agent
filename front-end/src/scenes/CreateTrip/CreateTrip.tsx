@@ -42,13 +42,10 @@ export function CreateTrip() {
 
   const is1255OrLess = useMediaQuery("(max-width:1255px)");
   const is720OrLess = useMediaQuery("(max-width:720px)");
-  const [openSnack, setOpenSnack] = useState(false);
   const idPerson: number = useSelector(selectIdPerson);
 
-  const userTripRef: firebase.storage.Reference = storage
-    .ref()
-    .child(`images/trips/${idPerson}`);
-  const [coverRef, setCoverRef] = useState<firebase.storage.Reference>(userTripRef);
+  const [openSnack, setOpenSnack] = useState(false);
+  const [coverUrl, setCoverUrl] = useState<string>("");
 
   function updateDates(startDate: Date, endDate: Date) {
     setStartDate(startDate);
@@ -59,24 +56,7 @@ export function CreateTrip() {
     setBudget(value);
   }
 
-  async function onCreateTripClick() {
-    let fileToSave: File = image;
-
-    if (image.size > 250000) {
-      fileToSave = await compressImage(image);
-    }
-
-    coverRef.put(fileToSave).then((snapshot) => {
-      snapshot.ref
-        .getDownloadURL()
-        .then((url) => {
-          createTrip(url);
-        })
-        .catch((error) => console.log(error));
-    });
-  }
-
-  function createTrip(coverUrl: string) {
+  function createTrip() {
     backend
       .post(`/trip/create?idPerson=${idPerson}`, {
         idPerson,
@@ -98,12 +78,16 @@ export function CreateTrip() {
   }
 
   function onAlbumCoverChange(images: File[]) {
-    let file = images[0];
-    setImage(file);
-
-    if (file) {
-      setCoverRef(userTripRef.child(`${file.name}`));
+    if (images.length > 0) {
+      let file = images[0];
+      setImage(file);
+    } else {
+      setCoverUrl("");
     }
+  }
+
+  function onTripCoverUploadSuccess(url: string, image: File) {
+    setCoverUrl(url);
   }
 
   return (
@@ -154,6 +138,7 @@ export function CreateTrip() {
                 <ImageUploader
                   images={[image]}
                   updateState={(images) => onAlbumCoverChange(images)}
+                  onPictureUploadSucess={onTripCoverUploadSuccess}
                 />
               </div>
             </Grid>
@@ -219,7 +204,7 @@ export function CreateTrip() {
                   style={is720OrLess ? { marginTop: 30 } : { marginTop: "auto" }}
                 >
                   <CustomButton
-                    onClick={() => onCreateTripClick()}
+                    onClick={() => createTrip()}
                     style={{ boxShadow: Shadow.LIGHT3D }}
                     backgroundColor={Colors.GREEN}
                   >

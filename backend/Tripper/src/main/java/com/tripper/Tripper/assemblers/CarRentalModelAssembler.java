@@ -1,9 +1,7 @@
 package com.tripper.Tripper.assemblers;
 
 import com.tripper.Tripper.controllers.CarRentalController;
-import com.tripper.Tripper.controllers.FlightController;
 import com.tripper.Tripper.models.CarRental;
-import com.tripper.Tripper.models.Flight;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;

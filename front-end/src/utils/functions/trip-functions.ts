@@ -1,5 +1,6 @@
 import { differenceInCalendarDays, parseISO } from "date-fns";
 import Compress from "react-image-file-resizer";
+import { storage, firebase } from "../external-apis";
 import { setUserTrips, store } from "../store";
 import { Trip, TripEvent } from "../types";
 
@@ -50,9 +51,9 @@ export function compressImage(file: File) {
   return new Promise<File>((resolve) => {
     Compress.imageFileResizer(
       file, // the file from input
-      480, // width
-      480, // height
-      "JPEG", // compress format WEBP, JPEG, PNG
+      800, // width
+      800, // height
+      "PNG", // compress format WEBP, JPEG, PNG
       100, // quality
       0, // rotation
       (uri) => {
@@ -62,4 +63,28 @@ export function compressImage(file: File) {
       "file" // blob, base64 or file default base64
     );
   });
+}
+
+export async function deleteImageFromFirebase(image: File) {
+  const idPerson: number = store.getState().rootSlice.idPerson;
+  const userTripRef: firebase.storage.Reference = storage
+    .ref()
+    .child(`images/trips/${idPerson}`);
+
+  let fileToDelete: File = image;
+
+  if (image.size > 250000) {
+    fileToDelete = await compressImage(image);
+  }
+
+  let imageRef: firebase.storage.Reference = userTripRef.child(fileToDelete.name);
+
+  imageRef
+    .delete()
+    .then(() => {
+      console.log(`Picture ${image.name} deleted.`);
+    })
+    .catch((error) => {
+      console.log(`Couldn't delete ${image.name} | Error: ${error}`);
+    });
 }

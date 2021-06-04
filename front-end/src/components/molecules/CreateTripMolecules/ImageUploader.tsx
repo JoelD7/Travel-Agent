@@ -1,8 +1,9 @@
-import React, { ChangeEvent, useRef, useState } from "react";
 import { Grid, makeStyles, Theme } from "@material-ui/core";
-import { CustomButton, Text } from "../../atoms";
-import { Colors, Shadow } from "../../../styles";
 import { CSSProperties } from "@material-ui/styles";
+import React, { ChangeEvent, useRef, useState } from "react";
+import { Colors, Shadow } from "../../../styles";
+import { deleteImageFromFirebase } from "../../../utils";
+import { CustomButton, Text } from "../../atoms";
 import { SinglePictureUploader } from "../../organisms";
 
 interface ImageUploader {
@@ -11,6 +12,7 @@ interface ImageUploader {
   multiple?: boolean; //To upload several images
   buttonText?: string;
   noImageText?: string;
+  onPictureUploadSucess: (url: string, image: File) => void;
   containerStyles?: CSSProperties;
 }
 
@@ -19,6 +21,7 @@ export function ImageUploader({
   containerStyles,
   multiple,
   images: imagesParam,
+  onPictureUploadSucess,
   noImageText = "Upload an image",
 }: ImageUploader) {
   const EMPTY_IMAGE = "/Travel-Agent/gallery.png";
@@ -70,11 +73,18 @@ export function ImageUploader({
   }
 
   function onRemoveImageClick() {
-    setDisplayImage(EMPTY_IMAGE);
-    setImages([new File([""], "")]);
     //To remove the img from the <input> element.
     //@ts-ignore
     hiddenInputFileRef.current.value = null;
+    //@ts-ignore
+    hiddenInputFileRef.current.files = null;
+
+    let picture: File = images[0];
+    deleteImageFromFirebase(picture);
+
+    setDisplayImage(EMPTY_IMAGE);
+    setImages([]);
+    updateState([]);
   }
 
   function onImageChange(event: ChangeEvent<HTMLInputElement>) {
@@ -112,6 +122,21 @@ export function ImageUploader({
     return `Selected photos: ${images.length}`;
   }
 
+  function updateThisState(values: File[]) {
+    updateState(values);
+    setImages(values);
+
+    if (values.length > 0) {
+      setDisplayImage(URL.createObjectURL(values[0]));
+    } else {
+      setDisplayImage(EMPTY_IMAGE);
+      //@ts-ignore
+      hiddenInputFileRef.current.value = null;
+      //@ts-ignore
+      hiddenInputFileRef.current.files = null;
+    }
+  }
+
   return (
     <div onBlur={multiple ? () => {} : () => updateState(images)}>
       <Grid container className={style.uploaderContainer}>
@@ -145,11 +170,28 @@ export function ImageUploader({
             <Text style={{ marginLeft: "auto", fontSize: 14 }}>{getPhotoQtyLabel()}</Text>
           )}
 
+          {!multiple && images.length > 0 && (
+            <SinglePictureUploader
+              key={images[0].name}
+              picture={images[0]}
+              onUpload={(url) => onPictureUploadSucess(url, images[0])}
+              images={images}
+              updateState={(values) => updateThisState(values)}
+            />
+          )}
+
+          {/* Multiple picture upload */}
           {multiple && images.length > 0 && (
             <>
               {images.map((image) => (
                 // Image upload progress
-                <SinglePictureUploader key={image.name} picture={image} />
+                <SinglePictureUploader
+                  key={image.name}
+                  picture={image}
+                  onUpload={(url) => onPictureUploadSucess(url, image)}
+                  images={images}
+                  updateState={(values) => updateThisState(values)}
+                />
               ))}
             </>
           )}
@@ -168,7 +210,7 @@ export function ImageUploader({
 
         {/* Remove an image */}
         <Grid item xs={12}>
-          {!isImageEmpty() && (
+          {!isImageEmpty() && !multiple && (
             <CustomButton
               className={style.button}
               backgroundColor={Colors.RED}
