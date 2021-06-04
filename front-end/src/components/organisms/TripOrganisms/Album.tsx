@@ -7,14 +7,14 @@ import {
   Theme,
 } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
-import { format, parseISO } from "date-fns";
+import { compareAsc, format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router";
 import Slider from "react-slick";
 import { Colors, Shadow } from "../../../styles";
 import { TripAlbum, tripAlbumPlaceholder, AlbumPicture, backend } from "../../../utils";
-import { SliderArrow, Text } from "../../atoms";
+import { ProgressCircle, SliderArrow, Text } from "../../atoms";
 import { Navbar } from "../../molecules";
 import { DashDrawer } from "../DashDrawer/DashDrawer";
 import { Footer } from "../Footer/Footer";
@@ -155,6 +155,7 @@ export function Album({}: AlbumProps) {
       objectFit: "cover",
       height: "auto",
       width: "auto",
+      maxWidth: "100%",
       margin: "auto",
       borderRadius: "10px",
       [theme.breakpoints.down(755)]: {
@@ -172,12 +173,12 @@ export function Album({}: AlbumProps) {
   const style = stylesFunction();
 
   const { id } = useParams<AlbumRouteParams>();
-  const [album, setAlbum] = useState<TripAlbum>(tripAlbumPlaceholder);
+  const [album, setAlbum] = useState<TripAlbum>();
 
   let pictureGroup: PictureGroup = {};
   const [pictureGroupArr, setPictureGroupArr] = useState<AlbumPicture[][]>([]);
-
   const [openFullImage, setOpenFullImage] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const sliderArrowStyles: CSSProperties = {
     backgroundColor: "#00000075",
@@ -211,112 +212,137 @@ export function Album({}: AlbumProps) {
   async function fetchAlbum() {
     let response = await backend.get(`/album/${id}`);
     setAlbum(response.data);
+    setLoading(false);
   }
 
   function groupPicturesByDate() {
-    //   Group pictures
-    album.pictures.forEach((picture) => {
-      let dateAsString: string = picture.date;
+    if (album) {
+      //   Group pictures
+      album.pictures.forEach((picture) => {
+        let dateAsString: string = picture.date;
 
-      if (pictureGroup.hasOwnProperty(dateAsString)) {
-        let curPicturesInGroup: AlbumPicture[] = pictureGroup[dateAsString];
-        pictureGroup = {
-          ...pictureGroup,
-          [dateAsString]: [...curPicturesInGroup, picture],
-        };
-      } else {
-        pictureGroup = {
-          ...pictureGroup,
-          [dateAsString]: [picture],
-        };
-      }
-    });
+        if (pictureGroup.hasOwnProperty(dateAsString)) {
+          let curPicturesInGroup: AlbumPicture[] = pictureGroup[dateAsString];
+          pictureGroup = {
+            ...pictureGroup,
+            [dateAsString]: [...curPicturesInGroup, picture],
+          };
+        } else {
+          pictureGroup = {
+            ...pictureGroup,
+            [dateAsString]: [picture],
+          };
+        }
+      });
 
-    // Add groups to array
-    let buffer: AlbumPicture[][] = [];
-    for (const key in pictureGroup) {
-      if (Object.prototype.hasOwnProperty.call(pictureGroup, key)) {
-        const pictures = pictureGroup[key];
-        buffer.push(pictures);
+      // Add groups to array
+      let buffer: AlbumPicture[][] = [];
+      for (const key in pictureGroup) {
+        if (Object.prototype.hasOwnProperty.call(pictureGroup, key)) {
+          const pictures = pictureGroup[key];
+          buffer.push(pictures);
+        }
       }
+
+      setPictureGroupArr(buffer);
     }
-
-    setPictureGroupArr(buffer);
   }
 
-  function openFullScreenImageSlider(initialSlide: number) {
-    setInitialImageSlide(initialSlide);
-    setOpenFullImage(true);
+  function openFullScreenImageSlider(picture: AlbumPicture) {
+    if (album) {
+      let slideNo: number = album.pictures.indexOf(picture);
+      setInitialImageSlide(slideNo);
+      setOpenFullImage(true);
+    }
   }
 
   return (
     <div>
       <Helmet>
-        <title>{`Album | ${album.name}`}</title>
+        <title>{album ? `Album | ${album.name}` : "Tripper"}</title>
       </Helmet>
 
       <Navbar className={style.navbar} dashboard position="sticky" />
       <DashDrawer />
 
       <Grid item className={style.pageContentGrid}>
-        {/* Page title */}
-        <Text component="h1" style={{ marginBottom: 20 }} color={Colors.BLUE}>
-          {album.name}
-        </Text>
+        {loading && (
+          <Grid container style={{ height: "85vh" }}>
+            <ProgressCircle />
+          </Grid>
+        )}
 
-        {pictureGroupArr.map((group) => (
-          <div key={group[0].idPicture}>
-            <Text component="h2" color={Colors.BLUE}>
-              {format(parseISO(group[0].date), "MMM. dd, yyyy")}
+        {album && (
+          <>
+            {/* Page title */}
+            <Text component="h1" style={{ marginBottom: 20 }} color={Colors.BLUE}>
+              {album.name}
             </Text>
 
-            {/* Picture cards */}
-            <Grid container>
-              {group.map((picture, i) => (
-                <CardActionArea
-                  key={picture.pictureUrl}
-                  className={style.cardContainer}
-                  onClick={() => openFullScreenImageSlider(i)}
-                >
-                  <img src={picture.pictureUrl} className={style.cardPicture} alt="" />
-                </CardActionArea>
-              ))}
-            </Grid>
-          </div>
-        ))}
+            {pictureGroupArr.map((group) => (
+              <div key={group[0].idPicture} style={{ marginTop: 20 }}>
+                <Text component="h3" color={Colors.BLUE}>
+                  {format(parseISO(group[0].date), "MMM. dd, yyyy")}
+                </Text>
+
+                {/* Picture cards */}
+                <Grid container>
+                  {group.map((picture, i) => (
+                    <CardActionArea
+                      key={picture.pictureUrl}
+                      className={style.cardContainer}
+                      onClick={() => openFullScreenImageSlider(picture)}
+                    >
+                      <img
+                        src={picture.pictureUrl}
+                        className={style.cardPicture}
+                        alt=""
+                      />
+                    </CardActionArea>
+                  ))}
+                </Grid>
+              </div>
+            ))}
+          </>
+        )}
       </Grid>
 
-      <div className={style.footerContainer}>
-        <Footer />
-      </div>
+      {album && (
+        <div className={style.footerContainer}>
+          <Footer />
+        </div>
+      )}
 
-      <Dialog
-        open={openFullImage}
-        onClose={() => setOpenFullImage(false)}
-        BackdropComponent={Backdrop}
-        classes={{ paper: style.paperImage }}
-        BackdropProps={{
-          timeout: 500,
-          classes: { root: style.backdrop },
-        }}
-      >
-        <Slider {...imageSliderSettings} lazyLoad="progressive">
-          {album.pictures.map((picture) => (
-            <Grid
-              container
-              justify="center"
-              key={picture.pictureUrl}
-              className={style.photoContainerImage}
-            >
-              <img
-                src={`${picture.pictureUrl}`}
-                alt={`${picture.pictureUrl}`}
-                className={style.photoInSlider}
-              />
-            </Grid>
-          ))}
-        </Slider>
-      </Dialog>
+      {/* Fullscreen image slider */}
+      {album && (
+        <Dialog
+          open={openFullImage}
+          onClose={() => setOpenFullImage(false)}
+          BackdropComponent={Backdrop}
+          classes={{ paper: style.paperImage }}
+          BackdropProps={{
+            timeout: 500,
+            classes: { root: style.backdrop },
+          }}
+        >
+          <Slider {...imageSliderSettings} lazyLoad="progressive">
+            {album.pictures.map((picture) => (
+              <Grid
+                container
+                justify="center"
+                key={picture.pictureUrl}
+                className={style.photoContainerImage}
+              >
+                <img
+                  src={`${picture.pictureUrl}`}
+                  alt={`${picture.pictureUrl}`}
+                  className={style.photoInSlider}
+                />
+              </Grid>
+            ))}
+          </Slider>
+        </Dialog>
+      )}
     </div>
   );
 }

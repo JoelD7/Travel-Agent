@@ -30,6 +30,12 @@ public class POI {
     @Setter(AccessLevel.PRIVATE)
     private TripEvent event;
 
+    @OneToOne
+    @JoinColumn(name = "idFavorite")
+    @JsonBackReference(value = "poiFavReference")
+    @Setter(AccessLevel.PRIVATE)
+    private Favorite favorite;
+
     private String id;
     private String name;
     private LocalDateTime visitDate;
@@ -42,5 +48,10 @@ public class POI {
     public void setTripEvent(TripEvent event) {
         this.setEvent(event);
         event.setPoi(this);
+    }
+
+    public void setFavoritePOI(Favorite favorite) {
+        this.setFavorite(favorite);
+        favorite.setPoi(this);
     }
 }

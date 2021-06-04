@@ -50,7 +50,7 @@ import { IconText, Text } from "../../atoms";
 import { includeInTripStyles } from "./includeInTripStyles";
 
 interface IncludeInTripPopover {
-  place: Restaurant | POI | Flight | CarRsv | HotelReservation;
+  place: Restaurant | POIType | Flight | CarRsv | HotelReservation;
   eventType: EventTypes.EventType;
   tripAnchor: HTMLButtonElement | null;
   openPopover: boolean;
@@ -451,7 +451,7 @@ export function IncludeInTripPopover({
   }
 
   function getPoiTripEventDTO() {
-    let poi: POI = place as POI;
+    let poi: POIType = place as POIType;
     let poiDTO: RsvPOI = getPoiDTO(poi, datetimePopover.start);
 
     return {

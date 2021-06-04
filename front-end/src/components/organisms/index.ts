@@ -1,3 +1,4 @@
+import ScrollToTop from "./ScrollToTop";
 export { default as HomeHotelReservation } from "./HomeHotelReservation";
 export { default as HomeFlightReservation } from "./HomeFlightReservation";
 export { default as HomeCarReservation } from "./HomeCarReservation";
@@ -29,4 +30,6 @@ export { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 export { RoomAccordionTitle } from "./RoomAccordionTitle/RoomAccordionTitle";
 export { ConfirmRsvDialog } from "./ConfirmRsvDialog";
 export { CarRsvDetails } from "./CarRsvDetails";
+export { AddFavoritesButton } from "./AddFavoritesButton";
+export { ScrollToTop };
 export * from "./TripOrganisms";

@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Font } from "../../assets";
 import {
+  AddFavoritesButton,
   CustomButton,
   Footer,
   IconText,
@@ -42,6 +43,7 @@ import {
   tripEventPlaceholder,
   selectUserTrips,
   Trip,
+  FavoriteTypes,
 } from "../../utils";
 import { fetchRestaurant } from "../../utils/external-apis/yelp-apis";
 import { restaurantDetailsStyles } from "./restaurantDetails-styles";
@@ -186,15 +188,11 @@ export function RestaurantDetails() {
                   </CustomButton>
                 )}
 
-                <IconButton
+                <AddFavoritesButton
                   style={{ margin: "auto 0px auto 10px" }}
-                  onClick={() => addToFavorites()}
-                >
-                  <FontAwesomeIcon
-                    icon={restaurant.favorite ? faHeart : faHeartReg}
-                    color={Colors.PURPLE}
-                  />
-                </IconButton>
+                  type={FavoriteTypes.RESTAURANT}
+                  restaurant={restaurant}
+                />
               </Grid>
             </Grid>
           </Grid>

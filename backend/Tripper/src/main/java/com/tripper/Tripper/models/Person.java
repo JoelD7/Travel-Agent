@@ -34,6 +34,7 @@ public class Person implements Serializable {
     private List<Trip> trips = new ArrayList<>();
 
     @OneToMany(mappedBy = "person")
+    @JsonManagedReference(value = "favoriteReference")
     private List<Favorite> favoritePlaces = new ArrayList<>();
 
     @OneToMany(mappedBy = "person")

@@ -51,6 +51,7 @@ export const selectIdPerson = (state: RootState) => state.rootSlice.idPerson;
 export const selectTripDetail = (state: RootState) => state.tripSlice.tripDetail;
 export const selectUserTrips = (state: RootState) => state.tripSlice.userTrips;
 export const selectAlbumPictures = (state: RootState) => state.tripSlice.albumPictures;
+export const selectFavorites = (state: RootState) => state.tripSlice.favPlaces;
 
 //#endregion
 

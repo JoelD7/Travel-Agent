@@ -2,7 +2,7 @@ import { store } from "../store";
 import { EventTypes, Trip } from "../types";
 import { getISODatetimeWithOffset } from "./functions";
 
-export function parsePOIAddress(poi: POI) {
+export function parsePOIAddress(poi: POIType) {
   if (poi.location.formattedAddress === undefined) {
     return;
   }
@@ -16,7 +16,7 @@ export function parsePOIAddress(poi: POI) {
   }`;
 }
 
-export function getPoiDTO(poi: POI, visitDate: Date): RsvPOI {
+export function getPoiDTO(poi: POIType, visitDate?: Date): RsvPOI {
   let image: POIPhotoItems | undefined = poi.bestPhoto ? poi.bestPhoto : undefined;
   let imageUrl: string = image
     ? `${image.prefix}${image.width}x${image.height}${image.suffix}`
@@ -30,13 +30,13 @@ export function getPoiDTO(poi: POI, visitDate: Date): RsvPOI {
     rating: poi.rating / 2,
     category: poi.categories[0].name,
     categoryIconUrl: `${poi.categories[0].icon.prefix}32${poi.categories[0].icon.suffix}`,
-    visitDate: getISODatetimeWithOffset(visitDate),
+    visitDate: visitDate ? getISODatetimeWithOffset(visitDate) : "",
     imageUrl,
     formattedAddress: poiAddress ? poiAddress : "",
   };
 }
 
-export function isPoiInAnyTrip(poi: POI): boolean {
+export function isPoiInAnyTrip(poi: POIType): boolean {
   const userTrips: Trip[] = store.getState().tripSlice.userTrips;
   let included: boolean = false;
 

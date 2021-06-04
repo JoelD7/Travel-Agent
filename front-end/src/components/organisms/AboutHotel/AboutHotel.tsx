@@ -1,13 +1,10 @@
-import { faHeart as faHeartReg } from "@fortawesome/free-regular-svg-icons";
-import { faHeart, faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Divider, Grid, IconButton, Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { Divider, Grid } from "@material-ui/core";
 import React, { useState } from "react";
-import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
-import { getHotelStars, HotelBooking } from "../../../utils";
+import { FavoriteTypes, getHotelStars, HotelBooking } from "../../../utils";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
+import { AddFavoritesButton } from "../AddFavoritesButton";
 import { aboutHotelStyles } from "./aboutHotel-styles";
 
 interface AboutHotel {
@@ -18,22 +15,9 @@ export function AboutHotel({ hotel }: AboutHotel) {
   const [limitedAbout, setLimitedAbout] = useState(true);
 
   const style = aboutHotelStyles();
-  const [openSnack, setOpenSnack] = useState(false);
-  const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
-  const [favorite, setFavorite] = useState(false);
 
   function getPhoneList() {
     return hotel.phones.map((phone) => phone.phoneNumber).join(" | ");
-  }
-
-  function addToFavorites() {
-    if (!favorite) {
-      setFavorite(true);
-      setOpenSnack(true);
-    } else {
-      setFavorite(false);
-      setOpenSnackRemoved(true);
-    }
   }
 
   return (
@@ -45,15 +29,11 @@ export function AboutHotel({ hotel }: AboutHotel) {
             {hotel.name.content}
           </Text>
 
-          <IconButton
+          <AddFavoritesButton
             style={{ margin: "auto 0px auto auto" }}
-            onClick={() => addToFavorites()}
-          >
-            <FontAwesomeIcon
-              icon={favorite ? faHeart : faHeartReg}
-              color={Colors.PURPLE}
-            />
-          </IconButton>
+            type={FavoriteTypes.HOTEL}
+            hotel={hotel}
+          />
         </Grid>
       </Grid>
 
@@ -115,38 +95,6 @@ export function AboutHotel({ hotel }: AboutHotel) {
           )}
         </Grid>
       </Grid>
-
-      <Snackbar
-        open={openSnack}
-        autoHideDuration={6000}
-        onClose={() => setOpenSnack(false)}
-      >
-        <Alert
-          style={{ fontFamily: Font.Family }}
-          variant="filled"
-          elevation={6}
-          onClose={() => setOpenSnack(false)}
-          severity="success"
-        >
-          {"Added to favorites."}
-        </Alert>
-      </Snackbar>
-
-      <Snackbar
-        open={openSnackRemoved}
-        autoHideDuration={6000}
-        onClose={() => setOpenSnackRemoved(false)}
-      >
-        <Alert
-          style={{ fontFamily: Font.Family }}
-          variant="filled"
-          elevation={6}
-          onClose={() => setOpenSnackRemoved(false)}
-          severity="error"
-        >
-          {"Removed from favorites."}
-        </Alert>
-      </Snackbar>
     </Grid>
   );
 }

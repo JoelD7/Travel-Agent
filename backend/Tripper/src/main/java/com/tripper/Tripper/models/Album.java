@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,7 @@ public class Album {
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "pictureReference")
     @Setter(AccessLevel.PRIVATE)
+    @OrderBy("date ASC")
     private List<Picture> pictures = new ArrayList<>();
 
     public void setAlbumPictures(List<Picture> pictures) {

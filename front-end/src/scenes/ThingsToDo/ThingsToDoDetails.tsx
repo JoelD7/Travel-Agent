@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Font } from "../../assets";
 import {
+  AddFavoritesButton,
   CustomButton,
   Footer,
   IconText,
@@ -34,6 +35,7 @@ import {
   backend,
   deleteTripEventFromStore,
   EventTypes,
+  FavoriteTypes,
   isPoiInAnyTrip,
   parsePOIAddress,
   selectUserTrips,
@@ -44,7 +46,7 @@ import {
 import { thingsToDoDetailsStyles as thingsToDoDetailsStyles } from "./thingsToDoDetails-styles";
 
 export function ThingsToDoDetails() {
-  const [poi, setPOI] = useState<POI>();
+  const [poi, setPOI] = useState<POIType>();
 
   const { id } = useParams<any>();
 
@@ -86,7 +88,7 @@ export function ThingsToDoDetails() {
     return " ";
   }
 
-  function parseHours(poi: POI) {
+  function parseHours(poi: POIType) {
     let hours = "";
     let timeframes = poi.hours.timeframes;
 
@@ -109,7 +111,7 @@ export function ThingsToDoDetails() {
     return hours;
   }
 
-  function parseAttributes(poi: POI) {
+  function parseAttributes(poi: POIType) {
     let attributes = "";
     for (let i = 0; i < poi.attributes.groups.length; i++) {
       const e = poi.attributes.groups[i];
@@ -250,15 +252,11 @@ export function ThingsToDoDetails() {
                   </CustomButton>
                 )}
 
-                <IconButton
+                <AddFavoritesButton
                   style={{ margin: "auto 0px auto 10px" }}
-                  onClick={() => addToFavorites()}
-                >
-                  <FontAwesomeIcon
-                    icon={poi.favorite ? faHeart : faHeartReg}
-                    color={Colors.PURPLE}
-                  />
-                </IconButton>
+                  type={FavoriteTypes.POI}
+                  poi={poi}
+                />
               </Grid>
             </Grid>
 

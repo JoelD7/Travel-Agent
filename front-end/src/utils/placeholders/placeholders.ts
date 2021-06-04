@@ -2109,7 +2109,7 @@ export const poisPlaceholderAPI = [
   },
 ];
 
-export const poiPlaceholder: POI = {
+export const poiPlaceholder: POIType = {
   id: "49eeaf08f964a52078681fe3",
   name: "Vanessa's Dumpling House",
   favorite: true,
@@ -2873,7 +2873,7 @@ export const hotelPhotos = [
   "/Travel-Agent/george6.jpg",
 ];
 
-const poiArray: POI[] = [
+const poiArray: POIType[] = [
   {
     id: "49c54c1bf964a520ed561fe3",
     favorite: false,

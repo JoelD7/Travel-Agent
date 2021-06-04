@@ -9,7 +9,7 @@ interface RsvPOI {
   formattedAddress: string;
 }
 
-interface POI {
+interface POIType {
   id: string;
   name: string;
   contact: POIContact;

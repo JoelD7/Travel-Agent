@@ -31,6 +31,12 @@ public class Restaurant implements Serializable {
     @Setter(AccessLevel.PRIVATE)
     private TripEvent event;
 
+    @OneToOne
+    @JoinColumn(name = "idFavorite")
+    @JsonBackReference(value = "restaurantFavReference")
+    @Setter(AccessLevel.PRIVATE)
+    private Favorite favorite;
+
     private String id;
     private String name;
     private String imageUrl;
@@ -42,6 +48,11 @@ public class Restaurant implements Serializable {
     public void setTripEvent(TripEvent event) {
         this.setEvent(event);
         event.setRestaurant(this);
+    }
+
+    public void setFavoriteRestaurant(Favorite favorite) {
+        this.setFavorite(favorite);
+        favorite.setRestaurant(this);
     }
 
 }

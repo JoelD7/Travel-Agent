@@ -178,7 +178,10 @@ export function getRestaurantsDefaultRoute(): string {
   return `${Routes.RESTAURANTS}?page=${1}&pageSize=${20}`;
 }
 
-export function getRestaurantDTO(restaurant: Restaurant, visitDate: Date): RsvRestaurant {
+export function getRestaurantDTO(
+  restaurant: Restaurant,
+  visitDate?: Date
+): RsvRestaurant {
   return {
     idRestaurant: null,
     name: restaurant.name,
@@ -187,7 +190,7 @@ export function getRestaurantDTO(restaurant: Restaurant, visitDate: Date): RsvRe
     rating: restaurant.rating,
     displayAddress: restaurant.location.display_address.join(", "),
     cuisines: getRestaurantCategoriesList(restaurant),
-    visitDate: getISODatetimeWithOffset(visitDate),
+    visitDate: visitDate ? getISODatetimeWithOffset(visitDate) : "",
   };
 }
 
