@@ -65,6 +65,7 @@ export interface HotelBooking {
   currency: string;
   cancellationAmount?: number;
   countryCode: string;
+  categoryGroupCode: string;
   stateCode?: string;
   S2C: string;
   city: {

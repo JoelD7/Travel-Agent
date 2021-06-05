@@ -1,10 +1,9 @@
 import { faCalendar, faFlag } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardActionArea, CardContent, CardMedia, Grid } from "@material-ui/core";
-import Axios from "axios";
-import { compareAsc, differenceInCalendarDays, format, parseISO } from "date-fns";
+import { compareAsc, format } from "date-fns";
 import React, { CSSProperties, useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
 import {
@@ -19,14 +18,14 @@ import {
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
-  getLinkStyle,
-  Routes,
-  tripPlaceholder,
-  tripsPlaceholder,
-  responseTripToDomainTrip,
   backend,
+  getLinkStyle,
+  responseTripToDomainTrip,
+  Routes,
+  selectUserTrips,
   setTripDetail,
   Trip,
+  tripPlaceholder,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -40,6 +39,7 @@ export function Trips() {
 
   const match = useRouteMatch();
   const history = useHistory();
+  const userTrips: Trip[] = useSelector(selectUserTrips);
 
   const tripCoverBackground: CSSProperties = {
     backgroundImage: lastTrip
@@ -82,6 +82,14 @@ export function Trips() {
   };
 
   useEffect(() => {
+    if (userTrips.length === 0) {
+      fetchTrips();
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  function fetchTrips() {
     backend
       .get("/trip/all")
       .then((res: any) => {
@@ -93,7 +101,7 @@ export function Trips() {
         setLoading(false);
       })
       .catch((err: any) => console.log(err));
-  }, []);
+  }
 
   function onTripClick(trip: Trip) {
     dispatch(setTripDetail(trip));

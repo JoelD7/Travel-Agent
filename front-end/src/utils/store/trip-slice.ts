@@ -4,14 +4,14 @@ import { Trip, AlbumPicture } from "../types";
 import { Favorite } from "../types/favorite-types";
 
 interface TripSlice {
-  tripDetail: Trip;
+  tripDetail?: Trip;
   userTrips: Trip[];
   favPlaces: Favorite[];
   albumPictures: AlbumPicture[];
 }
 
 const initialState: TripSlice = {
-  tripDetail: tripPlaceholder,
+  // tripDetail: tripPlaceholder,
   userTrips: [],
   albumPictures: [],
   favPlaces: [],

@@ -17,21 +17,21 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { CSSProperties } from "@material-ui/styles";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Font } from "../../../assets";
 import { Colors, Shadow } from "../../../styles";
 import {
   AlbumPicture,
   backend,
-  compressImage,
   deleteImageFromFirebase,
-  firebase,
   getISODatetimeWithOffset,
   selectAlbumPictures,
   selectIdPerson,
+  selectUserTrips,
   setAlbumPictures,
-  storage,
+  setTripDetail,
+  setUserTrips,
   store,
   Trip,
   TripAlbum,
@@ -217,19 +217,19 @@ export const TripPictureUploader = React.memo(function Component({
   const [images, setImages] = useState<File[]>([]);
   const [albumCover, setAlbumCover] = useState<File>(new File([""], ""));
   const [albumCoverUrl, setAlbumCoverUrl] = useState<string>("");
+  const [openSnack, setOpenSnack] = useState(false);
 
   const idPerson: number = useSelector(selectIdPerson);
   const albumPictures: AlbumPicture[] = useSelector(selectAlbumPictures);
 
   const is585pxOrLess = useMediaQuery("(max-width:585px)");
 
-  const albumOptions: string[] = [
-    "Journey Through the Alps",
-    "Andes Walk",
-    "Europe in the Snow",
-  ];
-  const [album, setAlbum] = useState<string>("");
-  const [openSnack, setOpenSnack] = useState(false);
+  const albumOptions: string[] = trip.albums.map((album) => album.name);
+  const [albumOption, setAlbumOption] = useState<string>("");
+  const [selectedAlbum, setSelectedAlbum] = useState<TripAlbum>();
+  const [albums, setAlbums] = useState<TripAlbum[]>();
+
+  useEffect(() => {}, []);
 
   function areAllPicturesUploaded(): boolean {
     return albumPictures.length === images.length;
@@ -249,18 +249,43 @@ export const TripPictureUploader = React.memo(function Component({
   }
 
   async function saveAlbum() {
-    onClose();
     dispatch(setAlbumPictures([]));
 
-    let albumDTO: TripAlbum = {
-      idAlbum: null,
-      name: newAlbumName,
-      cover: albumCoverUrl,
-      pictures: albumPictures,
-    };
-
+    let albumDTO: TripAlbum = getAlbumDTO();
     let response = await backend.post(`/album/create?idTrip=${trip.idTrip}`, albumDTO);
     setOpenSnack(true);
+    addAlbumToStore(response.data);
+
+    setTimeout(() => {
+      onClose();
+    }, 1000);
+  }
+
+  function getAlbumDTO(): TripAlbum {
+    return selectedAlbum
+      ? { ...selectedAlbum, pictures: albumPictures }
+      : {
+          idAlbum: null,
+          name: newAlbumName,
+          cover: albumCoverUrl,
+          pictures: albumPictures,
+        };
+  }
+
+  function addAlbumToStore(album: TripAlbum) {
+    // let updatedUserTrips: Trip[] = userTrips.map((tr) => {
+    //   if (tr.idTrip === trip.idTrip) {
+    //     let updatedAlbums: TripAlbum[] = [...tr.albums, album];
+
+    //     return { ...tr, albums: updatedAlbums };
+    //   }
+
+    //   return tr;
+    // });
+
+    let updatedAlbums: TripAlbum[] = [...trip.albums, album];
+    dispatch(setTripDetail({ ...trip, albums: updatedAlbums }));
+    // dispatch(setUserTrips(updatedUserTrips));
   }
 
   function onPictureUploadSucess(url: string, image: File) {
@@ -277,6 +302,7 @@ export const TripPictureUploader = React.memo(function Component({
 
   function onAlbumCoverUploadSuccess(url: string, image: File) {
     setAlbumCoverUrl(url);
+    onPictureUploadSucess(url, image);
   }
 
   function deleteAllUploadedPictures() {
@@ -288,8 +314,27 @@ export const TripPictureUploader = React.memo(function Component({
   function onAlbumCoverChange(values: File[]) {
     if (values.length > 0) {
       setAlbumCover(values[0]);
+      setImages([...images, values[0]]);
     } else {
+      let updatedImages = images.filter((image) => image.name !== values[0].name);
+      setImages(updatedImages);
       setAlbumCoverUrl("");
+    }
+  }
+
+  function onAlbumOptionChange(value: string) {
+    setAlbumOption(value);
+    if (value === "") {
+      setSelectedAlbum(undefined);
+      return;
+    }
+
+    let albumFound: TripAlbum | undefined = trip.albums.find(
+      (album) => album.name === value
+    );
+
+    if (albumFound) {
+      setSelectedAlbum(albumFound);
     }
   }
 
@@ -335,12 +380,16 @@ export const TripPictureUploader = React.memo(function Component({
 
             <FormControl className={style.sortFormControl}>
               <Select
-                value={album}
+                value={albumOption}
                 variant="outlined"
                 classes={{ icon: style.selectIcon }}
                 className={style.select}
-                onChange={(e) => setAlbum(e.target.value as string)}
+                onChange={(e) => onAlbumOptionChange(e.target.value as string)}
               >
+                <MenuItem classes={{ root: style.menuItemSelect }} value="">
+                  <em>None</em>
+                </MenuItem>
+
                 {albumOptions.map((option, i) => (
                   <MenuItem
                     key={i}
@@ -362,6 +411,7 @@ export const TripPictureUploader = React.memo(function Component({
 
             <TextField
               value={newAlbumName}
+              disabled={selectedAlbum !== undefined}
               variant="outlined"
               className={style.textfield}
               onChange={(e) => setNewAlbumName(e.target.value)}
@@ -370,6 +420,7 @@ export const TripPictureUploader = React.memo(function Component({
 
             <ImageUploader
               images={[albumCover]}
+              disabled={selectedAlbum !== undefined}
               onPictureUploadSucess={onAlbumCoverUploadSuccess}
               containerStyles={imageUploaderStyles}
               updateState={(values) => onAlbumCoverChange(values)}
@@ -390,7 +441,7 @@ export const TripPictureUploader = React.memo(function Component({
                 onPictureUploadSucess={onPictureUploadSucess}
                 multiple
                 containerStyles={imageUploaderStyles}
-                updateState={(values) => setImages(values)}
+                updateState={(values) => setImages([...images, ...values])}
               />
             </Grid>
 

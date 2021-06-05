@@ -19,18 +19,22 @@ export function getHotelStars(hotel: HotelBooking) {
   let stars = Number(hotel.categoryCode.split("EST")[0]);
 
   if (isNaN(stars)) {
-    for (const char of hotel.categoryName) {
-      if (char === " ") {
-        continue;
+    if (hotel.categoryName) {
+      for (const char of hotel.categoryName) {
+        if (char === " ") {
+          continue;
+        }
+
+        if (Number.isFinite(Number(char))) {
+          stars = Number(char);
+        }
       }
 
-      if (Number.isFinite(Number(char))) {
-        stars = Number(char);
+      if (hotel.categoryName.includes("HALF")) {
+        stars = stars + 0.5;
       }
-    }
-
-    if (hotel.categoryName.includes("HALF")) {
-      stars = stars + 0.5;
+    } else {
+      stars = Number(hotel.categoryGroupCode[hotel.categoryGroupCode.length - 1]);
     }
   }
 

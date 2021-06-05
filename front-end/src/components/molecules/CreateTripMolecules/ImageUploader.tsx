@@ -13,12 +13,14 @@ interface ImageUploader {
   buttonText?: string;
   noImageText?: string;
   onPictureUploadSucess: (url: string, image: File) => void;
+  disabled?: boolean;
   containerStyles?: CSSProperties;
 }
 
 export function ImageUploader({
   updateState,
   containerStyles,
+  disabled = false,
   multiple,
   images: imagesParam,
   onPictureUploadSucess,
@@ -201,6 +203,7 @@ export function ImageUploader({
           <CustomButton
             className={style.button}
             backgroundColor={Colors.PURPLE}
+            disabled={disabled}
             rounded
             onClick={() => onUploadButtonClick()}
           >

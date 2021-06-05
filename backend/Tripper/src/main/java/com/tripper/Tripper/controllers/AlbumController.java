@@ -51,14 +51,29 @@ public class AlbumController {
         Trip trip = tripRepo.findById(idTrip)
                 .orElseThrow(() -> new TripNotFoundException("This Trip does not exists."));
 
-        Album newAlbum = dto;
-        newAlbum.setAlbumPictures(dto.getPictures());
-        newAlbum.setTrip(trip);
-
+        Album newAlbum = prepareAlbumInstance(dto, trip);
         EntityModel<Album> savedAlbum = assembler.toModel(albumRepo.save(newAlbum));
 
         return ResponseEntity
                 .created(savedAlbum.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .build();
+                .body(savedAlbum.getContent());
+    }
+
+    private Album prepareAlbumInstance(Album dto, Trip trip) {
+        Long idAlbum = dto.getIdAlbum();
+        Album newAlbum;
+
+        if (idAlbum == null) {
+            newAlbum = dto;
+            newAlbum.setAlbumPictures(dto.getPictures());
+        } else {
+            newAlbum = albumRepo.findById(idAlbum)
+                    .orElseThrow(() -> new AlbumNotFoundException(idAlbum));
+            newAlbum.getPictures().addAll(dto.getPictures());
+        }
+
+        newAlbum.setTrip(trip);
+
+        return newAlbum;
     }
 }

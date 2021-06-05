@@ -17,21 +17,21 @@ import {
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import Slider from "react-slick";
 import {
   CustomButton,
   DashDrawer,
   Footer,
   IconText,
   Navbar,
+  ProgressCircle,
   Rating,
-  SliderArrow,
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
 import {
+  backend,
   FavoriteTypes,
   getHotelImages,
   getHotelStars,
@@ -42,6 +42,8 @@ import {
   proxyUrl,
   Routes,
   selectFavorites,
+  selectIdPerson,
+  setFavorites,
 } from "../../utils";
 import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
 import { Favorite } from "../../utils/types/favorite-types";
@@ -65,15 +67,9 @@ export function FavPlaces() {
   const [hotels, setHotels] = useState<HotelBooking[]>();
   const [restaurants, setRestaurants] = useState<RsvRestaurant[]>();
   const [pois, setPois] = useState<RsvPOI[]>();
-  const filterOptions: string[] = [
-    "All",
-    "Restaurants",
-    "Hotels",
-    "Movie Theaters",
-    "Gym / Fitness Centers",
-    "Clothing Stores",
-  ];
+  const [filterOptions, setFilterOptions] = useState<string[]>(["All"]);
   const [selectedFilter, setSelectedFilter] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   let poiCategories = POICategory.POICategories;
   let poiCategoryNames: string[] = POICategory.POICategories.map(
@@ -81,33 +77,50 @@ export function FavPlaces() {
   );
 
   const history = useHistory();
-  const sliderSettings = {
-    className: style.slider,
-    nextArrow: <SliderArrow direction="right" />,
-    prevArrow: <SliderArrow direction="left" />,
-  };
+  const dispatch = useDispatch();
+
   const favorites: Favorite[] = useSelector(selectFavorites);
+  const idPerson = useSelector(selectIdPerson);
 
   useEffect(() => {
     let restaurantsBuffer: RsvRestaurant[] = [];
     let poisBuffer: RsvPOI[] = [];
     let hotelCodes: string[] = [];
 
-    favorites.forEach((fav) => {
-      if (fav.type === FavoriteTypes.HOTEL) {
-        hotelCodes.push(fav.code);
-      } else if (fav.type === FavoriteTypes.POI && fav.poi !== null) {
-        poisBuffer.push(fav.poi);
-      } else if (fav.type === FavoriteTypes.RESTAURANT && fav.restaurant !== null) {
-        restaurantsBuffer.push(fav.restaurant);
-      }
+    fetchFavPlaces().then((res) => {
+      let favoritePlaces: Favorite[] = res;
+
+      favoritePlaces.forEach((fav) => {
+        if (fav.type === FavoriteTypes.HOTEL) {
+          hotelCodes.push(fav.code);
+        } else if (fav.type === FavoriteTypes.POI && fav.poi !== null) {
+          poisBuffer.push(fav.poi);
+        } else if (fav.type === FavoriteTypes.RESTAURANT && fav.restaurant !== null) {
+          restaurantsBuffer.push(fav.restaurant);
+        }
+      });
+
+      setPois(poisBuffer);
+      setRestaurants(restaurantsBuffer);
+      buildFilterOptions(restaurantsBuffer, poisBuffer, hotelCodes);
+
+      fetchFavHotels(hotelCodes);
+
+      setLoading(false);
     });
-
-    setPois(poisBuffer);
-    setRestaurants(restaurantsBuffer);
-
-    fetchFavHotels(hotelCodes);
   }, []);
+
+  async function fetchFavPlaces() {
+    if (favorites.length === 0) {
+      let res = await backend.get(`/favorite/all?idPerson=${idPerson}`);
+      let favoritePlaces: Favorite[] = res.data._embedded.favoriteList;
+      dispatch(setFavorites(favoritePlaces));
+
+      return favoritePlaces;
+    }
+
+    return favorites;
+  }
 
   function fetchFavHotels(hotelCodes: string[]) {
     Axios.get(proxyUrl + HotelBedAPI.hotelContentURL, {
@@ -125,37 +138,34 @@ export function FavPlaces() {
     });
   }
 
-  function getResponsiveSlider(list: RsvRestaurant[] | RsvPOI[] | HotelBooking[]) {
-    return [
-      {
-        breakpoint: 1240,
-        settings: {
-          slidesToShow: getSlidesToShow(3, list),
-          slidesToScroll: getSlidesToShow(3, list),
-        },
-      },
-      {
-        breakpoint: 1080,
-        settings: {
-          slidesToShow: getSlidesToShow(2, list),
-          slidesToScroll: getSlidesToShow(2, list),
-        },
-      },
-      {
-        breakpoint: 620,
-        settings: {
-          slidesToShow: getSlidesToShow(1, list),
-          slidesToScroll: getSlidesToShow(1, list),
-        },
-      },
-    ];
-  }
-
-  function getSlidesToShow(
-    def: number,
-    list: RsvRestaurant[] | RsvPOI[] | HotelBooking[]
+  function buildFilterOptions(
+    restaurants: RsvRestaurant[],
+    pois: RsvPOI[],
+    hotelCodes: string[]
   ) {
-    return list.length > def ? def : list.length;
+    let filtersBuffer: string[] = [];
+
+    if (restaurants.length > 0) {
+      filtersBuffer.push("Restaurants");
+    }
+
+    if (pois.length > 0) {
+      pois
+        .map((poi) => poi.category)
+        .forEach((category) => {
+          if (!filtersBuffer.includes(category)) {
+            filtersBuffer.push(category);
+          }
+        });
+    }
+
+    if (hotelCodes.length > 0) {
+      filtersBuffer.push("Hotels");
+    }
+
+    filtersBuffer.sort((a, b) => a.localeCompare(b));
+
+    setFilterOptions([...filterOptions, ...filtersBuffer]);
   }
 
   function getPlacesOfCategory(category: string): RsvPOI[] {
@@ -340,6 +350,12 @@ export function FavPlaces() {
           </Grid>
         </Grid>
 
+        {loading && (
+          <Grid container style={{ height: "85vh" }}>
+            <ProgressCircle />
+          </Grid>
+        )}
+
         {/* Restaurants */}
         {isSliderSectionVisible("Restaurants") && restaurants && (
           <Grid container style={{ marginTop: "20px" }}>
@@ -373,17 +389,13 @@ export function FavPlaces() {
                 ))}
               </Grid>
             ) : (
-              <Slider
-                {...sliderSettings}
-                responsive={getResponsiveSlider(restaurants)}
-                slidesToShow={getSlidesToShow(4, restaurants)}
-              >
-                {restaurants.map((restaurant) => (
-                  <div key={restaurant.id}>
+              <Grid container>
+                {restaurants.slice(0, 3).map((restaurant) => (
+                  <div key={restaurant.id} className={style.noSliderCard}>
                     <RestaurantCard restaurant={restaurant} />
                   </div>
                 ))}
-              </Slider>
+              </Grid>
             )}
           </Grid>
         )}
@@ -421,17 +433,13 @@ export function FavPlaces() {
                 ))}
               </Grid>
             ) : (
-              <Slider
-                {...sliderSettings}
-                responsive={getResponsiveSlider(hotels)}
-                slidesToShow={getSlidesToShow(4, hotels)}
-              >
-                {hotels.map((hotel) => (
-                  <div key={hotel.code}>
+              <Grid container>
+                {hotels.slice(0, 3).map((hotel) => (
+                  <div key={hotel.code} className={style.noSliderCard}>
                     <HotelCard hotel={hotel} />
                   </div>
                 ))}
-              </Slider>
+              </Grid>
             )}
           </Grid>
         )}
@@ -479,22 +487,15 @@ export function FavPlaces() {
                         ))}
                       </Grid>
                     ) : (
-                      <Slider
-                        {...sliderSettings}
-                        responsive={getResponsiveSlider(
-                          getPlacesOfCategory(category.name)
-                        )}
-                        slidesToShow={getSlidesToShow(
-                          4,
-                          getPlacesOfCategory(category.name)
-                        )}
-                      >
-                        {getPlacesOfCategory(category.name).map((poi: RsvPOI, i) => (
-                          <div key={poi.id}>
-                            <FavPOICard poi={poi} />
-                          </div>
-                        ))}
-                      </Slider>
+                      <Grid container>
+                        {getPlacesOfCategory(category.name)
+                          .slice(0, 3)
+                          .map((poi: RsvPOI, i) => (
+                            <div key={poi.id} className={style.noSliderCard}>
+                              <FavPOICard poi={poi} />
+                            </div>
+                          ))}
+                      </Grid>
                     )}
                   </Grid>
                 )}

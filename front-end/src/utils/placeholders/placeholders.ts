@@ -2490,6 +2490,7 @@ export const hotelsPlaceholder: HotelAvailability = {
 export const hotelPlaceholder: HotelBooking = {
   checkIn: "2021-06-15",
   checkOut: "2021-06-16",
+  categoryGroupCode: "4EST",
   favorite: false,
   S2C: "4*",
   code: 128537,

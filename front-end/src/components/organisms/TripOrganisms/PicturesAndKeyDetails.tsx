@@ -2,7 +2,6 @@ import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { Divider, Grid, makeStyles, Theme } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
-import { useHistory } from "react-router";
 import Slider from "react-slick";
 import { Colors } from "../../../styles";
 import { Trip } from "../../../utils";
@@ -51,7 +50,6 @@ export const PicturesAndKeyDetails = React.memo(function Component({
   }));
 
   const style = photosKeyDetailsStyles();
-
   const [openDialog, setOpenDialog] = useState(false);
 
   const sliderSettings = {
@@ -146,7 +144,7 @@ export const PicturesAndKeyDetails = React.memo(function Component({
             )}
 
             {trip.albums.length > 0 &&
-              trip.albums.length < 3 &&
+              trip.albums.length <= 3 &&
               trip.albums.map((album, i) => (
                 <AlbumCard
                   key={album.name}

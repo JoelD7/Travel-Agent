@@ -35,6 +35,9 @@ import {
   mapHotelDTOToDomainType,
   carRsvPlaceholder,
   setCarReservations,
+  selectUserTrips,
+  setTripDetail,
+  selectTripDetail,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -47,7 +50,7 @@ interface TabPanel {
 
 export function TripDetails() {
   const style = tripStyles();
-  const [trip, setTrip] = useState<Trip>();
+  const trip: Trip | undefined = useSelector(selectTripDetail);
 
   const [tabIndex, setTabIndex] = useState(0);
   const MUtheme = useTheme();
@@ -59,6 +62,7 @@ export function TripDetails() {
   const dispatch = useDispatch();
 
   const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+  const userTrips: Trip[] = useSelector(selectUserTrips);
   const userCurrency: string = useSelector(selectUserCurrency);
 
   const tripCoverBackground: CSSProperties = {
@@ -74,7 +78,7 @@ export function TripDetails() {
     backend
       .get(`/trip/${id}`)
       .then((res) => {
-        setTrip(responseTripToDomainTrip(res.data));
+        dispatch(setTripDetail(responseTripToDomainTrip(res.data)));
       })
       .catch((err) => console.log(err));
   }, []);
@@ -394,6 +398,25 @@ export function TripDetails() {
     setTabIndex(index);
   }
 
+  function getTripPictureQty(trip: Trip) {
+    return trip.albums.map((album) => album.pictures.length).reduce((a, b) => a + b);
+  }
+
+  function getTripPlacesQty(trip: Trip) {
+    let total: number = 0;
+    let placesToCount = [EventTypes.HOTEL, EventTypes.POI, EventTypes.RESTAURANT];
+
+    if (trip.itinerary) {
+      trip.itinerary.forEach((event) => {
+        if (placesToCount.includes(event.type)) {
+          total++;
+        }
+      });
+    }
+
+    return total;
+  }
+
   return (
     <div className={style.mainContainer}>
       <Helmet>{trip && <title>{trip.name}</title>}</Helmet>
@@ -466,7 +489,7 @@ export function TripDetails() {
                     Photos
                   </Text>
                   <Text color="white" component="h4" style={{ textAlign: "center" }}>
-                    {trip && trip.photosQty}
+                    {trip && getTripPictureQty(trip)}
                   </Text>
                 </div>
 
@@ -479,7 +502,7 @@ export function TripDetails() {
                     Places
                   </Text>
                   <Text color="white" component="h4" style={{ textAlign: "center" }}>
-                    {trip && trip.places}
+                    {trip && getTripPlacesQty(trip)}
                   </Text>
                 </div>
 
