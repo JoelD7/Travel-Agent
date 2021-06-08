@@ -1,5 +1,5 @@
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import { Divider, Grid, makeStyles, Theme } from "@material-ui/core";
+import { Divider, Grid, Grow, makeStyles, Theme } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
 import Slider from "react-slick";
@@ -11,10 +11,12 @@ import { TripPictureUploader } from "./TripPictureUploader";
 
 interface PicturesAndKeyDetailsProps {
   trip: Trip;
+  showAll?: boolean;
 }
 
 export const PicturesAndKeyDetails = React.memo(function Component({
   trip,
+  showAll = true,
 }: PicturesAndKeyDetailsProps) {
   const photosKeyDetailsStyles = makeStyles((theme: Theme) => ({
     detailsContainer: {
@@ -107,45 +109,34 @@ export const PicturesAndKeyDetails = React.memo(function Component({
     setOpenDialog(false);
   }
 
+  function getAlbumsToShow() {
+    return showAll ? trip.albums : trip.albums.slice(0, 3);
+  }
+
   return (
-    <Grid item xs={12}>
-      <Grid container>
-        {/* Photos */}
-        <Grid key="photos" item className={style.photosGrid}>
-          <Grid container>
-            <Text bold color={Colors.BLUE} component="h2">
-              Photos
-            </Text>
-            <CustomButton
-              icon={faPlusCircle}
-              iconColor="#7e7e7e"
-              backgroundColor="rgba(0,0,0,0)"
-              textColor="#7e7e7e"
-              onClick={() => openPhotoUploader()}
-            >
-              Upload photo
-            </CustomButton>
-          </Grid>
+    <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+      <Grid item xs={12}>
+        <Grid container>
+          {/* Photos */}
+          <Grid key="photos" item className={style.photosGrid}>
+            <Grid container>
+              <Text bold color={Colors.BLUE} component="h2">
+                Photos
+              </Text>
+              <CustomButton
+                icon={faPlusCircle}
+                iconColor="#7e7e7e"
+                backgroundColor="rgba(0,0,0,0)"
+                textColor="#7e7e7e"
+                onClick={() => openPhotoUploader()}
+              >
+                Upload photo
+              </CustomButton>
+            </Grid>
 
-          {/* Album cards */}
-          <Grid container>
-            {trip.albums.length > 3 && (
-              <Slider {...sliderSettings} slidesToShow={getSlidesToShow(3)}>
-                {trip.albums.map((album, i) => (
-                  <AlbumCard
-                    key={album.name}
-                    id={album.idAlbum as string}
-                    name={album.name}
-                    cover={album.cover}
-                    picturesQant={album.pictures.length}
-                  />
-                ))}
-              </Slider>
-            )}
-
-            {trip.albums.length > 0 &&
-              trip.albums.length <= 3 &&
-              trip.albums.map((album, i) => (
+            {/* Album cards */}
+            <Grid container>
+              {getAlbumsToShow().map((album, i) => (
                 <AlbumCard
                   key={album.name}
                   id={album.idAlbum as string}
@@ -155,47 +146,48 @@ export const PicturesAndKeyDetails = React.memo(function Component({
                 />
               ))}
 
-            {trip.albums.length === 0 && (
-              <NotCreatedMessage
-                actionFunction={() => openPhotoUploader()}
-                type="ALBUMS"
-                message="You have no albums created."
-              />
-            )}
+              {trip.albums.length === 0 && (
+                <NotCreatedMessage
+                  actionFunction={() => openPhotoUploader()}
+                  type="ALBUMS"
+                  message="You have no albums created."
+                />
+              )}
+            </Grid>
+          </Grid>
+
+          {/* Key details */}
+          <Grid key="details" item className={style.detailsGrid}>
+            <div className={style.detailsContainer}>
+              <Text bold color={Colors.BLUE} component="h3">
+                Key details
+              </Text>
+              <Divider style={{ marginBottom: "10px" }} variant="fullWidth" />
+
+              <Text weight="bold" component="h4">
+                Countries
+              </Text>
+              <Text component="p">{trip.countries.join(", ")}</Text>
+
+              <Text weight="bold" component="h4">
+                From
+              </Text>
+              <Text component="p">{format(trip.startDate, "MMM. dd, yyyy")}</Text>
+
+              <Text weight="bold" component="h4">
+                To
+              </Text>
+              <Text component="p">{format(trip.endDate, "MMM. dd, yyyy")}</Text>
+            </div>
           </Grid>
         </Grid>
 
-        {/* Key details */}
-        <Grid key="details" item className={style.detailsGrid}>
-          <div className={style.detailsContainer}>
-            <Text bold color={Colors.BLUE} component="h3">
-              Key details
-            </Text>
-            <Divider style={{ marginBottom: "10px" }} variant="fullWidth" />
-
-            <Text weight="bold" component="h4">
-              Countries
-            </Text>
-            <Text component="p">{trip.countries.join(", ")}</Text>
-
-            <Text weight="bold" component="h4">
-              From
-            </Text>
-            <Text component="p">{format(trip.startDate, "MMM. dd, yyyy")}</Text>
-
-            <Text weight="bold" component="h4">
-              To
-            </Text>
-            <Text component="p">{format(trip.endDate, "MMM. dd, yyyy")}</Text>
-          </div>
-        </Grid>
+        <TripPictureUploader
+          open={openDialog}
+          onClose={() => closePhotoUploader()}
+          trip={trip}
+        />
       </Grid>
-
-      <TripPictureUploader
-        open={openDialog}
-        onClose={() => closePhotoUploader()}
-        trip={trip}
-      />
-    </Grid>
+    </Grow>
   );
 });

@@ -273,24 +273,14 @@ export const TripPictureUploader = React.memo(function Component({
   }
 
   function addAlbumToStore(album: TripAlbum) {
-    // let updatedUserTrips: Trip[] = userTrips.map((tr) => {
-    //   if (tr.idTrip === trip.idTrip) {
-    //     let updatedAlbums: TripAlbum[] = [...tr.albums, album];
-
-    //     return { ...tr, albums: updatedAlbums };
-    //   }
-
-    //   return tr;
-    // });
-
     let updatedAlbums: TripAlbum[] = [...trip.albums, album];
     dispatch(setTripDetail({ ...trip, albums: updatedAlbums }));
-    // dispatch(setUserTrips(updatedUserTrips));
   }
 
-  function onPictureUploadSucess(url: string, image: File) {
+  function onPictureUploadSucess(url: string, savedName: string, image: File) {
     let newAlbumPicture: AlbumPicture = {
       idPicture: null,
+      name: savedName,
       pictureUrl: url,
       date: getISODatetimeWithOffset(new Date(image.lastModified)),
     };
@@ -300,9 +290,9 @@ export const TripPictureUploader = React.memo(function Component({
     dispatch(setAlbumPictures(updatedAlbumPictures));
   }
 
-  function onAlbumCoverUploadSuccess(url: string, image: File) {
+  function onAlbumCoverUploadSuccess(url: string, savedName: string, image: File) {
     setAlbumCoverUrl(url);
-    onPictureUploadSucess(url, image);
+    onPictureUploadSucess(url, savedName, image);
   }
 
   function deleteAllUploadedPictures() {

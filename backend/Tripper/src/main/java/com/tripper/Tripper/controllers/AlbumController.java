@@ -11,6 +11,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +42,6 @@ public class AlbumController {
         return assembler.toModel(album);
     }
 
-    @GetMapping("/all")
     public CollectionModel<EntityModel<Album>> getAllAlbums(@RequestParam Long idTrip) {
         return assembler.toCollectionModel(albumRepo.findByTrip(idTrip));
     }
@@ -75,5 +75,12 @@ public class AlbumController {
         newAlbum.setTrip(trip);
 
         return newAlbum;
+    }
+
+    @DeleteMapping("/{idAlbum}")
+    public ResponseEntity<?> deleteAlbum(@PathVariable Long idAlbum) {
+        albumRepo.deleteById(idAlbum);
+
+        return ResponseEntity.noContent().build();
     }
 }

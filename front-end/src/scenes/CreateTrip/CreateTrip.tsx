@@ -86,7 +86,7 @@ export function CreateTrip() {
     }
   }
 
-  function onTripCoverUploadSuccess(url: string, image: File) {
+  function onTripCoverUploadSuccess(url: string, savedName: string, image: File) {
     setCoverUrl(url);
   }
 

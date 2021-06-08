@@ -1,10 +1,8 @@
-import * as LocalStorageKeys from "./localStorageKeys";
+import { firebase, storage } from "../external-apis";
+import { CarCheckbox, IATALocation } from "../types";
 import * as FlightClass from "./flight-classes";
 import * as LocationType from "./geolocation";
-import { CarCheckbox, CarSearch, IATALocation } from "../types";
-import { addDays, format } from "date-fns";
-import { getDefaultCity, getISOCodeFromCountry } from "../functions";
-import { CarReducer } from "../store";
+import * as LocalStorageKeys from "./localStorageKeys";
 export * from "./airports";
 export * from "./iataCodes";
 export * from "./iso3166-countryCodes";

@@ -41,6 +41,7 @@ export interface TripAlbum {
 
 export interface AlbumPicture {
   idPicture: string | null;
+  name: string;
   pictureUrl: string;
   date: string;
 }

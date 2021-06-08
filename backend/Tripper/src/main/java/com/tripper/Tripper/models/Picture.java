@@ -22,6 +22,7 @@ public class Picture {
     @Column(name = "idPicture")
     private Long idPicture;
 
+    private String name;
     private String pictureUrl;
     private LocalDateTime date;
 

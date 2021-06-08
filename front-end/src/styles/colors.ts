@@ -15,6 +15,7 @@ export const RED_HOVER = "#ee6257";
 export const ORANGE = "#fba900";
 export const ORANGE_HOVER = "#e89c00";
 export const TRANSPARENT = "rgba(0,0,0,0)";
+export const TRANSPARENT_HOVER = "rgba(0, 0, 0, 0.1)";
 export const PAGE_BACKG =
   "linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 50%, rgba(255,255,255,1) 100%)";
 export const TF_BACKGROUND = "#f5f5f578";

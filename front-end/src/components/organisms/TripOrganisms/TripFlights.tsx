@@ -1,6 +1,5 @@
-import { makeStyles, Grid, Theme } from "@material-ui/core";
-import React from "react";
-import { flightsPlaceholder } from "../../../utils";
+import { Grid, Grow, makeStyles, Theme } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import { NotCreatedMessage } from "../../molecules";
 import { CardFlight } from "../CardFlight/CardFlight";
 
@@ -22,31 +21,30 @@ export const TripFlights = React.memo(function TripFlights({
       },
     },
   }));
-
   const style = tripFlightStyles();
-
-  // const flights: Flight[] = flightsPlaceholder.concat(flightsPlaceholder);
 
   function getFlightsToShow(): Flight[] {
     return showAll ? flights : flights.slice(0, 2);
   }
 
   return (
-    <Grid container>
-      {getFlightsToShow().length > 0 ? (
-        getFlightsToShow().map((flight, i) => (
-          <CardFlight
-            className={style.flightCard}
-            key={i}
-            flight={flight}
-            bookedFlight
-            isFlightInTrip
-            variant="deal"
-          />
-        ))
-      ) : (
-        <NotCreatedMessage type="FLIGHT" message="You have no booked flights." />
-      )}
-    </Grid>
+    <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+      <Grid container>
+        {getFlightsToShow().length > 0 ? (
+          getFlightsToShow().map((flight, i) => (
+            <CardFlight
+              className={style.flightCard}
+              key={i}
+              flight={flight}
+              bookedFlight
+              isFlightInTrip
+              variant="deal"
+            />
+          ))
+        ) : (
+          <NotCreatedMessage type="FLIGHT" message="You have no booked flights." />
+        )}
+      </Grid>
+    </Grow>
   );
 });

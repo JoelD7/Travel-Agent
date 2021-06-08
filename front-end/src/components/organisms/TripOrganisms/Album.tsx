@@ -1,20 +1,38 @@
+import { faTrash, faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Backdrop,
   CardActionArea,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Grid,
+  IconButton,
   makeStyles,
+  Snackbar,
   Theme,
 } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { CSSProperties } from "@material-ui/styles";
 import { compareAsc, format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router";
+import { useDispatch } from "react-redux";
+import { useHistory, useParams, useRouteMatch } from "react-router";
 import Slider from "react-slick";
+import { Font } from "../../../assets";
 import { Colors, Shadow } from "../../../styles";
-import { TripAlbum, tripAlbumPlaceholder, AlbumPicture, backend } from "../../../utils";
-import { ProgressCircle, SliderArrow, Text } from "../../atoms";
+import {
+  TripAlbum,
+  tripAlbumPlaceholder,
+  firebase,
+  AlbumPicture,
+  backend,
+  Routes,
+  userTripRef,
+} from "../../../utils";
+import { CustomButton, IconTP, ProgressCircle, SliderArrow, Text } from "../../atoms";
 import { Navbar } from "../../molecules";
 import { DashDrawer } from "../DashDrawer/DashDrawer";
 import { Footer } from "../Footer/Footer";
@@ -131,6 +149,15 @@ export function Album({}: AlbumProps) {
         width: "100%",
       },
     },
+    paperDelete: {
+      maxWidth: "94vw",
+      width: "auto",
+      backgroundColor: "white",
+      borderRadius: 10,
+      "&.MuiPaper-elevation24": {
+        boxShadow: Shadow.TRANSPARENT,
+      },
+    },
     paperImage: {
       maxWidth: "94vw",
       width: "auto",
@@ -178,7 +205,10 @@ export function Album({}: AlbumProps) {
   let pictureGroup: PictureGroup = {};
   const [pictureGroupArr, setPictureGroupArr] = useState<AlbumPicture[][]>([]);
   const [openFullImage, setOpenFullImage] = useState(false);
+  const [openAlbumDeleteConfirm, setOpenAlbumDeleteConfirm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [openDeleteSnack, setOpenDeleteSnack] = useState(false);
+  const [initialImageSlide, setInitialImageSlide] = useState(0);
 
   const sliderArrowStyles: CSSProperties = {
     backgroundColor: "#00000075",
@@ -186,8 +216,6 @@ export function Album({}: AlbumProps) {
       backgroundColor: "#000000b5",
     },
   };
-
-  const [initialImageSlide, setInitialImageSlide] = useState(0);
 
   const imageSliderSettings = {
     className: style.imageSlider,
@@ -200,6 +228,9 @@ export function Album({}: AlbumProps) {
     slidesToShow: 1,
     initialSlide: initialImageSlide,
   };
+
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchAlbum();
@@ -256,6 +287,42 @@ export function Album({}: AlbumProps) {
     }
   }
 
+  async function deleteAlbum() {
+    let response = await backend.delete(`/album/${id}`);
+    setOpenAlbumDeleteConfirm(false);
+    setOpenDeleteSnack(true);
+    deleteFirebaseAlbumPictures();
+
+    let url = window.location.href;
+    let tripDetailRoute = url.substring(0, url.indexOf("/album/"));
+
+    setTimeout(() => {
+      window.location.href = tripDetailRoute;
+    }, 1000);
+  }
+
+  function deleteFirebaseAlbumPictures() {
+    if (album) {
+      album.pictures.forEach((picture) => {
+        let imageRef: firebase.storage.Reference = userTripRef.child(picture.name);
+
+        imageRef
+          .delete()
+          .then(() => {
+            console.log(`Picture ${picture.name} deleted.`);
+          })
+          .catch((error) => {
+            console.log(`Couldn't delete ${picture.name} | Error: ${error}`);
+          });
+      });
+    }
+  }
+
+  function removeAlbumFromStore(album: TripAlbum) {
+    // let updatedAlbums: TripAlbum[] = [...trip.albums, album];
+    // dispatch(setTripDetail({ ...trip, albums: updatedAlbums }));
+  }
+
   return (
     <div>
       <Helmet>
@@ -275,9 +342,18 @@ export function Album({}: AlbumProps) {
         {album && (
           <>
             {/* Page title */}
-            <Text component="h1" style={{ marginBottom: 20 }} color={Colors.BLUE}>
-              {album.name}
-            </Text>
+            <Grid container style={{ marginTop: 20 }} alignItems="center">
+              <Text component="h1" style={{ marginBottom: 0 }} color={Colors.BLUE}>
+                {album.name}
+              </Text>
+
+              <IconButton
+                style={{ marginLeft: 5 }}
+                onClick={() => setOpenAlbumDeleteConfirm(true)}
+              >
+                <FontAwesomeIcon size="xs" icon={faTrash} />
+              </IconButton>
+            </Grid>
 
             {pictureGroupArr.map((group) => (
               <div key={group[0].idPicture} style={{ marginTop: 20 }}>
@@ -313,6 +389,55 @@ export function Album({}: AlbumProps) {
         </div>
       )}
 
+      {/* Delete confirmation */}
+      <Dialog
+        open={openAlbumDeleteConfirm}
+        onClose={() => setOpenAlbumDeleteConfirm(false)}
+        BackdropComponent={Backdrop}
+        classes={{ paper: style.paperDelete }}
+        BackdropProps={{
+          timeout: 500,
+          classes: { root: style.backdrop },
+        }}
+      >
+        <DialogTitle>
+          <Grid container alignItems="center">
+            <FontAwesomeIcon
+              style={{ width: 25, height: 25 }}
+              icon={faExclamationTriangle}
+              color="#002E43AB"
+            />
+
+            <Text style={{ marginLeft: 15 }} component="h2" color={Colors.BLUE}>
+              Delete album
+            </Text>
+          </Grid>
+        </DialogTitle>
+
+        <DialogContent>
+          <Text>Are you sure you want to delete this album?</Text>
+        </DialogContent>
+
+        <DialogActions style={{ marginTop: 10 }}>
+          <CustomButton
+            size={14}
+            style={{ fontWeight: "bold" }}
+            onClick={() => setOpenAlbumDeleteConfirm(false)}
+            backgroundColor={Colors.TRANSPARENT}
+          >
+            Cancel
+          </CustomButton>
+
+          <CustomButton
+            size={14}
+            onClick={() => deleteAlbum()}
+            backgroundColor={Colors.RED}
+          >
+            Delete
+          </CustomButton>
+        </DialogActions>
+      </Dialog>
+
       {/* Fullscreen image slider */}
       {album && (
         <Dialog
@@ -343,6 +468,22 @@ export function Album({}: AlbumProps) {
           </Slider>
         </Dialog>
       )}
+
+      <Snackbar
+        open={openDeleteSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenDeleteSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenDeleteSnack(false)}
+          severity="success"
+        >
+          Album deleted
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

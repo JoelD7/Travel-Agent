@@ -3023,72 +3023,84 @@ export const tripAlbumPlaceholder: TripAlbum = {
   pictures: [
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
       date: new Date(2021, 4, 25).toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
       date: new Date(2021, 4, 25).toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
       date: new Date(2021, 4, 25).toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
       date: new Date().toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
       date: new Date().toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
       date: new Date().toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
       date: new Date(2021, 4, 25).toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
       date: new Date(2021, 4, 25).toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
       date: new Date(2021, 4, 25).toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
       date: new Date().toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
       date: new Date().toISOString(),
     },
     {
       idPicture: "asd",
+      name: "",
       pictureUrl:
         "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
       date: new Date().toISOString(),
@@ -3115,6 +3127,7 @@ export const tripPlaceholder: Trip = {
         {
           idPicture: "asd",
           pictureUrl: "",
+          name: "country.jpg",
           date: new Date().toISOString(),
         },
       ],
@@ -3127,6 +3140,7 @@ export const tripPlaceholder: Trip = {
         {
           idPicture: "asd",
           pictureUrl: "",
+          name: "globes.jpg",
           date: new Date().toISOString(),
         },
       ],
@@ -3139,6 +3153,7 @@ export const tripPlaceholder: Trip = {
         {
           idPicture: "asd",
           pictureUrl: "",
+          name: "country.jpg",
           date: new Date().toISOString(),
         },
       ],
@@ -3230,36 +3245,42 @@ export const tripsPlaceholder: Trip[] = [
         pictures: [
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
@@ -3273,36 +3294,42 @@ export const tripsPlaceholder: Trip[] = [
         pictures: [
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
@@ -3323,36 +3350,42 @@ export const tripsPlaceholder: Trip[] = [
         pictures: [
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
@@ -3366,36 +3399,42 @@ export const tripsPlaceholder: Trip[] = [
         pictures: [
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
@@ -3428,36 +3467,42 @@ export const tripsPlaceholder: Trip[] = [
         pictures: [
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
@@ -3471,36 +3516,42 @@ export const tripsPlaceholder: Trip[] = [
         pictures: [
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1508672019048-805c876b67e2?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date(2021, 4, 25).toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1530789253388-582c481c54b0?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8dHJhdmVsfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),
           },
           {
             idPicture: "asd",
+            name: "",
             pictureUrl:
               "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHRyYXZlbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
             date: new Date().toISOString(),

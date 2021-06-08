@@ -1,6 +1,6 @@
 import { faCalendar, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Direction, Grid, IconButton, useTheme } from "@material-ui/core";
+import { Direction, Grid, Grow, IconButton, Slide, useTheme } from "@material-ui/core";
 import React, { CSSProperties, ReactNode, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,9 +13,10 @@ import {
   Footer,
   Navbar,
   PicturesAndKeyDetails,
+  ProgressCircle,
+  ReservedCars,
   RsvHotels,
   Text,
-  ReservedCars,
   TripFlights,
   TripPOIs,
   TripRestaurants,
@@ -26,18 +27,16 @@ import {
   backend,
   CarRsv,
   EventTypes,
-  selectUserCurrency,
   HotelReservation,
   mapFlightToDomainType,
+  mapHotelDTOToDomainType,
   responseTripToDomainTrip,
   Routes,
-  Trip,
-  mapHotelDTOToDomainType,
-  carRsvPlaceholder,
-  setCarReservations,
-  selectUserTrips,
-  setTripDetail,
   selectTripDetail,
+  selectUserCurrency,
+  setCarReservations,
+  setTripDetail,
+  Trip,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -53,6 +52,8 @@ export function TripDetails() {
   const trip: Trip | undefined = useSelector(selectTripDetail);
 
   const [tabIndex, setTabIndex] = useState(0);
+  const [prevTabIndex, setPrevTabIndex] = useState(0);
+  const [loading, setLoading] = useState(trip === undefined);
   const MUtheme = useTheme();
 
   //@ts-ignore
@@ -62,7 +63,6 @@ export function TripDetails() {
   const dispatch = useDispatch();
 
   const VirtualizeSwipeableViews = virtualize(SwipeableViews);
-  const userTrips: Trip[] = useSelector(selectUserTrips);
   const userCurrency: string = useSelector(selectUserCurrency);
 
   const tripCoverBackground: CSSProperties = {
@@ -79,6 +79,7 @@ export function TripDetails() {
       .get(`/trip/${id}`)
       .then((res) => {
         dispatch(setTripDetail(responseTripToDomainTrip(res.data)));
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -182,210 +183,241 @@ export function TripDetails() {
       case 0:
         return (
           <div key={key}>
-            {trip && (
-              <TabPanel value={tabIndex} index={0} dir={MUtheme.direction}>
-                {/* Photos, details grid */}
-                <PicturesAndKeyDetails trip={trip} />
+            {trip && tabIndex === index && (
+              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
+                <div>
+                  <TabPanel value={tabIndex} index={0} dir={MUtheme.direction}>
+                    {/* Photos, details grid */}
+                    <PicturesAndKeyDetails showAll={false} trip={trip} />
 
-                {/* Flights */}
-                <Grid item xs={12} style={{ marginTop: 30 }}>
-                  <Grid container>
-                    <Text bold color={Colors.BLUE} component="h2">
-                      Flights
-                    </Text>
-                    <CustomButton
-                      iconColor="#7e7e7e"
-                      backgroundColor="rgba(0,0,0,0)"
-                      textColor="#7e7e7e"
-                      onClick={() => setTabIndex(2)}
-                    >
-                      See all
-                    </CustomButton>
-                  </Grid>
+                    {/* Flights */}
+                    <Grid item xs={12} style={{ marginTop: 30 }}>
+                      <Grid container>
+                        <Text bold color={Colors.BLUE} component="h2">
+                          Flights
+                        </Text>
+                        <CustomButton
+                          iconColor="#7e7e7e"
+                          backgroundColor="rgba(0,0,0,0)"
+                          textColor="#7e7e7e"
+                          onClick={() => setTabIndex(2)}
+                        >
+                          See all
+                        </CustomButton>
+                      </Grid>
 
-                  <TripFlights flights={getTripFlights()} showAll={false} />
-                </Grid>
+                      <TripFlights flights={getTripFlights()} showAll={false} />
+                    </Grid>
 
-                {/* Hotels */}
-                <Grid item xs={12} style={{ marginTop: 30 }}>
-                  <Grid container>
-                    <Text bold color={Colors.BLUE} component="h2">
-                      Hotels
-                    </Text>
-                    <CustomButton
-                      iconColor="#7e7e7e"
-                      backgroundColor="rgba(0,0,0,0)"
-                      textColor="#7e7e7e"
-                      onClick={() => setTabIndex(3)}
-                    >
-                      See all
-                    </CustomButton>
-                  </Grid>
+                    {/* Hotels */}
+                    <Grid item xs={12} style={{ marginTop: 30 }}>
+                      <Grid container>
+                        <Text bold color={Colors.BLUE} component="h2">
+                          Hotels
+                        </Text>
+                        <CustomButton
+                          iconColor="#7e7e7e"
+                          backgroundColor="rgba(0,0,0,0)"
+                          textColor="#7e7e7e"
+                          onClick={() => setTabIndex(3)}
+                        >
+                          See all
+                        </CustomButton>
+                      </Grid>
 
-                  <RsvHotels
-                    userCurrency={userCurrency}
-                    hotels={getTripHotelRsv()}
-                    showAll={false}
-                  />
-                </Grid>
+                      <RsvHotels
+                        userCurrency={userCurrency}
+                        hotels={getTripHotelRsv()}
+                        showAll={false}
+                      />
+                    </Grid>
 
-                {/* Restaurants */}
-                <Grid item xs={12} style={{ marginTop: 30 }}>
-                  <Grid container>
-                    <Text bold color={Colors.BLUE} component="h2">
-                      Restaurants
-                    </Text>
-                    <CustomButton
-                      iconColor="#7e7e7e"
-                      backgroundColor="rgba(0,0,0,0)"
-                      textColor="#7e7e7e"
-                      onClick={() => setTabIndex(4)}
-                    >
-                      See all
-                    </CustomButton>
-                  </Grid>
+                    {/* Restaurants */}
+                    <Grid item xs={12} style={{ marginTop: 30 }}>
+                      <Grid container>
+                        <Text bold color={Colors.BLUE} component="h2">
+                          Restaurants
+                        </Text>
+                        <CustomButton
+                          iconColor="#7e7e7e"
+                          backgroundColor="rgba(0,0,0,0)"
+                          textColor="#7e7e7e"
+                          onClick={() => setTabIndex(4)}
+                        >
+                          See all
+                        </CustomButton>
+                      </Grid>
 
-                  <TripRestaurants restaurants={getTripRestaurants()} showAll={false} />
-                </Grid>
+                      <TripRestaurants
+                        restaurants={getTripRestaurants()}
+                        showAll={false}
+                      />
+                    </Grid>
 
-                {/* Things to do */}
-                <Grid item xs={12} style={{ marginTop: 30 }}>
-                  <Grid container>
-                    <Text bold color={Colors.BLUE} component="h2">
-                      Things to do
-                    </Text>
-                    <CustomButton
-                      iconColor="#7e7e7e"
-                      backgroundColor="rgba(0,0,0,0)"
-                      textColor="#7e7e7e"
-                      onClick={() => setTabIndex(4)}
-                    >
-                      See all
-                    </CustomButton>
-                  </Grid>
+                    {/* Things to do */}
+                    <Grid item xs={12} style={{ marginTop: 30 }}>
+                      <Grid container>
+                        <Text bold color={Colors.BLUE} component="h2">
+                          Things to do
+                        </Text>
+                        <CustomButton
+                          iconColor="#7e7e7e"
+                          backgroundColor="rgba(0,0,0,0)"
+                          textColor="#7e7e7e"
+                          onClick={() => setTabIndex(4)}
+                        >
+                          See all
+                        </CustomButton>
+                      </Grid>
 
-                  <TripPOIs pois={getTripPOIs()} showAll={false} />
-                </Grid>
+                      <TripPOIs pois={getTripPOIs()} showAll={false} />
+                    </Grid>
 
-                {/* Car rental */}
-                <Grid item xs={12} style={{ marginTop: 30 }}>
-                  <Grid container>
-                    <Text bold color={Colors.BLUE} component="h2">
-                      Car rental
-                    </Text>
-                    <CustomButton
-                      iconColor="#7e7e7e"
-                      backgroundColor="rgba(0,0,0,0)"
-                      textColor="#7e7e7e"
-                      onClick={() => setTabIndex(5)}
-                    >
-                      See all
-                    </CustomButton>
-                  </Grid>
+                    {/* Car rental */}
+                    <Grid item xs={12} style={{ marginTop: 30 }}>
+                      <Grid container>
+                        <Text bold color={Colors.BLUE} component="h2">
+                          Car rental
+                        </Text>
+                        <CustomButton
+                          iconColor="#7e7e7e"
+                          backgroundColor="rgba(0,0,0,0)"
+                          textColor="#7e7e7e"
+                          onClick={() => setTabIndex(5)}
+                        >
+                          See all
+                        </CustomButton>
+                      </Grid>
 
-                  <ReservedCars showAll={false} />
-                </Grid>
-              </TabPanel>
+                      <ReservedCars showAll={false} />
+                    </Grid>
+                  </TabPanel>
+                </div>
+              </Slide>
             )}
           </div>
         );
       case 1:
         return (
           <div key={key}>
-            {trip && (
-              <TabPanel value={tabIndex} index={1} dir={MUtheme.direction}>
-                <PicturesAndKeyDetails trip={trip} />
-              </TabPanel>
+            {trip && tabIndex === index && (
+              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
+                <div>
+                  <TabPanel value={tabIndex} index={1} dir={MUtheme.direction}>
+                    <PicturesAndKeyDetails trip={trip} />
+                  </TabPanel>
+                </div>
+              </Slide>
             )}
           </div>
         );
       case 2:
         return (
           <div key={key}>
-            {trip && (
-              <TabPanel value={tabIndex} index={2} dir={MUtheme.direction}>
-                <Text
-                  bold
-                  color={Colors.BLUE}
-                  component="h2"
-                  style={{ margin: "20px 0px" }}
-                >
-                  Flights
-                </Text>
-                <TripFlights flights={getTripFlights()} />
-              </TabPanel>
+            {trip && tabIndex === index && (
+              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
+                <div>
+                  <TabPanel value={tabIndex} index={2} dir={MUtheme.direction}>
+                    <Text
+                      bold
+                      color={Colors.BLUE}
+                      component="h2"
+                      style={{ margin: "20px 0px" }}
+                    >
+                      Flights
+                    </Text>
+                    <TripFlights flights={getTripFlights()} />
+                  </TabPanel>
+                </div>
+              </Slide>
             )}
           </div>
         );
       case 3:
         return (
           <div key={key}>
-            {trip && (
-              <TabPanel value={tabIndex} index={3} dir={MUtheme.direction}>
-                <Text
-                  bold
-                  color={Colors.BLUE}
-                  component="h2"
-                  style={{ margin: "20px 0px" }}
-                >
-                  Hotels
-                </Text>
-                <RsvHotels userCurrency={userCurrency} hotels={getTripHotelRsv()} />
-              </TabPanel>
+            {trip && tabIndex === index && (
+              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
+                <div>
+                  <TabPanel value={tabIndex} index={3} dir={MUtheme.direction}>
+                    <Text
+                      bold
+                      color={Colors.BLUE}
+                      component="h2"
+                      style={{ margin: "20px 0px" }}
+                    >
+                      Hotels
+                    </Text>
+                    <RsvHotels userCurrency={userCurrency} hotels={getTripHotelRsv()} />
+                  </TabPanel>
+                </div>
+              </Slide>
             )}
           </div>
         );
       case 4:
         return (
           <div key={key}>
-            {trip && (
-              <TabPanel value={tabIndex} index={4} dir={MUtheme.direction}>
-                <Text
-                  bold
-                  color={Colors.BLUE}
-                  component="h2"
-                  style={{ margin: "20px 0px" }}
-                >
-                  Restaurants
-                </Text>
-                <TripRestaurants restaurants={getTripRestaurants()} />
-              </TabPanel>
+            {trip && tabIndex === index && (
+              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
+                <div>
+                  <TabPanel value={tabIndex} index={4} dir={MUtheme.direction}>
+                    <Text
+                      bold
+                      color={Colors.BLUE}
+                      component="h2"
+                      style={{ margin: "20px 0px" }}
+                    >
+                      Restaurants
+                    </Text>
+                    <TripRestaurants restaurants={getTripRestaurants()} />
+                  </TabPanel>
+                </div>
+              </Slide>
             )}
           </div>
         );
       case 5:
         return (
           <div key={key}>
-            {trip && (
-              <TabPanel value={tabIndex} index={5} dir={MUtheme.direction}>
-                <Text
-                  bold
-                  color={Colors.BLUE}
-                  component="h2"
-                  style={{ margin: "20px 0px" }}
-                >
-                  Things to do
-                </Text>
-                <TripPOIs pois={getTripPOIs()} />
-              </TabPanel>
+            {trip && tabIndex === index && (
+              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
+                <div>
+                  <TabPanel value={tabIndex} index={5} dir={MUtheme.direction}>
+                    <Text
+                      bold
+                      color={Colors.BLUE}
+                      component="h2"
+                      style={{ margin: "20px 0px" }}
+                    >
+                      Things to do
+                    </Text>
+                    <TripPOIs pois={getTripPOIs()} />
+                  </TabPanel>
+                </div>
+              </Slide>
             )}
           </div>
         );
       case 6:
         return (
           <div key={key}>
-            {trip && (
-              <TabPanel value={tabIndex} index={6} dir={MUtheme.direction}>
-                <Text
-                  bold
-                  color={Colors.BLUE}
-                  component="h2"
-                  style={{ margin: "20px 0px" }}
-                >
-                  Car rental
-                </Text>
-                <ReservedCars />
-              </TabPanel>
+            {trip && tabIndex === index && (
+              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
+                <div>
+                  <TabPanel value={tabIndex} index={6} dir={MUtheme.direction}>
+                    <Text
+                      bold
+                      color={Colors.BLUE}
+                      component="h2"
+                      style={{ margin: "20px 0px" }}
+                    >
+                      Car rental
+                    </Text>
+                    <ReservedCars />
+                  </TabPanel>
+                </div>
+              </Slide>
             )}
           </div>
         );
@@ -394,12 +426,20 @@ export function TripDetails() {
     }
   }
 
+  function getSlideDirection(index: number) {
+    return index > prevTabIndex ? "left" : "right";
+  }
+
   function onTabIndexChange(index: number) {
+    setPrevTabIndex(tabIndex);
     setTabIndex(index);
   }
 
   function getTripPictureQty(trip: Trip) {
-    return trip.albums.map((album) => album.pictures.length).reduce((a, b) => a + b);
+    if (trip.albums.length > 0) {
+      return trip.albums.map((album) => album.pictures.length).reduce((a, b) => a + b);
+    }
+    return 0;
   }
 
   function getTripPlacesQty(trip: Trip) {
@@ -426,118 +466,148 @@ export function TripDetails() {
       <DashDrawer />
 
       <Grid container className={style.pageContentGrid}>
-        <Grid item xs={12} style={{ marginBottom: "10px" }}>
-          <CustomButton icon={faChevronLeft} rounded>
-            All trips
-          </CustomButton>
-        </Grid>
+        {loading && (
+          <Grid container style={{ height: "85vh" }}>
+            <ProgressCircle />
+          </Grid>
+        )}
 
-        {/* Photo title */}
-        <Grid
-          key="photoTitle"
-          item
-          xs={12}
-          className={style.photoTitleContainer}
-          style={tripCoverBackground}
-        >
-          <Grid container style={{ height: "100%" }}>
-            <Grid item xs={12}>
-              <Grid container alignItems="baseline" style={{ marginTop: "20px" }}>
-                <Grid item xs={9}>
-                  <Text
-                    color="white"
-                    component="h1"
-                    style={{ margin: "0px 10px 0px 0px" }}
-                  >
-                    {trip && trip.name}
-                  </Text>
-                </Grid>
+        {trip && (
+          <div style={{ width: "100%" }}>
+            <Grid item xs={12} style={{ marginBottom: "10px" }}>
+              <CustomButton icon={faChevronLeft} rounded>
+                All trips
+              </CustomButton>
+            </Grid>
 
-                <Grid item xs={3}>
-                  <Grid container>
-                    <CustomButton
-                      className={style.itineraryButton}
-                      onClick={() => history.push(Routes.ITINERARY)}
-                      icon={faCalendar}
-                    >
-                      Itinerary
-                    </CustomButton>
+            {/* Photo title */}
+            <Grid
+              key="photoTitle"
+              item
+              xs={12}
+              className={style.photoTitleContainer}
+              style={tripCoverBackground}
+            >
+              <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                <Grid container style={{ height: "100%" }}>
+                  <Grid item xs={12}>
+                    <Grid container alignItems="baseline" style={{ marginTop: "20px" }}>
+                      <Grid item xs={9}>
+                        <Text
+                          color="white"
+                          component="h1"
+                          style={{ margin: "0px 10px 0px 0px" }}
+                        >
+                          {trip && trip.name}
+                        </Text>
+                      </Grid>
 
-                    <IconButton className={style.itineraryIconButton}>
-                      <FontAwesomeIcon icon={faCalendar} color="white" />
-                    </IconButton>
+                      <Grid item xs={3}>
+                        <Grid container>
+                          <CustomButton
+                            className={style.itineraryButton}
+                            onClick={() => history.push(Routes.ITINERARY)}
+                            icon={faCalendar}
+                          >
+                            Itinerary
+                          </CustomButton>
+
+                          <IconButton className={style.itineraryIconButton}>
+                            <FontAwesomeIcon icon={faCalendar} color="white" />
+                          </IconButton>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item className={style.countryListGrid}>
+                        <Text
+                          color="white"
+                          component="h4"
+                          style={{ fontWeight: "normal" }}
+                        >
+                          {trip && trip.countries.join(", ")}
+                        </Text>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+
+                  {/* Trip quick info */}
+                  <Grid item xs={12} style={{ alignSelf: "flex-end" }}>
+                    <Grid container>
+                      <div className={style.photosPlacesDaysContainer}>
+                        <Text
+                          color="white"
+                          component="h3"
+                          style={{ textAlign: "center", marginBottom: "5px" }}
+                        >
+                          Photos
+                        </Text>
+                        <Text
+                          color="white"
+                          component="h4"
+                          style={{ textAlign: "center" }}
+                        >
+                          {trip && getTripPictureQty(trip)}
+                        </Text>
+                      </div>
+
+                      <div className={style.photosPlacesDaysContainer}>
+                        <Text
+                          color="white"
+                          component="h3"
+                          style={{ textAlign: "center", marginBottom: "5px" }}
+                        >
+                          Places
+                        </Text>
+                        <Text
+                          color="white"
+                          component="h4"
+                          style={{ textAlign: "center" }}
+                        >
+                          {trip && getTripPlacesQty(trip)}
+                        </Text>
+                      </div>
+
+                      <div className={style.photosPlacesDaysContainer}>
+                        <Text
+                          color="white"
+                          component="h3"
+                          style={{ textAlign: "center", marginBottom: "5px" }}
+                        >
+                          Days
+                        </Text>
+                        <Text
+                          color="white"
+                          component="h4"
+                          style={{ textAlign: "center" }}
+                        >
+                          {trip && trip.days}
+                        </Text>
+                      </div>
+                    </Grid>
                   </Grid>
                 </Grid>
-
-                <Grid item className={style.countryListGrid}>
-                  <Text color="white" component="h4" style={{ fontWeight: "normal" }}>
-                    {trip && trip.countries.join(", ")}
-                  </Text>
-                </Grid>
-              </Grid>
+              </Grow>
             </Grid>
 
-            {/* Trip quick info */}
-            <Grid item xs={12} style={{ alignSelf: "flex-end" }}>
-              <Grid container>
-                <div className={style.photosPlacesDaysContainer}>
-                  <Text
-                    color="white"
-                    component="h3"
-                    style={{ textAlign: "center", marginBottom: "5px" }}
-                  >
-                    Photos
-                  </Text>
-                  <Text color="white" component="h4" style={{ textAlign: "center" }}>
-                    {trip && getTripPictureQty(trip)}
-                  </Text>
-                </div>
-
-                <div className={style.photosPlacesDaysContainer}>
-                  <Text
-                    color="white"
-                    component="h3"
-                    style={{ textAlign: "center", marginBottom: "5px" }}
-                  >
-                    Places
-                  </Text>
-                  <Text color="white" component="h4" style={{ textAlign: "center" }}>
-                    {trip && getTripPlacesQty(trip)}
-                  </Text>
-                </div>
-
-                <div className={style.photosPlacesDaysContainer}>
-                  <Text
-                    color="white"
-                    component="h3"
-                    style={{ textAlign: "center", marginBottom: "5px" }}
-                  >
-                    Days
-                  </Text>
-                  <Text color="white" component="h4" style={{ textAlign: "center" }}>
-                    {trip && trip.days}
-                  </Text>
-                </div>
+            {/* Tab bar */}
+            <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+              <Grid item xs={12}>
+                <TripTabBar tabIndex={tabIndex} onTabIndexChange={onTabIndexChange} />
               </Grid>
+            </Grow>
+
+            {/* Tabs */}
+            <Grid item xs={12}>
+              <VirtualizeSwipeableViews
+                slideRenderer={({ index, key }) => TabViews(index, key)}
+                axis={MUtheme.direction === "rtl" ? "x-reverse" : "x"}
+                index={tabIndex}
+                slideClassName={style.tabSlide}
+                onChangeIndex={onTabIndexChange}
+              />
             </Grid>
-          </Grid>
-        </Grid>
-
-        {/* Tab bar */}
-        <Grid item xs={12}>
-          <TripTabBar tabIndex={tabIndex} onTabIndexChange={onTabIndexChange} />
-        </Grid>
-
-        {/* Tabs */}
-        <Grid item xs={12}>
-          <VirtualizeSwipeableViews
-            slideRenderer={({ index, key }) => TabViews(index, key)}
-            axis={MUtheme.direction === "rtl" ? "x-reverse" : "x"}
-            index={tabIndex}
-            slideClassName={style.tabSlide}
-            onChangeIndex={onTabIndexChange}
-          />
-        </Grid>
+          </div>
+        )}
       </Grid>
 
       <div className={style.footerContainer}>

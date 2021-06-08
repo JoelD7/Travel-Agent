@@ -86,6 +86,7 @@ export function Trips() {
       fetchTrips();
     } else {
       setLoading(false);
+      setTrips(userTrips);
     }
   }, []);
 

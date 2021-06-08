@@ -12,6 +12,7 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  Grow,
 } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React from "react";
@@ -55,38 +56,40 @@ export const TripRestaurants = React.memo(function TripRestaurants({
   }
 
   return (
-    <Grid container>
-      {getRestaurantsToShow().length > 0 ? (
-        getRestaurantsToShow().map((restaurant) => (
-          <Card key={restaurant.id} className={style.card}>
-            <CardActionArea>
-              <CardMedia component="img" src={restaurant.imageUrl} height="200" />
+    <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+      <Grid container>
+        {getRestaurantsToShow().length > 0 ? (
+          getRestaurantsToShow().map((restaurant) => (
+            <Card key={restaurant.id} className={style.card}>
+              <CardActionArea>
+                <CardMedia component="img" src={restaurant.imageUrl} height="200" />
 
-              <CardContent>
-                <Text component="h4" color={Colors.BLUE}>
-                  {restaurant.name}
-                </Text>
-                <Rating type="circle" score={restaurant.rating} />
+                <CardContent>
+                  <Text component="h4" color={Colors.BLUE}>
+                    {restaurant.name}
+                  </Text>
+                  <Rating type="circle" score={restaurant.rating} />
 
-                <IconText style={{ marginTop: "10px" }} icon={faUtensils}>
-                  {restaurant.cuisines}
-                </IconText>
+                  <IconText style={{ marginTop: "10px" }} icon={faUtensils}>
+                    {restaurant.cuisines}
+                  </IconText>
 
-                <IconText icon={faCalendar}>
-                  {format(parseISO(restaurant.visitDate), "dd/MM/yyyy 'at' HH:mm")}
-                </IconText>
+                  <IconText icon={faCalendar}>
+                    {format(parseISO(restaurant.visitDate), "dd/MM/yyyy 'at' HH:mm")}
+                  </IconText>
 
-                <IconText icon={faMapMarkerAlt}>{restaurant.displayAddress}</IconText>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        ))
-      ) : (
-        <NotCreatedMessage
-          type="RESTAURANT"
-          message="This trip has no restaurants added."
-        />
-      )}
-    </Grid>
+                  <IconText icon={faMapMarkerAlt}>{restaurant.displayAddress}</IconText>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          ))
+        ) : (
+          <NotCreatedMessage
+            type="RESTAURANT"
+            message="This trip has no restaurants added."
+          />
+        )}
+      </Grid>
+    </Grow>
   );
 });

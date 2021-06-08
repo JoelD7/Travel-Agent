@@ -53,7 +53,7 @@ export function compressImage(file: File) {
       file, // the file from input
       800, // width
       800, // height
-      "PNG", // compress format WEBP, JPEG, PNG
+      "png", // compress format WEBP, JPEG, PNG
       100, // quality
       0, // rotation
       (uri) => {

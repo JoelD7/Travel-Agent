@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { tripPlaceholder } from "../placeholders";
-import { Trip, AlbumPicture } from "../types";
+import { AlbumPicture, Trip } from "../types";
 import { Favorite } from "../types/favorite-types";
 
 interface TripSlice {
@@ -11,7 +10,6 @@ interface TripSlice {
 }
 
 const initialState: TripSlice = {
-  // tripDetail: tripPlaceholder,
   userTrips: [],
   albumPictures: [],
   favPlaces: [],

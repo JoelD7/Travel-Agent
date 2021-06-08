@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/storage";
+import { store } from "../store";
 
 var firebaseConfig = {
   apiKey: "AIzaSyBCrNnyYWSbUOHAIE6W3CZ2Ai-zOx1hJ0g",
@@ -15,4 +16,8 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 export const storage = firebase.storage();
+const idPerson: number = store.getState().rootSlice.idPerson;
+export const userTripRef: firebase.storage.Reference = storage
+  .ref()
+  .child(`images/trips/${idPerson}`);
 export { firebase };

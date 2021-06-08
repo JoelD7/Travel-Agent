@@ -65,23 +65,22 @@ export function CustomButton({
       padding: `5px ${icon ? "16px" : "10px"} 5px 10px`,
       borderRadius: rounded ? "50px" : "",
       "&:hover": {
-        backgroundColor: getHoverColor(backgroundColor),
-        color: type === "text" ? getHoverColor(textColor) : "",
+        backgroundColor: getHoverColor(),
       },
       fontSize: `${size}px`,
       textTransform: "capitalize",
-      color: textColor,
+      color: backgroundColor === Colors.TRANSPARENT ? Colors.BLUE : textColor,
       cursor: "pointer",
       ...style,
     },
   });
 
-  function getHoverColor(color: string | undefined): string {
+  function getHoverColor(): string {
     if (type === "text") {
       return "";
     }
 
-    switch (color) {
+    switch (backgroundColor) {
       case Colors.PURPLE:
         return Colors.PURPLE_HOVER;
 
@@ -99,8 +98,11 @@ export function CustomButton({
 
       case Colors.ORANGE:
         return Colors.ORANGE_HOVER;
+
+      case Colors.TRANSPARENT:
+        return Colors.TRANSPARENT_HOVER;
       default:
-        return color ? color : "inherit";
+        return backgroundColor ? backgroundColor : "inherit";
     }
   }
 

@@ -12,7 +12,7 @@ interface ImageUploader {
   multiple?: boolean; //To upload several images
   buttonText?: string;
   noImageText?: string;
-  onPictureUploadSucess: (url: string, image: File) => void;
+  onPictureUploadSucess: (url: string, savedName: string, image: File) => void;
   disabled?: boolean;
   containerStyles?: CSSProperties;
 }
@@ -176,7 +176,9 @@ export function ImageUploader({
             <SinglePictureUploader
               key={images[0].name}
               picture={images[0]}
-              onUpload={(url) => onPictureUploadSucess(url, images[0])}
+              onUpload={(url, savedName) =>
+                onPictureUploadSucess(url, savedName, images[0])
+              }
               images={images}
               updateState={(values) => updateThisState(values)}
             />
@@ -190,7 +192,9 @@ export function ImageUploader({
                 <SinglePictureUploader
                   key={image.name}
                   picture={image}
-                  onUpload={(url) => onPictureUploadSucess(url, image)}
+                  onUpload={(url, savedName) =>
+                    onPictureUploadSucess(url, savedName, image)
+                  }
                   images={images}
                   updateState={(values) => updateThisState(values)}
                 />

@@ -22,7 +22,8 @@ public class AlbumModelAssembler implements RepresentationModelAssembler<Album, 
         return EntityModel.of(entity,
                 linkTo(methodOn(AlbumController.class).getAlbum(idAlbum)).withSelfRel(),
                 linkTo(methodOn(AlbumController.class).getAllAlbums(idTrip)).withRel("albums"),
-                linkTo(methodOn(AlbumController.class).createAlbum(entity, entity.getTrip().getIdTrip())).withRel("createNew")
+                linkTo(methodOn(AlbumController.class).createAlbum(entity, entity.getTrip().getIdTrip())).withRel("createNew"),
+                linkTo(methodOn(AlbumController.class).deleteAlbum(idAlbum)).withRel("delete")
         );
     }
 

@@ -8,7 +8,7 @@ import { compressImage, firebase, selectIdPerson, storage } from "../../../utils
 import { Text } from "../../atoms";
 
 interface SinglePictureUploaderProps {
-  onUpload: (url: string) => void;
+  onUpload: (url: string, savedName: string) => void;
   picture: File;
   images: File[];
   updateState: (values: File[]) => void;
@@ -76,7 +76,8 @@ export function SinglePictureUploader({
 
   async function onUploadSuccess(uploadTask: firebase.storage.UploadTask) {
     let url: string = await uploadTask.snapshot.ref.getDownloadURL();
-    onUpload(url);
+    let savedName = uploadTask.snapshot.ref.name;
+    onUpload(url, savedName);
   }
 
   async function deletePicture() {
