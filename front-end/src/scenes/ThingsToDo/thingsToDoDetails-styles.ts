@@ -33,6 +33,16 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
     background: "#cecece",
     marginBottom: "10px",
   },
+  footerContainer: {
+    position: "relative",
+    marginTop: "250px",
+    width: "90%",
+    marginLeft: "auto",
+
+    [theme.breakpoints.down(1000)]: {
+      width: "100%",
+    },
+  },
   images: {
     objectFit: "cover",
     width: "100%",

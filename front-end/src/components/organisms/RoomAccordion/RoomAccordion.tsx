@@ -5,6 +5,7 @@ import {
   AccordionSummary,
   Divider,
   Grid,
+  Grow,
   Radio,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
@@ -145,63 +146,69 @@ export const RoomAccordion = React.memo(function Component({
   return (
     <>
       {hotel && (
-        <Accordion
+        <Grow
           key={room.code}
-          onChange={(e, isExpanded) => onAccordionChange(isExpanded)}
-          expanded={expanded}
-          classes={{ root: style.accordionRoot, rounded: style.accordionRounded }}
+          in={true}
+          style={{ transformOrigin: "0 0 0" }}
+          timeout={1000}
         >
-          <AccordionSummary
-            style={{ display: "flex" }}
-            expandIcon={
-              <IconTP icon={faChevronDown} backgroundColor={Colors.GREEN} size={28} />
-            }
+          <Accordion
+            onChange={(e, isExpanded) => onAccordionChange(isExpanded)}
+            expanded={expanded}
+            classes={{ root: style.accordionRoot, rounded: style.accordionRounded }}
           >
-            <RoomAccordionTitle totalRoomCost={totalRoomCost} room={room} />
-          </AccordionSummary>
+            <AccordionSummary
+              style={{ display: "flex" }}
+              expandIcon={
+                <IconTP icon={faChevronDown} backgroundColor={Colors.GREEN} size={28} />
+              }
+            >
+              <RoomAccordionTitle totalRoomCost={totalRoomCost} room={room} />
+            </AccordionSummary>
 
-          <AccordionDetails style={{ background: "white" }}>
-            <Grid container>
-              {uniqueRates.map((rate, i) => (
-                <>
-                  <Grid item xs={12}>
-                    <Grid container alignItems="center">
-                      <Text style={{ marginLeft: "3px" }}>
-                        {capitalizeString(rate.boardName, "each word")}
-                      </Text>
+            <AccordionDetails style={{ background: "white" }}>
+              <Grid container>
+                {uniqueRates.map((rate, i) => (
+                  <>
+                    <Grid item xs={12}>
+                      <Grid container alignItems="center">
+                        <Text style={{ marginLeft: "3px" }}>
+                          {capitalizeString(rate.boardName, "each word")}
+                        </Text>
+                      </Grid>
                     </Grid>
-                  </Grid>
 
-                  <Grid item xs={12}>
-                    <Grid container alignItems="center">
-                      <Text bold>Total: </Text>
-                      <Text style={{ marginLeft: "3px" }}>
-                        {formatAsCurrency(
-                          convertToUserCurrency(getRoomTotalPrice(rate), "USD")
-                        )}
-                      </Text>
+                    <Grid item xs={12}>
+                      <Grid container alignItems="center">
+                        <Text bold>Total: </Text>
+                        <Text style={{ marginLeft: "3px" }}>
+                          {formatAsCurrency(
+                            convertToUserCurrency(getRoomTotalPrice(rate), "USD")
+                          )}
+                        </Text>
 
-                      <Radio
-                        style={{ marginLeft: "auto" }}
-                        checked={selectedRateKey === rate.rateKey}
-                        onChange={(e) => onBoardChange(e, rate)}
-                        disabled={isRoomBooked() || areAllRoomsToBookBooked()}
-                        value={rate.rateKey}
-                        classes={{ colorSecondary: style.colorSecondary }}
-                      />
+                        <Radio
+                          style={{ marginLeft: "auto" }}
+                          checked={selectedRateKey === rate.rateKey}
+                          onChange={(e) => onBoardChange(e, rate)}
+                          disabled={isRoomBooked() || areAllRoomsToBookBooked()}
+                          value={rate.rateKey}
+                          classes={{ colorSecondary: style.colorSecondary }}
+                        />
+                      </Grid>
                     </Grid>
-                  </Grid>
 
-                  {i < uniqueRates.length - 1 && (
-                    <Grid item xs={12} style={{ margin: "15px" }}>
-                      <Divider style={{ backgroundColor: "#cecece" }} />
-                    </Grid>
-                  )}
-                </>
-              ))}
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
+                    {i < uniqueRates.length - 1 && (
+                      <Grid item xs={12} style={{ margin: "15px" }}>
+                        <Divider style={{ backgroundColor: "#cecece" }} />
+                      </Grid>
+                    )}
+                  </>
+                ))}
+              </Grid>
+            </AccordionDetails>
+          </Accordion>
+        </Grow>
       )}
     </>
   );

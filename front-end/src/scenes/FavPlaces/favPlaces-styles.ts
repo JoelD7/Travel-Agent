@@ -35,6 +35,7 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
   },
   mainGrid: {
     marginLeft: "290px",
+    marginBottom: "100px",
     width: "calc(100% - 330px)",
     [theme.breakpoints.down("sm")]: {
       width: "85%",

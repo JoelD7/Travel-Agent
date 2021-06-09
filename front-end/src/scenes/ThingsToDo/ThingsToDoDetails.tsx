@@ -9,7 +9,7 @@ import {
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Divider, Grid, IconButton, Snackbar } from "@material-ui/core";
+import { Divider, Grid, Grow, IconButton, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Axios from "axios";
 import React, { MouseEvent, useEffect, useState } from "react";
@@ -218,201 +218,219 @@ export function ThingsToDoDetails() {
       >
         {poi && (
           <>
-            <Grid item key="title" xs={12}>
-              {/* Title and include in trip */}
-              <Grid container alignItems="center">
-                <Grid item className={style.titleRatingGrid}>
-                  <Text component="h1" bold color={Colors.BLUE}>
-                    {poi.name}
-                  </Text>
+            <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+              <Grid item key="title" xs={12}>
+                {/* Title and include in trip */}
+                <Grid container alignItems="center">
+                  <Grid item className={style.titleRatingGrid}>
+                    <Text component="h1" bold color={Colors.BLUE}>
+                      {poi.name}
+                    </Text>
 
-                  {/* Rating */}
-                  {poi.rating && (
-                    <Rating size={30} type="star" readonly score={poi.rating} />
+                    {/* Rating */}
+                    {poi.rating && (
+                      <Rating size={30} type="star" readonly score={poi.rating} />
+                    )}
+                  </Grid>
+
+                  {isPoiInAnyTrip(poi) ? (
+                    <CustomButton
+                      style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
+                      onClick={() => deleteFromTrip()}
+                      backgroundColor={Colors.RED}
+                      rounded
+                    >
+                      Delete from trip
+                    </CustomButton>
+                  ) : (
+                    <CustomButton
+                      style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
+                      onClick={(e) => onIncludeTripClick(e)}
+                      backgroundColor={Colors.GREEN}
+                      rounded
+                    >
+                      Include in trip
+                    </CustomButton>
                   )}
+
+                  <AddFavoritesButton
+                    style={{ margin: "auto 0px auto 10px" }}
+                    type={FavoriteTypes.POI}
+                    poi={poi}
+                  />
                 </Grid>
-
-                {isPoiInAnyTrip(poi) ? (
-                  <CustomButton
-                    style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
-                    onClick={() => deleteFromTrip()}
-                    backgroundColor={Colors.RED}
-                    rounded
-                  >
-                    Delete from trip
-                  </CustomButton>
-                ) : (
-                  <CustomButton
-                    style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
-                    onClick={(e) => onIncludeTripClick(e)}
-                    backgroundColor={Colors.GREEN}
-                    rounded
-                  >
-                    Include in trip
-                  </CustomButton>
-                )}
-
-                <AddFavoritesButton
-                  style={{ margin: "auto 0px auto 10px" }}
-                  type={FavoriteTypes.POI}
-                  poi={poi}
-                />
               </Grid>
-            </Grid>
+            </Grow>
 
             {/* Image */}
-            <Grid
-              item
-              className={poi.bestPhoto ? style.imageGrid : style.imageGridNoImage}
-            >
-              <Grid container style={{ height: "100%" }}>
-                {poi.bestPhoto ? (
-                  <img
-                    src={photoURLBuilder(poi.bestPhoto)}
-                    className={style.images}
-                    alt="restaurant image"
-                  />
-                ) : (
-                  <NotAvailableCard variant="vertical" title="Sorry">
-                    This place has no photos available.
-                  </NotAvailableCard>
-                )}
+            <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+              <Grid
+                item
+                className={poi.bestPhoto ? style.imageGrid : style.imageGridNoImage}
+              >
+                <Grid container style={{ height: "100%" }}>
+                  {poi.bestPhoto ? (
+                    <img
+                      src={photoURLBuilder(poi.bestPhoto)}
+                      className={style.images}
+                      alt="restaurant image"
+                    />
+                  ) : (
+                    <NotAvailableCard variant="vertical" title="Sorry">
+                      This place has no photos available.
+                    </NotAvailableCard>
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
+            </Grow>
 
             {/* Details */}
-            <Grid item className={style.detailsGrid}>
-              <div className={style.detailsContainer}>
-                <Text bold style={{ marginBottom: "15px" }} color="white" component="h3">
-                  Details
-                </Text>
-
-                {hasContactInfo() && (
-                  <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
-                    Contact
+            <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+              <Grid item className={style.detailsGrid}>
+                <div className={style.detailsContainer}>
+                  <Text
+                    bold
+                    style={{ marginBottom: "15px" }}
+                    color="white"
+                    component="h3"
+                  >
+                    Details
                   </Text>
-                )}
 
-                {poi.contact.formattedPhone && (
-                  <IconText
-                    textColor="white"
-                    icon={faPhone}
-                    fontSize={15}
-                    text={poi.contact.formattedPhone}
-                  />
-                )}
-
-                {poi.contact.facebookName && (
-                  <IconText
-                    textColor="white"
-                    icon={faFacebook}
-                    fontSize={15}
-                    text={poi.contact.facebookName}
-                  />
-                )}
-
-                {poi.contact.twitter && (
-                  <IconText
-                    textColor="white"
-                    style={{ marginBottom: "20px" }}
-                    icon={faTwitter}
-                    fontSize={15}
-                    text={poi.contact.twitter}
-                  />
-                )}
-
-                {poi.location.formattedAddress && (
-                  <div>
+                  {hasContactInfo() && (
                     <Text
                       bold
                       style={{ marginBottom: "7px" }}
                       color="white"
                       component="h4"
                     >
-                      Address
+                      Contact
                     </Text>
+                  )}
+
+                  {poi.contact.formattedPhone && (
+                    <IconText
+                      textColor="white"
+                      icon={faPhone}
+                      fontSize={15}
+                      text={poi.contact.formattedPhone}
+                    />
+                  )}
+
+                  {poi.contact.facebookName && (
+                    <IconText
+                      textColor="white"
+                      icon={faFacebook}
+                      fontSize={15}
+                      text={poi.contact.facebookName}
+                    />
+                  )}
+
+                  {poi.contact.twitter && (
                     <IconText
                       textColor="white"
                       style={{ marginBottom: "20px" }}
-                      icon={faMapMarkerAlt}
+                      icon={faTwitter}
                       fontSize={15}
-                      text={parsePOIAddress(poi)}
+                      text={poi.contact.twitter}
                     />
-                  </div>
-                )}
+                  )}
 
-                {poi.hours && poi.hours.timeframes && (
-                  <div>
-                    <Text
-                      bold
-                      style={{ marginBottom: "7px" }}
-                      color="white"
-                      component="h4"
-                    >
-                      Hours
-                    </Text>
-                    <IconText
-                      textColor="white"
-                      style={{ marginBottom: "20px" }}
-                      icon={faClock}
-                      fontSize={15}
-                      text={parseHours(poi)}
-                    />
-                  </div>
-                )}
+                  {poi.location.formattedAddress && (
+                    <div>
+                      <Text
+                        bold
+                        style={{ marginBottom: "7px" }}
+                        color="white"
+                        component="h4"
+                      >
+                        Address
+                      </Text>
+                      <IconText
+                        textColor="white"
+                        style={{ marginBottom: "20px" }}
+                        icon={faMapMarkerAlt}
+                        fontSize={15}
+                        text={parsePOIAddress(poi)}
+                      />
+                    </div>
+                  )}
 
-                {poi.url && (
-                  <div>
-                    <Text
-                      bold
-                      style={{ marginBottom: "7px" }}
-                      color="white"
-                      component="h4"
-                    >
-                      Website
-                    </Text>
-                    <IconText
-                      textColor="white"
-                      style={{ marginBottom: "20px" }}
-                      icon={faGlobe}
-                      fontSize={15}
-                      text={poi.url}
-                    />
-                  </div>
-                )}
+                  {poi.hours && poi.hours.timeframes && (
+                    <div>
+                      <Text
+                        bold
+                        style={{ marginBottom: "7px" }}
+                        color="white"
+                        component="h4"
+                      >
+                        Hours
+                      </Text>
+                      <IconText
+                        textColor="white"
+                        style={{ marginBottom: "20px" }}
+                        icon={faClock}
+                        fontSize={15}
+                        text={parseHours(poi)}
+                      />
+                    </div>
+                  )}
 
-                {poi.attributes.groups.length > 0 && (
-                  <div>
-                    <Text
-                      bold
-                      style={{ marginBottom: "7px" }}
-                      color="white"
-                      component="h4"
-                    >
-                      Amenities
-                    </Text>
-                    <IconText
-                      textColor="white"
-                      style={{ marginBottom: "20px" }}
-                      icon={faStar}
-                      fontSize={15}
-                      text={parseAttributes(poi)}
-                    />
-                  </div>
-                )}
-              </div>
-            </Grid>
+                  {poi.url && (
+                    <div>
+                      <Text
+                        bold
+                        style={{ marginBottom: "7px" }}
+                        color="white"
+                        component="h4"
+                      >
+                        Website
+                      </Text>
+                      <IconText
+                        textColor="white"
+                        style={{ marginBottom: "20px" }}
+                        icon={faGlobe}
+                        fontSize={15}
+                        text={poi.url}
+                      />
+                    </div>
+                  )}
 
-            {poi.description && (
-              <Grid item className={style.aboutGrid}>
-                <div className={style.aboutContainer}>
-                  <Text component="h2" bold color={Colors.BLUE}>
-                    About
-                  </Text>
-                  <Divider className={style.divider} />
-                  <Text>{poi.description}</Text>
+                  {poi.attributes.groups.length > 0 && (
+                    <div>
+                      <Text
+                        bold
+                        style={{ marginBottom: "7px" }}
+                        color="white"
+                        component="h4"
+                      >
+                        Amenities
+                      </Text>
+                      <IconText
+                        textColor="white"
+                        style={{ marginBottom: "20px" }}
+                        icon={faStar}
+                        fontSize={15}
+                        text={parseAttributes(poi)}
+                      />
+                    </div>
+                  )}
                 </div>
               </Grid>
+            </Grow>
+
+            {poi.description && (
+              <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                <Grid item className={style.aboutGrid}>
+                  <div className={style.aboutContainer}>
+                    <Text component="h2" bold color={Colors.BLUE}>
+                      About
+                    </Text>
+                    <Divider className={style.divider} />
+                    <Text>{poi.description}</Text>
+                  </div>
+                </Grid>
+              </Grow>
             )}
           </>
         )}
@@ -465,7 +483,7 @@ export function ThingsToDoDetails() {
         </Snackbar>
       )}
 
-      <Footer />
+      {poi && <Footer />}
     </div>
   );
 }

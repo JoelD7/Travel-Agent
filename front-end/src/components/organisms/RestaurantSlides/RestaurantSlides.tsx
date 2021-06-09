@@ -5,6 +5,7 @@ import {
   CardActionArea,
   CardMedia,
   CardContent,
+  Grow,
 } from "@material-ui/core";
 import React from "react";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
@@ -69,46 +70,48 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
 
   function SlideContent({ restaurant }: SlideContent) {
     return (
-      <div className={restaurants.length > 3 ? style.cardParent : ""}>
-        <CardActionArea
-          className={style.card}
-          onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
-        >
-          <Card>
-            <CardMedia component="img" height="150" image={restaurant.image_url} />
+      <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+        <div className={restaurants.length > 3 ? style.cardParent : ""}>
+          <CardActionArea
+            className={style.card}
+            onClick={() => history.push(`${Routes.RESTAURANTS}/${restaurant.id}`)}
+          >
+            <Card>
+              <CardMedia component="img" height="150" image={restaurant.image_url} />
 
-            <CardContent>
-              <Text
-                component="h4"
-                className={style.restaurantName}
-              >{`${restaurant.name}`}</Text>
+              <CardContent>
+                <Text
+                  component="h4"
+                  className={style.restaurantName}
+                >{`${restaurant.name}`}</Text>
 
-              <Rating
-                initialRating={restaurant.rating}
-                readonly
-                emptySymbol={
-                  <FontAwesomeIcon
-                    style={{ margin: "0px 1px" }}
-                    icon={faCircleReg}
-                    color={Colors.PURPLE}
-                  />
-                }
-                fullSymbol={
-                  <FontAwesomeIcon
-                    style={{ margin: "0px 1px" }}
-                    icon={faCircle}
-                    color={Colors.PURPLE}
-                  />
-                }
-              />
+                <Rating
+                  initialRating={restaurant.rating}
+                  readonly
+                  emptySymbol={
+                    <FontAwesomeIcon
+                      style={{ margin: "0px 1px" }}
+                      icon={faCircleReg}
+                      color={Colors.PURPLE}
+                    />
+                  }
+                  fullSymbol={
+                    <FontAwesomeIcon
+                      style={{ margin: "0px 1px" }}
+                      icon={faCircle}
+                      color={Colors.PURPLE}
+                    />
+                  }
+                />
 
-              <p className={style.restaurantCuisines}>
-                {getRestaurantCategoriesList(restaurant)}
-              </p>
-            </CardContent>
-          </Card>
-        </CardActionArea>
-      </div>
+                <p className={style.restaurantCuisines}>
+                  {getRestaurantCategoriesList(restaurant)}
+                </p>
+              </CardContent>
+            </Card>
+          </CardActionArea>
+        </div>
+      </Grow>
     );
   }
 

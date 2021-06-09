@@ -7,7 +7,6 @@ import {
   CardFlight,
   CustomButton,
   DashDrawer,
-  Footer,
   HotelRsvDetail,
   IconText,
   Navbar,
@@ -192,10 +191,6 @@ export function Reservations() {
       </Grid>
 
       <HotelRsvDetail open={openHotelDialog} onClose={() => setOpenHotelDialog(false)} />
-
-      <div className={style.footerContainer}>
-        <Footer />
-      </div>
     </div>
   );
 }

@@ -60,17 +60,6 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
       width: "12%",
     },
   },
-  footerContainer: {
-    position: "relative",
-    zIndex: 3,
-    marginTop: "250px",
-    width: "90%",
-    marginLeft: "auto",
-
-    [theme.breakpoints.down(1000)]: {
-      width: "100%",
-    },
-  },
   iconGrid: {
     width: "100%",
     alignSelf: "flex-end",
@@ -90,6 +79,7 @@ export const itineraryStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     marginLeft: "260px",
+    marginBottom: "100px",
     width: "calc(100% - 260px)",
     [theme.breakpoints.down(960)]: {
       margin: "auto",

@@ -54,6 +54,7 @@ export const reservationStyles = makeStyles((theme: Theme) => ({
   },
   pageContentGrid: {
     marginLeft: "265px",
+    marginBottom: "100px",
     width: "81%",
     [theme.breakpoints.down("sm")]: {
       margin: "auto",

@@ -54,6 +54,7 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
     drawerText: {
       fontFamily: Font.Family,
       color: "white",
+      fontSize: 14,
     },
     listItem: {
       "&:hover": {
@@ -110,8 +111,6 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
       user: true,
     },
   ]);
-
-  const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
   const bottomDrawerOptions: DrawerOptions[] = [
     {

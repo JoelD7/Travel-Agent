@@ -9,7 +9,7 @@ import {
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Grid, IconButton, Snackbar } from "@material-ui/core";
+import { Grid, Grow, IconButton, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
@@ -53,7 +53,7 @@ export function RestaurantDetails() {
   const { id } = useParams<any>();
   const [loading, setLoading] = useState<boolean>(true);
 
-  const [restaurant, setRestaurant] = useState<Restaurant>(restaurantPlaceholder);
+  const [restaurant, setRestaurant] = useState<Restaurant>();
   const amenities: string = getRestaurantTransactions(restaurant);
 
   const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
@@ -109,20 +109,22 @@ export function RestaurantDetails() {
   function getTripEventOfRestaurant(): TripEvent {
     let tripEvent: TripEvent = tripEventPlaceholder;
 
-    userTrips.forEach((trip) => {
-      if (trip.itinerary) {
-        trip.itinerary.forEach((event) => {
-          if (event.restaurant && event.restaurant.id === restaurant.id) {
-            tripEvent = event;
-            return;
-          }
-        });
-      }
+    if (restaurant) {
+      userTrips.forEach((trip) => {
+        if (trip.itinerary) {
+          trip.itinerary.forEach((event) => {
+            if (event.restaurant && event.restaurant.id === restaurant.id) {
+              tripEvent = event;
+              return;
+            }
+          });
+        }
 
-      if (tripEvent) {
-        return;
-      }
-    });
+        if (tripEvent) {
+          return;
+        }
+      });
+    }
 
     return tripEvent;
   }
@@ -130,7 +132,7 @@ export function RestaurantDetails() {
   return (
     <div className={style.mainContainer}>
       <Helmet>
-        <title>{`Restaurant | ${restaurant.name}`}</title>
+        <title>{restaurant ? `Restaurant | ${restaurant.name}` : "Tripper"}</title>
       </Helmet>
 
       <Navbar />
@@ -148,170 +150,215 @@ export function RestaurantDetails() {
         className={style.pageContentContainer}
         style={loading ? { filter: "blur(4px)" } : {}}
       >
-        {/* Name and Ratings */}
-        <Grid item xs={12}>
-          <Text component="h1" bold color={Colors.BLUE}>
-            {restaurant.name}
-          </Text>
-          <Rating size={30} type="star" readonly score={restaurant.rating} />
-        </Grid>
-
-        {/* Location, phone, include in trip */}
-        <Grid item xs={12}>
-          <Grid container>
-            <IconText
-              text={restaurant.location.display_address.join(", ")}
-              icon={faMapMarkerAlt}
-            />
-            <p style={{ margin: "auto 5px" }}>|</p>
-            <IconText text={restaurant.display_phone} icon={faPhone} />
-
-            <Grid item className={style.tripButtonGrid}>
+        {restaurant && (
+          <>
+            <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
               <Grid container>
-                {isRestaurantInAnyTrip(restaurant) ? (
-                  <CustomButton
-                    style={{ boxShadow: Shadow.LIGHT }}
-                    onClick={() => deleteFromTrip()}
-                    backgroundColor={Colors.RED}
-                    rounded
-                  >
-                    Delete from trip
-                  </CustomButton>
-                ) : (
-                  <CustomButton
-                    style={{ boxShadow: Shadow.LIGHT }}
-                    onClick={(e) => onIncludeTripClick(e)}
-                    backgroundColor={Colors.GREEN}
-                    rounded
-                  >
-                    Include in trip
-                  </CustomButton>
-                )}
+                {/* Name and Ratings */}
+                <Grid item xs={12}>
+                  <Text component="h1" bold color={Colors.BLUE}>
+                    {restaurant.name}
+                  </Text>
+                  <Rating size={30} type="star" readonly score={restaurant.rating} />
+                </Grid>
 
-                <AddFavoritesButton
-                  style={{ margin: "auto 0px auto 10px" }}
-                  type={FavoriteTypes.RESTAURANT}
-                  restaurant={restaurant}
-                />
+                {/* Location, phone, include in trip */}
+                <Grid item xs={12}>
+                  <Grid container>
+                    <IconText
+                      text={restaurant.location.display_address.join(", ")}
+                      icon={faMapMarkerAlt}
+                    />
+                    <p style={{ margin: "auto 5px" }}>|</p>
+                    <IconText text={restaurant.display_phone} icon={faPhone} />
+
+                    <Grid item className={style.tripButtonGrid}>
+                      <Grid container>
+                        {isRestaurantInAnyTrip(restaurant) ? (
+                          <CustomButton
+                            style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
+                            onClick={() => deleteFromTrip()}
+                            backgroundColor={Colors.RED}
+                            rounded
+                          >
+                            Delete from trip
+                          </CustomButton>
+                        ) : (
+                          <CustomButton
+                            style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
+                            onClick={(e) => onIncludeTripClick(e)}
+                            backgroundColor={Colors.GREEN}
+                            rounded
+                          >
+                            Include in trip
+                          </CustomButton>
+                        )}
+
+                        <AddFavoritesButton
+                          style={{ margin: "auto 0px auto 10px" }}
+                          type={FavoriteTypes.RESTAURANT}
+                          restaurant={restaurant}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
               </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
+            </Grow>
 
-        {/* Images */}
-        <Grid item className={style.imageGrid}>
-          <RestaurantDetailsSlider photos={restaurant.photos} />
-        </Grid>
+            {/* Images */}
+            <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+              <Grid item className={style.imageGrid}>
+                <RestaurantDetailsSlider photos={restaurant.photos} />
+              </Grid>
+            </Grow>
 
-        {/* Details */}
-        <Grid item className={style.detailsGrid}>
-          <div className={style.detailsContainer}>
-            <Text bold color="white" component="h3" style={{ marginBottom: "15px" }}>
-              Details
-            </Text>
+            {/* Details */}
+            <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+              <Grid item className={style.detailsGrid}>
+                <div className={style.detailsContainer}>
+                  <Text
+                    bold
+                    color="white"
+                    component="h3"
+                    style={{ marginBottom: "15px" }}
+                  >
+                    Details
+                  </Text>
 
-            {/* Cuisines */}
-            <div>
-              <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
-                Cuisines
-              </Text>
-              <IconText
-                textColor="white"
-                fontSize={15}
-                icon={faUtensils}
-                style={{ marginBottom: "20px" }}
-              >
-                {getRestaurantCategoriesList(restaurant)}
-              </IconText>
-            </div>
+                  {/* Cuisines */}
+                  <div>
+                    <Text
+                      bold
+                      style={{ marginBottom: "7px" }}
+                      color="white"
+                      component="h4"
+                    >
+                      Cuisines
+                    </Text>
+                    <IconText
+                      textColor="white"
+                      fontSize={15}
+                      icon={faUtensils}
+                      style={{ marginBottom: "20px" }}
+                    >
+                      {getRestaurantCategoriesList(restaurant)}
+                    </IconText>
+                  </div>
 
-            {/* Timings */}
-            <div>
-              <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
-                Timings
-              </Text>
-              {getRestaurantHours(restaurant).map((timing) => (
-                <IconText
-                  key={timing}
-                  textColor="white"
-                  fontSize={15}
-                  icon={faClock}
-                  style={{ marginBottom: "5px" }}
-                >
-                  {timing}
-                </IconText>
-              ))}
-            </div>
+                  {/* Timings */}
+                  <div>
+                    <Text
+                      bold
+                      style={{ marginBottom: "7px" }}
+                      color="white"
+                      component="h4"
+                    >
+                      Timings
+                    </Text>
+                    {getRestaurantHours(restaurant).map((timing) => (
+                      <IconText
+                        key={timing}
+                        textColor="white"
+                        fontSize={15}
+                        icon={faClock}
+                        style={{ marginBottom: "5px" }}
+                      >
+                        {timing}
+                      </IconText>
+                    ))}
+                  </div>
 
-            {/* Menu */}
-            <div>
-              <Text
-                bold
-                style={{ margin: "20px 0px 7px 0px" }}
-                color="white"
-                component="h4"
-              >
-                Menu
-              </Text>
-              <IconText
-                textColor="white"
-                fontSize={15}
-                icon={faUtensils}
-                style={{ marginBottom: "20px" }}
-              >
-                <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
-                  Click here
-                </a>
-              </IconText>
-            </div>
+                  {/* Menu */}
+                  <div>
+                    <Text
+                      bold
+                      style={{ margin: "20px 0px 7px 0px" }}
+                      color="white"
+                      component="h4"
+                    >
+                      Menu
+                    </Text>
+                    <IconText
+                      textColor="white"
+                      fontSize={15}
+                      icon={faUtensils}
+                      style={{ marginBottom: "20px" }}
+                    >
+                      <a
+                        style={{ color: "white", fontSize: "15px" }}
+                        href={restaurant.url}
+                      >
+                        Click here
+                      </a>
+                    </IconText>
+                  </div>
 
-            {/* Website */}
-            <div>
-              <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
-                Website
-              </Text>
-              <IconText
-                textColor="white"
-                fontSize={15}
-                icon={faGlobe}
-                style={{ marginBottom: "20px" }}
-              >
-                <a style={{ color: "white", fontSize: "15px" }} href={restaurant.url}>
-                  Click here
-                </a>
-              </IconText>
-            </div>
+                  {/* Website */}
+                  <div>
+                    <Text
+                      bold
+                      style={{ marginBottom: "7px" }}
+                      color="white"
+                      component="h4"
+                    >
+                      Website
+                    </Text>
+                    <IconText
+                      textColor="white"
+                      fontSize={15}
+                      icon={faGlobe}
+                      style={{ marginBottom: "20px" }}
+                    >
+                      <a
+                        style={{ color: "white", fontSize: "15px" }}
+                        href={restaurant.url}
+                      >
+                        Click here
+                      </a>
+                    </IconText>
+                  </div>
 
-            {/* Amenities */}
-            {amenities !== "" && (
-              <>
-                <Text bold style={{ marginBottom: "7px" }} color="white" component="h4">
-                  Amenities
-                </Text>
-                <IconText
-                  textColor="white"
-                  fontSize={15}
-                  icon={faStar}
-                  style={{ marginBottom: "20px" }}
-                >
-                  {amenities}
-                </IconText>
-              </>
-            )}
-          </div>
-        </Grid>
+                  {/* Amenities */}
+                  {amenities !== "" && (
+                    <>
+                      <Text
+                        bold
+                        style={{ marginBottom: "7px" }}
+                        color="white"
+                        component="h4"
+                      >
+                        Amenities
+                      </Text>
+                      <IconText
+                        textColor="white"
+                        fontSize={15}
+                        icon={faStar}
+                        style={{ marginBottom: "20px" }}
+                      >
+                        {amenities}
+                      </IconText>
+                    </>
+                  )}
+                </div>
+              </Grid>
+            </Grow>
+          </>
+        )}
       </Grid>
 
-      <Footer />
+      {restaurant && <Footer />}
 
-      <IncludeInTripPopover
-        place={restaurant}
-        tripAnchor={tripAnchor}
-        eventType={EventTypes.RESTAURANT}
-        setTripAnchor={setTripAnchor}
-        openPopover={openPopover}
-        setOpenPopover={setOpenPopover}
-      />
+      {restaurant && (
+        <IncludeInTripPopover
+          place={restaurant}
+          tripAnchor={tripAnchor}
+          eventType={EventTypes.RESTAURANT}
+          setTripAnchor={setTripAnchor}
+          openPopover={openPopover}
+          setOpenPopover={setOpenPopover}
+        />
+      )}
 
       <Snackbar
         open={openSnack}

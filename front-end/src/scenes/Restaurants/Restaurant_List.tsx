@@ -1,4 +1,4 @@
-import { Grid, useMediaQuery } from "@material-ui/core";
+import { Grid, Grow, useMediaQuery } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
@@ -525,16 +525,18 @@ export function Restaurant_List() {
 
         <Grid container spacing={2} className={style.pageContentContainer}>
           {/* Filters */}
-          <>
-            <Grid item className={style.filterGrid}>
-              <RestaurantFilters setLoading={(value) => {}} />
-            </Grid>
+          <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+            <>
+              <Grid item className={style.filterGrid}>
+                <RestaurantFilters setLoading={(value) => {}} />
+              </Grid>
 
-            {/* Filter button */}
-            <Grid item className={style.filterButtonGrid}>
-              <RestaurantFilterDrawer />
-            </Grid>
-          </>
+              {/* Filter button */}
+              <Grid item className={style.filterButtonGrid}>
+                <RestaurantFilterDrawer />
+              </Grid>
+            </>
+          </Grow>
 
           {/* Restaurants */}
           <Grid item className={style.restaurantsGrid}>

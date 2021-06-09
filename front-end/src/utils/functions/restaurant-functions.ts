@@ -99,17 +99,21 @@ function parseHour(value: string) {
 }
 
 export function getRestaurantTransactions(
-  restaurant: Restaurant | RestaurantSearch
+  restaurant?: Restaurant | RestaurantSearch
 ): string {
-  return restaurant.transactions
-    .map((tr) => {
-      if (tr.split("_").length > 1) {
-        return capitalizeString(tr.split("_").join(" "), "full sentence");
-      } else {
-        return capitalizeString(tr, "full sentence");
-      }
-    })
-    .join(", ");
+  if (restaurant) {
+    return restaurant.transactions
+      .map((tr) => {
+        if (tr.split("_").length > 1) {
+          return capitalizeString(tr.split("_").join(" "), "full sentence");
+        } else {
+          return capitalizeString(tr, "full sentence");
+        }
+      })
+      .join(", ");
+  }
+
+  return "";
 }
 
 export function getDistinctCuisines(cuisines: { title: string; alias: string }[]) {

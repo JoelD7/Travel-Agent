@@ -94,6 +94,7 @@ export const tripStyles = makeStyles((theme: Theme) => ({
   },
   pageContentGrid: {
     marginLeft: "265px",
+    marginBottom: "100px",
     width: "calc(100% - 300px)",
     [theme.breakpoints.down(960)]: {
       margin: "auto",

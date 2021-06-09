@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
+  Grow,
   IconButton,
   makeStyles,
   Snackbar,
@@ -364,17 +365,23 @@ export function Album({}: AlbumProps) {
                 {/* Picture cards */}
                 <Grid container>
                   {group.map((picture, i) => (
-                    <CardActionArea
+                    <Grow
                       key={picture.pictureUrl}
-                      className={style.cardContainer}
-                      onClick={() => openFullScreenImageSlider(picture)}
+                      in={true}
+                      style={{ transformOrigin: "0 0 0" }}
+                      timeout={1000}
                     >
-                      <img
-                        src={picture.pictureUrl}
-                        className={style.cardPicture}
-                        alt=""
-                      />
-                    </CardActionArea>
+                      <CardActionArea
+                        className={style.cardContainer}
+                        onClick={() => openFullScreenImageSlider(picture)}
+                      >
+                        <img
+                          src={picture.pictureUrl}
+                          className={style.cardPicture}
+                          alt=""
+                        />
+                      </CardActionArea>
+                    </Grow>
                   ))}
                 </Grid>
               </div>

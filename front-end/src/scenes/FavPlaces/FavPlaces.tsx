@@ -22,7 +22,6 @@ import { Link, useHistory } from "react-router-dom";
 import {
   CustomButton,
   DashDrawer,
-  Footer,
   IconText,
   Navbar,
   ProgressCircle,
@@ -503,10 +502,6 @@ export function FavPlaces() {
             ))}
         </Grid>
       </Grid>
-
-      <div className={style.footerContainer}>
-        <Footer />
-      </div>
     </div>
   );
 }

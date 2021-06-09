@@ -5,7 +5,7 @@ import {
   faDollarSign,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { Divider, Grid, Snackbar } from "@material-ui/core";
+import { Divider, Grid, Grow, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Axios from "axios";
 import { format, parseISO } from "date-fns";
@@ -329,164 +329,173 @@ export function HotelDetails() {
             {/* About hotel / Reservation info */}
             <Grid container style={{ marginTop: "40px" }}>
               {/* About hotel */}
-              <Grid item className={style.aboutHotelGrid}>
-                <AboutHotel hotel={hotel} />
-              </Grid>
+              <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                <Grid item className={style.aboutHotelGrid}>
+                  <AboutHotel hotel={hotel} />
+                </Grid>
+              </Grow>
 
               {/* Reservation info and status */}
               <Grid item className={style.reservationInfoGrid}>
                 <Grid container>
                   {/* Reservation info */}
-                  <Grid container className={style.reservationInfoContainer}>
-                    <Grid item xs={12}>
-                      <Text color={Colors.BLUE} component="h4">
-                        Rates starting at
-                      </Text>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <Text color={Colors.BLUE} component="h2" bold>
-                        {formatAsCurrency(
-                          convertToUserCurrency(getMinRate(hotel.rooms), "USD")
-                        )}
-                      </Text>
-                    </Grid>
-
-                    {/* Dates */}
-                    {hotel.checkIn && hotel.checkOut && (
-                      <>
-                        <Grid item xs={12} style={{ marginTop: "20px" }}>
-                          <IconText icon={faCalendar} fontSize={16}>
-                            <p style={{ margin: "0" }}>
-                              <b>Check in: </b>
-                              {format(parseISO(hotel.checkIn), "dd MMM., yyyy")}
-                            </p>
-                          </IconText>
-                        </Grid>
-                        <Grid item xs={12}>
-                          <IconText icon={faCalendar} fontSize={16}>
-                            <p style={{ margin: "0" }}>
-                              <b>Check out: </b>
-                              {format(parseISO(hotel.checkOut), "dd MMM., yyyy")}
-                            </p>
-                          </IconText>
-                        </Grid>
-                      </>
-                    )}
-
-                    {/* Occupancy params */}
-                    <Grid item xs={12}>
-                      <IconText icon={faBed} fontSize={16}>
-                        {getOccupancyText("room")}
-                      </IconText>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <IconText icon={faUser} fontSize={16}>
-                        {getOccupancyText("adult")}
-                      </IconText>
-                    </Grid>
-
-                    {reservationParams.occupancies[0].children > 0 && (
+                  <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                    <Grid container className={style.reservationInfoContainer}>
                       <Grid item xs={12}>
-                        <IconText
-                          icon={faChild}
-                          fontSize={16}
-                        >{`${reservationParams.occupancies[0]["children"]} children`}</IconText>
+                        <Text color={Colors.BLUE} component="h4">
+                          Rates starting at
+                        </Text>
                       </Grid>
-                    )}
 
-                    <Grid item xs={12}>
-                      <Grid container>
-                        <CustomButton
-                          type="text"
-                          style={{ marginLeft: "auto" }}
-                          textColor={Colors.BLUE}
-                          onClick={() => goToRoomOptions()}
-                        >
-                          See room options
-                        </CustomButton>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-
-                  {/* Reservation status */}
-                  <Grid className={style.reservationStatusContainer}>
-                    <Text component="h2" color={Colors.BLUE}>
-                      Reservation status
-                    </Text>
-
-                    {/* Room and total  */}
-                    {hotelRsv.rooms.map((room) => (
-                      <div key={room.code} style={{ marginBottom: 10 }}>
-                        <IconText fontSize={16} icon={faBed}>
-                          {capitalizeString(room.name, "full sentence")}
-                        </IconText>
-
-                        <IconText fontSize={16} icon={faDollarSign}>
+                      <Grid item xs={12}>
+                        <Text color={Colors.BLUE} component="h2" bold>
                           {formatAsCurrency(
-                            convertToUserCurrency(room.totalAmount, "USD")
+                            convertToUserCurrency(getMinRate(hotel.rooms), "USD")
                           )}
+                        </Text>
+                      </Grid>
+
+                      {/* Dates */}
+                      {hotel.checkIn && hotel.checkOut && (
+                        <>
+                          <Grid item xs={12} style={{ marginTop: "20px" }}>
+                            <IconText icon={faCalendar} fontSize={16}>
+                              <p style={{ margin: "0" }}>
+                                <b>Check in: </b>
+                                {format(parseISO(hotel.checkIn), "dd MMM., yyyy")}
+                              </p>
+                            </IconText>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <IconText icon={faCalendar} fontSize={16}>
+                              <p style={{ margin: "0" }}>
+                                <b>Check out: </b>
+                                {format(parseISO(hotel.checkOut), "dd MMM., yyyy")}
+                              </p>
+                            </IconText>
+                          </Grid>
+                        </>
+                      )}
+
+                      {/* Occupancy params */}
+                      <Grid item xs={12}>
+                        <IconText icon={faBed} fontSize={16}>
+                          {getOccupancyText("room")}
                         </IconText>
-                      </div>
-                    ))}
+                      </Grid>
+                      <Grid item xs={12}>
+                        <IconText icon={faUser} fontSize={16}>
+                          {getOccupancyText("adult")}
+                        </IconText>
+                      </Grid>
 
-                    {/* Total of reservation */}
-                    <Grid container style={{ marginTop: 25 }}>
-                      <Text component="h4" color={Colors.BLUE}>
-                        Total
-                      </Text>
-
-                      <Text
-                        component="h4"
-                        color={Colors.BLUE}
-                        style={{ marginLeft: "auto" }}
-                      >
-                        {formatAsCurrency(
-                          convertToUserCurrency(getHotelReservationCost(hotelRsv), "USD")
-                        )}
-                      </Text>
-                    </Grid>
-
-                    <Grid container style={{ marginTop: 15 }}>
-                      {!isHotelRsvInAnyTrip() && !isHotelBooked() && (
-                        <CustomButton
-                          backgroundColor={Colors.GREEN}
-                          disabled={!areAllRoomsToBookBooked()}
-                          style={{ marginLeft: "auto" }}
-                          onClick={() => setOpenConfirmation(true)}
-                        >
-                          Confirm Reservation
-                        </CustomButton>
+                      {reservationParams.occupancies[0].children > 0 && (
+                        <Grid item xs={12}>
+                          <IconText
+                            icon={faChild}
+                            fontSize={16}
+                          >{`${reservationParams.occupancies[0]["children"]} children`}</IconText>
+                        </Grid>
                       )}
 
-                      {isHotelRsvInAnyTrip() && (
-                        <CustomButton
-                          backgroundColor={Colors.RED}
-                          style={{ marginLeft: "auto" }}
-                          onClick={() => setOpenConfirmation(true)}
-                        >
-                          Delete from trip
-                        </CustomButton>
-                      )}
-
-                      {isHotelBooked() && !isHotelRsvInAnyTrip() && (
-                        <div style={{ width: "100%" }}>
-                          <Divider className={style.reservationLinkDivider} />
-                          <Text color={Colors.GRAY_TEXT} style={{ marginBottom: 0 }}>
-                            You have a reservation on this hotel
-                          </Text>
+                      <Grid item xs={12}>
+                        <Grid container>
                           <CustomButton
                             type="text"
+                            style={{ marginLeft: "auto" }}
                             textColor={Colors.BLUE}
-                            style={{ padding: "10px 0px", fontWeight: "bold" }}
-                            onClick={() => history.push(Routes.RESERVATIONS)}
+                            onClick={() => goToRoomOptions()}
                           >
-                            Wanna see it?
+                            See room options
                           </CustomButton>
-                        </div>
-                      )}
+                        </Grid>
+                      </Grid>
                     </Grid>
-                  </Grid>
+                  </Grow>
+
+                  {/* Reservation status */}
+                  <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                    <Grid className={style.reservationStatusContainer}>
+                      <Text component="h2" color={Colors.BLUE}>
+                        Reservation status
+                      </Text>
+
+                      {/* Room and total  */}
+                      {hotelRsv.rooms.map((room) => (
+                        <div key={room.code} style={{ marginBottom: 10 }}>
+                          <IconText fontSize={16} icon={faBed}>
+                            {capitalizeString(room.name, "full sentence")}
+                          </IconText>
+
+                          <IconText fontSize={16} icon={faDollarSign}>
+                            {formatAsCurrency(
+                              convertToUserCurrency(room.totalAmount, "USD")
+                            )}
+                          </IconText>
+                        </div>
+                      ))}
+
+                      {/* Total of reservation */}
+                      <Grid container style={{ marginTop: 25 }}>
+                        <Text component="h4" color={Colors.BLUE}>
+                          Total
+                        </Text>
+
+                        <Text
+                          component="h4"
+                          color={Colors.BLUE}
+                          style={{ marginLeft: "auto" }}
+                        >
+                          {formatAsCurrency(
+                            convertToUserCurrency(
+                              getHotelReservationCost(hotelRsv),
+                              "USD"
+                            )
+                          )}
+                        </Text>
+                      </Grid>
+
+                      <Grid container style={{ marginTop: 15 }}>
+                        {!isHotelRsvInAnyTrip() && !isHotelBooked() && (
+                          <CustomButton
+                            backgroundColor={Colors.GREEN}
+                            disabled={!areAllRoomsToBookBooked()}
+                            style={{ marginLeft: "auto" }}
+                            onClick={() => setOpenConfirmation(true)}
+                          >
+                            Confirm Reservation
+                          </CustomButton>
+                        )}
+
+                        {isHotelRsvInAnyTrip() && (
+                          <CustomButton
+                            backgroundColor={Colors.RED}
+                            style={{ marginLeft: "auto" }}
+                            onClick={() => setOpenConfirmation(true)}
+                          >
+                            Delete from trip
+                          </CustomButton>
+                        )}
+
+                        {isHotelBooked() && !isHotelRsvInAnyTrip() && (
+                          <div style={{ width: "100%" }}>
+                            <Divider className={style.reservationLinkDivider} />
+                            <Text color={Colors.GRAY_TEXT} style={{ marginBottom: 0 }}>
+                              You have a reservation on this hotel
+                            </Text>
+                            <CustomButton
+                              type="text"
+                              textColor={Colors.BLUE}
+                              style={{ padding: "10px 0px", fontWeight: "bold" }}
+                              onClick={() => history.push(Routes.RESERVATIONS)}
+                            >
+                              Wanna see it?
+                            </CustomButton>
+                          </div>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </Grow>
                 </Grid>
               </Grid>
             </Grid>

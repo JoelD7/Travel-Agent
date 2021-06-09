@@ -100,6 +100,7 @@ export const footerStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "white",
     "& .MuiOutlinedInput-input": {
       padding: "10px 25px 10px 15px !important",
+      fontFamily: `${Font.Family} !important`,
     },
 
     "& .MuiMenuItem-root": {

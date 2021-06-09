@@ -1,7 +1,7 @@
 import { faCalendar, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Direction, Grid, Grow, IconButton, Slide, useTheme } from "@material-ui/core";
-import React, { CSSProperties, ReactNode, useEffect, useState } from "react";
+import React, { CSSProperties, ReactNode, useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
@@ -10,7 +10,6 @@ import { virtualize } from "react-swipeable-views-utils";
 import {
   CustomButton,
   DashDrawer,
-  Footer,
   Navbar,
   PicturesAndKeyDetails,
   ProgressCircle,
@@ -42,6 +41,7 @@ import { tripStyles } from "./trip-styles";
 
 interface TabPanel {
   children: ReactNode;
+  key: number;
   index: number;
   value: number;
   dir: Direction;
@@ -55,6 +55,7 @@ export function TripDetails() {
   const [prevTabIndex, setPrevTabIndex] = useState(0);
   const [loading, setLoading] = useState(trip === undefined);
   const MUtheme = useTheme();
+  const mainRef = useRef(null);
 
   //@ts-ignore
   const { id } = useParams();
@@ -80,6 +81,8 @@ export function TripDetails() {
       .then((res) => {
         dispatch(setTripDetail(responseTripToDomainTrip(res.data)));
         setLoading(false);
+        //@ts-ignore
+        mainRef.current.scrollTo(0, 0);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -90,10 +93,12 @@ export function TripDetails() {
     }
   }, [trip]);
 
-  function TabPanel({ children, index, value, dir }: TabPanel) {
+  function TabPanel({ children, index, value, dir, key }: TabPanel) {
     return (
-      <div dir={dir} hidden={value !== index}>
-        {value === index && children}
+      <div key={key} dir={dir} hidden={value !== index}>
+        <Slide direction={getSlideDirection(index)} in={true} mountOnEnter unmountOnExit>
+          <div>{value === index && children}</div>
+        </Slide>
       </div>
     );
   }
@@ -181,133 +186,14 @@ export function TripDetails() {
   function TabViews(index: number, key: number) {
     switch (index) {
       case 0:
-        return (
-          <div key={key}>
-            {trip && tabIndex === index && (
-              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
-                <div>
-                  <TabPanel value={tabIndex} index={0} dir={MUtheme.direction}>
-                    {/* Photos, details grid */}
-                    <PicturesAndKeyDetails showAll={false} trip={trip} />
-
-                    {/* Flights */}
-                    <Grid item xs={12} style={{ marginTop: 30 }}>
-                      <Grid container>
-                        <Text bold color={Colors.BLUE} component="h2">
-                          Flights
-                        </Text>
-                        <CustomButton
-                          iconColor="#7e7e7e"
-                          backgroundColor="rgba(0,0,0,0)"
-                          textColor="#7e7e7e"
-                          onClick={() => setTabIndex(2)}
-                        >
-                          See all
-                        </CustomButton>
-                      </Grid>
-
-                      <TripFlights flights={getTripFlights()} showAll={false} />
-                    </Grid>
-
-                    {/* Hotels */}
-                    <Grid item xs={12} style={{ marginTop: 30 }}>
-                      <Grid container>
-                        <Text bold color={Colors.BLUE} component="h2">
-                          Hotels
-                        </Text>
-                        <CustomButton
-                          iconColor="#7e7e7e"
-                          backgroundColor="rgba(0,0,0,0)"
-                          textColor="#7e7e7e"
-                          onClick={() => setTabIndex(3)}
-                        >
-                          See all
-                        </CustomButton>
-                      </Grid>
-
-                      <RsvHotels
-                        userCurrency={userCurrency}
-                        hotels={getTripHotelRsv()}
-                        showAll={false}
-                      />
-                    </Grid>
-
-                    {/* Restaurants */}
-                    <Grid item xs={12} style={{ marginTop: 30 }}>
-                      <Grid container>
-                        <Text bold color={Colors.BLUE} component="h2">
-                          Restaurants
-                        </Text>
-                        <CustomButton
-                          iconColor="#7e7e7e"
-                          backgroundColor="rgba(0,0,0,0)"
-                          textColor="#7e7e7e"
-                          onClick={() => setTabIndex(4)}
-                        >
-                          See all
-                        </CustomButton>
-                      </Grid>
-
-                      <TripRestaurants
-                        restaurants={getTripRestaurants()}
-                        showAll={false}
-                      />
-                    </Grid>
-
-                    {/* Things to do */}
-                    <Grid item xs={12} style={{ marginTop: 30 }}>
-                      <Grid container>
-                        <Text bold color={Colors.BLUE} component="h2">
-                          Things to do
-                        </Text>
-                        <CustomButton
-                          iconColor="#7e7e7e"
-                          backgroundColor="rgba(0,0,0,0)"
-                          textColor="#7e7e7e"
-                          onClick={() => setTabIndex(4)}
-                        >
-                          See all
-                        </CustomButton>
-                      </Grid>
-
-                      <TripPOIs pois={getTripPOIs()} showAll={false} />
-                    </Grid>
-
-                    {/* Car rental */}
-                    <Grid item xs={12} style={{ marginTop: 30 }}>
-                      <Grid container>
-                        <Text bold color={Colors.BLUE} component="h2">
-                          Car rental
-                        </Text>
-                        <CustomButton
-                          iconColor="#7e7e7e"
-                          backgroundColor="rgba(0,0,0,0)"
-                          textColor="#7e7e7e"
-                          onClick={() => setTabIndex(5)}
-                        >
-                          See all
-                        </CustomButton>
-                      </Grid>
-
-                      <ReservedCars showAll={false} />
-                    </Grid>
-                  </TabPanel>
-                </div>
-              </Slide>
-            )}
-          </div>
-        );
+        return <div key={key}></div>;
       case 1:
         return (
           <div key={key}>
             {trip && tabIndex === index && (
-              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
-                <div>
-                  <TabPanel value={tabIndex} index={1} dir={MUtheme.direction}>
-                    <PicturesAndKeyDetails trip={trip} />
-                  </TabPanel>
-                </div>
-              </Slide>
+              <TabPanel key={1} value={tabIndex} index={1} dir={MUtheme.direction}>
+                <PicturesAndKeyDetails trip={trip} />
+              </TabPanel>
             )}
           </div>
         );
@@ -315,21 +201,17 @@ export function TripDetails() {
         return (
           <div key={key}>
             {trip && tabIndex === index && (
-              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
-                <div>
-                  <TabPanel value={tabIndex} index={2} dir={MUtheme.direction}>
-                    <Text
-                      bold
-                      color={Colors.BLUE}
-                      component="h2"
-                      style={{ margin: "20px 0px" }}
-                    >
-                      Flights
-                    </Text>
-                    <TripFlights flights={getTripFlights()} />
-                  </TabPanel>
-                </div>
-              </Slide>
+              <TabPanel key={2} value={tabIndex} index={2} dir={MUtheme.direction}>
+                <Text
+                  bold
+                  color={Colors.BLUE}
+                  component="h2"
+                  style={{ margin: "20px 0px" }}
+                >
+                  Flights
+                </Text>
+                <TripFlights flights={getTripFlights()} />
+              </TabPanel>
             )}
           </div>
         );
@@ -337,21 +219,17 @@ export function TripDetails() {
         return (
           <div key={key}>
             {trip && tabIndex === index && (
-              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
-                <div>
-                  <TabPanel value={tabIndex} index={3} dir={MUtheme.direction}>
-                    <Text
-                      bold
-                      color={Colors.BLUE}
-                      component="h2"
-                      style={{ margin: "20px 0px" }}
-                    >
-                      Hotels
-                    </Text>
-                    <RsvHotels userCurrency={userCurrency} hotels={getTripHotelRsv()} />
-                  </TabPanel>
-                </div>
-              </Slide>
+              <TabPanel key={3} value={tabIndex} index={3} dir={MUtheme.direction}>
+                <Text
+                  bold
+                  color={Colors.BLUE}
+                  component="h2"
+                  style={{ margin: "20px 0px" }}
+                >
+                  Hotels
+                </Text>
+                <RsvHotels userCurrency={userCurrency} hotels={getTripHotelRsv()} />
+              </TabPanel>
             )}
           </div>
         );
@@ -359,21 +237,17 @@ export function TripDetails() {
         return (
           <div key={key}>
             {trip && tabIndex === index && (
-              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
-                <div>
-                  <TabPanel value={tabIndex} index={4} dir={MUtheme.direction}>
-                    <Text
-                      bold
-                      color={Colors.BLUE}
-                      component="h2"
-                      style={{ margin: "20px 0px" }}
-                    >
-                      Restaurants
-                    </Text>
-                    <TripRestaurants restaurants={getTripRestaurants()} />
-                  </TabPanel>
-                </div>
-              </Slide>
+              <TabPanel key={4} value={tabIndex} index={4} dir={MUtheme.direction}>
+                <Text
+                  bold
+                  color={Colors.BLUE}
+                  component="h2"
+                  style={{ margin: "20px 0px" }}
+                >
+                  Restaurants
+                </Text>
+                <TripRestaurants restaurants={getTripRestaurants()} />
+              </TabPanel>
             )}
           </div>
         );
@@ -381,21 +255,17 @@ export function TripDetails() {
         return (
           <div key={key}>
             {trip && tabIndex === index && (
-              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
-                <div>
-                  <TabPanel value={tabIndex} index={5} dir={MUtheme.direction}>
-                    <Text
-                      bold
-                      color={Colors.BLUE}
-                      component="h2"
-                      style={{ margin: "20px 0px" }}
-                    >
-                      Things to do
-                    </Text>
-                    <TripPOIs pois={getTripPOIs()} />
-                  </TabPanel>
-                </div>
-              </Slide>
+              <TabPanel key={5} value={tabIndex} index={5} dir={MUtheme.direction}>
+                <Text
+                  bold
+                  color={Colors.BLUE}
+                  component="h2"
+                  style={{ margin: "20px 0px" }}
+                >
+                  Things to do
+                </Text>
+                <TripPOIs pois={getTripPOIs()} />
+              </TabPanel>
             )}
           </div>
         );
@@ -403,21 +273,17 @@ export function TripDetails() {
         return (
           <div key={key}>
             {trip && tabIndex === index && (
-              <Slide direction={getSlideDirection(index)} in={true} mountOnEnter>
-                <div>
-                  <TabPanel value={tabIndex} index={6} dir={MUtheme.direction}>
-                    <Text
-                      bold
-                      color={Colors.BLUE}
-                      component="h2"
-                      style={{ margin: "20px 0px" }}
-                    >
-                      Car rental
-                    </Text>
-                    <ReservedCars />
-                  </TabPanel>
-                </div>
-              </Slide>
+              <TabPanel key={6} value={tabIndex} index={6} dir={MUtheme.direction}>
+                <Text
+                  bold
+                  color={Colors.BLUE}
+                  component="h2"
+                  style={{ margin: "20px 0px" }}
+                >
+                  Car rental
+                </Text>
+                <ReservedCars />
+              </TabPanel>
             )}
           </div>
         );
@@ -481,14 +347,14 @@ export function TripDetails() {
             </Grid>
 
             {/* Photo title */}
-            <Grid
-              key="photoTitle"
-              item
-              xs={12}
-              className={style.photoTitleContainer}
-              style={tripCoverBackground}
-            >
-              <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+            <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+              <Grid
+                key="photoTitle"
+                item
+                xs={12}
+                className={style.photoTitleContainer}
+                style={tripCoverBackground}
+              >
                 <Grid container style={{ height: "100%" }}>
                   <Grid item xs={12}>
                     <Grid container alignItems="baseline" style={{ marginTop: "20px" }}>
@@ -586,8 +452,8 @@ export function TripDetails() {
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grow>
-            </Grid>
+              </Grid>
+            </Grow>
 
             {/* Tab bar */}
             <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
@@ -605,14 +471,116 @@ export function TripDetails() {
                 slideClassName={style.tabSlide}
                 onChangeIndex={onTabIndexChange}
               />
+
+              {tabIndex === 0 && (
+                <>
+                  {/* Photos, details grid */}
+                  <PicturesAndKeyDetails showAll={false} trip={trip} />
+
+                  {/* Flights */}
+                  <Grid item xs={12} style={{ marginTop: 30 }}>
+                    <Grid container>
+                      <Text bold color={Colors.BLUE} component="h2">
+                        Flights
+                      </Text>
+                      <CustomButton
+                        iconColor="#7e7e7e"
+                        backgroundColor="rgba(0,0,0,0)"
+                        textColor="#7e7e7e"
+                        onClick={() => setTabIndex(2)}
+                      >
+                        See all
+                      </CustomButton>
+                    </Grid>
+
+                    <TripFlights flights={getTripFlights()} showAll={false} />
+                  </Grid>
+
+                  {/* Hotels */}
+                  <Grid item xs={12} style={{ marginTop: 30 }}>
+                    <Grid container>
+                      <Text bold color={Colors.BLUE} component="h2">
+                        Hotels
+                      </Text>
+                      <CustomButton
+                        iconColor="#7e7e7e"
+                        backgroundColor="rgba(0,0,0,0)"
+                        textColor="#7e7e7e"
+                        onClick={() => setTabIndex(3)}
+                      >
+                        See all
+                      </CustomButton>
+                    </Grid>
+
+                    <RsvHotels
+                      userCurrency={userCurrency}
+                      hotels={getTripHotelRsv()}
+                      showAll={false}
+                    />
+                  </Grid>
+
+                  {/* Restaurants */}
+                  <Grid item xs={12} style={{ marginTop: 30 }}>
+                    <Grid container>
+                      <Text bold color={Colors.BLUE} component="h2">
+                        Restaurants
+                      </Text>
+                      <CustomButton
+                        iconColor="#7e7e7e"
+                        backgroundColor="rgba(0,0,0,0)"
+                        textColor="#7e7e7e"
+                        onClick={() => setTabIndex(4)}
+                      >
+                        See all
+                      </CustomButton>
+                    </Grid>
+
+                    <TripRestaurants restaurants={getTripRestaurants()} showAll={false} />
+                  </Grid>
+
+                  {/* Things to do */}
+                  <Grid item xs={12} style={{ marginTop: 30 }}>
+                    <Grid container>
+                      <Text bold color={Colors.BLUE} component="h2">
+                        Things to do
+                      </Text>
+                      <CustomButton
+                        iconColor="#7e7e7e"
+                        backgroundColor="rgba(0,0,0,0)"
+                        textColor="#7e7e7e"
+                        onClick={() => setTabIndex(4)}
+                      >
+                        See all
+                      </CustomButton>
+                    </Grid>
+
+                    <TripPOIs pois={getTripPOIs()} showAll={false} />
+                  </Grid>
+
+                  {/* Car rental */}
+                  <Grid item xs={12} style={{ marginTop: 30 }}>
+                    <Grid container>
+                      <Text bold color={Colors.BLUE} component="h2">
+                        Car rental
+                      </Text>
+                      <CustomButton
+                        iconColor="#7e7e7e"
+                        backgroundColor="rgba(0,0,0,0)"
+                        textColor="#7e7e7e"
+                        onClick={() => setTabIndex(5)}
+                      >
+                        See all
+                      </CustomButton>
+                    </Grid>
+
+                    <ReservedCars showAll={false} />
+                  </Grid>
+                </>
+              )}
             </Grid>
           </div>
         )}
       </Grid>
-
-      <div className={style.footerContainer}>
-        <Footer />
-      </div>
     </div>
   );
 }

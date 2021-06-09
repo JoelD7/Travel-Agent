@@ -3,6 +3,7 @@ import {
   CardActionArea,
   Dialog,
   Grid,
+  Grow,
   makeStyles,
   Theme,
 } from "@material-ui/core";
@@ -164,13 +165,15 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
       {/* Images slider */}
       <Slider {...sliderSettings} lazyLoad="ondemand">
         {hotelPhotos.map((photo, i) => (
-          <CardActionArea
-            key={photo}
-            className={style.photoContainer}
-            onClick={() => openFullScreenImageSlider(i)}
-          >
-            <img src={photo} alt="" className={style.photo} />
-          </CardActionArea>
+          <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+            <CardActionArea
+              key={photo}
+              className={style.photoContainer}
+              onClick={() => openFullScreenImageSlider(i)}
+            >
+              <img src={photo} alt="" className={style.photo} />
+            </CardActionArea>
+          </Grow>
         ))}
       </Slider>
 
