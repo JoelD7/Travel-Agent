@@ -32,6 +32,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
 
     "& .MuiInputBase-input": {
       padding: "5px 0px 5px 10px",
+      fontSize: 14,
     },
   },
   dealsContainer: {
@@ -93,7 +94,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     fontFamily: Family,
     borderBottom: `2px solid rgba(0,0,0,0)`,
     margin: "0px 5px",
-    fontSize: "14px",
+    fontSize: 13,
     color: Colors.BLUE,
 
     "&.MuiListItem-root": {
@@ -151,6 +152,7 @@ export const flightStyles = makeStyles((theme: Theme) => ({
     },
   },
   select: {
+    fontSize: 14,
     "& .MuiOutlinedInput-input": {
       padding: "10px 25px 10px 15px",
       borderRadius: "10px",

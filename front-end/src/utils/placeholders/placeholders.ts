@@ -3166,8 +3166,12 @@ export const tripPlaceholder: Trip = {
       name: "Flight to Dubai",
       idEvent: 12,
       type: EventTypes.FLIGHT,
-      start: new Date(flightPlaceholder.itineraries[0].segments[0].departure.at),
-      end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at),
+      start: new Date(
+        flightPlaceholder.itineraries[0].segments[0].departure.at
+      ).toISOString(),
+      end: new Date(
+        flightPlaceholder.itineraries[0].segments[0].arrival.at
+      ).toISOString(),
       flight: flightPlaceholder,
       location: "SIN, Singapore",
       includesTime: true,
@@ -3176,8 +3180,12 @@ export const tripPlaceholder: Trip = {
       name: "Flight to Singapore",
       type: EventTypes.FLIGHT,
       idEvent: 11,
-      start: new Date(flightPlaceholder.itineraries[1].segments[0].departure.at),
-      end: new Date(flightPlaceholder.itineraries[1].segments[0].arrival.at),
+      start: new Date(
+        flightPlaceholder.itineraries[1].segments[0].departure.at
+      ).toISOString(),
+      end: new Date(
+        flightPlaceholder.itineraries[1].segments[0].arrival.at
+      ).toISOString(),
       flight: flightPlaceholder,
       location: "DXB, Dubai",
       includesTime: true,
@@ -3186,8 +3194,8 @@ export const tripPlaceholder: Trip = {
       idEvent: 46,
       name: "Arrival at Hotel Sheraton Santo Domingo",
       type: EventTypes.HOTEL,
-      start: new Date(2021, 4, 13, 14, 35),
-      end: new Date(2021, 4, 17, 11, 35),
+      start: new Date(2021, 4, 13, 14, 35).toISOString(),
+      end: new Date(2021, 4, 17, 11, 35).toISOString(),
       hotelReservation: hotelRsvPlaceholder,
       location: "Santo Domingo, Dominican Republic",
       includesTime: true,
@@ -3196,8 +3204,8 @@ export const tripPlaceholder: Trip = {
       idEvent: 78,
       name: "Visit to The Morgan Library & Museum",
       type: EventTypes.POI,
-      start: new Date(2021, 4, 16, 16, 0),
-      end: new Date(2021, 4, 16, 17, 0),
+      start: new Date(2021, 4, 16, 16, 0).toISOString(),
+      end: new Date(2021, 4, 16, 17, 0).toISOString(),
       poi: poiRsv,
       location: "225 Madison Ave (btwn E 36th & E 37th St) New York, United States",
       includesTime: true,
@@ -3206,8 +3214,8 @@ export const tripPlaceholder: Trip = {
       name: "Visit to Hulu Theater",
       type: EventTypes.POI,
       idEvent: 44,
-      start: new Date(2021, 4, 19, 12, 0),
-      end: new Date(2021, 4, 19, 14, 0),
+      start: new Date(2021, 4, 19, 12, 0).toISOString(),
+      end: new Date(2021, 4, 19, 14, 0).toISOString(),
       poi: poiRsv,
       location: "4 Penn Plz, New York, United States",
       includesTime: true,
@@ -3216,8 +3224,8 @@ export const tripPlaceholder: Trip = {
       name: "Visit to Dear Irving",
       idEvent: 18,
       type: EventTypes.POI,
-      start: new Date(2021, 4, 21, 0, 0),
-      end: new Date(2021, 4, 21, 3, 0),
+      start: new Date(2021, 4, 21, 0, 0).toISOString(),
+      end: new Date(2021, 4, 21, 3, 0).toISOString(),
       poi: poiRsv,
       location: "55 Irving Pl (at E 17th St), New York, United States",
       includesTime: true,
@@ -3568,8 +3576,10 @@ export const tripEventPlaceholder: TripEvent = {
   name: "Flight to Dubai",
   idEvent: 12,
   type: EventTypes.FLIGHT,
-  start: new Date(flightPlaceholder.itineraries[0].segments[0].departure.at),
-  end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at),
+  start: new Date(
+    flightPlaceholder.itineraries[0].segments[0].departure.at
+  ).toISOString(),
+  end: new Date(flightPlaceholder.itineraries[0].segments[0].arrival.at).toISOString(),
   flight: flightPlaceholder,
   location: "SIN, Singapore",
   includesTime: true,

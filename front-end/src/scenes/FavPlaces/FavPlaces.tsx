@@ -11,6 +11,7 @@ import {
   CardMedia,
   FormControl,
   Grid,
+  Grow,
   MenuItem,
   Select,
 } from "@material-ui/core";
@@ -382,17 +383,31 @@ export function FavPlaces() {
             {selectedFilter === "Restaurants" ? (
               <Grid container>
                 {restaurants.map((restaurant) => (
-                  <div key={restaurant.id} className={style.noSliderCard}>
-                    <RestaurantCard restaurant={restaurant} />
-                  </div>
+                  <Grow
+                    in={true}
+                    mountOnEnter
+                    style={{ transformOrigin: "0 0 0" }}
+                    timeout={1000}
+                  >
+                    <div key={restaurant.id} className={style.noSliderCard}>
+                      <RestaurantCard restaurant={restaurant} />
+                    </div>
+                  </Grow>
                 ))}
               </Grid>
             ) : (
               <Grid container>
                 {restaurants.slice(0, 3).map((restaurant) => (
-                  <div key={restaurant.id} className={style.noSliderCard}>
-                    <RestaurantCard restaurant={restaurant} />
-                  </div>
+                  <Grow
+                    in={true}
+                    mountOnEnter
+                    style={{ transformOrigin: "0 0 0" }}
+                    timeout={1000}
+                  >
+                    <div key={restaurant.id} className={style.noSliderCard}>
+                      <RestaurantCard restaurant={restaurant} />
+                    </div>
+                  </Grow>
                 ))}
               </Grid>
             )}
@@ -426,17 +441,31 @@ export function FavPlaces() {
             {selectedFilter === "Hotels" ? (
               <Grid container>
                 {hotels.map((hotel) => (
-                  <div key={hotel.code} className={style.noSliderCard}>
-                    <HotelCard hotel={hotel} />
-                  </div>
+                  <Grow
+                    in={true}
+                    mountOnEnter
+                    style={{ transformOrigin: "0 0 0" }}
+                    timeout={1000}
+                  >
+                    <div key={hotel.code} className={style.noSliderCard}>
+                      <HotelCard hotel={hotel} />
+                    </div>
+                  </Grow>
                 ))}
               </Grid>
             ) : (
               <Grid container>
                 {hotels.slice(0, 3).map((hotel) => (
-                  <div key={hotel.code} className={style.noSliderCard}>
-                    <HotelCard hotel={hotel} />
-                  </div>
+                  <Grow
+                    in={true}
+                    mountOnEnter
+                    style={{ transformOrigin: "0 0 0" }}
+                    timeout={1000}
+                  >
+                    <div key={hotel.code} className={style.noSliderCard}>
+                      <HotelCard hotel={hotel} />
+                    </div>
+                  </Grow>
                 ))}
               </Grid>
             )}
@@ -480,9 +509,16 @@ export function FavPlaces() {
                     {isACategoryFilterSelected() ? (
                       <Grid container>
                         {getPlacesOfCategory(category.name).map((poi: RsvPOI, i) => (
-                          <div key={poi.id} className={style.noSliderCard}>
-                            <FavPOICard poi={poi} />
-                          </div>
+                          <Grow
+                            in={true}
+                            mountOnEnter
+                            style={{ transformOrigin: "0 0 0" }}
+                            timeout={1000}
+                          >
+                            <div key={poi.id} className={style.noSliderCard}>
+                              <FavPOICard poi={poi} />
+                            </div>
+                          </Grow>
                         ))}
                       </Grid>
                     ) : (
@@ -490,9 +526,16 @@ export function FavPlaces() {
                         {getPlacesOfCategory(category.name)
                           .slice(0, 3)
                           .map((poi: RsvPOI, i) => (
-                            <div key={poi.id} className={style.noSliderCard}>
-                              <FavPOICard poi={poi} />
-                            </div>
+                            <Grow
+                              in={true}
+                              mountOnEnter
+                              style={{ transformOrigin: "0 0 0" }}
+                              timeout={1000}
+                            >
+                              <div key={poi.id} className={style.noSliderCard}>
+                                <FavPOICard poi={poi} />
+                              </div>
+                            </Grow>
                           ))}
                       </Grid>
                     )}

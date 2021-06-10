@@ -12,6 +12,7 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
   },
   autocompleteOption: {
     color: Colors.BLUE,
+    fontSize: 14,
     fontWeight: "bold",
   },
   popupIndicatorOpen: {
@@ -32,6 +33,7 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
     },
   },
   searchBar: {
+    fontSize: 14,
     borderRadius: "10px",
     "& .MuiOutlinedInput-root": {
       borderRadius: "10px",
@@ -49,9 +51,10 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "white",
     color: Colors.BLUE,
     borderRadius: "5px",
+    fontSize: 14,
     "& .MuiInputBase-input": {
       position: "relative",
-      bottom: "4px",
+      bottom: 2,
     },
     "& .MuiInputBase-root": {
       height: "32px",

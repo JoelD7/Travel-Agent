@@ -44,6 +44,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
 
     "& .MuiInputBase-input": {
       padding: "5px 0px 5px 10px",
+      fontSize: 14,
     },
     "& .MuiInputBase-root": {
       height: "32px",
@@ -138,8 +139,8 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   menuItemRoot: {
     fontFamily: Font.Family,
     borderBottom: `2px solid rgba(0,0,0,0)`,
+    fontSize: 14,
     margin: "0px 5px",
-    fontSize: "16px",
     color: "white",
 
     "&.MuiListItem-root": {
@@ -294,6 +295,7 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   select: {
     height: "32px",
+    fontSize: 14,
     "& .MuiOutlinedInput-input": {
       padding: "10px 25px 10px 15px",
     },

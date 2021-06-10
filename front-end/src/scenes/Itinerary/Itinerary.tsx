@@ -5,21 +5,37 @@ import {
   faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CardActionArea, Grid, IconButton, useMediaQuery } from "@material-ui/core";
-import { addDays, addMonths, eachDayOfInterval, format, subMonths } from "date-fns";
+import { CardActionArea, Grid, Grow, IconButton, useMediaQuery } from "@material-ui/core";
+import {
+  addDays,
+  addMonths,
+  eachDayOfInterval,
+  format,
+  parseISO,
+  subMonths,
+} from "date-fns";
 import { endOfMonth, subDays } from "date-fns/esm";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router";
 import {
   CustomButton,
   DashDrawer,
   DayItinerary,
   IconText,
   Navbar,
+  ProgressCircle,
   Text,
 } from "../../components";
 import { Colors } from "../../styles";
-import { areDatesEqual, tripPlaceholder } from "../../utils";
+import {
+  areDatesEqual,
+  backend,
+  responseTripToDomainTrip,
+  selectTripDetail,
+  setTripDetail,
+  tripPlaceholder,
+} from "../../utils";
 import { calendarItemHolderSelect } from "../../utils/store/calendar-slice";
 import { CalendarItem, Trip, TripEvent } from "../../utils/types/trip-types";
 import { itineraryStyles } from "./itinerary-styles";
@@ -36,7 +52,9 @@ interface DayItinerary {
 export function Itinerary() {
   const style = itineraryStyles();
 
-  const trip: Trip = tripPlaceholder;
+  const trip: Trip | undefined = useSelector(selectTripDetail);
+  const dispatch = useDispatch();
+  const routeLocation = useLocation();
 
   const weekDays = [
     "Sunday",
@@ -49,7 +67,7 @@ export function Itinerary() {
   ];
 
   const [baseDate, setBaseDate] = useState<Date>(new Date());
-
+  const [loading, setLoading] = useState<boolean>(true);
   const [openDialog, setOpenDialog] = useState(false);
 
   const [dateItinerary, setDayItinerary] = useState<DayItinerary>({
@@ -59,6 +77,24 @@ export function Itinerary() {
 
   const is1170OrLess = useMediaQuery("(max-width:1170px)");
   const is405OrLess = useMediaQuery("(max-width:405px)");
+
+  useEffect(() => {
+    if (trip) {
+      setLoading(false);
+    } else {
+      let idTrip = routeLocation.search.substring(1).split("=")[1];
+      backend
+        .get(`/trip/${idTrip}`)
+        .then((res) => {
+          dispatch(setTripDetail(responseTripToDomainTrip(res.data)));
+          setLoading(false);
+          //@ts-ignore
+          // mainRef.current.scrollTo(0, 0);
+          window.scrollTo(0, 0);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
 
   function getWeekDayLabel(weekDay: string): string {
     if (is1170OrLess) {
@@ -86,8 +122,6 @@ export function Itinerary() {
   }
 
   function Calendar({ baseDate }: Calendar) {
-    const trip: Trip = tripPlaceholder;
-
     const calendarItemsRx = useSelector(calendarItemHolderSelect);
 
     const [calendarItems, setCalendarItems] = useState<CalendarItem[]>(
@@ -95,8 +129,8 @@ export function Itinerary() {
     );
 
     const tripDateInterval: Date[] = eachDayOfInterval({
-      start: trip.startDate,
-      end: trip.endDate,
+      start: trip ? trip.startDate : new Date(),
+      end: trip ? trip.endDate : new Date(),
     });
 
     useEffect(() => {
@@ -183,9 +217,12 @@ export function Itinerary() {
      */
     function dayHasEvents(day: Date) {
       let hasEvents = false;
-      if (trip.itinerary) {
+      if (trip && trip.itinerary) {
         trip.itinerary.forEach((event) => {
-          if (areDatesEqual(day, event.start) || areDatesEqual(day, event.end)) {
+          if (
+            areDatesEqual(day, parseISO(event.start)) ||
+            areDatesEqual(day, parseISO(event.end))
+          ) {
             hasEvents = true;
             return;
           }
@@ -218,11 +255,13 @@ export function Itinerary() {
     }
 
     function seeDayItinerary(date: Date) {
-      if (!trip.itinerary) {
+      if (trip === undefined || !trip.itinerary) {
         return;
       }
       let events: TripEvent[] = trip.itinerary.filter(
-        (event) => areDatesEqual(event.start, date) || areDatesEqual(event.end, date)
+        (event) =>
+          areDatesEqual(parseISO(event.start), date) ||
+          areDatesEqual(parseISO(event.end), date)
       );
 
       setDayItinerary({
@@ -236,40 +275,51 @@ export function Itinerary() {
     return (
       <Grid container className={style.calendarGrid}>
         {calendarItems.map((item, i) => (
-          <div key={item.date.valueOf()} className={style.calendarItemContainer}>
-            <CardActionArea
-              disabled={!item.active}
-              style={{ backgroundColor: getCalendarItemBackground(item) }}
-              className={style.calendarItem}
-              onClick={() => seeDayItinerary(item.date)}
-            >
-              <Grid container style={{ height: "100%" }}>
-                {/* Day number grid */}
-                <Grid item xs={12}>
-                  {item.tripDay ? (
-                    <Text bold color={getCalendarTextColor(item)} component="h4">
-                      {item.day}
-                    </Text>
+          <Grow
+            in={true}
+            mountOnEnter
+            style={{ transformOrigin: "0 0 0" }}
+            timeout={1000}
+          >
+            <div key={item.date.valueOf()} className={style.calendarItemContainer}>
+              <CardActionArea
+                disabled={!item.active}
+                style={{ backgroundColor: getCalendarItemBackground(item) }}
+                className={style.calendarItem}
+                onClick={() => seeDayItinerary(item.date)}
+              >
+                <Grid container style={{ height: "100%" }}>
+                  {/* Day number grid */}
+                  <Grid item xs={12}>
+                    {item.tripDay ? (
+                      <Text bold color={getCalendarTextColor(item)} component="h4">
+                        {item.day}
+                      </Text>
+                    ) : (
+                      <Text color={getCalendarTextColor(item)} component="h4">
+                        {item.day}
+                      </Text>
+                    )}
+                  </Grid>
+
+                  {/* Icon grid */}
+                  {trip && trip.itinerary && dayHasEvents(item.date) ? (
+                    <Grid item xs={12} className={style.iconGrid}>
+                      <Grid container>
+                        <FontAwesomeIcon
+                          size="xs"
+                          color={Colors.PURPLE}
+                          icon={faCircle}
+                        />
+                      </Grid>
+                    </Grid>
                   ) : (
-                    <Text color={getCalendarTextColor(item)} component="h4">
-                      {item.day}
-                    </Text>
+                    <div></div>
                   )}
                 </Grid>
-
-                {/* Icon grid */}
-                {trip.itinerary && dayHasEvents(item.date) ? (
-                  <Grid item xs={12} className={style.iconGrid}>
-                    <Grid container>
-                      <FontAwesomeIcon size="xs" color={Colors.PURPLE} icon={faCircle} />
-                    </Grid>
-                  </Grid>
-                ) : (
-                  <div></div>
-                )}
-              </Grid>
-            </CardActionArea>
-          </div>
+              </CardActionArea>
+            </div>
+          </Grow>
         ))}
       </Grid>
     );
@@ -280,66 +330,75 @@ export function Itinerary() {
       <Navbar className={style.navbar} dashboard position="sticky" />
       <DashDrawer />
 
-      <div className={style.pageContentContainer}>
-        <IconText
-          style={{ marginBottom: "20px", marginTop: "10px" }}
-          iconStyle={{ padding: "12px" }}
-          shadow
-          size={35}
-          icon={faCalendarAlt}
-        >
-          <Text bold component="h1">
-            {`Itinerary | ${trip.name}`}
-          </Text>
-        </IconText>
+      {loading && (
+        <Grid container style={{ height: "85vh" }}>
+          <ProgressCircle />
+        </Grid>
+      )}
 
-        <div className={style.contentBackgroundContainer}>
-          {/* Date selector */}
-          <Grid container>
-            <CustomButton
-              textColor="black"
-              style={{ fontSize: "22px", fontWeight: "bold" }}
-              backgroundColor="rgba(0,0,0,0)"
-            >
-              {format(baseDate, "MMMM yyyy")}
-            </CustomButton>
+      {trip && (
+        <div className={style.pageContentContainer}>
+          <IconText
+            style={{ marginBottom: "20px", marginTop: "10px" }}
+            iconStyle={{ padding: "12px" }}
+            shadow
+            size={35}
+            icon={faCalendarAlt}
+          >
+            <Text bold component="h1">
+              {`Itinerary | ${trip.name}`}
+            </Text>
+          </IconText>
 
-            <IconButton
-              onClick={() => {
-                setBaseDate(subMonths(baseDate, 1));
-              }}
-            >
-              <FontAwesomeIcon icon={faChevronCircleLeft} color={Colors.PURPLE} />
-            </IconButton>
+          <div className={style.contentBackgroundContainer}>
+            {/* Date selector */}
+            <Grid container>
+              <CustomButton
+                textColor="black"
+                style={{ fontSize: "22px", fontWeight: "bold" }}
+                backgroundColor="rgba(0,0,0,0)"
+              >
+                {format(baseDate, "MMMM yyyy")}
+              </CustomButton>
 
-            <IconButton
-              onClick={() => {
-                setBaseDate(addMonths(baseDate, 1));
-              }}
-            >
-              <FontAwesomeIcon icon={faChevronCircleRight} color={Colors.PURPLE} />
-            </IconButton>
-          </Grid>
+              <IconButton
+                onClick={() => {
+                  setBaseDate(subMonths(baseDate, 1));
+                }}
+              >
+                <FontAwesomeIcon icon={faChevronCircleLeft} color={Colors.PURPLE} />
+              </IconButton>
 
-          {/* Week Days container */}
-          <Grid container className={style.daysContainer}>
-            {weekDays.map((weekDay, i) => (
-              <div key={i} className={style.dayItemContainer}>
-                <Grid key={i} item>
-                  <Text color={"#8d8d8d"} style={{ fontSize: 18 }}>
-                    {getWeekDayLabel(weekDay)}
-                  </Text>
-                </Grid>
-              </div>
-            ))}
-          </Grid>
+              <IconButton
+                onClick={() => {
+                  setBaseDate(addMonths(baseDate, 1));
+                }}
+              >
+                <FontAwesomeIcon icon={faChevronCircleRight} color={Colors.PURPLE} />
+              </IconButton>
+            </Grid>
 
-          {/* Calendar grid */}
-          <Calendar baseDate={baseDate} />
+            {/* Week Days container */}
+            <Grid container className={style.daysContainer}>
+              {weekDays.map((weekDay, i) => (
+                <div key={i} className={style.dayItemContainer}>
+                  <Grid key={i} item>
+                    <Text color={"#8d8d8d"} style={{ fontSize: 18 }}>
+                      {getWeekDayLabel(weekDay)}
+                    </Text>
+                  </Grid>
+                </div>
+              ))}
+            </Grid>
+
+            {/* Calendar grid */}
+
+            <Calendar baseDate={baseDate} />
+          </div>
         </div>
-      </div>
+      )}
 
-      {trip.itinerary && (
+      {trip && trip.itinerary && (
         <DayItinerary
           open={openDialog}
           events={dateItinerary.events}

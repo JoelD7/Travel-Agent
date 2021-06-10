@@ -190,14 +190,16 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
       >
         <Slider {...imageSliderSettings} lazyLoad="ondemand">
           {hotelPhotos.map((photo) => (
-            <Grid
-              container
-              justify="center"
+            <Grow
               key={photo}
-              className={style.photoContainerImage}
+              in={true}
+              style={{ transformOrigin: "0 0 0" }}
+              timeout={1000}
             >
-              <img src={`${photo}`} alt={`${photo}`} className={style.photoInSlider} />
-            </Grid>
+              <Grid container justify="center" className={style.photoContainerImage}>
+                <img src={`${photo}`} alt={`${photo}`} className={style.photoInSlider} />
+              </Grid>
+            </Grow>
           ))}
         </Slider>
       </Dialog>

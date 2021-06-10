@@ -5,6 +5,7 @@ import {
   createMuiTheme,
   FormControl,
   Grid,
+  Grow,
   MenuItem,
   Select,
   Snackbar,
@@ -32,6 +33,7 @@ import {
   PageSubtitle,
   ProgressCircle,
   ServicesToolbar,
+  Text,
 } from "../../components";
 import { Colors } from "../../styles";
 import {
@@ -345,157 +347,159 @@ export function Flights_Home() {
       <Navbar />
 
       {/* Top image container */}
-      <Grid
-        container
-        className={style.topContainer}
-        style={{
-          backgroundImage: `url('/Travel-Agent/flights-home.jpg')`,
-          backgroundPosition: "50%",
-        }}
-      >
-        <Grid item xs={12}>
-          <ServicesToolbar />
-        </Grid>
-
-        {/* Reservation Container */}
-        <Grid container spacing={2} className={style.reservationContainer}>
+      <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+        <Grid
+          container
+          className={style.topContainer}
+          style={{
+            backgroundImage: `url('/Travel-Agent/flights-home.jpg')`,
+            backgroundPosition: "50%",
+          }}
+        >
           <Grid item xs={12}>
-            <h2>{`Find the best flight to ${destinationCity.city}`}</h2>
+            <ServicesToolbar />
           </Grid>
 
-          {/* Flight type toolbar */}
-          <Grid item xs={12} key="toolbar">
-            <Toolbar classes={{ root: style.reservationOptionsToolbar }}>
-              <MenuItem
-                selected={state.flightType === FlightTypes.ROUND}
-                classes={{ root: style.menuItemRoot }}
-                onClick={() => onFlightTypeChange(FlightTypes.ROUND)}
-              >
-                Round-trip
-              </MenuItem>
+          {/* Reservation Container */}
+          <Grid container spacing={2} className={style.reservationContainer}>
+            <Grid item xs={12}>
+              <Text component="h3">{`Find the best flight to ${destinationCity.city}`}</Text>
+            </Grid>
 
-              <MenuItem
-                selected={state.flightType === FlightTypes.ONE_WAY}
-                classes={{ root: style.menuItemRoot }}
-                onClick={() => onFlightTypeChange(FlightTypes.ONE_WAY)}
-              >
-                One way
-              </MenuItem>
-            </Toolbar>
-          </Grid>
+            {/* Flight type toolbar */}
+            <Grid item xs={12} key="toolbar">
+              <Toolbar classes={{ root: style.reservationOptionsToolbar }}>
+                <MenuItem
+                  selected={state.flightType === FlightTypes.ROUND}
+                  classes={{ root: style.menuItemRoot }}
+                  onClick={() => onFlightTypeChange(FlightTypes.ROUND)}
+                >
+                  Round-trip
+                </MenuItem>
 
-          {/* From grid */}
-          <Grid item key="destinationTF" xs={12}>
-            <h5 className={style.reservationParamText}>From</h5>
+                <MenuItem
+                  selected={state.flightType === FlightTypes.ONE_WAY}
+                  classes={{ root: style.menuItemRoot }}
+                  onClick={() => onFlightTypeChange(FlightTypes.ONE_WAY)}
+                >
+                  One way
+                </MenuItem>
+              </Toolbar>
+            </Grid>
 
-            <IataAutocomplete type="airport" flightDirection="from" />
-          </Grid>
+            {/* From grid */}
+            <Grid item key="destinationTF" xs={12}>
+              <h5 className={style.reservationParamText}>From</h5>
 
-          {/* To Grid */}
-          <Grid item xs={12} key="destinationTF">
-            <h5 className={style.reservationParamText}>To</h5>
-            <IataAutocomplete type="airport" flightDirection="to" />
-          </Grid>
+              <IataAutocomplete type="airport" flightDirection="from" />
+            </Grid>
 
-          {/* Dates */}
-          <ThemeProvider theme={theme}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid
-                item
-                className={
-                  state.flightType === FlightTypes.ROUND
-                    ? style.largeGrid
-                    : style.largeGridFull
-                }
-              >
-                <h5 className={style.reservationParamText}>Departure</h5>
-                <KeyboardDatePicker
-                  value={flightSearch.departure}
-                  labelFunc={(date, invalidLabel) =>
-                    muiDateFormatter(date, invalidLabel, "date")
+            {/* To Grid */}
+            <Grid item xs={12} key="destinationTF">
+              <h5 className={style.reservationParamText}>To</h5>
+              <IataAutocomplete type="airport" flightDirection="to" />
+            </Grid>
+
+            {/* Dates */}
+            <ThemeProvider theme={theme}>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <Grid
+                  item
+                  className={
+                    state.flightType === FlightTypes.ROUND
+                      ? style.largeGrid
+                      : style.largeGridFull
                   }
-                  className={style.datepicker}
-                  minDate={new Date()}
-                  format="dd MMM., yyyy"
-                  onChange={(d) => onDateChange(d, "departure")}
-                />
-              </Grid>
-
-              {state.flightType === FlightTypes.ROUND && (
-                <Grid item className={style.largeGrid}>
-                  <h5 className={style.reservationParamText}>Return</h5>
+                >
+                  <h5 className={style.reservationParamText}>Departure</h5>
                   <KeyboardDatePicker
-                    value={flightSearch.return}
+                    value={flightSearch.departure}
                     labelFunc={(date, invalidLabel) =>
                       muiDateFormatter(date, invalidLabel, "date")
                     }
                     className={style.datepicker}
                     minDate={new Date()}
                     format="dd MMM., yyyy"
-                    onChange={(d) => onDateChange(d, "return")}
+                    onChange={(d) => onDateChange(d, "departure")}
                   />
                 </Grid>
-              )}
-            </MuiPickersUtilsProvider>
-          </ThemeProvider>
 
-          {/* Passengers */}
-          <ThemeProvider theme={reservationParamsTheme}>
-            {passengersParams.map((passenger, i) => (
-              <Grid item key={i} className={style.passengerParamGrid}>
-                <h5 className={style.reservationParamText}>{passenger.label}</h5>
+                {state.flightType === FlightTypes.ROUND && (
+                  <Grid item className={style.largeGrid}>
+                    <h5 className={style.reservationParamText}>Return</h5>
+                    <KeyboardDatePicker
+                      value={flightSearch.return}
+                      labelFunc={(date, invalidLabel) =>
+                        muiDateFormatter(date, invalidLabel, "date")
+                      }
+                      className={style.datepicker}
+                      minDate={new Date()}
+                      format="dd MMM., yyyy"
+                      onChange={(d) => onDateChange(d, "return")}
+                    />
+                  </Grid>
+                )}
+              </MuiPickersUtilsProvider>
+            </ThemeProvider>
+
+            {/* Passengers */}
+            <ThemeProvider theme={reservationParamsTheme}>
+              {passengersParams.map((passenger, i) => (
+                <Grid item key={i} className={style.passengerParamGrid}>
+                  <h5 className={style.reservationParamText}>{passenger.label}</h5>
+
+                  <FormControl style={{ width: "100%" }}>
+                    <Select
+                      value={flightSearch[passenger.variable]}
+                      variant="outlined"
+                      className={style.select}
+                      startAdornment={
+                        <FontAwesomeIcon icon={passenger.icon} color={Colors.BLUE} />
+                      }
+                      onChange={(e) => onPassengerParamsChange(e, passenger.variable)}
+                    >
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+                        <MenuItem value={n}>{n}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              ))}
+
+              <Grid item className={style.largeGrid}>
+                <h5 className={style.reservationParamText}>Class</h5>
 
                 <FormControl style={{ width: "100%" }}>
                   <Select
-                    value={flightSearch[passenger.variable]}
+                    value={flightSearch.class}
                     variant="outlined"
                     className={style.select}
-                    startAdornment={
-                      <FontAwesomeIcon icon={passenger.icon} color={Colors.BLUE} />
-                    }
-                    onChange={(e) => onPassengerParamsChange(e, passenger.variable)}
+                    startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
+                    onChange={(e) => dispatch(setFlightClass(e.target.value as string))}
                   >
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                      <MenuItem value={n}>{n}</MenuItem>
+                    {classes.map((n, i) => (
+                      <MenuItem key={i} value={n}>
+                        {n}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
               </Grid>
-            ))}
+            </ThemeProvider>
 
-            <Grid item className={style.largeGrid}>
-              <h5 className={style.reservationParamText}>Class</h5>
-
-              <FormControl style={{ width: "100%" }}>
-                <Select
-                  value={flightSearch.class}
-                  variant="outlined"
-                  className={style.select}
-                  startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
-                  onChange={(e) => dispatch(setFlightClass(e.target.value as string))}
-                >
-                  {classes.map((n, i) => (
-                    <MenuItem key={i} value={n}>
-                      {n}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+            <Grid item xs={12}>
+              <CustomButton
+                rounded
+                backgroundColor={Colors.PURPLE}
+                style={{ width: "100%", fontSize: 14 }}
+                onClick={() => onFindFlightsClicked()}
+              >
+                Find flights
+              </CustomButton>
             </Grid>
-          </ThemeProvider>
-
-          <Grid item xs={12}>
-            <CustomButton
-              rounded
-              backgroundColor={Colors.PURPLE}
-              style={{ width: "100%" }}
-              onClick={() => onFindFlightsClicked()}
-            >
-              Find flights
-            </CustomButton>
           </Grid>
         </Grid>
-      </Grid>
+      </Grow>
 
       <PageSubtitle label="Great deals" containerStyle={{ margin: "20px auto" }} />
 
@@ -514,11 +518,13 @@ export function Flights_Home() {
       </Grid>
 
       {areNoDealsReturned() && (
-        <Grid container className={style.dealsContainer}>
-          <NotAvailableCard title="Sorry!">
-            There are no deals available for these destinations.
-          </NotAvailableCard>
-        </Grid>
+        <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+          <Grid container className={style.dealsContainer}>
+            <NotAvailableCard title="Sorry!">
+              There are no deals available for these destinations.
+            </NotAvailableCard>
+          </Grid>
+        </Grow>
       )}
 
       <Footer />

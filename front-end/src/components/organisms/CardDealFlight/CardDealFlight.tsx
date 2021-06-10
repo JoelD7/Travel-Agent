@@ -1,5 +1,12 @@
 import { faCalendar, faFlag, faPlane } from "@fortawesome/free-solid-svg-icons";
-import { Card, CardActionArea, CardContent, CardHeader, Grid } from "@material-ui/core";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardHeader,
+  Grid,
+  Grow,
+} from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -96,68 +103,73 @@ export function CardDealFlight({ deal, className, animate }: CardDealFlight) {
   }
 
   return (
-    <Grid item className={`${style.dealGrid} ${className}`}>
-      <CardActionArea
-        className={animate ? style.cardAnimated : style.card}
-        onClick={() => onCardDealClick()}
-      >
-        <Card>
-          <CardHeader
-            title={
-              <Grid container style={{ fontFamily: Font.Family }}>
-                <Grid id="text grid" item xs={8}>
-                  <div style={{ display: "flex" }}>
-                    <Text style={{ color: Colors.BLUE }} component="h4" weight="bold">
-                      {getCardTitle(origin)}
-                    </Text>
+    <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+      <Grid item className={`${style.dealGrid} ${className}`}>
+        <CardActionArea
+          className={animate ? style.cardAnimated : style.card}
+          onClick={() => onCardDealClick()}
+        >
+          <Card>
+            <CardHeader
+              title={
+                <Grid container style={{ fontFamily: Font.Family }}>
+                  <Grid id="text grid" item xs={8}>
+                    <div style={{ display: "flex" }}>
+                      <Text style={{ color: Colors.BLUE }} component="h4" weight="bold">
+                        {getCardTitle(origin)}
+                      </Text>
 
-                    <IconText
-                      text=""
-                      icon={faPlane}
-                      style={{ margin: "0px 5px" }}
-                      size={14}
-                    />
+                      <IconText
+                        text=""
+                        icon={faPlane}
+                        style={{ margin: "0px 5px" }}
+                        size={14}
+                      />
 
-                    <Text style={{ color: Colors.BLUE }} component="h4" weight="bold">
-                      {getCardTitle(destination)}
-                    </Text>
-                  </div>
+                      <Text style={{ color: Colors.BLUE }} component="h4" weight="bold">
+                        {getCardTitle(destination)}
+                      </Text>
+                    </div>
 
-                  <div>
-                    <IconText icon={faCalendar}>
-                      {`${format(new Date(deal.departureDate), "EEE, d/MMM")} - ${format(
-                        new Date(deal.returnDate),
-                        "EEE, d/MMM"
-                      )}`}
-                    </IconText>
+                    <div>
+                      <IconText icon={faCalendar}>
+                        {`${format(
+                          new Date(deal.departureDate),
+                          "EEE, d/MMM"
+                        )} - ${format(new Date(deal.returnDate), "EEE, d/MMM")}`}
+                      </IconText>
 
-                    <IconText icon={faFlag}>{getCountries()}</IconText>
-                  </div>
-                </Grid>
+                      <IconText icon={faFlag}>{getCountries()}</IconText>
+                    </div>
+                  </Grid>
 
-                <Grid id="price grid" item xs={4}>
-                  <Grid container alignItems="center">
-                    <h5 style={{ margin: "auto 0px auto auto" }}>{`${formatAsCurrency(
-                      convertToUserCurrency(Number(deal.price.total), deal.price.currency)
-                    )}`}</h5>
+                  <Grid id="price grid" item xs={4}>
+                    <Grid container alignItems="center">
+                      <h5 style={{ margin: "auto 0px auto auto" }}>{`${formatAsCurrency(
+                        convertToUserCurrency(
+                          Number(deal.price.total),
+                          deal.price.currency
+                        )
+                      )}`}</h5>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            }
-          />
+              }
+            />
 
-          <CardContent>
-            <div style={{ display: "flex" }}>
-              <CustomButton
-                style={{ marginLeft: "auto", fontSize: "14px" }}
-                backgroundColor={Colors.PURPLE}
-              >
-                View details
-              </CustomButton>
-            </div>
-          </CardContent>
-        </Card>
-      </CardActionArea>
-    </Grid>
+            <CardContent>
+              <div style={{ display: "flex" }}>
+                <CustomButton
+                  style={{ marginLeft: "auto", fontSize: "14px" }}
+                  backgroundColor={Colors.PURPLE}
+                >
+                  View details
+                </CustomButton>
+              </div>
+            </CardContent>
+          </Card>
+        </CardActionArea>
+      </Grid>
+    </Grow>
   );
 }

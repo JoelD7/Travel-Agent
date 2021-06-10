@@ -5,6 +5,7 @@ import {
   Drawer,
   FormControl,
   Grid,
+  Grow,
   MenuItem,
   Select,
   ThemeProvider,
@@ -563,96 +564,100 @@ export function CarRental() {
       </Helmet>
 
       {/* Image container */}
-      <Grid container className={style.topImageContainer}>
-        <img
-          src="/Travel-Agent/car-rental.jpg"
-          className={style.backgroundImage}
-          alt=""
-        />
+      <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+        <Grid container className={style.topImageContainer}>
+          <img
+            src="/Travel-Agent/car-rental.jpg"
+            className={style.backgroundImage}
+            alt=""
+          />
 
-        <Grid item xs={12} style={{ zIndex: 1 }}>
-          <Navbar transparent />
-          <ServicesToolbar transparent />
+          <Grid container>
+            <Grid item xs={12} style={{ zIndex: 1 }}>
+              <Navbar transparent />
+              <ServicesToolbar transparent />
 
-          {/* Title */}
-          <div className={style.pageTitleContainer}>
-            <Text
-              component="hm"
-              color="white"
-            >{`Car Rental in ${destinationCity.city}`}</Text>
-          </div>
-        </Grid>
+              {/* Title */}
+              <div className={style.pageTitleContainer}>
+                <Text
+                  component="hm"
+                  color="white"
+                >{`Car Rental in ${destinationCity.city}`}</Text>
+              </div>
+            </Grid>
 
-        {/* Search params */}
-        <Grid container spacing={2} className={style.searchParamsGrid}>
-          {/* Location */}
-          <Grid item className={style.locationGrid}>
-            <Text color="white" className={style.whiteParamText} bold>
-              Pickup location
-            </Text>
-            <div className={style.locationDiv}>
-              <IataAutocomplete type="airport" flightDirection="to" />
-            </div>
-          </Grid>
-
-          {/* Dates */}
-          <ThemeProvider theme={theme}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              {/* Pickup date */}
-              <Grid item className={style.dateButtonGrid}>
+            {/* Search params */}
+            <Grid container spacing={2} className={style.searchParamsGrid}>
+              {/* Location */}
+              <Grid item className={style.locationGrid}>
                 <Text color="white" className={style.whiteParamText} bold>
-                  Pickup
+                  Pickup location
                 </Text>
-                <KeyboardDateTimePicker
-                  value={parseISO(localCarSearch.pickup_date)}
-                  labelFunc={(date, invalidLabel) =>
-                    muiDateFormatter(date, invalidLabel, "datetime")
-                  }
-                  className={style.datepicker}
-                  minDate={new Date()}
-                  format="EEE. d/MMM, yyyy 'at' h:mm"
-                  onChange={(d) => onDateChange(d, "pickup_date")}
-                />
+                <div className={style.locationDiv}>
+                  <IataAutocomplete type="airport" flightDirection="to" />
+                </div>
               </Grid>
 
-              {/* Dropoff date */}
-              <Grid item className={style.dateButtonGrid}>
-                <Text color="white" className={style.whiteParamText} bold>
-                  Dropoff
-                </Text>
-                <KeyboardDateTimePicker
-                  value={parseISO(localCarSearch.dropoff_date)}
-                  labelFunc={(date, invalidLabel) =>
-                    muiDateFormatter(date, invalidLabel, "datetime")
-                  }
-                  className={style.datepicker}
-                  minDate={new Date()}
-                  format="EEE. d/MMM, yyyy 'at' h:mm"
-                  onChange={(d) => onDateChange(d, "dropoff_date")}
-                />
-              </Grid>
-            </MuiPickersUtilsProvider>
-          </ThemeProvider>
+              {/* Dates */}
+              <ThemeProvider theme={theme}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  {/* Pickup date */}
+                  <Grid item className={style.dateButtonGrid}>
+                    <Text color="white" className={style.whiteParamText} bold>
+                      Pickup
+                    </Text>
+                    <KeyboardDateTimePicker
+                      value={parseISO(localCarSearch.pickup_date)}
+                      labelFunc={(date, invalidLabel) =>
+                        muiDateFormatter(date, invalidLabel, "datetime")
+                      }
+                      className={style.datepicker}
+                      minDate={new Date()}
+                      format="EEE. d/MMM, yyyy 'at' h:mm"
+                      onChange={(d) => onDateChange(d, "pickup_date")}
+                    />
+                  </Grid>
 
-          {/* Button */}
-          <Grid item className={style.buttonGrid}>
-            <Grid
-              container
-              style={{ height: "100%" }}
-              justify="flex-end"
-              alignItems="flex-end"
-            >
-              <CustomButton
-                style={{ fontSize: "18px" }}
-                onClick={() => onSearchClick()}
-                backgroundColor={Colors.GREEN}
-              >
-                Search
-              </CustomButton>
+                  {/* Dropoff date */}
+                  <Grid item className={style.dateButtonGrid}>
+                    <Text color="white" className={style.whiteParamText} bold>
+                      Dropoff
+                    </Text>
+                    <KeyboardDateTimePicker
+                      value={parseISO(localCarSearch.dropoff_date)}
+                      labelFunc={(date, invalidLabel) =>
+                        muiDateFormatter(date, invalidLabel, "datetime")
+                      }
+                      className={style.datepicker}
+                      minDate={new Date()}
+                      format="EEE. d/MMM, yyyy 'at' h:mm"
+                      onChange={(d) => onDateChange(d, "dropoff_date")}
+                    />
+                  </Grid>
+                </MuiPickersUtilsProvider>
+              </ThemeProvider>
+
+              {/* Button */}
+              <Grid item className={style.buttonGrid}>
+                <Grid
+                  container
+                  style={{ height: "100%" }}
+                  justify="flex-end"
+                  alignItems="flex-end"
+                >
+                  <CustomButton
+                    style={{ fontSize: "18px" }}
+                    onClick={() => onSearchClick()}
+                    backgroundColor={Colors.GREEN}
+                  >
+                    Search
+                  </CustomButton>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Grow>
 
       {/* Page container */}
       <Grid container className={style.pageContainer} justify="center">
@@ -671,46 +676,50 @@ export function CarRental() {
         </Grid>
 
         {/* Sort */}
-        <Grid item className={style.sortGrid}>
-          <Grid container className={style.gridContainer}>
-            <Grid container className={style.sortContainer}>
-              <Text
-                bold
-                style={{ alignSelf: "end", margin: "auto 0px" }}
-                color={Colors.BLUE}
-              >
-                Sort by
-              </Text>
-
-              <FormControl className={style.sortFormControl}>
-                <Select
-                  value={sortOption}
-                  variant="outlined"
-                  classes={{ icon: style.selectIcon }}
-                  className={style.select}
-                  onChange={onSortOptionChange}
+        <Grow in={true} mountOnEnter style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+          <Grid item className={style.sortGrid}>
+            <Grid container className={style.gridContainer}>
+              <Grid container className={style.sortContainer}>
+                <Text
+                  bold
+                  style={{ alignSelf: "end", margin: "auto 0px" }}
+                  color={Colors.BLUE}
                 >
-                  {sortOptions.map((option, i) => (
-                    <MenuItem
-                      classes={{ root: style.menuItemSelect }}
-                      key={i}
-                      value={option}
-                    >
-                      {option}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                  Sort by
+                </Text>
+
+                <FormControl className={style.sortFormControl}>
+                  <Select
+                    value={sortOption}
+                    variant="outlined"
+                    classes={{ icon: style.selectIcon }}
+                    className={style.select}
+                    onChange={onSortOptionChange}
+                  >
+                    {sortOptions.map((option, i) => (
+                      <MenuItem
+                        classes={{ root: style.menuItemSelect }}
+                        key={i}
+                        value={option}
+                      >
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        </Grow>
 
         {/* Filters */}
-        <Grid item className={style.filterGrid}>
-          <div className={style.filterContainer}>
-            <CarFilters />
-          </div>
-        </Grid>
+        <Grow in={true} mountOnEnter style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+          <Grid item className={style.filterGrid}>
+            <div className={style.filterContainer}>
+              <CarFilters />
+            </div>
+          </Grid>
+        </Grow>
 
         {/* Cars cards */}
         <Grid item className={style.carsGrid}>
@@ -721,19 +730,34 @@ export function CarRental() {
           )}
 
           {noCarRentalCardsFound() && (
-            <Grid container justify="center" style={getBlurStyle()}>
-              <NotAvailableCard title="Sorry">
-                {noCarRentalsInfo.details}
-              </NotAvailableCard>
-            </Grid>
+            <Grow
+              in={true}
+              mountOnEnter
+              style={{ transformOrigin: "0 0 0" }}
+              timeout={1000}
+            >
+              <Grid container justify="center" style={getBlurStyle()}>
+                <NotAvailableCard title="Sorry">
+                  {noCarRentalsInfo.details}
+                </NotAvailableCard>
+              </Grid>
+            </Grow>
           )}
 
           {areCarRentalCardsRenderable() && (
             <Grid container spacing={2} justify="center" style={getBlurStyle()}>
               {cars.map((car, i) => (
-                <Grid key={i} item className={style.carsGridItem}>
-                  <CarsCard car={car} />
-                </Grid>
+                <Grow
+                  key={i}
+                  in={true}
+                  mountOnEnter
+                  style={{ transformOrigin: "0 0 0" }}
+                  timeout={1000}
+                >
+                  <Grid item className={style.carsGridItem}>
+                    <CarsCard car={car} />
+                  </Grid>
+                </Grow>
               ))}
             </Grid>
           )}

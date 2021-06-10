@@ -372,7 +372,9 @@ export function TripDetails() {
                         <Grid container>
                           <CustomButton
                             className={style.itineraryButton}
-                            onClick={() => history.push(Routes.ITINERARY)}
+                            onClick={() =>
+                              history.push(`${Routes.ITINERARY}?trip=${trip.idTrip}`)
+                            }
                             icon={faCalendar}
                           >
                             Itinerary

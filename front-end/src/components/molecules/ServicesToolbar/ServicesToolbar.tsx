@@ -1,7 +1,6 @@
 import { createMuiTheme, MenuItem, ThemeProvider, Toolbar } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import React from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Colors } from "../../../styles";
 import {
@@ -10,7 +9,6 @@ import {
   getLinkStyle,
   getRestaurantsDefaultRoute,
   Routes,
-  selectHotelReservationParams,
 } from "../../../utils";
 import { servicesToolbarStyles } from "../servicesToolbar-styles";
 
@@ -28,8 +26,6 @@ interface ServicesToolbar {
 export function ServicesToolbar({ transparent, style }: ServicesToolbar) {
   let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
   let page = "/" + segmentedURL[segmentedURL.length - 1];
-
-  const reservationParams = useSelector(selectHotelReservationParams);
 
   const navbarServices: NavbarService[] = [
     {

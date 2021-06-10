@@ -11,6 +11,7 @@ import {
   Drawer,
   FormControl,
   Grid,
+  Grow,
   MenuItem,
   Popover,
   Select,
@@ -754,109 +755,110 @@ export function Hotels() {
         <Grid item xs={12} className={style.pageTitleGrid}>
           <Grid container className={style.backgroundImageContainer}>
             <img src="/Travel-Agent/hotel.jpg" className={style.backgroundImage} alt="" />
+            <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+              <Grid container style={{ zIndex: 1 }}>
+                {/* Services bar and title */}
+                <Grid item xs={12}>
+                  <Navbar transparent />
+                  <Grid container>
+                    {/* Services toolbar */}
+                    <Grid item xs={12}>
+                      <ServicesToolbar transparent />
+                    </Grid>
 
-            <Grid container style={{ zIndex: 1 }}>
-              {/* Services bar and title */}
-              <Grid item xs={12}>
-                <Navbar transparent />
-                <Grid container>
-                  {/* Services toolbar */}
-                  <Grid item xs={12}>
-                    <ServicesToolbar transparent />
-                  </Grid>
-
-                  {/* Title */}
-                  <Grid item xs={10} style={{ margin: "0px auto" }}>
-                    <Text
-                      style={{ position: "relative" }}
-                      component="hm"
-                      color="white"
-                      bold
-                    >
-                      {`Hotels in ${geolocation.city}`}
-                    </Text>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              {/* Reservation params box*/}
-              <Grid item xs={10} className={style.reservationParamBox}>
-                <Grid container spacing={2} className={style.pageTitleContainer}>
-                  {/* Dates */}
-                  <ThemeProvider theme={theme}>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <Grid item className={style.datepickerItemGrid}>
-                        <Text bold className={style.whiteParamText} color="white">
-                          Check-in
-                        </Text>
-                        <KeyboardDatePicker
-                          value={reservationParams.stay.checkIn}
-                          labelFunc={(date, invalidLabel) =>
-                            muiDateFormatter(date, invalidLabel, "date")
-                          }
-                          className={style.datepicker}
-                          minDate={new Date()}
-                          format="dd MMM., yyyy"
-                          onChange={(date) => onOccupancyDateChange(date, "checkIn")}
-                        />
-                      </Grid>
-
-                      <Grid item className={style.datepickerItemGrid}>
-                        <Text bold className={style.whiteParamText} color="white">
-                          Check-out
-                        </Text>
-                        <KeyboardDatePicker
-                          value={reservationParams.stay.checkOut}
-                          labelFunc={(date, invalidLabel) =>
-                            muiDateFormatter(date, invalidLabel, "date")
-                          }
-                          className={style.datepicker}
-                          minDate={new Date()}
-                          format="dd MMM., yyyy"
-                          onChange={(date) => onOccupancyDateChange(date, "checkOut")}
-                        />
-                      </Grid>
-                    </MuiPickersUtilsProvider>
-                  </ThemeProvider>
-
-                  {/* Occupancy params */}
-                  <Grid item className={style.occupancyGrid}>
-                    <Grid container alignItems="flex-end" style={{ height: "100%" }}>
-                      <Text bold className={style.whiteParamText} color="white">
-                        Occupancy
+                    {/* Title */}
+                    <Grid item xs={10} style={{ margin: "0px auto" }}>
+                      <Text
+                        style={{ position: "relative" }}
+                        component="hm"
+                        color="white"
+                        bold
+                      >
+                        {`Hotels in ${geolocation.city}`}
                       </Text>
-                      <CustomButton
-                        backgroundColor={"white"}
-                        style={{ height: "32px", width: "100%" }}
-                        textColor={Colors.BLUE}
-                        onClick={(e) => onOccupanciesPopoverChange(e)}
-                      >
-                        {getOccupancyText()}
-                      </CustomButton>
                     </Grid>
                   </Grid>
+                </Grid>
 
-                  {/* Search Button */}
-                  <Grid item className={style.searchButtonGrid}>
-                    <Grid
-                      container
-                      justify="flex-end"
-                      alignItems="flex-end"
-                      style={{ height: "100%" }}
-                    >
-                      <CustomButton
-                        backgroundColor={Colors.GREEN}
-                        rounded
-                        className={style.searchButton}
-                        onClick={() => onSearchButtonClick()}
+                {/* Reservation params box*/}
+                <Grid item xs={10} className={style.reservationParamBox}>
+                  <Grid container spacing={2} className={style.pageTitleContainer}>
+                    {/* Dates */}
+                    <ThemeProvider theme={theme}>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid item className={style.datepickerItemGrid}>
+                          <Text bold className={style.whiteParamText} color="white">
+                            Check-in
+                          </Text>
+                          <KeyboardDatePicker
+                            value={reservationParams.stay.checkIn}
+                            labelFunc={(date, invalidLabel) =>
+                              muiDateFormatter(date, invalidLabel, "date")
+                            }
+                            className={style.datepicker}
+                            minDate={new Date()}
+                            format="dd MMM., yyyy"
+                            onChange={(date) => onOccupancyDateChange(date, "checkIn")}
+                          />
+                        </Grid>
+
+                        <Grid item className={style.datepickerItemGrid}>
+                          <Text bold className={style.whiteParamText} color="white">
+                            Check-out
+                          </Text>
+                          <KeyboardDatePicker
+                            value={reservationParams.stay.checkOut}
+                            labelFunc={(date, invalidLabel) =>
+                              muiDateFormatter(date, invalidLabel, "date")
+                            }
+                            className={style.datepicker}
+                            minDate={new Date()}
+                            format="dd MMM., yyyy"
+                            onChange={(date) => onOccupancyDateChange(date, "checkOut")}
+                          />
+                        </Grid>
+                      </MuiPickersUtilsProvider>
+                    </ThemeProvider>
+
+                    {/* Occupancy params */}
+                    <Grid item className={style.occupancyGrid}>
+                      <Grid container alignItems="flex-end" style={{ height: "100%" }}>
+                        <Text bold className={style.whiteParamText} color="white">
+                          Occupancy
+                        </Text>
+                        <CustomButton
+                          backgroundColor={"white"}
+                          style={{ height: "32px", width: "100%" }}
+                          textColor={Colors.BLUE}
+                          onClick={(e) => onOccupanciesPopoverChange(e)}
+                        >
+                          {getOccupancyText()}
+                        </CustomButton>
+                      </Grid>
+                    </Grid>
+
+                    {/* Search Button */}
+                    <Grid item className={style.searchButtonGrid}>
+                      <Grid
+                        container
+                        justify="flex-end"
+                        alignItems="flex-end"
+                        style={{ height: "100%" }}
                       >
-                        {`${state.occupancyParamsChanged ? "Update search" : "Search"}`}
-                      </CustomButton>
+                        <CustomButton
+                          backgroundColor={Colors.GREEN}
+                          rounded
+                          className={style.searchButton}
+                          onClick={() => onSearchButtonClick()}
+                        >
+                          {`${state.occupancyParamsChanged ? "Update search" : "Search"}`}
+                        </CustomButton>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
+            </Grow>
           </Grid>
         </Grid>
 
@@ -865,30 +867,32 @@ export function Hotels() {
           <Grid container className={style.pageContentContainer}>
             {/* Filters */}
             <Grid item className={style.filtersGrid}>
-              <div className={style.filtersContainer}>
-                <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-                  Price range
-                </Text>
-                <PriceRange
-                  value={state.priceRange}
-                  baseCurrency="USD"
-                  max={maxRate}
-                  updateState={onPriceRangeChange}
-                />
+              <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                <div className={style.filtersContainer}>
+                  <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+                    Price range
+                  </Text>
+                  <PriceRange
+                    value={state.priceRange}
+                    baseCurrency="USD"
+                    max={maxRate}
+                    updateState={onPriceRangeChange}
+                  />
 
-                <Divider style={{ margin: "10px auto" }} />
+                  <Divider style={{ margin: "10px auto" }} />
 
-                <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-                  Stars
-                </Text>
-                <Rating
-                  type="star"
-                  readonly={false}
-                  score={state.stars}
-                  onChange={onStarChange}
-                  size={40}
-                />
-              </div>
+                  <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+                    Stars
+                  </Text>
+                  <Rating
+                    type="star"
+                    readonly={false}
+                    score={state.stars}
+                    onChange={onStarChange}
+                    size={40}
+                  />
+                </div>
+              </Grow>
             </Grid>
 
             {/* Hotels grid */}
@@ -898,37 +902,39 @@ export function Hotels() {
             >
               <Grid container>
                 {/* Sort by and filter button */}
-                <Grid item className={style.sortFilterGrid}>
-                  <Grid container>
-                    {/* Filter button */}
-                    <Grid item className={style.filterButtonGrid}>
-                      <Grid container alignItems="center" style={{ height: "100%" }}>
-                        <CustomButton
-                          icon={faFilter}
-                          backgroundColor={Colors.PURPLE}
-                          style={{ paddingLeft: "10px", fontSize: "14px" }}
-                          onClick={() => setOpenDrawer(true)}
-                        >
-                          Filter
-                        </CustomButton>
+                <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                  <Grid item className={style.sortFilterGrid}>
+                    <Grid container>
+                      {/* Filter button */}
+                      <Grid item className={style.filterButtonGrid}>
+                        <Grid container alignItems="center" style={{ height: "100%" }}>
+                          <CustomButton
+                            icon={faFilter}
+                            backgroundColor={Colors.PURPLE}
+                            style={{ paddingLeft: "10px", fontSize: "14px" }}
+                            onClick={() => setOpenDrawer(true)}
+                          >
+                            Filter
+                          </CustomButton>
+                        </Grid>
+                      </Grid>
+
+                      {/* Sort and paging grid */}
+                      <Grid item className={style.sortGrid}>
+                        <SortPageSize
+                          pageSize={pageSize}
+                          pageSizeOptions={pageSizeOptions}
+                          sortOption={sortOption}
+                          sortOptions={sortOptions}
+                          onPageSizeChange={(value) => onPageSizeChange(value)}
+                          onSortOptionChange={(e) =>
+                            onSortOptionChange(e.target.value as string)
+                          }
+                        />
                       </Grid>
                     </Grid>
-
-                    {/* Sort and paging grid */}
-                    <Grid item className={style.sortGrid}>
-                      <SortPageSize
-                        pageSize={pageSize}
-                        pageSizeOptions={pageSizeOptions}
-                        sortOption={sortOption}
-                        sortOptions={sortOptions}
-                        onPageSizeChange={(value) => onPageSizeChange(value)}
-                        onSortOptionChange={(e) =>
-                          onSortOptionChange(e.target.value as string)
-                        }
-                      />
-                    </Grid>
                   </Grid>
-                </Grid>
+                </Grow>
 
                 {/* Hotel cards */}
                 <Grid item style={{ margin: "auto" }}>
@@ -947,7 +953,16 @@ export function Hotels() {
                       {hotelAvailability.hotels
                         .slice(page * pageSize, page * pageSize + pageSize)
                         .map((hotel) => (
-                          <HotelCard key={hotel.code} hotel={hotel} />
+                          <Grow
+                            key={hotel.code}
+                            in={true}
+                            style={{ transformOrigin: "0 0 0" }}
+                            timeout={1000}
+                          >
+                            <div>
+                              <HotelCard hotel={hotel} />
+                            </div>
+                          </Grow>
                         ))}
                     </div>
                   )}

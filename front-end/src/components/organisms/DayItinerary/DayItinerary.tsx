@@ -1,26 +1,26 @@
 import { faClock, faMapMarkerAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Grid, IconButton, useMediaQuery } from "@material-ui/core";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
 import {
   eventToIcon,
   EventTypes,
+  flightPlaceholder,
   HotelReservation,
   hotelRsvPlaceholder,
-  setHotelRsv,
   selectFlightDetail,
   setFlightDetail,
-  flightPlaceholder,
+  setHotelRsv,
 } from "../../../utils";
 import { TripEvent } from "../../../utils/types/trip-types";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
+import { NotAvailableCard } from "../../molecules";
 import { HotelRsvDetail } from "../../organisms";
 import { dayItineraryStyles } from "./dayItinerary-styles";
-import { FlightDetails } from "../../../scenes";
-import { NotAvailableCard } from "../../molecules";
 
 interface DayItinerary {
   open: boolean;
@@ -125,8 +125,8 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
                     backgroundColor={Colors.BLUE}
                   >
                     {event.includesTime
-                      ? format(event.start, "PP 'at' p")
-                      : format(event.start, "PP")}
+                      ? format(parseISO(event.start), "PP 'at' p")
+                      : format(parseISO(event.start), "PP")}
                   </IconText>
                 </Grid>
 

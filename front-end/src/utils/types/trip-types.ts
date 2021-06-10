@@ -22,8 +22,8 @@ export interface TripEvent {
   name: string;
   location: string;
   type: EventType.EventType;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   includesTime: boolean; //whether the date of the event includes time
   flight?: Flight | null;
   hotelReservation?: HotelReservation | null;

@@ -9,7 +9,7 @@ import {
   faSmokingBan,
   faSnowflake,
 } from "@fortawesome/free-solid-svg-icons";
-import { Backdrop, Dialog, Grid } from "@material-ui/core";
+import { Backdrop, Dialog, Grid, Grow } from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Colors } from "../../../styles";
@@ -81,7 +81,9 @@ export function CarsCard({ car }: CarsCard) {
     <Grid container className={style.card}>
       {/* Image */}
       <Grid item xs={12}>
-        <img className={style.image} src={car.category.image_url} alt="" />
+        <Grow in={true} mountOnEnter style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+          <img className={style.image} src={car.category.image_url} alt="" />
+        </Grow>
       </Grid>
 
       {/* Name */}
