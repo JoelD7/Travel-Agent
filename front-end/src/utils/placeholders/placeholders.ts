@@ -3163,7 +3163,6 @@ export const tripPlaceholder: Trip = {
   endDate: new Date(2021, 4, 23),
   itinerary: [
     {
-      name: "Flight to Dubai",
       idEvent: 12,
       type: EventTypes.FLIGHT,
       start: new Date(
@@ -3177,7 +3176,6 @@ export const tripPlaceholder: Trip = {
       includesTime: true,
     },
     {
-      name: "Flight to Singapore",
       type: EventTypes.FLIGHT,
       idEvent: 11,
       start: new Date(
@@ -3192,7 +3190,6 @@ export const tripPlaceholder: Trip = {
     },
     {
       idEvent: 46,
-      name: "Arrival at Hotel Sheraton Santo Domingo",
       type: EventTypes.HOTEL,
       start: new Date(2021, 4, 13, 14, 35).toISOString(),
       end: new Date(2021, 4, 17, 11, 35).toISOString(),
@@ -3202,7 +3199,6 @@ export const tripPlaceholder: Trip = {
     },
     {
       idEvent: 78,
-      name: "Visit to The Morgan Library & Museum",
       type: EventTypes.POI,
       start: new Date(2021, 4, 16, 16, 0).toISOString(),
       end: new Date(2021, 4, 16, 17, 0).toISOString(),
@@ -3211,7 +3207,6 @@ export const tripPlaceholder: Trip = {
       includesTime: true,
     },
     {
-      name: "Visit to Hulu Theater",
       type: EventTypes.POI,
       idEvent: 44,
       start: new Date(2021, 4, 19, 12, 0).toISOString(),
@@ -3221,7 +3216,6 @@ export const tripPlaceholder: Trip = {
       includesTime: true,
     },
     {
-      name: "Visit to Dear Irving",
       idEvent: 18,
       type: EventTypes.POI,
       start: new Date(2021, 4, 21, 0, 0).toISOString(),
@@ -3573,7 +3567,6 @@ export const tripsPlaceholder: Trip[] = [
 ];
 
 export const tripEventPlaceholder: TripEvent = {
-  name: "Flight to Dubai",
   idEvent: 12,
   type: EventTypes.FLIGHT,
   start: new Date(

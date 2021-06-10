@@ -1,25 +1,40 @@
 import { faClock, faMapMarkerAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Grid, IconButton, useMediaQuery } from "@material-ui/core";
-import { format, parseISO } from "date-fns";
+import { compareAsc, format, parseISO } from "date-fns";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
 import {
   eventToIcon,
   EventTypes,
   flightPlaceholder,
+  getIataLocation,
+  getLastSegment,
   HotelReservation,
   hotelRsvPlaceholder,
+  IATALocation,
+  mapFlightToDomainType,
+  mapHotelDTOToDomainType,
+  Routes,
   selectFlightDetail,
+  setCarRsv,
   setFlightDetail,
   setHotelRsv,
 } from "../../../utils";
 import { TripEvent } from "../../../utils/types/trip-types";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
-import { NotAvailableCard } from "../../molecules";
+import {
+  CarRentalEvent,
+  FlightEvent,
+  HotelEvent,
+  NotAvailableCard,
+  POIEvent,
+} from "../../molecules";
 import { HotelRsvDetail } from "../../organisms";
+import { CarRsvDetails } from "../CarRsvDetails";
 import { dayItineraryStyles } from "./dayItinerary-styles";
 
 interface DayItinerary {
@@ -36,118 +51,31 @@ interface DayItineraryCard {
 export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
   const style = dayItineraryStyles();
 
-  const dispatch = useDispatch();
-  const [openHotelDialog, setOpenHotelDialog] = useState(false);
-  const [openFlightDialog, setOpenFlightDialog] = useState(false);
-
-  const hotelRsv: HotelReservation = hotelRsvPlaceholder;
-
-  const flightDetail: Flight | undefined = useSelector(selectFlightDetail);
-
   const is430pxOrLess = useMediaQuery("(max-width:430px)");
 
   function DayItineraryCard({ event }: DayItineraryCard) {
-    function getDetailButtonText(): string {
-      switch (event.type) {
-        case EventTypes.FLIGHT:
-          return "Flight details";
-        case EventTypes.HOTEL:
-          return "Reservation details";
-        default:
-          return "Check out place";
-      }
+    if (event.type === EventTypes.FLIGHT && event.flight) {
+      return <FlightEvent flight={event.flight} eventDate={date} />;
     }
 
-    function onDetailButtonClick() {
-      switch (event.type) {
-        case EventTypes.FLIGHT:
-          setOpenFlightDialog(true);
-          dispatch(setFlightDetail(flightPlaceholder));
-          break;
-        case EventTypes.HOTEL:
-          setOpenHotelDialog(true);
-          dispatch(setHotelRsv(hotelRsv));
-          break;
-        default:
-          break;
-      }
+    if (event.type === EventTypes.HOTEL && event.hotelReservation !== null) {
+      return (
+        <HotelEvent
+          hotelRsv={mapHotelDTOToDomainType(event.hotelReservation)}
+          eventDate={date}
+        />
+      );
     }
 
-    return (
-      <Grid container className={style.cardGrid}>
-        {/* Event Icon */}
-        <Grid item xs={2}>
-          <Grid
-            container
-            style={{ height: "100%" }}
-            justify="center"
-            alignContent="center"
-          >
-            <IconTP
-              style={{ padding: 10 }}
-              size={is430pxOrLess ? 20 : 25}
-              icon={eventToIcon(event.type)}
-            />
-          </Grid>
-        </Grid>
+    if (event.type === EventTypes.CAR_RENTAL && event.carRental) {
+      return <CarRentalEvent carRsv={event.carRental} eventDate={date} />;
+    }
 
-        {/* Content */}
-        <Grid item xs={10}>
-          <Grid container>
-            <Grid item xs={12}>
-              <Text component="h4" bold color={"white"}>
-                {event.name}
-              </Text>
-            </Grid>
+    if (event.type === EventTypes.POI && event.poi) {
+      return <POIEvent poi={event.poi} eventDate={date} />;
+    }
 
-            <Grid item xs={12}>
-              <IconText
-                style={{ fontSize: "14px" }}
-                icon={faMapMarkerAlt}
-                iconColor="white"
-                textColor="white"
-                backgroundColor={Colors.BLUE}
-              >
-                {event.location}
-              </IconText>
-            </Grid>
-
-            {/* Datetime and detail button */}
-            <Grid item xs={12}>
-              <Grid container>
-                {/* Datetime grid */}
-                <Grid item className={style.datetimeGrid}>
-                  <IconText
-                    style={{ fontSize: "14px" }}
-                    icon={faClock}
-                    iconColor="white"
-                    textColor="white"
-                    backgroundColor={Colors.BLUE}
-                  >
-                    {event.includesTime
-                      ? format(parseISO(event.start), "PP 'at' p")
-                      : format(parseISO(event.start), "PP")}
-                  </IconText>
-                </Grid>
-
-                {/* Button grid */}
-                <Grid item className={style.detailButtonGrid}>
-                  <Grid container>
-                    <CustomButton
-                      onClick={() => onDetailButtonClick()}
-                      backgroundColor={Colors.GREEN}
-                      style={{ fontSize: "16px", marginLeft: "auto", color: "white" }}
-                    >
-                      {getDetailButtonText()}
-                    </CustomButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    );
+    return <div></div>;
   }
 
   return (
@@ -194,15 +122,6 @@ export function DayItinerary({ open, events, date, onClose }: DayItinerary) {
           )}
         </Grid>
       </Dialog>
-
-      {flightDetail && (
-        <FlightDetails
-          open={openFlightDialog}
-          onClose={() => setOpenFlightDialog(false)}
-        />
-      )}
-
-      <HotelRsvDetail open={openHotelDialog} onClose={() => setOpenHotelDialog(false)} />
     </>
   );
 }

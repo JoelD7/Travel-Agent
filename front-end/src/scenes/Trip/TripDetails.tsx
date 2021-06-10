@@ -82,7 +82,7 @@ export function TripDetails() {
         dispatch(setTripDetail(responseTripToDomainTrip(res.data)));
         setLoading(false);
         //@ts-ignore
-        mainRef.current.scrollTo(0, 0);
+        window.scrollTo(0, 0);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -111,7 +111,7 @@ export function TripDetails() {
         .filter((event) => event.type === EventTypes.FLIGHT)
         .forEach((event) => {
           if (event.flight !== null && event.flight) {
-            flights.push(mapFlightToDomainType(event.flight));
+            flights.push(event.flight);
           }
         });
     }

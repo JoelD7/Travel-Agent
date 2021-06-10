@@ -19,7 +19,6 @@ export interface Trip {
 
 export interface TripEvent {
   idEvent?: number;
-  name: string;
   location: string;
   type: EventType.EventType;
   start: string;

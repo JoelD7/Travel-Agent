@@ -30,6 +30,7 @@ export { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 export { RoomAccordionTitle } from "./RoomAccordionTitle/RoomAccordionTitle";
 export { ConfirmRsvDialog } from "./ConfirmRsvDialog";
 export { CarRsvDetails } from "./CarRsvDetails";
+export { Calendar } from "./Calendar";
 export { AddFavoritesButton } from "./AddFavoritesButton";
 export { ScrollToTop };
 export * from "./TripOrganisms";

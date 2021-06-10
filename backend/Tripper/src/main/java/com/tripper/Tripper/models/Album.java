@@ -2,7 +2,6 @@ package com.tripper.Tripper.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

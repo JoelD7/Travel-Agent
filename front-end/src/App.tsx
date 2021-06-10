@@ -48,6 +48,7 @@ import {
   selectIdPerson,
   responseTripToDomainTrip,
   setFavorites,
+  setLastTrip,
 } from "./utils";
 
 export default function App() {
@@ -84,6 +85,7 @@ export default function App() {
         );
 
         dispatch(setUserTrips(tripsBuffer));
+        dispatch(setLastTrip(tripsBuffer as Trip[]));
       })
       .catch((err: any) => console.log(err));
   }

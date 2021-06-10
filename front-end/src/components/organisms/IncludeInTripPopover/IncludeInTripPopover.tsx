@@ -398,7 +398,6 @@ export function IncludeInTripPopover({
     );
 
     return {
-      name: destination ? `Flight to ${destination.city}` : "Flight",
       location: destination ? `${destination.city}` : "",
       type: EventTypes.FLIGHT,
       start: datetimePopover.start.toISOString(),
@@ -410,7 +409,6 @@ export function IncludeInTripPopover({
 
   function getHotelTripEventDTO() {
     return {
-      name: `Check in at hotel ${hotelRsv.name}`,
       location: hotelRsv.address,
       type: EventTypes.HOTEL,
       start: datetimePopover.start.toISOString(),
@@ -422,7 +420,6 @@ export function IncludeInTripPopover({
 
   function getCarRentalTripEventDTO() {
     return {
-      name: `Car rental | ${carRsv.name}`,
       location: carRsv.location,
       type: EventTypes.CAR_RENTAL,
       start: datetimePopover.start.toISOString(),
@@ -440,7 +437,6 @@ export function IncludeInTripPopover({
     );
 
     return {
-      name: `Visit to ${restaurantRsv.name}`,
       location: restaurantRsv.displayAddress,
       type: EventTypes.RESTAURANT,
       start: getISODatetimeWithOffset(datetimePopover.start),
@@ -455,7 +451,6 @@ export function IncludeInTripPopover({
     let poiDTO: RsvPOI = getPoiDTO(poi, datetimePopover.start);
 
     return {
-      name: `Visit to ${poiDTO.name}`,
       location: poiDTO.formattedAddress,
       type: EventTypes.POI,
       start: getISODatetimeWithOffset(datetimePopover.start),

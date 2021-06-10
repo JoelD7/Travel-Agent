@@ -3,6 +3,7 @@ import Compress from "react-image-file-resizer";
 import { storage, firebase } from "../external-apis";
 import { setUserTrips, store } from "../store";
 import { Trip, TripEvent } from "../types";
+import { mapFlightToDomainType } from "./functions";
 
 /**
  * Converts data returned by the backend to a
@@ -24,8 +25,18 @@ export function responseTripToDomainTrip(resTrip: any) {
     endDate: parseISO(resTrip.endDate),
     coverPhoto: resTrip.coverPhoto,
     albums: resTrip.albums,
-    itinerary: resTrip.itinerary,
+    itinerary: responseItineraryToDomainItinerary(resTrip.itinerary),
   };
+}
+
+function responseItineraryToDomainItinerary(itinerary: any[]) {
+  return itinerary.map((event) => {
+    if (event.flight !== null) {
+      return { ...event, flight: mapFlightToDomainType(event.flight) };
+    }
+
+    return event;
+  });
 }
 
 export function deleteTripEventFromStore(idEvent: number | undefined) {

@@ -1,6 +1,6 @@
 import {
-  faHotel,
   faCircle,
+  faHotel,
   faLocationArrow,
   faPlaneDeparture,
   faUtensils,

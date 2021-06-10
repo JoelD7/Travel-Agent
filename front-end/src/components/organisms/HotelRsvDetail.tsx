@@ -31,6 +31,8 @@ import {
   capitalizeString,
   convertReservationParamsToURLParams,
   convertToUserCurrency,
+  deleteTripEventFromStore,
+  EventTypes,
   formatAsCurrency,
   getHotelReservationCost,
   HotelBookingParams,
@@ -40,14 +42,10 @@ import {
   Routes,
   selectHotelReservationParams,
   selectHotelRsv,
-  Trip,
   selectUserTrips,
-  setUserTrips,
-  responseTripToDomainTrip,
+  Trip,
   TripEvent,
   tripEventPlaceholder,
-  EventTypes,
-  deleteTripEventFromStore,
 } from "../../utils";
 import { CustomButton, IconText, Rating, Text } from "../atoms";
 import { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopover";

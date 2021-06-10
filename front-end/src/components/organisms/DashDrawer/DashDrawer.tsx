@@ -20,7 +20,7 @@ import {
   makeStyles,
   Theme,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Font } from "../../../assets";
@@ -30,9 +30,9 @@ import {
   getHotelSearchURL,
   getLinkStyle,
   getRestaurantsDefaultRoute,
-  HotelBookingParams,
   Routes,
-  selectHotelReservationParams,
+  selectLastTrip,
+  Trip,
 } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 
@@ -81,11 +81,13 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
   let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
   let page = "/" + segmentedURL[segmentedURL.length - 1];
 
+  let lastTrip: Trip | undefined = useSelector(selectLastTrip);
+
   const [topDrawerOptions, setTopDrawerOptions] = useState<DrawerOptions[]>([
     {
       label: "Itinerary",
       icon: faCalendarAlt,
-      route: Routes.ITINERARY,
+      route: lastTrip ? `${Routes.ITINERARY}?trip=${lastTrip.idTrip}` : Routes.ITINERARY,
       selected: page === Routes.ITINERARY,
       user: true,
     },
@@ -149,6 +151,26 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
       user: false,
     },
   ];
+
+  useEffect(() => {
+    let newOptions = topDrawerOptions.map((option) => {
+      if (option.label === "Itinerary") {
+        return {
+          label: "Itinerary",
+          icon: faCalendarAlt,
+          route: lastTrip
+            ? `${Routes.ITINERARY}?trip=${lastTrip.idTrip}`
+            : Routes.ITINERARY,
+          selected: page === Routes.ITINERARY,
+          user: true,
+        };
+      } else {
+        return option;
+      }
+    });
+
+    setTopDrawerOptions(newOptions);
+  }, [lastTrip]);
 
   /**
    * Sets a drawer list item as selected when clicked

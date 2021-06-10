@@ -38,7 +38,7 @@ public class TripEventServiceImpl implements TripEventService {
     public TripEvent addEventToTrip(TripEvent eventDTO, Trip trip) {
         Person person = trip.getPerson();
 
-        TripEvent newTripEvent = new TripEvent(eventDTO.getName(), eventDTO.getLocation(),
+        TripEvent newTripEvent = new TripEvent(eventDTO.getLocation(),
                 eventDTO.getType(), eventDTO.getIncludesTime(), eventDTO.getStart(),
                 eventDTO.getEnd());
 

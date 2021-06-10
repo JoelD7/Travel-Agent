@@ -21,7 +21,7 @@ import {
   ListItemText,
   ThemeProvider,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { carlos, Font, logoTypeWhiteFore } from "../../../assets";
@@ -32,9 +32,9 @@ import {
   getHotelSearchURL,
   getLinkStyle,
   getRestaurantsDefaultRoute,
-  HotelBookingParams,
   Routes,
-  selectHotelReservationParams,
+  selectLastTrip,
+  Trip,
 } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 import { CustomButton } from "../../atoms";
@@ -51,12 +51,9 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
 
   const location = useLocation();
   const history = useHistory();
-
   let page = location.pathname;
 
-  const hotelReservationParams: HotelBookingParams = useSelector(
-    selectHotelReservationParams
-  );
+  let lastTrip: Trip | undefined = useSelector(selectLastTrip);
 
   const theme = createMuiTheme({
     overrides: {
@@ -72,7 +69,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
     {
       label: "Itinerary",
       icon: faCalendarAlt,
-      route: Routes.ITINERARY,
+      route: lastTrip ? `${Routes.ITINERARY}?trip=${lastTrip.idTrip}` : Routes.ITINERARY,
       selected: page === Routes.ITINERARY,
       user: true,
     },
@@ -133,6 +130,26 @@ export function NavDrawer({ open, onClose, userLoggedIn }: CDrawerProps) {
       user: false,
     },
   ]);
+
+  useEffect(() => {
+    let newOptions = drawerOptions.map((option) => {
+      if (option.label === "Itinerary") {
+        return {
+          label: "Itinerary",
+          icon: faCalendarAlt,
+          route: lastTrip
+            ? `${Routes.ITINERARY}?trip=${lastTrip.idTrip}`
+            : Routes.ITINERARY,
+          selected: page === Routes.ITINERARY,
+          user: true,
+        };
+      } else {
+        return option;
+      }
+    });
+
+    setDrawerOptions(newOptions);
+  }, [lastTrip]);
 
   function onOptionClick(option: DrawerOptions) {
     let newDrawer = drawerOptions.map((op) => {

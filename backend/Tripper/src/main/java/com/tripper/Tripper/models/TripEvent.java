@@ -30,7 +30,6 @@ public class TripEvent {
     @Column(name = "idEvent")
     private Long idEvent;
 
-    private String name;
     private String location;
 
     @Enumerated(EnumType.STRING)
@@ -39,7 +38,7 @@ public class TripEvent {
     private LocalDate start;
     private LocalDate end;
 
-    public TripEvent(String name, String location, TripEventType type, Boolean includesTime,
+    public TripEvent(String location, TripEventType type, Boolean includesTime,
             LocalDate start, LocalDate end) {
         this.name = name;
         this.location = location;

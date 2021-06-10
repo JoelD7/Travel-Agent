@@ -1,4 +1,7 @@
 export { Navbar } from "./Navbar";
+export { FlightEvent } from "./FlightEvent";
+export { HotelEvent } from "./HotelEvent";
+export { CarRentalEvent } from "./CarRentalEvent";
 export { ServicesToolbar } from "./ServicesToolbar/ServicesToolbar";
 export { DatetimeRange } from "./DatetimeRange/DatetimeRange";
 export { FlightTimesRange } from "./FlightTimesRange/FlightTimesRange";
@@ -10,4 +13,5 @@ export { NotAvailableCard } from "./NotAvailableCard/NotAvailableCard";
 export { Pagination } from "./Pagination/Pagination";
 export { RestaurantFilterDrawer } from "./RestaurantFilterDrawer";
 export { NotCreatedMessage } from "./NotCreatedMessage";
+export { POIEvent } from "./POIEvent";
 export * from "./CreateTripMolecules";

@@ -29,6 +29,7 @@ import {
   responseTripToDomainTrip,
   Routes,
   selectUserTrips,
+  setLastTrip,
   setTripDetail,
   Trip,
   tripPlaceholder,
@@ -105,6 +106,7 @@ export function Trips() {
           responseTripToDomainTrip(resTrip)
         );
         setTrips(tripsBuffer);
+        dispatch(setLastTrip(tripsBuffer as Trip[]));
         setLoading(false);
       })
       .catch((err: any) => console.log(err));
