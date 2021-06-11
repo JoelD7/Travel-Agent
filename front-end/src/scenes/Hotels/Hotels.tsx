@@ -759,7 +759,7 @@ export function Hotels() {
               <Grid container style={{ zIndex: 1 }}>
                 {/* Services bar and title */}
                 <Grid item xs={12}>
-                  <Navbar transparent />
+                  <Navbar variant="transparent" />
                   <Grid container>
                     {/* Services toolbar */}
                     <Grid item xs={12}>

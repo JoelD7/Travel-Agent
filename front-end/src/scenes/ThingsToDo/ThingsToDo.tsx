@@ -92,9 +92,8 @@ export function ThingsToDo() {
     image: "",
     pluralName: "",
   };
-  const [selectedCategory, setSelectedCategory] = useState<POICategorySearch>(
-    categoryPlaceholder
-  );
+  const [selectedCategory, setSelectedCategory] =
+    useState<POICategorySearch>(categoryPlaceholder);
 
   const [poiSliderRows, setPoiSliderRows] = useState(2);
 
@@ -267,7 +266,7 @@ export function ThingsToDo() {
         <Grid container style={{ zIndex: 1, width: "100%" }}>
           {/* Services toolbar and title */}
           <Grid item xs={12}>
-            <Navbar transparent />
+            <Navbar variant="transparent" />
 
             <Grid container>
               <Grid item xs={12}>

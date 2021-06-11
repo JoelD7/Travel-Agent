@@ -504,7 +504,7 @@ export function Restaurant_List() {
 
           {/* Services toolbar and title */}
           <Grid item xs={12} style={{ zIndex: 1 }}>
-            <Navbar transparent />
+            <Navbar variant="transparent" />
 
             <Grid container className={style.titleAndToolbarContainer}>
               <Grid item xs={12}>

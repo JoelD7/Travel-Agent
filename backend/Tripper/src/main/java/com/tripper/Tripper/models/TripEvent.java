@@ -40,7 +40,6 @@ public class TripEvent {
 
     public TripEvent(String location, TripEventType type, Boolean includesTime,
             LocalDate start, LocalDate end) {
-        this.name = name;
         this.location = location;
         this.type = type;
         this.includesTime = includesTime;

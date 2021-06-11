@@ -55,8 +55,6 @@ export function TripDetails() {
   const [prevTabIndex, setPrevTabIndex] = useState(0);
   const [loading, setLoading] = useState(trip === undefined);
   const MUtheme = useTheme();
-  const mainRef = useRef(null);
-
   //@ts-ignore
   const { id } = useParams();
 
@@ -65,6 +63,7 @@ export function TripDetails() {
 
   const VirtualizeSwipeableViews = virtualize(SwipeableViews);
   const userCurrency: string = useSelector(selectUserCurrency);
+  const mainRef = React.createRef<HTMLDivElement>();
 
   const tripCoverBackground: CSSProperties = {
     backgroundImage: trip
@@ -82,7 +81,7 @@ export function TripDetails() {
         dispatch(setTripDetail(responseTripToDomainTrip(res.data)));
         setLoading(false);
         //@ts-ignore
-        window.scrollTo(0, 0);
+        mainRef.current.scrollTo(0, 0);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -324,10 +323,10 @@ export function TripDetails() {
   }
 
   return (
-    <div className={style.mainContainer}>
+    <div className={style.mainContainer} ref={mainRef}>
       <Helmet>{trip && <title>{trip.name}</title>}</Helmet>
 
-      <Navbar className={style.navbar} dashboard position="sticky" />
+      <Navbar className={style.navbar} variant="dashboard" position="sticky" />
 
       <DashDrawer />
 

@@ -16,9 +16,10 @@ public class TripModelAssembler implements RepresentationModelAssembler<Trip, En
 
     @Override
     public EntityModel<Trip> toModel(Trip trip) {
+        Long idPerson = trip.getPerson().getIdPerson();
         return EntityModel.of(trip,
                 linkTo(methodOn(TripController.class).getTrip(trip.getIdTrip())).withSelfRel(),
-                linkTo(methodOn(TripController.class).getAllTrips()).withRel("trips"));
+                linkTo(methodOn(TripController.class).getAllTrips(idPerson)).withRel("trips"));
     }
 
     @Override
@@ -29,7 +30,7 @@ public class TripModelAssembler implements RepresentationModelAssembler<Trip, En
                         .collect(Collectors.toList());
 
         return CollectionModel.of(entityModels,
-                linkTo(methodOn(TripController.class).getAllTrips()).withSelfRel()
+                linkTo(methodOn(TripController.class).getAllTrips(null)).withSelfRel()
         );
     }
 

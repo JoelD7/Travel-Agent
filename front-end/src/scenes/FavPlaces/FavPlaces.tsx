@@ -18,7 +18,7 @@ import {
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import {
   CustomButton,
@@ -31,8 +31,8 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
-  backend,
   FavoriteTypes,
+  fetchFavorites,
   getHotelImages,
   getHotelStars,
   getLinkStyle,
@@ -43,7 +43,7 @@ import {
   Routes,
   selectFavorites,
   selectIdPerson,
-  setFavorites,
+  useAppDispatch,
 } from "../../utils";
 import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
 import { Favorite } from "../../utils/types/favorite-types";
@@ -77,7 +77,7 @@ export function FavPlaces() {
   );
 
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const favorites: Favorite[] = useSelector(selectFavorites);
   const idPerson = useSelector(selectIdPerson);
@@ -87,8 +87,8 @@ export function FavPlaces() {
     let poisBuffer: RsvPOI[] = [];
     let hotelCodes: string[] = [];
 
-    fetchFavPlaces().then((res) => {
-      let favoritePlaces: Favorite[] = res;
+    dispatch(fetchFavorites(null)).then((res) => {
+      let favoritePlaces: Favorite[] = res.payload as Favorite[];
 
       favoritePlaces.forEach((fav) => {
         if (fav.type === FavoriteTypes.HOTEL) {
@@ -109,18 +109,6 @@ export function FavPlaces() {
       setLoading(false);
     });
   }, []);
-
-  async function fetchFavPlaces() {
-    if (favorites.length === 0) {
-      let res = await backend.get(`/favorite/all?idPerson=${idPerson}`);
-      let favoritePlaces: Favorite[] = res.data._embedded.favoriteList;
-      dispatch(setFavorites(favoritePlaces));
-
-      return favoritePlaces;
-    }
-
-    return favorites;
-  }
 
   function fetchFavHotels(hotelCodes: string[]) {
     Axios.get(proxyUrl + HotelBedAPI.hotelContentURL, {
@@ -307,7 +295,7 @@ export function FavPlaces() {
       <Helmet>
         <title>Favorite Places</title>
       </Helmet>
-      <Navbar className={style.navbar} dashboard position="sticky" />
+      <Navbar className={style.navbar} variant="dashboard" position="sticky" />
       <DashDrawer />
 
       <Grid container className={style.mainGrid}>

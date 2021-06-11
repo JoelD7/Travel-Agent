@@ -5,11 +5,5 @@ export interface DrawerOptions {
   icon: IconDefinition;
   route: string;
   selected: boolean;
-  user: boolean;
+  loggedOnly: boolean;
 }
-
-// export interface RestaurantFilter {
-//   id: number;
-//   name: string;
-//   checked: boolean;
-// }

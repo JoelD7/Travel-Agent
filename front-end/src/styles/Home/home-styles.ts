@@ -28,7 +28,8 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     fontWeight: "bold",
   },
   card: {
-    width: "95%",
+    boxShadow: Shadow.LIGHT3D,
+    width: "94%",
   },
   createTripButton: {
     boxShadow: `5px 5px 10px ${Colors.BLUE}`,
@@ -54,6 +55,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
 
     "& .MuiInputBase-input": {
       padding: "5px 0px 5px 10px",
+      fontSize: 14,
     },
   },
   datepickerItemGrid: {
@@ -157,6 +159,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     borderRadius: "10px",
+    boxShadow: Shadow.LIGHT3D,
 
     [theme.breakpoints.down(990)]: {
       width: "100%",
@@ -173,6 +176,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   },
   redirectTripContainer: {
     backgroundColor: Colors.BLUE,
+    boxShadow: Shadow.MEDIUM3D,
     width: "90%",
     color: "white",
     padding: "10px 20px",
@@ -184,6 +188,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     },
   },
   redirectTripContainerHidden: {
+    boxShadow: Shadow.LIGHT3D,
     backgroundColor: Colors.BLUE,
     width: "90%",
     color: "white",
@@ -238,6 +243,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   },
   select: {
     "& .MuiOutlinedInput-input": {
+      fontSize: 14,
       padding: "10px 25px 10px 15px",
       borderRadius: "10px",
     },
@@ -281,7 +287,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
   },
   serviceName: {
     textAlign: "center",

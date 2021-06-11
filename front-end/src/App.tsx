@@ -2,7 +2,7 @@ import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { Dialog, DialogActions, DialogContent, Grid, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { appStyles } from "./app-styles";
 import { Font } from "./assets";
@@ -16,6 +16,7 @@ import {
 } from "./components";
 import {
   CarRental,
+  CreateTrip,
   FavPlaces,
   Flights_Home,
   Flight_List,
@@ -33,22 +34,18 @@ import {
   ThingsToDoDetails,
   TripDetails,
   Trips,
-  CreateTrip,
 } from "./scenes";
 import { Colors } from "./styles";
 import {
+  fetchFavorites,
+  fetchUserTrips,
   IATALocation,
   LocationType,
   Routes,
   selectOriginCity,
-  Trip,
   selectUserTrips,
-  backend,
-  setUserTrips,
-  selectIdPerson,
-  responseTripToDomainTrip,
-  setFavorites,
-  setLastTrip,
+  Trip,
+  useAppDispatch,
 } from "./utils";
 
 export default function App() {
@@ -58,10 +55,9 @@ export default function App() {
 
   const originCity: IATALocation = useSelector(selectOriginCity);
   const userTrips: Trip[] = useSelector(selectUserTrips);
-  const idPerson = useSelector(selectIdPerson);
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!isOriginCityDefined()) {
@@ -69,36 +65,11 @@ export default function App() {
     }
 
     if (userTrips.length === 0) {
-      fetchUserTrips();
+      dispatch(fetchUserTrips(null));
     }
 
-    fetchFavPlaces();
+    dispatch(fetchFavorites(null));
   }, []);
-
-  function fetchUserTrips() {
-    backend
-      .get("/trip/all")
-      .then((res: any) => {
-        let tripsInResponse = res.data._embedded.tripList;
-        let tripsBuffer = tripsInResponse.map((resTrip: any) =>
-          responseTripToDomainTrip(resTrip)
-        );
-
-        dispatch(setUserTrips(tripsBuffer));
-        dispatch(setLastTrip(tripsBuffer as Trip[]));
-      })
-      .catch((err: any) => console.log(err));
-  }
-
-  function fetchFavPlaces() {
-    backend
-      .get(`/favorite/all?idPerson=${idPerson}`)
-      .then((res) => {
-        let favorites = res.data._embedded.favoriteList;
-        dispatch(setFavorites(favorites));
-      })
-      .catch((error) => console.log(error));
-  }
 
   function isOriginCityDefined(): boolean {
     return localStorage.getItem(LocationType.ORIGIN) !== null;

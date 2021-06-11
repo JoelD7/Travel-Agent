@@ -7,10 +7,10 @@ import {
   Grid,
   Grow,
 } from "@material-ui/core";
-import { compareAsc, format } from "date-fns";
-import React, { CSSProperties, useEffect, useRef, useState } from "react";
+import { format } from "date-fns";
+import React, { CSSProperties, useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
 import {
@@ -24,15 +24,13 @@ import {
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
-  backend,
+  fetchUserTrips,
   getLinkStyle,
-  responseTripToDomainTrip,
   Routes,
+  selectLastTrip,
   selectUserTrips,
-  setLastTrip,
-  setTripDetail,
   Trip,
-  tripPlaceholder,
+  useAppDispatch,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -42,7 +40,7 @@ export function Trips() {
   const [trips, setTrips] = useState<Trip[]>();
   const [loading, setLoading] = useState(true);
 
-  let lastTrip: Trip = getLastTrip();
+  const lastTrip: Trip | undefined = useSelector(selectLastTrip);
 
   const match = useRouteMatch();
   const history = useHistory();
@@ -57,7 +55,7 @@ export function Trips() {
     backgroundPosition: "50%",
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const sliderSettings = {
     className: style.slider,
@@ -90,38 +88,15 @@ export function Trips() {
 
   useEffect(() => {
     if (userTrips.length === 0) {
-      fetchTrips();
+      dispatch(fetchUserTrips(null)).then((res) => {
+        setTrips(res.payload as Trip[]);
+        setLoading(false);
+      });
     } else {
       setLoading(false);
       setTrips([...userTrips]);
     }
   }, []);
-
-  function fetchTrips() {
-    backend
-      .get("/trip/all")
-      .then((res: any) => {
-        let tripsInResponse = res.data._embedded.tripList;
-        let tripsBuffer = tripsInResponse.map((resTrip: any) =>
-          responseTripToDomainTrip(resTrip)
-        );
-        setTrips(tripsBuffer);
-        dispatch(setLastTrip(tripsBuffer as Trip[]));
-        setLoading(false);
-      })
-      .catch((err: any) => console.log(err));
-  }
-
-  function onTripClick(trip: Trip) {
-    dispatch(setTripDetail(trip));
-  }
-
-  function getLastTrip(): Trip {
-    if (trips) {
-      return trips.sort((a, b) => compareAsc(b.endDate, a.endDate))[0];
-    }
-    return tripPlaceholder;
-  }
 
   function TripCards() {
     if (trips) {
@@ -172,7 +147,7 @@ export function Trips() {
         <title>Trips</title>
       </Helmet>
 
-      <Navbar className={style.navbar} dashboard position="sticky" />
+      <Navbar className={style.navbar} variant="dashboard" position="sticky" />
       <DashDrawer />
 
       <Grid container>
@@ -182,7 +157,7 @@ export function Trips() {
               <ProgressCircle />
             </Grid>
           )}
-          {trips && (
+          {trips && lastTrip && (
             <>
               {/* Photo title */}
               <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>

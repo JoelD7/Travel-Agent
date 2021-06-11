@@ -96,7 +96,7 @@ export function CreateTrip() {
         <title>Create a trip</title>
       </Helmet>
 
-      <Navbar className={style.navbar} dashboard position="sticky" />
+      <Navbar className={style.navbar} variant="dashboard" position="sticky" />
       <DashDrawer />
 
       {/* Page container */}

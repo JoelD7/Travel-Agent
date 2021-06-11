@@ -9,7 +9,9 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  Grow,
   Snackbar,
+  Fade,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
@@ -36,7 +38,7 @@ import {
 } from "../../components";
 import { ButtonIcon } from "../../components/atoms/ButtonIcon";
 import { Navbar, ServicesToolbar } from "../../components/molecules";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 import * as styles from "../../styles/Home/home-styles";
 import { homeStyles } from "../../styles/Home/home-styles";
 import {
@@ -273,170 +275,180 @@ export function Home() {
           <title>Tripper</title>
         </Helmet>
 
-        <Grid id="section-1" container className={style.topContainer}>
-          <Grid item xs={12}>
-            <Navbar transparent />
-            <ServicesToolbar transparent />
-          </Grid>
+        <Fade in={true} timeout={1000}>
+          <Grid id="section-1" container className={style.topContainer}>
+            <Grid item xs={12}>
+              <Navbar variant="transparent" />
+              <ServicesToolbar transparent />
+            </Grid>
 
-          {/* Reservation */}
-          <Grid item className={style.reservationGrid}>
-            <div className={style.reservationContainer}>
-              <Text
-                component="h3"
-                bold
-                color={Colors.BLUE}
-                className={style.servicesTitle}
-              >
-                What are you looking for?
-              </Text>
+            {/* Reservation */}
+            <Grid item className={style.reservationGrid}>
+              <div className={style.reservationContainer}>
+                <Text
+                  component="h3"
+                  bold
+                  color={Colors.BLUE}
+                  className={style.servicesTitle}
+                >
+                  What are you looking for?
+                </Text>
 
-              {/* Services */}
-              <div className={style.servicesContainer}>
-                {services.map((service) => (
-                  <div key={service.name}>
-                    <div
-                      key={service.name}
-                      style={{ display: "flex", justifyContent: "center" }}
-                    >
-                      <ButtonIcon
-                        primary={Colors.PURPLE}
-                        secondary={"white"}
-                        selectable={true}
-                        selected={selectedService[service.prop]}
-                        onClick={() => onServicePressed(service.prop)}
-                        size="medium"
-                        className={getIconClassname(service.prop)}
-                        icon={service.icon}
-                      />
+                {/* Services */}
+                <div className={style.servicesContainer}>
+                  {services.map((service) => (
+                    <div key={service.name}>
+                      <div
+                        key={service.name}
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <ButtonIcon
+                          primary={Colors.PURPLE}
+                          secondary={"white"}
+                          selectable={true}
+                          selected={selectedService[service.prop]}
+                          onClick={() => onServicePressed(service.prop)}
+                          size="medium"
+                          className={getIconClassname(service.prop)}
+                          icon={service.icon}
+                        />
+                      </div>
+                      <Text color={Colors.BLUE} className={style.serviceName} bold>
+                        {service.name}
+                      </Text>
                     </div>
-                    <Text color={Colors.BLUE} className={style.serviceName} bold>
-                      {service.name}
-                    </Text>
+                  ))}
+                </div>
+
+                <div id="reservationMode">
+                  <SwipeableViews index={index} onChangeIndex={(i) => setIndex(i)}>
+                    <HomeHotelReservation />
+                    <HomeFlightReservation />
+                    <HomeCarReservation />
+                  </SwipeableViews>
+                </div>
+              </div>
+            </Grid>
+
+            {/* Random location */}
+            <Grid item className={style.mainPhotoGrid}>
+              <Grid
+                container
+                justify="center"
+                alignItems="center"
+                className={style.homeImageDiv}
+              >
+                <div>
+                  <h1 className={style.homeImageText}>Hey, where you're off to next?</h1>
+                  <div className={style.exploreButtonContainer}>
+                    <CustomButton size={18} onClick={() => onRandomDestinationClick()}>
+                      Random destination
+                    </CustomButton>
                   </div>
-                ))}
-              </div>
-
-              <div id="reservationMode">
-                <SwipeableViews index={index} onChangeIndex={(i) => setIndex(i)}>
-                  <HomeHotelReservation />
-                  <HomeFlightReservation />
-                  <HomeCarReservation />
-                </SwipeableViews>
-              </div>
-            </div>
+                </div>
+              </Grid>
+            </Grid>
           </Grid>
+        </Fade>
 
-          {/* Random location */}
-          <Grid item className={style.mainPhotoGrid}>
-            <Grid
-              container
-              justify="center"
-              alignItems="center"
-              className={style.homeImageDiv}
-            >
-              <div>
-                <h1 className={style.homeImageText}>Hey, where you're off to next?</h1>
-                <div className={style.exploreButtonContainer}>
-                  <CustomButton size={18} onClick={() => onRandomDestinationClick()}>
-                    Random destination
+        <PageSubtitle label="Plan your trip" />
+        <Grid id="section-2" container className={style.section}>
+          <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+            <Grid item className={style.planTripGrid}>
+              <div className={style.redirectTripContainer}>
+                <Text color="white" bold component="h2">
+                  Make a trip
+                </Text>
+
+                <p>Plan your trips however you want! </p>
+
+                <p>
+                  The first step in planning your trip is making an itinerary. An
+                  itinerary will help you organize your time so you can get the most out
+                  of your journey.
+                </p>
+
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <CustomButton
+                    backgroundColor={Colors.GREEN}
+                    style={styles.style_createTripButton}
+                    onClick={() => history.push(Routes.CREATE_TRIP)}
+                  >
+                    Create trip
                   </CustomButton>
                 </div>
               </div>
             </Grid>
-          </Grid>
-        </Grid>
+          </Grow>
 
-        <PageSubtitle label="Plan your trip" />
-        <Grid id="section-2" container className={style.section}>
-          <Grid item className={style.planTripGrid}>
-            <div className={style.redirectTripContainer}>
-              <Text color="white" bold component="h2">
-                Make a trip
-              </Text>
+          <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+            <Grid item className={style.planTripPhotoContainer}>
+              <div className={style.redirectTripContainerHidden}>
+                <h2 style={{ fontWeight: "normal" }}>Make a trip</h2>
 
-              <p>Plan your trips however you want! </p>
+                <p>Plan your trips however you want! </p>
 
-              <p>
-                The first step in planning your trip is making an itinerary. An itinerary
-                will help you organize your time so you can get the most out of your
-                journey.
-              </p>
+                <p>
+                  The first step in planning your trip is making an itinerary. An
+                  itinerary will help you organize your time so you can get the most out
+                  of your journey.
+                </p>
 
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <CustomButton
-                  backgroundColor={Colors.GREEN}
-                  style={styles.style_createTripButton}
-                  onClick={() => history.push(Routes.CREATE_TRIP)}
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
                 >
-                  Create trip
-                </CustomButton>
+                  <CustomButton
+                    backgroundColor={Colors.GREEN}
+                    style={styles.style_createTripButton}
+                  >
+                    Create trip
+                  </CustomButton>
+                </div>
               </div>
-            </div>
-          </Grid>
-
-          <Grid item className={style.planTripPhotoContainer}>
-            <div className={style.redirectTripContainerHidden}>
-              <h2 style={{ fontWeight: "normal" }}>Make a trip</h2>
-
-              <p>Plan your trips however you want! </p>
-
-              <p>
-                The first step in planning your trip is making an itinerary. An itinerary
-                will help you organize your time so you can get the most out of your
-                journey.
-              </p>
-
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <CustomButton
-                  backgroundColor={Colors.GREEN}
-                  textColor={Colors.BLUE}
-                  style={styles.style_createTripButton}
-                >
-                  Create trip
-                </CustomButton>
-              </div>
-            </div>
-          </Grid>
+            </Grid>
+          </Grow>
         </Grid>
 
         <PageSubtitle label="Popular destinations" />
+
         <Grid id="section-3" container className={style.section}>
           <Slider
             {...sliderSettings}
             slidesToScroll={1}
-            lazyLoad="progressive"
+            lazyLoad="ondemand"
             slidesToShow={3}
           >
             {popularDestinations.map((destination, i) => (
-              <div key={i}>
-                <Card className={style.card}>
-                  <CardActionArea onClick={() => onPopularDestinationClick(destination)}>
-                    <CardMedia component="img" height="250" image={destination.image} />
-                  </CardActionArea>
+              <Grow key={i} in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                <div style={{ padding: 18 }}>
+                  <Card className={style.card}>
+                    <CardActionArea
+                      onClick={() => onPopularDestinationClick(destination)}
+                    >
+                      <CardMedia component="img" height="250" image={destination.image} />
+                    </CardActionArea>
 
-                  <CardContent>
-                    <div style={{ fontWeight: "bold" }}>
-                      <Text
-                        bold
-                        color={Colors.BLUE}
-                      >{`${destination.city}, ${destination.country}`}</Text>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+                    <CardContent>
+                      <div style={{ fontWeight: "bold" }}>
+                        <Text
+                          bold
+                          color={Colors.BLUE}
+                        >{`${destination.city}, ${destination.country}`}</Text>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </Grow>
             ))}
           </Slider>
         </Grid>

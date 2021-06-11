@@ -9,6 +9,18 @@ interface ScrollToTopProps {
 
 function ScrollToTop({ history, children }: ScrollToTopProps) {
   useEffect(() => {
+    // To scroll to top on refresh
+    window.onload = (event: any) => {
+      const e = event || window.event;
+      // Cancel the event
+      e.preventDefault();
+      window.scrollTo(0, 0);
+      if (e) {
+        e.returnValue = ""; // Legacy method for cross browser support
+      }
+      return ""; // Legacy method for cross browser support
+    };
+
     const unlisten = history.listen(() => {
       window.scrollTo(0, 0);
     });

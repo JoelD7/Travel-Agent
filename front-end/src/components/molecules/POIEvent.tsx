@@ -36,7 +36,7 @@ export function POIEvent({ poi, eventDate }: POIEventProps) {
         <Grid container>
           <Grid item xs={12}>
             <Text component="h4" bold color={"white"}>
-              {poi.name}
+              {`Visit to ${poi.name}`}
             </Text>
           </Grid>
 

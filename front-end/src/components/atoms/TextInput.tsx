@@ -1,7 +1,6 @@
 import { createMuiTheme, makeStyles, TextField } from "@material-ui/core";
-import { CreateCSSProperties, CSSProperties, ThemeProvider } from "@material-ui/styles";
-import React, { ChangeEvent, ReactNode, SetStateAction, useState } from "react";
-import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
+import { CreateCSSProperties, ThemeProvider } from "@material-ui/styles";
+import React, { ChangeEvent, ReactNode, useState } from "react";
 import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import { Colors } from "../../styles";

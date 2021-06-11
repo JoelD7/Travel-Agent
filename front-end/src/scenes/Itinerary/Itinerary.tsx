@@ -6,7 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, useMediaQuery } from "@material-ui/core";
 import { addMonths, format, subMonths } from "date-fns";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import {
@@ -56,6 +56,8 @@ export function Itinerary() {
   const is1170OrLess = useMediaQuery("(max-width:1170px)");
   const is405OrLess = useMediaQuery("(max-width:405px)");
 
+  const mainRef = React.createRef<HTMLDivElement>();
+
   useEffect(() => {
     if (trip) {
       setLoading(false);
@@ -66,9 +68,8 @@ export function Itinerary() {
         .then((res) => {
           dispatch(setTripDetail(responseTripToDomainTrip(res.data)));
           setLoading(false);
-          //@ts-ignore
+          // //@ts-ignore
           // mainRef.current.scrollTo(0, 0);
-          window.scrollTo(0, 0);
         })
         .catch((err) => console.log(err));
     }
@@ -100,8 +101,8 @@ export function Itinerary() {
   }
 
   return (
-    <div className={style.mainContainer}>
-      <Navbar className={style.navbar} dashboard position="sticky" />
+    <div className={style.mainContainer} ref={mainRef}>
+      <Navbar className={style.navbar} variant="dashboard" position="sticky" />
       <DashDrawer />
 
       {loading && (

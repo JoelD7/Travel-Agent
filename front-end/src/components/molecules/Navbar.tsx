@@ -17,7 +17,7 @@ import {
 import { Alert } from "@material-ui/lab";
 import React, { CSSProperties, FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import { carlos, Font, logoIcon, logoType, logoTypeWhiteFore } from "../../assets";
 import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
@@ -38,26 +38,26 @@ import { CustomButton, IconTP, Text } from "../atoms";
 import { IataAutocomplete, NavDrawer } from "../organisms";
 
 interface Navbar {
-  transparent?: boolean;
   position?: "fixed" | "absolute" | "sticky" | "static" | "relative";
+  variant?: "transparent" | "auth" | "dashboard" | "regular";
   className?: string;
   style?: CSSProperties;
   /**
    * Indicates if the navbar is on a page that includes
    * a dashboard. In this case, the navbar should be smaller.
    */
-  dashboard?: boolean;
 }
 
 export const Navbar: FunctionComponent<Navbar> = ({
-  transparent,
-  dashboard,
+  variant = "regular",
   className,
   style: styleParam,
   position = "relative",
 }: Navbar) => {
   const style = navbarStyles();
   const searchQuery = useSelector(selectSearchQuery);
+  const match = useRouteMatch();
+  const route = match.path;
 
   useEffect(() => {
     if (isAccessTokenUpdatable()) {
@@ -69,7 +69,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
     }
   }, [searchQuery]);
 
-  let userLoggedIn = true;
+  let userLoggedIn = variant === "auth" ? false : true;
   // userLoggedIn = false;
 
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -105,7 +105,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
   }
 
   function getAppbarClassname() {
-    return `${className} ${transparent ? style.appbarHome : style.appbar}`;
+    return `${className} ${variant === "transparent" ? style.appbarHome : style.appbar}`;
   }
 
   return (
@@ -119,7 +119,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
           >
             <img
               alt=" "
-              src={transparent ? logoTypeWhiteFore : logoType}
+              src={variant === "transparent" ? logoTypeWhiteFore : logoType}
               className={style.logotype}
             />
           </Link>
@@ -134,29 +134,37 @@ export const Navbar: FunctionComponent<Navbar> = ({
           </Link>
 
           {/* Search box */}
-          <Grid item className={style.searchBoxContainer}>
-            <IataAutocomplete
-              className={style.autocompleteContainer}
-              type="city"
-              isInNavbar
-              home={transparent}
-            />
-          </Grid>
+          {variant !== "auth" && (
+            <Grid item className={style.searchBoxContainer}>
+              <IataAutocomplete
+                className={style.autocompleteContainer}
+                type="city"
+                isInNavbar
+                home={variant === "transparent"}
+              />
+            </Grid>
+          )}
 
           <Grid item className={style.rightChildrenContainer}>
             <div
-              className={dashboard ? style.defaultHomeNavDashboard : style.defaultHomeNav}
+              className={
+                variant === "dashboard"
+                  ? style.defaultHomeNavDashboard
+                  : style.defaultHomeNav
+              }
             >
               {/* Trip reservations */}
               {userLoggedIn ? (
                 <>
                   <MenuItem
-                    // selected={page === }
+                    selected={route === Routes.TRIPS}
                     classes={{ root: style.menuItemRoot }}
                   >
                     <Link
                       style={
-                        transparent ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)
+                        variant === "transparent"
+                          ? getLinkStyle("white")
+                          : getLinkStyle(Colors.BLUE)
                       }
                       to={Routes.TRIPS}
                     >
@@ -164,12 +172,14 @@ export const Navbar: FunctionComponent<Navbar> = ({
                     </Link>
                   </MenuItem>
                   <MenuItem
-                    // selected={page === }
+                    selected={route === Routes.RESERVATIONS}
                     classes={{ root: style.menuItemRoot }}
                   >
                     <Link
                       style={
-                        transparent ? getLinkStyle("white") : getLinkStyle(Colors.BLUE)
+                        variant === "transparent"
+                          ? getLinkStyle("white")
+                          : getLinkStyle(Colors.BLUE)
                       }
                       to={Routes.RESERVATIONS}
                     >
@@ -182,14 +192,14 @@ export const Navbar: FunctionComponent<Navbar> = ({
                 <>
                   <MenuItem
                     onClick={() => {}}
-                    style={transparent ? { color: "white" } : {}}
+                    style={variant === "transparent" ? { color: "white" } : {}}
                     classes={{ root: style.menuItemRoot }}
                   >
                     Login
                   </MenuItem>
                   <MenuItem
                     onClick={() => {}}
-                    style={transparent ? { color: "white" } : {}}
+                    style={variant === "transparent" ? { color: "white" } : {}}
                     classes={{ root: style.menuItemRoot }}
                   >
                     Sign Up
@@ -206,21 +216,23 @@ export const Navbar: FunctionComponent<Navbar> = ({
 
             <IconButton onClick={() => setOpenDrawer(true)}>
               <FontAwesomeIcon
-                color={transparent ? "white" : Colors.BLUE}
+                color={variant === "transparent" ? "white" : Colors.BLUE}
                 icon={faBars}
               />
             </IconButton>
           </Grid>
 
-          {/* Search box phones */}
-          <Grid item className={style.searchBoxContainerPhone}>
-            <IataAutocomplete
-              className={style.autocompleteContainer}
-              type="city"
-              isInNavbar
-              home={transparent}
-            />
-          </Grid>
+          {/* Search box for phones */}
+          {variant !== "auth" && (
+            <Grid item className={style.searchBoxContainerPhone}>
+              <IataAutocomplete
+                className={style.autocompleteContainer}
+                type="city"
+                isInNavbar
+                home={variant === "transparent"}
+              />
+            </Grid>
+          )}
         </Grid>
       </Toolbar>
 

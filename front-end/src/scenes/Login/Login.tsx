@@ -29,7 +29,7 @@ export function Login() {
     password: false,
   });
 
-  const [values, setValues] = useState<LoginType>({
+  const [credentials, setCredentials] = useState<LoginType>({
     email: "",
     password: "",
   });
@@ -55,7 +55,7 @@ export function Login() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar variant="auth" />
       <Grid className={style.mainContainerLogin} container>
         <Grid item className={style.formGrid}>
           <div className={style.imageContainer}>
@@ -75,7 +75,10 @@ export function Login() {
               <TextInput
                 label="Email"
                 name="email"
-                value={values.email}
+                updateState={(name, value) =>
+                  setCredentials({ ...credentials, [name]: value })
+                }
+                value={credentials.email}
                 style={{ width: "100%" }}
                 type="email"
               />
@@ -85,7 +88,10 @@ export function Login() {
               <TextInput
                 label="Password"
                 name="password"
-                value={values.password}
+                updateState={(name, value) =>
+                  setCredentials({ ...credentials, [name]: value })
+                }
+                value={credentials.password}
                 style={{ width: "100%" }}
                 type={visibility.password ? "text" : "password"}
                 endAdornment={<PasswordEye name="password" />}
@@ -94,7 +100,7 @@ export function Login() {
 
             <Grid id="signUp" style={{ marginTop: "15px" }} container>
               <CustomButton onClick={login} submit={true} style={{ width: "100%" }}>
-                Sign up
+                Log in
               </CustomButton>
             </Grid>
 

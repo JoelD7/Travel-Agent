@@ -574,7 +574,7 @@ export function CarRental() {
 
           <Grid container>
             <Grid item xs={12} style={{ zIndex: 1 }}>
-              <Navbar transparent />
+              <Navbar variant="transparent" />
               <ServicesToolbar transparent />
 
               {/* Title */}

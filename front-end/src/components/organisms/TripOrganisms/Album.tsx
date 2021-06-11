@@ -330,7 +330,7 @@ export function Album({}: AlbumProps) {
         <title>{album ? `Album | ${album.name}` : "Tripper"}</title>
       </Helmet>
 
-      <Navbar className={style.navbar} dashboard position="sticky" />
+      <Navbar className={style.navbar} variant="dashboard" position="sticky" />
       <DashDrawer />
 
       <Grid item className={style.pageContentGrid}>

@@ -89,28 +89,28 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
       icon: faCalendarAlt,
       route: lastTrip ? `${Routes.ITINERARY}?trip=${lastTrip.idTrip}` : Routes.ITINERARY,
       selected: page === Routes.ITINERARY,
-      user: true,
+      loggedOnly: true,
     },
     {
       label: "Reservations",
       icon: faCalendar,
       route: Routes.RESERVATIONS,
       selected: page === Routes.RESERVATIONS,
-      user: true,
+      loggedOnly: true,
     },
     {
       label: "Trips",
       icon: faPlane,
       route: Routes.TRIPS,
       selected: page === Routes.TRIPS,
-      user: true,
+      loggedOnly: true,
     },
     {
       label: "Favorite places",
       icon: faHeart,
       route: Routes.FAVORITE_PLACES,
       selected: page === Routes.FAVORITE_PLACES,
-      user: true,
+      loggedOnly: true,
     },
   ]);
 
@@ -120,35 +120,35 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
       icon: faHotel,
       route: getHotelSearchURL(),
       selected: page === Routes.HOTELS,
-      user: false,
+      loggedOnly: false,
     },
     {
       label: "Flights",
       icon: faPlaneDeparture,
       route: Routes.FLIGHTS,
       selected: page === Routes.FLIGHTS,
-      user: false,
+      loggedOnly: false,
     },
     {
       label: "Restaurants",
       icon: faUtensils,
       route: getRestaurantsDefaultRoute(),
       selected: page === Routes.RESTAURANTS,
-      user: false,
+      loggedOnly: false,
     },
     {
       label: "Things to do",
       icon: faDice,
       route: Routes.THINGS_TODO,
       selected: page === Routes.THINGS_TODO,
-      user: false,
+      loggedOnly: false,
     },
     {
       label: "Car rental",
       icon: faCar,
       route: getCarRentalDefaultURL(),
       selected: page === Routes.CAR_RENTAL,
-      user: false,
+      loggedOnly: false,
     },
   ];
 
@@ -162,7 +162,7 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
             ? `${Routes.ITINERARY}?trip=${lastTrip.idTrip}`
             : Routes.ITINERARY,
           selected: page === Routes.ITINERARY,
-          user: true,
+          loggedOnly: true,
         };
       } else {
         return option;

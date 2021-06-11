@@ -42,8 +42,8 @@ public class TripController {
     }
 
     @GetMapping("/all")
-    public CollectionModel<EntityModel<Trip>> getAllTrips() {
-        return assembler.toCollectionModel(tripRepo.findAll());
+    public CollectionModel<EntityModel<Trip>> getAllTrips(@RequestParam Long idPerson) {
+        return assembler.toCollectionModel(tripRepo.findByPerson(idPerson));
     }
 
     @PostMapping("/create")

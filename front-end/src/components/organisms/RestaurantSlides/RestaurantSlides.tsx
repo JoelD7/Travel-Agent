@@ -1,27 +1,24 @@
+import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Button,
-  Grid,
   Card,
   CardActionArea,
-  CardMedia,
   CardContent,
+  CardMedia,
+  Grid,
   Grow,
 } from "@material-ui/core";
 import React from "react";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
-import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
-import { ProgressCircle, SliderArrow, Text } from "../../atoms";
-import { restaurantSlidesStyles } from "./restaurantSlides-styles";
+import Rating from "react-rating";
+import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import { Colors } from "../../../styles";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useHistory } from "react-router-dom";
 import { Routes } from "../../../utils";
-import Rating from "react-rating";
-import {
-  getRestaurantCategoriesList,
-  getRestaurantTransactions,
-} from "../../../utils/functions/restaurant-functions";
+import { getRestaurantCategoriesList } from "../../../utils/functions/restaurant-functions";
+import { ProgressCircle, SliderArrow, Text } from "../../atoms";
+import { restaurantSlidesStyles } from "./restaurantSlides-styles";
 
 interface RestaurantSlides {
   restaurants: RestaurantSearch[];

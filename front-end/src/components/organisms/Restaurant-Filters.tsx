@@ -10,7 +10,6 @@ import {
   selectDestinationCity,
   selectRestaurantCuisines,
   selectRestaurantFeatures,
-  selectRestaurants,
 } from "../../utils";
 import { fetchRestaurants } from "../../utils/external-apis/yelp-apis";
 import {

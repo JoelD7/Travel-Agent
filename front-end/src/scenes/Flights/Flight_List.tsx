@@ -1131,7 +1131,7 @@ export function Flight_List() {
             <Grid item xs={12}>
               <Grid container>
                 <Grid item xs={12}>
-                  <Navbar transparent />
+                  <Navbar variant="transparent" />
                   <ServicesToolbar transparent />
                 </Grid>
 

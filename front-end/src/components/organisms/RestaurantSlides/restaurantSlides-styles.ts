@@ -11,6 +11,7 @@ export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
     maxWidth: "100%",
   },
   cardParent: {
+    padding: 10,
     width: "inherit",
   },
   restaurantName: {
@@ -32,7 +33,7 @@ export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
   },
   slideshowGrid: {
     width: "100%",
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
     borderRadius: " 10px",
     padding: "10px",
   },

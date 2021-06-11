@@ -1,31 +1,12 @@
-import { faClock, faMapMarkerAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dialog, Grid, IconButton, useMediaQuery } from "@material-ui/core";
-import { compareAsc, format, parseISO } from "date-fns";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router";
-import { FlightDetails } from "../../../scenes";
+import { format } from "date-fns";
+import React from "react";
 import { Colors } from "../../../styles";
-import {
-  eventToIcon,
-  EventTypes,
-  flightPlaceholder,
-  getIataLocation,
-  getLastSegment,
-  HotelReservation,
-  hotelRsvPlaceholder,
-  IATALocation,
-  mapFlightToDomainType,
-  mapHotelDTOToDomainType,
-  Routes,
-  selectFlightDetail,
-  setCarRsv,
-  setFlightDetail,
-  setHotelRsv,
-} from "../../../utils";
+import { EventTypes, mapHotelDTOToDomainType } from "../../../utils";
 import { TripEvent } from "../../../utils/types/trip-types";
-import { CustomButton, IconText, IconTP, Text } from "../../atoms";
+import { Text } from "../../atoms";
 import {
   CarRentalEvent,
   FlightEvent,
@@ -33,8 +14,6 @@ import {
   NotAvailableCard,
   POIEvent,
 } from "../../molecules";
-import { HotelRsvDetail } from "../../organisms";
-import { CarRsvDetails } from "../CarRsvDetails";
 import { dayItineraryStyles } from "./dayItinerary-styles";
 
 interface DayItinerary {

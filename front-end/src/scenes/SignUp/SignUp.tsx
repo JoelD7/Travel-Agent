@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, InputAdornment } from "@material-ui/core";
 import React, { MouseEvent, useState } from "react";
 import { logoType, signup } from "../../assets/images";
-import { CustomButton, Footer } from "../../components";
+import { CustomButton, Footer, Navbar } from "../../components";
 import TextInput from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
 
@@ -27,7 +27,7 @@ interface PasswordProps {
 export function SignUp() {
   const style = signStyles();
 
-  const [values, setValues] = useState<SignUpValuesType>({
+  const [credentials, setCredentials] = useState<SignUpValuesType>({
     firstName: "",
     lastName: "",
     email: "",
@@ -60,11 +60,13 @@ export function SignUp() {
   }
 
   function updateState(name: string, value: string) {
-    setValues({ ...values, [name]: value });
+    setCredentials({ ...credentials, [name]: value });
   }
 
   return (
     <div>
+      <Navbar variant="auth" />
+
       <Grid className={style.mainContainerSignUp} container>
         <Grid item className={style.formGrid}>
           <div className={style.imageContainer}>
@@ -92,7 +94,7 @@ export function SignUp() {
             >
               <TextInput
                 name="firstName"
-                value={values.firstName}
+                value={credentials.firstName}
                 label="First name"
                 className={style.nameTextField}
                 updateState={updateState}
@@ -100,7 +102,7 @@ export function SignUp() {
 
               <TextInput
                 name="lastName"
-                value={values.lastName}
+                value={credentials.lastName}
                 label="Last name"
                 className={style.nameTextField}
                 updateState={updateState}
@@ -111,7 +113,7 @@ export function SignUp() {
               <TextInput
                 label="Email"
                 name="email"
-                value={values.email}
+                value={credentials.email}
                 style={{ width: "100%" }}
                 type="email"
                 updateState={updateState}
@@ -122,8 +124,8 @@ export function SignUp() {
               <TextInput
                 label="Password"
                 name="password"
-                coPassword={values.passwordConfirmation}
-                value={values.password}
+                coPassword={credentials.passwordConfirmation}
+                value={credentials.password}
                 style={{ width: "100%" }}
                 type={visibility.password ? "text" : "password"}
                 updateState={updateState}
@@ -135,8 +137,8 @@ export function SignUp() {
               <TextInput
                 label="Confirm password"
                 name="passwordConfirmation"
-                coPassword={values.password}
-                value={values.passwordConfirmation}
+                coPassword={credentials.password}
+                value={credentials.passwordConfirmation}
                 style={{ width: "100%" }}
                 type={visibility.passwordConfirmation ? "text" : "password"}
                 updateState={updateState}

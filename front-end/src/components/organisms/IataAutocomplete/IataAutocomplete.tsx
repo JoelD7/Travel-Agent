@@ -94,9 +94,9 @@ export function IataAutocomplete({
     }
   }
 
-  useEffect(() => {
-    getPredictions(text);
-  }, [text]);
+  // useEffect(() => {
+  //   getPredictions(text);
+  // }, [text]);
 
   useEffect(() => {
     setAutocomplete(getAutocompleteDefault());
@@ -105,10 +105,9 @@ export function IataAutocomplete({
   function getPredictions(query: string) {
     let predictionsBuffer: IATALocation[] = iataCodes.filter(
       (iata) =>
-        iata.code.toLowerCase().includes(query) ||
-        iata.name.toLowerCase().includes(query) ||
-        iata.city.toLowerCase().includes(query) ||
-        (iata.state !== null ? iata.state.toLowerCase().includes(query) : false)
+        iata.code.toLowerCase().indexOf(query) > -1 ||
+        iata.name.toLowerCase().indexOf(query) > -1 ||
+        iata.city.toLowerCase().indexOf(query) > -1
     );
 
     setPredictions(predictionsBuffer);
@@ -145,8 +144,9 @@ export function IataAutocomplete({
   }
 
   function onTextChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    let value = e.target.value;
+    let value = e.target.value as string;
     setText(value);
+    getPredictions(value);
   }
 
   function updateState() {
@@ -210,10 +210,6 @@ export function IataAutocomplete({
     dispatch(batchActions(batchedActions));
   }
 
-  function onCityChange(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    setText(e.target.value);
-  }
-
   return (
     <>
       <Autocomplete
@@ -251,7 +247,7 @@ export function IataAutocomplete({
               placeholder={placeholder ? placeholder : "Search locations"}
               style={isInNavbar ? { width: "100%" } : {}}
               className={isInNavbar ? style.navbar : style.searchBar}
-              onChange={onCityChange}
+              onChange={onTextChange}
               size="small"
             />
           ) : (
@@ -262,7 +258,7 @@ export function IataAutocomplete({
               placeholder={placeholder ? placeholder : "City or airport"}
               className={style.searchBarInput}
               variant={"outlined"}
-              onChange={(e) => onTextChange(e)}
+              onChange={onTextChange}
               error={error}
               helperText={helperText}
             />

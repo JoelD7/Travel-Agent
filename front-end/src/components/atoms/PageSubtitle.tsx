@@ -19,7 +19,7 @@ export function PageSubtitle({ label, containerStyle }: PageSubtitleProps) {
       fontWeight: "bold",
       fontFamily: Font.Family,
       padding: "0 5px 0 5px",
-      backgroundColor: Colors.BACKGROUND,
+      backgroundColor: "white",
     },
     divider: {
       backgroundColor: "black",

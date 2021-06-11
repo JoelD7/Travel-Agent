@@ -1,7 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { compareDesc } from "date-fns";
+import { backend } from "../external-apis";
+import { responseTripToDomainTrip } from "../functions";
 import { AlbumPicture, Trip } from "../types";
 import { Favorite } from "../types/favorite-types";
+import { AppDispatch, RootState } from "./store";
 
 interface TripSlice {
   tripDetail?: Trip;
@@ -10,6 +13,43 @@ interface TripSlice {
   favPlaces: Favorite[];
   albumPictures: AlbumPicture[];
 }
+
+type ThunkAPIType = {
+  dispatch: AppDispatch;
+  state: RootState;
+};
+
+export const fetchUserTrips = createAsyncThunk<Trip[], null, ThunkAPIType>(
+  "tripSlice/fetchUserTrips",
+  async (_, thunkAPI) => {
+    let idPerson = thunkAPI.getState().rootSlice.idPerson;
+    const response = await backend.get(`/trip/all?idPerson=${idPerson}`);
+
+    let tripsInResponse = response.data._embedded.tripList;
+    let tripsBuffer = tripsInResponse.map((resTrip: any) =>
+      responseTripToDomainTrip(resTrip)
+    );
+
+    thunkAPI.dispatch(setLastTrip(tripsBuffer as Trip[]));
+
+    return tripsBuffer;
+  }
+);
+
+export const fetchFavorites = createAsyncThunk<Favorite[], null, ThunkAPIType>(
+  "tripSlice/fetchFavorites",
+  async (_, thunkAPI) => {
+    let idPerson = thunkAPI.getState().rootSlice.idPerson;
+    let favPlaces: Favorite[] = thunkAPI.getState().tripSlice.favPlaces;
+
+    if (favPlaces.length === 0) {
+      const response = await backend.get(`/favorite/all?idPerson=${idPerson}`);
+      return response.data._embedded.favoriteList;
+    }
+
+    return favPlaces;
+  }
+);
 
 const initialState: TripSlice = {
   userTrips: [],
@@ -53,6 +93,16 @@ const tripSlice = createSlice({
     setUserTrips(state, action: PayloadAction<Trip[]>) {
       state.userTrips = action.payload;
     },
+  },
+
+  extraReducers: (builder) => {
+    builder.addCase(fetchUserTrips.fulfilled, (state, action) => {
+      state.userTrips = action.payload;
+    });
+
+    builder.addCase(fetchFavorites.fulfilled, (state, action) => {
+      state.favPlaces = action.payload;
+    });
   },
 });
 

@@ -17,7 +17,7 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   drawer: {
     width: "250px",
     backgroundColor: "transparent",
-    fontFamily: Family,
+    fontFamily: Font.Family,
     padding: "10px",
     "&.MuiPaper-elevation16": {
       boxShadow: "2px 2px 3px rgba(0,0,0,0)",
@@ -25,7 +25,7 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
   },
   filterGrid: {
     width: "22%",
@@ -48,7 +48,7 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     },
   },
   filterContainer: {
-    boxShadow: Shadow.MEDIUM3D,
+    boxShadow: Shadow.LIGHT3D,
     backgroundColor: "white",
     borderRadius: "5px",
     padding: "15px",
