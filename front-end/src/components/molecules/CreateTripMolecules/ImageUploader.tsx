@@ -2,7 +2,7 @@ import { Grid, makeStyles, Theme } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import React, { ChangeEvent, useRef, useState } from "react";
 import { Colors, Shadow } from "../../../styles";
-import { deleteImageFromFirebase } from "../../../utils";
+import { deleteImageFromFirebase, userTripRef } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 import { SinglePictureUploader } from "../../organisms";
 
@@ -82,7 +82,7 @@ export function ImageUploader({
     hiddenInputFileRef.current.files = null;
 
     let picture: File = images[0];
-    deleteImageFromFirebase(picture);
+    deleteImageFromFirebase(picture, userTripRef);
 
     setDisplayImage(EMPTY_IMAGE);
     setImages([]);
@@ -175,6 +175,7 @@ export function ImageUploader({
           {!multiple && images.length > 0 && (
             <SinglePictureUploader
               key={images[0].name}
+              type="tripImages"
               picture={images[0]}
               onUpload={(url, savedName) =>
                 onPictureUploadSucess(url, savedName, images[0])
@@ -190,6 +191,7 @@ export function ImageUploader({
               {images.map((image) => (
                 // Image upload progress
                 <SinglePictureUploader
+                  type="tripImages"
                   key={image.name}
                   picture={image}
                   onUpload={(url, savedName) =>

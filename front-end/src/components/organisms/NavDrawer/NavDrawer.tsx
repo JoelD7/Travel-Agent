@@ -173,16 +173,16 @@ export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
               backgroundColor={Colors.PURPLE}
               rounded
               style={drawerButtonStyle}
-              onClick={() => {}}
+              onClick={() => history.push(Routes.PROFILE)}
             >
-              Account
+              Profile
             </CustomButton>
 
             <CustomButton
               backgroundColor={Colors.PURPLE}
               rounded
               style={drawerButtonStyle}
-              onClick={() => {}}
+              onClick={() => history.push(Routes.CREATE_TRIP)}
             >
               Make trip
             </CustomButton>
@@ -200,9 +200,9 @@ export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
 
             <p style={{ color: "white", fontSize: "14px" }}>
               Or{" "}
-              <a style={{ color: "white" }} href="#">
+              <Link style={{ color: "white" }} to={Routes.SIGNUP}>
                 register
-              </a>
+              </Link>
             </p>
           </div>
         )}
@@ -225,7 +225,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
       <List style={{ marginTop: "40px" }}>
         <DrawerButtons />
 
-        <Divider style={{ backgroundColor: "#cecece" }} />
+        <Divider className={style.divider} />
 
         {/* Routes for logged users */}
         {userLoggedIn && (
@@ -247,42 +247,52 @@ export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
                       <FontAwesomeIcon icon={option.icon} color="white" />
                     </ListItemIcon>
 
-                    <ListItemText style={{ color: "white" }}>{option.label}</ListItemText>
+                    <ListItemText
+                      classes={{ primary: style.listItemText }}
+                      style={{ color: "white" }}
+                    >
+                      {option.label}
+                    </ListItemText>
                   </ListItem>
                 </Link>
               ))}
           </ThemeProvider>
         )}
 
-        <Divider style={{ backgroundColor: "#cecece" }} />
-
         {/* Routes for all users */}
-        <ThemeProvider theme={theme}>
-          {drawerOptions
-            .filter((o) => !o.loggedOnly)
-            .map((option, i) => (
-              <Link key={option.route} style={getLinkStyle("white")} to={option.route}>
-                <ListItem
-                  selected={option.selected}
-                  button
-                  key={i}
-                  classes={{
-                    root: style.listItemRoot,
-                    button: style.listItem,
-                  }}
-                  onClick={() => onOptionClick(option)}
-                >
-                  <ListItemIcon>
-                    <FontAwesomeIcon icon={option.icon} color="white" />
-                  </ListItemIcon>
+        <div className={style.routesContainer}>
+          <Divider className={style.divider} />
 
-                  <ListItemText style={{ color: "white" }} className={style.listItemText}>
-                    {option.label}
-                  </ListItemText>
-                </ListItem>
-              </Link>
-            ))}
-        </ThemeProvider>
+          <ThemeProvider theme={theme}>
+            {drawerOptions
+              .filter((o) => !o.loggedOnly)
+              .map((option, i) => (
+                <Link key={option.route} style={getLinkStyle("white")} to={option.route}>
+                  <ListItem
+                    selected={option.selected}
+                    button
+                    key={i}
+                    classes={{
+                      root: style.listItemRoot,
+                      button: style.listItem,
+                    }}
+                    onClick={() => onOptionClick(option)}
+                  >
+                    <ListItemIcon>
+                      <FontAwesomeIcon icon={option.icon} color="white" />
+                    </ListItemIcon>
+
+                    <ListItemText
+                      style={{ color: "white" }}
+                      classes={{ primary: style.listItemText }}
+                    >
+                      {option.label}
+                    </ListItemText>
+                  </ListItem>
+                </Link>
+              ))}
+          </ThemeProvider>
+        </div>
       </List>
     </Drawer>
   );

@@ -38,9 +38,9 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     width: "100%",
     justifyContent: "center",
-    [theme.breakpoints.down(1150)]: {
-      display: "none",
-    },
+    // [theme.breakpoints.down(1150)]: {
+    //   display: "none",
+    // },
   },
   datepicker: {
     backgroundColor: "white",
@@ -109,6 +109,9 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     backgroundRepeat: "no-repeat",
     marginBottom: "40px",
     height: "100vh",
+    [theme.breakpoints.down(560)]: {
+      height: "auto",
+    },
   },
   homeImageText: {
     color: "white",
@@ -138,12 +141,27 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   },
   mainPhotoGrid: {
     [theme.breakpoints.down(1150)]: {
-      width: "100%",
+      width: "43%",
+      marginRight: 10,
+    },
+    [theme.breakpoints.down(930)]: {
+      display: "none",
     },
     width: "60%",
     padding: "10px",
   },
-
+  reservationGrid: {
+    [theme.breakpoints.down(1150)]: {
+      width: "55%",
+      margin: "auto",
+    },
+    [theme.breakpoints.down(930)]: {
+      width: "85%",
+    },
+    width: "40%",
+    marginTop: "20px",
+    padding: "10px",
+  },
   nextButton: {
     backgroundColor: "white",
   },
@@ -203,32 +221,25 @@ export const homeStyles = makeStyles((theme: Theme) => ({
       display: "block",
     },
   },
-  reservationGrid: {
-    [theme.breakpoints.down(1150)]: {
-      width: "85%",
-      margin: "auto",
-    },
-    width: "40%",
-    marginTop: "20px",
-    padding: "10px",
-  },
+
   reservationParamsGrid: {
     marginTop: "20px",
     padding: "10px",
     borderRadius: "10px",
     backgroundColor: "#eeeeee",
-    width: "90%",
+    width: "100%",
     margin: "auto",
   },
   reservationParamsBox: {
     borderRadius: "20px",
   },
   reservationContainer: {
-    padding: "10px 0px",
+    padding: "10px",
     backgroundColor: "white",
     borderRadius: "10px",
   },
   searchLocationContainer: {
+    minWidth: 250,
     width: "40%",
     display: "flex",
     margin: "auto",

@@ -94,10 +94,6 @@ export function IataAutocomplete({
     }
   }
 
-  // useEffect(() => {
-  //   getPredictions(text);
-  // }, [text]);
-
   useEffect(() => {
     setAutocomplete(getAutocompleteDefault());
   }, [flightFromAutocomplete, flightToAutocomplete]);

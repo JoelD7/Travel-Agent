@@ -7,13 +7,23 @@ import { Colors, Shadow } from "../../../styles";
 export const drawerButtonStyle: CreateCSSProperties<{}> = {
   boxShadow: Shadow.DARK,
   width: "100%",
+  fontSize: 14,
   marginBottom: "20px",
 };
 
 export const drawerStyles = makeStyles((theme: Theme) => ({
+  divider: {
+    backgroundColor: "#cecece",
+    width: "90%",
+    margin: "auto",
+  },
   drawer: {
     width: "250px",
     backgroundColor: Colors.BLUE,
+    height: "96%",
+    marginRight: 10,
+    borderRadius: 20,
+    marginTop: 15,
   },
   drawerText: {
     fontFamily: Family,
@@ -38,8 +48,15 @@ export const drawerStyles = makeStyles((theme: Theme) => ({
     },
   },
   listItemText: {
+    fontSize: 14,
     "&.MuiTypography-body1": {
       fontFamily: Font.Family,
+    },
+  },
+  routesContainer: {
+    display: "none",
+    [theme.breakpoints.down(1000)]: {
+      display: "block",
     },
   },
 }));

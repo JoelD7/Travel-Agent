@@ -192,6 +192,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
                 <>
                   <MenuItem
                     onClick={() => {}}
+                    selected={route === Routes.LOGIN}
                     style={variant === "transparent" ? { color: "white" } : {}}
                     classes={{ root: style.menuItemRoot }}
                   >
@@ -199,6 +200,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
                   </MenuItem>
                   <MenuItem
                     onClick={() => {}}
+                    selected={route === Routes.SIGNUP}
                     style={variant === "transparent" ? { color: "white" } : {}}
                     classes={{ root: style.menuItemRoot }}
                   >
@@ -236,7 +238,11 @@ export const Navbar: FunctionComponent<Navbar> = ({
         </Grid>
       </Toolbar>
 
-      <NavDrawer open={openDrawer} onClose={() => setOpenDrawer(false)} />
+      <NavDrawer
+        userLoggedIn={userLoggedIn}
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+      />
 
       {/* Change origin city menu */}
       <div>

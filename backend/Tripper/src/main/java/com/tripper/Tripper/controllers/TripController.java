@@ -3,7 +3,6 @@ package com.tripper.Tripper.controllers;
 import com.tripper.Tripper.assemblers.TripModelAssembler;
 import com.tripper.Tripper.data.PersonRepository;
 import com.tripper.Tripper.data.TripRepository;
-import com.tripper.Tripper.dtos.TripDTO;
 import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.exceptions.TripNotFoundException;
 import com.tripper.Tripper.models.Person;

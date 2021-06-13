@@ -11,7 +11,6 @@ import {
   Grid,
   Grow,
   Snackbar,
-  Fade,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
@@ -38,7 +37,7 @@ import {
 } from "../../components";
 import { ButtonIcon } from "../../components/atoms/ButtonIcon";
 import { Navbar, ServicesToolbar } from "../../components/molecules";
-import { Colors, Shadow } from "../../styles";
+import { Colors } from "../../styles";
 import * as styles from "../../styles/Home/home-styles";
 import { homeStyles } from "../../styles/Home/home-styles";
 import {
@@ -268,6 +267,36 @@ export function Home() {
     }
   }
 
+  function onSlideIndexChange(index: number) {
+    setIndex(index);
+
+    switch (index) {
+      case 0:
+        setSelectedService({
+          hotel: true,
+          flight: false,
+          carRental: false,
+        });
+        break;
+      case 1:
+        setSelectedService({
+          hotel: false,
+          flight: true,
+          carRental: false,
+        });
+        break;
+      case 2:
+        setSelectedService({
+          hotel: false,
+          flight: false,
+          carRental: true,
+        });
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <>
       <div className={style.mainContainer}>
@@ -275,7 +304,8 @@ export function Home() {
           <title>Tripper</title>
         </Helmet>
 
-        <Fade in={true} timeout={1000}>
+        {/* Top/image container */}
+        <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
           <Grid id="section-1" container className={style.topContainer}>
             <Grid item xs={12}>
               <Navbar variant="transparent" />
@@ -321,7 +351,10 @@ export function Home() {
                 </div>
 
                 <div id="reservationMode">
-                  <SwipeableViews index={index} onChangeIndex={(i) => setIndex(i)}>
+                  <SwipeableViews
+                    index={index}
+                    onChangeIndex={(i) => onSlideIndexChange(i)}
+                  >
                     <HomeHotelReservation />
                     <HomeFlightReservation />
                     <HomeCarReservation />
@@ -349,8 +382,9 @@ export function Home() {
               </Grid>
             </Grid>
           </Grid>
-        </Fade>
+        </Grow>
 
+        {/* Plan your trip  */}
         <PageSubtitle label="Plan your trip" />
         <Grid id="section-2" container className={style.section}>
           <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
@@ -419,8 +453,8 @@ export function Home() {
           </Grow>
         </Grid>
 
+        {/* Popular destinations */}
         <PageSubtitle label="Popular destinations" />
-
         <Grid id="section-3" container className={style.section}>
           <Slider
             {...sliderSettings}

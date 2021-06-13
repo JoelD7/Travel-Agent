@@ -24,7 +24,7 @@ type TextInputType = PartialBy<
   "style" | "label" | "type" | "className" | "endAdornment" | "coPassword" | "updateState"
 >;
 
-export default function TextInput({
+export function TextInput({
   name,
   label,
   value,
@@ -71,16 +71,39 @@ export default function TextInput({
 
   const textStyles = makeStyles({
     textField: {
-      width: "50%",
+      width: "100%",
+
+      "& .MuiOutlinedInput-root": {
+        "&:hover fieldset": {
+          borderColor: Colors.GRAY_BORDER_HOVER,
+        },
+        "&.Mui-focused fieldset": {
+          borderColor: Colors.PURPLE,
+        },
+      },
       ...style,
     },
     input: {
       fontFamily: Font.Family,
       color: Colors.BLUE,
+
+      "&.MuiOutlinedInput-notchedOutline": {
+        "&:hover": {
+          borderColor: Colors.PURPLE,
+        },
+      },
+
+      "&.MuiOutlinedInput-input": {
+        padding: 10,
+      },
     },
+    outlinedInput: {
+      padding: 10,
+    },
+
     inputLabel: {
       fontFamily: Font.Family,
-      color: Colors.BLUE,
+      color: Colors.GRAY_TEXT,
     },
   });
   const styles = textStyles();
@@ -132,9 +155,11 @@ export default function TextInput({
   return (
     <ThemeProvider theme={theme}>
       <TextField
-        className={className ? className : styles.textField}
+        variant="outlined"
+        margin="dense"
+        className={`${styles.textField} ${className}`}
         InputProps={{
-          classes: { root: styles.input },
+          classes: { root: styles.input, input: styles.outlinedInput },
           type: type ? type : "text",
           endAdornment: endAdornment ? endAdornment : <b></b>,
         }}

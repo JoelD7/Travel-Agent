@@ -76,19 +76,17 @@ export function compressImage(file: File) {
   });
 }
 
-export async function deleteImageFromFirebase(image: File) {
-  const idPerson: number = store.getState().rootSlice.idPerson;
-  const userTripRef: firebase.storage.Reference = storage
-    .ref()
-    .child(`images/trips/${idPerson}`);
-
+export async function deleteImageFromFirebase(
+  image: File,
+  reference: firebase.storage.Reference
+) {
   let fileToDelete: File = image;
 
   if (image.size > 250000) {
     fileToDelete = await compressImage(image);
   }
 
-  let imageRef: firebase.storage.Reference = userTripRef.child(fileToDelete.name);
+  let imageRef: firebase.storage.Reference = reference.child(fileToDelete.name);
 
   imageRef
     .delete()

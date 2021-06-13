@@ -28,6 +28,7 @@ public class Person implements Serializable {
     private String lastName;
     private String email;
     private String password;
+    private String profilePic;
 
     @OneToMany(mappedBy = "person")
     @JsonManagedReference

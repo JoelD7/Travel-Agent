@@ -9,5 +9,7 @@ export { Rating } from "./Rating";
 export { Text } from "./Text";
 export { AmenityIcon } from "./AmenityIcon";
 export { CustomTF } from "./CustomTF";
+export { PasswordEye } from "./PasswordEye";
 export { IconTP } from "./IconTP/IconTP";
 export { FeatureIcons } from "./FeatureIcons";
+export { TextInput } from "./TextInput";

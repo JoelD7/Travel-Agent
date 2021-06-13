@@ -3,10 +3,12 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, InputAdornment } from "@material-ui/core";
 import React, { MouseEvent, useState } from "react";
+import { Link } from "react-router-dom";
 import { logoType, signup } from "../../assets/images";
-import { CustomButton, Footer, Navbar } from "../../components";
-import TextInput from "../../components/atoms/TextInput";
+import { CustomButton, Footer, Navbar, PasswordEye } from "../../components";
+import { TextInput } from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
+import { Routes } from "../../utils";
 
 interface SignUpValuesType {
   firstName: string;
@@ -18,10 +20,6 @@ interface SignUpValuesType {
 
 interface VisibilityProps {
   [index: string]: boolean;
-}
-
-interface PasswordProps {
-  name: string;
 }
 
 export function SignUp() {
@@ -43,21 +41,6 @@ export function SignUp() {
   function signUp(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
 
   function googleSignUp(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
-
-  function PasswordEye({ name }: PasswordProps) {
-    return (
-      <InputAdornment position="end">
-        <IconButton
-          onClick={() => setVisibility({ ...visibility, [name]: !visibility[name] })}
-        >
-          <FontAwesomeIcon
-            transform="shrink-4"
-            icon={visibility[name] ? faEye : faEyeSlash}
-          />
-        </IconButton>
-      </InputAdornment>
-    );
-  }
 
   function updateState(name: string, value: string) {
     setCredentials({ ...credentials, [name]: value });
@@ -96,7 +79,7 @@ export function SignUp() {
                 name="firstName"
                 value={credentials.firstName}
                 label="First name"
-                className={style.nameTextField}
+                style={{ width: "45%", minWidth: "147px" }}
                 updateState={updateState}
               />
 
@@ -104,7 +87,7 @@ export function SignUp() {
                 name="lastName"
                 value={credentials.lastName}
                 label="Last name"
-                className={style.nameTextField}
+                style={{ width: "45%", minWidth: "147px" }}
                 updateState={updateState}
               />
             </Grid>
@@ -129,7 +112,14 @@ export function SignUp() {
                 style={{ width: "100%" }}
                 type={visibility.password ? "text" : "password"}
                 updateState={updateState}
-                endAdornment={<PasswordEye name="password" />}
+                endAdornment={
+                  <PasswordEye
+                    visible={visibility.password}
+                    onClick={() =>
+                      setVisibility({ ...visibility, password: !visibility.password })
+                    }
+                  />
+                }
               />
             </Grid>
 
@@ -142,7 +132,17 @@ export function SignUp() {
                 style={{ width: "100%" }}
                 type={visibility.passwordConfirmation ? "text" : "password"}
                 updateState={updateState}
-                endAdornment={<PasswordEye name="passwordConfirmation" />}
+                endAdornment={
+                  <PasswordEye
+                    visible={visibility.passwordConfirmation}
+                    onClick={() =>
+                      setVisibility({
+                        ...visibility,
+                        passwordConfirmation: !visibility.passwordConfirmation,
+                      })
+                    }
+                  />
+                }
               />
             </Grid>
 
@@ -156,7 +156,10 @@ export function SignUp() {
               <p style={{ color: Colors.PURPLE }}>
                 Already registered?
                 <b>
-                  <a href="/login">Sign in</a>
+                  <Link to={Routes.LOGIN} style={{ color: "blue" }}>
+                    {" "}
+                    Log in
+                  </Link>
                 </b>
               </p>
             </Grid>

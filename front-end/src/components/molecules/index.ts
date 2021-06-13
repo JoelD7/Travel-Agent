@@ -14,4 +14,5 @@ export { Pagination } from "./Pagination/Pagination";
 export { RestaurantFilterDrawer } from "./RestaurantFilterDrawer";
 export { NotCreatedMessage } from "./NotCreatedMessage";
 export { POIEvent } from "./POIEvent";
+export { ProfilePicture } from "./ProfilePicture";
 export * from "./CreateTripMolecules";

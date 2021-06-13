@@ -26,6 +26,7 @@ import {
   Itinerary,
   Login,
   NotFound,
+  Profile,
   Reservations,
   RestaurantDetails,
   Restaurant_List,
@@ -116,6 +117,7 @@ export default function App() {
             <Route exact path={Routes.ITINERARY} component={Itinerary} />
             <Route exact path={Routes.CAR_RENTAL} component={CarRental} />
             <Route exact path={Routes.CREATE_TRIP} component={CreateTrip} />
+            <Route exact path={Routes.PROFILE} component={Profile} />
             <Route component={NotFound} />
           </Switch>
         </ScrollToTop>

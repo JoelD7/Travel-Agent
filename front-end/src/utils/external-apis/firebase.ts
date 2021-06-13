@@ -20,4 +20,10 @@ const idPerson: number = store.getState().rootSlice.idPerson;
 export const userTripRef: firebase.storage.Reference = storage
   .ref()
   .child(`images/trips/${idPerson}`);
+export const profileRef: firebase.storage.Reference = storage
+  .ref()
+  .child(`images/profile/${idPerson}`);
+
+export const avatar =
+  "https://firebasestorage.googleapis.com/v0/b/tripper-7aba4.appspot.com/o/images%2Fgeneral%2Favatar.png?alt=media&token=ba6845de-8324-418c-bad7-aec081782625";
 export { firebase };

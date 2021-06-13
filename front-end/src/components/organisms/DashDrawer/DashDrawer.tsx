@@ -7,6 +7,7 @@ import {
   faHotel,
   faPlane,
   faPlaneDeparture,
+  faUser,
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -84,6 +85,13 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
   let lastTrip: Trip | undefined = useSelector(selectLastTrip);
 
   const [topDrawerOptions, setTopDrawerOptions] = useState<DrawerOptions[]>([
+    {
+      label: "Profile",
+      icon: faUser,
+      route: Routes.PROFILE,
+      selected: page === Routes.PROFILE,
+      loggedOnly: true,
+    },
     {
       label: "Itinerary",
       icon: faCalendarAlt,

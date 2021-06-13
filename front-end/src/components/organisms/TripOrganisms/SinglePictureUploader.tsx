@@ -2,19 +2,27 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, LinearProgress, makeStyles, Theme } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Colors } from "../../../styles";
-import { compressImage, firebase, selectIdPerson, storage } from "../../../utils";
+import {
+  compressImage,
+  firebase,
+  selectIdPerson,
+  profileRef,
+  userTripRef,
+} from "../../../utils";
 import { Text } from "../../atoms";
 
 interface SinglePictureUploaderProps {
   onUpload: (url: string, savedName: string) => void;
   picture: File;
   images: File[];
+  type: "tripImages" | "profilePic";
   updateState: (values: File[]) => void;
 }
 
 export function SinglePictureUploader({
+  type,
   picture,
   onUpload,
   updateState,
@@ -38,16 +46,13 @@ export function SinglePictureUploader({
 
   const style = stylesFunction();
 
-  const dispatch = useDispatch();
-
   const [isDeleted, setIsDeleted] = useState(false);
   const [progress, setProgress] = useState(0);
   const idPerson: number = useSelector(selectIdPerson);
-  const userTripRef: firebase.storage.Reference = storage
-    .ref()
-    .child(`images/trips/${idPerson}`);
+  const baseRef: firebase.storage.Reference =
+    type === "tripImages" ? userTripRef : profileRef;
 
-  let imageRef: firebase.storage.Reference = userTripRef.child(picture.name);
+  let imageRef: firebase.storage.Reference = baseRef.child(picture.name);
 
   useEffect(() => {
     uploadPicture();
@@ -58,7 +63,7 @@ export function SinglePictureUploader({
 
     if (picture.size > 250000) {
       fileToSave = await compressImage(picture);
-      imageRef = userTripRef.child(fileToSave.name);
+      imageRef = baseRef.child(fileToSave.name);
     }
 
     let uploadTask = imageRef.put(fileToSave);
@@ -86,7 +91,7 @@ export function SinglePictureUploader({
 
       if (picture.size > 250000) {
         fileToDelete = await compressImage(picture);
-        imageRef = userTripRef.child(fileToDelete.name);
+        imageRef = baseRef.child(fileToDelete.name);
       }
       console.log(imageRef.fullPath);
       imageRef
@@ -111,7 +116,7 @@ export function SinglePictureUploader({
   }).format;
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Text style={{ fontSize: "14px", marginBottom: 0 }}>{picture.name}</Text>
 
       <Grid container alignItems="center">

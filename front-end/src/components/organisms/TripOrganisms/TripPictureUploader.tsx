@@ -27,14 +27,12 @@ import {
   deleteImageFromFirebase,
   getISODatetimeWithOffset,
   selectAlbumPictures,
-  selectIdPerson,
-  selectUserTrips,
   setAlbumPictures,
   setTripDetail,
-  setUserTrips,
   store,
   Trip,
   TripAlbum,
+  userTripRef,
 } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 import { ImageUploader } from "../../molecules";
@@ -219,7 +217,6 @@ export const TripPictureUploader = React.memo(function Component({
   const [albumCoverUrl, setAlbumCoverUrl] = useState<string>("");
   const [openSnack, setOpenSnack] = useState(false);
 
-  const idPerson: number = useSelector(selectIdPerson);
   const albumPictures: AlbumPicture[] = useSelector(selectAlbumPictures);
 
   const is585pxOrLess = useMediaQuery("(max-width:585px)");
@@ -227,7 +224,6 @@ export const TripPictureUploader = React.memo(function Component({
   const albumOptions: string[] = trip.albums.map((album) => album.name);
   const [albumOption, setAlbumOption] = useState<string>("");
   const [selectedAlbum, setSelectedAlbum] = useState<TripAlbum>();
-  const [albums, setAlbums] = useState<TripAlbum[]>();
 
   useEffect(() => {}, []);
 
@@ -297,7 +293,7 @@ export const TripPictureUploader = React.memo(function Component({
 
   function deleteAllUploadedPictures() {
     images.forEach((image) => {
-      deleteImageFromFirebase(image);
+      deleteImageFromFirebase(image, userTripRef);
     });
   }
 

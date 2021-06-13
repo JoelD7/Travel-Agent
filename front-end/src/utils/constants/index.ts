@@ -1,4 +1,3 @@
-import { firebase, storage } from "../external-apis";
 import { CarCheckbox, IATALocation } from "../types";
 import * as FlightClass from "./flight-classes";
 import * as LocationType from "./geolocation";

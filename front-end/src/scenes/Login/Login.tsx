@@ -3,9 +3,10 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, InputAdornment } from "@material-ui/core";
 import React, { MouseEvent, useState } from "react";
+import { Link } from "react-router-dom";
 import { logoType, loginImage } from "../../assets";
 import { CustomButton, Footer, Navbar } from "../../components";
-import TextInput from "../../components/atoms/TextInput";
+import { TextInput } from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
 import { Routes } from "../../utils";
 
@@ -108,9 +109,10 @@ export function Login() {
               <p style={{ color: Colors.BLUE }}>
                 Not registered?
                 <b>
-                  <a style={{ marginLeft: "5px" }} href={Routes.SIGNUP}>
+                  <Link to={Routes.SIGNUP} style={{ color: "blue" }}>
+                    {" "}
                     Sign up
-                  </a>
+                  </Link>
                 </b>
               </p>
             </Grid>
