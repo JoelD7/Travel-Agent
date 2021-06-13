@@ -7,8 +7,8 @@ import { Colors } from "../../../styles";
 import {
   compressImage,
   firebase,
-  selectIdPerson,
   profileRef,
+  selectIdPerson,
   userTripRef,
 } from "../../../utils";
 import { Text } from "../../atoms";
