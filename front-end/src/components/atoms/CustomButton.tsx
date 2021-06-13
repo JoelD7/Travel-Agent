@@ -1,14 +1,16 @@
 import { IconDefinition } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, makeStyles } from "@material-ui/core";
+import { Button, Grid, makeStyles } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React, { MouseEvent, ReactNode } from "react";
 import { Family } from "../../assets/fonts";
 import { Colors } from "../../styles";
+import { ProgressCircle } from "./ProgressCircle";
 
 interface CustomButtonProps {
   avatar: ReactNode;
   backgroundColor: string;
+  loading?: boolean;
   label?: string;
   size?: number;
   rounded: boolean;
@@ -50,6 +52,7 @@ export function CustomButton({
   onClick,
   submit,
   disabled,
+  loading,
   textColor = "white",
   iconColor,
   type,
@@ -127,12 +130,18 @@ export function CustomButton({
   return (
     <Button
       className={`${styles.button} ${className}`}
-      disabled={disabled}
+      disabled={disabled || loading}
       startIcon={renderIcon()}
       onClick={onClick}
       type={submit ? "submit" : "button"}
     >
-      {children}
+      {loading ? (
+        <Grid container alignItems="center" justify="center">
+          <ProgressCircle style={{ top: 4 }} size={20} color="white" />{" "}
+        </Grid>
+      ) : (
+        children
+      )}
     </Button>
   );
 }

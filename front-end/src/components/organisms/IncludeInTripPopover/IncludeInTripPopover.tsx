@@ -46,7 +46,7 @@ import {
   Trip,
 } from "../../../utils";
 import { setUserTrips } from "../../../utils/store/trip-slice";
-import { IconText, Text } from "../../atoms";
+import { IconText, ProgressCircle, Text } from "../../atoms";
 import { includeInTripStyles } from "./includeInTripStyles";
 
 interface IncludeInTripPopover {
@@ -197,6 +197,7 @@ export function IncludeInTripPopover({
 
   const [openErrorSnack, setOpenErrorSnack] = useState(false);
   const [openSuccessSnack, setOpenSuccessSnack] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   const userTrips: Trip[] = useSelector(selectUserTrips);
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
@@ -298,29 +299,28 @@ export function IncludeInTripPopover({
     return compareAsc(parsedDate, datetimePopover.end) !== -1;
   }
 
-  function addToTrip() {
+  async function addToTrip() {
+    setLoadingButton(true);
     let tripEventDTO = getTripEventDTO();
     let selectedTrip: Trip = userTrips.filter((trip) => trip.name === tripOption)[0];
 
-    backend
-      .post(`/trip-event/add-new?idTrip=${selectedTrip.idTrip}`, tripEventDTO)
-      .then((res) => {
-        let newEvent = res.data;
-        updateUserTripsEvents(newEvent, selectedTrip);
+    let res = await backend.post(
+      `/trip-event/add-new?idTrip=${selectedTrip.idTrip}`,
+      tripEventDTO
+    );
 
-        onPopoverClose();
-        setOpenSuccessSnack(true);
+    let newEvent = res.data;
+    updateUserTripsEvents(newEvent, selectedTrip);
 
-        if (
-          newEvent.type === EventTypes.HOTEL ||
-          newEvent.type === EventTypes.CAR_RENTAL
-        ) {
-          setTimeout(() => {
-            redirectToTripDetail(selectedTrip);
-          }, 1000);
-        }
-      })
-      .catch((err) => console.log(err));
+    onPopoverClose();
+    setLoadingButton(false);
+    setOpenSuccessSnack(true);
+
+    if (newEvent.type === EventTypes.HOTEL || newEvent.type === EventTypes.CAR_RENTAL) {
+      setTimeout(() => {
+        redirectToTripDetail(selectedTrip);
+      }, 1000);
+    }
   }
 
   function redirectToTripDetail(trip: Trip) {
@@ -543,10 +543,15 @@ export function IncludeInTripPopover({
               {/* Add button */}
               <Grid container>
                 <IconButton
+                  disabled={loadingButton}
                   onClick={() => addToTrip()}
-                  style={{ margin: "10px 0px 0px auto", backgroundColor: Colors.GREEN }}
+                  className={style.addButton}
                 >
-                  <FontAwesomeIcon icon={faPlus} color="white" />
+                  {loadingButton ? (
+                    <ProgressCircle style={{ top: 3 }} size={20} color="white" />
+                  ) : (
+                    <FontAwesomeIcon icon={faPlus} color="white" />
+                  )}
                 </IconButton>
               </Grid>
             </Grid>

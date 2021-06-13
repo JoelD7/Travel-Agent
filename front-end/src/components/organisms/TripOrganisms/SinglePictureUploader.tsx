@@ -2,15 +2,8 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, LinearProgress, makeStyles, Theme } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Colors } from "../../../styles";
-import {
-  compressImage,
-  firebase,
-  profileRef,
-  selectIdPerson,
-  userTripRef,
-} from "../../../utils";
+import { compressImage, firebase, profileRef, userTripRef } from "../../../utils";
 import { Text } from "../../atoms";
 
 interface SinglePictureUploaderProps {
@@ -48,7 +41,6 @@ export function SinglePictureUploader({
 
   const [isDeleted, setIsDeleted] = useState(false);
   const [progress, setProgress] = useState(0);
-  const idPerson: number = useSelector(selectIdPerson);
   const baseRef: firebase.storage.Reference =
     type === "tripImages" ? userTripRef : profileRef;
 

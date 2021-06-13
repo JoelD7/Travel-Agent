@@ -1281,6 +1281,7 @@ export function Flight_List() {
                   <Grid item style={{ margin: "auto 0px 0px auto" }}>
                     <CustomButton
                       backgroundColor={Colors.GREEN}
+                      loading={loading}
                       style={{
                         boxShadow: Shadow.DARK,
                         fontSize: "16px",

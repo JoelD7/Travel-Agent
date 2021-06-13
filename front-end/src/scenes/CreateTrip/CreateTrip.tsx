@@ -25,19 +25,18 @@ import {
   TripDates,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import { backend, firebase, selectIdPerson, storage, compressImage } from "../../utils";
+import { backend, selectIdPerson } from "../../utils";
 import { createTripStyles } from "./createTrip-styles";
 
 export function CreateTrip() {
   const style = createTripStyles();
-  const EMPTY_IMAGE = "/Travel-Agent/gallery.png";
 
   const [name, setName] = useState("");
   const [image, setImage] = useState<File>(new File([""], ""));
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 1));
   const [countries, setCountries] = useState<string[]>([]);
-
+  const [loadingButton, setLoadingButton] = useState(false);
   const [budget, setBudget] = useState<string>("");
 
   const is1255OrLess = useMediaQuery("(max-width:1255px)");
@@ -57,6 +56,7 @@ export function CreateTrip() {
   }
 
   function createTrip() {
+    setLoadingButton(true);
     backend
       .post(`/trip/create?idPerson=${idPerson}`, {
         idPerson,
@@ -69,6 +69,7 @@ export function CreateTrip() {
       })
       .then((res) => {
         setOpenSnack(true);
+        setLoadingButton(false);
       })
       .catch((err) => console.log(err));
   }
@@ -205,6 +206,7 @@ export function CreateTrip() {
                 >
                   <CustomButton
                     onClick={() => createTrip()}
+                    loading={loadingButton}
                     style={{ boxShadow: Shadow.LIGHT3D }}
                     backgroundColor={Colors.GREEN}
                   >

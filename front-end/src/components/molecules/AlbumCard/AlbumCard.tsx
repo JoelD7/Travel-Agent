@@ -26,11 +26,19 @@ export const AlbumCard = React.memo(function PhotoAlbumCard({
     },
     card: {
       borderRadius: "10px",
+      width: "30%",
       boxShadow: Shadow.LIGHT3D,
       margin: "10px",
       height: 250,
       backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7)), url('${cover}')`,
       backgroundSize: "cover",
+      [theme.breakpoints.down(715)]: {
+        width: "45%",
+      },
+
+      [theme.breakpoints.down(450)]: {
+        width: "100%",
+      },
 
       [theme.breakpoints.down(360)]: {
         height: 200,

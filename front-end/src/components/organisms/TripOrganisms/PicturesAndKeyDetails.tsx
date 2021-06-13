@@ -2,7 +2,6 @@ import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { Divider, Grid, Grow, makeStyles, Theme } from "@material-ui/core";
 import { format } from "date-fns";
 import React, { useState } from "react";
-import Slider from "react-slick";
 import { Colors } from "../../../styles";
 import { Trip } from "../../../utils";
 import { CustomButton, SliderArrow, Text } from "../../atoms";
@@ -27,8 +26,8 @@ export const PicturesAndKeyDetails = React.memo(function Component({
     detailsGrid: {
       padding: "20px",
       width: "25%",
-      [theme.breakpoints.down(1036)]: {
-        width: "30%",
+      [theme.breakpoints.down(1155)]: {
+        width: "100%",
       },
       [theme.breakpoints.down(973)]: {
         width: "100%",
@@ -37,8 +36,8 @@ export const PicturesAndKeyDetails = React.memo(function Component({
     photosGrid: {
       marginTop: "20px",
       width: "75%",
-      [theme.breakpoints.down(1036)]: {
-        width: "70%",
+      [theme.breakpoints.down(1155)]: {
+        width: "100%",
       },
       [theme.breakpoints.down(973)]: {
         width: "100%",
@@ -53,53 +52,6 @@ export const PicturesAndKeyDetails = React.memo(function Component({
 
   const style = photosKeyDetailsStyles();
   const [openDialog, setOpenDialog] = useState(false);
-
-  const sliderSettings = {
-    className: style.slider,
-    nextArrow: <SliderArrow direction="right" />,
-    prevArrow: <SliderArrow direction="left" />,
-    responsive: [
-      {
-        breakpoint: 1244,
-        settings: {
-          slidesToShow: getSlidesToShow(2),
-          slidesToScroll: getSlidesToShow(2),
-        },
-      },
-      {
-        breakpoint: 1010,
-        settings: {
-          slidesToShow: getSlidesToShow(1),
-          slidesToScroll: getSlidesToShow(1),
-        },
-      },
-      {
-        breakpoint: 960,
-        settings: {
-          slidesToShow: getSlidesToShow(3),
-          slidesToScroll: getSlidesToShow(3),
-        },
-      },
-      {
-        breakpoint: 826,
-        settings: {
-          slidesToShow: getSlidesToShow(2),
-          slidesToScroll: getSlidesToShow(2),
-        },
-      },
-      {
-        breakpoint: 608,
-        settings: {
-          slidesToShow: getSlidesToShow(1),
-          slidesToScroll: getSlidesToShow(1),
-        },
-      },
-    ],
-  };
-
-  function getSlidesToShow(def: number) {
-    return trip.albums.length > def ? def : trip.albums.length;
-  }
 
   function openPhotoUploader() {
     setOpenDialog(true);

@@ -216,6 +216,7 @@ export const TripPictureUploader = React.memo(function Component({
   const [albumCover, setAlbumCover] = useState<File>(new File([""], ""));
   const [albumCoverUrl, setAlbumCoverUrl] = useState<string>("");
   const [openSnack, setOpenSnack] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   const albumPictures: AlbumPicture[] = useSelector(selectAlbumPictures);
 
@@ -245,10 +246,12 @@ export const TripPictureUploader = React.memo(function Component({
   }
 
   async function saveAlbum() {
+    setLoadingButton(true);
     dispatch(setAlbumPictures([]));
 
     let albumDTO: TripAlbum = getAlbumDTO();
     let response = await backend.post(`/album/create?idTrip=${trip.idTrip}`, albumDTO);
+    setLoadingButton(false);
     setOpenSnack(true);
     addAlbumToStore(response.data);
 
@@ -302,10 +305,28 @@ export const TripPictureUploader = React.memo(function Component({
       setAlbumCover(values[0]);
       setImages([...images, values[0]]);
     } else {
-      let updatedImages = images.filter((image) => image.name !== values[0].name);
-      setImages(updatedImages);
+      let deletedFile: File = images[0];
+
+      deleteAlbumCoverFromStore(deletedFile);
+
+      setImages([]);
       setAlbumCoverUrl("");
     }
+  }
+
+  function deleteAlbumCoverFromStore(deletedFile: File) {
+    const albumPictures: AlbumPicture[] = store.getState().tripSlice.albumPictures;
+    let updatedAlbumPictures: AlbumPicture[] = [...albumPictures].filter(
+      (ap) => compareWithoutExtension(ap.name, deletedFile.name) !== 0
+    );
+    dispatch(setAlbumPictures(updatedAlbumPictures));
+  }
+
+  function compareWithoutExtension(file1: string, file2: string): number {
+    let first = file1.split(".")[0];
+    let second = file2.split(".")[0];
+
+    return first.localeCompare(second);
   }
 
   function onAlbumOptionChange(value: string) {
@@ -436,6 +457,7 @@ export const TripPictureUploader = React.memo(function Component({
               <CustomButton
                 disabled={!areAllPicturesUploaded()}
                 className={style.saveButton}
+                loading={loadingButton}
                 onClick={() => saveAlbum()}
                 backgroundColor={Colors.GREEN}
               >

@@ -3,6 +3,18 @@ import { Font } from "../../../assets";
 import { Colors } from "../../../styles";
 
 export const includeInTripStyles = makeStyles((theme: Theme) => ({
+  addButton: {
+    margin: "10px 0px 0px auto",
+    width: 50,
+    height: 50,
+    backgroundColor: Colors.GREEN,
+
+    "&.MuiIconButton-root": {
+      "&.Mui-disabled": {
+        backgroundColor: Colors.GREEN,
+      },
+    },
+  },
   datepicker: {
     backgroundColor: "white",
     fontFamily: Font.Family,

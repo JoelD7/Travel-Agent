@@ -76,7 +76,6 @@ interface AvailabilityParams {
 interface HotelSearchFilter {
   stars: number;
   priceRange: number[];
-  occupancyParamsChanged: boolean;
 }
 
 export function Hotels() {
@@ -199,7 +198,6 @@ export function Hotels() {
   const [state, setState] = useState<HotelSearchFilter>({
     priceRange: [0, 500],
     stars: 0,
-    occupancyParamsChanged: false,
   });
 
   let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
@@ -227,13 +225,12 @@ export function Hotels() {
   ];
 
   const [sortOption, setSortOption] = useState<string>(getSortOption());
-
+  const [occupancyParamsChanged, setOccupancyParamsChanged] = useState(false);
   const [loadingOnMount, setLoadingOnMount] = useState(true);
   const [loading, setLoading] = useState(false);
   const [hotelsMounted, setHotelsMounted] = useState(false);
 
   const [maxRate, setMaxRate] = useState<number>(500);
-
   const [noHotels, setNoHotels] = useState(false);
 
   const pageSizeOptions = [20, 30, 40];
@@ -562,11 +559,11 @@ export function Hotels() {
 
       dispatch(updateReservationParams({ ...reservationParams, occupancies }));
 
-      setState({ ...state, occupancyParamsChanged: true });
+      setOccupancyParamsChanged(true);
     } else {
       let occupancies = [{ ...reservationParams.occupancies[0], [param.field]: value }];
       dispatch(updateReservationParams({ ...reservationParams, occupancies }));
-      setState({ ...state, occupancyParamsChanged: true });
+      setOccupancyParamsChanged(true);
     }
   }
 
@@ -583,7 +580,7 @@ export function Hotels() {
     let occupancies = [{ ...reservationParams.occupancies[0], paxes: newPaxes }];
 
     dispatch(updateReservationParams({ ...reservationParams, occupancies }));
-    setState({ ...state, occupancyParamsChanged: true });
+    setOccupancyParamsChanged(true);
   }
 
   function onOccupancyDateChange(
@@ -609,7 +606,7 @@ export function Hotels() {
       })
     );
 
-    setState({ ...state, occupancyParamsChanged: true });
+    setOccupancyParamsChanged(true);
   }
 
   function onOccupanciesPopoverChange(event: MouseEvent<HTMLButtonElement>) {
@@ -626,7 +623,7 @@ export function Hotels() {
     setLoading(true);
 
     searchHotels(reservationParams);
-    setState({ ...state, occupancyParamsChanged: false });
+    setOccupancyParamsChanged(false);
   }
 
   function getOccupancyText() {
@@ -848,10 +845,11 @@ export function Hotels() {
                         <CustomButton
                           backgroundColor={Colors.GREEN}
                           rounded
+                          loading={loading}
                           className={style.searchButton}
                           onClick={() => onSearchButtonClick()}
                         >
-                          {`${state.occupancyParamsChanged ? "Update search" : "Search"}`}
+                          {`${occupancyParamsChanged ? "Update search" : "Search"}`}
                         </CustomButton>
                       </Grid>
                     </Grid>
