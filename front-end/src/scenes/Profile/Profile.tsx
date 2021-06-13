@@ -170,7 +170,7 @@ export function Profile({}: ProfileProps) {
           </>
         )}
 
-        {/* Buttons */}
+        {/* Buttons  */}
         <Grid item xs={12} style={{ marginTop: 20 }}>
           <Grid container justify="flex-end">
             <CustomButton
