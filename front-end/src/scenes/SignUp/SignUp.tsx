@@ -1,14 +1,16 @@
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Grid, IconButton, InputAdornment } from "@material-ui/core";
+import { Grid, IconButton, InputAdornment, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { Font } from "../../assets";
 import { logoType, signup } from "../../assets/images";
 import { CustomButton, Footer, Navbar, PasswordEye } from "../../components";
 import { TextInput } from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
-import { Routes } from "../../utils";
+import { Routes, backend } from "../../utils";
 
 interface SignUpValuesType {
   firstName: string;
@@ -32,13 +34,23 @@ export function SignUp() {
     password: "",
     passwordConfirmation: "",
   });
+  const [openSuccessSnack, setOpenSuccessSnack] = useState(false);
+  const history = useHistory();
 
   const [visibility, setVisibility] = useState<VisibilityProps>({
     password: false,
     passwordConfirmation: false,
   });
 
-  function signUp(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
+  async function signUp(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
+    let { passwordConfirmation, ...signUpDto } = credentials;
+    let res = backend.post(`/auth/signup`, signUpDto);
+    setOpenSuccessSnack(true);
+
+    setTimeout(() => {
+      history.push(Routes.LOGIN);
+    }, 1000);
+  }
 
   function googleSignUp(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
 
@@ -172,6 +184,22 @@ export function SignUp() {
       </Grid>
 
       <Footer />
+
+      <Snackbar
+        open={openSuccessSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenSuccessSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenSuccessSnack(false)}
+          severity="success"
+        >
+          Sign up successfull
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

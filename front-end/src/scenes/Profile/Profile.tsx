@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid, ThemeProvider, createMuiTheme } from "@material-ui/core";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
@@ -23,6 +23,15 @@ interface VisibilityProps {
 }
 
 export function Profile({}: ProfileProps) {
+  const theme = createMuiTheme({
+    overrides: {
+      MuiInputBase: {
+        input: {
+          fontSize: 16,
+        },
+      },
+    },
+  });
   const style = profileStyles();
 
   const originCity: IATALocation = useSelector(selectOriginCity);
@@ -117,9 +126,11 @@ export function Profile({}: ProfileProps) {
         </Grid>
 
         {/* Origin */}
-        <Grid style={{ marginTop: 15 }} item xs={12}>
-          <IataAutocomplete type="city" cityType={LocationType.ORIGIN} required />
-        </Grid>
+        <ThemeProvider theme={theme}>
+          <Grid style={{ marginTop: 15 }} item xs={12}>
+            <IataAutocomplete type="city" cityType={LocationType.ORIGIN} required />
+          </Grid>
+        </ThemeProvider>
 
         {changePassword && (
           <>

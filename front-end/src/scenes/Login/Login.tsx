@@ -3,12 +3,12 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, InputAdornment } from "@material-ui/core";
 import React, { MouseEvent, useState } from "react";
-import { Link } from "react-router-dom";
-import { logoType, loginImage } from "../../assets";
+import { Link, useHistory } from "react-router-dom";
+import { loginImage, logoType } from "../../assets";
 import { CustomButton, Footer, Navbar } from "../../components";
 import { TextInput } from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
-import { Routes } from "../../utils";
+import { backend, Routes } from "../../utils";
 
 interface LoginType {
   email: string;
@@ -34,8 +34,16 @@ export function Login() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
-  function login(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
+  async function login(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
+    setLoading(true);
+    let res = await backend.post(`/auth/login`, credentials);
+    localStorage.setItem("jwt", res.data.token);
+    history.push(Routes.HOME);
+    setLoading(false);
+  }
 
   function googleLogin(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
 
@@ -100,7 +108,12 @@ export function Login() {
             </Grid>
 
             <Grid id="signUp" style={{ marginTop: "15px" }} container>
-              <CustomButton onClick={login} submit={true} style={{ width: "100%" }}>
+              <CustomButton
+                onClick={login}
+                loading={loading}
+                submit={true}
+                style={{ width: "100%" }}
+              >
                 Log in
               </CustomButton>
             </Grid>
@@ -123,6 +136,7 @@ export function Login() {
           <img className={style.image} src={loginImage} />
         </Grid>
       </Grid>
+
       <Footer />
     </div>
   );

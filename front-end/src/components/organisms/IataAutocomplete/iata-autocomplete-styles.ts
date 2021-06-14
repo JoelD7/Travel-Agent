@@ -50,6 +50,7 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
     borderRadius: "5px",
     "& .MuiInputBase-input": {
       position: "relative",
+      fontSize: 14,
       bottom: 2,
     },
     "& .MuiInputBase-root": {

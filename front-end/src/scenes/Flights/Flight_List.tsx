@@ -53,7 +53,6 @@ import {
   addFlightDuration,
   convertFlightToURLParams,
   convertURLParamsToFlight,
-  FlightClass,
   FlightSearch,
   flightsPlaceholder,
   getAccessToken,
@@ -65,11 +64,11 @@ import {
   isDateBetweenRange,
   muiDateFormatter,
   Routes,
-  selectUserCurrency,
   selectFlightFromAutocomplete,
   selectFlightSearchParams,
   selectFlightToAutocomplete,
   selectFlightType,
+  selectUserCurrency,
   setFlightAdults,
   setFlightChildren,
   setFlightClass,
@@ -215,18 +214,14 @@ export function Flight_List() {
 
   const [flights, setFlights] = useState<Flight[]>(flightsPlaceholder);
   const [allFlights, setAllFlights] = useState<Flight[]>([]);
-
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
-
   const [occupancyParamsChanged, setOccupancyParamsChanged] = useState(false);
 
   const location = useLocation();
 
   const query = useQuery();
 
-  const [urlParams, setURLParams] = useState<{ [index: string]: string }>(
-    getURLParamsAsKVP()
-  );
+  const urlParams: { [index: string]: string } = getURLParamsAsKVP();
 
   const [sortOptions, setSortOptions] = useState<string[]>(
     flightType === FlightTypes.ROUND

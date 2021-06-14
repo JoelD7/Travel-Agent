@@ -30,6 +30,13 @@ public class Person implements Serializable {
     private String password;
     private String profilePic;
 
+    public Person(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
+
     @OneToMany(mappedBy = "person")
     @JsonManagedReference
     private List<Trip> trips = new ArrayList<>();

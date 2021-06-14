@@ -647,6 +647,7 @@ export function CarRental() {
                 >
                   <CustomButton
                     style={{ fontSize: "18px" }}
+                    loading={loading}
                     onClick={() => onSearchClick()}
                     backgroundColor={Colors.GREEN}
                   >

@@ -77,6 +77,7 @@ export const carRentalStyles = makeStyles((theme: Theme) => ({
 
     "& .MuiInputBase-input": {
       padding: "5px 0px 5px 10px",
+      fontSize: 14,
     },
     "& .MuiInputBase-root": {
       height: "32px",
