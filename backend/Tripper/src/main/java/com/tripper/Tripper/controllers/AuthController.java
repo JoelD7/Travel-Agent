@@ -7,17 +7,24 @@ import com.tripper.Tripper.dtos.SignUpDTO;
 import com.tripper.Tripper.models.Person;
 import com.tripper.Tripper.security.JwtUtils;
 import com.tripper.Tripper.security.UserDetailsImpl;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @RestController
 @RequestMapping("/auth")
@@ -35,6 +42,9 @@ public class AuthController {
     @Autowired
     private PersonRepository personRepo;
 
+    @Autowired
+    private SessionRegistry sessionRegistry;
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginDTO loginDto) {
 
@@ -46,9 +56,15 @@ public class AuthController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        return ResponseEntity.ok(new JwtResponseDTO(jwt,
-                userDetails.getIdPerson(),
-                userDetails.getEmail()));
+        RequestAttributes reqAttr = RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes servlReqAttr = (ServletRequestAttributes) reqAttr;
+        HttpServletRequest request = servlReqAttr.getRequest();
+
+        sessionRegistry.registerNewSession(request.getSession().getId(), authentication.getPrincipal());
+
+        return ResponseEntity
+                .ok()
+                .build();
     }
 
     @PostMapping("/signup")

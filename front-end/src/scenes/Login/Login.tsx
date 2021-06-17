@@ -39,7 +39,7 @@ export function Login() {
 
   async function login(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     setLoading(true);
-    let res = await backend.post(`/auth/login`, credentials);
+    let res = await backend.post(`/auth/login`, { ...credentials, rememberMe: true });
     localStorage.setItem("jwt", res.data.token);
     history.push(Routes.HOME);
     setLoading(false);

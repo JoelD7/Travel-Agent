@@ -2,21 +2,28 @@ package com.tripper.Tripper.security;
 
 import java.util.Arrays;
 import java.util.Collections;
+import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -30,32 +37,39 @@ import org.springframework.web.filter.CorsFilter;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
+
+    @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    private DataSource dataSource;
 
     @Override
+
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
+                .authenticationProvider(rememberMeAuthenticationProvider())
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
 
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
-    }
-
-    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+        AuthenticationManager manager = super.authenticationManagerBean();
+//        rememberMeAuthenticationProvider
+        return manager;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     @Override
@@ -70,12 +84,60 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and().rememberMe()
+                .tokenRepository(persistentTokenRepository())
+                .key("remember_me_key")
+                .alwaysRemember(true)
+                .rememberMeParameter("rememberMe")
+                .rememberMeCookieName("remember-me-cookie")
+                .tokenValiditySeconds(120);
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterAfter(rememberMeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public RememberMeAuthenticationFilter rememberMeAuthenticationFilter() throws Exception {
+        RememberMeAuthenticationFilter filter
+                = new RememberMeAuthenticationFilter(authenticationManagerBean(),
+                        persistentTokenBasedRememberMeServices());
+        return filter;
+    }
+
+    @Bean
+    public PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices() {
+        PersistentTokenBasedRememberMeServices service
+                = new PersistentTokenBasedRememberMeServices("remember_me_key",
+                        userDetailsService,
+                        persistentTokenRepository());
+
+        service.setParameter("rememberMe");
+        service.setCookieName("remember_me");
+        service.setTokenValiditySeconds(120);
+        return service;
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
+    }
+
+    @Bean
+    public UsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter() throws Exception {
+        UsernamePasswordAuthenticationFilter filter = new UsernamePasswordAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setUsernameParameter("email");
+        filter.setPasswordParameter("password");
+        filter.setRememberMeServices(persistentTokenBasedRememberMeServices());
+        return filter;
+    }
+
+    @Bean
+    public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
+        return new RememberMeAuthenticationProvider("remember_me_key");
     }
 
     @Bean
