@@ -1,9 +1,15 @@
 package com.tripper.Tripper.security;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.logging.Level;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -45,8 +51,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
-    @Override
+    @Value("${tripper.app.rememberMe-key}")
+    private String rememberMeKey;
 
+    @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
                 .authenticationProvider(rememberMeAuthenticationProvider())
@@ -57,9 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        AuthenticationManager manager = super.authenticationManagerBean();
-//        rememberMeAuthenticationProvider
-        return manager;
+        return super.authenticationManagerBean();
     }
 
     @Bean
@@ -85,16 +91,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
-                .and().rememberMe()
-                .tokenRepository(persistentTokenRepository())
-                .key("remember_me_key")
-                .alwaysRemember(true)
-                .rememberMeParameter("rememberMe")
-                .rememberMeCookieName("remember-me-cookie")
-                .tokenValiditySeconds(120);
+                .anyRequest().authenticated();
 
-//        http.addFilterAfter(rememberMeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(rememberMeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -108,7 +108,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices() {
         PersistentTokenBasedRememberMeServices service
-                = new PersistentTokenBasedRememberMeServices("remember_me_key",
+                = new PersistentTokenBasedRememberMeServices(rememberMeKey,
                         userDetailsService,
                         persistentTokenRepository());
 
@@ -132,12 +132,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setUsernameParameter("email");
         filter.setPasswordParameter("password");
         filter.setRememberMeServices(persistentTokenBasedRememberMeServices());
+
         return filter;
     }
 
     @Bean
     public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
-        return new RememberMeAuthenticationProvider("remember_me_key");
+        return new RememberMeAuthenticationProvider(rememberMeKey);
     }
 
     @Bean

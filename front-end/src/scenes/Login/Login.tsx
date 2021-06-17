@@ -39,8 +39,11 @@ export function Login() {
 
   async function login(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     setLoading(true);
-    let res = await backend.post(`/auth/login`, { ...credentials, rememberMe: true });
-    localStorage.setItem("jwt", res.data.token);
+    let res = await backend.post(
+      `/auth/login`,
+      `email=${credentials.email}&password=${credentials.password}&rememberMe=true`
+    );
+
     history.push(Routes.HOME);
     setLoading(false);
   }
