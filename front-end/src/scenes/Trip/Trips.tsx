@@ -18,6 +18,7 @@ import {
   DashDrawer,
   IconText,
   Navbar,
+  NoTrips,
   ProgressCircle,
   SliderArrow,
   Text,
@@ -31,6 +32,7 @@ import {
   selectUserTrips,
   Trip,
   useAppDispatch,
+  selectIsAuthenticated,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -45,6 +47,7 @@ export function Trips() {
   const match = useRouteMatch();
   const history = useHistory();
   const userTrips: Trip[] = useSelector(selectUserTrips);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
 
   const tripCoverBackground: CSSProperties = {
     backgroundImage: lastTrip
@@ -87,14 +90,18 @@ export function Trips() {
   };
 
   useEffect(() => {
-    if (userTrips.length === 0) {
-      dispatch(fetchUserTrips(null)).then((res) => {
-        setTrips(res.payload as Trip[]);
+    if (isAuthenticated) {
+      if (userTrips.length === 0) {
+        dispatch(fetchUserTrips(null)).then((res) => {
+          setTrips(res.payload as Trip[]);
+          setLoading(false);
+        });
+      } else {
         setLoading(false);
-      });
+        setTrips([...userTrips]);
+      }
     } else {
-      setLoading(false);
-      setTrips([...userTrips]);
+      setTrips([]);
     }
   }, []);
 
@@ -150,149 +157,157 @@ export function Trips() {
       <Navbar className={style.navbar} variant="dashboard" position="sticky" />
       <DashDrawer />
 
-      <Grid container>
-        <Grid item className={style.pageContentGrid}>
-          {loading && (
-            <Grid container style={{ height: "85vh" }}>
-              <ProgressCircle />
-            </Grid>
-          )}
-          {trips && lastTrip && (
-            <>
-              {/* Photo title */}
-              <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
-                <Grid
-                  key="photoTitle"
-                  item
-                  xs={12}
-                  className={style.photoTitleContainer}
-                  style={tripCoverBackground}
-                >
-                  <Grid container style={{ height: "100%" }}>
-                    <Grid item xs={12}>
-                      <Text color="white" component="h4" style={{ fontWeight: "normal" }}>
-                        Your last trip
-                      </Text>
-
-                      {/* Trip name, countries */}
-                      <Grid container alignItems="baseline">
-                        <Text
-                          color="white"
-                          component="h1"
-                          style={{ margin: "0px 10px 0px 0px" }}
-                        >
-                          {lastTrip.name}
-                        </Text>
+      {trips && trips.length === 0 ? (
+        <NoTrips />
+      ) : (
+        <Grid container>
+          <Grid item className={style.pageContentGrid}>
+            {loading && (
+              <Grid container style={{ height: "85vh" }}>
+                <ProgressCircle />
+              </Grid>
+            )}
+            {trips && lastTrip && (
+              <>
+                {/* Photo title */}
+                <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                  <Grid
+                    key="photoTitle"
+                    item
+                    xs={12}
+                    className={style.photoTitleContainer}
+                    style={tripCoverBackground}
+                  >
+                    <Grid container style={{ height: "100%" }}>
+                      <Grid item xs={12}>
                         <Text
                           color="white"
                           component="h4"
                           style={{ fontWeight: "normal" }}
                         >
-                          {lastTrip.countries.join(", ")}
+                          Your last trip
                         </Text>
+
+                        {/* Trip name, countries */}
+                        <Grid container alignItems="baseline">
+                          <Text
+                            color="white"
+                            component="h1"
+                            style={{ margin: "0px 10px 0px 0px" }}
+                          >
+                            {lastTrip.name}
+                          </Text>
+                          <Text
+                            color="white"
+                            component="h4"
+                            style={{ fontWeight: "normal" }}
+                          >
+                            {lastTrip.countries.join(", ")}
+                          </Text>
+                        </Grid>
                       </Grid>
-                    </Grid>
 
-                    {/* Trip quick info */}
-                    <Grid item xs={12} style={{ alignSelf: "flex-end" }}>
-                      <Grid container>
-                        <div style={{ width: "105px" }}>
-                          <Text
-                            color="white"
-                            component="h2"
-                            style={{ textAlign: "center", marginBottom: "5px" }}
-                          >
-                            Photos
-                          </Text>
-                          <Text
-                            color="white"
-                            component="h3"
-                            weight={500}
-                            style={{ textAlign: "center" }}
-                          >
-                            {lastTrip.photosQty}
-                          </Text>
-                        </div>
+                      {/* Trip quick info */}
+                      <Grid item xs={12} style={{ alignSelf: "flex-end" }}>
+                        <Grid container>
+                          <div style={{ width: "105px" }}>
+                            <Text
+                              color="white"
+                              component="h2"
+                              style={{ textAlign: "center", marginBottom: "5px" }}
+                            >
+                              Photos
+                            </Text>
+                            <Text
+                              color="white"
+                              component="h3"
+                              weight={500}
+                              style={{ textAlign: "center" }}
+                            >
+                              {lastTrip.photosQty}
+                            </Text>
+                          </div>
 
-                        <div style={{ width: "105px" }}>
-                          <Text
-                            color="white"
-                            component="h2"
-                            style={{ textAlign: "center", marginBottom: "5px" }}
-                          >
-                            Places
-                          </Text>
-                          <Text
-                            color="white"
-                            component="h3"
-                            weight={500}
-                            style={{ textAlign: "center" }}
-                          >
-                            {lastTrip.places}
-                          </Text>
-                        </div>
+                          <div style={{ width: "105px" }}>
+                            <Text
+                              color="white"
+                              component="h2"
+                              style={{ textAlign: "center", marginBottom: "5px" }}
+                            >
+                              Places
+                            </Text>
+                            <Text
+                              color="white"
+                              component="h3"
+                              weight={500}
+                              style={{ textAlign: "center" }}
+                            >
+                              {lastTrip.places}
+                            </Text>
+                          </div>
 
-                        <div style={{ width: "105px" }}>
-                          <Text
-                            color="white"
-                            component="h2"
-                            style={{ textAlign: "center", marginBottom: "5px" }}
-                          >
-                            Days
-                          </Text>
-                          <Text
-                            color="white"
-                            component="h3"
-                            weight={500}
-                            style={{ textAlign: "center" }}
-                          >
-                            {lastTrip.days}
-                          </Text>
-                        </div>
+                          <div style={{ width: "105px" }}>
+                            <Text
+                              color="white"
+                              component="h2"
+                              style={{ textAlign: "center", marginBottom: "5px" }}
+                            >
+                              Days
+                            </Text>
+                            <Text
+                              color="white"
+                              component="h3"
+                              weight={500}
+                              style={{ textAlign: "center" }}
+                            >
+                              {lastTrip.days}
+                            </Text>
+                          </div>
+                        </Grid>
                       </Grid>
-                    </Grid>
 
-                    <Grid
-                      item
-                      xs={12}
-                      style={{ height: "fit-content", alignSelf: "flex-end" }}
-                    >
-                      <Grid container justify="flex-end">
-                        <CustomButton
-                          backgroundColor={Colors.GREEN}
-                          style={{ boxShadow: Shadow.DARK3D }}
-                          onClick={() => history.push(Routes.CREATE_TRIP)}
-                        >
-                          Create trip
-                        </CustomButton>
+                      <Grid
+                        item
+                        xs={12}
+                        style={{ height: "fit-content", alignSelf: "flex-end" }}
+                      >
+                        <Grid container justify="flex-end">
+                          <CustomButton
+                            backgroundColor={Colors.GREEN}
+                            style={{ boxShadow: Shadow.DARK3D }}
+                            onClick={() => history.push(Routes.CREATE_TRIP)}
+                          >
+                            Create trip
+                          </CustomButton>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </Grow>
+                </Grow>
 
-              {/* Trips */}
-              <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
-                <Grid item xs={12} className={style.tripCardGrid}>
-                  <Text bold color={Colors.BLUE} component="h2">
-                    Trips
-                  </Text>
+                {/* Trips */}
+                <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                  <Grid item xs={12} className={style.tripCardGrid}>
+                    <Text bold color={Colors.BLUE} component="h2">
+                      Trips
+                    </Text>
 
-                  <Grid key="trip cards" container style={{ marginTop: 10 }}>
-                    {trips.length > 4 ? (
-                      <Slider {...sliderSettings} slidesToShow={getSlidesToShow(4)}>
-                        {TripCards()}
-                      </Slider>
-                    ) : (
-                      TripCards()
-                    )}
+                    <Grid key="trip cards" container style={{ marginTop: 10 }}>
+                      {trips.length > 4 ? (
+                        <Slider {...sliderSettings} slidesToShow={getSlidesToShow(4)}>
+                          {TripCards()}
+                        </Slider>
+                      ) : (
+                        TripCards()
+                      )}
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Grow>
-            </>
-          )}
+                </Grow>
+              </>
+            )}
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </div>
   );
 }

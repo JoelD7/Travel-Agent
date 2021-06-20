@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { compareDesc } from "date-fns";
+import { Routes } from "..";
 import { backend } from "../external-apis";
 import { responseTripToDomainTrip } from "../functions";
 import { AlbumPicture, Trip } from "../types";
@@ -21,18 +22,22 @@ type ThunkAPIType = {
 
 export const fetchUserTrips = createAsyncThunk<Trip[], null, ThunkAPIType>(
   "tripSlice/fetchUserTrips",
-  async (_, thunkAPI) => {
+  (_, thunkAPI) => {
     let idPerson = thunkAPI.getState().rootSlice.idPerson;
-    const response = await backend.get(`/trip/all?idPerson=${idPerson}`);
 
-    let tripsInResponse = response.data._embedded.tripList;
-    let tripsBuffer = tripsInResponse.map((resTrip: any) =>
-      responseTripToDomainTrip(resTrip)
-    );
+    return backend
+      .get(`/trip/all?idPerson=${idPerson}`)
+      .then((response) => {
+        let tripsInResponse = response.data._embedded.tripList;
+        let tripsBuffer = tripsInResponse.map((resTrip: any) =>
+          responseTripToDomainTrip(resTrip)
+        );
 
-    thunkAPI.dispatch(setLastTrip(tripsBuffer as Trip[]));
+        thunkAPI.dispatch(setLastTrip(tripsBuffer as Trip[]));
 
-    return tripsBuffer;
+        return tripsBuffer;
+      })
+      .catch((error) => {});
   }
 );
 

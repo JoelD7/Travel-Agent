@@ -1,6 +1,5 @@
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { Amenity } from "../HotelAmenities";
 
 export interface HotelBookingRequest {
   stay: {

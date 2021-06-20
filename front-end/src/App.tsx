@@ -1,9 +1,9 @@
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { Dialog, DialogActions, DialogContent, Grid, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, useHistory } from "react-router-dom";
 import { appStyles } from "./app-styles";
 import { Font } from "./assets";
 import {
@@ -38,15 +38,20 @@ import {
 } from "./scenes";
 import { Colors } from "./styles";
 import {
+  AuthStatus,
+  backend,
   fetchFavorites,
   fetchUserTrips,
   IATALocation,
   LocationType,
+  setIsAuthenticated,
   Routes,
   selectOriginCity,
   selectUserTrips,
   Trip,
   useAppDispatch,
+  selectIsAuthenticated,
+  selectIdPerson,
 } from "./utils";
 
 export default function App() {
@@ -57,20 +62,48 @@ export default function App() {
   const originCity: IATALocation = useSelector(selectOriginCity);
   const userTrips: Trip[] = useSelector(selectUserTrips);
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
-
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
+  const idPerson: number = useSelector(selectIdPerson);
   const dispatch = useAppDispatch();
+  const curPathname = window.location.pathname;
 
   useEffect(() => {
     if (!isOriginCityDefined()) {
       setOpenOriginCityDialog(true);
     }
 
+    if (isAuthStatusRequestable()) {
+      backend
+        .get(`/auth/status?idPerson=${idPerson}`)
+        .then((res) => {
+          let status = res.data;
+
+          if (status === AuthStatus.AUTHENTICATED) {
+            dispatch(setIsAuthenticated(true));
+            fetchTripsAndFavorites();
+          } else if (status === AuthStatus.NOT_AUTHENTICATED) {
+            window.location.pathname = Routes.LOGIN;
+          }
+        })
+        .catch((err) => {});
+    } else if (isAuthenticated) {
+      fetchTripsAndFavorites();
+    }
+  }, []);
+
+  function isAuthStatusRequestable(): boolean {
+    return (
+      !isAuthenticated && curPathname !== Routes.LOGIN && curPathname !== Routes.SIGNUP
+    );
+  }
+
+  function fetchTripsAndFavorites() {
     if (userTrips.length === 0) {
       dispatch(fetchUserTrips(null));
     }
 
     dispatch(fetchFavorites(null));
-  }, []);
+  }
 
   function isOriginCityDefined(): boolean {
     return localStorage.getItem(LocationType.ORIGIN) !== null;

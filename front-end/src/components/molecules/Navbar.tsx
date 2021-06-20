@@ -18,15 +18,18 @@ import { Alert } from "@material-ui/lab";
 import React, { CSSProperties, FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useRouteMatch } from "react-router-dom";
-import { carlos, Font, logoIcon, logoType, logoTypeWhiteFore } from "../../assets";
+import { Font, logoIcon, logoType, logoTypeWhiteFore } from "../../assets";
 import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
 import {
+  avatar,
   getLinkStyle,
   IATALocation,
   LocationType,
+  Person,
   Routes,
   selectOriginCity,
+  selectPerson,
   selectSearchQuery,
 } from "../../utils";
 import {
@@ -70,7 +73,6 @@ export const Navbar: FunctionComponent<Navbar> = ({
   }, [searchQuery]);
 
   let userLoggedIn = variant === "auth" ? false : true;
-  // userLoggedIn = false;
 
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -80,6 +82,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
 
   const originCity: IATALocation = useSelector(selectOriginCity);
+  const person: Person | undefined = useSelector(selectPerson);
 
   const is450OrLess = useMediaQuery("(max-width:450px)");
 
@@ -209,9 +212,9 @@ export const Navbar: FunctionComponent<Navbar> = ({
                 </>
               )}
 
-              {userLoggedIn && (
+              {userLoggedIn && person && (
                 <IconButton onClick={onAvatarClick} style={{ marginLeft: "10px" }}>
-                  <Avatar src={carlos} />
+                  <Avatar src={person.profilePic ? person.profilePic : avatar} />
                 </IconButton>
               )}
             </div>

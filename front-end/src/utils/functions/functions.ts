@@ -13,8 +13,10 @@ import { DEFAULT_CURRENCY, isoCountryCodes } from "../constants";
 import { iataCodes } from "../constants/iataCodes";
 import { airportCityPlaceholder, carRsvPlaceholder } from "../placeholders";
 import { CarReducer, store } from "../store";
-import { CityImage, EventTypes, ExchangeRate } from "../types";
+import { Person, CityImage, EventTypes, ExchangeRate } from "../types";
 import { IATALocation } from "../types/location-types";
+import { mapFlightToDomainType } from "./flight-functions";
+import { responseTripToDomainTrip } from "./trip-functions";
 export * from "./flight-functions";
 export * from "./hotel-functions";
 
@@ -805,4 +807,19 @@ export function getISODatetimeWithOffset(date: Date): string {
   let localISOTime = new Date(date.valueOf() - tzoffset).toISOString();
 
   return localISOTime;
+}
+
+export function mapPersonToDomainType(data: any): Person {
+  return {
+    carRentals: data.carRentals,
+    email: data.email,
+    favoritePlaces: data.favoritePlaces,
+    firstName: data.firstName,
+    flights: data.flights.map((flight: any) => mapFlightToDomainType(flight)),
+    hotelReservations: data.hotelReservations,
+    idPerson: data.idPerson,
+    lastName: data.lastName,
+    profilePic: data.profilePic,
+    trips: data.trips.map((trip: any) => responseTripToDomainTrip(trip)),
+  };
 }

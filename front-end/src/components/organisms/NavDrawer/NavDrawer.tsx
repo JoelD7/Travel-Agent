@@ -22,18 +22,21 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { carlos, Font, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors } from "../../../styles";
 import {
+  backend,
   getCarRentalDefaultURL,
   getHotelSearchURL,
   getLinkStyle,
   getRestaurantsDefaultRoute,
   Routes,
   selectLastTrip,
+  setIsAuthenticated,
+  setPerson,
   Trip,
 } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
@@ -51,6 +54,8 @@ export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
 
   const location = useLocation();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   let page = location.pathname;
 
   let lastTrip: Trip | undefined = useSelector(selectLastTrip);
@@ -163,6 +168,16 @@ export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
     setDrawerOptions(newDrawer);
   }
 
+  async function logout() {
+    setLoading(true);
+    dispatch(setIsAuthenticated(false));
+    dispatch(setPerson(undefined));
+
+    const res = await backend.get(`/auth/logout`);
+    setLoading(false);
+    history.push(Routes.LOGIN);
+  }
+
   function DrawerButtons() {
     return (
       <div style={{ padding: "0px 10px" }}>
@@ -185,6 +200,16 @@ export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
               onClick={() => history.push(Routes.CREATE_TRIP)}
             >
               Make trip
+            </CustomButton>
+
+            <CustomButton
+              backgroundColor={Colors.PURPLE}
+              rounded
+              loading={loading}
+              style={drawerButtonStyle}
+              onClick={() => logout()}
+            >
+              Log out
             </CustomButton>
           </div>
         ) : (

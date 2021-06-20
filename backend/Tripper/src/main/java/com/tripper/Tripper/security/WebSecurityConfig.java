@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
@@ -40,6 +42,8 @@ import org.springframework.web.filter.CorsFilter;
         prePostEnabled = true,
         securedEnabled = true,
         jsr250Enabled = true)
+@PropertySources({
+    @PropertySource("classpath:tripper.properties")})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -54,12 +58,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${tripper.app.rememberMe-key}")
     private String rememberMeKey;
 
+    @Value("${tripper.app.rememberMe-cookie.name}")
+    private String rememberMeCookieName;
+
+    @Value("${tripper.app.rememberMe.timeout}")
+    private int rememberMeTimeout;
+
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
                 .authenticationProvider(rememberMeAuthenticationProvider())
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
+        return new RememberMeAuthenticationProvider(rememberMeKey);
     }
 
     @Bean
@@ -113,8 +128,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         persistentTokenRepository());
 
         service.setParameter("rememberMe");
-        service.setCookieName("remember_me");
-        service.setTokenValiditySeconds(120);
+        service.setCookieName(rememberMeCookieName);
+        service.setTokenValiditySeconds(rememberMeTimeout);
         return service;
     }
 
@@ -134,11 +149,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setRememberMeServices(persistentTokenBasedRememberMeServices());
 
         return filter;
-    }
-
-    @Bean
-    public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
-        return new RememberMeAuthenticationProvider(rememberMeKey);
     }
 
     @Bean

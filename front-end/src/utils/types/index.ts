@@ -11,5 +11,8 @@ export * from "./location-types";
 export * from "./restaurant-types";
 export * from "./trip-types";
 export * from "./car-types";
+export * from "./person-types";
+export * from "./favorite-types";
+export * from "./auth-status";
 
 export { FlightTypes, EventTypes, FavoriteTypes };

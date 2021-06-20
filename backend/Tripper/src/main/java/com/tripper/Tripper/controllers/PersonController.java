@@ -28,12 +28,9 @@ public class PersonController {
 
     private final APICredentialsProps apiCredential;
 
-    private final RestTemplate restTemplate;
-
-    public PersonController(PersonRepository personRepo, APICredentialsProps apiCredential, RestTemplate restTemplate) {
+    public PersonController(PersonRepository personRepo, APICredentialsProps apiCredential) {
         this.personRepo = personRepo;
         this.apiCredential = apiCredential;
-        this.restTemplate = restTemplate;
     }
 
     @GetMapping("/all")
@@ -44,8 +41,6 @@ public class PersonController {
         headers.add("Authorization", "Bearer " + yelpKey);
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        System.out.println("Response: " + restTemplate.exchange(
-                "https://api.yelp.com/v3/businesses/Z1hoRcuxB9v7aBF7hPwUPQ", HttpMethod.GET, entity, String.class));
         return personRepo.findAll();
     }
 

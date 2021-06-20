@@ -6,4 +6,8 @@ public class PersonNotFoundException extends RuntimeException {
         super("The user with id " + id + " does not exists.");
     }
 
+    public PersonNotFoundException(String email) {
+        super("The user with email " + email + " does not exists.");
+    }
+
 }

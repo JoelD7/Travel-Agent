@@ -3,12 +3,19 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, InputAdornment } from "@material-ui/core";
 import React, { MouseEvent, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { loginImage, logoType } from "../../assets";
-import { CustomButton, Footer, Navbar } from "../../components";
+import { CustomButton, Footer } from "../../components";
 import { TextInput } from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
-import { backend, Routes } from "../../utils";
+import {
+  backend,
+  mapPersonToDomainType,
+  Routes,
+  setIsAuthenticated,
+  setPerson,
+} from "../../utils";
 
 interface LoginType {
   email: string;
@@ -36,6 +43,7 @@ export function Login() {
   });
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   async function login(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     setLoading(true);
@@ -44,8 +52,10 @@ export function Login() {
       `email=${credentials.email}&password=${credentials.password}&rememberMe=true`
     );
 
-    history.push(Routes.HOME);
+    dispatch(setIsAuthenticated(true));
+    dispatch(setPerson(mapPersonToDomainType(res.data)));
     setLoading(false);
+    history.push(Routes.HOME);
   }
 
   function googleLogin(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
@@ -67,11 +77,12 @@ export function Login() {
 
   return (
     <div>
-      <Navbar variant="auth" />
       <Grid className={style.mainContainerLogin} container>
         <Grid item className={style.formGrid}>
           <div className={style.imageContainer}>
-            <img className={style.logotype} src={logoType} />
+            <Link to={Routes.HOME} className={style.logoLinkContainer}>
+              <img className={style.logotype} src={logoType} />
+            </Link>
           </div>
 
           <Grid item className={style.formContainer}>

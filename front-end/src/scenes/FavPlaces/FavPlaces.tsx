@@ -43,10 +43,10 @@ import {
   Routes,
   selectFavorites,
   selectIdPerson,
+  Favorite,
   useAppDispatch,
 } from "../../utils";
 import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
-import { Favorite } from "../../utils/types/favorite-types";
 import { favPlacesStyles } from "./favPlaces-styles";
 
 interface RestaurantCardProps {

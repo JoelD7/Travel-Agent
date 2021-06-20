@@ -23,7 +23,7 @@ export const signStyles = makeStyles((theme: Theme) => ({
     paddingTop: "0px",
     alignItems: "flex-start",
     justifyContent: "center",
-    marginTop: '10px',
+    marginTop: "10px",
   },
   imageGrid: {
     width: "60%",
@@ -32,6 +32,11 @@ export const signStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down(1045)]: {
       display: "none",
     },
+  },
+  logoLinkContainer: {
+    outline: "none",
+    border: "none",
+    display: "flex",
   },
   mainContainerSignUp: {
     backgroundColor: "white",
@@ -62,6 +67,7 @@ export const signStyles = makeStyles((theme: Theme) => ({
     minWidth: "147px",
   },
   logotype: {
+    margin: "auto",
     width: "40%",
     height: "40%",
   },
