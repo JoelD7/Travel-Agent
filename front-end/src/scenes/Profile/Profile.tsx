@@ -13,7 +13,13 @@ import {
   TextInput,
 } from "../../components";
 import { Colors } from "../../styles";
-import { IATALocation, selectOriginCity, LocationType } from "../../utils";
+import {
+  IATALocation,
+  selectOriginCity,
+  LocationType,
+  Person,
+  selectPerson,
+} from "../../utils";
 import { profileStyles } from "./profile-styles";
 
 interface ProfileProps {}
@@ -35,18 +41,18 @@ export function Profile({}: ProfileProps) {
   const style = profileStyles();
 
   const originCity: IATALocation = useSelector(selectOriginCity);
+  const person: Person | undefined = useSelector(selectPerson);
 
   const [visibility, setVisibility] = useState<VisibilityProps>({
     password: false,
     passwordConfirmation: false,
   });
-
   const [credentials, setCredentials] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    origin: originCity,
-    profilePic: "",
+    firstName: person ? person.firstName : "",
+    lastName: person ? person.lastName : "",
+    email: person ? person.email : "",
+    origin: "",
+    profilePic: person ? person.profilePic : "",
     password: "",
     passwordConfirmation: "",
   });

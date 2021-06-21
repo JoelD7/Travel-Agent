@@ -1,10 +1,15 @@
 package com.tripper.Tripper.controllers;
 
 import com.tripper.Tripper.APICredentialsProps;
+import com.tripper.Tripper.assemblers.PersonModelAssembler;
 import com.tripper.Tripper.data.PersonRepository;
+import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.models.Person;
+import com.tripper.Tripper.services.PersonServiceImpl;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,38 +30,35 @@ import org.springframework.web.client.RestTemplate;
 public class PersonController {
 
     private final PersonRepository personRepo;
+    private final PersonModelAssembler assembler;
+    private final PersonServiceImpl personService;
 
-    private final APICredentialsProps apiCredential;
-
-    public PersonController(PersonRepository personRepo, APICredentialsProps apiCredential) {
+    public PersonController(PersonRepository personRepo, PersonModelAssembler assembler, PersonServiceImpl personService) {
         this.personRepo = personRepo;
-        this.apiCredential = apiCredential;
+        this.assembler = assembler;
+        this.personService = personService;
     }
 
     @GetMapping("/all")
-    public List<Person> list() {
-        String yelpKey = apiCredential.getYELP_KEY();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.add("Authorization", "Bearer " + yelpKey);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        return personRepo.findAll();
+    public CollectionModel<EntityModel<Person>> getAll() {
+        return assembler.toCollectionModel(personRepo.findAll());
     }
 
     @GetMapping("/{id}")
-    public Object get(@PathVariable String id) {
-        return null;
+    public EntityModel<Person> get(@PathVariable Long idPerson) {
+        Person person = personRepo.findById(idPerson)
+                .orElseThrow(() -> new PersonNotFoundException(idPerson));
+
+        return assembler.toModel(person);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> put(@PathVariable String id, @RequestBody Object input) {
-        return null;
-    }
+    public ResponseEntity<?> editProfile(@PathVariable Long idPerson, @RequestBody Person dto) {
+        Person editedUser = personService.editUserProfile(idPerson, dto);
 
-    @PostMapping
-    public ResponseEntity<?> post(@RequestBody Object input) {
-        return null;
+        return ResponseEntity
+                .accepted()
+                .body(editedUser);
     }
 
     @DeleteMapping("/{id}")

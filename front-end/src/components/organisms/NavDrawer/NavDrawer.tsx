@@ -24,17 +24,21 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { carlos, Font, logoTypeWhiteFore } from "../../../assets";
+import { Font, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors } from "../../../styles";
 import {
+  avatar,
   backend,
   getCarRentalDefaultURL,
   getHotelSearchURL,
   getLinkStyle,
+  selectIsAuthenticated,
   getRestaurantsDefaultRoute,
+  Person,
   Routes,
   selectLastTrip,
+  selectPerson,
   setIsAuthenticated,
   setPerson,
   Trip,
@@ -45,11 +49,10 @@ import { drawerButtonStyle, drawerStyles } from "./navDrawer-styles";
 
 interface NavDrawer {
   open: boolean;
-  userLoggedIn?: boolean;
   onClose: () => void;
 }
 
-export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
+export function NavDrawer({ open, onClose }: NavDrawer) {
   const style = drawerStyles();
 
   const location = useLocation();
@@ -59,6 +62,8 @@ export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
   let page = location.pathname;
 
   let lastTrip: Trip | undefined = useSelector(selectLastTrip);
+  const person: Person | undefined = useSelector(selectPerson);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
 
   const theme = createMuiTheme({
     overrides: {
@@ -181,10 +186,10 @@ export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
   function DrawerButtons() {
     return (
       <div style={{ padding: "0px 10px" }}>
-        {userLoggedIn ? (
+        {isAuthenticated && person ? (
           <div>
             <CustomButton
-              avatar={<Avatar src={carlos} />}
+              avatar={<Avatar src={person.profilePic ? person.profilePic : avatar} />}
               backgroundColor={Colors.PURPLE}
               rounded
               style={drawerButtonStyle}
@@ -253,7 +258,7 @@ export function NavDrawer({ open, onClose, userLoggedIn }: NavDrawer) {
         <Divider className={style.divider} />
 
         {/* Routes for logged users */}
-        {userLoggedIn && (
+        {isAuthenticated && (
           <ThemeProvider theme={theme}>
             {drawerOptions
               .filter((o) => o.loggedOnly)

@@ -28,6 +28,7 @@ import {
   LocationType,
   Person,
   Routes,
+  selectIsAuthenticated,
   selectOriginCity,
   selectPerson,
   selectSearchQuery,
@@ -72,17 +73,14 @@ export const Navbar: FunctionComponent<Navbar> = ({
     }
   }, [searchQuery]);
 
-  let userLoggedIn = variant === "auth" ? false : true;
-
   const [openDrawer, setOpenDrawer] = useState(false);
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const [openOriginCityDialog, setOpenOriginCityDialog] = useState(false);
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
 
   const originCity: IATALocation = useSelector(selectOriginCity);
   const person: Person | undefined = useSelector(selectPerson);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
 
   const is450OrLess = useMediaQuery("(max-width:450px)");
 
@@ -157,7 +155,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
               }
             >
               {/* Trip reservations */}
-              {userLoggedIn ? (
+              {isAuthenticated ? (
                 <>
                   <MenuItem
                     selected={route === Routes.TRIPS}
@@ -212,7 +210,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
                 </>
               )}
 
-              {userLoggedIn && person && (
+              {isAuthenticated && person && (
                 <IconButton onClick={onAvatarClick} style={{ marginLeft: "10px" }}>
                   <Avatar src={person.profilePic ? person.profilePic : avatar} />
                 </IconButton>
@@ -241,11 +239,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
         </Grid>
       </Toolbar>
 
-      <NavDrawer
-        userLoggedIn={userLoggedIn}
-        open={openDrawer}
-        onClose={() => setOpenDrawer(false)}
-      />
+      <NavDrawer open={openDrawer} onClose={() => setOpenDrawer(false)} />
 
       {/* Change origin city menu */}
       <div>

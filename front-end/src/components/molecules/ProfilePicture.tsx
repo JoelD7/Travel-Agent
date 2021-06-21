@@ -1,7 +1,14 @@
 import { faPencilAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Grid, IconButton, makeStyles, Theme } from "@material-ui/core";
-import React, { ChangeEvent, useRef, useState } from "react";
-import { avatar, deleteImageFromFirebase, profileRef } from "../../utils";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import {
+  avatar,
+  deleteImageFromFirebase,
+  profileRef,
+  Person,
+  selectPerson,
+} from "../../utils";
 import { IconTP } from "../atoms";
 import { SinglePictureUploader } from "../organisms";
 
@@ -39,8 +46,19 @@ export function ProfilePicture({ updateProfilePic }: ProfilePictureProps) {
   const [url, setUrl] = useState(avatar);
   const [images, setImages] = useState<File[]>([]);
   const hiddenInputFileRef = useRef<HTMLInputElement>(null);
+  const person: Person | undefined = useSelector(selectPerson);
 
   const style = stylesFunction();
+
+  useEffect(() => {
+    if (person && person.profilePic !== null) {
+      fetch(person.profilePic)
+        .then((res) => res.blob())
+        .then((blob) => {
+          setImages([new File([blob], "")]);
+        });
+    }
+  }, []);
 
   function onImageChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files && event.target.files[0]) {

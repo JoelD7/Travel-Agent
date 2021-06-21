@@ -109,9 +109,7 @@ export function TextInput({
   const styles = textStyles();
 
   function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    if (!Number.isFinite(Number(e.target.value)) || e.target.value === "") {
-      setText(e.target.value);
-    }
+    setText(e.target.value);
   }
 
   function validateInput() {

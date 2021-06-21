@@ -25,6 +25,7 @@ import {
   setFlightFromAutocomplete,
   setFlightTo,
   setFlightToAutocomplete,
+  selectOriginCity,
   setOriginCity,
   updateAirportPredictions,
   updateCityPredictions,
@@ -69,6 +70,7 @@ export function IataAutocomplete({
   let batchedActions: AnyAction[] = [];
 
   const searchQuery = useSelector(selectSearchQuery);
+  const originCity: IATALocation = useSelector(selectOriginCity);
 
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState("");
@@ -88,7 +90,7 @@ export function IataAutocomplete({
 
   function getAutocompleteDefault() {
     if (type === "city") {
-      return undefined;
+      return cityType === LocationType.ORIGIN ? originCity : undefined;
     } else {
       return flightDirection === "from" ? flightFromAutocomplete : flightToAutocomplete;
     }
