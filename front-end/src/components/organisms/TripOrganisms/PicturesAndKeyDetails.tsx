@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import React, { useState } from "react";
 import { Colors } from "../../../styles";
 import { Trip } from "../../../utils";
-import { CustomButton, SliderArrow, Text } from "../../atoms";
+import { CustomButton, Text } from "../../atoms";
 import { AlbumCard, NotCreatedMessage } from "../../molecules";
 import { TripPictureUploader } from "./TripPictureUploader";
 
@@ -91,7 +91,7 @@ export const PicturesAndKeyDetails = React.memo(function Component({
               {getAlbumsToShow().map((album, i) => (
                 <AlbumCard
                   key={album.name}
-                  id={album.idAlbum as string}
+                  uuid={album.uuid}
                   name={album.name}
                   cover={album.cover}
                   picturesQant={album.pictures.length}

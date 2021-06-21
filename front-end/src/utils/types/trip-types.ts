@@ -4,6 +4,7 @@ import { HotelReservation } from "./hotel-types";
 
 export interface Trip {
   idTrip: string;
+  uuid: string;
   name: string;
   countries: string[];
   photosQty: number;
@@ -19,6 +20,7 @@ export interface Trip {
 
 export interface TripEvent {
   idEvent?: number;
+  uuid: string;
   location: string;
   type: EventType.EventType;
   start: string;
@@ -33,6 +35,7 @@ export interface TripEvent {
 
 export interface TripAlbum {
   idAlbum: string | null;
+  uuid: string;
   name: string;
   cover: string;
   pictures: AlbumPicture[];

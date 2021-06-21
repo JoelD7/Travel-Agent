@@ -114,12 +114,12 @@ export function CarRsvDetails({ open, onClose }: CarRsvDetailsProps) {
 
     let tripEvent: TripEvent = getTripEventOfCarRental();
 
-    if (tripEvent.idEvent) {
+    if (tripEvent.uuid) {
       backend
-        .delete(`/trip-event/delete/${tripEvent.idEvent}`)
+        .delete(`/trip-event/delete/${tripEvent.uuid}`)
         .then((res) => {
           setOpenRemovedSnack(true);
-          deleteTripEventFromStore(tripEvent.idEvent);
+          deleteTripEventFromStore(tripEvent.uuid);
 
           deleteCarRsvFromStore();
 

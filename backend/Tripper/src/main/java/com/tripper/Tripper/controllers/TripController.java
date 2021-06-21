@@ -7,6 +7,7 @@ import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.exceptions.TripNotFoundException;
 import com.tripper.Tripper.models.Person;
 import com.tripper.Tripper.models.Trip;
+import java.util.UUID;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -33,9 +34,9 @@ public class TripController {
         this.personRepo = personRepo;
     }
 
-    @GetMapping("/{id}")
-    public EntityModel<Trip> getTrip(@PathVariable Long id) {
-        Trip trip = tripRepo.findById(id)
+    @GetMapping("/{uuid}")
+    public EntityModel<Trip> getTrip(@PathVariable String uuid) {
+        Trip trip = tripRepo.findByUuid(uuid)
                 .orElseThrow(() -> new TripNotFoundException("This Trip does not exists."));
         return assembler.toModel(trip);
     }
@@ -49,6 +50,7 @@ public class TripController {
     public ResponseEntity<Trip> createTrip(@RequestBody Trip trip, @RequestParam Long idPerson) {
         Person person = personRepo.findById(idPerson).orElseThrow(() -> new PersonNotFoundException(idPerson));
         trip.setPerson(person);
+        trip.setUuid(UUID.randomUUID().toString());
 
         Trip newTrip = tripRepo.save(trip);
         EntityModel<Trip> tripModel = assembler.toModel(newTrip);

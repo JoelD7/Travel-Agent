@@ -16,6 +16,7 @@ import com.tripper.Tripper.models.Restaurant;
 import com.tripper.Tripper.models.Trip;
 import com.tripper.Tripper.models.TripEvent;
 import com.tripper.Tripper.models.enums.TripEventType;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,6 +45,7 @@ public class TripEventServiceImpl implements TripEventService {
 
         newTripEvent.setTrip(trip);
         setEventTypeEntity(newTripEvent, eventDTO, person);
+        newTripEvent.setUuid(UUID.randomUUID().toString());
 
         return tripEventRepo.save(newTripEvent);
     }

@@ -94,8 +94,6 @@ export function FlightDetails({
 
   const dispatch = useDispatch();
 
-  const [idEvent, setIdEvent] = useState(0);
-
   const userTrips: Trip[] = useSelector(selectUserTrips);
 
   function getFlightPassengers() {
@@ -251,7 +249,6 @@ export function FlightDetails({
       .post(`/flight?idPerson=${idPerson}`, flightDTO)
       .then((res) => {
         setOpenSnack(true);
-        setIdEvent(res.data.idEvent);
         setBookedFlight(true);
       })
       .catch((err) => console.log(err));
@@ -278,9 +275,9 @@ export function FlightDetails({
   function deleteFlightFromTrip() {
     let tripEventOfFlight: TripEvent = getTripEventOfFlight();
 
-    if (tripEventOfFlight.idEvent) {
+    if (tripEventOfFlight.uuid) {
       backend
-        .delete(`/trip-event/delete/${tripEventOfFlight.idEvent}`)
+        .delete(`/trip-event/delete/${tripEventOfFlight.uuid}`)
         .then((res) => {
           //Trip without the deleted event in its itinerary.
           let updatedEventsTrip: Trip = responseTripToDomainTrip(res.data);

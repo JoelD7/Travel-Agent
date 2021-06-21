@@ -1,9 +1,9 @@
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { Dialog, DialogActions, DialogContent, Grid, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { BrowserRouter as Router, Route, Switch, useHistory } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { appStyles } from "./app-styles";
 import { Font } from "./assets";
 import {
@@ -14,6 +14,7 @@ import {
   ScrollToTop,
   Text,
 } from "./components";
+import { Parent } from "./Parent";
 import {
   CarRental,
   CreateTrip,
@@ -38,20 +39,11 @@ import {
 } from "./scenes";
 import { Colors } from "./styles";
 import {
-  AuthStatus,
-  backend,
-  fetchFavorites,
-  fetchUserTrips,
   IATALocation,
   LocationType,
-  setIsAuthenticated,
   Routes,
-  selectOriginCity,
-  selectUserTrips,
-  Trip,
-  useAppDispatch,
   selectIsAuthenticated,
-  selectIdPerson,
+  selectOriginCity,
 } from "./utils";
 
 export default function App() {
@@ -60,50 +52,14 @@ export default function App() {
   const [openOriginCityDialog, setOpenOriginCityDialog] = useState(false);
 
   const originCity: IATALocation = useSelector(selectOriginCity);
-  const userTrips: Trip[] = useSelector(selectUserTrips);
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
   const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
-  const idPerson: number = useSelector(selectIdPerson);
-  const dispatch = useAppDispatch();
-  const curPathname = window.location.pathname;
 
   useEffect(() => {
     if (!isOriginCityDefined()) {
       setOpenOriginCityDialog(true);
     }
-
-    if (isAuthStatusRequestable()) {
-      backend
-        .get(`/auth/status?idPerson=${idPerson}`)
-        .then((res) => {
-          let status = res.data;
-
-          if (status === AuthStatus.AUTHENTICATED) {
-            dispatch(setIsAuthenticated(true));
-            fetchTripsAndFavorites();
-          } else if (status === AuthStatus.NOT_AUTHENTICATED) {
-            window.location.pathname = Routes.LOGIN;
-          }
-        })
-        .catch((err) => {});
-    } else if (isAuthenticated) {
-      fetchTripsAndFavorites();
-    }
-  }, []);
-
-  function isAuthStatusRequestable(): boolean {
-    return (
-      !isAuthenticated && curPathname !== Routes.LOGIN && curPathname !== Routes.SIGNUP
-    );
-  }
-
-  function fetchTripsAndFavorites() {
-    if (userTrips.length === 0) {
-      dispatch(fetchUserTrips(null));
-    }
-
-    dispatch(fetchFavorites(null));
-  }
+  }, [isAuthenticated]);
 
   function isOriginCityDefined(): boolean {
     return localStorage.getItem(LocationType.ORIGIN) !== null;
@@ -121,39 +77,41 @@ export default function App() {
   return (
     <div>
       <Router basename="/Travel-Agent">
-        <ScrollToTop>
-          <Switch>
-            <Route exact path={Routes.HOME} component={Home} />
-            <Route exact path={Routes.SIGNUP} component={SignUp} />
-            <Route exact path={Routes.LOGIN} component={Login} />
-            <Route exact path={Routes.HOTELS} component={Hotels} />
-            <Route exact path={`${Routes.HOTELS}/:id`} component={HotelDetails} />
-            <Route exact path={Routes.FLIGHTS} component={Flights_Home} />
-            <Route exact path={Routes.FLIGHT_LIST} component={Flight_List} />
-            <Route exact path={Routes.RESTAURANTS} component={Restaurant_List} />
-            <Route
-              exact
-              path={`${Routes.RESTAURANTS}/:id`}
-              component={RestaurantDetails}
-            />
-            <Route exact path={Routes.THINGS_TODO} component={ThingsToDo} />
-            <Route
-              exact
-              path={`${Routes.THINGS_TODO}/:id`}
-              component={ThingsToDoDetails}
-            />
-            <Route exact path={Routes.TRIPS} component={Trips} />
-            <Route exact path={`${Routes.TRIPS}/:id`} component={TripDetails} />
-            <Route exact path={`${Routes.TRIPS}/:id/album/:id`} component={Album} />
-            <Route exact path={Routes.FAVORITE_PLACES} component={FavPlaces} />
-            <Route exact path={Routes.RESERVATIONS} component={Reservations} />
-            <Route exact path={Routes.ITINERARY} component={Itinerary} />
-            <Route exact path={Routes.CAR_RENTAL} component={CarRental} />
-            <Route exact path={Routes.CREATE_TRIP} component={CreateTrip} />
-            <Route exact path={Routes.PROFILE} component={Profile} />
-            <Route component={NotFound} />
-          </Switch>
-        </ScrollToTop>
+        <Parent>
+          <ScrollToTop>
+            <Switch>
+              <Route exact path={Routes.HOME} component={Home} />
+              <Route exact path={Routes.SIGNUP} component={SignUp} />
+              <Route exact path={Routes.LOGIN} component={Login} />
+              <Route exact path={Routes.HOTELS} component={Hotels} />
+              <Route exact path={`${Routes.HOTELS}/:id`} component={HotelDetails} />
+              <Route exact path={Routes.FLIGHTS} component={Flights_Home} />
+              <Route exact path={Routes.FLIGHT_LIST} component={Flight_List} />
+              <Route exact path={Routes.RESTAURANTS} component={Restaurant_List} />
+              <Route
+                exact
+                path={`${Routes.RESTAURANTS}/:id`}
+                component={RestaurantDetails}
+              />
+              <Route exact path={Routes.THINGS_TODO} component={ThingsToDo} />
+              <Route
+                exact
+                path={`${Routes.THINGS_TODO}/:id`}
+                component={ThingsToDoDetails}
+              />
+              <Route exact path={Routes.TRIPS} component={Trips} />
+              <Route exact path={`${Routes.TRIPS}/:uuid`} component={TripDetails} />
+              <Route exact path={`${Routes.TRIPS}/:uuid/album/:uuid`} component={Album} />
+              <Route exact path={Routes.FAVORITE_PLACES} component={FavPlaces} />
+              <Route exact path={Routes.RESERVATIONS} component={Reservations} />
+              <Route exact path={Routes.ITINERARY} component={Itinerary} />
+              <Route exact path={Routes.CAR_RENTAL} component={CarRental} />
+              <Route exact path={Routes.CREATE_TRIP} component={CreateTrip} />
+              <Route exact path={Routes.PROFILE} component={Profile} />
+              <Route component={NotFound} />
+            </Switch>
+          </ScrollToTop>
+        </Parent>
       </Router>
 
       {/* Dialog */}

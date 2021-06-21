@@ -95,7 +95,7 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
     {
       label: "Itinerary",
       icon: faCalendarAlt,
-      route: lastTrip ? `${Routes.ITINERARY}?trip=${lastTrip.idTrip}` : Routes.ITINERARY,
+      route: lastTrip ? `${Routes.ITINERARY}?trip=${lastTrip.uuid}` : Routes.ITINERARY,
       selected: page === Routes.ITINERARY,
       loggedOnly: true,
     },
@@ -167,7 +167,7 @@ export function DashDrawer({ hiddenBreakpoint = 960 }: DashDrawer) {
           label: "Itinerary",
           icon: faCalendarAlt,
           route: lastTrip
-            ? `${Routes.ITINERARY}?trip=${lastTrip.idTrip}`
+            ? `${Routes.ITINERARY}?trip=${lastTrip.uuid}`
             : Routes.ITINERARY,
           selected: page === Routes.ITINERARY,
           loggedOnly: true,

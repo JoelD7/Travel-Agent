@@ -8,13 +8,10 @@ interface RootSlice {
   exchangeRate: ExchangeRate;
   userCurrency: string;
   cityImage: CityImage;
-  isAuthenticated: boolean;
-  person?: Person;
 }
 
 const initialState: RootSlice = {
   idPerson: 0,
-  isAuthenticated: false,
   openRequiredFieldSnack: false,
   exchangeRate: JSON.parse(String(localStorage.getItem("rates"))),
   userCurrency: getUserCurrency(),
@@ -50,13 +47,6 @@ const rootSlice = createSlice({
     setCityImage(state, action: PayloadAction<CityImage>) {
       state.cityImage = action.payload;
     },
-    setIsAuthenticated(state, action: PayloadAction<boolean>) {
-      state.isAuthenticated = action.payload;
-    },
-
-    setPerson(state, action: PayloadAction<Person | undefined>) {
-      state.person = action.payload;
-    },
   },
 });
 
@@ -65,9 +55,7 @@ export const {
   setExchangeRate,
   setEndCurrency,
   setIdPerson,
-  setPerson,
   setCityImage,
-  setIsAuthenticated,
 } = rootSlice.actions;
 
 export default rootSlice.reducer;

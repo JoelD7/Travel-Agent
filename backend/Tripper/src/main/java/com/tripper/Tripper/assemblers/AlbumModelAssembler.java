@@ -16,14 +16,14 @@ public class AlbumModelAssembler implements RepresentationModelAssembler<Album, 
 
     @Override
     public EntityModel<Album> toModel(Album entity) {
-        Long idAlbum = entity.getIdAlbum();
-        Long idTrip = entity.getTrip().getIdTrip();
+        String albumUuid = entity.getUuid();
+        String tripUuid = entity.getTrip().getUuid();
 
         return EntityModel.of(entity,
-                linkTo(methodOn(AlbumController.class).getAlbum(idAlbum)).withSelfRel(),
-                linkTo(methodOn(AlbumController.class).getAllAlbums(idTrip)).withRel("albums"),
-                linkTo(methodOn(AlbumController.class).createAlbum(entity, entity.getTrip().getIdTrip())).withRel("createNew"),
-                linkTo(methodOn(AlbumController.class).deleteAlbum(idAlbum)).withRel("delete")
+                linkTo(methodOn(AlbumController.class).getAlbum(albumUuid)).withSelfRel(),
+                linkTo(methodOn(AlbumController.class).getAllAlbums(tripUuid)).withRel("albums"),
+                linkTo(methodOn(AlbumController.class).createAlbum(entity, entity.getTrip().getUuid())).withRel("createNew"),
+                linkTo(methodOn(AlbumController.class).deleteAlbum(albumUuid)).withRel("delete")
         );
     }
 

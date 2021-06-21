@@ -177,10 +177,10 @@ export function NavDrawer({ open, onClose }: NavDrawer) {
     setLoading(true);
     dispatch(setIsAuthenticated(false));
     dispatch(setPerson(undefined));
+    history.push(Routes.LOGIN);
 
     const res = await backend.get(`/auth/logout`);
     setLoading(false);
-    history.push(Routes.LOGIN);
   }
 
   function DrawerButtons() {

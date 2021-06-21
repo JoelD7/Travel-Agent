@@ -31,6 +31,7 @@ import {
   mapHotelDTOToDomainType,
   responseTripToDomainTrip,
   Routes,
+  selectIsAuthenticated,
   selectTripDetail,
   selectUserCurrency,
   setCarReservations,
@@ -56,13 +57,14 @@ export function TripDetails() {
   const [loading, setLoading] = useState(trip === undefined);
   const MUtheme = useTheme();
   //@ts-ignore
-  const { id } = useParams();
+  const { uuid } = useParams();
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   const VirtualizeSwipeableViews = virtualize(SwipeableViews);
   const userCurrency: string = useSelector(selectUserCurrency);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
   const mainRef = React.createRef<HTMLDivElement>();
 
   const tripCoverBackground: CSSProperties = {
@@ -75,15 +77,15 @@ export function TripDetails() {
   };
 
   useEffect(() => {
-    backend
-      .get(`/trip/${id}`)
-      .then((res) => {
-        dispatch(setTripDetail(responseTripToDomainTrip(res.data)));
-        setLoading(false);
-        //@ts-ignore
-        mainRef.current.scrollTo(0, 0);
-      })
-      .catch((err) => console.log(err));
+    if (isAuthenticated) {
+      backend
+        .get(`/trip/${uuid}`)
+        .then((res) => {
+          dispatch(setTripDetail(responseTripToDomainTrip(res.data)));
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
+    }
   }, []);
 
   useEffect(() => {

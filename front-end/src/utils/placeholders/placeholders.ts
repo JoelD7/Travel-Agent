@@ -2874,136 +2874,6 @@ export const hotelPhotos = [
   "/Travel-Agent/george6.jpg",
 ];
 
-const poiArray: POIType[] = [
-  {
-    id: "49c54c1bf964a520ed561fe3",
-    favorite: false,
-    name: "The Morgan Library & Museum",
-    attributes: {
-      groups: [],
-    },
-    bestPhoto: { height: 0, prefix: "", suffix: "", width: 0 },
-    contact: {},
-    hours: {
-      timeframes: [],
-    },
-    rating: 5,
-    url: "",
-
-    location: {
-      address: "225 Madison Ave",
-      crossStreet: "btwn E 36th & E 37th St",
-      lat: 40.74921,
-      lng: -73.98153,
-      distance: 363,
-      postalCode: "10016",
-      city: "New York",
-      state: "NY",
-      country: "United States",
-      formattedAddress: [
-        "225 Madison Ave (btwn E 36th & E 37th St)",
-        "New York, NY 10016",
-        "United States",
-      ],
-    },
-    categories: [
-      {
-        id: "4bf58dd8d48988d181941735",
-        name: "Museum",
-        pluralName: "Museums",
-        shortName: "Museum",
-        icon: {
-          prefix: "",
-          suffix: "",
-        },
-      },
-    ],
-  },
-  {
-    id: "4e8c7d54e5fa774802eb9515",
-    favorite: false,
-    name: "Hulu Theater",
-    attributes: {
-      groups: [],
-    },
-    bestPhoto: { height: 0, prefix: "", suffix: "", width: 0 },
-    contact: {},
-    hours: {
-      timeframes: [],
-    },
-    rating: 5,
-    url: "",
-
-    location: {
-      address: "4 Penn Plz",
-      lat: 40.750923181108604,
-      lng: -73.99407910561577,
-      distance: 760,
-      postalCode: "10121",
-      city: "New York",
-      state: "NY",
-      country: "United States",
-      formattedAddress: ["4 Penn Plz", "New York, NY 10121", "United States"],
-    },
-    categories: [
-      {
-        id: "4bf58dd8d48988d1e5931735",
-        name: "Music Venue",
-        pluralName: "Music Venues",
-        shortName: "Music Venue",
-        icon: {
-          prefix: "",
-          suffix: "",
-        },
-      },
-    ],
-  },
-  {
-    id: "53866567498ea4ed73cabb0c",
-    favorite: false,
-    name: "Dear Irving",
-    attributes: {
-      groups: [],
-    },
-    bestPhoto: { height: 0, prefix: "", suffix: "", width: 0 },
-    contact: {},
-    hours: {
-      timeframes: [],
-    },
-    rating: 5,
-    url: "",
-
-    location: {
-      address: "55 Irving Pl",
-      crossStreet: "at E 17th St",
-      lat: 40.736088656671825,
-      lng: -73.98732376809846,
-      distance: 1377,
-      postalCode: "10003",
-      city: "New York",
-      state: "NY",
-      country: "United States",
-      formattedAddress: [
-        "55 Irving Pl (at E 17th St)",
-        "New York, NY 10003",
-        "United States",
-      ],
-    },
-    categories: [
-      {
-        id: "4bf58dd8d48988d116941735",
-        name: "Bar",
-        pluralName: "Bars",
-        shortName: "Cocktail",
-        icon: {
-          prefix: "",
-          suffix: "",
-        },
-      },
-    ],
-  },
-];
-
 const poiRsv: RsvPOI = {
   id: "49c54c1bf964a520ed561fe3",
   name: "The Morgan Library & Museum",
@@ -3018,6 +2888,7 @@ const poiRsv: RsvPOI = {
 
 export const tripAlbumPlaceholder: TripAlbum = {
   idAlbum: "qec",
+  uuid: "qec",
   name: "Ballon day!",
   cover: "/Travel-Agent/globes.jpg",
   pictures: [
@@ -3110,6 +2981,7 @@ export const tripAlbumPlaceholder: TripAlbum = {
 
 export const tripPlaceholder: Trip = {
   idTrip: "498650",
+  uuid: "498650",
   name: "Journey through the alps",
   countries: ["Switzerland", "Austria", "France"],
   photosQty: 184,
@@ -3121,6 +2993,7 @@ export const tripPlaceholder: Trip = {
     tripAlbumPlaceholder,
     {
       idAlbum: "1223asa",
+      uuid: "1223asa",
       name: "Villages",
       cover: "/Travel-Agent/country.jpg",
       pictures: [
@@ -3134,6 +3007,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       idAlbum: "fsdgf",
+      uuid: "fsdgf",
       name: "Ballon day!",
       cover: "/Travel-Agent/globes.jpg",
       pictures: [
@@ -3147,6 +3021,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       idAlbum: "5a4sd",
+      uuid: "5a4sd",
       name: "Villages",
       cover: "/Travel-Agent/country.jpg",
       pictures: [
@@ -3163,7 +3038,7 @@ export const tripPlaceholder: Trip = {
   endDate: new Date(2021, 4, 23),
   itinerary: [
     {
-      idEvent: 12,
+      uuid: "12",
       type: EventTypes.FLIGHT,
       start: new Date(
         flightPlaceholder.itineraries[0].segments[0].departure.at
@@ -3177,7 +3052,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       type: EventTypes.FLIGHT,
-      idEvent: 11,
+      uuid: "11",
       start: new Date(
         flightPlaceholder.itineraries[1].segments[0].departure.at
       ).toISOString(),
@@ -3189,7 +3064,7 @@ export const tripPlaceholder: Trip = {
       includesTime: true,
     },
     {
-      idEvent: 46,
+      uuid: "46",
       type: EventTypes.HOTEL,
       start: new Date(2021, 4, 13, 14, 35).toISOString(),
       end: new Date(2021, 4, 17, 11, 35).toISOString(),
@@ -3198,7 +3073,7 @@ export const tripPlaceholder: Trip = {
       includesTime: true,
     },
     {
-      idEvent: 78,
+      uuid: "78",
       type: EventTypes.POI,
       start: new Date(2021, 4, 16, 16, 0).toISOString(),
       end: new Date(2021, 4, 16, 17, 0).toISOString(),
@@ -3208,7 +3083,7 @@ export const tripPlaceholder: Trip = {
     },
     {
       type: EventTypes.POI,
-      idEvent: 44,
+      uuid: "44",
       start: new Date(2021, 4, 19, 12, 0).toISOString(),
       end: new Date(2021, 4, 19, 14, 0).toISOString(),
       poi: poiRsv,
@@ -3216,7 +3091,7 @@ export const tripPlaceholder: Trip = {
       includesTime: true,
     },
     {
-      idEvent: 18,
+      uuid: "18",
       type: EventTypes.POI,
       start: new Date(2021, 4, 21, 0, 0).toISOString(),
       end: new Date(2021, 4, 21, 3, 0).toISOString(),
@@ -3230,6 +3105,7 @@ export const tripPlaceholder: Trip = {
 export const tripsPlaceholder: Trip[] = [
   {
     idTrip: "498650",
+    uuid: "498650",
     name: "Journey through the alps",
     countries: ["Switzerland", "Austria", "France"],
     photosQty: 184,
@@ -3242,6 +3118,7 @@ export const tripsPlaceholder: Trip[] = [
     albums: [
       {
         idAlbum: "",
+        uuid: "",
         name: "Ballon day!",
         cover: "/Travel-Agent/globes.jpg",
         pictures: [
@@ -3291,6 +3168,7 @@ export const tripsPlaceholder: Trip[] = [
       },
       {
         idAlbum: "",
+        uuid: "",
         name: "Villages",
         cover: "/Travel-Agent/country.jpg",
         pictures: [
@@ -3342,11 +3220,13 @@ export const tripsPlaceholder: Trip[] = [
   },
   {
     idTrip: "7008965",
+    uuid: "7008965",
     name: "Meso-american Tour",
     budget: 2500,
     albums: [
       {
         idAlbum: "",
+        uuid: "",
         name: "Ballon day!",
         cover: "/Travel-Agent/globes.jpg",
         pictures: [
@@ -3396,6 +3276,7 @@ export const tripsPlaceholder: Trip[] = [
       },
       {
         idAlbum: "",
+        uuid: "",
         name: "Villages",
         cover: "/Travel-Agent/country.jpg",
         pictures: [
@@ -3454,6 +3335,7 @@ export const tripsPlaceholder: Trip[] = [
   },
   {
     idTrip: "1235",
+    uuid: "1235",
     name: "Indonesia in a month",
     countries: ["Indonesia"],
     budget: 2500,
@@ -3464,6 +3346,7 @@ export const tripsPlaceholder: Trip[] = [
     albums: [
       {
         idAlbum: "",
+        uuid: "",
         name: "Ballon day!",
         cover: "/Travel-Agent/globes.jpg",
         pictures: [
@@ -3513,6 +3396,7 @@ export const tripsPlaceholder: Trip[] = [
       },
       {
         idAlbum: "",
+        uuid: "",
         name: "Villages",
         cover: "/Travel-Agent/country.jpg",
         pictures: [
@@ -3567,7 +3451,7 @@ export const tripsPlaceholder: Trip[] = [
 ];
 
 export const tripEventPlaceholder: TripEvent = {
-  idEvent: 12,
+  uuid: "12",
   type: EventTypes.FLIGHT,
   start: new Date(
     flightPlaceholder.itineraries[0].segments[0].departure.at

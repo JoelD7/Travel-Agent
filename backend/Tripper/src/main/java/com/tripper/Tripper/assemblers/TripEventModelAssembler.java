@@ -16,13 +16,13 @@ public class TripEventModelAssembler implements RepresentationModelAssembler<Tri
 
     @Override
     public EntityModel<TripEvent> toModel(TripEvent entity) {
-        Long idTrip = entity.getTrip().getIdTrip();
+        String tripUuid = entity.getTrip().getUuid();
 
         return EntityModel.of(entity,
-                linkTo(methodOn(TripEventController.class).getTripEvent(entity.getIdEvent())).withSelfRel(),
-                linkTo(methodOn(TripEventController.class).getAllOfTrip(idTrip)).withRel("eventsOfTrip"),
-                linkTo(methodOn(TripEventController.class).addEventToTrip(entity, idTrip)).withRel("addEvent"),
-                linkTo(methodOn(TripEventController.class).deleteEvent(entity.getIdEvent())).withRel("deleteEvent")
+                linkTo(methodOn(TripEventController.class).getTripEvent(entity.getUuid())).withSelfRel(),
+                linkTo(methodOn(TripEventController.class).getAllOfTrip(tripUuid)).withRel("eventsOfTrip"),
+                linkTo(methodOn(TripEventController.class).addEventToTrip(entity, tripUuid)).withRel("addEvent"),
+                linkTo(methodOn(TripEventController.class).deleteEvent(entity.getUuid())).withRel("deleteEvent")
         );
     }
 
@@ -34,7 +34,7 @@ public class TripEventModelAssembler implements RepresentationModelAssembler<Tri
                         .collect(Collectors.toList());
 
         return CollectionModel.of(entityModels,
-                linkTo(methodOn(TripEventController.class).getAllOfTrip(1L)).withSelfRel()
+                linkTo(methodOn(TripEventController.class).getAllOfTrip(null)).withSelfRel()
         );
     }
 

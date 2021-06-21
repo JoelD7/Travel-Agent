@@ -8,6 +8,7 @@ import flightSlice from "./flight-slice";
 import rootSlice from "./root-slice";
 import restaurantSlice from "./restaurant-slice";
 import carSlice from "./car-slice";
+import authSlice from "./auth-slice";
 import tripSlice from "./trip-slice";
 import { useDispatch } from "react-redux";
 import { enableBatching } from "redux-batched-actions";
@@ -24,6 +25,7 @@ export const store = configureStore({
     carSlice: enableBatching(carSlice),
     rootSlice: enableBatching(rootSlice),
     tripSlice: enableBatching(tripSlice),
+    authSlice: enableBatching(authSlice),
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
@@ -44,11 +46,6 @@ export const selectUserCurrency = (state: RootState) => state.rootSlice.userCurr
 export const selectCityImage = (state: RootState) => state.rootSlice.cityImage;
 
 export const selectIdPerson = (state: RootState) => state.rootSlice.idPerson;
-
-export const selectPerson = (state: RootState) => state.rootSlice.person;
-
-export const selectIsAuthenticated = (state: RootState) =>
-  state.rootSlice.isAuthenticated;
 
 //#endregion
 
@@ -171,6 +168,15 @@ export const selectCarSearchBrands = (state: RootState) => state.carSlice.brands
 export const selectCarSearchFeatures = (state: RootState) => state.carSlice.features;
 export const selectCarSearchTransmission = (state: RootState) =>
   state.carSlice.transmission;
+//#endregion
+
+//#region
+export const selectPerson = (state: RootState) => state.authSlice.person;
+
+export const selectIsAuthenticated = (state: RootState) =>
+  state.authSlice.isAuthenticated;
+
+export const selectLoginReferrer = (state: RootState) => state.authSlice.loginReferrer;
 //#endregion
 
 export default store;

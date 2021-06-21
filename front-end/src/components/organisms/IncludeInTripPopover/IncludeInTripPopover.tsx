@@ -305,7 +305,7 @@ export function IncludeInTripPopover({
     let selectedTrip: Trip = userTrips.filter((trip) => trip.name === tripOption)[0];
 
     let res = await backend.post(
-      `/trip-event/add-new?idTrip=${selectedTrip.idTrip}`,
+      `/trip-event/add-new?tripUuid=${selectedTrip.uuid}`,
       tripEventDTO
     );
 

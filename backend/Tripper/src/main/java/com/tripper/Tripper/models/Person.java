@@ -26,6 +26,7 @@ public class Person implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idPerson")
     private Long idPerson;
+    private String uuid;
 
     private String firstName;
     private String lastName;

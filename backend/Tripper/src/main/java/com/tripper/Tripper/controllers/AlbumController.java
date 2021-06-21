@@ -7,6 +7,7 @@ import com.tripper.Tripper.exceptions.AlbumNotFoundException;
 import com.tripper.Tripper.exceptions.TripNotFoundException;
 import com.tripper.Tripper.models.Album;
 import com.tripper.Tripper.models.Trip;
+import java.util.UUID;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -34,21 +35,21 @@ public class AlbumController {
         this.assembler = assembler;
     }
 
-    @GetMapping("/{idAlbum}")
-    public EntityModel<Album> getAlbum(@PathVariable Long idAlbum) {
-        Album album = albumRepo.findById(idAlbum)
-                .orElseThrow(() -> new AlbumNotFoundException(idAlbum));
+    @GetMapping("/{albumUuid}")
+    public EntityModel<Album> getAlbum(@PathVariable String albumUuid) {
+        Album album = albumRepo.findByUuid(albumUuid)
+                .orElseThrow(() -> new AlbumNotFoundException(albumUuid));
 
         return assembler.toModel(album);
     }
 
-    public CollectionModel<EntityModel<Album>> getAllAlbums(@RequestParam Long idTrip) {
-        return assembler.toCollectionModel(albumRepo.findByTrip(idTrip));
+    public CollectionModel<EntityModel<Album>> getAllAlbums(@RequestParam String tripUuid) {
+        return assembler.toCollectionModel(albumRepo.findByTrip(tripUuid));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createAlbum(@RequestBody Album dto, @RequestParam Long idTrip) {
-        Trip trip = tripRepo.findById(idTrip)
+    public ResponseEntity<?> createAlbum(@RequestBody Album dto, @RequestParam String tripUuid) {
+        Trip trip = tripRepo.findByUuid(tripUuid)
                 .orElseThrow(() -> new TripNotFoundException("This Trip does not exists."));
 
         Album newAlbum = prepareAlbumInstance(dto, trip);
@@ -60,26 +61,30 @@ public class AlbumController {
     }
 
     private Album prepareAlbumInstance(Album dto, Trip trip) {
-        Long idAlbum = dto.getIdAlbum();
+        String albumUuid = dto.getUuid();
         Album newAlbum;
 
-        if (idAlbum == null) {
+        if (albumUuid == null) {
             newAlbum = dto;
             newAlbum.setAlbumPictures(dto.getPictures());
         } else {
-            newAlbum = albumRepo.findById(idAlbum)
-                    .orElseThrow(() -> new AlbumNotFoundException(idAlbum));
+            newAlbum = albumRepo.findByUuid(albumUuid)
+                    .orElseThrow(() -> new AlbumNotFoundException(albumUuid));
             newAlbum.getPictures().addAll(dto.getPictures());
         }
 
         newAlbum.setTrip(trip);
 
+        newAlbum.setUuid(UUID.randomUUID().toString());
         return newAlbum;
     }
 
-    @DeleteMapping("/{idAlbum}")
-    public ResponseEntity<?> deleteAlbum(@PathVariable Long idAlbum) {
-        albumRepo.deleteById(idAlbum);
+    @DeleteMapping("/{albumUuid}")
+    public ResponseEntity<?> deleteAlbum(@PathVariable String albumUuid) {
+        Album album = albumRepo.findByUuid(albumUuid)
+                .orElseThrow(() -> new AlbumNotFoundException(albumUuid));
+
+        albumRepo.delete(album);
 
         return ResponseEntity.noContent().build();
     }

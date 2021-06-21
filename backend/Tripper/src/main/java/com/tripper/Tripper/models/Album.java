@@ -1,6 +1,7 @@
 package com.tripper.Tripper.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,9 @@ public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idAlbum")
+    @JsonIgnore
     private Long idAlbum;
+    private String uuid;
 
     private String name;
     private String cover;

@@ -222,13 +222,13 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
   function deleteHotelRsvFromTrip() {
     let tripEventOfHotel: TripEvent = getTripEventOfHotel();
 
-    if (tripEventOfHotel.idEvent) {
+    if (tripEventOfHotel.uuid) {
       backend
-        .delete(`/trip-event/delete/${tripEventOfHotel.idEvent}`)
+        .delete(`/trip-event/delete/${tripEventOfHotel.uuid}`)
         .then((res) => {
           setOpenRsvDeletedSnack(true);
 
-          deleteTripEventFromStore(tripEventOfHotel.idEvent);
+          deleteTripEventFromStore(tripEventOfHotel.uuid);
 
           setTimeout(() => {
             window.location.reload();

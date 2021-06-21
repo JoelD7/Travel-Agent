@@ -2,9 +2,11 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, InputAdornment } from "@material-ui/core";
+import { AnyAction } from "@reduxjs/toolkit";
 import React, { MouseEvent, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import { batchActions } from "redux-batched-actions";
 import { loginImage, logoType } from "../../assets";
 import { CustomButton, Footer } from "../../components";
 import { TextInput } from "../../components/atoms/TextInput";
@@ -12,9 +14,14 @@ import { Colors, signStyles } from "../../styles";
 import {
   backend,
   mapPersonToDomainType,
+  Person,
   Routes,
+  selectLoginReferrer,
+  setFavorites,
   setIsAuthenticated,
+  setLoginReferrer,
   setPerson,
+  setUserTrips,
 } from "../../utils";
 
 interface LoginType {
@@ -36,14 +43,18 @@ export function Login() {
   const [visibility, setVisibility] = useState<VisibilityProps>({
     password: false,
   });
-
   const [credentials, setCredentials] = useState<LoginType>({
     email: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
+
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const loginReferrer: string = useSelector(selectLoginReferrer);
+
+  let batchedActions: AnyAction[] = [];
 
   async function login(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     setLoading(true);
@@ -52,10 +63,22 @@ export function Login() {
       `email=${credentials.email}&password=${credentials.password}&rememberMe=true`
     );
 
-    dispatch(setIsAuthenticated(true));
-    dispatch(setPerson(mapPersonToDomainType(res.data)));
+    batchedActions.push(setIsAuthenticated(true));
+
+    const loggedUser: Person = mapPersonToDomainType(res.data);
+    batchedActions.push(setPerson(loggedUser));
+    batchedActions.push(setFavorites(loggedUser.favoritePlaces));
+    batchedActions.push(setUserTrips(loggedUser.trips));
+    batchedActions.push(setLoginReferrer(""));
+    dispatch(batchActions(batchedActions));
+
     setLoading(false);
-    history.push(Routes.HOME);
+
+    if (loginReferrer !== Routes.LOGIN && loginReferrer !== "") {
+      history.push(loginReferrer);
+    } else {
+      history.push(Routes.HOME);
+    }
   }
 
   function googleLogin(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}

@@ -250,7 +250,7 @@ export const TripPictureUploader = React.memo(function Component({
     dispatch(setAlbumPictures([]));
 
     let albumDTO: TripAlbum = getAlbumDTO();
-    let response = await backend.post(`/album/create?idTrip=${trip.idTrip}`, albumDTO);
+    let response = await backend.post(`/album/create?tripUuid=${trip.uuid}`, albumDTO);
     setLoadingButton(false);
     setOpenSnack(true);
     addAlbumToStore(response.data);
@@ -265,6 +265,7 @@ export const TripPictureUploader = React.memo(function Component({
       ? { ...selectedAlbum, pictures: albumPictures }
       : {
           idAlbum: null,
+          uuid: "",
           name: newAlbumName,
           cover: albumCoverUrl,
           pictures: albumPictures,

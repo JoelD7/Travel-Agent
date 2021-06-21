@@ -7,7 +7,7 @@ import {
   Grid,
   Grow,
 } from "@material-ui/core";
-import { format } from "date-fns";
+import { compareDesc, format } from "date-fns";
 import React, { CSSProperties, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useSelector } from "react-redux";
@@ -28,11 +28,10 @@ import {
   fetchUserTrips,
   getLinkStyle,
   Routes,
-  selectLastTrip,
+  selectIsAuthenticated,
   selectUserTrips,
   Trip,
   useAppDispatch,
-  selectIsAuthenticated,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -42,7 +41,7 @@ export function Trips() {
   const [trips, setTrips] = useState<Trip[]>();
   const [loading, setLoading] = useState(true);
 
-  const lastTrip: Trip | undefined = useSelector(selectLastTrip);
+  const [lastTrip, setLastTrip] = useState<Trip>();
 
   const match = useRouteMatch();
   const history = useHistory();
@@ -95,15 +94,23 @@ export function Trips() {
         dispatch(fetchUserTrips(null)).then((res) => {
           setTrips(res.payload as Trip[]);
           setLoading(false);
+          setUpLastTrip(res.payload as Trip[]);
         });
       } else {
         setLoading(false);
         setTrips([...userTrips]);
+        setUpLastTrip([...userTrips]);
       }
     } else {
       setTrips([]);
     }
   }, []);
+
+  function setUpLastTrip(trips: Trip[]) {
+    let lastTrip: Trip = trips.sort((a, b) => compareDesc(a.endDate, b.endDate))[0];
+
+    setLastTrip(lastTrip);
+  }
 
   function TripCards() {
     if (trips) {
@@ -116,7 +123,7 @@ export function Trips() {
         >
           <Card className={style.tripCard}>
             <CardActionArea>
-              <Link style={getLinkStyle()} to={`${match.url}/${trip.idTrip}`}>
+              <Link style={getLinkStyle()} to={`${match.url}/${trip.uuid}`}>
                 <CardMedia component="img" height="150" src={`${trip.coverPhoto}`} />
 
                 <CardContent>

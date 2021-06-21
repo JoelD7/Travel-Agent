@@ -5,7 +5,7 @@ import { Colors, Shadow } from "../../../styles";
 import { CustomButton, Text } from "../../atoms";
 
 interface AlbumCard {
-  id: string;
+  uuid: string;
   cover: string;
   name: string;
   picturesQant: number;
@@ -13,7 +13,7 @@ interface AlbumCard {
 
 export const AlbumCard = React.memo(function PhotoAlbumCard({
   cover,
-  id,
+  uuid,
   name,
   picturesQant,
 }: AlbumCard) {
@@ -66,7 +66,7 @@ export const AlbumCard = React.memo(function PhotoAlbumCard({
   const match = useRouteMatch();
 
   function onAlbumClick() {
-    history.push(`${match.url}/album/${id}`);
+    history.push(`${match.url}/album/${uuid}`);
   }
 
   return (

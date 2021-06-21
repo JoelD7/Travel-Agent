@@ -18,7 +18,7 @@ public class TripModelAssembler implements RepresentationModelAssembler<Trip, En
     public EntityModel<Trip> toModel(Trip trip) {
         Long idPerson = trip.getPerson().getIdPerson();
         return EntityModel.of(trip,
-                linkTo(methodOn(TripController.class).getTrip(trip.getIdTrip())).withSelfRel(),
+                linkTo(methodOn(TripController.class).getTrip(trip.getUuid())).withSelfRel(),
                 linkTo(methodOn(TripController.class).getAllTrips(idPerson)).withRel("trips"));
     }
 

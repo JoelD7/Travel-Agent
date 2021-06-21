@@ -12,6 +12,7 @@ import { mapFlightToDomainType } from "./functions";
 export function responseTripToDomainTrip(resTrip: any) {
   return {
     idTrip: resTrip.idTrip,
+    uuid: resTrip.uuid,
     name: resTrip.name,
     countries: resTrip.countries.split(", "),
     photosQty: 0,
@@ -39,14 +40,14 @@ function responseItineraryToDomainItinerary(itinerary: any[]) {
   });
 }
 
-export function deleteTripEventFromStore(idEvent: number | undefined) {
-  if (idEvent) {
+export function deleteTripEventFromStore(uuid: string | undefined) {
+  if (uuid) {
     const userTrips: Trip[] = store.getState().tripSlice.userTrips;
 
     const newUserTrips: Trip[] = userTrips.map((trip) => {
       if (trip.itinerary) {
         const newItinerary: TripEvent[] = trip.itinerary.filter(
-          (event) => event.idEvent !== idEvent
+          (event) => event.uuid !== uuid
         );
         return { ...trip, itinerary: newItinerary };
       }

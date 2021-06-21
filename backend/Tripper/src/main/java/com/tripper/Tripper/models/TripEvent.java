@@ -1,6 +1,7 @@
 package com.tripper.Tripper.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tripper.Tripper.models.enums.TripEventType;
 import java.time.LocalDate;
@@ -28,7 +29,9 @@ public class TripEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idEvent")
+    @JsonIgnore
     private Long idEvent;
+    private String uuid;
 
     private String location;
 

@@ -31,6 +31,7 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
+  Favorite,
   FavoriteTypes,
   fetchFavorites,
   getHotelImages,
@@ -42,8 +43,7 @@ import {
   proxyUrl,
   Routes,
   selectFavorites,
-  selectIdPerson,
-  Favorite,
+  selectIsAuthenticated,
   useAppDispatch,
 } from "../../utils";
 import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
@@ -80,35 +80,42 @@ export function FavPlaces() {
   const dispatch = useAppDispatch();
 
   const favorites: Favorite[] = useSelector(selectFavorites);
-  const idPerson = useSelector(selectIdPerson);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
 
   useEffect(() => {
+    if (favorites.length === 0 && isAuthenticated) {
+      dispatch(fetchFavorites(null)).then((res) => {
+        let favoritePlaces: Favorite[] = res.payload as Favorite[];
+        setFavoritePlacesPerType(favoritePlaces);
+        setLoading(false);
+      });
+    } else {
+      setFavoritePlacesPerType(favorites);
+      setLoading(false);
+    }
+  }, []);
+
+  function setFavoritePlacesPerType(favoritePlaces: Favorite[]) {
     let restaurantsBuffer: RsvRestaurant[] = [];
     let poisBuffer: RsvPOI[] = [];
     let hotelCodes: string[] = [];
 
-    dispatch(fetchFavorites(null)).then((res) => {
-      let favoritePlaces: Favorite[] = res.payload as Favorite[];
-
-      favoritePlaces.forEach((fav) => {
-        if (fav.type === FavoriteTypes.HOTEL) {
-          hotelCodes.push(fav.code);
-        } else if (fav.type === FavoriteTypes.POI && fav.poi !== null) {
-          poisBuffer.push(fav.poi);
-        } else if (fav.type === FavoriteTypes.RESTAURANT && fav.restaurant !== null) {
-          restaurantsBuffer.push(fav.restaurant);
-        }
-      });
-
-      setPois(poisBuffer);
-      setRestaurants(restaurantsBuffer);
-      buildFilterOptions(restaurantsBuffer, poisBuffer, hotelCodes);
-
-      fetchFavHotels(hotelCodes);
-
-      setLoading(false);
+    favoritePlaces.forEach((fav) => {
+      if (fav.type === FavoriteTypes.HOTEL) {
+        hotelCodes.push(fav.code);
+      } else if (fav.type === FavoriteTypes.POI && fav.poi !== null) {
+        poisBuffer.push(fav.poi);
+      } else if (fav.type === FavoriteTypes.RESTAURANT && fav.restaurant !== null) {
+        restaurantsBuffer.push(fav.restaurant);
+      }
     });
-  }, []);
+
+    setPois(poisBuffer);
+    setRestaurants(restaurantsBuffer);
+    buildFilterOptions(restaurantsBuffer, poisBuffer, hotelCodes);
+
+    fetchFavHotels(hotelCodes);
+  }
 
   function fetchFavHotels(hotelCodes: string[]) {
     Axios.get(proxyUrl + HotelBedAPI.hotelContentURL, {

@@ -2,8 +2,8 @@ package com.tripper.Tripper.exceptions;
 
 public class TripEventNotFoundException extends RuntimeException {
 
-    public TripEventNotFoundException(Long id) {
-        super("The event with id " + id + " does not exists.");
+    public TripEventNotFoundException(String uuid) {
+        super("The event with uuid " + uuid + " does not exists.");
     }
 
 }

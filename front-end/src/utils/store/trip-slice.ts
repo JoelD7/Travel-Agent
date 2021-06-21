@@ -33,8 +33,6 @@ export const fetchUserTrips = createAsyncThunk<Trip[], null, ThunkAPIType>(
           responseTripToDomainTrip(resTrip)
         );
 
-        thunkAPI.dispatch(setLastTrip(tripsBuffer as Trip[]));
-
         return tripsBuffer;
       })
       .catch((error) => {});
@@ -71,22 +69,6 @@ const tripSlice = createSlice({
       state.tripDetail = action.payload;
     },
 
-    setLastTrip: {
-      reducer(state, action: PayloadAction<Trip>) {
-        state.lastTrip = action.payload;
-      },
-
-      prepare(userTrips: Trip[]) {
-        let lastTrip: Trip = [...userTrips].sort((a, b) =>
-          compareDesc(a.endDate, b.endDate)
-        )[0];
-
-        return {
-          payload: lastTrip,
-        };
-      },
-    },
-
     setFavorites(state, action: PayloadAction<Favorite[]>) {
       state.favPlaces = action.payload;
     },
@@ -111,12 +93,7 @@ const tripSlice = createSlice({
   },
 });
 
-export const {
-  setTripDetail,
-  setLastTrip,
-  setUserTrips,
-  setAlbumPictures,
-  setFavorites,
-} = tripSlice.actions;
+export const { setTripDetail, setUserTrips, setAlbumPictures, setFavorites } =
+  tripSlice.actions;
 
 export default tripSlice.reducer;

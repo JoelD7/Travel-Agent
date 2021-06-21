@@ -8,4 +8,5 @@ export * from "./calendar-slice";
 export * from "./car-slice";
 export * from "./signUpSlice";
 export * from "./trip-slice";
+export * from "./auth-slice";
 export * from "./store";

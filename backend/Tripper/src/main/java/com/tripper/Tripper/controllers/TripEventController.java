@@ -38,22 +38,22 @@ public class TripEventController {
         this.service = service;
     }
 
-    @GetMapping("/{idTripEvent}")
-    public EntityModel<TripEvent> getTripEvent(@PathVariable Long idTripEvent) {
-        TripEvent event = tripEventRepo.findById(idTripEvent)
-                .orElseThrow(() -> new TripEventNotFoundException(idTripEvent));
+    @GetMapping("/{eventUuid}")
+    public EntityModel<TripEvent> getTripEvent(@PathVariable String eventUuid) {
+        TripEvent event = tripEventRepo.findByUuid(eventUuid)
+                .orElseThrow(() -> new TripEventNotFoundException(eventUuid));
 
         return assembler.toModel(event);
     }
 
     @GetMapping("/all")
-    public CollectionModel<EntityModel<TripEvent>> getAllOfTrip(@RequestParam Long idTrip) {
-        return assembler.toCollectionModel(tripEventRepo.getAllEventsOfTrip(idTrip));
+    public CollectionModel<EntityModel<TripEvent>> getAllOfTrip(@RequestParam String tripUuid) {
+        return assembler.toCollectionModel(tripEventRepo.getAllEventsOfTrip(tripUuid));
     }
 
     @PostMapping("/add-new")
-    public ResponseEntity<?> addEventToTrip(@RequestBody TripEvent event, @RequestParam Long idTrip) {
-        Trip trip = tripRepo.findById(idTrip)
+    public ResponseEntity<?> addEventToTrip(@RequestBody TripEvent event, @RequestParam String tripUuid) {
+        Trip trip = tripRepo.findByUuid(tripUuid)
                 .orElseThrow(() -> new TripNotFoundException("This Trip does not exists."));
 
         TripEvent newTripEvent = service.addEventToTrip(event, trip);
@@ -64,13 +64,13 @@ public class TripEventController {
                 .body(newTripEvent);
     }
 
-    @DeleteMapping("/delete/{idEvent}")
-    public ResponseEntity<?> deleteEvent(@PathVariable Long idEvent) {
-        TripEvent tripEvent = tripEventRepo.findById(idEvent)
-                .orElseThrow(() -> new TripEventNotFoundException(idEvent));
+    @DeleteMapping("/delete/{eventUuid}")
+    public ResponseEntity<?> deleteEvent(@PathVariable String eventUuid) {
+        TripEvent tripEvent = tripEventRepo.findByUuid(eventUuid)
+                .orElseThrow(() -> new TripEventNotFoundException(eventUuid));
 
         Trip trip = tripEvent.getTrip();
-        tripEventRepo.deleteById(idEvent);
+        tripEventRepo.delete(tripEvent);
 
         return ResponseEntity.ok(trip);
     }

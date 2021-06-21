@@ -1,4 +1,4 @@
-import { faTrash, faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
+import { faExclamationTriangle, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Backdrop,
@@ -16,30 +16,30 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { CSSProperties } from "@material-ui/styles";
-import { compareAsc, format, parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useDispatch } from "react-redux";
-import { useHistory, useParams, useRouteMatch } from "react-router";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
+import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import { Font } from "../../../assets";
 import { Colors, Shadow } from "../../../styles";
 import {
-  TripAlbum,
-  tripAlbumPlaceholder,
-  firebase,
   AlbumPicture,
   backend,
-  Routes,
+  firebase,
+  selectIsAuthenticated,
+  TripAlbum,
   userTripRef,
 } from "../../../utils";
-import { CustomButton, IconTP, ProgressCircle, SliderArrow, Text } from "../../atoms";
+import { CustomButton, ProgressCircle, SliderArrow, Text } from "../../atoms";
 import { Navbar } from "../../molecules";
 import { DashDrawer } from "../DashDrawer/DashDrawer";
 import { Footer } from "../Footer/Footer";
 
 interface AlbumRouteParams {
-  id?: string;
+  uuid?: string;
 }
 
 interface AlbumProps {}
@@ -200,7 +200,7 @@ export function Album({}: AlbumProps) {
 
   const style = stylesFunction();
 
-  const { id } = useParams<AlbumRouteParams>();
+  const { uuid } = useParams<AlbumRouteParams>();
   const [album, setAlbum] = useState<TripAlbum>();
 
   let pictureGroup: PictureGroup = {};
@@ -210,6 +210,10 @@ export function Album({}: AlbumProps) {
   const [loading, setLoading] = useState(true);
   const [openDeleteSnack, setOpenDeleteSnack] = useState(false);
   const [initialImageSlide, setInitialImageSlide] = useState(0);
+
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
+
+  const history = useHistory();
 
   const sliderArrowStyles: CSSProperties = {
     backgroundColor: "#00000075",
@@ -230,11 +234,10 @@ export function Album({}: AlbumProps) {
     initialSlide: initialImageSlide,
   };
 
-  const history = useHistory();
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    fetchAlbum();
+    if (isAuthenticated) {
+      fetchAlbum();
+    }
   }, []);
 
   useEffect(() => {
@@ -242,7 +245,7 @@ export function Album({}: AlbumProps) {
   }, [album]);
 
   async function fetchAlbum() {
-    let response = await backend.get(`/album/${id}`);
+    let response = await backend.get(`/album/${uuid}`);
     setAlbum(response.data);
     setLoading(false);
   }
@@ -289,7 +292,7 @@ export function Album({}: AlbumProps) {
   }
 
   async function deleteAlbum() {
-    let response = await backend.delete(`/album/${id}`);
+    let response = await backend.delete(`/album/${uuid}`);
     setOpenAlbumDeleteConfirm(false);
     setOpenDeleteSnack(true);
     deleteFirebaseAlbumPictures();
@@ -299,6 +302,8 @@ export function Album({}: AlbumProps) {
 
     setTimeout(() => {
       window.location.href = tripDetailRoute;
+      //Dont use history or this will happen:
+      //http://localhost:3000/Travel-Agent/trips/f6f6c797-d2a4-11eb-bb75-54e1ad512f86/album/http://localhost:3000/Travel-Agent/trips/f6f6c797-d2a4-11eb-bb75-54e1ad512f86
     }, 1000);
   }
 
@@ -317,11 +322,6 @@ export function Album({}: AlbumProps) {
           });
       });
     }
-  }
-
-  function removeAlbumFromStore(album: TripAlbum) {
-    // let updatedAlbums: TripAlbum[] = [...trip.albums, album];
-    // dispatch(setTripDetail({ ...trip, albums: updatedAlbums }));
   }
 
   return (

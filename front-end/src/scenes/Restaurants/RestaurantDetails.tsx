@@ -95,12 +95,12 @@ export function RestaurantDetails() {
 
     let tripEvent: TripEvent = getTripEventOfRestaurant();
 
-    if (tripEvent.idEvent) {
+    if (tripEvent.uuid) {
       backend
-        .delete(`/trip-event/delete/${tripEvent.idEvent}`)
+        .delete(`/trip-event/delete/${tripEvent.uuid}`)
         .then((res) => {
           setOpenSnackRemoved(true);
-          deleteTripEventFromStore(tripEvent.idEvent);
+          deleteTripEventFromStore(tripEvent.uuid);
         })
         .catch((err) => console.log(err));
     }
