@@ -43,11 +43,7 @@ interface TripPictureUploaderProps {
   onClose: () => void;
 }
 
-export const TripPictureUploader = React.memo(function Component({
-  trip,
-  open,
-  onClose,
-}: TripPictureUploaderProps) {
+export function TripPictureUploader({ trip, open, onClose }: TripPictureUploaderProps) {
   const stylesFunction = makeStyles((theme: Theme) => ({
     albumPane: {
       width: "50%",
@@ -225,6 +221,7 @@ export const TripPictureUploader = React.memo(function Component({
   const albumOptions: string[] = trip.albums.map((album) => album.name);
   const [albumOption, setAlbumOption] = useState<string>("");
   const [selectedAlbum, setSelectedAlbum] = useState<TripAlbum>();
+  const [emptyFieldError, setEmptyFieldError] = useState<boolean>(false);
 
   useEffect(() => {}, []);
 
@@ -246,6 +243,12 @@ export const TripPictureUploader = React.memo(function Component({
   }
 
   async function saveAlbum() {
+    if (newAlbumName === "" && selectedAlbum === undefined) {
+      setEmptyFieldError(true);
+      return;
+    }
+
+    setEmptyFieldError(false);
     setLoadingButton(true);
     dispatch(setAlbumPictures([]));
 
@@ -254,8 +257,11 @@ export const TripPictureUploader = React.memo(function Component({
     setLoadingButton(false);
     setOpenSnack(true);
     addAlbumToStore(response.data);
+    setNewAlbumName("");
+    setImages([]);
 
     setTimeout(() => {
+      setOpenSnack(false);
       onClose();
     }, 1000);
   }
@@ -265,7 +271,7 @@ export const TripPictureUploader = React.memo(function Component({
       ? { ...selectedAlbum, pictures: albumPictures }
       : {
           idAlbum: null,
-          uuid: "",
+          uuid: null,
           name: newAlbumName,
           cover: albumCoverUrl,
           pictures: albumPictures,
@@ -273,7 +279,15 @@ export const TripPictureUploader = React.memo(function Component({
   }
 
   function addAlbumToStore(album: TripAlbum) {
-    let updatedAlbums: TripAlbum[] = [...trip.albums, album];
+    let updatedAlbums: TripAlbum[] = [];
+
+    if (selectedAlbum) {
+      updatedAlbums = trip.albums.filter((a) => a.uuid !== selectedAlbum.uuid);
+      updatedAlbums.push(album);
+    } else {
+      updatedAlbums = [...trip.albums, album];
+    }
+
     dispatch(setTripDetail({ ...trip, albums: updatedAlbums }));
   }
 
@@ -424,6 +438,8 @@ export const TripPictureUploader = React.memo(function Component({
               className={style.textfield}
               onChange={(e) => setNewAlbumName(e.target.value)}
               placeholder="Album name"
+              helperText={emptyFieldError ? "This field must not be empty." : ""}
+              error={emptyFieldError}
             />
 
             <ImageUploader
@@ -481,9 +497,9 @@ export const TripPictureUploader = React.memo(function Component({
           onClose={() => setOpenSnack(false)}
           severity="success"
         >
-          Album created
+          {selectedAlbum ? "Added to album" : "Album created"}
         </Alert>
       </Snackbar>
     </Dialog>
   );
-});
+}

@@ -29,10 +29,12 @@ import {
   AlbumPicture,
   backend,
   firebase,
+  Routes,
   selectIsAuthenticated,
   TripAlbum,
   userTripRef,
 } from "../../../utils";
+import { TRIPS } from "../../../utils/Routes";
 import { CustomButton, ProgressCircle, SliderArrow, Text } from "../../atoms";
 import { Navbar } from "../../molecules";
 import { DashDrawer } from "../DashDrawer/DashDrawer";
@@ -298,12 +300,12 @@ export function Album({}: AlbumProps) {
     deleteFirebaseAlbumPictures();
 
     let url = window.location.href;
-    let tripDetailRoute = url.substring(0, url.indexOf("/album/"));
+    let tripDetailUrlArr: string[] = url.substring(0, url.indexOf("/album/")).split("/");
+    let tripDetailUuid: string = tripDetailUrlArr[tripDetailUrlArr.length - 1];
 
     setTimeout(() => {
-      window.location.href = tripDetailRoute;
-      //Dont use history or this will happen:
-      //http://localhost:3000/Travel-Agent/trips/f6f6c797-d2a4-11eb-bb75-54e1ad512f86/album/http://localhost:3000/Travel-Agent/trips/f6f6c797-d2a4-11eb-bb75-54e1ad512f86
+      // http://localhost:3000/Travel-Agent/trips/f6f6c797-d2a4-11eb-bb75-54e1ad512f86
+      history.push(`${Routes.TRIPS}/${tripDetailUuid}`);
     }, 1000);
   }
 

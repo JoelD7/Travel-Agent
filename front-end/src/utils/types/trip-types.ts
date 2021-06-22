@@ -35,7 +35,7 @@ export interface TripEvent {
 
 export interface TripAlbum {
   idAlbum: string | null;
-  uuid: string;
+  uuid: string | null;
   name: string;
   cover: string;
   pictures: AlbumPicture[];

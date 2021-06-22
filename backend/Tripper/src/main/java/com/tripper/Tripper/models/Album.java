@@ -58,4 +58,16 @@ public class Album {
 
         this.setPictures(albumAwarePictures);
     }
+
+    public void addAlbumPictures(List<Picture> newPictures) {
+        List<Picture> albumAwarePictures = newPictures
+                .stream()
+                .map(picture -> {
+                    picture.setAlbum(this);
+                    return picture;
+                })
+                .collect(Collectors.toList());
+
+        this.pictures.addAll(albumAwarePictures);
+    }
 }

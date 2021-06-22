@@ -91,7 +91,7 @@ export const PicturesAndKeyDetails = React.memo(function Component({
               {getAlbumsToShow().map((album, i) => (
                 <AlbumCard
                   key={album.name}
-                  uuid={album.uuid}
+                  uuid={album.uuid as string}
                   name={album.name}
                   cover={album.cover}
                   picturesQant={album.pictures.length}

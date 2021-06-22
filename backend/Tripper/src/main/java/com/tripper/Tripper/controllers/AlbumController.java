@@ -67,15 +67,15 @@ public class AlbumController {
         if (albumUuid == null) {
             newAlbum = dto;
             newAlbum.setAlbumPictures(dto.getPictures());
+            newAlbum.setUuid(UUID.randomUUID().toString());
         } else {
             newAlbum = albumRepo.findByUuid(albumUuid)
                     .orElseThrow(() -> new AlbumNotFoundException(albumUuid));
-            newAlbum.getPictures().addAll(dto.getPictures());
+            newAlbum.addAlbumPictures(dto.getPictures());
         }
 
         newAlbum.setTrip(trip);
 
-        newAlbum.setUuid(UUID.randomUUID().toString());
         return newAlbum;
     }
 

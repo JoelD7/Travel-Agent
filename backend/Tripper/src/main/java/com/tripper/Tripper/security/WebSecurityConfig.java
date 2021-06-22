@@ -1,13 +1,9 @@
 package com.tripper.Tripper.security;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.tripper.Tripper.utils.CookieName;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.logging.Level;
 import javax.sql.DataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -55,11 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private LoggedUserFilter loggedUserFilter;
+
     @Value("${tripper.app.rememberMe-key}")
     private String rememberMeKey;
-
-    @Value("${tripper.app.rememberMe-cookie.name}")
-    private String rememberMeCookieName;
 
     @Value("${tripper.app.rememberMe.timeout}")
     private int rememberMeTimeout;
@@ -110,6 +106,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(rememberMeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(loggedUserFilter, RememberMeAuthenticationFilter.class);
     }
 
     @Bean
@@ -117,6 +114,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         RememberMeAuthenticationFilter filter
                 = new RememberMeAuthenticationFilter(authenticationManagerBean(),
                         persistentTokenBasedRememberMeServices());
+
         return filter;
     }
 
@@ -128,7 +126,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         persistentTokenRepository());
 
         service.setParameter("rememberMe");
-        service.setCookieName(rememberMeCookieName);
+        service.setCookieName(CookieName.REMEMBER_ME.toString());
         service.setTokenValiditySeconds(rememberMeTimeout);
         return service;
     }

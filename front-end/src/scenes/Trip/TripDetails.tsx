@@ -86,7 +86,7 @@ export function TripDetails() {
         })
         .catch((err) => console.log(err));
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (trip) {
