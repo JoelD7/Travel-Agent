@@ -2,6 +2,7 @@ package com.tripper.Tripper.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tripper.Tripper.dtos.ProfileDTO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,14 @@ public class Person implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+    }
+
+    public Person(String uuid, String firstName, String lastName, String email, String profilePic) {
+        this.uuid = uuid;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.profilePic = profilePic;
     }
 
     @OneToMany(mappedBy = "person")

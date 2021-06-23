@@ -2,7 +2,7 @@ import { Grid, makeStyles, Theme } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import React, { ChangeEvent, useRef, useState } from "react";
 import { Colors, Shadow } from "../../../styles";
-import { deleteImageFromFirebase, userTripRef } from "../../../utils";
+import { deleteImageFromFirebase, getUserTripRef, firebase } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 import { SinglePictureUploader } from "../../organisms";
 
@@ -82,6 +82,7 @@ export function ImageUploader({
     hiddenInputFileRef.current.files = null;
 
     let picture: File = images[0];
+    let userTripRef: firebase.storage.Reference = getUserTripRef();
     deleteImageFromFirebase(picture, userTripRef);
 
     setDisplayImage(EMPTY_IMAGE);

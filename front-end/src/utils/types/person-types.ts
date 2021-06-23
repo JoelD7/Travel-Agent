@@ -16,3 +16,15 @@ export interface Person {
   profilePic: string;
   trips: Trip[];
 }
+
+export interface ProfileCredentials {
+  uuid: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  origin: string;
+  profilePic: string | null;
+  curPassword: string | null;
+  newPassword: string | null;
+  newPasswordConfirmation: string;
+}

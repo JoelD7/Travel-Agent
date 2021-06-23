@@ -26,13 +26,14 @@ import {
   backend,
   deleteImageFromFirebase,
   getISODatetimeWithOffset,
+  getUserTripRef,
   selectAlbumPictures,
+  firebase,
   setAlbumPictures,
   setTripDetail,
   store,
   Trip,
   TripAlbum,
-  userTripRef,
 } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";
 import { ImageUploader } from "../../molecules";
@@ -311,6 +312,7 @@ export function TripPictureUploader({ trip, open, onClose }: TripPictureUploader
 
   function deleteAllUploadedPictures() {
     images.forEach((image) => {
+      let userTripRef: firebase.storage.Reference = getUserTripRef();
       deleteImageFromFirebase(image, userTripRef);
     });
   }

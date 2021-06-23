@@ -136,8 +136,8 @@ export function TextInput({
           setHelperText("");
         }
         break;
-      case "password":
-      case "passwordConfirmation":
+      case "newPassword":
+      case "newPasswordConfirmation":
         if (coPassword && text !== coPassword && coPassword !== "") {
           setError(true);
           setHelperText("The passwords don't match");

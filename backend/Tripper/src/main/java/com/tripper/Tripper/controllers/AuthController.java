@@ -5,7 +5,6 @@ import com.tripper.Tripper.dtos.LoginDTO;
 import com.tripper.Tripper.dtos.SignUpDTO;
 import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.models.Person;
-import com.tripper.Tripper.security.UserDetailsImpl;
 import com.tripper.Tripper.utils.AuthStatus;
 import com.tripper.Tripper.utils.CookieName;
 import java.util.stream.Stream;
@@ -95,7 +94,6 @@ public class AuthController {
             }
         }
 
-//        addPersonUuidCookie(request, response);
         return ResponseEntity.ok(status);
     }
 
@@ -110,8 +108,6 @@ public class AuthController {
                 .orElse(null);
 
         if (request.getCookies() != null && personUuidCookie == null) {
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//            UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
 
             personUuidCookie = new Cookie(CookieName.PERSON_UUID.toString(), uuid);
             personUuidCookie.setDomain("localhost");

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, LinearProgress, makeStyles, Theme } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Colors } from "../../../styles";
-import { compressImage, firebase, profileRef, userTripRef } from "../../../utils";
+import { compressImage, firebase, getProfileRef, getUserTripRef } from "../../../utils";
 import { Text } from "../../atoms";
 
 interface SinglePictureUploaderProps {
@@ -11,11 +11,17 @@ interface SinglePictureUploaderProps {
   picture: File;
   images: File[];
   type: "tripImages" | "profilePic";
+  /**
+   * If set, the picture will upload to Firebase
+   * when the component is mounted.
+   */
+  uploadOnMount?: boolean;
   updateState: (values: File[]) => void;
 }
 
 export function SinglePictureUploader({
   type,
+  uploadOnMount = true,
   picture,
   onUpload,
   updateState,
@@ -42,12 +48,14 @@ export function SinglePictureUploader({
   const [isDeleted, setIsDeleted] = useState(false);
   const [progress, setProgress] = useState(0);
   const baseRef: firebase.storage.Reference =
-    type === "tripImages" ? userTripRef : profileRef;
+    type === "tripImages" ? getUserTripRef() : getProfileRef();
 
   let imageRef: firebase.storage.Reference = baseRef.child(picture.name);
 
   useEffect(() => {
-    uploadPicture();
+    if (uploadOnMount) {
+      uploadPicture();
+    }
   }, []);
 
   async function uploadPicture() {
@@ -85,7 +93,7 @@ export function SinglePictureUploader({
         fileToDelete = await compressImage(picture);
         imageRef = baseRef.child(fileToDelete.name);
       }
-      console.log(imageRef.fullPath);
+
       imageRef
         .delete()
         .then(() => {
@@ -109,25 +117,29 @@ export function SinglePictureUploader({
 
   return (
     <div style={{ width: "100%" }}>
-      <Text style={{ fontSize: "14px", marginBottom: 0 }}>{picture.name}</Text>
+      {uploadOnMount && (
+        <>
+          <Text style={{ fontSize: "14px", marginBottom: 0 }}>{picture.name}</Text>
 
-      <Grid container alignItems="center">
-        <IconButton disabled={progress !== 100} onClick={() => deletePicture()}>
-          <FontAwesomeIcon icon={faTimes} size="xs" color={Colors.BLUE} />
-        </IconButton>
+          <Grid container alignItems="center">
+            <IconButton disabled={progress !== 100} onClick={() => deletePicture()}>
+              <FontAwesomeIcon icon={faTimes} size="xs" color={Colors.BLUE} />
+            </IconButton>
 
-        <LinearProgress
-          className={style.progressBar}
-          classes={{ colorPrimary: style.colorPrimary }}
-          value={progress}
-          variant="determinate"
-        />
+            <LinearProgress
+              className={style.progressBar}
+              classes={{ colorPrimary: style.colorPrimary }}
+              value={progress}
+              variant="determinate"
+            />
 
-        <Text
-          className={style.percentText}
-          style={{ marginBottom: 0, marginLeft: 5 }}
-        >{`${formatAsInt(progress)} %`}</Text>
-      </Grid>
+            <Text
+              className={style.percentText}
+              style={{ marginBottom: 0, marginLeft: 5 }}
+            >{`${formatAsInt(progress)} %`}</Text>
+          </Grid>
+        </>
+      )}
     </div>
   );
 }

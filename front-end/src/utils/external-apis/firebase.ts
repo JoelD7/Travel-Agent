@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/storage";
 import { store } from "../store";
+import { Person } from "../types";
 
 var firebaseConfig = {
   apiKey: "AIzaSyBCrNnyYWSbUOHAIE6W3CZ2Ai-zOx1hJ0g",
@@ -16,13 +17,18 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 export const storage = firebase.storage();
-const idPerson: number = store.getState().rootSlice.idPerson;
-export const userTripRef: firebase.storage.Reference = storage
-  .ref()
-  .child(`images/trips/${idPerson}`);
-export const profileRef: firebase.storage.Reference = storage
-  .ref()
-  .child(`images/profile/${idPerson}`);
+
+export function getUserTripRef(): firebase.storage.Reference {
+  const person: Person | undefined = store.getState().authSlice.person;
+
+  return storage.ref().child(`images/trips/${person ? person.uuid : 0}`);
+}
+
+export function getProfileRef(): firebase.storage.Reference {
+  const person: Person | undefined = store.getState().authSlice.person;
+
+  return storage.ref().child(`images/profile/${person ? person.uuid : 0}`);
+}
 
 export const avatar =
   "https://firebasestorage.googleapis.com/v0/b/tripper-7aba4.appspot.com/o/images%2Fgeneral%2Favatar.png?alt=media&token=ba6845de-8324-418c-bad7-aec081782625";

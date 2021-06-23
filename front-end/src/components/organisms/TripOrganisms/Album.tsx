@@ -29,10 +29,10 @@ import {
   AlbumPicture,
   backend,
   firebase,
+  getUserTripRef,
   Routes,
   selectIsAuthenticated,
   TripAlbum,
-  userTripRef,
 } from "../../../utils";
 import { TRIPS } from "../../../utils/Routes";
 import { CustomButton, ProgressCircle, SliderArrow, Text } from "../../atoms";
@@ -312,7 +312,7 @@ export function Album({}: AlbumProps) {
   function deleteFirebaseAlbumPictures() {
     if (album) {
       album.pictures.forEach((picture) => {
-        let imageRef: firebase.storage.Reference = userTripRef.child(picture.name);
+        let imageRef: firebase.storage.Reference = getUserTripRef().child(picture.name);
 
         imageRef
           .delete()

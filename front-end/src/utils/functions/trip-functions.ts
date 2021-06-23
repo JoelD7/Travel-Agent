@@ -88,7 +88,6 @@ export async function deleteImageFromFirebase(
   }
 
   let imageRef: firebase.storage.Reference = reference.child(fileToDelete.name);
-
   imageRef
     .delete()
     .then(() => {

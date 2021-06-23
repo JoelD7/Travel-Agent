@@ -1,6 +1,7 @@
 package com.tripper.Tripper.services;
 
 import com.tripper.Tripper.data.PersonRepository;
+import com.tripper.Tripper.dtos.ProfileDTO;
 import com.tripper.Tripper.exceptions.InvalidPasswordException;
 import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.models.Person;
@@ -37,16 +38,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person editUserProfile(String uuid, Person dto) throws InvalidPasswordException {
+    public Person editUserProfile(String uuid, ProfileDTO dto) throws InvalidPasswordException {
         Person curPerson = personRepo.findByUuid(uuid)
                 .orElseThrow(() -> new PersonNotFoundException(uuid));
 
-        Person modPerson = dto;
+        Person modPerson = new Person(dto.getUuid(), dto.getFirstName(), dto.getLastName(),
+                dto.getEmail(), dto.getProfilePic());
         modPerson.setIdPerson(curPerson.getIdPerson());
 
         if (isPasswordModRequested(dto)) {
             if (isRequestPasswordValid(curPerson, dto)) {
-                String newPassword = encoder.encode(dto.getPassword());
+                String newPassword = encoder.encode(dto.getNewPassword());
                 modPerson.setPassword(newPassword);
             } else {
                 throw new InvalidPasswordException(uuid);
@@ -58,13 +60,12 @@ public class PersonServiceImpl implements PersonService {
         return personRepo.save(modPerson);
     }
 
-    private boolean isRequestPasswordValid(Person profileToChange, Person dto) {
-        return encoder.encode(profileToChange.getPassword())
-                .equals(encoder.encode(dto.getPassword()));
+    private boolean isRequestPasswordValid(Person profileToChange, ProfileDTO dto) {
+        return encoder.matches(dto.getCurPassword(), profileToChange.getPassword());
     }
 
-    private boolean isPasswordModRequested(Person dto) {
-        return dto.getPassword() != null;
+    private boolean isPasswordModRequested(ProfileDTO dto) {
+        return dto.getCurPassword() != null;
     }
 
 }

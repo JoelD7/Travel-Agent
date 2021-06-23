@@ -23,6 +23,7 @@ import {
   setPerson,
   backend,
   setUserTripsFromPerson,
+  ProfileCredentials,
 } from "../../utils";
 import { profileStyles } from "./profile-styles";
 
@@ -49,21 +50,24 @@ export function Profile({}: ProfileProps) {
   const dispatch = useDispatch();
 
   const [visibility, setVisibility] = useState<VisibilityProps>({
-    password: false,
-    passwordConfirmation: false,
+    curPassword: false,
+    newPassword: false,
+    nePasswordConfirmation: false,
   });
-  const [credentials, setCredentials] = useState({
+  const [credentials, setCredentials] = useState<ProfileCredentials>({
     uuid: person ? person.uuid : "",
     firstName: person ? person.firstName : "",
     lastName: person ? person.lastName : "",
     email: person ? person.email : "",
     origin: "",
     profilePic: person ? person.profilePic : "",
-    password: null,
-    passwordConfirmation: "",
+    curPassword: null,
+    newPassword: null,
+    newPasswordConfirmation: "",
   });
   const [changePassword, setChangePassword] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   useEffect(() => {
     if (person) {
@@ -76,8 +80,9 @@ export function Profile({}: ProfileProps) {
         email: person.email,
         origin: "",
         profilePic: person.profilePic,
-        password: null,
-        passwordConfirmation: "",
+        curPassword: null,
+        newPassword: null,
+        newPasswordConfirmation: "",
       });
     }
   }, [person]);
@@ -88,9 +93,11 @@ export function Profile({}: ProfileProps) {
 
   async function onSaveChangesClicked() {
     if (person) {
+      setLoadingButton(true);
       const res = await backend.put(`/person/${person.uuid}`, credentials);
       let editedPerson = res.data;
 
+      setLoadingButton(false);
       dispatch(setPerson(editedPerson));
       setUserTripsFromPerson(editedPerson);
     }
@@ -108,7 +115,7 @@ export function Profile({}: ProfileProps) {
       {/* Content */}
       <Grid container className={style.pageContentContainer}>
         {loading && (
-          <Grid container style={{ height: "85vh" }}>
+          <Grid container className={style.progressContainer}>
             <ProgressCircle />
           </Grid>
         )}
@@ -126,6 +133,10 @@ export function Profile({}: ProfileProps) {
             <Grid item xs={12}>
               <Grid container justify="center">
                 <ProfilePicture
+                  credentials={credentials}
+                  updateCredentials={(updatedCredentials) =>
+                    setCredentials({ ...credentials, ...updatedCredentials })
+                  }
                   updateProfilePic={(url) =>
                     setCredentials({ ...credentials, profilePic: url })
                   }
@@ -136,7 +147,7 @@ export function Profile({}: ProfileProps) {
             {/* First and lastname */}
             <Grid item xs={12} style={{ marginTop: 30 }}>
               <Grid container>
-                <Grid item className={style.nameGrid}>
+                <Grid item className={style.firstNameGrid}>
                   <TextInput
                     name="firstName"
                     label="First Name"
@@ -147,7 +158,7 @@ export function Profile({}: ProfileProps) {
                   />
                 </Grid>
 
-                <Grid item style={{ marginLeft: 15 }} className={style.nameGrid}>
+                <Grid item style={{}} className={style.lastNameGrid}>
                   <TextInput
                     name="lastName"
                     label="Last Name"
@@ -185,19 +196,51 @@ export function Profile({}: ProfileProps) {
                 {/* Current password */}
                 <Grid style={{ marginTop: 10 }} item xs={12}>
                   <TextInput
-                    name="password"
+                    name="curPassword"
                     label="Current Password"
                     value={
-                      credentials.password === null
+                      credentials.curPassword === null
                         ? ""
-                        : (credentials.password as unknown as string)
+                        : (credentials.curPassword as unknown as string)
                     }
-                    type={visibility.password ? "text" : "password"}
+                    type={visibility.curPassword ? "text" : "password"}
                     endAdornment={
                       <PasswordEye
-                        visible={visibility.password}
+                        visible={visibility.curPassword}
                         onClick={() =>
-                          setVisibility({ ...visibility, password: !visibility.password })
+                          setVisibility({
+                            ...visibility,
+                            curPassword: !visibility.curPassword,
+                          })
+                        }
+                      />
+                    }
+                    updateState={(name, value) =>
+                      setCredentials({ ...credentials, [name]: value })
+                    }
+                  />
+                </Grid>
+
+                {/* New password */}
+                <Grid style={{ marginTop: 10 }} item xs={12}>
+                  <TextInput
+                    name="newPassword"
+                    label="New Password"
+                    coPassword={credentials.newPasswordConfirmation}
+                    value={
+                      credentials.newPassword === null
+                        ? ""
+                        : (credentials.newPassword as unknown as string)
+                    }
+                    type={visibility.newPassword ? "text" : "password"}
+                    endAdornment={
+                      <PasswordEye
+                        visible={visibility.newPassword}
+                        onClick={() =>
+                          setVisibility({
+                            ...visibility,
+                            newPassword: !visibility.newPassword,
+                          })
                         }
                       />
                     }
@@ -210,17 +253,22 @@ export function Profile({}: ProfileProps) {
                 {/* Confirm password */}
                 <Grid style={{ marginTop: 10 }} item xs={12}>
                   <TextInput
-                    name="passwordConfirmation"
-                    label="Confirm Password"
-                    value={credentials.passwordConfirmation}
-                    type={visibility.passwordConfirmation ? "text" : "password"}
+                    name="newPasswordConfirmation"
+                    label="Confirm New Password"
+                    coPassword={
+                      credentials.newPassword === null
+                        ? ""
+                        : (credentials.newPassword as unknown as string)
+                    }
+                    value={credentials.newPasswordConfirmation}
+                    type={visibility.newPasswordConfirmation ? "text" : "password"}
                     endAdornment={
                       <PasswordEye
-                        visible={visibility.passwordConfirmation}
+                        visible={visibility.newPasswordConfirmation}
                         onClick={() =>
                           setVisibility({
                             ...visibility,
-                            passwordConfirmation: !visibility.passwordConfirmation,
+                            newPasswordConfirmation: !visibility.newPasswordConfirmation,
                           })
                         }
                       />
@@ -246,6 +294,7 @@ export function Profile({}: ProfileProps) {
                 <CustomButton
                   style={{ marginLeft: 10 }}
                   onClick={() => onSaveChangesClicked()}
+                  loading={loadingButton}
                   backgroundColor={Colors.GREEN}
                 >
                   Save changes
