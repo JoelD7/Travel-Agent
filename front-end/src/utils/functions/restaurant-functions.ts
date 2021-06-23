@@ -199,21 +199,23 @@ export function getRestaurantDTO(
 }
 
 export function isRestaurantInAnyTrip(restaurant: Restaurant): boolean {
-  const userTrips: Trip[] = store.getState().tripSlice.userTrips;
+  const userTrips: Trip[] | undefined = store.getState().tripSlice.userTrips;
   let included: boolean = false;
 
-  userTrips.forEach((trip) => {
-    if (trip.itinerary) {
-      trip.itinerary
-        .filter((event) => event.type === EventTypes.RESTAURANT)
-        .forEach((event) => {
-          if (event.restaurant && event.restaurant.id === restaurant.id) {
-            included = true;
-            return;
-          }
-        });
-    }
-  });
+  if (userTrips) {
+    userTrips.forEach((trip) => {
+      if (trip.itinerary) {
+        trip.itinerary
+          .filter((event) => event.type === EventTypes.RESTAURANT)
+          .forEach((event) => {
+            if (event.restaurant && event.restaurant.id === restaurant.id) {
+              included = true;
+              return;
+            }
+          });
+      }
+    });
+  }
 
   return included;
 }

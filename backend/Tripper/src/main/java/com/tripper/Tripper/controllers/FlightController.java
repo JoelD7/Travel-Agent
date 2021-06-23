@@ -47,8 +47,10 @@ public class FlightController {
     }
 
     @PostMapping
-    public ResponseEntity<?> bookFlight(@RequestBody Flight flight, @RequestParam Long idPerson) {
-        Person person = personRepo.findById(idPerson).orElseThrow(() -> new PersonNotFoundException(idPerson));
+    public ResponseEntity<?> bookFlight(@RequestBody Flight flight, @RequestParam String personUuid) {
+        Person person = personRepo.findByUuid(personUuid)
+                .orElseThrow(() -> new PersonNotFoundException(personUuid));
+
         flight.setPerson(person);
         flight.setFlightChildren();
         flightRepo.save(flight);

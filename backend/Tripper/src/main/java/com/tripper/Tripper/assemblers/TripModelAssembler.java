@@ -16,10 +16,11 @@ public class TripModelAssembler implements RepresentationModelAssembler<Trip, En
 
     @Override
     public EntityModel<Trip> toModel(Trip trip) {
-        Long idPerson = trip.getPerson().getIdPerson();
+        String personUuid = trip.getPerson().getUuid();
+
         return EntityModel.of(trip,
                 linkTo(methodOn(TripController.class).getTrip(trip.getUuid())).withSelfRel(),
-                linkTo(methodOn(TripController.class).getAllTrips(idPerson)).withRel("trips"));
+                linkTo(methodOn(TripController.class).getAllTrips(personUuid)).withRel("trips"));
     }
 
     @Override

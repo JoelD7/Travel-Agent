@@ -812,6 +812,7 @@ export function getISODatetimeWithOffset(date: Date): string {
 export function mapPersonToDomainType(data: any): Person {
   return {
     carRentals: data.carRentals,
+    uuid: data.uuid,
     email: data.email,
     favoritePlaces: data.favoritePlaces,
     firstName: data.firstName,

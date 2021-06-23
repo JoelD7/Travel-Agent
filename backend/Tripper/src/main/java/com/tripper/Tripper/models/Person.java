@@ -67,8 +67,8 @@ public class Person implements Serializable {
         trip.setPerson(this);
     }
 
-    public Person setIdPersonFluently(Long idPerson) {
-        this.setIdPerson(idPerson);
+    public Person setUuidFluently(String uuid) {
+        this.setUuid(uuid);
         return this;
     }
 

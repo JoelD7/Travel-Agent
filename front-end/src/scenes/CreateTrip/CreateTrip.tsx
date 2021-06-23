@@ -25,7 +25,7 @@ import {
   TripDates,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import { backend, selectIdPerson } from "../../utils";
+import { backend, selectIdPerson, selectPerson, Person } from "../../utils";
 import { createTripStyles } from "./createTrip-styles";
 
 export function CreateTrip() {
@@ -42,6 +42,7 @@ export function CreateTrip() {
   const is1255OrLess = useMediaQuery("(max-width:1255px)");
   const is720OrLess = useMediaQuery("(max-width:720px)");
   const idPerson: number = useSelector(selectIdPerson);
+  const person: Person | undefined = useSelector(selectPerson);
 
   const [openSnack, setOpenSnack] = useState(false);
   const [coverUrl, setCoverUrl] = useState<string>("");
@@ -57,21 +58,23 @@ export function CreateTrip() {
 
   function createTrip() {
     setLoadingButton(true);
-    backend
-      .post(`/trip/create?idPerson=${idPerson}`, {
-        idPerson,
-        name,
-        countries: countries.join(", "),
-        budget: Number(budget),
-        coverPhoto: coverUrl,
-        startDate,
-        endDate,
-      })
-      .then((res) => {
-        setOpenSnack(true);
-        setLoadingButton(false);
-      })
-      .catch((err) => console.log(err));
+    if (person) {
+      backend
+        .post(`/trip/create?personUuid=${person.uuid}`, {
+          idPerson,
+          name,
+          countries: countries.join(", "),
+          budget: Number(budget),
+          coverPhoto: coverUrl,
+          startDate,
+          endDate,
+        })
+        .then((res) => {
+          setOpenSnack(true);
+          setLoadingButton(false);
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   function getNameTFWidth() {

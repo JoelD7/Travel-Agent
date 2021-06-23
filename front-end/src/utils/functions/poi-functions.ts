@@ -37,21 +37,23 @@ export function getPoiDTO(poi: POIType, visitDate?: Date): RsvPOI {
 }
 
 export function isPoiInAnyTrip(poi: POIType): boolean {
-  const userTrips: Trip[] = store.getState().tripSlice.userTrips;
+  const userTrips: Trip[] | undefined = store.getState().tripSlice.userTrips;
   let included: boolean = false;
 
-  userTrips.forEach((trip) => {
-    if (trip.itinerary) {
-      trip.itinerary
-        .filter((event) => event.type === EventTypes.POI)
-        .forEach((event) => {
-          if (event.poi && event.poi.id === poi.id) {
-            included = true;
-            return;
-          }
-        });
-    }
-  });
+  if (userTrips) {
+    userTrips.forEach((trip) => {
+      if (trip.itinerary) {
+        trip.itinerary
+          .filter((event) => event.type === EventTypes.POI)
+          .forEach((event) => {
+            if (event.poi && event.poi.id === poi.id) {
+              included = true;
+              return;
+            }
+          });
+      }
+    });
+  }
 
   return included;
 }

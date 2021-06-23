@@ -46,6 +46,8 @@ import {
   selectIdPerson,
   selectUserTrips,
   Trip,
+  selectPerson,
+  Person,
   TripEvent,
   tripEventPlaceholder,
 } from "../../utils";
@@ -94,7 +96,8 @@ export function FlightDetails({
 
   const dispatch = useDispatch();
 
-  const userTrips: Trip[] = useSelector(selectUserTrips);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
+  const person: Person | undefined = useSelector(selectPerson);
 
   function getFlightPassengers() {
     let total: number = 0;
@@ -245,13 +248,15 @@ export function FlightDetails({
   function bookFlight() {
     let flightDTO = getFlightDTO(flight);
 
-    backend
-      .post(`/flight?idPerson=${idPerson}`, flightDTO)
-      .then((res) => {
-        setOpenSnack(true);
-        setBookedFlight(true);
-      })
-      .catch((err) => console.log(err));
+    if (person) {
+      backend
+        .post(`/flight?personUuid=${person.uuid}`, flightDTO)
+        .then((res) => {
+          setOpenSnack(true);
+          setBookedFlight(true);
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   function onIncludeTripClick(event: MouseEvent<HTMLButtonElement>) {
@@ -262,12 +267,14 @@ export function FlightDetails({
   function isFlightIncludedInAnyTrip() {
     let included: boolean = false;
 
-    userTrips.forEach((trip) => {
-      if (isFlightInTrip(flight, trip)) {
-        included = true;
-        return;
-      }
-    });
+    if (userTrips) {
+      userTrips.forEach((trip) => {
+        if (isFlightInTrip(flight, trip)) {
+          included = true;
+          return;
+        }
+      });
+    }
 
     return included;
   }
@@ -275,7 +282,7 @@ export function FlightDetails({
   function deleteFlightFromTrip() {
     let tripEventOfFlight: TripEvent = getTripEventOfFlight();
 
-    if (tripEventOfFlight.uuid) {
+    if (tripEventOfFlight.uuid && userTrips) {
       backend
         .delete(`/trip-event/delete/${tripEventOfFlight.uuid}`)
         .then((res) => {
@@ -301,18 +308,20 @@ export function FlightDetails({
   function getTripEventOfFlight(): TripEvent {
     let tripEventOfFlight: TripEvent = tripEventPlaceholder;
 
-    userTrips.forEach((trip) => {
-      if (trip.itinerary) {
-        trip.itinerary
-          .filter((event) => event.type === EventTypes.FLIGHT)
-          .forEach((event) => {
-            if (event.flight && event.flight.idFlight === flight.idFlight) {
-              tripEventOfFlight = event;
-              return;
-            }
-          });
-      }
-    });
+    if (userTrips) {
+      userTrips.forEach((trip) => {
+        if (trip.itinerary) {
+          trip.itinerary
+            .filter((event) => event.type === EventTypes.FLIGHT)
+            .forEach((event) => {
+              if (event.flight && event.flight.idFlight === flight.idFlight) {
+                tripEventOfFlight = event;
+                return;
+              }
+            });
+        }
+      });
+    }
 
     return tripEventOfFlight;
   }

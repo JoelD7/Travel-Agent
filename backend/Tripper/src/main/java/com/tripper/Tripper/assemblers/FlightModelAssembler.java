@@ -16,11 +16,11 @@ public class FlightModelAssembler implements RepresentationModelAssembler<Flight
 
     @Override
     public EntityModel<Flight> toModel(Flight entity) {
-        Long idPerson = entity.getPerson().getIdPerson();
+        String personUuid = entity.getPerson().getUuid();
 
         return EntityModel.of(entity,
                 linkTo(methodOn(FlightController.class).getFlight(entity.getIdFlight())).withSelfRel(),
-                linkTo(methodOn(FlightController.class).bookFlight(entity, idPerson)).withRel("bookFlight"));
+                linkTo(methodOn(FlightController.class).bookFlight(entity, personUuid)).withRel("bookFlight"));
     }
 
     @Override

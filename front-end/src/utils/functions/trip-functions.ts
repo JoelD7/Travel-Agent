@@ -41,9 +41,9 @@ function responseItineraryToDomainItinerary(itinerary: any[]) {
 }
 
 export function deleteTripEventFromStore(uuid: string | undefined) {
-  if (uuid) {
-    const userTrips: Trip[] = store.getState().tripSlice.userTrips;
+  const userTrips: Trip[] | undefined = store.getState().tripSlice.userTrips;
 
+  if (uuid && userTrips) {
     const newUserTrips: Trip[] = userTrips.map((trip) => {
       if (trip.itinerary) {
         const newItinerary: TripEvent[] = trip.itinerary.filter(

@@ -5,6 +5,7 @@ import com.tripper.Tripper.dtos.LoginDTO;
 import com.tripper.Tripper.dtos.SignUpDTO;
 import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.models.Person;
+import com.tripper.Tripper.security.UserDetailsImpl;
 import com.tripper.Tripper.utils.AuthStatus;
 import com.tripper.Tripper.utils.CookieName;
 import java.util.stream.Stream;
@@ -51,7 +52,7 @@ public class AuthController {
     private final int ONE_YEAR = 31536000;
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<?> authenticateUser(@ModelAttribute LoginDTO loginDto, HttpServletRequest request,
+    public ResponseEntity<?> login(@ModelAttribute LoginDTO loginDto, HttpServletRequest request,
             HttpServletResponse response) {
 
         Authentication authentication = authenticationManager.authenticate(
@@ -62,9 +63,7 @@ public class AuthController {
         Person person = personRepo.findByEmail(loginDto.getEmail())
                 .orElseThrow(() -> new PersonNotFoundException(loginDto.getEmail()));
 
-        Cookie idPersonCookie = new Cookie("idPerson", person.getIdPerson().toString());
-        idPersonCookie.setMaxAge(ONE_YEAR);
-        response.addCookie(idPersonCookie);
+        addPersonUuidCookie(request, response, person.getUuid());
 
         rememberMeService.loginSuccess(request, response, authentication);
         sessionRegistry.registerNewSession(request.getSession().getId(), authentication.getPrincipal());
@@ -85,23 +84,43 @@ public class AuthController {
             if (rememberMe != null) {
                 status = AuthStatus.AUTHENTICATED.toString();
             } else {
-                Cookie idPerson = Stream.of(request.getCookies())
-                        .filter(cookie -> cookie.getName().equals(CookieName.ID_PERSON.toString()))
+                Cookie personUuidCookie = Stream.of(request.getCookies())
+                        .filter(cookie -> cookie.getName().equals(CookieName.PERSON_UUID.toString()))
                         .findFirst()
                         .orElse(null);
 
-                if (idPersonCookieExists(idPerson)) {
+                if (personUuidCookieExists(personUuidCookie)) {
                     status = AuthStatus.NOT_AUTHENTICATED.toString();
                 }
             }
-
         }
 
+//        addPersonUuidCookie(request, response);
         return ResponseEntity.ok(status);
     }
 
-    private boolean idPersonCookieExists(Cookie idPerson) {
-        return idPerson != null;
+    private boolean personUuidCookieExists(Cookie personUuid) {
+        return personUuid != null;
+    }
+
+    private void addPersonUuidCookie(HttpServletRequest request, HttpServletResponse response, String uuid) {
+        Cookie personUuidCookie = Stream.of(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(CookieName.PERSON_UUID.toString()))
+                .findFirst()
+                .orElse(null);
+
+        if (request.getCookies() != null && personUuidCookie == null) {
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+
+            personUuidCookie = new Cookie(CookieName.PERSON_UUID.toString(), uuid);
+            personUuidCookie.setDomain("localhost");
+            personUuidCookie.setPath("/");
+            personUuidCookie.setMaxAge(ONE_YEAR);
+
+            response.addCookie(personUuidCookie);
+        }
+
     }
 
     @PostMapping("/signup")

@@ -199,14 +199,14 @@ export function IncludeInTripPopover({
   const [openSuccessSnack, setOpenSuccessSnack] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
 
-  const userTrips: Trip[] = useSelector(selectUserTrips);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
   const carRsv: CarRsv = useSelector(selectCarRsv);
   const hotelReservationParams: HotelBookingParams = useSelector(
     selectHotelReservationParams
   );
 
-  const tripOptions: string[] = userTrips.map((trip) => trip.name);
+  const tripOptions: string[] = userTrips ? userTrips.map((trip) => trip.name) : [];
   const [tripOption, setTripOption] = useState<string>(tripOptions[0]);
   const [datetimePopover, setDatetimePopover] = useState<{ [index: string]: Date }>(
     getDates()
@@ -216,18 +216,20 @@ export function IncludeInTripPopover({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (userTrips.length === 0) {
-      backend
-        .get("/trip/all")
-        .then((res: any) => {
-          let tripsInResponse = res.data._embedded.tripList;
-          let tripsBuffer = tripsInResponse.map((resTrip: any) =>
-            responseTripToDomainTrip(resTrip)
-          );
+    if (userTrips) {
+      if (userTrips.length === 0) {
+        backend
+          .get("/trip/all")
+          .then((res: any) => {
+            let tripsInResponse = res.data._embedded.tripList;
+            let tripsBuffer = tripsInResponse.map((resTrip: any) =>
+              responseTripToDomainTrip(resTrip)
+            );
 
-          dispatch(setUserTrips(tripsBuffer));
-        })
-        .catch((err: any) => console.log(err));
+            dispatch(setUserTrips(tripsBuffer));
+          })
+          .catch((err: any) => console.log(err));
+      }
     }
   }, []);
 
@@ -300,26 +302,28 @@ export function IncludeInTripPopover({
   }
 
   async function addToTrip() {
-    setLoadingButton(true);
-    let tripEventDTO = getTripEventDTO();
-    let selectedTrip: Trip = userTrips.filter((trip) => trip.name === tripOption)[0];
+    if (userTrips) {
+      setLoadingButton(true);
+      let tripEventDTO = getTripEventDTO();
+      let selectedTrip: Trip = userTrips.filter((trip) => trip.name === tripOption)[0];
 
-    let res = await backend.post(
-      `/trip-event/add-new?tripUuid=${selectedTrip.uuid}`,
-      tripEventDTO
-    );
+      let res = await backend.post(
+        `/trip-event/add-new?tripUuid=${selectedTrip.uuid}`,
+        tripEventDTO
+      );
 
-    let newEvent = res.data;
-    updateUserTripsEvents(newEvent, selectedTrip);
+      let newEvent = res.data;
+      updateUserTripsEvents(newEvent, selectedTrip);
 
-    onPopoverClose();
-    setLoadingButton(false);
-    setOpenSuccessSnack(true);
+      onPopoverClose();
+      setLoadingButton(false);
+      setOpenSuccessSnack(true);
 
-    if (newEvent.type === EventTypes.HOTEL || newEvent.type === EventTypes.CAR_RENTAL) {
-      setTimeout(() => {
-        redirectToTripDetail(selectedTrip);
-      }, 1000);
+      if (newEvent.type === EventTypes.HOTEL || newEvent.type === EventTypes.CAR_RENTAL) {
+        setTimeout(() => {
+          redirectToTripDetail(selectedTrip);
+        }, 1000);
+      }
     }
   }
 
@@ -334,22 +338,26 @@ export function IncludeInTripPopover({
    * @param selectedTrip
    */
   function updateUserTripsEvents(newEvent: any, selectedTrip: Trip) {
-    let updatedUserTrips = userTrips.map((trip) => {
-      if (trip.name === tripOption) {
-        return {
-          ...selectedTrip,
-          itinerary: selectedTrip.itinerary ? [...selectedTrip.itinerary, newEvent] : [],
-        };
-      } else {
-        return trip;
+    if (userTrips) {
+      let updatedUserTrips = userTrips.map((trip) => {
+        if (trip.name === tripOption) {
+          return {
+            ...selectedTrip,
+            itinerary: selectedTrip.itinerary
+              ? [...selectedTrip.itinerary, newEvent]
+              : [],
+          };
+        } else {
+          return trip;
+        }
+      });
+
+      if (newEvent.type === EventTypes.FLIGHT) {
+        dispatch(setFlightDetail(mapFlightToDomainType(newEvent.flight)));
       }
-    });
 
-    if (newEvent.type === EventTypes.FLIGHT) {
-      dispatch(setFlightDetail(mapFlightToDomainType(newEvent.flight)));
+      dispatch(setUserTrips(updatedUserTrips));
     }
-
-    dispatch(setUserTrips(updatedUserTrips));
   }
 
   /**

@@ -1,6 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { compareDesc } from "date-fns";
-import { Routes } from "..";
 import { backend } from "../external-apis";
 import { responseTripToDomainTrip } from "../functions";
 import { AlbumPicture, Trip } from "../types";
@@ -10,7 +8,7 @@ import { AppDispatch, RootState } from "./store";
 interface TripSlice {
   tripDetail?: Trip;
   lastTrip?: Trip;
-  userTrips: Trip[];
+  userTrips?: Trip[];
   favPlaces: Favorite[];
   albumPictures: AlbumPicture[];
 }
@@ -24,9 +22,10 @@ export const fetchUserTrips = createAsyncThunk<Trip[], null, ThunkAPIType>(
   "tripSlice/fetchUserTrips",
   (_, thunkAPI) => {
     let idPerson = thunkAPI.getState().rootSlice.idPerson;
+    let person = thunkAPI.getState().authSlice.person;
 
     return backend
-      .get(`/trip/all?idPerson=${idPerson}`)
+      .get(`/trip/all?personUuid=${person ? person.uuid : "0"}`)
       .then((response) => {
         let tripsInResponse = response.data._embedded.tripList;
         let tripsBuffer = tripsInResponse.map((resTrip: any) =>
@@ -43,10 +42,13 @@ export const fetchFavorites = createAsyncThunk<Favorite[], null, ThunkAPIType>(
   "tripSlice/fetchFavorites",
   async (_, thunkAPI) => {
     let idPerson = thunkAPI.getState().rootSlice.idPerson;
+    let person = thunkAPI.getState().authSlice.person;
     let favPlaces: Favorite[] = thunkAPI.getState().tripSlice.favPlaces;
 
     if (favPlaces.length === 0) {
-      const response = await backend.get(`/favorite/all?idPerson=${idPerson}`);
+      const response = await backend.get(
+        `/favorite/all?personUuid=${person ? person.uuid : "0"}`
+      );
       return response.data._embedded.favoriteList;
     }
 
@@ -55,7 +57,6 @@ export const fetchFavorites = createAsyncThunk<Favorite[], null, ThunkAPIType>(
 );
 
 const initialState: TripSlice = {
-  userTrips: [],
   albumPictures: [],
   favPlaces: [],
 };

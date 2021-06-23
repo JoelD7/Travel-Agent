@@ -62,7 +62,7 @@ export function RestaurantDetails() {
   const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
   const [removedSnackText, setRemovedSnackText] = useState("");
 
-  const userTrips: Trip[] = useSelector(selectUserTrips);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
 
   useEffect(() => {
     fetchRestaurant(id)
@@ -109,7 +109,7 @@ export function RestaurantDetails() {
   function getTripEventOfRestaurant(): TripEvent {
     let tripEvent: TripEvent = tripEventPlaceholder;
 
-    if (restaurant) {
+    if (restaurant && userTrips) {
       userTrips.forEach((trip) => {
         if (trip.itinerary) {
           trip.itinerary.forEach((event) => {

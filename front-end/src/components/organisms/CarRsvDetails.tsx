@@ -82,7 +82,7 @@ export function CarRsvDetails({ open, onClose }: CarRsvDetailsProps) {
   }));
 
   const style = carRsvDetailsStyles();
-  const userTrips: Trip[] = useSelector(selectUserTrips);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
   const carRsv: CarRsv = useSelector(selectCarRsv);
   const carReservations: CarRsv[] = useSelector(selectCarReservations);
 
@@ -94,14 +94,17 @@ export function CarRsvDetails({ open, onClose }: CarRsvDetailsProps) {
   const dispatch = useDispatch();
 
   function isCarRsvInAnyTrip(): boolean {
-    let included: boolean = false;
-    userTrips.forEach((trip) => {
-      if (isCarRsvInTrip(carRsv, trip)) {
-        included = true;
-        return;
-      }
-    });
-    return included;
+    if (userTrips) {
+      let included: boolean = false;
+      userTrips.forEach((trip) => {
+        if (isCarRsvInTrip(carRsv, trip)) {
+          included = true;
+          return;
+        }
+      });
+      return included;
+    }
+    return false;
   }
 
   function onIncludeInTripOpen(event: MouseEvent<HTMLButtonElement>) {
@@ -141,20 +144,22 @@ export function CarRsvDetails({ open, onClose }: CarRsvDetailsProps) {
   function getTripEventOfCarRental(): TripEvent {
     let tripEvent: TripEvent = tripEventPlaceholder;
 
-    userTrips.forEach((trip) => {
-      if (trip.itinerary) {
-        trip.itinerary.forEach((event) => {
-          if (event.carRental && event.carRental.idCarRental === carRsv.idCarRental) {
-            tripEvent = event;
-            return;
-          }
-        });
-      }
+    if (userTrips) {
+      userTrips.forEach((trip) => {
+        if (trip.itinerary) {
+          trip.itinerary.forEach((event) => {
+            if (event.carRental && event.carRental.idCarRental === carRsv.idCarRental) {
+              tripEvent = event;
+              return;
+            }
+          });
+        }
 
-      if (tripEvent) {
-        return;
-      }
-    });
+        if (tripEvent) {
+          return;
+        }
+      });
+    }
 
     return tripEvent;
   }

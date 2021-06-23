@@ -15,6 +15,8 @@ import {
   HotelBooking,
   selectFavorites,
   selectIdPerson,
+  selectPerson,
+  Person,
   setFavorites,
 } from "../../utils";
 import { Favorite, FavoriteType } from "../../utils/types/favorite-types";
@@ -35,7 +37,7 @@ export function AddFavoritesButton({
   restaurant,
   style,
 }: AddFavoritesProps) {
-  const idPerson = useSelector(selectIdPerson);
+  const person: Person | undefined = useSelector(selectPerson);
   const favorites: Favorite[] = useSelector(selectFavorites);
 
   const [openSnack, setOpenSnack] = useState(false);
@@ -52,16 +54,18 @@ export function AddFavoritesButton({
   function addToFavorites() {
     let favoriteDTO: Favorite = getFavoriteDTO();
 
-    backend
-      .post(`/favorite/add?idPerson=${idPerson}`, favoriteDTO)
-      .then((res) => {
-        setFavorite(true);
-        setOpenSnack(true);
+    if (person) {
+      backend
+        .post(`/favorite/add?personUuid=${person.uuid}`, favoriteDTO)
+        .then((res) => {
+          setFavorite(true);
+          setOpenSnack(true);
 
-        let updatedFavs: Favorite[] = [...favorites, favoriteDTO];
-        dispatch(setFavorites(updatedFavs));
-      })
-      .catch((error) => console.log(error));
+          let updatedFavs: Favorite[] = [...favorites, favoriteDTO];
+          dispatch(setFavorites(updatedFavs));
+        })
+        .catch((error) => console.log(error));
+    }
   }
 
   function removeFromFavorites() {

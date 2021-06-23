@@ -49,9 +49,10 @@ public class CarRentalController {
     }
 
     @PostMapping("/book")
-    public ResponseEntity<?> bookCarRental(@RequestBody CarRental dto, @RequestParam Long idPerson) {
-        Person person = personRepo.findById(idPerson)
-                .orElseThrow(() -> new PersonNotFoundException(idPerson));
+    public ResponseEntity<?> bookCarRental(@RequestBody CarRental dto, @RequestParam String personUuid) {
+        Person person = personRepo.findByUuid(personUuid)
+                .orElseThrow(() -> new PersonNotFoundException(personUuid));
+
         dto.setPerson(person);
 
         CarRental newCarRental = carRepo.save(dto);

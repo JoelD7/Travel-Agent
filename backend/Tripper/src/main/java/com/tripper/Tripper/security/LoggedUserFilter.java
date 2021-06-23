@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,12 +20,18 @@ public class LoggedUserFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        UserDetailsImpl user = (UserDetailsImpl) authentication.getPrincipal();
+//
+//        Cookie personUuidCookie = new Cookie(CookieName.PERSON_UUID.toString(), user.getUuid());
+//        personUuidCookie.setDomain("localhost");
+//        personUuidCookie.setPath("/");
+//        System.out.println(String.format("name: %s, value: %s\n", personUuidCookie.getName(), personUuidCookie.getValue()));
+//        response.addCookie(personUuidCookie);
 
-        if (request.getCookies() != null) {
-
-        } else {
-            System.out.println("No cookie found");
-        }
+        filterChain.doFilter(request, response);
+//        System.out.println("After passing request and response to filter");
     }
 
 }

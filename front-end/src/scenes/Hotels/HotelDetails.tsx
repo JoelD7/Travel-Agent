@@ -102,7 +102,7 @@ export function HotelDetails() {
 
   const [openConfirmation, setOpenConfirmation] = useState(false);
 
-  const userTrips: Trip[] = useSelector(selectUserTrips);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
   const idPerson: number = useSelector(selectIdPerson);
 
   useEffect(() => {
@@ -280,12 +280,14 @@ export function HotelDetails() {
   function isHotelRsvInAnyTrip(): boolean {
     let included: boolean = false;
 
-    userTrips.forEach((trip) => {
-      if (isHotelRsvInTrip(hotelRsv, trip)) {
-        included = true;
-        return;
-      }
-    });
+    if (userTrips) {
+      userTrips.forEach((trip) => {
+        if (isHotelRsvInTrip(hotelRsv, trip)) {
+          included = true;
+          return;
+        }
+      });
+    }
 
     return included;
   }

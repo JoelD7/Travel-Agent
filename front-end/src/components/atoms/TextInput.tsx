@@ -1,6 +1,6 @@
 import { createMuiTheme, makeStyles, TextField } from "@material-ui/core";
 import { CreateCSSProperties, ThemeProvider } from "@material-ui/styles";
-import React, { ChangeEvent, ReactNode, useState } from "react";
+import React, { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import { Colors } from "../../styles";
@@ -65,7 +65,6 @@ export function TextInput({
   });
 
   const [text, setText] = useState(value);
-
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState("");
 
@@ -107,6 +106,10 @@ export function TextInput({
     },
   });
   const styles = textStyles();
+
+  useEffect(() => {
+    setText(value);
+  }, [value]);
 
   function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     setText(e.target.value);

@@ -11,6 +11,7 @@ export interface Person {
   flights: Flight[];
   hotelReservations: HotelReservation[];
   idPerson: number;
+  uuid: string;
   lastName: string;
   profilePic: string;
   trips: Trip[];

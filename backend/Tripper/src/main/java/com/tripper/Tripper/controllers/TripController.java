@@ -42,13 +42,15 @@ public class TripController {
     }
 
     @GetMapping("/all")
-    public CollectionModel<EntityModel<Trip>> getAllTrips(@RequestParam Long idPerson) {
-        return assembler.toCollectionModel(tripRepo.findByPerson(idPerson));
+    public CollectionModel<EntityModel<Trip>> getAllTrips(@RequestParam String personUuid) {
+        return assembler.toCollectionModel(tripRepo.findByPerson(personUuid));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Trip> createTrip(@RequestBody Trip trip, @RequestParam Long idPerson) {
-        Person person = personRepo.findById(idPerson).orElseThrow(() -> new PersonNotFoundException(idPerson));
+    public ResponseEntity<Trip> createTrip(@RequestBody Trip trip, @RequestParam String personUuid) {
+        Person person = personRepo.findByUuid(personUuid)
+                .orElseThrow(() -> new PersonNotFoundException(personUuid));
+
         trip.setPerson(person);
         trip.setUuid(UUID.randomUUID().toString());
 

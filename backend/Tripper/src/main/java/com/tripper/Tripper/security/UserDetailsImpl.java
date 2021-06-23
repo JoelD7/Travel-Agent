@@ -15,19 +15,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class UserDetailsImpl implements UserDetails {
 
     private Long idPerson;
+    private String uuid;
     private String email;
 
     @JsonIgnore
     private String password;
 
-    public UserDetailsImpl(Long idPerson, String email, String password) {
+    public UserDetailsImpl(Long idPerson, String uuid, String email, String password) {
         this.idPerson = idPerson;
+        this.uuid = uuid;
         this.email = email;
         this.password = password;
     }
 
     public static UserDetails build(Person person) {
-        return new UserDetailsImpl(person.getIdPerson(), person.getEmail(), person.getPassword());
+        return new UserDetailsImpl(person.getIdPerson(), person.getUuid(), person.getEmail(), person.getPassword());
     }
 
     @Override

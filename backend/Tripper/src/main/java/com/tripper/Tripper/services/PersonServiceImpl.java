@@ -19,12 +19,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person getPerson(Long idPerson) {
-        Person person = personRepo.findById(idPerson)
-                .orElseThrow(() -> new PersonNotFoundException(idPerson));
+    public Person getPerson(String uuid) {
+        Person person = personRepo.findByUuid(uuid)
+                .orElseThrow(() -> new PersonNotFoundException(uuid));
 
         return new Person()
-                .setIdPersonFluently(idPerson)
+                .setUuidFluently(uuid)
                 .setFirstNameFluently(person.getFirstName())
                 .setLastNameFluently(person.getLastName())
                 .setEmailFluently(person.getEmail())
@@ -37,22 +37,25 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person editUserProfile(Long idPerson, Person dto) throws InvalidPasswordException {
-        Person curPerson = personRepo.findById(idPerson)
-                .orElseThrow(() -> new PersonNotFoundException(idPerson));
+    public Person editUserProfile(String uuid, Person dto) throws InvalidPasswordException {
+        Person curPerson = personRepo.findByUuid(uuid)
+                .orElseThrow(() -> new PersonNotFoundException(uuid));
 
         Person modPerson = dto;
+        modPerson.setIdPerson(curPerson.getIdPerson());
 
         if (isPasswordModRequested(dto)) {
             if (isRequestPasswordValid(curPerson, dto)) {
                 String newPassword = encoder.encode(dto.getPassword());
                 modPerson.setPassword(newPassword);
             } else {
-                throw new InvalidPasswordException(idPerson);
+                throw new InvalidPasswordException(uuid);
             }
+        } else {
+            modPerson.setPassword(curPerson.getPassword());
         }
 
-        return modPerson;
+        return personRepo.save(modPerson);
     }
 
     private boolean isRequestPasswordValid(Person profileToChange, Person dto) {

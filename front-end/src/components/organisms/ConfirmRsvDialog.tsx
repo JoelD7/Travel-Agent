@@ -22,12 +22,14 @@ import {
   EventTypes,
   HotelReservation,
   mapHotelDTOToDomainType,
+  Person,
   Routes,
   selectCarRsv,
   selectHotelReservations,
   selectHotelRsv,
   selectIdPerson,
   setHotelReservations,
+  selectPerson,
   setHotelRsv,
 } from "../../utils";
 import { CustomButton, Text } from "../atoms";
@@ -78,6 +80,7 @@ export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps)
   const carRsv: CarRsv = useSelector(selectCarRsv);
 
   const idPerson: number = useSelector(selectIdPerson);
+  const person: Person | undefined = useSelector(selectPerson);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -87,9 +90,9 @@ export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps)
   }
 
   function makeBooking() {
-    if (type === "Hotel") {
+    if (type === "Hotel" && person) {
       backend
-        .post(`/hotel/book?idPerson=${idPerson}`, hotelRsv)
+        .post(`/hotel/book?personUuid=${person.uuid}`, hotelRsv)
         .then((res) => {
           setOpenSuccessSnack(true);
 
@@ -100,9 +103,9 @@ export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps)
           history.push(`${Routes.RESERVATIONS}`);
         })
         .catch((err) => console.log(err));
-    } else {
+    } else if (person) {
       backend
-        .post(`/car-rental/book?idPerson=${idPerson}`, carRsv)
+        .post(`/car-rental/book?personUuid=${person.uuid}`, carRsv)
         .then((res) => {
           setOpenSuccessSnack(true);
 

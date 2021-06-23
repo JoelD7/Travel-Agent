@@ -44,13 +44,15 @@ public class HotelReservationController {
     }
 
     @GetMapping("/all")
-    public CollectionModel<EntityModel<HotelReservation>> getAllHotelReservations(@RequestParam Long idPerson) {
-        return assembler.toCollectionModel(hotelRepo.getAllHotelReservationsByPerson(idPerson));
+    public CollectionModel<EntityModel<HotelReservation>> getAllHotelReservations(@RequestParam String personUuid) {
+        return assembler.toCollectionModel(hotelRepo.getAllHotelReservationsByPerson(personUuid));
     }
 
     @PostMapping("/book")
-    public ResponseEntity<?> bookHotel(@RequestBody HotelReservation hotelRsv, @RequestParam Long idPerson) {
-        Person person = personRepo.findById(idPerson).orElseThrow(() -> new PersonNotFoundException(idPerson));
+    public ResponseEntity<?> bookHotel(@RequestBody HotelReservation hotelRsv, @RequestParam String personUuid) {
+        Person person = personRepo.findByUuid(personUuid)
+                .orElseThrow(() -> new PersonNotFoundException(personUuid));
+
         hotelRsv.setPerson(person);
         person.getHotelReservations().add(hotelRsv);
 

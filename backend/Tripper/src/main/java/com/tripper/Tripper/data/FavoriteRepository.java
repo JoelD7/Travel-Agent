@@ -9,8 +9,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
-    @Query("select f from Favorite f where f.person.idPerson = :idPerson")
-    public List<Favorite> getAllByPerson(@Param("idPerson") Long idPerson);
+    @Query("select f from Favorite f where f.person.uuid = :uuid")
+    public List<Favorite> getAllByPerson(@Param("uuid") String uuid);
 
     @Query("select f from Favorite f where f.code = :code")
     public Optional<Favorite> findByCode(@Param("code") String code);

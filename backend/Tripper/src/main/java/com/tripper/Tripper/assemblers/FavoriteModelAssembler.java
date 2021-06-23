@@ -17,12 +17,12 @@ public class FavoriteModelAssembler implements RepresentationModelAssembler<Favo
     @Override
     public EntityModel<Favorite> toModel(Favorite entity) {
         Long idFavorite = entity.getIdFavorite();
-        Long idPerson = entity.getPerson().getIdPerson();
+        String personUuid = entity.getPerson().getUuid();
 
         return EntityModel.of(entity,
                 linkTo(methodOn(FavoriteController.class).getFavorite(idFavorite)).withSelfRel(),
-                linkTo(methodOn(FavoriteController.class).getAllFavorites(idPerson)).withRel("favorites"),
-                linkTo(methodOn(FavoriteController.class).addToFavorites(entity, idPerson)).withRel("addNew")
+                linkTo(methodOn(FavoriteController.class).getAllFavorites(personUuid)).withRel("favorites"),
+                linkTo(methodOn(FavoriteController.class).addToFavorites(entity, personUuid)).withRel("addNew")
         );
     }
 

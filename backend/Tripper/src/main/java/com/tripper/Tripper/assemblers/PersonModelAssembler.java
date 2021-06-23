@@ -16,11 +16,11 @@ public class PersonModelAssembler implements RepresentationModelAssembler<Person
 
     @Override
     public EntityModel<Person> toModel(Person entity) {
-        Long idPerson = entity.getIdPerson();
+        String uuid = entity.getUuid();
 
         return EntityModel.of(entity,
-                linkTo(methodOn(PersonController.class).get(idPerson)).withSelfRel(),
-                linkTo(methodOn(PersonController.class).editProfile(idPerson, entity)).withRel("editProfile"),
+                linkTo(methodOn(PersonController.class).get(uuid)).withSelfRel(),
+                linkTo(methodOn(PersonController.class).editProfile(uuid, entity)).withRel("editProfile"),
                 linkTo(methodOn(PersonController.class).getAll()).withRel("personList"));
     }
 

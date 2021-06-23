@@ -5,10 +5,15 @@ import {
   AuthStatus,
   backend,
   Person,
+  responseTripToDomainTrip,
   Routes,
-  selectIsAuthenticated,
-  setIsAuthenticated,selectPerson,
-  setLoginReferrer, useAppDispatch
+  selectPerson,
+  setIsAuthenticated,
+  setLoginReferrer,
+  setPerson,
+  setUserTrips,
+  setUserTripsFromPerson,
+  useAppDispatch,
 } from "./utils";
 
 interface ParentProps {
@@ -20,18 +25,18 @@ export function Parent({ children }: ParentProps) {
   const history = useHistory();
   const location = useLocation();
   const curPathname = location.pathname;
-  const person: Person | undefined = useSelector(selectPerson)
+  const person: Person | undefined = useSelector(selectPerson);
 
   useEffect(() => {
-    if(!person){
-      // const res = await backend.get
+    if (!person) {
+      fetchPerson();
     }
 
     backend
       .get(`/auth/status`)
       .then((res) => {
         let status = res.data;
-console.log(res.headers);
+
         if (status === AuthStatus.AUTHENTICATED) {
           dispatch(setIsAuthenticated(true));
         } else if (status === AuthStatus.NOT_AUTHENTICATED) {
@@ -43,6 +48,19 @@ console.log(res.headers);
       .catch((err) => {});
   }, []);
 
+  async function fetchPerson() {
+    const personUuidCookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("personUuid="));
+
+    if (personUuidCookie) {
+      const uuid = personUuidCookie.split("=")[1];
+
+      const res = await backend.get(`/person/${uuid}`);
+      dispatch(setPerson(res.data));
+      setUserTripsFromPerson(res.data);
+    }
+  }
 
   return <>{children}</>;
 }

@@ -17,15 +17,15 @@ public class HotelReservationModelAssembler
 
     @Override
     public EntityModel<HotelReservation> toModel(HotelReservation entity) {
-        Long idPerson = entity.getPerson().getIdPerson();
+        String personUuid = entity.getPerson().getUuid();
 
         return EntityModel.of(entity,
                 linkTo(methodOn(HotelReservationController.class)
                         .getHotelReservation(entity.getIdHotelReservation())).withSelfRel(),
                 linkTo(methodOn(HotelReservationController.class)
-                        .getAllHotelReservations(idPerson)).withRel("hotelReservations"),
+                        .getAllHotelReservations(personUuid)).withRel("hotelReservations"),
                 linkTo(methodOn(HotelReservationController.class)
-                        .bookHotel(entity, idPerson)).withRel("bookHotel"),
+                        .bookHotel(entity, personUuid)).withRel("bookHotel"),
                 linkTo(methodOn(HotelReservationController.class)
                         .deleteReservation(entity.getIdHotelReservation())).withRel("deleteReservation")
         );

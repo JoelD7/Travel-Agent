@@ -24,15 +24,7 @@ import {
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import {
-  fetchUserTrips,
-  getLinkStyle,
-  Routes,
-  selectIsAuthenticated,
-  selectUserTrips,
-  Trip,
-  useAppDispatch,
-} from "../../utils";
+import { getLinkStyle, Routes, selectUserTrips, Trip } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
 export function Trips() {
@@ -40,13 +32,11 @@ export function Trips() {
 
   const [trips, setTrips] = useState<Trip[]>();
   const [loading, setLoading] = useState(true);
-
   const [lastTrip, setLastTrip] = useState<Trip>();
 
   const match = useRouteMatch();
   const history = useHistory();
-  const userTrips: Trip[] = useSelector(selectUserTrips);
-  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
 
   const tripCoverBackground: CSSProperties = {
     backgroundImage: lastTrip
@@ -56,8 +46,6 @@ export function Trips() {
     backgroundRepeat: "no-repeat",
     backgroundPosition: "50%",
   };
-
-  const dispatch = useAppDispatch();
 
   const sliderSettings = {
     className: style.slider,
@@ -89,22 +77,16 @@ export function Trips() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      if (userTrips.length === 0) {
-        dispatch(fetchUserTrips(null)).then((res) => {
-          setTrips(res.payload as Trip[]);
-          setLoading(false);
-          setUpLastTrip(res.payload as Trip[]);
-        });
-      } else {
-        setLoading(false);
+    if (userTrips) {
+      if (userTrips.length > 0) {
         setTrips([...userTrips]);
         setUpLastTrip([...userTrips]);
+      } else {
+        setTrips([]);
       }
-    } else {
-      setTrips([]);
+      setLoading(false);
     }
-  }, []);
+  }, [userTrips]);
 
   function setUpLastTrip(trips: Trip[]) {
     let lastTrip: Trip = trips.sort((a, b) => compareDesc(a.endDate, b.endDate))[0];

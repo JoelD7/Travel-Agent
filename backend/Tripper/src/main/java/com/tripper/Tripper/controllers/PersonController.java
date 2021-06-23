@@ -44,17 +44,17 @@ public class PersonController {
         return assembler.toCollectionModel(personRepo.findAll());
     }
 
-    @GetMapping("/{id}")
-    public EntityModel<Person> get(@PathVariable Long idPerson) {
-        Person person = personRepo.findById(idPerson)
-                .orElseThrow(() -> new PersonNotFoundException(idPerson));
+    @GetMapping("/{uuid}")
+    public EntityModel<Person> get(@PathVariable String uuid) {
+        Person person = personRepo.findByUuid(uuid)
+                .orElseThrow(() -> new PersonNotFoundException(uuid));
 
         return assembler.toModel(person);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> editProfile(@PathVariable Long idPerson, @RequestBody Person dto) {
-        Person editedUser = personService.editUserProfile(idPerson, dto);
+    @PutMapping("/{uuid}")
+    public ResponseEntity<?> editProfile(@PathVariable String uuid, @RequestBody Person dto) {
+        Person editedUser = personService.editUserProfile(uuid, dto);
 
         return ResponseEntity
                 .accepted()

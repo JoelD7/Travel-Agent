@@ -54,14 +54,14 @@ public class FavoriteController {
     }
 
     @GetMapping("/all")
-    public CollectionModel<EntityModel<Favorite>> getAllFavorites(@RequestParam Long idPerson) {
-        return assembler.toCollectionModel(favoriteRepo.getAllByPerson(idPerson));
+    public CollectionModel<EntityModel<Favorite>> getAllFavorites(@RequestParam String personUuid) {
+        return assembler.toCollectionModel(favoriteRepo.getAllByPerson(personUuid));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addToFavorites(@RequestBody Favorite dto, @RequestParam Long idPerson) {
-        Person person = personRepo.findById(idPerson)
-                .orElseThrow(() -> new PersonNotFoundException(idPerson));
+    public ResponseEntity<?> addToFavorites(@RequestBody Favorite dto, @RequestParam String personUuid) {
+        Person person = personRepo.findByUuid(personUuid)
+                .orElseThrow(() -> new PersonNotFoundException(personUuid));
 
         dto.setPerson(person);
         setFavoriteEntity(dto);

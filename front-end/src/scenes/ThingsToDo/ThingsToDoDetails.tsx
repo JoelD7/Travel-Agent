@@ -57,7 +57,7 @@ export function ThingsToDoDetails() {
   const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
   const [removedSnackText, setRemovedSnackText] = useState("");
 
-  const userTrips: Trip[] = useSelector(selectUserTrips);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
 
   useEffect(() => {
     fetchPOIDetail()
@@ -171,7 +171,7 @@ export function ThingsToDoDetails() {
   function getTripEventOfPOI(): TripEvent {
     let tripEvent: TripEvent = tripEventPlaceholder;
 
-    if (poi) {
+    if (poi && userTrips) {
       userTrips.forEach((trip) => {
         if (trip.itinerary) {
           trip.itinerary.forEach((event) => {

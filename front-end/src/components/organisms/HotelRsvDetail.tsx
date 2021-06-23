@@ -137,7 +137,7 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
   const history = useHistory();
   const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
 
-  const userTrips: Trip[] = useSelector(selectUserTrips);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
   const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
   const [openPopover, setOpenPopover] = useState(false);
@@ -163,12 +163,14 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
   function isHotelRsvInAnyTrip(): boolean {
     let included: boolean = false;
 
-    userTrips.forEach((trip) => {
-      if (isHotelRsvInTrip(hotelRsv, trip)) {
-        included = true;
-        return;
-      }
-    });
+    if (userTrips) {
+      userTrips.forEach((trip) => {
+        if (isHotelRsvInTrip(hotelRsv, trip)) {
+          included = true;
+          return;
+        }
+      });
+    }
 
     return included;
   }
@@ -241,23 +243,25 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
   function getTripEventOfHotel() {
     let tripEvent: TripEvent = tripEventPlaceholder;
 
-    userTrips.forEach((trip) => {
-      if (trip.itinerary) {
-        trip.itinerary.forEach((event) => {
-          if (
-            event.hotelReservation &&
-            event.hotelReservation.idHotelReservation === hotelRsv.idHotelReservation
-          ) {
-            tripEvent = event;
-            return;
-          }
-        });
-      }
+    if (userTrips) {
+      userTrips.forEach((trip) => {
+        if (trip.itinerary) {
+          trip.itinerary.forEach((event) => {
+            if (
+              event.hotelReservation &&
+              event.hotelReservation.idHotelReservation === hotelRsv.idHotelReservation
+            ) {
+              tripEvent = event;
+              return;
+            }
+          });
+        }
 
-      if (tripEvent) {
-        return;
-      }
-    });
+        if (tripEvent) {
+          return;
+        }
+      });
+    }
 
     return tripEvent;
   }

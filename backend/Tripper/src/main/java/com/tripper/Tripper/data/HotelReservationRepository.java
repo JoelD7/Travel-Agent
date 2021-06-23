@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface HotelReservationRepository extends JpaRepository<HotelReservation, Long> {
 
-    @Query("select hr from HotelReservation hr where hr.person.idPerson = :idPerson")
-    public List<HotelReservation> getAllHotelReservationsByPerson(@Param("idPerson") Long idPerson);
+    @Query("select hr from HotelReservation hr where hr.person.uuid= :uuid")
+    public List<HotelReservation> getAllHotelReservationsByPerson(@Param("uuid") String uuid);
 }
