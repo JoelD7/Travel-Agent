@@ -1,16 +1,14 @@
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Grid, IconButton, InputAdornment, Snackbar } from "@material-ui/core";
+import { Grid, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Font } from "../../assets";
 import { logoType, signup } from "../../assets/images";
-import { CustomButton, Footer, Navbar, PasswordEye } from "../../components";
+import { CustomButton, Footer, PasswordEye } from "../../components";
 import { TextInput } from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
-import { Routes, backend } from "../../utils";
+import { backend, Routes } from "../../utils";
 
 interface SignUpValuesType {
   firstName: string;
@@ -41,15 +39,29 @@ export function SignUp() {
     password: false,
     passwordConfirmation: false,
   });
+  const [emailTaken, setEmailTaken] = useState<boolean>(false);
+  const [emailTakenText, setEmailTakenText] = useState<string>("");
+  const [loadingButton, setLoadingButton] = useState(false);
 
-  async function signUp(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
+  function signUp(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     let { passwordConfirmation, ...signUpDto } = credentials;
-    let res = backend.post(`/auth/signup`, signUpDto);
-    setOpenSuccessSnack(true);
+    setLoadingButton(true);
 
-    setTimeout(() => {
-      history.push(Routes.LOGIN);
-    }, 1000);
+    backend
+      .post(`/auth/signup`, signUpDto)
+      .then((res) => {
+        setOpenSuccessSnack(true);
+        setLoadingButton(false);
+
+        setTimeout(() => {
+          history.push(Routes.LOGIN);
+        }, 1000);
+      })
+      .catch((error) => {
+        setEmailTaken(true);
+        setLoadingButton(false);
+        setEmailTakenText(error.response.data.message);
+      });
   }
 
   function googleSignUp(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
@@ -60,8 +72,6 @@ export function SignUp() {
 
   return (
     <div>
-      <Navbar variant="auth" />
-
       <Grid className={style.mainContainerSignUp} container>
         <Grid item className={style.formGrid}>
           <div className={style.imageContainer}>
@@ -111,6 +121,8 @@ export function SignUp() {
                 label="Email"
                 name="email"
                 value={credentials.email}
+                error={emailTaken}
+                helperText={emailTakenText}
                 style={{ width: "100%" }}
                 type="email"
                 updateState={updateState}
@@ -161,7 +173,12 @@ export function SignUp() {
             </Grid>
 
             <Grid id="signUp" style={{ marginTop: "15px" }} container>
-              <CustomButton onClick={signUp} submit={true} style={{ width: "100%" }}>
+              <CustomButton
+                onClick={signUp}
+                submit={true}
+                loading={loadingButton}
+                style={{ width: "100%" }}
+              >
                 Sign up
               </CustomButton>
             </Grid>

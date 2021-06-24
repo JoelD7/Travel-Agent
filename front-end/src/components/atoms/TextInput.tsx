@@ -9,6 +9,8 @@ interface TextInputProps {
   name: string;
   value: string;
   label: string;
+  error?: boolean;
+  helperText?: string;
   type: string;
   coPassword: string;
   style: CreateCSSProperties<{}>;
@@ -34,6 +36,8 @@ export function TextInput({
   endAdornment,
   coPassword,
   updateState,
+  error: errorProp,
+  helperText: helperTextProp,
 }: TextInputType) {
   const theme = createMuiTheme({
     overrides: {
@@ -65,8 +69,8 @@ export function TextInput({
   });
 
   const [text, setText] = useState(value);
-  const [error, setError] = useState(false);
-  const [helperText, setHelperText] = useState("");
+  const [error, setError] = useState(errorProp ? errorProp : false);
+  const [helperText, setHelperText] = useState(helperTextProp ? helperTextProp : "");
 
   const textStyles = makeStyles({
     textField: {
@@ -110,6 +114,15 @@ export function TextInput({
   useEffect(() => {
     setText(value);
   }, [value]);
+
+  useEffect(() => {
+    if (errorProp) {
+      setError(errorProp);
+    }
+    if (helperTextProp) {
+      setHelperText(helperTextProp);
+    }
+  }, [errorProp, helperTextProp]);
 
   function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     setText(e.target.value);

@@ -4,12 +4,14 @@ import { useHistory, useLocation } from "react-router-dom";
 import {
   AuthStatus,
   backend,
-  Person, Routes,
+  Person,
+  Routes,
   selectPerson,
   setIsAuthenticated,
   setLoginReferrer,
-  setPerson, setUserTripsFromPerson,
-  useAppDispatch
+  setPerson,
+  setUserTripsFromPerson,
+  useAppDispatch,
 } from "./utils";
 
 interface ParentProps {
@@ -29,16 +31,19 @@ export function Parent({ children }: ParentProps) {
       .then((res) => {
         let status = res.data;
 
-        if (!person) {
-          fetchPerson();
-        }
-
         if (status === AuthStatus.AUTHENTICATED) {
           dispatch(setIsAuthenticated(true));
+
+          if (!person) {
+            fetchPerson();
+          }
         } else if (status === AuthStatus.NOT_AUTHENTICATED) {
           dispatch(setIsAuthenticated(false));
           dispatch(setLoginReferrer(curPathname));
-          history.push(Routes.LOGIN);
+
+          if (curPathname !== Routes.SIGNUP) {
+            history.push(Routes.LOGIN);
+          }
         }
       })
       .catch((err) => {});

@@ -68,6 +68,8 @@ export function Profile({}: ProfileProps) {
   const [changePassword, setChangePassword] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingButton, setLoadingButton] = useState(false);
+  const [wrongPassword, setWrongPassword] = useState<boolean>(false);
+  const [wrongPasswordText, setWrongPasswordText] = useState<string>("");
 
   useEffect(() => {
     if (person) {
@@ -91,15 +93,24 @@ export function Profile({}: ProfileProps) {
     setChangePassword(true);
   }
 
-  async function onSaveChangesClicked() {
+  function onSaveChangesClicked() {
     if (person) {
       setLoadingButton(true);
-      const res = await backend.put(`/person/${person.uuid}`, credentials);
-      let editedPerson = res.data;
 
-      setLoadingButton(false);
-      dispatch(setPerson(editedPerson));
-      setUserTripsFromPerson(editedPerson);
+      backend
+        .put(`/person/${person.uuid}`, credentials)
+        .then((res) => {
+          let editedPerson = res.data;
+
+          setLoadingButton(false);
+          dispatch(setPerson(editedPerson));
+          setUserTripsFromPerson(editedPerson);
+        })
+        .catch((error) => {
+          setWrongPassword(true);
+          setLoadingButton(false);
+          setWrongPasswordText(error.response.data.message);
+        });
     }
   }
 
@@ -198,6 +209,8 @@ export function Profile({}: ProfileProps) {
                   <TextInput
                     name="curPassword"
                     label="Current Password"
+                    error={wrongPassword}
+                    helperText={wrongPasswordText}
                     value={
                       credentials.curPassword === null
                         ? ""

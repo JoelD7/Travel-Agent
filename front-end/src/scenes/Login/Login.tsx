@@ -48,6 +48,8 @@ export function Login() {
     password: "",
   });
   const [loading, setLoading] = useState(false);
+  const [wrongPassword, setWrongPassword] = useState<boolean>(false);
+  const [wrongPasswordText, setWrongPasswordText] = useState<string>("");
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -58,27 +60,35 @@ export function Login() {
 
   async function login(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     setLoading(true);
-    let res = await backend.post(
-      `/auth/login`,
-      `email=${credentials.email}&password=${credentials.password}&rememberMe=true`
-    );
+    backend
+      .post(
+        `/auth/login`,
+        `email=${credentials.email}&password=${credentials.password}&rememberMe=true`
+      )
+      .then((res) => {
+        batchedActions.push(setIsAuthenticated(true));
 
-    batchedActions.push(setIsAuthenticated(true));
+        const loggedUser: Person = mapPersonToDomainType(res.data);
+        batchedActions.push(setPerson(loggedUser));
+        batchedActions.push(setFavorites(loggedUser.favoritePlaces));
+        batchedActions.push(setUserTrips(loggedUser.trips));
+        batchedActions.push(setLoginReferrer(""));
+        dispatch(batchActions(batchedActions));
 
-    const loggedUser: Person = mapPersonToDomainType(res.data);
-    batchedActions.push(setPerson(loggedUser));
-    batchedActions.push(setFavorites(loggedUser.favoritePlaces));
-    batchedActions.push(setUserTrips(loggedUser.trips));
-    batchedActions.push(setLoginReferrer(""));
-    dispatch(batchActions(batchedActions));
+        setLoading(false);
+        setWrongPassword(false);
 
-    setLoading(false);
-
-    if (loginReferrer !== Routes.LOGIN && loginReferrer !== "") {
-      history.push(loginReferrer);
-    } else {
-      history.push(Routes.HOME);
-    }
+        if (loginReferrer !== Routes.LOGIN && loginReferrer !== "") {
+          history.push(loginReferrer);
+        } else {
+          history.push(Routes.HOME);
+        }
+      })
+      .catch((error) => {
+        setWrongPassword(true);
+        setLoading(false);
+        setWrongPasswordText(error.response.data.message);
+      });
   }
 
   function googleLogin(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
@@ -121,6 +131,8 @@ export function Login() {
               <TextInput
                 label="Email"
                 name="email"
+                error={wrongPassword}
+                helperText={wrongPasswordText}
                 updateState={(name, value) =>
                   setCredentials({ ...credentials, [name]: value })
                 }
@@ -134,6 +146,8 @@ export function Login() {
               <TextInput
                 label="Password"
                 name="password"
+                error={wrongPassword}
+                helperText={wrongPasswordText}
                 updateState={(name, value) =>
                   setCredentials({ ...credentials, [name]: value })
                 }

@@ -3,6 +3,8 @@ package com.tripper.Tripper.controllers;
 import com.tripper.Tripper.data.PersonRepository;
 import com.tripper.Tripper.dtos.LoginDTO;
 import com.tripper.Tripper.dtos.SignUpDTO;
+import com.tripper.Tripper.exceptions.BadCrendetialsException;
+import com.tripper.Tripper.exceptions.EmailTakenException;
 import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.models.Person;
 import com.tripper.Tripper.utils.AuthStatus;
@@ -54,6 +56,8 @@ public class AuthController {
     public ResponseEntity<?> login(@ModelAttribute LoginDTO loginDto, HttpServletRequest request,
             HttpServletResponse response) {
 
+        validateCredentials(loginDto);
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 
@@ -68,6 +72,20 @@ public class AuthController {
         sessionRegistry.registerNewSession(request.getSession().getId(), authentication.getPrincipal());
 
         return ResponseEntity.ok(person);
+    }
+
+    private void validateCredentials(LoginDTO dto) {
+
+        if (!personRepo.existsByEmail(dto.getEmail())) {
+            throw new BadCrendetialsException();
+        }
+
+        Person person = personRepo.findByEmail(dto.getEmail()).get();
+        boolean isPasswordValid = encoder.matches(dto.getPassword(), person.getPassword());
+
+        if (!isPasswordValid) {
+            throw new BadCrendetialsException();
+        }
     }
 
     @GetMapping("/status")
@@ -122,12 +140,9 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDTO signUpDto) {
         if (personRepo.existsByEmail(signUpDto.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Error: Email is `already taken!");
+            throw new EmailTakenException();
         }
 
-        // Create new user's account
         Person person = new Person(signUpDto.getFirstName(), signUpDto.getLastName(),
                 signUpDto.getEmail(), encoder.encode(signUpDto.getPassword()));
 
