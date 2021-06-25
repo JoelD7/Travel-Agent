@@ -4,6 +4,7 @@ import * as LocationType from "./geolocation";
 import * as LocalStorageKeys from "./localStorageKeys";
 export * from "./airports";
 export * from "./iataCodes";
+export * from "./ExceptionMessage";
 export * from "./iso3166-countryCodes";
 export { LocalStorageKeys, FlightClass, LocationType };
 

@@ -24,6 +24,7 @@ import {
   backend,
   setUserTripsFromPerson,
   ProfileCredentials,
+  ExceptionMessage,
 } from "../../utils";
 import { profileStyles } from "./profile-styles";
 
@@ -107,9 +108,14 @@ export function Profile({}: ProfileProps) {
           setUserTripsFromPerson(editedPerson);
         })
         .catch((error) => {
-          setWrongPassword(true);
-          setLoadingButton(false);
-          setWrongPasswordText(error.response.data.message);
+          if (
+            error.response &&
+            error.response.data.message === ExceptionMessage.INVALID_PASSWORD
+          ) {
+            setWrongPassword(true);
+            setLoadingButton(false);
+            setWrongPasswordText(error.response.data.message);
+          }
         });
     }
   }

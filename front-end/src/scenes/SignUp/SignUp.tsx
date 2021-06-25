@@ -8,7 +8,7 @@ import { logoType, signup } from "../../assets/images";
 import { CustomButton, Footer, PasswordEye } from "../../components";
 import { TextInput } from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
-import { backend, Routes } from "../../utils";
+import { backend, ExceptionMessage, Routes } from "../../utils";
 
 interface SignUpValuesType {
   firstName: string;
@@ -58,9 +58,14 @@ export function SignUp() {
         }, 1000);
       })
       .catch((error) => {
-        setEmailTaken(true);
-        setLoadingButton(false);
-        setEmailTakenText(error.response.data.message);
+        if (
+          error.response &&
+          error.response.data.message === ExceptionMessage.BAD_CREDENTIALS
+        ) {
+          setEmailTaken(true);
+          setLoadingButton(false);
+          setEmailTakenText(error.response.data.message);
+        }
       });
   }
 

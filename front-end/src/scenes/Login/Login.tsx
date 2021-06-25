@@ -13,6 +13,7 @@ import { TextInput } from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
 import {
   backend,
+  ExceptionMessage,
   mapPersonToDomainType,
   Person,
   Routes,
@@ -85,9 +86,14 @@ export function Login() {
         }
       })
       .catch((error) => {
-        setWrongPassword(true);
-        setLoading(false);
-        setWrongPasswordText(error.response.data.message);
+        if (
+          error.response &&
+          error.response.data.message === ExceptionMessage.BAD_CREDENTIALS
+        ) {
+          setWrongPassword(true);
+          setLoading(false);
+          setWrongPasswordText(error.response.data.message);
+        }
       });
   }
 

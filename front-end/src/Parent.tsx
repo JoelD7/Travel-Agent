@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import {
@@ -24,6 +24,7 @@ export function Parent({ children }: ParentProps) {
   const location = useLocation();
   const curPathname = location.pathname;
   const person: Person | undefined = useSelector(selectPerson);
+  const [childrenVisible, setChildrenVisible] = useState(false);
 
   useEffect(() => {
     backend
@@ -45,6 +46,8 @@ export function Parent({ children }: ParentProps) {
             history.push(Routes.LOGIN);
           }
         }
+
+        setChildrenVisible(true);
       })
       .catch((err) => {});
   }, []);
@@ -63,5 +66,5 @@ export function Parent({ children }: ParentProps) {
     }
   }
 
-  return <>{children}</>;
+  return <>{childrenVisible && children}</>;
 }

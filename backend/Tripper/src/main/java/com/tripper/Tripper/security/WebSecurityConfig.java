@@ -43,9 +43,6 @@ import org.springframework.web.filter.CorsFilter;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
-
-    @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
