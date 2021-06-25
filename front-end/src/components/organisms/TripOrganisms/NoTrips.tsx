@@ -1,7 +1,7 @@
 import { Grid, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Colors } from "../../../styles";
 import { Routes, selectIsAuthenticated } from "../../../utils";
 import { CustomButton, Text } from "../../atoms";

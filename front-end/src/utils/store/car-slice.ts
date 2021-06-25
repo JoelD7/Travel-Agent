@@ -5,7 +5,7 @@ import { CarCheckbox, CarRsv, CarSearch } from "../types";
 export interface CarReducer {
   carSearch: CarSearch;
   carRsv: CarRsv;
-  carReservations: CarRsv[];
+  carReservations?: CarRsv[];
   brands: CarCheckbox[];
   transmission: string;
   features: CarCheckbox[];

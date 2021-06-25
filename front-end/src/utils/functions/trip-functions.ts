@@ -1,7 +1,7 @@
-import { differenceInCalendarDays, parseISO } from "date-fns";
+import { compareDesc, differenceInCalendarDays, parseISO } from "date-fns";
 import Compress from "react-image-file-resizer";
-import { storage, firebase } from "../external-apis";
-import { setUserTrips, store } from "../store";
+import { firebase } from "../external-apis";
+import { setLastTrip, setUserTrips, store } from "../store";
 import { Trip, TripEvent } from "../types";
 import { mapFlightToDomainType } from "./functions";
 
@@ -96,4 +96,10 @@ export async function deleteImageFromFirebase(
     .catch((error) => {
       console.log(`Couldn't delete ${image.name} | Error: ${error}`);
     });
+}
+
+export function setUpLastTrip(trips: Trip[]) {
+  let lastTrip: Trip = trips.sort((a, b) => compareDesc(a.endDate, b.endDate))[0];
+
+  store.dispatch(setLastTrip(lastTrip));
 }

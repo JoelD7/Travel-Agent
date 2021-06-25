@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface CarRentalRepository extends JpaRepository<CarRental, Long> {
 
-    @Query("select cr from CarRental cr where cr.person.idPerson = :idPerson")
-    public List<CarRental> findAllByPerson(@Param("idPerson") Long idPerson);
+    @Query("select cr from CarRental cr where cr.person.uuid = :uuid")
+    public List<CarRental> findAllByPerson(String uuid);
 }

@@ -10,6 +10,8 @@ import {
   HotelRsvDetail,
   IconText,
   Navbar,
+  NotCreatedMessage,
+  ProgressCircle,
   ReservedCars,
   RsvHotels,
   Text,
@@ -19,11 +21,11 @@ import {
   backend,
   CarRsv,
   HotelReservation,
-  hotelRsvPlaceholder,
   mapCarDTOToDomainType,
   mapFlightToDomainType,
   mapHotelDTOToDomainType,
-  selectIdPerson,
+  Person,
+  selectPerson,
   selectUserCurrency,
   setCarReservations,
 } from "../../utils";
@@ -32,61 +34,62 @@ import { reservationStyles } from "./reservation-styles";
 export function Reservations() {
   const style = reservationStyles();
 
-  const [flights, setFlights] = useState<Flight[]>([]);
-
   const dispatch = useDispatch();
 
-  const idPerson: number = useSelector(selectIdPerson);
-  const [openHotelDialog, setOpenHotelDialog] = useState(false);
-
-  const hotelRsv: HotelReservation = hotelRsvPlaceholder;
-
+  const person: Person | undefined = useSelector(selectPerson);
   const userCurrency: string = useSelector(selectUserCurrency);
 
-  const [hotelReservations, setHotelReservations] = useState<HotelReservation[]>([]);
-  const [carRentalReservations, setCarRentalReservations] = useState<CarRsv[]>([]);
+  const [flights, setFlights] = useState<Flight[]>();
+  const [openHotelDialog, setOpenHotelDialog] = useState(false);
+  const [hotelReservations, setHotelReservations] = useState<HotelReservation[]>();
 
   useEffect(() => {
     fetchBookedFlights();
     fetchBookedHotels();
     fetchBookedCarRentals();
-  }, []);
+  }, [person]);
 
   function fetchBookedFlights() {
-    backend
-      .get(`/flight/all?idPerson=${idPerson}`)
-      .then((res) => {
-        let mappedFlights: Flight[] = res.data._embedded.flightList.map((flight: any) =>
-          mapFlightToDomainType(flight)
-        );
-        setFlights(mappedFlights);
-      })
-      .catch((err) => console.log(err));
+    if (person) {
+      backend
+        .get(`/flight/all?personUuid=${person.uuid}`)
+        .then((res) => {
+          let mappedFlights: Flight[] = res.data._embedded.flightList.map((flight: any) =>
+            mapFlightToDomainType(flight)
+          );
+          setFlights(mappedFlights);
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   function fetchBookedHotels() {
-    backend
-      .get(`/hotel/all?idPerson=${idPerson}`)
-      .then((res) => {
-        let mappedHotels: HotelReservation[] =
-          res.data._embedded.hotelReservationList.map((hotel: any) =>
-            mapHotelDTOToDomainType(hotel)
-          );
-        setHotelReservations(mappedHotels);
-      })
-      .catch((err) => console.log(err));
+    if (person) {
+      backend
+        .get(`/hotel/all?personUuid=${person.uuid}`)
+        .then((res) => {
+          let mappedHotels: HotelReservation[] =
+            res.data._embedded.hotelReservationList.map((hotel: any) =>
+              mapHotelDTOToDomainType(hotel)
+            );
+          setHotelReservations(mappedHotels);
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   function fetchBookedCarRentals() {
-    backend
-      .get(`/car-rental/all?idPerson=${idPerson}`)
-      .then((res) => {
-        let mappedCarReservations: CarRsv[] = res.data._embedded.carRentalList.map(
-          (car: any) => mapCarDTOToDomainType(car)
-        );
-        dispatch(setCarReservations(mappedCarReservations));
-      })
-      .catch((err) => console.log(err));
+    if (person) {
+      backend
+        .get(`/car-rental/all?personUuid=${person.uuid}`)
+        .then((res) => {
+          let mappedCarReservations: CarRsv[] = res.data._embedded.carRentalList.map(
+            (car: any) => mapCarDTOToDomainType(car)
+          );
+          dispatch(setCarReservations(mappedCarReservations));
+        })
+        .catch((err) => console.log(err));
+    }
   }
 
   return (
@@ -131,17 +134,32 @@ export function Reservations() {
 
           {/* Flights */}
           <Grid item xs={12}>
-            <Grid container>
-              {flights.map((flight, i) => (
-                <CardFlight
-                  className={style.flightCard}
-                  key={i}
-                  bookedFlight
-                  flight={flight}
-                  variant="deal"
-                />
-              ))}
-            </Grid>
+            {flights ? (
+              <Grid container>
+                {flights.length > 0 ? (
+                  <>
+                    {flights.map((flight, i) => (
+                      <CardFlight
+                        className={style.flightCard}
+                        key={i}
+                        bookedFlight
+                        flight={flight}
+                        variant="deal"
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <NotCreatedMessage
+                    type="FLIGHT"
+                    message="You have no booked flights."
+                  />
+                )}
+              </Grid>
+            ) : (
+              <Grid container>
+                <ProgressCircle />
+              </Grid>
+            )}
           </Grid>
 
           {/* Hotels title */}
@@ -163,7 +181,13 @@ export function Reservations() {
 
           {/* Hotels */}
           <Grid item xs={12}>
-            <RsvHotels userCurrency={userCurrency} hotels={hotelReservations} />
+            {hotelReservations ? (
+              <RsvHotels userCurrency={userCurrency} hotels={hotelReservations} />
+            ) : (
+              <Grid container>
+                <ProgressCircle />
+              </Grid>
+            )}
           </Grid>
 
           {/* Cars title */}

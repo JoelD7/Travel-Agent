@@ -18,6 +18,7 @@ import {
   selectFlightFromAutocomplete,
   selectFlightSearchParams,
   selectFlightToAutocomplete,
+  selectOriginCity,
   selectSearchQuery,
   setCarSearch,
   setDestinationCity,
@@ -25,7 +26,6 @@ import {
   setFlightFromAutocomplete,
   setFlightTo,
   setFlightToAutocomplete,
-  selectOriginCity,
   setOriginCity,
   updateAirportPredictions,
   updateCityPredictions,
@@ -41,6 +41,7 @@ interface IataAutocomplete {
   home?: boolean;
   placeholder?: string;
   isInNavbar?: boolean;
+  label?: string;
   required?: boolean;
   className?: string;
   getOptionLabel?: (option: any) => string;
@@ -51,6 +52,7 @@ export function IataAutocomplete({
   type,
   placeholder,
   home,
+  label,
   required = false,
   cityType = LocationType.DESTINATION,
   isInNavbar,
@@ -62,7 +64,6 @@ export function IataAutocomplete({
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
   const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
-
   const carSearch: CarSearch = useSelector(selectCarSearch);
 
   const dispatch = useDispatch();
@@ -246,7 +247,11 @@ export function IataAutocomplete({
               style={isInNavbar ? { width: "100%" } : {}}
               className={isInNavbar ? style.navbar : style.searchBar}
               onChange={onTextChange}
+              label={label}
               size="small"
+              InputLabelProps={{
+                classes: { root: style.inputLabel },
+              }}
             />
           ) : (
             <TextField

@@ -17,7 +17,7 @@ import {
 import { Alert } from "@material-ui/lab";
 import React, { CSSProperties, FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import { Font, logoIcon, logoType, logoTypeWhiteFore } from "../../assets";
 import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
@@ -62,6 +62,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
   const searchQuery = useSelector(selectSearchQuery);
   const match = useRouteMatch();
   const route = match.path;
+  const history = useHistory();
 
   useEffect(() => {
     if (isAccessTokenUpdatable()) {
@@ -197,7 +198,16 @@ export const Navbar: FunctionComponent<Navbar> = ({
                     style={variant === "transparent" ? { color: "white" } : {}}
                     classes={{ root: style.menuItemRoot }}
                   >
-                    Login
+                    <Link
+                      style={
+                        variant === "transparent"
+                          ? getLinkStyle("white")
+                          : getLinkStyle(Colors.BLUE)
+                      }
+                      to={Routes.LOGIN}
+                    >
+                      Login
+                    </Link>
                   </MenuItem>
                   <MenuItem
                     onClick={() => {}}
@@ -205,7 +215,16 @@ export const Navbar: FunctionComponent<Navbar> = ({
                     style={variant === "transparent" ? { color: "white" } : {}}
                     classes={{ root: style.menuItemRoot }}
                   >
-                    Sign Up
+                    <Link
+                      style={
+                        variant === "transparent"
+                          ? getLinkStyle("white")
+                          : getLinkStyle(Colors.BLUE)
+                      }
+                      to={Routes.SIGNUP}
+                    >
+                      Sign up
+                    </Link>
                   </MenuItem>
                 </>
               )}
@@ -258,6 +277,15 @@ export const Navbar: FunctionComponent<Navbar> = ({
           }}
         >
           <MenuItem
+            style={{ fontSize: 16 }}
+            classes={{ root: style.menuItemRoot }}
+            onClick={() => history.push(Routes.PROFILE)}
+          >
+            Profile
+          </MenuItem>
+
+          <MenuItem
+            style={{ fontSize: 16 }}
             classes={{ root: style.menuItemRoot }}
             onClick={() => onChangeOriginCityClick()}
           >

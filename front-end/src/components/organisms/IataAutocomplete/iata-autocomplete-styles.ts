@@ -15,6 +15,10 @@ export const iataAutocompleteStyles = makeStyles((theme: Theme) => ({
     fontSize: 14,
     fontWeight: "bold",
   },
+  inputLabel: {
+    fontFamily: Font.Family,
+    color: Colors.GRAY_TEXT,
+  },
   popupIndicatorOpen: {
     transform: "rotate(0deg)",
   },

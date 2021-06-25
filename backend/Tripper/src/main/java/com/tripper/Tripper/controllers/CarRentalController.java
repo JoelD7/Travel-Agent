@@ -44,8 +44,8 @@ public class CarRentalController {
     }
 
     @GetMapping("/all")
-    public CollectionModel<EntityModel<CarRental>> getAllCarRentals(@RequestParam Long idPerson) {
-        return assembler.toCollectionModel(carRepo.findAllByPerson(idPerson));
+    public CollectionModel<EntityModel<CarRental>> getAllCarRentals(@RequestParam String personUuid) {
+        return assembler.toCollectionModel(carRepo.findAllByPerson(personUuid));
     }
 
     @PostMapping("/book")

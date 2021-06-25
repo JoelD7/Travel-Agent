@@ -70,6 +70,10 @@ const tripSlice = createSlice({
       state.tripDetail = action.payload;
     },
 
+    setLastTrip(state, action: PayloadAction<Trip>) {
+      state.lastTrip = action.payload;
+    },
+
     setFavorites(state, action: PayloadAction<Favorite[]>) {
       state.favPlaces = action.payload;
     },
@@ -94,7 +98,12 @@ const tripSlice = createSlice({
   },
 });
 
-export const { setTripDetail, setUserTrips, setAlbumPictures, setFavorites } =
-  tripSlice.actions;
+export const {
+  setTripDetail,
+  setUserTrips,
+  setLastTrip,
+  setAlbumPictures,
+  setFavorites,
+} = tripSlice.actions;
 
 export default tripSlice.reducer;

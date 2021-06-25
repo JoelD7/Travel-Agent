@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import static com.tripper.Tripper.data.specifications.FlightRepositorySpecs.*;
 
 @RestController
 @RequestMapping("/flight")
@@ -42,8 +41,8 @@ public class FlightController {
     }
 
     @GetMapping("/all")
-    public CollectionModel<EntityModel<Flight>> getAllFlights(@RequestParam Long idPerson) {
-        return assembler.toCollectionModel(flightRepo.findAll(hasIdPerson(idPerson)));
+    public CollectionModel<EntityModel<Flight>> getAllFlights(@RequestParam String personUuid) {
+        return assembler.toCollectionModel(flightRepo.findAllOfPerson(personUuid));
     }
 
     @PostMapping

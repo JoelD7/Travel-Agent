@@ -10,7 +10,7 @@ import {
 import { compareDesc, format } from "date-fns";
 import React, { CSSProperties, useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
 import {
@@ -24,7 +24,14 @@ import {
   Text,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import { getLinkStyle, Routes, selectUserTrips, Trip } from "../../utils";
+import {
+  getLinkStyle,
+  Routes,
+  selectUserTrips,
+  Trip,
+  selectLastTrip,
+  setUpLastTrip,
+} from "../../utils";
 import { tripStyles } from "./trip-styles";
 
 export function Trips() {
@@ -32,11 +39,13 @@ export function Trips() {
 
   const [trips, setTrips] = useState<Trip[]>();
   const [loading, setLoading] = useState(true);
-  const [lastTrip, setLastTrip] = useState<Trip>();
+
+  const lastTrip: Trip | undefined = useSelector(selectLastTrip);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
 
   const match = useRouteMatch();
+  const dispatch = useDispatch();
   const history = useHistory();
-  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
 
   const tripCoverBackground: CSSProperties = {
     backgroundImage: lastTrip
@@ -87,12 +96,6 @@ export function Trips() {
       setLoading(false);
     }
   }, [userTrips]);
-
-  function setUpLastTrip(trips: Trip[]) {
-    let lastTrip: Trip = trips.sort((a, b) => compareDesc(a.endDate, b.endDate))[0];
-
-    setLastTrip(lastTrip);
-  }
 
   function TripCards() {
     if (trips) {

@@ -84,7 +84,7 @@ export function CarRsvDetails({ open, onClose }: CarRsvDetailsProps) {
   const style = carRsvDetailsStyles();
   const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
   const carRsv: CarRsv = useSelector(selectCarRsv);
-  const carReservations: CarRsv[] = useSelector(selectCarReservations);
+  const carReservations: CarRsv[] | undefined = useSelector(selectCarReservations);
 
   const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
   const [openPopover, setOpenPopover] = useState(false);
@@ -135,10 +135,12 @@ export function CarRsvDetails({ open, onClose }: CarRsvDetailsProps) {
   }
 
   function deleteCarRsvFromStore() {
-    const newCarReservations: CarRsv[] = carReservations.filter(
-      (carRental) => carRental.idCarRental !== carRsv.idCarRental
-    );
-    dispatch(setCarReservations(newCarReservations));
+    if (carReservations) {
+      const newCarReservations: CarRsv[] = carReservations.filter(
+        (carRental) => carRental.idCarRental !== carRsv.idCarRental
+      );
+      dispatch(setCarReservations(newCarReservations));
+    }
   }
 
   function getTripEventOfCarRental(): TripEvent {

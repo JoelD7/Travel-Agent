@@ -1,5 +1,6 @@
 import { setUserTrips, store } from "../store";
-import { responseTripToDomainTrip } from "./trip-functions";
+import { Trip } from "../types";
+import { responseTripToDomainTrip, setUpLastTrip } from "./trip-functions";
 
 export function setUserTripsFromPerson(person: any) {
   let tripsInResponse = person.trips;
@@ -8,4 +9,9 @@ export function setUserTripsFromPerson(person: any) {
   );
 
   store.dispatch(setUserTrips(tripsBuffer));
+
+  let userTrips: Trip[] | undefined = store.getState().tripSlice.userTrips;
+  if (userTrips) {
+    setUpLastTrip([...userTrips]);
+  }
 }

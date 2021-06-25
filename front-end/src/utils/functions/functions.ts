@@ -741,7 +741,6 @@ export function getDefaultCarReducer(): CarReducer {
   const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
 
   const carReducerDefault: CarReducer = {
-    carReservations: [],
     carRsv: carRsvPlaceholder[0],
     carSearch: {
       pickup_date: format(addDays(new Date(), 2), `yyyy-MM-dd'T'HH:mm:ss`),

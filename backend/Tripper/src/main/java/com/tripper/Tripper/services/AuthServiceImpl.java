@@ -92,21 +92,21 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void addPersonUuidCookie(HttpServletRequest request, HttpServletResponse response, String uuid) {
-        Cookie personUuidCookie = Stream.of(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(CookieName.PERSON_UUID.toString()))
-                .findFirst()
-                .orElse(null);
+        if (request.getCookies() != null) {
+            Cookie personUuidCookie = Stream.of(request.getCookies())
+                    .filter(cookie -> cookie.getName().equals(CookieName.PERSON_UUID.toString()))
+                    .findFirst()
+                    .orElse(null);
 
-        if (request.getCookies() != null && personUuidCookie == null) {
+            if (personUuidCookie != null) {
+                personUuidCookie = new Cookie(CookieName.PERSON_UUID.toString(), uuid);
+                personUuidCookie.setDomain("localhost");
+                personUuidCookie.setPath("/");
+                personUuidCookie.setMaxAge(ONE_YEAR);
 
-            personUuidCookie = new Cookie(CookieName.PERSON_UUID.toString(), uuid);
-            personUuidCookie.setDomain("localhost");
-            personUuidCookie.setPath("/");
-            personUuidCookie.setMaxAge(ONE_YEAR);
-
-            response.addCookie(personUuidCookie);
+                response.addCookie(personUuidCookie);
+            }
         }
-
     }
 
     @Override

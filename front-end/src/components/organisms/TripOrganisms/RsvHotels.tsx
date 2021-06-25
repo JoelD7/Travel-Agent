@@ -1,15 +1,15 @@
-import { faRestroom, faCalendar, faBed } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faCalendar, faRestroom } from "@fortawesome/free-solid-svg-icons";
 import {
-  Grid,
   Card,
   CardActionArea,
-  CardMedia,
   CardContent,
+  CardMedia,
+  Grid,
+  Grow,
   makeStyles,
   Theme,
-  Grow,
 } from "@material-ui/core";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Colors, Shadow } from "../../../styles";
@@ -18,7 +18,6 @@ import {
   formatAsCurrency,
   getHotelReservationCost,
   HotelReservation,
-  hotelRsvPlaceholder,
   setHotelRsv,
 } from "../../../utils";
 import { IconText, Rating, Text } from "../../atoms";
@@ -35,7 +34,6 @@ interface RsvHotels {
 export const RsvHotels = React.memo(function RsvHotels({
   showAll = true,
   hotels,
-  userCurrency,
 }: RsvHotels) {
   const rsvHotelsStyles = makeStyles((theme: Theme) => ({
     hotelCard: {
@@ -60,8 +58,6 @@ export const RsvHotels = React.memo(function RsvHotels({
 
   const dispatch = useDispatch();
   const [openHotelDialog, setOpenHotelDialog] = useState(false);
-
-  const hotelRsv: HotelReservation = hotelRsvPlaceholder;
 
   function seeHotelReservationDetails(hotel: HotelReservation) {
     setOpenHotelDialog(true);

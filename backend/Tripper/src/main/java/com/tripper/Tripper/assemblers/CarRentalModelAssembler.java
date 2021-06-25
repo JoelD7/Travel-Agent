@@ -17,11 +17,11 @@ public class CarRentalModelAssembler implements RepresentationModelAssembler<Car
     @Override
     public EntityModel<CarRental> toModel(CarRental entity) {
         Long idCarRental = entity.getIdCarRental();
-        Long idPerson = entity.getPerson().getIdPerson();
+        String uuid = entity.getPerson().getUuid();
 
         return EntityModel.of(entity,
                 linkTo(methodOn(CarRentalController.class).getCarRental(idCarRental)).withSelfRel(),
-                linkTo(methodOn(CarRentalController.class).getAllCarRentals(idPerson)).withRel("carRentals")
+                linkTo(methodOn(CarRentalController.class).getAllCarRentals(uuid)).withRel("carRentals")
         );
     }
 

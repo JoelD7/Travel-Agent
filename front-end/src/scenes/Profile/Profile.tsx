@@ -204,7 +204,12 @@ export function Profile({}: ProfileProps) {
             {/* Origin */}
             <ThemeProvider theme={theme}>
               <Grid style={{ marginTop: 15 }} item xs={12}>
-                <IataAutocomplete type="city" cityType={LocationType.ORIGIN} required />
+                <IataAutocomplete
+                  type="city"
+                  label="Origin city"
+                  cityType={LocationType.ORIGIN}
+                  required
+                />
               </Grid>
             </ThemeProvider>
 
