@@ -9,7 +9,7 @@ interface TripSlice {
   tripDetail?: Trip;
   lastTrip?: Trip;
   userTrips?: Trip[];
-  favPlaces: Favorite[];
+  favPlaces?: Favorite[];
   albumPictures: AlbumPicture[];
 }
 
@@ -41,15 +41,15 @@ export const fetchUserTrips = createAsyncThunk<Trip[], null, ThunkAPIType>(
 export const fetchFavorites = createAsyncThunk<Favorite[], null, ThunkAPIType>(
   "tripSlice/fetchFavorites",
   async (_, thunkAPI) => {
-    let idPerson = thunkAPI.getState().rootSlice.idPerson;
     let person = thunkAPI.getState().authSlice.person;
-    let favPlaces: Favorite[] = thunkAPI.getState().tripSlice.favPlaces;
+    let favPlacesInStore = thunkAPI.getState().tripSlice.favPlaces;
+    let favPlaces: Favorite[] = favPlacesInStore ? favPlacesInStore : [];
 
     if (favPlaces.length === 0) {
       const response = await backend.get(
         `/favorite/all?personUuid=${person ? person.uuid : "0"}`
       );
-      return response.data._embedded.favoriteList;
+      return response.data._embedded ? response.data._embedded.favoriteList : [];
     }
 
     return favPlaces;
@@ -58,7 +58,6 @@ export const fetchFavorites = createAsyncThunk<Favorite[], null, ThunkAPIType>(
 
 const initialState: TripSlice = {
   albumPictures: [],
-  favPlaces: [],
 };
 
 const tripSlice = createSlice({

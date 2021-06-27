@@ -54,10 +54,14 @@ export function Reservations() {
       backend
         .get(`/flight/all?personUuid=${person.uuid}`)
         .then((res) => {
-          let mappedFlights: Flight[] = res.data._embedded.flightList.map((flight: any) =>
-            mapFlightToDomainType(flight)
-          );
-          setFlights(mappedFlights);
+          if (res.data._embedded) {
+            let mappedFlights: Flight[] = res.data._embedded.flightList.map(
+              (flight: any) => mapFlightToDomainType(flight)
+            );
+            setFlights(mappedFlights);
+          } else {
+            setFlights([]);
+          }
         })
         .catch((err) => console.log(err));
     }
@@ -68,11 +72,15 @@ export function Reservations() {
       backend
         .get(`/hotel/all?personUuid=${person.uuid}`)
         .then((res) => {
-          let mappedHotels: HotelReservation[] =
-            res.data._embedded.hotelReservationList.map((hotel: any) =>
-              mapHotelDTOToDomainType(hotel)
-            );
-          setHotelReservations(mappedHotels);
+          if (res.data._embedded) {
+            let mappedHotels: HotelReservation[] =
+              res.data._embedded.hotelReservationList.map((hotel: any) =>
+                mapHotelDTOToDomainType(hotel)
+              );
+            setHotelReservations(mappedHotels);
+          } else {
+            setHotelReservations([]);
+          }
         })
         .catch((err) => console.log(err));
     }
@@ -83,10 +91,14 @@ export function Reservations() {
       backend
         .get(`/car-rental/all?personUuid=${person.uuid}`)
         .then((res) => {
-          let mappedCarReservations: CarRsv[] = res.data._embedded.carRentalList.map(
-            (car: any) => mapCarDTOToDomainType(car)
-          );
-          dispatch(setCarReservations(mappedCarReservations));
+          if (res.data._embedded) {
+            let mappedCarReservations: CarRsv[] = res.data._embedded.carRentalList.map(
+              (car: any) => mapCarDTOToDomainType(car)
+            );
+            dispatch(setCarReservations(mappedCarReservations));
+          } else {
+            dispatch(setCarReservations([]));
+          }
         })
         .catch((err) => console.log(err));
     }

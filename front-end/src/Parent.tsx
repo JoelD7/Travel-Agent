@@ -7,6 +7,7 @@ import {
   Person,
   Routes,
   selectPerson,
+  setFavorites,
   setIsAuthenticated,
   setLoginReferrer,
   setPerson,
@@ -62,6 +63,7 @@ export function Parent({ children }: ParentProps) {
 
       const res = await backend.get(`/person/${uuid}`);
       dispatch(setPerson(res.data));
+      dispatch(setFavorites(res.data.favoritePlaces));
       setUserTripsFromPerson(res.data);
     }
   }

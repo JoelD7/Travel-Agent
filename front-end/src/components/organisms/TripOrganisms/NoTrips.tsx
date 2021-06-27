@@ -1,10 +1,11 @@
+import { faPlaneDeparture } from "@fortawesome/free-solid-svg-icons";
 import { Grid, makeStyles, Theme } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Colors } from "../../../styles";
 import { Routes, selectIsAuthenticated } from "../../../utils";
-import { CustomButton, Text } from "../../atoms";
+import { CustomButton, IconText, Text } from "../../atoms";
 
 interface NoTripsProps {}
 
@@ -14,11 +15,22 @@ export function NoTrips({}: NoTripsProps) {
       // width: '50%',
     },
     noTripContainer: {
-      alignContent: "center",
-      height: "95vh",
-      marginLeft: "265px",
+      marginLeft: "260px",
       marginBottom: "100px",
-      width: "calc(100% - 300px)",
+      width: "calc(100% - 260px)",
+      [theme.breakpoints.down(960)]: {
+        margin: "auto",
+        width: "97%",
+      },
+
+      [theme.breakpoints.down(450)]: {
+        padding: 10,
+      },
+    },
+    noTripGrid: {
+      alignContent: "center",
+      height: "75vh",
+      marginBottom: "100px",
       [theme.breakpoints.down(960)]: {
         margin: "auto",
         marginLeft: 0,
@@ -58,29 +70,43 @@ export function NoTrips({}: NoTripsProps) {
   }
 
   return (
-    <Grid container className={style.noTripContainer} justify="center">
-      <Grid container className={style.noTripContentGrid}>
-        <Grid item className={style.textGrid}>
-          <Text color={Colors.GRAY_TEXT}>
-            Organize your ideal vacation in <b>Trips</b>. Book flights, hotels and more
-            and group them in a single place.
-          </Text>
-        </Grid>
+    <div className={style.noTripContainer}>
+      <IconText
+        style={{ marginBottom: "20px", marginTop: "10px" }}
+        iconStyle={{ padding: "12px" }}
+        shadow
+        size={35}
+        icon={faPlaneDeparture}
+      >
+        <Text bold component="h1">
+          Trips
+        </Text>
+      </IconText>
 
-        <Grid item xs={12} className={style.buttonGrid}>
-          <Grid container justify="center">
-            {isAuthenticated ? (
-              <CustomButton backgroundColor={Colors.GREEN} onClick={() => redirect()}>
-                Create trip
-              </CustomButton>
-            ) : (
-              <CustomButton backgroundColor={Colors.GREEN} onClick={() => redirect()}>
-                Login to create a trip
-              </CustomButton>
-            )}
+      <Grid container className={style.noTripGrid} justify="center">
+        <Grid container className={style.noTripContentGrid}>
+          <Grid item className={style.textGrid}>
+            <Text color={Colors.GRAY_TEXT}>
+              Organize your ideal vacation in <b>Trips</b>. Book flights, hotels and more
+              and group them in a single place.
+            </Text>
+          </Grid>
+
+          <Grid item xs={12} className={style.buttonGrid}>
+            <Grid container justify="center">
+              {isAuthenticated ? (
+                <CustomButton backgroundColor={Colors.GREEN} onClick={() => redirect()}>
+                  Create trip
+                </CustomButton>
+              ) : (
+                <CustomButton backgroundColor={Colors.GREEN} onClick={() => redirect()}>
+                  Login to create a trip
+                </CustomButton>
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </div>
   );
 }

@@ -41,6 +41,8 @@ import {
   HotelBooking,
   POICategory,
   proxyUrl,
+  Person,
+  selectPerson,
   Routes,
   selectFavorites,
   selectIsAuthenticated,
@@ -79,21 +81,16 @@ export function FavPlaces() {
   const history = useHistory();
   const dispatch = useAppDispatch();
 
-  const favorites: Favorite[] = useSelector(selectFavorites);
+  const favorites: Favorite[] | undefined = useSelector(selectFavorites);
   const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
+  const person: Person | undefined = useSelector(selectPerson);
 
   useEffect(() => {
-    if (favorites.length === 0 && isAuthenticated) {
-      dispatch(fetchFavorites(null)).then((res) => {
-        let favoritePlaces: Favorite[] = res.payload as Favorite[];
-        setFavoritePlacesPerType(favoritePlaces);
-        setLoading(false);
-      });
-    } else {
+    if (favorites) {
       setFavoritePlacesPerType(favorites);
       setLoading(false);
     }
-  }, []);
+  }, [favorites]);
 
   function setFavoritePlacesPerType(favoritePlaces: Favorite[]) {
     let restaurantsBuffer: RsvRestaurant[] = [];
@@ -114,7 +111,9 @@ export function FavPlaces() {
     setRestaurants(restaurantsBuffer);
     buildFilterOptions(restaurantsBuffer, poisBuffer, hotelCodes);
 
-    fetchFavHotels(hotelCodes);
+    if (hotelCodes.length > 0) {
+      fetchFavHotels(hotelCodes);
+    }
   }
 
   function fetchFavHotels(hotelCodes: string[]) {
@@ -315,230 +314,268 @@ export function FavPlaces() {
           </IconText>
         </Grid>
 
-        {/* Filter by type of place */}
-        <Grid item xs={12} style={{ marginTop: "10px" }}>
-          <Grid container alignItems="center" justify="flex-end">
-            <Text component="h4" color={Colors.BLUE}>
-              Filter
-            </Text>
-
-            {/* Select */}
-            <FormControl className={style.sortFormControl}>
-              <Select
-                value={selectedFilter}
-                variant="outlined"
-                classes={{ icon: style.selectIcon }}
-                className={style.select}
-                onChange={onFilterOptionChange}
-              >
-                {filterOptions.map((option, i) => (
-                  <MenuItem
-                    classes={{ root: style.menuItemSelect }}
-                    key={i}
-                    value={option}
-                  >
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
-
         {loading && (
           <Grid container style={{ height: "85vh" }}>
             <ProgressCircle />
           </Grid>
         )}
 
-        {/* Restaurants */}
-        {isSliderSectionVisible("Restaurants") && restaurants && (
-          <Grid container style={{ marginTop: "20px" }}>
-            {/*  Category title */}
-            <Grid item xs={12}>
-              <Grid container>
-                <Text bold color={Colors.BLUE} component="h2">
-                  Restaurants
+        {favorites && favorites.length === 0 && (
+          <div className={style.noFavoritesContainer}>
+            <Grid container className={style.noFavoritesGrid}>
+              <Grid item xs={12}>
+                <Grid container justify="center">
+                  <Text color={Colors.GRAY_TEXT}>
+                    Here you'll be able to see all the spots you mark as favorites.
+                  </Text>
+                </Grid>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Grid container justify="center">
+                  {isAuthenticated ? (
+                    <CustomButton
+                      backgroundColor={Colors.GREEN}
+                      onClick={() => history.push(Routes.THINGS_TODO)}
+                    >
+                      Check interesting places
+                    </CustomButton>
+                  ) : (
+                    <CustomButton
+                      backgroundColor={Colors.GREEN}
+                      onClick={() => Routes.LOGIN}
+                    >
+                      Login to start adding favorites
+                    </CustomButton>
+                  )}
+                </Grid>
+              </Grid>
+            </Grid>
+          </div>
+        )}
+
+        {favorites && favorites.length > 0 && (
+          <>
+            {/* Filter by type of place */}
+            <Grid item xs={12} style={{ marginTop: "10px" }}>
+              <Grid container alignItems="center" justify="flex-end">
+                <Text component="h4" color={Colors.BLUE}>
+                  Filter
                 </Text>
 
-                {!isFilterSelected() && (
-                  <CustomButton
-                    style={{ paddingBottom: "0px" }}
-                    iconColor="#7e7e7e"
-                    backgroundColor="rgba(0,0,0,0)"
-                    textColor="#7e7e7e"
-                    onClick={() => setSelectedFilter("Restaurants")}
+                {/* Select */}
+                <FormControl className={style.sortFormControl}>
+                  <Select
+                    value={selectedFilter}
+                    variant="outlined"
+                    classes={{ icon: style.selectIcon }}
+                    className={style.select}
+                    onChange={onFilterOptionChange}
                   >
-                    See all
-                  </CustomButton>
-                )}
+                    {filterOptions.map((option, i) => (
+                      <MenuItem
+                        classes={{ root: style.menuItemSelect }}
+                        key={i}
+                        value={option}
+                      >
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
 
-            {selectedFilter === "Restaurants" ? (
-              <Grid container>
-                {restaurants.map((restaurant) => (
-                  <Grow
-                    in={true}
-                    mountOnEnter
-                    style={{ transformOrigin: "0 0 0" }}
-                    timeout={1000}
-                  >
-                    <div key={restaurant.id} className={style.noSliderCard}>
-                      <RestaurantCard restaurant={restaurant} />
-                    </div>
-                  </Grow>
-                ))}
-              </Grid>
-            ) : (
-              <Grid container>
-                {restaurants.slice(0, 3).map((restaurant) => (
-                  <Grow
-                    in={true}
-                    mountOnEnter
-                    style={{ transformOrigin: "0 0 0" }}
-                    timeout={1000}
-                  >
-                    <div key={restaurant.id} className={style.noSliderCard}>
-                      <RestaurantCard restaurant={restaurant} />
-                    </div>
-                  </Grow>
-                ))}
-              </Grid>
-            )}
-          </Grid>
-        )}
+            {/* Restaurants */}
+            {isSliderSectionVisible("Restaurants") && restaurants && (
+              <Grid container style={{ marginTop: "20px" }}>
+                {/*  Category title */}
+                <Grid item xs={12}>
+                  <Grid container>
+                    <Text bold color={Colors.BLUE} component="h2">
+                      Restaurants
+                    </Text>
 
-        {/* Hotels */}
-        {isSliderSectionVisible("Hotels") && hotels && (
-          <Grid container style={{ marginTop: "20px" }}>
-            {/*  Category title */}
-            <Grid item xs={12}>
-              <Grid container>
-                <Text bold color={Colors.BLUE} component="h2">
-                  Hotels
-                </Text>
-
-                {!isFilterSelected() && (
-                  <CustomButton
-                    style={{ paddingBottom: "0px" }}
-                    iconColor="#7e7e7e"
-                    backgroundColor="rgba(0,0,0,0)"
-                    textColor="#7e7e7e"
-                    onClick={() => setSelectedFilter("Hotels")}
-                  >
-                    See all
-                  </CustomButton>
-                )}
-              </Grid>
-            </Grid>
-
-            {selectedFilter === "Hotels" ? (
-              <Grid container>
-                {hotels.map((hotel) => (
-                  <Grow
-                    in={true}
-                    mountOnEnter
-                    style={{ transformOrigin: "0 0 0" }}
-                    timeout={1000}
-                  >
-                    <div key={hotel.code} className={style.noSliderCard}>
-                      <HotelCard hotel={hotel} />
-                    </div>
-                  </Grow>
-                ))}
-              </Grid>
-            ) : (
-              <Grid container>
-                {hotels.slice(0, 3).map((hotel) => (
-                  <Grow
-                    in={true}
-                    mountOnEnter
-                    style={{ transformOrigin: "0 0 0" }}
-                    timeout={1000}
-                  >
-                    <div key={hotel.code} className={style.noSliderCard}>
-                      <HotelCard hotel={hotel} />
-                    </div>
-                  </Grow>
-                ))}
-              </Grid>
-            )}
-          </Grid>
-        )}
-
-        {/* POI Sliders */}
-        <Grid item xs={12}>
-          {poiCategories
-            .filter((category) => getPlacesOfCategory(category.name).length > 0)
-            .map((category, i) => (
-              <div key={category.id}>
-                {isSliderSectionVisible(category.pluralName) && pois && (
-                  <Grid container style={{ marginTop: "20px" }}>
-                    {/*  Category title */}
-                    <Grid item xs={12}>
-                      <Grid container>
-                        <Text
-                          bold
-                          color={Colors.BLUE}
-                          className={style.cardText}
-                          component="h2"
-                        >
-                          {category.pluralName}
-                        </Text>
-
-                        {!isFilterSelected() && (
-                          <CustomButton
-                            style={{ paddingBottom: "0px" }}
-                            iconColor="#7e7e7e"
-                            backgroundColor="rgba(0,0,0,0)"
-                            textColor="#7e7e7e"
-                            onClick={() => setSelectedFilter(category.pluralName)}
-                          >
-                            See all
-                          </CustomButton>
-                        )}
-                      </Grid>
-                    </Grid>
-
-                    {isACategoryFilterSelected() ? (
-                      <Grid container>
-                        {getPlacesOfCategory(category.name).map((poi: RsvPOI, i) => (
-                          <Grow
-                            in={true}
-                            mountOnEnter
-                            style={{ transformOrigin: "0 0 0" }}
-                            timeout={1000}
-                          >
-                            <div key={poi.id} className={style.noSliderCard}>
-                              <FavPOICard poi={poi} />
-                            </div>
-                          </Grow>
-                        ))}
-                      </Grid>
-                    ) : (
-                      <Grid container>
-                        {getPlacesOfCategory(category.name)
-                          .slice(0, 3)
-                          .map((poi: RsvPOI, i) => (
-                            <Grow
-                              in={true}
-                              mountOnEnter
-                              style={{ transformOrigin: "0 0 0" }}
-                              timeout={1000}
-                            >
-                              <div key={poi.id} className={style.noSliderCard}>
-                                <FavPOICard poi={poi} />
-                              </div>
-                            </Grow>
-                          ))}
-                      </Grid>
+                    {!isFilterSelected() && (
+                      <CustomButton
+                        style={{ paddingBottom: "0px" }}
+                        iconColor="#7e7e7e"
+                        backgroundColor="rgba(0,0,0,0)"
+                        textColor="#7e7e7e"
+                        onClick={() => setSelectedFilter("Restaurants")}
+                      >
+                        See all
+                      </CustomButton>
                     )}
                   </Grid>
+                </Grid>
+
+                {selectedFilter === "Restaurants" ? (
+                  <Grid container>
+                    {restaurants.map((restaurant) => (
+                      <Grow
+                        in={true}
+                        mountOnEnter
+                        style={{ transformOrigin: "0 0 0" }}
+                        timeout={1000}
+                      >
+                        <div key={restaurant.id} className={style.noSliderCard}>
+                          <RestaurantCard restaurant={restaurant} />
+                        </div>
+                      </Grow>
+                    ))}
+                  </Grid>
+                ) : (
+                  <Grid container>
+                    {restaurants.slice(0, 3).map((restaurant) => (
+                      <Grow
+                        in={true}
+                        mountOnEnter
+                        style={{ transformOrigin: "0 0 0" }}
+                        timeout={1000}
+                      >
+                        <div key={restaurant.id} className={style.noSliderCard}>
+                          <RestaurantCard restaurant={restaurant} />
+                        </div>
+                      </Grow>
+                    ))}
+                  </Grid>
                 )}
-              </div>
-            ))}
-        </Grid>
+              </Grid>
+            )}
+
+            {/* Hotels */}
+            {isSliderSectionVisible("Hotels") && hotels && (
+              <Grid container style={{ marginTop: "20px" }}>
+                {/*  Category title */}
+                <Grid item xs={12}>
+                  <Grid container>
+                    <Text bold color={Colors.BLUE} component="h2">
+                      Hotels
+                    </Text>
+
+                    {!isFilterSelected() && (
+                      <CustomButton
+                        style={{ paddingBottom: "0px" }}
+                        iconColor="#7e7e7e"
+                        backgroundColor="rgba(0,0,0,0)"
+                        textColor="#7e7e7e"
+                        onClick={() => setSelectedFilter("Hotels")}
+                      >
+                        See all
+                      </CustomButton>
+                    )}
+                  </Grid>
+                </Grid>
+
+                {selectedFilter === "Hotels" ? (
+                  <Grid container>
+                    {hotels.map((hotel) => (
+                      <Grow
+                        in={true}
+                        mountOnEnter
+                        style={{ transformOrigin: "0 0 0" }}
+                        timeout={1000}
+                      >
+                        <div key={hotel.code} className={style.noSliderCard}>
+                          <HotelCard hotel={hotel} />
+                        </div>
+                      </Grow>
+                    ))}
+                  </Grid>
+                ) : (
+                  <Grid container>
+                    {hotels.slice(0, 3).map((hotel) => (
+                      <Grow
+                        in={true}
+                        mountOnEnter
+                        style={{ transformOrigin: "0 0 0" }}
+                        timeout={1000}
+                      >
+                        <div key={hotel.code} className={style.noSliderCard}>
+                          <HotelCard hotel={hotel} />
+                        </div>
+                      </Grow>
+                    ))}
+                  </Grid>
+                )}
+              </Grid>
+            )}
+
+            {/* POI Sliders */}
+            <Grid item xs={12}>
+              {poiCategories
+                .filter((category) => getPlacesOfCategory(category.name).length > 0)
+                .map((category, i) => (
+                  <div key={category.id}>
+                    {isSliderSectionVisible(category.pluralName) && pois && (
+                      <Grid container style={{ marginTop: "20px" }}>
+                        {/*  Category title */}
+                        <Grid item xs={12}>
+                          <Grid container>
+                            <Text
+                              bold
+                              color={Colors.BLUE}
+                              className={style.cardText}
+                              component="h2"
+                            >
+                              {category.pluralName}
+                            </Text>
+
+                            {!isFilterSelected() && (
+                              <CustomButton
+                                style={{ paddingBottom: "0px" }}
+                                iconColor="#7e7e7e"
+                                backgroundColor="rgba(0,0,0,0)"
+                                textColor="#7e7e7e"
+                                onClick={() => setSelectedFilter(category.pluralName)}
+                              >
+                                See all
+                              </CustomButton>
+                            )}
+                          </Grid>
+                        </Grid>
+
+                        {isACategoryFilterSelected() ? (
+                          <Grid container>
+                            {getPlacesOfCategory(category.name).map((poi: RsvPOI, i) => (
+                              <Grow
+                                in={true}
+                                mountOnEnter
+                                style={{ transformOrigin: "0 0 0" }}
+                                timeout={1000}
+                              >
+                                <div key={poi.id} className={style.noSliderCard}>
+                                  <FavPOICard poi={poi} />
+                                </div>
+                              </Grow>
+                            ))}
+                          </Grid>
+                        ) : (
+                          <Grid container>
+                            {getPlacesOfCategory(category.name)
+                              .slice(0, 3)
+                              .map((poi: RsvPOI, i) => (
+                                <Grow
+                                  in={true}
+                                  mountOnEnter
+                                  style={{ transformOrigin: "0 0 0" }}
+                                  timeout={1000}
+                                >
+                                  <div key={poi.id} className={style.noSliderCard}>
+                                    <FavPOICard poi={poi} />
+                                  </div>
+                                </Grow>
+                              ))}
+                          </Grid>
+                        )}
+                      </Grid>
+                    )}
+                  </div>
+                ))}
+            </Grid>
+          </>
+        )}
       </Grid>
     </div>
   );

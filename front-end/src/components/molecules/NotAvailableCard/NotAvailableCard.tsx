@@ -31,6 +31,9 @@ export function NotAvailableCard({
     },
     notAvailableContainer: {
       height: "100%",
+      width: "90%",
+      margin: "auto",
+      alignItems: "center",
       borderRadius: "10px",
       boxShadow: Shadow.LIGHT,
       backgroundColor: "white",
@@ -38,7 +41,7 @@ export function NotAvailableCard({
     },
     notFoundImg: {
       objectFit: "contain",
-      width: "100%",
+      width: "75%",
       height: `100%`,
       [theme.breakpoints.down(790)]: {
         height: "27vw",
@@ -66,7 +69,7 @@ export function NotAvailableCard({
     <Grid container className={style.notAvailableContainer}>
       {/* Message */}
       <Grid item className={style.messageContainer}>
-        <Text component={getTitleComponentType()} bold color={Colors.BLUE}>
+        <Text component={"h2"} bold color={Colors.BLUE}>
           {title}
         </Text>
 
@@ -78,9 +81,7 @@ export function NotAvailableCard({
           />
         )}
 
-        <Text component={getTextComponentType()} weight="normal">
-          {children}
-        </Text>
+        <Text weight="normal">{children}</Text>
       </Grid>
 
       {/* Image */}

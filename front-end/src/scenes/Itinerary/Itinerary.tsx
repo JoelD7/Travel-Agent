@@ -131,104 +131,114 @@ export function Itinerary() {
         </Grid>
       )}
 
-      {trip && (
+      {noItinerary && (
+        <div className={style.noItineraryContainer}>
+          <IconText
+            style={{ marginBottom: "20px", marginTop: "10px" }}
+            iconStyle={{ padding: "12px" }}
+            shadow
+            size={35}
+            icon={faCalendarAlt}
+          >
+            <Text bold component="h1">
+              Itinerary
+            </Text>
+          </IconText>
+
+          <Grid container className={style.noItineraryGrid}>
+            <Grid item xs={12}>
+              <Grid container justify="center">
+                <Text color={Colors.GRAY_TEXT}>
+                  Here you'll be able to see the schedule for all the activities and
+                  reservations related to your trip.
+                </Text>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Grid container justify="center">
+                {isAuthenticated ? (
+                  <CustomButton
+                    backgroundColor={Colors.GREEN}
+                    onClick={() => history.push(Routes.CREATE_TRIP)}
+                  >
+                    Create trip
+                  </CustomButton>
+                ) : (
+                  <CustomButton
+                    backgroundColor={Colors.GREEN}
+                    onClick={() => Routes.LOGIN}
+                  >
+                    Login to create a trip
+                  </CustomButton>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
+        </div>
+      )}
+
+      {trip && !noItinerary && (
         <div className={style.pageContentContainer}>
-          {noItinerary ? (
-            <>
-              <Grid container style={{ height: "85vh", alignContent: "center" }}>
-                <Grid item xs={12}>
-                  <Grid container justify="center">
-                    <Text color={Colors.GRAY_TEXT}>
-                      Here you'll be able to see the schedule for all the activities and
-                      reservations related to your trip.
+          <IconText
+            style={{ marginBottom: "20px", marginTop: "10px" }}
+            iconStyle={{ padding: "12px" }}
+            shadow
+            size={35}
+            icon={faCalendarAlt}
+          >
+            <Text bold component="h1">
+              {`Itinerary | ${trip.name}`}
+            </Text>
+          </IconText>
+
+          <div className={style.contentBackgroundContainer}>
+            {/* Date selector */}
+            <Grid container>
+              <CustomButton
+                textColor="black"
+                style={{ fontSize: "22px", fontWeight: "bold" }}
+                backgroundColor="rgba(0,0,0,0)"
+              >
+                {format(baseDate, "MMMM yyyy")}
+              </CustomButton>
+
+              <IconButton
+                onClick={() => {
+                  setBaseDate(subMonths(baseDate, 1));
+                  setPrevBaseDate(baseDate);
+                }}
+              >
+                <FontAwesomeIcon icon={faChevronCircleLeft} color={Colors.PURPLE} />
+              </IconButton>
+
+              <IconButton
+                onClick={() => {
+                  setBaseDate(addMonths(baseDate, 1));
+                  setPrevBaseDate(baseDate);
+                }}
+              >
+                <FontAwesomeIcon icon={faChevronCircleRight} color={Colors.PURPLE} />
+              </IconButton>
+            </Grid>
+
+            {/* Week Days container */}
+            <Grid container className={style.daysContainer}>
+              {weekDays.map((weekDay, i) => (
+                <div key={i} className={style.dayItemContainer}>
+                  <Grid key={i} item>
+                    <Text color={"#8d8d8d"} style={{ fontSize: 18 }}>
+                      {getWeekDayLabel(weekDay)}
                     </Text>
                   </Grid>
-                </Grid>
+                </div>
+              ))}
+            </Grid>
 
-                <Grid item xs={12}>
-                  <Grid container justify="center">
-                    {isAuthenticated ? (
-                      <CustomButton
-                        backgroundColor={Colors.GREEN}
-                        onClick={() => history.push(Routes.CREATE_TRIP)}
-                      >
-                        Create trip
-                      </CustomButton>
-                    ) : (
-                      <CustomButton
-                        backgroundColor={Colors.GREEN}
-                        onClick={() => Routes.LOGIN}
-                      >
-                        Login to create a trip
-                      </CustomButton>
-                    )}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </>
-          ) : (
-            <>
-              <IconText
-                style={{ marginBottom: "20px", marginTop: "10px" }}
-                iconStyle={{ padding: "12px" }}
-                shadow
-                size={35}
-                icon={faCalendarAlt}
-              >
-                <Text bold component="h1">
-                  {`Itinerary | ${trip.name}`}
-                </Text>
-              </IconText>
+            {/* Calendar grid */}
 
-              <div className={style.contentBackgroundContainer}>
-                {/* Date selector */}
-                <Grid container>
-                  <CustomButton
-                    textColor="black"
-                    style={{ fontSize: "22px", fontWeight: "bold" }}
-                    backgroundColor="rgba(0,0,0,0)"
-                  >
-                    {format(baseDate, "MMMM yyyy")}
-                  </CustomButton>
-
-                  <IconButton
-                    onClick={() => {
-                      setBaseDate(subMonths(baseDate, 1));
-                      setPrevBaseDate(baseDate);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faChevronCircleLeft} color={Colors.PURPLE} />
-                  </IconButton>
-
-                  <IconButton
-                    onClick={() => {
-                      setBaseDate(addMonths(baseDate, 1));
-                      setPrevBaseDate(baseDate);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faChevronCircleRight} color={Colors.PURPLE} />
-                  </IconButton>
-                </Grid>
-
-                {/* Week Days container */}
-                <Grid container className={style.daysContainer}>
-                  {weekDays.map((weekDay, i) => (
-                    <div key={i} className={style.dayItemContainer}>
-                      <Grid key={i} item>
-                        <Text color={"#8d8d8d"} style={{ fontSize: 18 }}>
-                          {getWeekDayLabel(weekDay)}
-                        </Text>
-                      </Grid>
-                    </div>
-                  ))}
-                </Grid>
-
-                {/* Calendar grid */}
-
-                <Calendar trip={trip} baseDate={baseDate} prevBaseDate={prevBaseDate} />
-              </div>
-            </>
-          )}
+            <Calendar trip={trip} baseDate={baseDate} prevBaseDate={prevBaseDate} />
+          </div>
         </div>
       )}
     </div>

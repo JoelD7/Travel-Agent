@@ -212,8 +212,9 @@ export function Hotels() {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const [openOccupancies, setOpenOccupancies] = useState<boolean>(false);
-  const [occupanciesAnchor, setOccupanciesAnchor] =
-    useState<HTMLButtonElement | null>(null);
+  const [occupanciesAnchor, setOccupanciesAnchor] = useState<HTMLButtonElement | null>(
+    null
+  );
 
   const sortOptions: string[] = [
     "Name | A - Z",

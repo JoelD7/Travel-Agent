@@ -66,7 +66,15 @@ const hotelSlice = createSlice({
   initialState,
   reducers: {
     setHotelDetail(state, action: PayloadAction<HotelBooking>) {
-      state.hotelDetail = action.payload;
+      let buffer = action.payload;
+      let rooms = buffer.rooms;
+      rooms = [...rooms].concat(buffer.rooms);
+      rooms = [...rooms].concat(buffer.rooms);
+      rooms = [...rooms].concat(buffer.rooms);
+      rooms = [...rooms].concat(buffer.rooms);
+      rooms = [...rooms].concat(buffer.rooms);
+      buffer = { ...buffer, rooms };
+      state.hotelDetail = buffer;
     },
 
     setHotelRsv(state, action: PayloadAction<HotelReservation>) {

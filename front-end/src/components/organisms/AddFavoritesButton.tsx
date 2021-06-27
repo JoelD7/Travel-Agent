@@ -13,10 +13,9 @@ import {
   getPoiDTO,
   getRestaurantDTO,
   HotelBooking,
-  selectFavorites,
-  selectIdPerson,
-  selectPerson,
   Person,
+  selectFavorites,
+  selectPerson,
   setFavorites,
 } from "../../utils";
 import { Favorite, FavoriteType } from "../../utils/types/favorite-types";
@@ -38,7 +37,7 @@ export function AddFavoritesButton({
   style,
 }: AddFavoritesProps) {
   const person: Person | undefined = useSelector(selectPerson);
-  const favorites: Favorite[] = useSelector(selectFavorites);
+  const favorites: Favorite[] | undefined = useSelector(selectFavorites);
 
   const [openSnack, setOpenSnack] = useState(false);
   const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
@@ -47,8 +46,12 @@ export function AddFavoritesButton({
   const dispatch = useDispatch();
 
   function isPlaceAddedToFavorites(): boolean {
-    let code: string = getCode();
-    return favorites.filter((fav) => fav.code === code).length > 0;
+    if (favorites) {
+      let code: string = getCode();
+      return favorites.filter((fav) => fav.code === code).length > 0;
+    }
+
+    return false;
   }
 
   function addToFavorites() {
@@ -61,7 +64,9 @@ export function AddFavoritesButton({
           setFavorite(true);
           setOpenSnack(true);
 
-          let updatedFavs: Favorite[] = [...favorites, favoriteDTO];
+          let updatedFavs: Favorite[] = favorites
+            ? [...favorites, favoriteDTO]
+            : [favoriteDTO];
           dispatch(setFavorites(updatedFavs));
         })
         .catch((error) => console.log(error));
@@ -76,8 +81,10 @@ export function AddFavoritesButton({
         setFavorite(false);
         setOpenSnackRemoved(true);
 
-        let updatedFavs: Favorite[] = favorites.filter((fav) => fav.code !== code);
-        dispatch(setFavorites(updatedFavs));
+        if (favorites) {
+          let updatedFavs: Favorite[] = favorites.filter((fav) => fav.code !== code);
+          dispatch(setFavorites(updatedFavs));
+        }
       })
       .catch((error) => console.log(error));
   }

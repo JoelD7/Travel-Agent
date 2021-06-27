@@ -5,15 +5,13 @@ import {
   faDollarSign,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { Divider, Grid, Grow, Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Divider, Grid, Grow } from "@material-ui/core";
 import Axios from "axios";
 import { format, parseISO } from "date-fns";
 import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
-import { Font } from "../../assets";
 import {
   AboutHotel,
   ConfirmRsvDialog,
@@ -49,9 +47,9 @@ import {
   selectHotelReservationParams,
   selectHotelReservations,
   selectHotelRsv,
-  setHotelReservations,
-  selectUserTrips,
   selectIdPerson,
+  selectUserTrips,
+  setHotelReservations,
   setHotelRsv,
   store,
   Trip,
@@ -84,8 +82,9 @@ export function HotelDetails() {
 
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
   const hotelReservations: HotelReservation[] = useSelector(selectHotelReservations);
-
-  const [loading, setLoading] = useState<boolean>(hotel ? false : true);
+  const geolocation: IATALocation = useSelector(selectDestinationCity);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
+  const idPerson: number = useSelector(selectIdPerson);
 
   const history = useHistory();
 
@@ -94,16 +93,10 @@ export function HotelDetails() {
 
   const dispatch = useDispatch();
 
+  const [loading, setLoading] = useState<boolean>(hotel ? false : true);
   const [renderedHeights, setRenderedHeights] = useState<number[]>([0]);
-
   const [cardsToRender, setCardsToRender] = useState<number>(3);
-
-  const geolocation: IATALocation = useSelector(selectDestinationCity);
-
   const [openConfirmation, setOpenConfirmation] = useState(false);
-
-  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
-  const idPerson: number = useSelector(selectIdPerson);
 
   useEffect(() => {
     if (!areAnyReservations()) {

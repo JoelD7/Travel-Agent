@@ -69,6 +69,26 @@ export const favPlacesStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
+  noFavoritesContainer: {
+    marginBottom: "100px",
+    width: "100%",
+    [theme.breakpoints.down(960)]: {
+      margin: "auto",
+      width: "97%",
+    },
+
+    [theme.breakpoints.down(450)]: {
+      padding: 10,
+    },
+  },
+  noFavoritesGrid: {
+    height: "75vh",
+    alignContent: "center",
+    [theme.breakpoints.down(730)]: {
+      width: "100%",
+      margin: "auto",
+    },
+  },
   noSliderCard: {
     width: "25%",
     [theme.breakpoints.down(1205)]: {
