@@ -17,8 +17,8 @@ import { Person, CityImage, EventTypes, ExchangeRate } from "../types";
 import { IATALocation } from "../types/location-types";
 import { mapFlightToDomainType } from "./flight-functions";
 import { responseTripToDomainTrip } from "./trip-functions";
-export * from "./flight-functions";
-export * from "./hotel-functions";
+// export * from "./flight-functions";
+// export * from "./hotel-functions";
 
 export function muiDateFormatter(
   date: MaterialUiPickersDate,

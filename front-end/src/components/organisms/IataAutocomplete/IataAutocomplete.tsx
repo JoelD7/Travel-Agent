@@ -33,6 +33,8 @@ import {
 } from "../../../utils";
 import { IATALocation } from "../../../utils/types/location-types";
 import { iataAutocompleteStyles } from "./iata-autocomplete-styles";
+import { VariableSizeList, ListChildComponentProps } from "react-window";
+import { Font } from "../../../assets";
 
 interface IataAutocomplete {
   flightDirection?: "from" | "to";
@@ -47,6 +49,13 @@ interface IataAutocomplete {
   getOptionLabel?: (option: any) => string;
 }
 
+const OuterElementContext = React.createContext({});
+
+const OuterElementType = React.forwardRef<HTMLDivElement>((props, ref) => {
+  const outerProps = React.useContext(OuterElementContext);
+  return <div ref={ref} {...props} {...outerProps} />;
+});
+
 export function IataAutocomplete({
   flightDirection,
   type,
@@ -59,7 +68,7 @@ export function IataAutocomplete({
   getOptionLabel,
   className,
 }: IataAutocomplete) {
-  const [predictions, setPredictions] = useState<IATALocation[]>([]);
+  const [predictions, setPredictions] = useState<IATALocation[]>(iataCodes);
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
@@ -101,18 +110,21 @@ export function IataAutocomplete({
     setAutocomplete(getAutocompleteDefault());
   }, [flightFromAutocomplete, flightToAutocomplete]);
 
-  function getPredictions(query: string) {
-    let predictionsBuffer: IATALocation[] = iataCodes.filter(
+  function getPredictions(options: IATALocation[], query: string) {
+    query = query.toLowerCase();
+
+    let predictionsBuffer: IATALocation[] = options.filter(
       (iata) =>
-        iata.code.toLowerCase().indexOf(query) > -1 ||
-        iata.name.toLowerCase().indexOf(query) > -1 ||
-        iata.city.toLowerCase().indexOf(query) > -1
+        iata.code.toLowerCase().indexOf(query) === 0 ||
+        iata.name.toLowerCase().indexOf(query) === 0 ||
+        iata.city.toLowerCase().indexOf(query) === 0
     );
 
-    setPredictions(predictionsBuffer);
+    return predictionsBuffer;
   }
 
   function onAutomcompleteValueChange(value: IATALocation | null) {
+    console.log("onAutomcompleteValueChange");
     setAutocomplete(value);
 
     if (required) {
@@ -145,7 +157,6 @@ export function IataAutocomplete({
   function onTextChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     let value = e.target.value as string;
     setText(value);
-    getPredictions(value);
   }
 
   function updateState() {
@@ -209,18 +220,85 @@ export function IataAutocomplete({
     dispatch(batchActions(batchedActions));
   }
 
+  const ListboxComponent = React.forwardRef<HTMLDivElement>(function ListboxComponent(
+    props,
+    ref
+  ) {
+    const { children, ...other } = props;
+    const itemData = React.Children.toArray(children);
+    const itemCount = itemData.length;
+    const [hover, setHover] = useState(false);
+    const [curIndex, setCurIndex] = useState(-1);
+
+    function getListBoxHeight(): number {
+      let max: number = 250;
+      let calculated: number = 35 * itemCount;
+
+      return calculated > max ? max : calculated;
+    }
+
+    function renderRow(props: ListChildComponentProps) {
+      const { data, index, style: styleProps } = props;
+
+      function onHover() {
+        setHover(true);
+        setCurIndex(index);
+      }
+
+      function onBlur() {
+        setHover(false);
+        setCurIndex(-1);
+      }
+
+      return React.cloneElement(data[index], {
+        onMouseEnter: () => onHover(),
+        onMouseLeave: () => onBlur(),
+        style: {
+          ...styleProps,
+          backgroundColor: curIndex === index && hover ? "#f5f5f5" : "white",
+          fontFamily: Font.Family,
+          top: (styleProps.top as number) + 5,
+          bottom: (styleProps.bottom as number) + 5,
+        },
+      });
+    }
+
+    return (
+      <div ref={ref}>
+        <OuterElementContext.Provider value={other}>
+          <VariableSizeList
+            height={getListBoxHeight() + 16}
+            itemData={itemData}
+            width="100%"
+            itemSize={(index) => 30}
+            overscanCount={5}
+            outerElementType={OuterElementType}
+            itemCount={itemCount}
+          >
+            {renderRow}
+          </VariableSizeList>
+        </OuterElementContext.Provider>
+      </div>
+    );
+  });
+
   return (
     <>
       <Autocomplete
         onBlur={() => updateState()}
         value={autocomplete}
         onChange={(e, value) => onAutomcompleteValueChange(value)}
+        filterOptions={(options) => getPredictions(options, text)}
         options={predictions}
         className={className}
+        autoHighlight
         style={{ width: "100%" }}
         loading={predictions.length !== 0}
         getOptionLabel={
           getOptionLabel ? getOptionLabel : (option) => getAutocompleteLabel(option, type)
+        }
+        ListboxComponent={
+          ListboxComponent as React.ComponentType<React.HTMLAttributes<HTMLElement>>
         }
         popupIcon={
           type === "city" ? (

@@ -3,7 +3,7 @@ import Compress from "react-image-file-resizer";
 import { firebase } from "../external-apis";
 import { setLastTrip, setUserTrips, store } from "../store";
 import { Trip, TripEvent } from "../types";
-import { mapFlightToDomainType } from "./functions";
+import { mapFlightToDomainType } from "./flight-functions";
 
 /**
  * Converts data returned by the backend to a

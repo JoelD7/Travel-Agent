@@ -23,6 +23,7 @@ import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
 import {
   avatar,
+  avatarWhite,
   getLinkStyle,
   IATALocation,
   LocationType,
@@ -108,6 +109,14 @@ export const Navbar: FunctionComponent<Navbar> = ({
 
   function getAppbarClassname() {
     return `${className} ${variant === "transparent" ? style.appbarHome : style.appbar}`;
+  }
+
+  function getAvatarPicture(): string {
+    if (person && person.profilePic) {
+      return person.profilePic;
+    }
+
+    return variant === "transparent" ? avatarWhite : avatar;
   }
 
   return (
@@ -231,7 +240,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
 
               {isAuthenticated && person && (
                 <IconButton onClick={onAvatarClick} style={{ marginLeft: "10px" }}>
-                  <Avatar src={person.profilePic ? person.profilePic : avatar} />
+                  <Avatar src={getAvatarPicture()} />
                 </IconButton>
               )}
             </div>

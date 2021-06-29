@@ -28,15 +28,15 @@ import { Font, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors } from "../../../styles";
 import {
-  avatar,
+  avatarWhite,
   backend,
   getCarRentalDefaultURL,
   getHotelSearchURL,
   getLinkStyle,
-  selectIsAuthenticated,
   getRestaurantsDefaultRoute,
   Person,
   Routes,
+  selectIsAuthenticated,
   selectLastTrip,
   selectPerson,
   setIsAuthenticated,
@@ -189,7 +189,9 @@ export function NavDrawer({ open, onClose }: NavDrawer) {
         {isAuthenticated && person ? (
           <div>
             <CustomButton
-              avatar={<Avatar src={person.profilePic ? person.profilePic : avatar} />}
+              avatar={
+                <Avatar src={person.profilePic ? person.profilePic : avatarWhite} />
+              }
               backgroundColor={Colors.PURPLE}
               rounded
               style={drawerButtonStyle}
