@@ -124,7 +124,6 @@ export function IataAutocomplete({
   }
 
   function onAutomcompleteValueChange(value: IATALocation | null) {
-    console.log("onAutomcompleteValueChange");
     setAutocomplete(value);
 
     if (required) {
@@ -220,10 +219,7 @@ export function IataAutocomplete({
     dispatch(batchActions(batchedActions));
   }
 
-  const ListboxComponent = React.forwardRef<HTMLDivElement>(function ListboxComponent(
-    props,
-    ref
-  ) {
+  function ListboxComponent(props: any) {
     const { children, ...other } = props;
     const itemData = React.Children.toArray(children);
     const itemCount = itemData.length;
@@ -264,23 +260,21 @@ export function IataAutocomplete({
     }
 
     return (
-      <div ref={ref}>
-        <OuterElementContext.Provider value={other}>
-          <VariableSizeList
-            height={getListBoxHeight() + 16}
-            itemData={itemData}
-            width="100%"
-            itemSize={(index) => 30}
-            overscanCount={5}
-            outerElementType={OuterElementType}
-            itemCount={itemCount}
-          >
-            {renderRow}
-          </VariableSizeList>
-        </OuterElementContext.Provider>
-      </div>
+      <OuterElementContext.Provider value={other}>
+        <VariableSizeList
+          height={getListBoxHeight() + 16}
+          itemData={itemData}
+          width="100%"
+          itemSize={(index) => 30}
+          overscanCount={5}
+          outerElementType={OuterElementType}
+          itemCount={itemCount}
+        >
+          {renderRow}
+        </VariableSizeList>
+      </OuterElementContext.Provider>
     );
-  });
+  }
 
   return (
     <>
