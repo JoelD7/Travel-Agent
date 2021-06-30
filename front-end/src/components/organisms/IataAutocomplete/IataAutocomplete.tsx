@@ -2,7 +2,14 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  useEffect,
+  useState,
+  forwardRef,
+  useContext,
+  createContext,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AnyAction } from "redux";
 import { batchActions } from "redux-batched-actions";
@@ -49,12 +56,12 @@ interface IataAutocomplete {
   getOptionLabel?: (option: any) => string;
 }
 
-const OuterElementContext = React.createContext({});
+const OuterElementContext = createContext({});
 
-const OuterElementType = React.forwardRef<HTMLDivElement>((props, ref) => {
-  const outerProps = React.useContext(OuterElementContext);
-  return <div ref={ref} {...props} {...outerProps} />;
-});
+const OuterElementType = (props: any) => {
+  const outerProps = useContext(OuterElementContext);
+  return <div {...props} {...outerProps} />;
+};
 
 export function IataAutocomplete({
   flightDirection,
@@ -68,7 +75,7 @@ export function IataAutocomplete({
   getOptionLabel,
   className,
 }: IataAutocomplete) {
-  const [predictions, setPredictions] = useState<IATALocation[]>(iataCodes);
+  const predictions: IATALocation[] = iataCodes;
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);

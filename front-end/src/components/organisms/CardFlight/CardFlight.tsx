@@ -15,6 +15,7 @@ import { FlightDetails } from "../../../scenes";
 import { Colors } from "../../../styles";
 import {
   convertToUserCurrency,
+  flightClassBackendToClient,
   formatAsCurrency,
   formatFlightDate,
   getFlightCitiesLabel,
@@ -22,7 +23,6 @@ import {
   getLastSegment,
   parseFlightDuration,
   selectFlightDictionaries,
-  flightClassBackendToClient,
   setFlightDetail,
 } from "../../../utils";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
@@ -37,7 +37,7 @@ interface CardFlight {
   isFlightInTrip?: boolean;
 }
 
-export function CardFlight({
+export default function CardFlight({
   flight,
   variant = "deal",
   className,

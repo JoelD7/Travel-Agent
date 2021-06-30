@@ -1,7 +1,7 @@
 import { Grid, Grow, makeStyles, Theme } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { NotCreatedMessage } from "../../molecules";
-import { CardFlight } from "../CardFlight/CardFlight";
+import CardFlight from "../CardFlight/CardFlight";
 
 interface TripFlights {
   showAll?: boolean;

@@ -34,12 +34,8 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
 
   const imageSliderSettings = {
     className: style.imageSlider,
-    nextArrow: (
-      <SliderArrow style={sliderArrowStyles} iconColor="#b6b6b6" direction="right" />
-    ),
-    prevArrow: (
-      <SliderArrow style={sliderArrowStyles} iconColor="#b6b6b6" direction="left" />
-    ),
+    nextArrow: <SliderArrow iconColor="#b6b6b6" direction="right" />,
+    prevArrow: <SliderArrow iconColor="#b6b6b6" direction="left" />,
     slidesToShow: 1,
     initialSlide: initialImageSlide,
   };

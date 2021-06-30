@@ -34,7 +34,6 @@ import {
   selectIsAuthenticated,
   TripAlbum,
 } from "../../../utils";
-import { TRIPS } from "../../../utils/Routes";
 import { CustomButton, ProgressCircle, SliderArrow, Text } from "../../atoms";
 import { Navbar } from "../../molecules";
 import { DashDrawer } from "../DashDrawer/DashDrawer";
@@ -226,12 +225,8 @@ export function Album({}: AlbumProps) {
 
   const imageSliderSettings = {
     className: style.imageSlider,
-    nextArrow: (
-      <SliderArrow style={sliderArrowStyles} iconColor="#b6b6b6" direction="right" />
-    ),
-    prevArrow: (
-      <SliderArrow style={sliderArrowStyles} iconColor="#b6b6b6" direction="left" />
-    ),
+    nextArrow: <SliderArrow iconColor="#b6b6b6" direction="right" />,
+    prevArrow: <SliderArrow iconColor="#b6b6b6" direction="left" />,
     slidesToShow: 1,
     initialSlide: initialImageSlide,
   };
@@ -304,7 +299,6 @@ export function Album({}: AlbumProps) {
     let tripDetailUuid: string = tripDetailUrlArr[tripDetailUrlArr.length - 1];
 
     setTimeout(() => {
-      // http://localhost:3000/Travel-Agent/trips/f6f6c797-d2a4-11eb-bb75-54e1ad512f86
       history.push(`${Routes.TRIPS}/${tripDetailUuid}`);
     }, 1000);
   }

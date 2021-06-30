@@ -30,7 +30,7 @@ interface HotelCard {
   hotel: HotelBooking;
 }
 
-export function HotelCard({ hotel }: HotelCard) {
+export default function HotelCard({ hotel }: HotelCard) {
   const history = useHistory();
 
   const style = hotelCardStyles();

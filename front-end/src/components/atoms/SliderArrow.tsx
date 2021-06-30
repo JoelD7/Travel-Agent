@@ -1,9 +1,11 @@
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconButton, makeStyles, Theme } from "@material-ui/core";
-import { CSSProperties } from "@material-ui/styles";
-import React, { MouseEvent } from "react";
+import { IconButton, makeStyles, Theme, useMediaQuery } from "@material-ui/core";
+import { CreateCSSProperties } from "@material-ui/styles";
+import React, { MouseEvent, CSSProperties } from "react";
 import { Colors } from "../../styles";
+
+type ArrowVariant = "regular" | "fullscreen";
 
 interface SliderArrowProps {
   direction: "right" | "left";
@@ -23,9 +25,10 @@ interface SliderArrowProps {
     | "10x";
   className?: string;
   onTop?: boolean;
+  variant?: ArrowVariant;
   iconColor?: string;
   backgroundColor?: string;
-  style?: CSSProperties;
+  style?: CreateCSSProperties<{}>;
   onClick?: (event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 }
 
@@ -33,38 +36,59 @@ export function SliderArrow({
   onClick,
   onTop,
   direction,
+  variant = "regular",
   style,
   backgroundColor = Colors.BLUE,
   iconColor = "white",
   className,
   iconSize = "1x",
 }: SliderArrowProps) {
+  const is500pxOrLess = useMediaQuery("(max-width:500px)");
+
   const sliderArrowStyles = makeStyles((theme: Theme) => ({
     iconContainer: {
-      backgroundColor: backgroundColor,
+      backgroundColor: getBackgroundColor(),
       borderRadius: "50%",
       height: iconSize === "1x" ? "40px" : "56px",
       width: iconSize === "1x" ? "40px" : "56px",
 
       "&:hover": {
-        backgroundColor: Colors.BLUE_HOVER,
+        backgroundColor: getBackgroundColorHover(),
       },
     },
   }));
 
   const styles = sliderArrowStyles();
 
+  function getBackgroundColor() {
+    if (variant === "fullscreen" && is500pxOrLess) {
+      return "#1313138f";
+    }
+
+    return backgroundColor;
+  }
+
+  function getBackgroundColorHover() {
+    if (variant === "fullscreen" && is500pxOrLess) {
+      return "#131313b0";
+    }
+
+    return Colors.BLUE_HOVER;
+  }
+
+  function getIconButtonStyle() {
+    if (variant === "fullscreen" && is500pxOrLess) {
+      return direction === "right" ? { right: 45, zIndex: 2 } : { left: 45, zIndex: 2 };
+    }
+
+    return {};
+  }
+
   return (
     <IconButton
       onClick={onClick}
       className={styles.iconContainer}
-      style={
-        onTop
-          ? direction === "right"
-            ? { position: "absolute", zIndex: 2, left: "calc(100% - 72px)" }
-            : { position: "absolute", zIndex: 2 }
-          : {}
-      }
+      style={getIconButtonStyle()}
     >
       <FontAwesomeIcon
         size={iconSize}

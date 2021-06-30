@@ -1,21 +1,19 @@
 import DateFnsUtils from "@date-io/date-fns";
-import { faBed, faChild, faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBed, faChild, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   createMuiTheme,
   FormControl,
   Grid,
-  IconButton,
   MenuItem,
   Select,
-  TextField,
   ThemeProvider,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { addDays, parseISO } from "date-fns";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
@@ -25,17 +23,20 @@ import {
   HotelBookingParams,
   isDateAfterOrEqual,
   muiDateFormatter,
+  selectDestinationCity,
   selectHotelReservationParams,
+  IATALocation,
+  updateReservationParams,
 } from "../../utils";
 import { CustomButton } from "../atoms";
 import { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 
 interface HotelType {
-  checkIn: MaterialUiPickersDate;
-  checkOut: MaterialUiPickersDate;
-  adults: unknown;
-  children: unknown;
-  rooms: unknown;
+  checkIn: Date;
+  checkOut: Date;
+  adults: number;
+  children: number;
+  rooms: number;
   [key: string]: HotelType[keyof HotelType];
 }
 
@@ -115,9 +116,9 @@ export default function HomeHotelReservation() {
   const [hotel, setHotel] = useState<HotelType>({
     checkIn: new Date(),
     checkOut: addDays(new Date(), 2),
-    adults: "",
-    children: "",
-    rooms: "",
+    adults: 0,
+    children: 0,
+    rooms: 0,
   });
 
   const hotelReservationParams = [
@@ -140,7 +141,10 @@ export default function HomeHotelReservation() {
 
   const style = homeStyles();
 
+  const dispatch = useDispatch();
+
   const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
+  const destinationCity: IATALocation = useSelector(selectDestinationCity);
 
   function onDateChange(date: MaterialUiPickersDate, param: "checkIn" | "checkOut") {
     let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
@@ -158,6 +162,31 @@ export default function HomeHotelReservation() {
   }
 
   function onSearchClick() {
+    let occupancies = [
+      {
+        adults: hotel.adults,
+        children: hotel.children,
+        rooms: hotel.rooms,
+        paxes: [],
+      },
+    ];
+
+    let stay = {
+      checkIn: hotel.checkIn,
+      checkOut: hotel.checkOut,
+    };
+
+    let geolocation = {
+      longitude: Number(destinationCity.lon),
+      latitude: Number(destinationCity.lat),
+      radius: 15,
+      unit: "km",
+    };
+
+    dispatch(
+      updateReservationParams({ ...reservationParams, occupancies, stay, geolocation })
+    );
+
     history.push(getHotelSearchURL());
   }
 
@@ -213,7 +242,9 @@ export default function HomeHotelReservation() {
                   startAdornment={
                     <FontAwesomeIcon icon={param.icon} color={Colors.BLUE} />
                   }
-                  onChange={(e) => setHotel({ ...hotel, [param.field]: e.target.value })}
+                  onChange={(e) =>
+                    setHotel({ ...hotel, [param.field]: e.target.value as number })
+                  }
                 >
                   {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
                     <MenuItem key={n} value={n}>

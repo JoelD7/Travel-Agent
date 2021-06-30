@@ -21,7 +21,15 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import Axios, { AxiosResponse } from "axios";
 import { addDays, parseISO } from "date-fns";
-import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  lazy,
+  MouseEvent,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
@@ -29,7 +37,6 @@ import { Family } from "../../assets/fonts";
 import {
   CustomButton,
   Footer,
-  HotelCard,
   HotelStarSelector,
   Navbar,
   NotAvailableCard,
@@ -77,6 +84,8 @@ interface HotelSearchFilter {
   stars: number;
   priceRange: number[];
 }
+
+const HotelCard = lazy(() => import("../../components/organisms/HotelCard/HotelCard"));
 
 export function Hotels() {
   const theme = createMuiTheme({
@@ -230,7 +239,6 @@ export function Hotels() {
   const [loadingOnMount, setLoadingOnMount] = useState(true);
   const [loading, setLoading] = useState(false);
   const [hotelsMounted, setHotelsMounted] = useState(false);
-
   const [maxRate, setMaxRate] = useState<number>(500);
   const [noHotels, setNoHotels] = useState(false);
 
@@ -959,7 +967,9 @@ export function Hotels() {
                             timeout={1000}
                           >
                             <div>
-                              <HotelCard hotel={hotel} />
+                              <Suspense fallback={<div />}>
+                                <HotelCard hotel={hotel} />
+                              </Suspense>
                             </div>
                           </Grow>
                         ))}

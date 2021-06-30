@@ -5,6 +5,7 @@ import {
   Grid,
   Grow,
   makeStyles,
+  useMediaQuery,
   Theme,
 } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
@@ -54,8 +55,8 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
       [theme.breakpoints.down(530)]: {
         width: "86vw",
       },
-      [theme.breakpoints.down(450)]: {
-        width: "94vw",
+      [theme.breakpoints.down(500)]: {
+        width: "100vw",
       },
     },
     paperImage: {
@@ -89,8 +90,9 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
       },
     },
     photoInSlider: {
-      objectFit: "cover",
-      height: "auto",
+      objectFit: "contain",
+      maxWidth: "100%",
+      height: "calc(100vh - 75px)",
       width: "auto",
       margin: "auto",
       borderRadius: "10px",
@@ -107,6 +109,8 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
   const hotelPhotos = getHotelImages(hotel);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [initialImageSlide, setInitialImageSlide] = useState(0);
+
+  const is500pxOrLess = useMediaQuery("(max-width:500px)");
 
   const sliderSettings = {
     className: style.slider,
@@ -137,16 +141,13 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
     "&:hover": {
       backgroundColor: "#000000b5",
     },
+    zIndex: is500pxOrLess ? 2 : 0,
   };
 
   const imageSliderSettings = {
     className: style.imageSlider,
-    nextArrow: (
-      <SliderArrow style={sliderArrowStyles} iconColor="#b6b6b6" direction="right" />
-    ),
-    prevArrow: (
-      <SliderArrow style={sliderArrowStyles} iconColor="#b6b6b6" direction="left" />
-    ),
+    nextArrow: <SliderArrow variant="fullscreen" direction="right" />,
+    prevArrow: <SliderArrow variant="fullscreen" direction="left" />,
     slidesToShow: 1,
     initialSlide: initialImageSlide,
   };
@@ -182,6 +183,7 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
         open={viewerOpen}
         onClose={() => onFullScreenViewerClose()}
         BackdropComponent={Backdrop}
+        fullScreen={is500pxOrLess}
         classes={{ paper: style.paperImage }}
         BackdropProps={{
           timeout: 500,

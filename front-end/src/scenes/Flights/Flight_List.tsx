@@ -26,15 +26,22 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import Axios from "axios";
 import { addDays, compareDesc, format, parseISO, subDays } from "date-fns";
 import { compareAsc } from "date-fns/esm";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  lazy,
+  ReactChild,
+  Suspense,
+  useEffect,
+  useState,
+} from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router";
+import { ListChildComponentProps, VariableSizeList } from "react-window";
 import { batchActions } from "redux-batched-actions";
 import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import {
-  CardFlight,
   CustomButton,
   FlightTimesRange,
   Footer,
@@ -83,6 +90,8 @@ import { FlightTypes } from "../../utils/types";
 import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
 import { IATALocation } from "../../utils/types/location-types";
 import { flightListStyles } from "./flight-list-styles";
+
+const CardFlight = lazy(() => import("../../components/organisms/CardFlight/CardFlight"));
 
 export function Flight_List() {
   const style = flightListStyles();
@@ -213,6 +222,7 @@ export function Flight_List() {
   ];
 
   const [flights, setFlights] = useState<Flight[]>(flightsPlaceholder);
+  const [renderedFlights, setRenderedFlights] = useState<Flight[]>([]);
   const [allFlights, setAllFlights] = useState<Flight[]>([]);
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
   const [occupancyParamsChanged, setOccupancyParamsChanged] = useState(false);
@@ -428,6 +438,7 @@ export function Flight_List() {
       sortFlightsBy(sortOption, buffer, "no filter");
     } else {
       setFlights(buffer);
+      setRenderedFlights(flights.slice(page * pageSize, page * pageSize + pageSize));
     }
     setAllFlights(buffer);
 
@@ -735,6 +746,7 @@ export function Flight_List() {
     }
 
     setFlights(sortedFlights);
+    setRenderedFlights(sortedFlights.slice(page * pageSize, page * pageSize + pageSize));
   }
 
   function isAnyFilterApplied() {
@@ -853,7 +865,7 @@ export function Flight_List() {
   }
 
   function SearchFilters() {
-    const endCurrency: string = useSelector(selectUserCurrency);
+    const userCurrency: string = useSelector(selectUserCurrency);
 
     return (
       <div>
@@ -865,7 +877,7 @@ export function Flight_List() {
         </Text>
 
         <PriceRange
-          baseCurrency={flights[0] ? flights[0].price.currency : endCurrency}
+          baseCurrency={flights[0] ? flights[0].price.currency : userCurrency}
           value={priceRange}
           max={maxPrice}
           updateState={(slider) => onPriceSliderChange(slider)}
@@ -1110,6 +1122,24 @@ export function Flight_List() {
     }
   }
 
+  function getRenderedCardsCount() {
+    return flights.slice(page * pageSize, page * pageSize + pageSize).length;
+  }
+
+  function getVirtualizedListHeight() {
+    return 185 * 4;
+  }
+
+  function Row(props: ListChildComponentProps) {
+    const { index, style: RWStyle, ...rest } = props;
+
+    return (
+      <div style={RWStyle}>
+        <CardFlight variant="regular" flight={renderedFlights[index]} />
+      </div>
+    );
+  }
+
   return (
     <div className={style.mainContainer}>
       <Helmet>
@@ -1349,11 +1379,17 @@ export function Flight_List() {
                 <Grid item xs={12} style={loading ? { filter: "blur(4px)" } : {}}>
                   {areAnyFlightsReturned() ? (
                     <div>
-                      {flights
-                        .slice(page * pageSize, page * pageSize + pageSize)
-                        .map((flight, i) => (
-                          <CardFlight variant="regular" key={i} flight={flight} />
-                        ))}
+                      <Suspense fallback={<div />}>
+                        <VariableSizeList
+                          height={getVirtualizedListHeight() + 16}
+                          width="100%"
+                          itemSize={(index) => 185}
+                          overscanCount={5}
+                          itemCount={getRenderedCardsCount()}
+                        >
+                          {Row}
+                        </VariableSizeList>
+                      </Suspense>
                     </div>
                   ) : (
                     <Grid item className={style.notAvailableCardGrid}>

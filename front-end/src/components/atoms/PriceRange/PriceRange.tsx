@@ -1,13 +1,6 @@
 import { Slider } from "@material-ui/core";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import {
-  selectExchangeRate,
-  ExchangeRate,
-  selectUserCurrency,
-  convertToUserCurrency,
-  formatAsCurrency,
-} from "../../../utils";
+import { convertToUserCurrency, formatAsCurrency } from "../../../utils";
 import { priceRangeStyles } from "./priceRange-styles";
 
 interface PriceRange {
@@ -21,8 +14,6 @@ export function PriceRange({ updateState, value, max, baseCurrency }: PriceRange
   const style = priceRangeStyles();
 
   const [slider, setSlider] = useState<number[]>(value);
-  const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
-  const endCurrency: string = useSelector(selectUserCurrency);
 
   useEffect(() => {
     setSlider(value);

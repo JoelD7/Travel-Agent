@@ -15,9 +15,9 @@ import {
   getHotelSearchURL,
   getRestaurantsDefaultRoute,
   Routes,
-  selectUserCurrency,
   selectExchangeRate,
   selectHotelReservationParams,
+  selectUserCurrency,
   setEndCurrency,
   setExchangeRate,
 } from "../../../utils";
@@ -239,7 +239,7 @@ export function Footer() {
                   style={{ marginTop: "6px" }}
                   backgroundColor={"inherit"}
                 >
-                  (829) 977 0013
+                  (829) 364 6641
                 </IconText>
               </Grid>
             </Grid>
