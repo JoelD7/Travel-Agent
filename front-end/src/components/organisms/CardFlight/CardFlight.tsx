@@ -37,7 +37,7 @@ interface CardFlight {
   isFlightInTrip?: boolean;
 }
 
-export default function CardFlight({
+const CardFlight = React.memo(function Component({
   flight,
   variant = "deal",
   className,
@@ -385,4 +385,6 @@ export default function CardFlight({
       />
     </>
   );
-}
+});
+
+export default CardFlight;

@@ -17,3 +17,4 @@ export {
   homeItinerary,
   logoTypeWhiteFore,
 };
+export * from "./cloud-images";

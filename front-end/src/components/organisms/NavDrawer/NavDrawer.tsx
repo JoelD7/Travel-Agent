@@ -24,11 +24,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { Font, logoTypeWhiteFore } from "../../../assets";
+import { CloudImage, Font, logoTypeWhiteFore } from "../../../assets";
 import { Family } from "../../../assets/fonts";
 import { Colors } from "../../../styles";
 import {
-  avatarWhite,
   backend,
   getCarRentalDefaultURL,
   getHotelSearchURL,
@@ -190,7 +189,9 @@ export function NavDrawer({ open, onClose }: NavDrawer) {
           <div>
             <CustomButton
               avatar={
-                <Avatar src={person.profilePic ? person.profilePic : avatarWhite} />
+                <Avatar
+                  src={person.profilePic ? person.profilePic : CloudImage.avatarWhite}
+                />
               }
               backgroundColor={Colors.PURPLE}
               rounded

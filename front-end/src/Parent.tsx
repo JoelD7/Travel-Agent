@@ -1,16 +1,19 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
+import { CloudImage } from "./assets";
 import {
   AuthStatus,
   backend,
   Person,
+  proxyUrl,
   Routes,
   selectPerson,
   setFavorites,
   setIsAuthenticated,
   setLoginReferrer,
   setPerson,
+  setTripperLogoImg,
   setUserTripsFromPerson,
   useAppDispatch,
 } from "./utils";
@@ -28,6 +31,12 @@ export function Parent({ children }: ParentProps) {
   const [childrenVisible, setChildrenVisible] = useState(false);
 
   useEffect(() => {
+    getTripperLogoImage();
+
+    fetchAuthenticationStatus();
+  }, []);
+
+  function fetchAuthenticationStatus() {
     backend
       .get(`/auth/status`)
       .then((res) => {
@@ -51,7 +60,7 @@ export function Parent({ children }: ParentProps) {
         setChildrenVisible(true);
       })
       .catch((err) => {});
-  }, []);
+  }
 
   async function fetchPerson() {
     const personUuidCookie = document.cookie
@@ -65,6 +74,46 @@ export function Parent({ children }: ParentProps) {
       dispatch(setPerson(res.data));
       dispatch(setFavorites(res.data.favoritePlaces));
       setUserTripsFromPerson(res.data);
+    }
+  }
+
+  function getTripperLogoImage() {
+    if (localStorage.getItem("tripperLogo") === null) {
+      let img = new Image();
+
+      img.addEventListener(
+        "load",
+        function () {
+          let imgCanvas = document.createElement("canvas"),
+            imgContext = imgCanvas.getContext("2d");
+
+          imgCanvas.width = img.width;
+          imgCanvas.height = img.height;
+
+          if (imgContext !== null) {
+            imgContext.drawImage(img, 0, 0, img.width, img.height);
+          }
+
+          let imgAsDataURL = imgCanvas.toDataURL("image/png");
+
+          try {
+            localStorage.setItem("tripperLogo", imgAsDataURL);
+            dispatch(setTripperLogoImg(imgAsDataURL));
+          } catch (e) {
+            console.log("Storage failed: " + e);
+          }
+        },
+        false
+      );
+
+      img.onerror = function (e) {
+        console.log("Not ok", e);
+      };
+
+      img.crossOrigin = "Anonymous";
+      img.src = proxyUrl + CloudImage.logotypeWhite;
+    } else {
+      dispatch(setTripperLogoImg(localStorage.getItem("tripperLogo") as string));
     }
   }
 

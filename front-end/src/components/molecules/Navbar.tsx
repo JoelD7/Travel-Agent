@@ -18,12 +18,10 @@ import { Alert } from "@material-ui/lab";
 import React, { CSSProperties, FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
-import { Font, logoIcon, logoType, logoTypeWhiteFore } from "../../assets";
+import { CloudImage, Font, logoIcon, logoType, logoTypeWhiteFore } from "../../assets";
 import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
 import {
-  avatar,
-  avatarWhite,
   getLinkStyle,
   IATALocation,
   LocationType,
@@ -116,7 +114,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
       return person.profilePic;
     }
 
-    return variant === "transparent" ? avatarWhite : avatar;
+    return variant === "transparent" ? CloudImage.avatarWhite : CloudImage.avatar;
   }
 
   return (

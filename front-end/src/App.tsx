@@ -15,6 +15,7 @@ import {
   Text,
 } from "./components";
 import { Parent } from "./Parent";
+import { Loading } from "./scenes";
 import { Colors } from "./styles";
 import {
   IATALocation,
@@ -82,7 +83,7 @@ export default function App() {
       <Router basename="/Travel-Agent">
         <Parent>
           <ScrollToTop>
-            <Suspense fallback={<div />}>
+            <Suspense fallback={<Loading />}>
               <Switch>
                 <Route exact path={Routes.HOME} component={Home} />
                 <Route exact path={Routes.SIGNUP} component={SignUp} />

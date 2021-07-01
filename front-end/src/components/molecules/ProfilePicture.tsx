@@ -2,8 +2,8 @@ import { faPencilAlt, faPlus, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { Grid, IconButton, makeStyles, Theme } from "@material-ui/core";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { CloudImage } from "../../assets";
 import {
-  avatar,
   deleteImageFromFirebase,
   proxyUrl,
   Person,
@@ -56,7 +56,7 @@ export function ProfilePicture({
     },
   }));
 
-  const [url, setUrl] = useState<string>(avatar);
+  const [url, setUrl] = useState<string>(CloudImage.avatar);
   const [images, setImages] = useState<File[]>([]);
   const hiddenInputFileRef = useRef<HTMLInputElement>(null);
   const person: Person | undefined = useSelector(selectPerson);
@@ -113,7 +113,7 @@ export function ProfilePicture({
   }
 
   async function deletePicture() {
-    setUrl(avatar);
+    setUrl(CloudImage.avatar);
 
     let profileRef = getProfileRef();
     deleteImageFromFirebase(images[0], profileRef);
@@ -142,7 +142,7 @@ export function ProfilePicture({
       hiddenInputFileRef.current.value = null;
       //@ts-ignore
       hiddenInputFileRef.current.files = null;
-      setUrl(avatar);
+      setUrl(CloudImage.avatar);
     } else {
       setUrl(URL.createObjectURL(values[0]));
     }
@@ -187,7 +187,11 @@ export function ProfilePicture({
         onClick={() => onUploadButtonClick()}
         className={style.uploadButton}
       >
-        {url === avatar ? <IconTP icon={faPlus} /> : <IconTP icon={faPencilAlt} />}
+        {url === CloudImage.avatar ? (
+          <IconTP icon={faPlus} />
+        ) : (
+          <IconTP icon={faPencilAlt} />
+        )}
       </IconButton>
 
       <input

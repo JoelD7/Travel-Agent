@@ -8,10 +8,12 @@ interface RootSlice {
   exchangeRate: ExchangeRate;
   userCurrency: string;
   cityImage: CityImage;
+  tripperLogoImg: string;
 }
 
 const initialState: RootSlice = {
   idPerson: 0,
+  tripperLogoImg: "",
   openRequiredFieldSnack: false,
   exchangeRate: JSON.parse(String(localStorage.getItem("rates"))),
   userCurrency: getUserCurrency(),
@@ -35,6 +37,10 @@ const rootSlice = createSlice({
       state.idPerson = action.payload;
     },
 
+    setTripperLogoImg(state, action: PayloadAction<string>) {
+      state.tripperLogoImg = action.payload;
+    },
+
     setOpenRequiredFieldSnack(state, action: PayloadAction<boolean>) {
       state.openRequiredFieldSnack = action.payload;
     },
@@ -53,6 +59,7 @@ const rootSlice = createSlice({
 export const {
   setOpenRequiredFieldSnack,
   setExchangeRate,
+  setTripperLogoImg,
   setEndCurrency,
   setIdPerson,
   setCityImage,

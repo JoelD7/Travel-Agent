@@ -260,7 +260,6 @@ export function Flights_Home() {
       })
       .catch((error) => {
         if (invalidDestinationsError(error)) {
-          console.log(error.response.status);
           setLoading(false);
         }
       });
