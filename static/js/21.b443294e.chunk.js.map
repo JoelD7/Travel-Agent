@@ -1,0 +1,1 @@
+{"version":3,"sources":["scenes/Trip/TripDetailsDefault.tsx"],"names":[],"mappings":"+GAAA","file":"static/js/21.b443294e.chunk.js","sourcesContent":["export { TripDetails as default } from \"./TripDetails\";\r\n"],"sourceRoot":""}

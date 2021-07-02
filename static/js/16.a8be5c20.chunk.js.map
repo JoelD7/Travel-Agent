@@ -1,0 +1,1 @@
+{"version":3,"sources":["scenes/Restaurants/RestaurantDetailsDefault.tsx"],"names":[],"mappings":"+GAAA","file":"static/js/16.a8be5c20.chunk.js","sourcesContent":["export { RestaurantDetails as default } from \"./RestaurantDetails\";\r\n"],"sourceRoot":""}
