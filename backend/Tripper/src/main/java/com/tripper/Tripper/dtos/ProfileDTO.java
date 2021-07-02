@@ -1,6 +1,5 @@
 package com.tripper.Tripper.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data

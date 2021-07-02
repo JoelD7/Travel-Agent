@@ -78,7 +78,7 @@ export function SignUp() {
       <Grid className={style.mainContainerSignUp} container>
         <Grid item className={style.formGrid}>
           <div className={style.imageContainer}>
-            <Link to={Routes.HOME} style={{ outline: "none", border: "none" }}>
+            <Link to={Routes.HOME} className={style.logoLinkContainer}>
               <img className={style.logotype} src={logoType} />
             </Link>
           </div>

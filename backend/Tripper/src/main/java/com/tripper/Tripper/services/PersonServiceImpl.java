@@ -5,11 +5,8 @@ import com.tripper.Tripper.dtos.ProfileDTO;
 import com.tripper.Tripper.exceptions.InvalidPasswordException;
 import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.models.Person;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Service
 public class PersonServiceImpl implements PersonService {

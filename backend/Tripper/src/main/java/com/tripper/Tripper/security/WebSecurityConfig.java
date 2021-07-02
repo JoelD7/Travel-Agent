@@ -48,9 +48,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
-    @Autowired
-    private LoggedUserFilter loggedUserFilter;
-
     @Value("${tripper.app.rememberMe-key}")
     private String rememberMeKey;
 
@@ -102,7 +99,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(rememberMeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(loggedUserFilter, RememberMeAuthenticationFilter.class);
     }
 
     @Bean
