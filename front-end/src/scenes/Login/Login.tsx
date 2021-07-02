@@ -97,8 +97,6 @@ export function Login() {
       });
   }
 
-  function googleLogin(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
-
   function PasswordEye({ name }: PasswordProps) {
     return (
       <InputAdornment position="end">
@@ -126,12 +124,6 @@ export function Login() {
 
           <Grid item className={style.formContainer}>
             <h1 className={style.title}>Login</h1>
-            <h5 style={{ color: Colors.BLUE, fontWeight: "normal" }}>
-              Login with Google
-            </h5>
-            <CustomButton style={{ width: "100%" }} icon={faGoogle} onClick={googleLogin}>
-              Google Login
-            </CustomButton>
 
             <Grid id="email" style={{ marginTop: "15px" }} container>
               <TextInput

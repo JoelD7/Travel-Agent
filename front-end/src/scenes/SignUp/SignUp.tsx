@@ -69,8 +69,6 @@ export function SignUp() {
       });
   }
 
-  function googleSignUp(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {}
-
   function updateState(name: string, value: string) {
     setCredentials({ ...credentials, [name]: value });
   }
@@ -87,16 +85,6 @@ export function SignUp() {
 
           <Grid item className={style.formContainer}>
             <h1 className={style.title}>Sign up</h1>
-            <h5 style={{ color: Colors.BLUE, fontWeight: "normal" }}>
-              Sign up with Google
-            </h5>
-            <CustomButton
-              style={{ width: "100%" }}
-              icon={faGoogle}
-              onClick={googleSignUp}
-            >
-              Google Sign up
-            </CustomButton>
 
             <Grid
               id="name"
