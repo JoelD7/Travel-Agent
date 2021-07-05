@@ -41,6 +41,7 @@ import {
   setIsAuthenticated,
   setPerson,
   Trip,
+  setLogout,
 } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 import { CustomButton } from "../../atoms";
@@ -78,65 +79,74 @@ export function NavDrawer({ open, onClose }: NavDrawer) {
     {
       label: "Itinerary",
       icon: faCalendarAlt,
-      route: lastTrip ? `${Routes.ITINERARY}?trip=${lastTrip.idTrip}` : Routes.ITINERARY,
+      route: lastTrip ? `${Routes.ITINERARY}?trip=${lastTrip.uuid}` : Routes.ITINERARY,
       selected: page === Routes.ITINERARY,
-      loggedOnly: true,
+      loggedUserRoute: true,
+      visible: true,
     },
     {
       label: "Reservations",
       icon: faCalendar,
       route: Routes.RESERVATIONS,
       selected: page === Routes.RESERVATIONS,
-      loggedOnly: true,
+      loggedUserRoute: true,
+      visible: true,
     },
     {
       label: "Trips",
       icon: faPlane,
       route: Routes.TRIPS,
       selected: page === Routes.TRIPS,
-      loggedOnly: true,
+      loggedUserRoute: true,
+      visible: true,
     },
     {
       label: "Favorite places",
       icon: faHeart,
       route: Routes.FAVORITE_PLACES,
       selected: page === Routes.FAVORITE_PLACES,
-      loggedOnly: true,
+      loggedUserRoute: true,
+      visible: true,
     },
     {
       label: "Hotels",
       icon: faHotel,
       route: getHotelSearchURL(),
       selected: page === Routes.HOTELS,
-      loggedOnly: false,
+      loggedUserRoute: false,
+      visible: true,
     },
     {
       label: "Flights",
       icon: faPlaneDeparture,
       route: Routes.FLIGHTS,
       selected: page === Routes.FLIGHTS,
-      loggedOnly: false,
+      loggedUserRoute: false,
+      visible: true,
     },
     {
       label: "Restaurants",
       icon: faUtensils,
       route: getRestaurantsDefaultRoute(),
       selected: page === Routes.RESTAURANTS,
-      loggedOnly: false,
+      loggedUserRoute: false,
+      visible: true,
     },
     {
       label: "Things to do",
       icon: faDice,
       route: Routes.THINGS_TODO,
       selected: page === Routes.THINGS_TODO,
-      loggedOnly: false,
+      loggedUserRoute: false,
+      visible: true,
     },
     {
       label: "Car rental",
       icon: faCar,
       route: getCarRentalDefaultURL(),
       selected: page === Routes.CAR_RENTAL,
-      loggedOnly: false,
+      loggedUserRoute: false,
+      visible: true,
     },
   ]);
 
@@ -147,10 +157,11 @@ export function NavDrawer({ open, onClose }: NavDrawer) {
           label: "Itinerary",
           icon: faCalendarAlt,
           route: lastTrip
-            ? `${Routes.ITINERARY}?trip=${lastTrip.idTrip}`
+            ? `${Routes.ITINERARY}?trip=${lastTrip.uuid}`
             : Routes.ITINERARY,
           selected: page === Routes.ITINERARY,
-          loggedOnly: true,
+          loggedUserRoute: true,
+          visible: true,
         };
       } else {
         return option;
@@ -176,6 +187,7 @@ export function NavDrawer({ open, onClose }: NavDrawer) {
     setLoading(true);
     dispatch(setIsAuthenticated(false));
     dispatch(setPerson(undefined));
+    dispatch(setLogout(""));
     history.push(Routes.LOGIN);
 
     const res = await backend.get(`/auth/logout`);
@@ -261,36 +273,34 @@ export function NavDrawer({ open, onClose }: NavDrawer) {
         <Divider className={style.divider} />
 
         {/* Routes for logged users */}
-        {isAuthenticated && (
-          <ThemeProvider theme={theme}>
-            {drawerOptions
-              .filter((o) => o.loggedOnly)
-              .map((option, i) => (
-                <Link key={i} style={getLinkStyle("white")} to={option.route}>
-                  <ListItem
-                    selected={option.selected}
-                    button
-                    classes={{
-                      root: style.listItemRoot,
-                      button: style.listItem,
-                    }}
-                    onClick={() => onOptionClick(option)}
-                  >
-                    <ListItemIcon>
-                      <FontAwesomeIcon icon={option.icon} color="white" />
-                    </ListItemIcon>
+        <ThemeProvider theme={theme}>
+          {drawerOptions
+            .filter((option) => option.loggedUserRoute)
+            .map((option, i) => (
+              <Link key={i} style={getLinkStyle("white")} to={option.route}>
+                <ListItem
+                  selected={option.selected}
+                  button
+                  classes={{
+                    root: style.listItemRoot,
+                    button: style.listItem,
+                  }}
+                  onClick={() => onOptionClick(option)}
+                >
+                  <ListItemIcon>
+                    <FontAwesomeIcon icon={option.icon} color="white" />
+                  </ListItemIcon>
 
-                    <ListItemText
-                      classes={{ primary: style.listItemText }}
-                      style={{ color: "white" }}
-                    >
-                      {option.label}
-                    </ListItemText>
-                  </ListItem>
-                </Link>
-              ))}
-          </ThemeProvider>
-        )}
+                  <ListItemText
+                    classes={{ primary: style.listItemText }}
+                    style={{ color: "white" }}
+                  >
+                    {option.label}
+                  </ListItemText>
+                </ListItem>
+              </Link>
+            ))}
+        </ThemeProvider>
 
         {/* Routes for all users */}
         <div className={style.routesContainer}>
@@ -298,7 +308,7 @@ export function NavDrawer({ open, onClose }: NavDrawer) {
 
           <ThemeProvider theme={theme}>
             {drawerOptions
-              .filter((o) => !o.loggedOnly)
+              .filter((option) => !option.loggedUserRoute)
               .map((option, i) => (
                 <Link key={option.route} style={getLinkStyle("white")} to={option.route}>
                   <ListItem

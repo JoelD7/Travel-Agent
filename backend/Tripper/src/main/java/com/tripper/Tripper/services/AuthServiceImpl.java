@@ -98,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
                     .findFirst()
                     .orElse(null);
 
-            if (personUuidCookie != null) {
+            if (!isCookiePresent(personUuidCookie)) {
                 personUuidCookie = new Cookie(CookieName.PERSON_UUID.toString(), uuid);
                 personUuidCookie.setDomain("localhost");
                 personUuidCookie.setPath("/");
@@ -107,6 +107,10 @@ public class AuthServiceImpl implements AuthService {
                 response.addCookie(personUuidCookie);
             }
         }
+    }
+
+    private boolean isCookiePresent(Cookie c) {
+        return c != null;
     }
 
     @Override

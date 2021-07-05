@@ -100,6 +100,5 @@ export async function deleteImageFromFirebase(
 
 export function setUpLastTrip(trips: Trip[]) {
   let lastTrip: Trip = trips.sort((a, b) => compareDesc(a.endDate, b.endDate))[0];
-
   store.dispatch(setLastTrip(lastTrip));
 }

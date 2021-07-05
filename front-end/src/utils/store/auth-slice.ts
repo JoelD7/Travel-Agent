@@ -27,9 +27,12 @@ const authSlice = createSlice({
     setLoginReferrer(state, action: PayloadAction<string>) {
       state.loginReferrer = action.payload;
     },
+
+    setLogout(state, action) {},
   },
 });
 
-export const { setIsAuthenticated, setPerson, setLoginReferrer } = authSlice.actions;
+export const { setIsAuthenticated, setPerson, setLoginReferrer, setLogout } =
+  authSlice.actions;
 
 export default authSlice.reducer;

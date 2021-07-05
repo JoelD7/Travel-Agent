@@ -1,4 +1,3 @@
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { Grid, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useState } from "react";

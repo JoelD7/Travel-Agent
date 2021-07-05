@@ -52,6 +52,27 @@ export const reservationStyles = makeStyles((theme: Theme) => ({
       width: "100%",
     },
   },
+  noReservationContainer: {
+    marginLeft: "260px",
+    marginBottom: "100px",
+    width: "calc(100% - 260px)",
+    [theme.breakpoints.down(960)]: {
+      margin: "auto",
+      width: "97%",
+    },
+
+    [theme.breakpoints.down(450)]: {
+      padding: 10,
+    },
+  },
+  noReservationGrid: {
+    height: "75vh",
+    alignContent: "center",
+    [theme.breakpoints.down(730)]: {
+      width: "100%",
+      margin: "auto",
+    },
+  },
   pageContentGrid: {
     marginLeft: "265px",
     marginBottom: "100px",

@@ -3,6 +3,7 @@ package com.tripper.Tripper.security;
 import com.tripper.Tripper.utils.CookieName;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,6 +54,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${tripper.app.rememberMe.timeout}")
     private int rememberMeTimeout;
+
+    @Value("${tripper.app.allowed-origins}")
+    private String allowedOrigins;
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -143,15 +147,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CorsFilter corsFilter() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        List<String> corsAllowedOrigins = Arrays.asList(allowedOrigins.split(","));
 
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+        config.setAllowedOrigins(corsAllowedOrigins);
         config.setAllowedHeaders(Arrays.asList("Authorization", "Origin", "Content-Type", "Accept"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
 
-        //Register a CorsConfiguration for the specified path pattern.
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

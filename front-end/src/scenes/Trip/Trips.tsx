@@ -10,7 +10,7 @@ import {
 import { compareDesc, format } from "date-fns";
 import React, { CSSProperties, useEffect, useState } from "react";
 import Helmet from "react-helmet";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
 import Slider from "react-slick";
 import {
@@ -27,10 +27,11 @@ import { Colors, Shadow } from "../../styles";
 import {
   getLinkStyle,
   Routes,
-  selectUserTrips,
-  Trip,
+  selectIsAuthenticated,
   selectLastTrip,
   setUpLastTrip,
+  selectUserTrips,
+  Trip,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";
 
@@ -40,11 +41,11 @@ export function Trips() {
   const [trips, setTrips] = useState<Trip[]>();
   const [loading, setLoading] = useState(true);
 
-  const lastTrip: Trip | undefined = useSelector(selectLastTrip);
   const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
+  const lastTrip: Trip | undefined = useSelector(selectLastTrip);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
 
   const match = useRouteMatch();
-  const dispatch = useDispatch();
   const history = useHistory();
 
   const tripCoverBackground: CSSProperties = {
@@ -140,6 +141,10 @@ export function Trips() {
     return 0;
   }
 
+  function isNoTripsShowable(): boolean {
+    return (trips && trips.length === 0) || !isAuthenticated;
+  }
+
   return (
     <div className={style.mainContainer}>
       <Helmet>
@@ -149,7 +154,7 @@ export function Trips() {
       <Navbar className={style.navbar} variant="dashboard" position="sticky" />
       <DashDrawer />
 
-      {trips && trips.length === 0 ? (
+      {isNoTripsShowable() ? (
         <NoTrips />
       ) : (
         <Grid container>

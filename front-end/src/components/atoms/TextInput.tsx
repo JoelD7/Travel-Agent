@@ -69,6 +69,7 @@ export function TextInput({
   });
 
   const [text, setText] = useState(value);
+  console.log(`Login value: ${value} | TextInput value: ${text}`);
   const [error, setError] = useState(errorProp ? errorProp : false);
   const [helperText, setHelperText] = useState(helperTextProp ? helperTextProp : "");
 
@@ -111,9 +112,9 @@ export function TextInput({
   });
   const styles = textStyles();
 
-  useEffect(() => {
-    setText(value);
-  }, [value]);
+  // useEffect(() => {
+  //   setText(value);
+  // }, [value]);
 
   useEffect(() => {
     if (errorProp) {
@@ -125,6 +126,9 @@ export function TextInput({
   }, [errorProp, helperTextProp]);
 
   function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+    if (updateState !== undefined) {
+      updateState(name, e.target.value);
+    }
     setText(e.target.value);
   }
 

@@ -33,7 +33,6 @@ import { Colors } from "../../styles";
 import {
   Favorite,
   FavoriteTypes,
-  fetchFavorites,
   getHotelImages,
   getHotelStars,
   getLinkStyle,
@@ -41,12 +40,9 @@ import {
   HotelBooking,
   POICategory,
   proxyUrl,
-  Person,
-  selectPerson,
   Routes,
   selectFavorites,
   selectIsAuthenticated,
-  useAppDispatch,
 } from "../../utils";
 import { getHotelBedHeaders } from "../../utils/external-apis/hotelbeds-apis";
 import { favPlacesStyles } from "./favPlaces-styles";
@@ -79,13 +75,15 @@ export function FavPlaces() {
   );
 
   const history = useHistory();
-  const dispatch = useAppDispatch();
 
   const favorites: Favorite[] | undefined = useSelector(selectFavorites);
   const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
-  const person: Person | undefined = useSelector(selectPerson);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setLoading(false);
+    }
+
     if (favorites) {
       setFavoritePlacesPerType(favorites);
       setLoading(false);
@@ -296,6 +294,47 @@ export function FavPlaces() {
     history.push(`${Routes.THINGS_TODO}/${poi.id}`);
   }
 
+  function NoFavorites() {
+    return (
+      <div className={style.noFavoritesContainer}>
+        <Grid container className={style.noFavoritesGrid}>
+          <Grid item xs={12}>
+            <Grid container justify="center">
+              <Text color={Colors.GRAY_TEXT}>
+                Here you'll be able to see all the spots you mark as favorites.
+              </Text>
+            </Grid>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Grid container justify="center">
+              {isAuthenticated ? (
+                <CustomButton
+                  backgroundColor={Colors.GREEN}
+                  onClick={() => history.push(Routes.THINGS_TODO)}
+                >
+                  Check interesting places
+                </CustomButton>
+              ) : (
+                <CustomButton backgroundColor={Colors.GREEN} onClick={() => Routes.LOGIN}>
+                  Login to start adding favorites
+                </CustomButton>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+      </div>
+    );
+  }
+
+  function isNoFavoritesShowable() {
+    return (favorites && favorites.length === 0) || !isAuthenticated;
+  }
+
+  function areFavoritesShowable() {
+    return favorites && favorites.length > 0 && isAuthenticated;
+  }
+
   return (
     <div className={style.mainContainer}>
       <Helmet>
@@ -320,41 +359,9 @@ export function FavPlaces() {
           </Grid>
         )}
 
-        {favorites && favorites.length === 0 && (
-          <div className={style.noFavoritesContainer}>
-            <Grid container className={style.noFavoritesGrid}>
-              <Grid item xs={12}>
-                <Grid container justify="center">
-                  <Text color={Colors.GRAY_TEXT}>
-                    Here you'll be able to see all the spots you mark as favorites.
-                  </Text>
-                </Grid>
-              </Grid>
+        {isNoFavoritesShowable() && <NoFavorites />}
 
-              <Grid item xs={12}>
-                <Grid container justify="center">
-                  {isAuthenticated ? (
-                    <CustomButton
-                      backgroundColor={Colors.GREEN}
-                      onClick={() => history.push(Routes.THINGS_TODO)}
-                    >
-                      Check interesting places
-                    </CustomButton>
-                  ) : (
-                    <CustomButton
-                      backgroundColor={Colors.GREEN}
-                      onClick={() => Routes.LOGIN}
-                    >
-                      Login to start adding favorites
-                    </CustomButton>
-                  )}
-                </Grid>
-              </Grid>
-            </Grid>
-          </div>
-        )}
-
-        {favorites && favorites.length > 0 && (
+        {areFavoritesShowable() && (
           <>
             {/* Filter by type of place */}
             <Grid item xs={12} style={{ marginTop: "10px" }}>

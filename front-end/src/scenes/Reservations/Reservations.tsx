@@ -19,10 +19,12 @@ import {
 import { Colors } from "../../styles";
 import {
   backend,
+  Routes,
   CarRsv,
   HotelReservation,
   mapCarDTOToDomainType,
   mapFlightToDomainType,
+  selectIsAuthenticated,
   mapHotelDTOToDomainType,
   Person,
   selectPerson,
@@ -38,6 +40,7 @@ export function Reservations() {
 
   const person: Person | undefined = useSelector(selectPerson);
   const userCurrency: string = useSelector(selectUserCurrency);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
 
   const [flights, setFlights] = useState<Flight[]>();
   const [openHotelDialog, setOpenHotelDialog] = useState(false);
@@ -47,7 +50,7 @@ export function Reservations() {
     fetchBookedFlights();
     fetchBookedHotels();
     fetchBookedCarRentals();
-  }, [person]);
+  }, [person, isAuthenticated]);
 
   function fetchBookedFlights() {
     if (person) {
@@ -113,8 +116,8 @@ export function Reservations() {
       <Navbar className={style.navbar} variant="dashboard" position="sticky" />
       <DashDrawer />
 
-      <Grid container>
-        <Grid item className={style.pageContentGrid}>
+      {!isAuthenticated && (
+        <div className={style.noReservationContainer}>
           <IconText
             style={{ marginBottom: "20px", marginTop: "10px" }}
             iconStyle={{ padding: "12px" }}
@@ -127,104 +130,141 @@ export function Reservations() {
             </Text>
           </IconText>
 
-          {/* Flights title */}
-          <Grid item xs={12}>
-            <Grid id="Flights" container>
-              <Text bold color={Colors.BLUE} component="h2">
-                Flights
-              </Text>
-              <CustomButton
-                style={{ paddingBottom: "0px" }}
-                iconColor="#7e7e7e"
-                backgroundColor="rgba(0,0,0,0)"
-                textColor="#7e7e7e"
-              >
-                See all
-              </CustomButton>
+          <Grid container className={style.noReservationGrid}>
+            <Grid item xs={12}>
+              <Grid container justify="center">
+                <Text color={Colors.GRAY_TEXT}>
+                  Here you'll be able to see the reservations made so far.
+                </Text>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Grid container justify="center">
+                <CustomButton backgroundColor={Colors.GREEN} onClick={() => Routes.LOGIN}>
+                  Login to make reservations
+                </CustomButton>
+              </Grid>
             </Grid>
           </Grid>
+        </div>
+      )}
 
-          {/* Flights */}
-          <Grid item xs={12}>
-            {flights ? (
-              <Grid container>
-                {flights.length > 0 ? (
-                  <>
-                    {flights.map((flight, i) => (
-                      <CardFlight
-                        className={style.flightCard}
-                        key={i}
-                        bookedFlight
-                        flight={flight}
-                        variant="deal"
-                      />
-                    ))}
-                  </>
-                ) : (
-                  <NotCreatedMessage
-                    type="FLIGHT"
-                    message="You have no booked flights."
-                  />
-                )}
-              </Grid>
-            ) : (
-              <Grid container>
-                <ProgressCircle />
-              </Grid>
-            )}
-          </Grid>
-
-          {/* Hotels title */}
-          <Grid item xs={12} style={{ marginTop: "30px" }}>
-            <Grid id="Hotels" container>
-              <Text bold color={Colors.BLUE} component="h2">
-                Hotels
+      {/* Page content container */}
+      {isAuthenticated && (
+        <Grid container>
+          <Grid item className={style.pageContentGrid}>
+            <IconText
+              style={{ marginBottom: "20px", marginTop: "10px" }}
+              iconStyle={{ padding: "12px" }}
+              shadow
+              size={35}
+              icon={faCalendar}
+            >
+              <Text bold component="h1">
+                Reservations
               </Text>
-              <CustomButton
-                style={{ paddingBottom: "0px" }}
-                iconColor="#7e7e7e"
-                backgroundColor="rgba(0,0,0,0)"
-                textColor="#7e7e7e"
-              >
-                See all
-              </CustomButton>
-            </Grid>
-          </Grid>
+            </IconText>
 
-          {/* Hotels */}
-          <Grid item xs={12}>
-            {hotelReservations ? (
-              <RsvHotels userCurrency={userCurrency} hotels={hotelReservations} />
-            ) : (
-              <Grid container>
-                <ProgressCircle />
+            {/* Flights title */}
+            <Grid item xs={12}>
+              <Grid id="Flights" container>
+                <Text bold color={Colors.BLUE} component="h2">
+                  Flights
+                </Text>
+                <CustomButton
+                  style={{ paddingBottom: "0px" }}
+                  iconColor="#7e7e7e"
+                  backgroundColor="rgba(0,0,0,0)"
+                  textColor="#7e7e7e"
+                >
+                  See all
+                </CustomButton>
               </Grid>
-            )}
-          </Grid>
-
-          {/* Cars title */}
-          <Grid item xs={12} style={{ marginTop: "30px" }}>
-            <Grid id="Cars" container>
-              <Text bold color={Colors.BLUE} component="h2">
-                Car rentals
-              </Text>
-              <CustomButton
-                style={{ paddingBottom: "0px" }}
-                iconColor="#7e7e7e"
-                backgroundColor="rgba(0,0,0,0)"
-                textColor="#7e7e7e"
-              >
-                See all
-              </CustomButton>
             </Grid>
-          </Grid>
 
-          {/* Car rentals */}
-          <Grid item xs={12}>
-            <ReservedCars />
+            {/* Flights */}
+            <Grid item xs={12}>
+              {flights ? (
+                <Grid container>
+                  {flights.length > 0 ? (
+                    <>
+                      {flights.map((flight, i) => (
+                        <CardFlight
+                          className={style.flightCard}
+                          key={i}
+                          bookedFlight
+                          flight={flight}
+                          variant="deal"
+                        />
+                      ))}
+                    </>
+                  ) : (
+                    <NotCreatedMessage
+                      type="FLIGHT"
+                      message="You have no booked flights."
+                    />
+                  )}
+                </Grid>
+              ) : (
+                <Grid container>
+                  <ProgressCircle />
+                </Grid>
+              )}
+            </Grid>
+
+            {/* Hotels title */}
+            <Grid item xs={12} style={{ marginTop: "30px" }}>
+              <Grid id="Hotels" container>
+                <Text bold color={Colors.BLUE} component="h2">
+                  Hotels
+                </Text>
+                <CustomButton
+                  style={{ paddingBottom: "0px" }}
+                  iconColor="#7e7e7e"
+                  backgroundColor="rgba(0,0,0,0)"
+                  textColor="#7e7e7e"
+                >
+                  See all
+                </CustomButton>
+              </Grid>
+            </Grid>
+
+            {/* Hotels */}
+            <Grid item xs={12}>
+              {hotelReservations ? (
+                <RsvHotels userCurrency={userCurrency} hotels={hotelReservations} />
+              ) : (
+                <Grid container>
+                  <ProgressCircle />
+                </Grid>
+              )}
+            </Grid>
+
+            {/* Cars title */}
+            <Grid item xs={12} style={{ marginTop: "30px" }}>
+              <Grid id="Cars" container>
+                <Text bold color={Colors.BLUE} component="h2">
+                  Car rentals
+                </Text>
+                <CustomButton
+                  style={{ paddingBottom: "0px" }}
+                  iconColor="#7e7e7e"
+                  backgroundColor="rgba(0,0,0,0)"
+                  textColor="#7e7e7e"
+                >
+                  See all
+                </CustomButton>
+              </Grid>
+            </Grid>
+
+            {/* Car rentals */}
+            <Grid item xs={12}>
+              <ReservedCars />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      )}
 
       <HotelRsvDetail open={openHotelDialog} onClose={() => setOpenHotelDialog(false)} />
     </div>

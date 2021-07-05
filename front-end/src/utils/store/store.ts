@@ -1,4 +1,10 @@
-import { configureStore, createSelector } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  combineReducers,
+  configureStore,
+  createSelector,
+  Reducer,
+} from "@reduxjs/toolkit";
 import signUpReducer from "./signUpSlice";
 import searchNavbarReducer from "./search-slice";
 import calendarReducer from "./calendar-slice";
@@ -13,22 +19,32 @@ import tripSlice from "./trip-slice";
 import { useDispatch } from "react-redux";
 import { enableBatching } from "redux-batched-actions";
 
-export const store = configureStore({
-  reducer: {
-    signUp: enableBatching(signUpReducer),
-    searchNavbar: enableBatching(searchNavbarReducer),
-    calendarSlice: enableBatching(calendarReducer),
-    poiReducer: enableBatching(poiReducer),
-    hotelReducer: enableBatching(hotelReducer),
-    flightSlice: enableBatching(flightSlice),
-    restaurantSlice: enableBatching(restaurantSlice),
-    carSlice: enableBatching(carSlice),
-    rootSlice: enableBatching(rootSlice),
-    tripSlice: enableBatching(tripSlice),
-    authSlice: enableBatching(authSlice),
-  },
+const combinedReducer = combineReducers({
+  signUp: enableBatching(signUpReducer),
+  searchNavbar: enableBatching(searchNavbarReducer),
+  calendarSlice: enableBatching(calendarReducer),
+  poiReducer: enableBatching(poiReducer),
+  hotelReducer: enableBatching(hotelReducer),
+  flightSlice: enableBatching(flightSlice),
+  restaurantSlice: enableBatching(restaurantSlice),
+  carSlice: enableBatching(carSlice),
+  rootSlice: enableBatching(rootSlice),
+  tripSlice: enableBatching(tripSlice),
+  authSlice: enableBatching(authSlice),
 });
-export type RootState = ReturnType<typeof store.getState>;
+
+const rootReducer: Reducer = (state: RootState, action: AnyAction) => {
+  if (action.type === "authSlice/setLogout") {
+    state = {} as RootState;
+  }
+  return combinedReducer(state, action);
+};
+
+export const store = configureStore({
+  reducer: rootReducer,
+});
+
+export type RootState = ReturnType<typeof combinedReducer>;
 
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();

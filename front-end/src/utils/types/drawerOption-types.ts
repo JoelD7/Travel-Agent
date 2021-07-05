@@ -5,5 +5,6 @@ export interface DrawerOptions {
   icon: IconDefinition;
   route: string;
   selected: boolean;
-  loggedOnly: boolean;
+  loggedUserRoute: boolean;
+  visible: boolean;
 }

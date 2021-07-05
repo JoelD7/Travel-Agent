@@ -11,6 +11,7 @@ export function setUserTripsFromPerson(person: any) {
   store.dispatch(setUserTrips(tripsBuffer));
 
   let userTrips: Trip[] | undefined = store.getState().tripSlice.userTrips;
+
   if (userTrips) {
     setUpLastTrip([...userTrips]);
   }

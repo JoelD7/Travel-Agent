@@ -47,6 +47,8 @@ export function Parent({ children }: ParentProps) {
 
           if (!person) {
             fetchPerson();
+          } else {
+            setPersonDependencies(person);
           }
         } else if (status === AuthStatus.NOT_AUTHENTICATED) {
           dispatch(setIsAuthenticated(false));
@@ -71,10 +73,14 @@ export function Parent({ children }: ParentProps) {
       const uuid = personUuidCookie.split("=")[1];
 
       const res = await backend.get(`/person/${uuid}`);
-      dispatch(setPerson(res.data));
-      dispatch(setFavorites(res.data.favoritePlaces));
-      setUserTripsFromPerson(res.data);
+      setPersonDependencies(res.data);
     }
+  }
+
+  function setPersonDependencies(person: any) {
+    dispatch(setPerson(person));
+    dispatch(setFavorites(person.favoritePlaces));
+    setUserTripsFromPerson(person);
   }
 
   function getTripperLogoImage() {

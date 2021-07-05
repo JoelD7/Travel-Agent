@@ -26,7 +26,6 @@ import {
   backend,
   convertToUserCurrency,
   EventTypes,
-  responseTripToDomainTrip,
   FlightSearch,
   formatAsCurrency,
   formatFlightDate,
@@ -34,20 +33,20 @@ import {
   getFlightCitiesLabel,
   getFlightClass,
   getFlightDTO,
-  setUserTrips,
   getFlightSegmentCarrier,
   getIataLocation,
   getLastSegment,
+  isFlightInTrip,
   parseFlightDuration,
+  Person,
+  responseTripToDomainTrip,
   selectFlightDetail,
   selectFlightDictionaries,
-  isFlightInTrip,
   selectFlightSearchParams,
-  selectIdPerson,
-  selectUserTrips,
-  Trip,
   selectPerson,
-  Person,
+  selectUserTrips,
+  setUserTrips,
+  Trip,
   TripEvent,
   tripEventPlaceholder,
 } from "../../utils";
@@ -86,11 +85,7 @@ export function FlightDetails({
   const is660OrLess = useMediaQuery("(max-width:660px)");
 
   const [openSnack, setOpenSnack] = useState(false);
-
   const [bookedFlight, setBookedFlight] = useState(bookedFlightProp);
-
-  const idPerson: number = useSelector(selectIdPerson);
-
   const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
   const [openPopover, setOpenPopover] = useState(false);
 

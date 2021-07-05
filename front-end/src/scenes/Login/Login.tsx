@@ -1,4 +1,3 @@
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid, IconButton, InputAdornment } from "@material-ui/core";
@@ -58,43 +57,41 @@ export function Login() {
   const loginReferrer: string = useSelector(selectLoginReferrer);
 
   let batchedActions: AnyAction[] = [];
+  // console.log("email in login: ", credentials.email);
 
   async function login(event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
-    setLoading(true);
-    backend
-      .post(
-        `/auth/login`,
-        `email=${credentials.email}&password=${credentials.password}&rememberMe=true`
-      )
-      .then((res) => {
-        batchedActions.push(setIsAuthenticated(true));
-
-        const loggedUser: Person = mapPersonToDomainType(res.data);
-        batchedActions.push(setPerson(loggedUser));
-        batchedActions.push(setFavorites(loggedUser.favoritePlaces));
-        batchedActions.push(setUserTrips(loggedUser.trips));
-        batchedActions.push(setLoginReferrer(""));
-        dispatch(batchActions(batchedActions));
-
-        setLoading(false);
-        setWrongPassword(false);
-
-        if (loginReferrer !== Routes.LOGIN && loginReferrer !== "") {
-          history.push(loginReferrer);
-        } else {
-          history.push(Routes.HOME);
-        }
-      })
-      .catch((error) => {
-        if (
-          error.response &&
-          error.response.data.message === ExceptionMessage.BAD_CREDENTIALS
-        ) {
-          setWrongPassword(true);
-          setLoading(false);
-          setWrongPasswordText(error.response.data.message);
-        }
-      });
+    // setLoading(true);
+    // backend
+    //   .post(
+    //     `/auth/login`,
+    //     `email=${credentials.email}&password=${credentials.password}&rememberMe=true`
+    //   )
+    //   .then((res) => {
+    //     batchedActions.push(setIsAuthenticated(true));
+    //     const loggedUser: Person = mapPersonToDomainType(res.data);
+    //     batchedActions.push(setPerson(loggedUser));
+    //     batchedActions.push(setFavorites(loggedUser.favoritePlaces));
+    //     batchedActions.push(setUserTrips(loggedUser.trips));
+    //     batchedActions.push(setLoginReferrer(""));
+    //     dispatch(batchActions(batchedActions));
+    //     setLoading(false);
+    //     setWrongPassword(false);
+    //     if (loginReferrer !== Routes.LOGIN && loginReferrer !== "") {
+    //       history.push(loginReferrer);
+    //     } else {
+    //       history.push(Routes.HOME);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     if (
+    //       error.response &&
+    //       error.response.data.message === ExceptionMessage.BAD_CREDENTIALS
+    //     ) {
+    //       setWrongPassword(true);
+    //       setLoading(false);
+    //       setWrongPasswordText(error.response.data.message);
+    //     }
+    //   });
   }
 
   function PasswordEye({ name }: PasswordProps) {
