@@ -69,7 +69,6 @@ export function TextInput({
   });
 
   const [text, setText] = useState(value);
-  console.log(`Login value: ${value} | TextInput value: ${text}`);
   const [error, setError] = useState(errorProp ? errorProp : false);
   const [helperText, setHelperText] = useState(helperTextProp ? helperTextProp : "");
 
@@ -90,11 +89,16 @@ export function TextInput({
     input: {
       fontFamily: Font.Family,
       color: Colors.BLUE,
+      width: "100%",
 
       "&.MuiOutlinedInput-notchedOutline": {
         "&:hover": {
           borderColor: Colors.PURPLE,
         },
+      },
+
+      "&.MuiOutlinedInput-adornedEnd": {
+        paddingRight: 0,
       },
 
       "&.MuiOutlinedInput-input": {
@@ -112,10 +116,6 @@ export function TextInput({
   });
   const styles = textStyles();
 
-  // useEffect(() => {
-  //   setText(value);
-  // }, [value]);
-
   useEffect(() => {
     if (errorProp) {
       setError(errorProp);
@@ -126,9 +126,6 @@ export function TextInput({
   }, [errorProp, helperTextProp]);
 
   function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-    if (updateState !== undefined) {
-      updateState(name, e.target.value);
-    }
     setText(e.target.value);
   }
 
@@ -170,10 +167,41 @@ export function TextInput({
     }
   }
 
+  function isPasswordFieldEmpty(): boolean {
+    return text === " " && name === "password";
+  }
+
   return (
     <ThemeProvider theme={theme}>
+      {isPasswordFieldEmpty() && (
+        <TextField
+          hidden={!isPasswordFieldEmpty()}
+          variant="outlined"
+          margin="dense"
+          className={`${styles.textField} ${className}`}
+          InputProps={{
+            classes: { root: styles.input, input: styles.outlinedInput },
+            type: "email",
+            endAdornment: endAdornment ? endAdornment : <b></b>,
+          }}
+          InputLabelProps={{
+            classes: { root: styles.inputLabel },
+          }}
+          name={name}
+          label={label}
+          value={text}
+          error={error}
+          helperText={helperText}
+          onChange={(e) => onChange(e)}
+          onBlur={validateInput}
+        />
+      )}
+
       <TextField
         variant="outlined"
+        style={{
+          display: isPasswordFieldEmpty() ? "none" : "block",
+        }}
         margin="dense"
         className={`${styles.textField} ${className}`}
         InputProps={{

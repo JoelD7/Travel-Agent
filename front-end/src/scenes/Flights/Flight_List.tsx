@@ -874,6 +874,7 @@ export function Flight_List() {
 
         <Divider style={{ margin: "10px auto" }} />
 
+        {/* Flight times */}
         <div key="flight times">
           <Text style={{ color: Colors.BLUE }} weight="bold" component="h4">
             Outgoing flight
