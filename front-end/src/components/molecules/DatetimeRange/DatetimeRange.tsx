@@ -30,8 +30,22 @@ export function DatetimeRange({ updateState, value, max, min }: DatetimeRange) {
     return format(date, "h:mm aa");
   }
 
+  function startStateUpdate() {
+    if (hasStateChanged()) {
+      updateState(slider);
+    }
+  }
+
+  function hasStateChanged(): boolean {
+    return slider[0] !== sliderValue[0] || slider[1] !== sliderValue[1];
+  }
+
   return (
-    <div onBlur={() => updateState(slider)}>
+    <div
+      onMouseLeave={() => {
+        startStateUpdate();
+      }}
+    >
       <Grid container className={style.textRangeGrid}>
         {/* Start */}
         <Grid item xs={6}>

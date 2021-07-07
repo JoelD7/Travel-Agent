@@ -27,9 +27,8 @@ import {
   selectCarRsv,
   selectHotelReservations,
   selectHotelRsv,
-  selectIdPerson,
-  setHotelReservations,
   selectPerson,
+  setHotelReservations,
   setHotelRsv,
 } from "../../utils";
 import { CustomButton, Text } from "../atoms";
@@ -79,7 +78,6 @@ export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps)
   const hotelReservations: HotelReservation[] = useSelector(selectHotelReservations);
   const carRsv: CarRsv = useSelector(selectCarRsv);
 
-  const idPerson: number = useSelector(selectIdPerson);
   const person: Person | undefined = useSelector(selectPerson);
   const dispatch = useDispatch();
   const history = useHistory();

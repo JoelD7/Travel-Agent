@@ -214,6 +214,8 @@ export function Flight_List() {
   ];
 
   const [flights, setFlights] = useState<Flight[]>(flightsPlaceholder);
+  const [filteredByPrice, setFilteredByPrice] = useState<Flight[]>([]);
+  const [filteredByDate, setFilteredByDate] = useState<Flight[]>([]);
   const [allFlights, setAllFlights] = useState<Flight[]>([]);
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
   const [occupancyParamsChanged, setOccupancyParamsChanged] = useState(false);
@@ -258,7 +260,7 @@ export function Flight_List() {
   const [pageSize, setPageSize] = useState<number>(getPageSize());
   const pageSizeOptions = [20, 30, 40];
 
-  const [firstRender, setFirstRender] = useState(true);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   const flightClasses: FlightClassType[] = [
     "ECONOMY",
@@ -275,7 +277,7 @@ export function Flight_List() {
   }, []);
 
   useEffect(() => {
-    if (!firstRender) {
+    if (!isFirstRender) {
       updateURL();
     }
   }, [
@@ -288,19 +290,18 @@ export function Flight_List() {
   ]);
 
   useEffect(() => {
-    if (!firstRender) {
+    if (!isFirstRender) {
       setOccupancyParamsChanged(true);
     }
   }, [flightFromAutocomplete, flightToAutocomplete]);
 
   // Date range filter change
   useEffect(() => {
-    if (!firstRender) {
-      filterByDates(allFlights);
+    if (!isFirstRender) {
+      filterByDates();
       setLoading(false);
     }
   }, [
-    allFlights,
     state.exitFlightDates?.departureDatetimeRange,
     state.exitFlightDates?.arrivalDatetimeRange,
     state.returnFlightDates?.departureDatetimeRange,
@@ -433,7 +434,7 @@ export function Flight_List() {
     setAllFlights(buffer);
 
     setTimeout(() => {
-      setFirstRender(true);
+      setIsFirstRender(false);
     }, 250);
   }
 
@@ -738,10 +739,17 @@ export function Flight_List() {
     setFlights(sortedFlights);
   }
 
-  function isAnyFilterApplied() {
+  function isAnyFilterApplied(): boolean {
+    return isPriceFilterApplied() || isAnyDateFilterApplied();
+  }
+
+  function isPriceFilterApplied(): boolean {
+    return priceRange[0] > 0;
+  }
+
+  function isAnyDateFilterApplied(): boolean {
     let booleanValues = [];
 
-    booleanValues.push(priceRange[0] > 0);
     booleanValues.push(
       state.exitFlightDates.departureDatetimeRange[0] !=
         state.exitFlightDates.minDeparture
@@ -779,8 +787,10 @@ export function Flight_List() {
     return booleanValues.filter((v) => v).length > 0;
   }
 
-  function filterByDates(flights: Flight[]) {
-    let filteredFlights: Flight[] = flights.filter((flight) => {
+  function filterByDates() {
+    let filteredFlights: Flight[] = [];
+
+    let filteredFlightsByDate: Flight[] = allFlights.filter((flight) => {
       let lastSegmentIndexOut: number = flight.itineraries[0].segments.length - 1;
       let outDeparture: Date = new Date(flight.itineraries[0].segments[0].departure.at);
       let outArrival: Date = new Date(
@@ -788,6 +798,7 @@ export function Flight_List() {
       );
 
       let booleanValues = [];
+
       booleanValues.push(
         isDateBetweenRange(outDeparture, state.exitFlightDates.departureDatetimeRange)
       );
@@ -817,7 +828,45 @@ export function Flight_List() {
 
       return booleanValues.reduce((prev, cur) => prev && cur);
     });
+
+    if (isPriceFilterApplied()) {
+      filteredFlights = filteredByPrice.filter((value) => {
+        return filteredFlightsByDate.includes(value);
+      });
+    } else {
+      filteredFlights = [...filteredFlightsByDate];
+    }
+
+    setFilteredByDate(filteredFlightsByDate);
     setFlights(filteredFlights);
+  }
+
+  function onPriceSliderChange(slider: number[]) {
+    setLoading(true);
+    setPriceRange(slider);
+
+    let filteredFlights: Flight[] = [];
+
+    let filteredFlightsByPrice: Flight[] = allFlights.filter((flight) =>
+      isNumberInRange(flight.price.total, slider)
+    );
+
+    if (isAnyDateFilterApplied()) {
+      filteredFlights = filteredByDate.filter((value) =>
+        filteredFlightsByPrice.includes(value)
+      );
+    } else {
+      filteredFlights = [...filteredFlightsByPrice];
+    }
+
+    setPage(0);
+    setFilteredByPrice(filteredFlightsByPrice);
+    setFlights(filteredFlights);
+    setLoading(false);
+  }
+
+  function isNumberInRange(value: number, range: number[]) {
+    return value >= range[0] && value <= range[1];
   }
 
   function onDateRangeChanged(
@@ -838,19 +887,6 @@ export function Flight_List() {
         },
       });
     }
-  }
-
-  function onPriceSliderChange(slider: number[]) {
-    setPriceRange(slider);
-    let filteredFlights: Flight[] = allFlights.filter((flight) =>
-      isNumberInRange(flight.price.total, slider)
-    );
-    setPage(0);
-    setFlights(filteredFlights);
-  }
-
-  function isNumberInRange(value: number, range: number[]) {
-    return value >= range[0] && value <= range[1];
   }
 
   function SearchFilters() {
@@ -876,34 +912,38 @@ export function Flight_List() {
 
         {/* Flight times */}
         <div key="flight times">
-          <Text style={{ color: Colors.BLUE }} weight="bold" component="h4">
-            Outgoing flight
-          </Text>
+          {/* Outgoing flight */}
+          <>
+            <Text style={{ color: Colors.BLUE }} weight="bold" component="h4">
+              Outgoing flight
+            </Text>
 
-          <FlightTimesRange
-            city={flightFromAutocomplete ? flightFromAutocomplete?.code : ""}
-            label="Take-off"
-            max={state.exitFlightDates?.maxDeparture}
-            min={state.exitFlightDates?.minDeparture}
-            destinationDateRangeField="departureDatetimeRange"
-            flightDateRangeField="exitFlightDates"
-            destinationDateRangeValue={state.exitFlightDates?.departureDatetimeRange}
-            onDateRangeChanged={onDateRangeChanged}
-          />
-
-          {flightToAutocomplete && (
             <FlightTimesRange
-              city={flightToAutocomplete.code}
-              label="Landing"
-              max={state.exitFlightDates?.maxArrival}
-              min={state.exitFlightDates?.minArrival}
-              destinationDateRangeField="arrivalDatetimeRange"
+              city={flightFromAutocomplete ? flightFromAutocomplete?.code : ""}
+              label="Take-off"
+              max={state.exitFlightDates?.maxDeparture}
+              min={state.exitFlightDates?.minDeparture}
+              destinationDateRangeField="departureDatetimeRange"
               flightDateRangeField="exitFlightDates"
-              destinationDateRangeValue={state.exitFlightDates?.arrivalDatetimeRange}
+              destinationDateRangeValue={state.exitFlightDates?.departureDatetimeRange}
               onDateRangeChanged={onDateRangeChanged}
             />
-          )}
 
+            {flightToAutocomplete && (
+              <FlightTimesRange
+                city={flightToAutocomplete.code}
+                label="Landing"
+                max={state.exitFlightDates?.maxArrival}
+                min={state.exitFlightDates?.minArrival}
+                destinationDateRangeField="arrivalDatetimeRange"
+                flightDateRangeField="exitFlightDates"
+                destinationDateRangeValue={state.exitFlightDates?.arrivalDatetimeRange}
+                onDateRangeChanged={onDateRangeChanged}
+              />
+            )}
+          </>
+
+          {/* Return flight */}
           {areReturnFlightsAvlb() && state.returnFlightDates !== undefined && (
             <>
               <Text
@@ -1369,12 +1409,14 @@ export function Flight_List() {
               )}
 
               <Grid item xs={12}>
-                <Pagination
-                  page={page}
-                  className={style.pagination}
-                  pageCount={getPageCount()}
-                  onChange={(e, pageNo) => onPageChange(pageNo)}
-                />
+                {!loading && (
+                  <Pagination
+                    page={page}
+                    className={style.pagination}
+                    pageCount={getPageCount()}
+                    onChange={(e, pageNo) => onPageChange(pageNo)}
+                  />
+                )}
               </Grid>
             </Grid>
           </Grid>

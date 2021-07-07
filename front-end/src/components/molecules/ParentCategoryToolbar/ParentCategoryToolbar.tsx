@@ -1,15 +1,14 @@
 import {
+  ClickAwayListener,
+  createMuiTheme,
   Grid,
+  Grow,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
   ThemeProvider,
   Toolbar,
-  MenuItem,
-  Menu,
-  createMuiTheme,
-  Popper,
-  Grow,
-  Paper,
-  ClickAwayListener,
-  MenuList,
 } from "@material-ui/core";
 import React, { MouseEvent, useEffect, useLayoutEffect, useState } from "react";
 import { Font } from "../../../assets";
@@ -62,7 +61,7 @@ export function ParentCategoryToolbar({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [anchorEl2, setAnchorEl2] = useState<null | HTMLElement>(null);
 
-  const [width, height] = useWindowSize();
+  const [width] = useWindowSize();
 
   useEffect(() => {
     if (betweenRange(862, 955, width)) {

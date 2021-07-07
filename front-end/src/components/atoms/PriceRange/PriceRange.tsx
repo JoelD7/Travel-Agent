@@ -24,7 +24,11 @@ export function PriceRange({ updateState, value, max, baseCurrency }: PriceRange
   }
 
   return (
-    <div onBlur={() => updateState(slider)}>
+    <div
+      onMouseLeave={() => {
+        updateState(slider);
+      }}
+    >
       <p style={{ textAlign: "center", fontSize: "16px" }}>{` ${formatAsCurrency(
         convertToUserCurrency(slider[0], baseCurrency)
       )} -  ${formatAsCurrency(convertToUserCurrency(slider[1], baseCurrency))}+`}</p>

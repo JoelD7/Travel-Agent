@@ -4,15 +4,16 @@ import { TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import React, {
   ChangeEvent,
+  createContext,
+  useContext,
   useEffect,
   useState,
-  forwardRef,
-  useContext,
-  createContext,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ListChildComponentProps, VariableSizeList } from "react-window";
 import { AnyAction } from "redux";
 import { batchActions } from "redux-batched-actions";
+import { Font } from "../../../assets";
 import {
   CarSearch,
   FlightSearch,
@@ -40,8 +41,6 @@ import {
 } from "../../../utils";
 import { IATALocation } from "../../../utils/types/location-types";
 import { iataAutocompleteStyles } from "./iata-autocomplete-styles";
-import { VariableSizeList, ListChildComponentProps } from "react-window";
-import { Font } from "../../../assets";
 
 interface IataAutocomplete {
   flightDirection?: "from" | "to";

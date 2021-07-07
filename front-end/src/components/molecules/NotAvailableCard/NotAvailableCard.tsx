@@ -2,7 +2,6 @@ import { Grid, makeStyles, Theme, useMediaQuery } from "@material-ui/core";
 import React, { ReactNode } from "react";
 import { Colors, Shadow } from "../../../styles";
 import { Text } from "../../atoms";
-import { TextComponent } from "../../atoms/Text";
 
 interface NotAvailableCard {
   children: ReactNode; //Detailed info
@@ -17,7 +16,6 @@ export function NotAvailableCard({
   imageHeight = 250,
   variant = "horizontal",
 }: NotAvailableCard) {
-  const is610pxOrLess = useMediaQuery("(max-width:610px)");
   const is330pxOrLess = useMediaQuery("(max-width:330px)");
 
   const notAvailableCardStyles = makeStyles((theme: Theme) => ({
@@ -56,14 +54,6 @@ export function NotAvailableCard({
   }));
 
   const style = notAvailableCardStyles();
-
-  function getTitleComponentType(): TextComponent {
-    return is610pxOrLess ? "h2" : "h1";
-  }
-
-  function getTextComponentType(): TextComponent {
-    return is610pxOrLess ? "h5" : "h4";
-  }
 
   return (
     <Grid container className={style.notAvailableContainer}>
