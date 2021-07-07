@@ -173,7 +173,6 @@ export const flightListStyles = makeStyles((theme: Theme) => ({
   },
   progressCircleGridLoading: {
     display: "flex",
-    position: "absolute",
     top: "100px",
     left: "26%",
     [theme.breakpoints.down(1215)]: {

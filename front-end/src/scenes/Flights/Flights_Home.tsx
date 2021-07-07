@@ -39,14 +39,17 @@ import { Colors } from "../../styles";
 import {
   fetchCityImage,
   getFlightSearchURL,
+  getFlightClassForAPI,
   isCityImageUpdated,
   isDateAfterOrEqual,
   muiDateFormatter,
   selectCityImage,
+  FlightClass,
   selectDestinationCity,
   selectFlightFromAutocomplete,
   selectFlightSearchParams,
   selectFlightToAutocomplete,
+  getFlightClassLabel,
   selectFlightType,
   setCityImage,
   setFlightType,
@@ -474,11 +477,13 @@ export function Flights_Home() {
                     variant="outlined"
                     className={style.select}
                     startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}
-                    onChange={(e) => dispatch(setFlightClass(e.target.value as string))}
+                    onChange={(e) =>
+                      dispatch(setFlightClass(e.target.value as FlightClassType))
+                    }
                   >
-                    {classes.map((n, i) => (
-                      <MenuItem key={i} value={n}>
-                        {n}
+                    {Object.values(FlightClass).map((value, i) => (
+                      <MenuItem key={i} value={value}>
+                        {getFlightClassLabel(value)}
                       </MenuItem>
                     ))}
                   </Select>

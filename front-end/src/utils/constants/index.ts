@@ -1,12 +1,12 @@
 import { CarCheckbox, IATALocation } from "../types";
-import * as FlightClass from "./flight-classes";
 import * as LocationType from "./geolocation";
 import * as LocalStorageKeys from "./localStorageKeys";
 export * from "./airports";
 export * from "./iataCodes";
 export * from "./ExceptionMessage";
+export * from "./FlightClass";
 export * from "./iso3166-countryCodes";
-export { LocalStorageKeys, FlightClass, LocationType };
+export { LocalStorageKeys, LocationType };
 
 export const DEFAULT_CURRENCY = "USD";
 

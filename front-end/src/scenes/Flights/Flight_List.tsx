@@ -26,7 +26,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import Axios from "axios";
 import { addDays, compareDesc, format, parseISO, subDays } from "date-fns";
 import { compareAsc } from "date-fns/esm";
-import React, { ChangeEvent, lazy, useEffect, useState } from "react";
+import React, { ChangeEvent, lazy, useEffect, useState, useRef } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router";
@@ -52,10 +52,11 @@ import {
   addFlightDuration,
   convertFlightToURLParams,
   convertURLParamsToFlight,
+  FlightClass,
   FlightSearch,
   flightsPlaceholder,
   getAccessToken,
-  getFlightClassForAPI,
+  getFlightClassLabel,
   getMaxDate,
   getMinDate,
   iataCodes,
@@ -259,15 +260,10 @@ export function Flight_List() {
   const [page, setPage] = useState<number>(getPage());
   const [pageSize, setPageSize] = useState<number>(getPageSize());
   const pageSizeOptions = [20, 30, 40];
-
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const flightClasses: FlightClassType[] = [
-    "ECONOMY",
-    "PREMIUM_ECONOMY",
-    "BUSINESS",
-    "FIRST",
-  ];
+  const sortRef = useRef(null);
+  const sortRefId = "sortRef";
 
   const history = useHistory();
 
@@ -334,7 +330,6 @@ export function Flight_List() {
             let flightsFromResponse = res.data.data;
 
             filterSimilarFlights(flightsFromResponse);
-
             setLoading(false);
             setLoadingOnMount(false);
           })
@@ -364,7 +359,7 @@ export function Flight_List() {
       ? searchParams
       : {
           ...searchParams,
-          travelClass: getFlightClassForAPI(flightSearch.class),
+          travelClass: flightSearch.class,
         };
   }
 
@@ -842,7 +837,6 @@ export function Flight_List() {
   }
 
   function onPriceSliderChange(slider: number[]) {
-    setLoading(true);
     setPriceRange(slider);
 
     let filteredFlights: Flight[] = [];
@@ -862,7 +856,6 @@ export function Flight_List() {
     setPage(0);
     setFilteredByPrice(filteredFlightsByPrice);
     setFlights(filteredFlights);
-    setLoading(false);
   }
 
   function isNumberInRange(value: number, range: number[]) {
@@ -903,7 +896,7 @@ export function Flight_List() {
 
         <PriceRange
           baseCurrency={flights[0] ? flights[0].price.currency : userCurrency}
-          value={priceRange}
+          values={priceRange}
           max={maxPrice}
           updateState={(slider) => onPriceSliderChange(slider)}
         />
@@ -1093,8 +1086,11 @@ export function Flight_List() {
   }
 
   function onPageChange(newPage: number) {
-    window.scrollTo(0, 0);
-    setTimeout(() => setPage(newPage - 1), 250);
+    setPage(newPage - 1);
+    setTimeout(() => {
+      //@ts-ignore
+      sortRef.current.click();
+    }, 250);
   }
 
   function onDateChange(date: MaterialUiPickersDate, field: "departure" | "return") {
@@ -1135,21 +1131,6 @@ export function Flight_List() {
 
   function getCityFromIataCode(code: string) {
     return iataCodes.filter((iata: IATALocation) => iata.code === code)[0].city;
-  }
-
-  function getFlightClassLabel(flightClass: FlightClassType) {
-    switch (flightClass) {
-      case "ECONOMY":
-        return "Economy";
-      case "PREMIUM_ECONOMY":
-        return "Premium Economy";
-      case "BUSINESS":
-        return "Business";
-      case "FIRST":
-        return "First";
-      default:
-        return "";
-    }
   }
 
   return (
@@ -1302,10 +1283,10 @@ export function Flight_List() {
                           <FontAwesomeIcon icon={faStar} color={Colors.BLUE} />
                         }
                         onChange={(e) =>
-                          dispatch(setFlightClass(e.target.value as string))
+                          dispatch(setFlightClass(e.target.value as FlightClassType))
                         }
                       >
-                        {flightClasses.map((n, i) => (
+                        {Object.values(FlightClass).map((n, i) => (
                           <MenuItem key={i} value={n}>
                             {getFlightClassLabel(n)}
                           </MenuItem>
@@ -1363,7 +1344,9 @@ export function Flight_List() {
           <Grid item className={style.flightsGrid}>
             <Grid container>
               {/* Sort and size */}
-              <Grid item xs={12} style={{ marginBottom: "30px" }}>
+              <a href={`#${sortRefId}`} ref={sortRef} hidden />
+
+              <Grid id={sortRefId} item xs={12} style={{ marginBottom: "30px" }}>
                 <SortPageSize
                   pageSize={pageSize}
                   pageSizeOptions={pageSizeOptions}
@@ -1409,7 +1392,7 @@ export function Flight_List() {
               )}
 
               <Grid item xs={12}>
-                {!loading && (
+                {!loading && !loadingOnMount && (
                   <Pagination
                     page={page}
                     className={style.pagination}

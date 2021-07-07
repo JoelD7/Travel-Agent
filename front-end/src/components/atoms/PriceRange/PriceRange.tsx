@@ -5,28 +5,38 @@ import { priceRangeStyles } from "./priceRange-styles";
 
 interface PriceRange {
   baseCurrency: string;
-  value: number[];
+  values: number[];
   max: number;
   updateState: (value: number[]) => void;
 }
 
-export function PriceRange({ updateState, value, max, baseCurrency }: PriceRange) {
+export function PriceRange({ updateState, values, max, baseCurrency }: PriceRange) {
   const style = priceRangeStyles();
 
-  const [slider, setSlider] = useState<number[]>(value);
+  const [slider, setSlider] = useState<number[]>(values);
 
   useEffect(() => {
-    setSlider(value);
-  }, [value]);
+    setSlider(values);
+  }, [values]);
 
-  function onSliderChange(event: ChangeEvent<{}>, value: number | number[]) {
-    setSlider(value as number[]);
+  function onSliderChange(event: ChangeEvent<{}>, range: number | number[]) {
+    setSlider(range as number[]);
+  }
+
+  function startStateUpdate() {
+    if (hasStateChanged()) {
+      updateState(slider);
+    }
+  }
+
+  function hasStateChanged(): boolean {
+    return slider[0] !== values[0] || slider[1] !== values[1];
   }
 
   return (
     <div
       onMouseLeave={() => {
-        updateState(slider);
+        startStateUpdate();
       }}
     >
       <p style={{ textAlign: "center", fontSize: "16px" }}>{` ${formatAsCurrency(

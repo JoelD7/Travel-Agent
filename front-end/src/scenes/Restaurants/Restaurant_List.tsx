@@ -596,21 +596,19 @@ export function Restaurant_List() {
                       onPageSizeChange={(value) => onPageSizeChange(value)}
                     />
 
-                    <Pagination
-                      className={style.pagination}
-                      page={page}
-                      onChange={(e, page) => onPageChange(page)}
-                      pageCount={Math.ceil(total / pageSize)}
-                    />
+                    {!loading && (
+                      <Pagination
+                        className={style.pagination}
+                        page={page}
+                        onChange={(e, page) => onPageChange(page)}
+                        pageCount={Math.ceil(total / pageSize)}
+                      />
+                    )}
                   </Grid>
 
                   {/* ProgressCircle */}
                   {loading && (
-                    <Grid
-                      container
-                      justify="center"
-                      style={{ position: "absolute", left: "150px" }}
-                    >
+                    <Grid container justify="center">
                       <ProgressCircle />
                     </Grid>
                   )}
@@ -622,12 +620,14 @@ export function Restaurant_List() {
                   </div>
 
                   <Grid container>
-                    <Pagination
-                      className={style.pagination}
-                      page={page}
-                      onChange={(e, page) => onPageChange(page)}
-                      pageCount={Math.ceil(total / pageSize)}
-                    />
+                    {!loading && (
+                      <Pagination
+                        className={style.pagination}
+                        page={page}
+                        onChange={(e, page) => onPageChange(page)}
+                        pageCount={Math.ceil(total / pageSize)}
+                      />
+                    )}
                   </Grid>
                 </div>
               </>

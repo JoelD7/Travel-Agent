@@ -12,7 +12,7 @@ export interface FlightSearch {
   from: string;
   to: string;
   adults: number;
-  class: string;
+  class: FlightClassType;
   children?: number;
   flightType: FlightType;
   infants?: number;
@@ -48,7 +48,7 @@ const initialState: FlightSearch = {
     },
   },
   adults: 2,
-  class: "Economy",
+  class: "ECONOMY",
   children: 0,
   infants: 0,
 };
@@ -87,7 +87,7 @@ const flightSlice = createSlice({
     setFlightAdults(state, action: PayloadAction<number>) {
       state.adults = action.payload;
     },
-    setFlightClass(state, action: PayloadAction<string>) {
+    setFlightClass(state, action: PayloadAction<FlightClassType>) {
       state.class = action.payload;
     },
     setFlightChildren(state, action: PayloadAction<number>) {

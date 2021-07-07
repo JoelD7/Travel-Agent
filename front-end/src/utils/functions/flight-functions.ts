@@ -269,7 +269,7 @@ export function convertURLParamsToFlight(query: URLSearchParams): FlightSearch {
  * Returns the flight class in a format understandable for
  * the API.
  */
-export function getFlightClassForAPI(value: string): string {
+export function getFlightClassForAPI(value: string): FlightClassType {
   switch (value) {
     case "Economy":
       return "ECONOMY";
@@ -281,6 +281,24 @@ export function getFlightClassForAPI(value: string): string {
       return "FIRST";
     default:
       return "ECONOMY";
+  }
+}
+
+/**
+ * Returns a user-friendly name for the cabin class of a flight.
+ */
+export function getFlightClassLabel(flightClass: FlightClassType) {
+  switch (flightClass) {
+    case "ECONOMY":
+      return "Economy";
+    case "PREMIUM_ECONOMY":
+      return "Premium Economy";
+    case "BUSINESS":
+      return "Business";
+    case "FIRST":
+      return "First";
+    default:
+      return "";
   }
 }
 
