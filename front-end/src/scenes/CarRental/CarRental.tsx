@@ -10,11 +10,7 @@ import {
   Select,
   ThemeProvider,
 } from "@material-ui/core";
-import {
-  KeyboardDatePicker,
-  KeyboardDateTimePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import Axios from "axios";
 import { addDays, format, parseISO } from "date-fns";
@@ -43,6 +39,7 @@ import {
   Car,
   CarCheckbox,
   CarReducer,
+  carRsvPlaceholder,
   CarSearch,
   carsPlaceholder,
   convertCarReducerToURLParams,
@@ -50,13 +47,13 @@ import {
   featureVarToLabel,
   getAvisAccessToken,
   getIataLocation,
+  hasAny,
   IATALocation,
   isDateAfterOrEqual,
   muiDateFormatter,
   Routes,
   selectCarSearch,
   selectCarSearchBrands,
-  hasAny,
   selectCarSearchFeatures,
   selectCarSearchTransmission,
   selectDestinationCity,
@@ -67,7 +64,6 @@ import {
   setDestinationCity,
   setFlightTo,
   setFlightToAutocomplete,
-  carRsvPlaceholder,
 } from "../../utils";
 import { carRentalStyles } from "./carRental-styles";
 
@@ -187,28 +183,22 @@ export function CarRental() {
   const transmission: string = useSelector(selectCarSearchTransmission);
 
   const location = useLocation();
-
   const query = useQuery();
-
   const history = useHistory();
+  const dispatch = useDispatch();
 
   let batchedActions: AnyAction[] = [];
 
   const [openDrawer, setOpenDrawer] = useState(false);
-
-  const dispatch = useDispatch();
-
   const [localCarSearch, setLocalCarSearch] = useState<CarSearch>(carSearch);
   const [sortOption, setSortOption] = useState<string>("Price | desc");
-
   const [loading, setLoading] = useState(true);
   const [loadingOnMount, setLoadingOnMount] = useState(true);
-
+  const [firstRender, setFirstRender] = useState(true);
   const [noCarRentalsInfo, setNoCarRentalsInfo] = useState<NoCarRentalsInfo>({
     code: "",
     details: "",
   });
-
   /**
    * Contains the last city on which the list of brands
    * was generated from.
@@ -249,9 +239,14 @@ export function CarRental() {
     }
 
     dispatch(batchActions(batchedActions));
-
     fetchCarRentals(carReducer);
   }, []);
+
+  useEffect(() => {
+    if (!firstRender) {
+      updateURLParams();
+    }
+  }, [destinationCity]);
 
   useEffect(() => {
     applyFilters();
@@ -344,6 +339,7 @@ export function CarRental() {
 
             setLoading(false);
             setLoadingOnMount(false);
+            setFirstRender(false);
           })
           .catch((error) => {
             if (error.response) {
@@ -510,6 +506,12 @@ export function CarRental() {
   function onSearchClick() {
     setLoading(true);
 
+    updateURLParams();
+
+    fetchCarRentals(carReducer);
+  }
+
+  function updateURLParams() {
     let updatedCarSearch: CarSearch = {
       ...carSearch,
       pickup_date: localCarSearch.pickup_date,
@@ -541,8 +543,6 @@ export function CarRental() {
 
     let urlParams = convertCarReducerToURLParams(carReducer);
     history.push(`${Routes.CAR_RENTAL}${urlParams}`);
-
-    fetchCarRentals(carReducer);
   }
 
   function areCarRentalCardsRenderable(): boolean {

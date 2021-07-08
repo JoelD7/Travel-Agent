@@ -198,10 +198,15 @@ export function Flight_List() {
 
   const [priceRange, setPriceRange] = useState<number[]>([0, 500]);
   const [maxPrice, setMaxPrice] = useState<number>(500);
-
   const [openDrawer, setOpenDrawer] = useState(false);
   const [loadingOnMount, setLoadingOnMount] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [flights, setFlights] = useState<Flight[]>(flightsPlaceholder);
+  const [filteredByPrice, setFilteredByPrice] = useState<Flight[]>([]);
+  const [filteredByDate, setFilteredByDate] = useState<Flight[]>([]);
+  const [allFlights, setAllFlights] = useState<Flight[]>([]);
+  const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
+  const [occupancyParamsChanged, setOccupancyParamsChanged] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -222,13 +227,6 @@ export function Flight_List() {
       label: "Infants",
     },
   ];
-
-  const [flights, setFlights] = useState<Flight[]>(flightsPlaceholder);
-  const [filteredByPrice, setFilteredByPrice] = useState<Flight[]>([]);
-  const [filteredByDate, setFilteredByDate] = useState<Flight[]>([]);
-  const [allFlights, setAllFlights] = useState<Flight[]>([]);
-  const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
-  const [occupancyParamsChanged, setOccupancyParamsChanged] = useState(false);
 
   const location = useLocation();
 

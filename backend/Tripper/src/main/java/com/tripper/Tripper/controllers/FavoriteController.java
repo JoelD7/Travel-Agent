@@ -66,11 +66,12 @@ public class FavoriteController {
         dto.setPerson(person);
         setFavoriteEntity(dto);
 
-        EntityModel<Favorite> newFavorite = assembler.toModel(favoriteRepo.save(dto));
+        Favorite newFavorite = favoriteRepo.save(dto);
+        EntityModel<Favorite> favoriteModel = assembler.toModel(newFavorite);
 
         return ResponseEntity
-                .created(newFavorite.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .build();
+                .created(favoriteModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(newFavorite);
     }
 
     private void setFavoriteEntity(Favorite dto) {

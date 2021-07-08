@@ -1,15 +1,12 @@
 import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
-import { faHeart as faHeartReg } from "@fortawesome/free-regular-svg-icons";
 import {
   faClock,
   faGlobe,
-  faHeart,
   faMapMarkerAlt,
   faPhone,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Divider, Grid, Grow, IconButton, Snackbar } from "@material-ui/core";
+import { Divider, Grid, Grow, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Axios from "axios";
 import React, { MouseEvent, useEffect, useState } from "react";

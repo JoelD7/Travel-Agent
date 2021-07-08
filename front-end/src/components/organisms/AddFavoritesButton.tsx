@@ -19,6 +19,7 @@ import {
   setFavorites,
 } from "../../utils";
 import { Favorite, FavoriteType } from "../../utils/types/favorite-types";
+import { ProgressCircle } from "../atoms";
 
 interface AddFavoritesProps {
   poi?: POIType;
@@ -42,6 +43,7 @@ export function AddFavoritesButton({
   const [openSnack, setOpenSnack] = useState(false);
   const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
   const [favorite, setFavorite] = useState(isPlaceAddedToFavorites());
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -55,6 +57,8 @@ export function AddFavoritesButton({
   }
 
   function addToFavorites() {
+    setLoading(true);
+
     let favoriteDTO: Favorite = getFavoriteDTO();
 
     if (person) {
@@ -63,6 +67,7 @@ export function AddFavoritesButton({
         .then((res) => {
           setFavorite(true);
           setOpenSnack(true);
+          setLoading(false);
 
           let updatedFavs: Favorite[] = favorites
             ? [...favorites, favoriteDTO]
@@ -143,12 +148,18 @@ export function AddFavoritesButton({
 
   return (
     <>
-      <IconButton
-        style={style}
-        onClick={favorite ? () => removeFromFavorites() : () => addToFavorites()}
-      >
-        <FontAwesomeIcon icon={favorite ? faHeart : faHeartReg} color={Colors.PURPLE} />
-      </IconButton>
+      {loading ? (
+        <IconButton style={style} disabled>
+          <ProgressCircle size={20} color={Colors.PURPLE} />
+        </IconButton>
+      ) : (
+        <IconButton
+          style={style}
+          onClick={favorite ? () => removeFromFavorites() : () => addToFavorites()}
+        >
+          <FontAwesomeIcon icon={favorite ? faHeart : faHeartReg} color={Colors.PURPLE} />
+        </IconButton>
+      )}
 
       <Snackbar
         open={openSnack}

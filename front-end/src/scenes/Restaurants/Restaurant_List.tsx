@@ -466,7 +466,6 @@ export function Restaurant_List() {
 
   function onPageChange(newPage: number) {
     //@ts-ignore
-    topRestaurantAnchorEl.current.click();
     setTimeout(() => setPage(newPage - 1), 250);
   }
 

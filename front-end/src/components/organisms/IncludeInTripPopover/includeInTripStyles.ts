@@ -9,6 +9,10 @@ export const includeInTripStyles = makeStyles((theme: Theme) => ({
     height: 50,
     backgroundColor: Colors.GREEN,
 
+    "&:hover": {
+      backgroundColor: Colors.GREEN_HOVER,
+    },
+
     "&.MuiIconButton-root": {
       "&.Mui-disabled": {
         backgroundColor: Colors.GREEN,

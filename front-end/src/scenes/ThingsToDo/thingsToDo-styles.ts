@@ -255,13 +255,13 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
     },
     "&.MuiInputBase-root": {
       fontFamily: Font.Family,
-      backgroundColor: Colors.BLUE,
-      boxShadow: Shadow.MEDIUM,
-      color: "white",
+      backgroundColor: "white",
+      boxShadow: Shadow.LIGHT,
+      color: Colors.BLUE,
     },
   },
   selectIcon: {
-    color: "white",
+    color: Colors.BLUE,
   },
   selectControl: {
     width: "230px",

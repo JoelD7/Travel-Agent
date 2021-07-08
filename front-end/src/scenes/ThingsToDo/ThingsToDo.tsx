@@ -107,7 +107,6 @@ export function ThingsToDo() {
     nextArrow: <SliderArrow iconSize="2x" direction="right" />,
     prevArrow: <SliderArrow iconSize="2x" direction="left" />,
     infinite: false,
-    slidesToShow: 1,
     rows: pois.length > 3 ? poiSliderRows : 1,
     slidesPerRow: pois.length > 3 ? 3 : 1,
     responsive: [

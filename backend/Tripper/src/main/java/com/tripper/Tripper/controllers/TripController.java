@@ -56,7 +56,10 @@ public class TripController {
 
         Trip newTrip = tripRepo.save(trip);
         EntityModel<Trip> tripModel = assembler.toModel(newTrip);
-        return ResponseEntity.created(tripModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(newTrip);
+
+        return ResponseEntity
+                .created(tripModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(newTrip);
     }
 
 }

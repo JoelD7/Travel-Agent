@@ -1,6 +1,7 @@
 import React, { Fragment, ReactNode, useEffect } from "react";
 import { withRouter } from "react-router";
 import { History } from "history";
+import { Routes } from "../../utils";
 
 interface ScrollToTopProps {
   history: History;
@@ -15,6 +16,7 @@ function ScrollToTop({ history, children }: ScrollToTopProps) {
       // Cancel the event
       e.preventDefault();
       window.scrollTo(0, 0);
+
       if (e) {
         e.returnValue = ""; // Legacy method for cross browser support
       }
@@ -22,8 +24,12 @@ function ScrollToTop({ history, children }: ScrollToTopProps) {
     };
 
     const unlisten = history.listen(() => {
-      window.scrollTo(0, 0);
+      //To prevent scroll to top on page change
+      if (history.location.pathname !== Routes.FLIGHT_LIST) {
+        window.scrollTo(0, 0);
+      }
     });
+
     return () => {
       unlisten();
     };

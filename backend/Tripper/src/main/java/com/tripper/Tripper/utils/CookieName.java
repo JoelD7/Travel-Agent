@@ -15,5 +15,4 @@ public enum CookieName {
     public String toString() {
         return displayName;
     }
-
 }

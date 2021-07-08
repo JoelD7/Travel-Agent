@@ -70,7 +70,7 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
   },
   mainContainer: {
     fontFamily: Font.Family,
-    backgroundColor: Colors.BACKGROUND,
+    backgroundColor: "white",
   },
   pageContentContainer: {
     width: "85%",
