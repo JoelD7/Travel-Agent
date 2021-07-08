@@ -5,7 +5,7 @@ export * from "./event-types";
 export { HOTEL, POI, RESTAURANT } from "./favorite-types";
 export * from "./hotel-types";
 export * from "./generic-types";
-
+export * from "./FlightSearchParams";
 export * from "./hotel-types";
 export * from "./location-types";
 export * from "./restaurant-types";

@@ -26,7 +26,7 @@ import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import Axios from "axios";
 import { addDays, compareDesc, format, parseISO, subDays } from "date-fns";
 import { compareAsc } from "date-fns/esm";
-import React, { ChangeEvent, lazy, useEffect, useState, useRef } from "react";
+import React, { ChangeEvent, memo, useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router";
@@ -34,6 +34,7 @@ import { batchActions } from "redux-batched-actions";
 import { Font } from "../../assets";
 import { Family } from "../../assets/fonts";
 import {
+  CardFlight,
   CustomButton,
   FlightTimesRange,
   Footer,
@@ -54,12 +55,15 @@ import {
   convertURLParamsToFlight,
   FlightClass,
   FlightSearch,
+  FlightSearchParams,
   flightsPlaceholder,
+  FlightTypes,
   getAccessToken,
   getFlightClassLabel,
   getMaxDate,
   getMinDate,
   iataCodes,
+  IATALocation,
   isDateAfterOrEqual,
   isDateBetweenRange,
   muiDateFormatter,
@@ -79,12 +83,17 @@ import {
   setFlightReturn,
   setFlightType,
 } from "../../utils";
-import { FlightTypes } from "../../utils/types";
-import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
-import { IATALocation } from "../../utils/types/location-types";
 import { flightListStyles } from "./flight-list-styles";
 
-const CardFlight = lazy(() => import("../../components/organisms/CardFlight/CardFlight"));
+interface FlightSearchFiltersProps {
+  flights: Flight[];
+  priceRange: number[];
+  maxPrice: number;
+  flightFromAutocomplete: IATALocation | null | undefined;
+  flightToAutocomplete: IATALocation | null | undefined;
+  exitFlightDates?: DatetimeRange | undefined;
+  returnFlightDates?: DatetimeRange | undefined;
+}
 
 export function Flight_List() {
   const style = flightListStyles();
@@ -291,19 +300,6 @@ export function Flight_List() {
     }
   }, [flightFromAutocomplete, flightToAutocomplete]);
 
-  // Date range filter change
-  useEffect(() => {
-    if (!isFirstRender) {
-      filterByDates();
-      setLoading(false);
-    }
-  }, [
-    state.exitFlightDates?.departureDatetimeRange,
-    state.exitFlightDates?.arrivalDatetimeRange,
-    state.returnFlightDates?.departureDatetimeRange,
-    state.returnFlightDates?.arrivalDatetimeRange,
-  ]);
-
   function getUserLocation() {
     navigator.geolocation.getCurrentPosition((pos) => {
       let crd = pos.coords;
@@ -426,6 +422,7 @@ export function Flight_List() {
     } else {
       setFlights(buffer);
     }
+
     setAllFlights(buffer);
 
     setTimeout(() => {
@@ -782,7 +779,7 @@ export function Flight_List() {
     return booleanValues.filter((v) => v).length > 0;
   }
 
-  function filterByDates() {
+  function filterByDates(updatedState: FlightSearchParams) {
     let filteredFlights: Flight[] = [];
 
     let filteredFlightsByDate: Flight[] = allFlights.filter((flight) => {
@@ -795,13 +792,16 @@ export function Flight_List() {
       let booleanValues = [];
 
       booleanValues.push(
-        isDateBetweenRange(outDeparture, state.exitFlightDates.departureDatetimeRange)
+        isDateBetweenRange(
+          outDeparture,
+          updatedState.exitFlightDates.departureDatetimeRange
+        )
       );
       booleanValues.push(
-        isDateBetweenRange(outArrival, state.exitFlightDates.arrivalDatetimeRange)
+        isDateBetweenRange(outArrival, updatedState.exitFlightDates.arrivalDatetimeRange)
       );
 
-      if (flightType === FlightTypes.ROUND && state.returnFlightDates) {
+      if (flightType === FlightTypes.ROUND && updatedState.returnFlightDates) {
         let lastSegmentIndexReturn: number = flight.itineraries[1].segments.length - 1;
         let returnDeparture: Date = new Date(
           flight.itineraries[1].segments[0].departure.at
@@ -813,11 +813,14 @@ export function Flight_List() {
         booleanValues.push(
           isDateBetweenRange(
             returnDeparture,
-            state.returnFlightDates.departureDatetimeRange
+            updatedState.returnFlightDates.departureDatetimeRange
           )
         );
         booleanValues.push(
-          isDateBetweenRange(returnArrival, state.returnFlightDates.arrivalDatetimeRange)
+          isDateBetweenRange(
+            returnArrival,
+            updatedState.returnFlightDates.arrivalDatetimeRange
+          )
         );
       }
 
@@ -872,17 +875,29 @@ export function Flight_List() {
     if (curFlightTypeRange) {
       setPage(0);
 
-      setState({
+      let updatedState: FlightSearchParams = {
         ...state,
         [flightDateRangeField]: {
           ...curFlightTypeRange,
           [destinationDateRangeField]: [new Date(arr[0]), new Date(arr[1])],
         },
-      });
+      };
+      setState(updatedState);
+
+      filterByDates(updatedState);
+      setLoading(false);
     }
   }
 
-  function SearchFilters() {
+  const FlightSearchFilters = memo(function Component({
+    flights,
+    priceRange,
+    maxPrice,
+    flightFromAutocomplete,
+    flightToAutocomplete,
+    exitFlightDates,
+    returnFlightDates,
+  }: FlightSearchFiltersProps) {
     const userCurrency: string = useSelector(selectUserCurrency);
 
     return (
@@ -914,8 +929,8 @@ export function Flight_List() {
             <FlightTimesRange
               city={flightFromAutocomplete ? flightFromAutocomplete?.code : ""}
               label="Take-off"
-              max={state.exitFlightDates?.maxDeparture}
-              min={state.exitFlightDates?.minDeparture}
+              max={exitFlightDates?.maxDeparture}
+              min={exitFlightDates?.minDeparture}
               destinationDateRangeField="departureDatetimeRange"
               flightDateRangeField="exitFlightDates"
               destinationDateRangeValue={state.exitFlightDates?.departureDatetimeRange}
@@ -926,18 +941,18 @@ export function Flight_List() {
               <FlightTimesRange
                 city={flightToAutocomplete.code}
                 label="Landing"
-                max={state.exitFlightDates?.maxArrival}
-                min={state.exitFlightDates?.minArrival}
+                max={exitFlightDates?.maxArrival}
+                min={exitFlightDates?.minArrival}
                 destinationDateRangeField="arrivalDatetimeRange"
                 flightDateRangeField="exitFlightDates"
-                destinationDateRangeValue={state.exitFlightDates?.arrivalDatetimeRange}
+                destinationDateRangeValue={exitFlightDates?.arrivalDatetimeRange}
                 onDateRangeChanged={onDateRangeChanged}
               />
             )}
           </>
 
           {/* Return flight */}
-          {areReturnFlightsAvlb() && state.returnFlightDates !== undefined && (
+          {areReturnFlightsAvlb() && returnFlightDates !== undefined && (
             <>
               <Text
                 style={{ color: Colors.BLUE, marginTop: "20px" }}
@@ -950,13 +965,11 @@ export function Flight_List() {
                 <FlightTimesRange
                   city={flightToAutocomplete.code}
                   label="Take-off"
-                  max={state.returnFlightDates?.maxDeparture}
-                  min={state.returnFlightDates?.minDeparture}
+                  max={returnFlightDates?.maxDeparture}
+                  min={returnFlightDates?.minDeparture}
                   destinationDateRangeField="departureDatetimeRange"
                   flightDateRangeField="returnFlightDates"
-                  destinationDateRangeValue={
-                    state.returnFlightDates?.departureDatetimeRange
-                  }
+                  destinationDateRangeValue={returnFlightDates?.departureDatetimeRange}
                   onDateRangeChanged={onDateRangeChanged}
                 />
               )}
@@ -964,11 +977,11 @@ export function Flight_List() {
               <FlightTimesRange
                 city={flightFromAutocomplete ? flightFromAutocomplete?.code : ""}
                 label="Landing"
-                max={state.returnFlightDates?.maxArrival}
-                min={state.returnFlightDates?.minArrival}
+                max={returnFlightDates?.maxArrival}
+                min={returnFlightDates?.minArrival}
                 destinationDateRangeField="arrivalDatetimeRange"
                 flightDateRangeField="returnFlightDates"
-                destinationDateRangeValue={state.returnFlightDates?.arrivalDatetimeRange}
+                destinationDateRangeValue={returnFlightDates?.arrivalDatetimeRange}
                 onDateRangeChanged={onDateRangeChanged}
               />
             </>
@@ -976,7 +989,7 @@ export function Flight_List() {
         </div>
       </div>
     );
-  }
+  });
 
   function areAnyFlightsReturned(): boolean {
     return flights.length > 0;
@@ -1068,10 +1081,6 @@ export function Flight_List() {
       dispatch(setFlightInfants(e.target.value as number));
     }
     setOccupancyParamsChanged(true);
-  }
-
-  function isLoadingEnabled() {
-    return loadingOnMount || loading;
   }
 
   function onSortOptionChange(option: string) {
@@ -1319,90 +1328,107 @@ export function Flight_List() {
       {/* Page content */}
       <div className={style.pageContentContainer}>
         <Grid container className={style.pageContentContainerGrid}>
-          {/* Filters */}
-          <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+          {loadingOnMount ? (
+            <Grid item style={{ width: "100%" }} className={style.progressCircleGrid}>
+              <ProgressCircle />
+            </Grid>
+          ) : (
             <>
-              <Grid item className={style.filtersGrid}>
-                <div className={style.filtersContainer}>
-                  <SearchFilters />
-                </div>
-              </Grid>
-
-              <Grid item className={style.filterButtonGrid}>
-                <CustomButton
-                  icon={faFilter}
-                  backgroundColor={Colors.PURPLE}
-                  style={{ paddingLeft: "10px", fontSize: "14px" }}
-                  onClick={() => setOpenDrawer(true)}
-                >
-                  Filter
-                </CustomButton>
-              </Grid>
-            </>
-          </Grow>
-
-          <Grid item className={style.flightsGrid}>
-            <Grid container>
-              {/* Sort and size */}
-              <a href={`#${sortRefId}`} ref={sortRef} hidden />
-
-              <Grid id={sortRefId} item xs={12} style={{ marginBottom: "30px" }}>
-                <SortPageSize
-                  pageSize={pageSize}
-                  pageSizeOptions={pageSizeOptions}
-                  sortOption={sortOption}
-                  sortOptions={sortOptions}
-                  onPageSizeChange={(value) => onPageSizeChange(value)}
-                  onSortOptionChange={(e) => onSortOptionChange(e.target.value as string)}
-                />
-              </Grid>
-
-              {/* Flight cards */}
-              {isLoadingEnabled() && (
-                <Grid
-                  item
-                  style={{ width: "100%" }}
-                  className={` ${
-                    loading ? style.progressCircleGridLoading : style.progressCircleGrid
-                  }`}
-                >
-                  <ProgressCircle />
-                </Grid>
-              )}
-
-              {!loadingOnMount && (
-                <Grid item xs={12} style={loading ? { filter: "blur(4px)" } : {}}>
-                  {areAnyFlightsReturned() ? (
-                    <div>
-                      {flights
-                        .slice(page * pageSize, page * pageSize + pageSize)
-                        .map((flight, i) => (
-                          <CardFlight variant="regular" key={i} flight={flight} />
-                        ))}
+              {/* Filters */}
+              <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                <>
+                  <Grid item className={style.filtersGrid}>
+                    <div className={style.filtersContainer}>
+                      <FlightSearchFilters
+                        flights={flights}
+                        priceRange={priceRange}
+                        maxPrice={maxPrice}
+                        flightFromAutocomplete={flightFromAutocomplete}
+                        flightToAutocomplete={flightToAutocomplete}
+                        exitFlightDates={state.exitFlightDates}
+                        returnFlightDates={state.returnFlightDates}
+                      />
                     </div>
-                  ) : (
-                    <Grid item className={style.notAvailableCardGrid}>
-                      <NotAvailableCard title="Oops...">
-                        There are no available flights for the selected booking
-                        parameters. Try with another ones.
-                      </NotAvailableCard>
+                  </Grid>
+
+                  <Grid item className={style.filterButtonGrid}>
+                    <CustomButton
+                      icon={faFilter}
+                      backgroundColor={Colors.PURPLE}
+                      style={{ paddingLeft: "10px", fontSize: "14px" }}
+                      onClick={() => setOpenDrawer(true)}
+                    >
+                      Filter
+                    </CustomButton>
+                  </Grid>
+                </>
+              </Grow>
+
+              {/* Flights */}
+              <Grid item className={style.flightsGrid}>
+                <Grid container>
+                  {/* Sort and size */}
+                  <a href={`#${sortRefId}`} ref={sortRef} hidden />
+
+                  <Grid id={sortRefId} item xs={12} style={{ marginBottom: "30px" }}>
+                    <SortPageSize
+                      pageSize={pageSize}
+                      pageSizeOptions={pageSizeOptions}
+                      sortOption={sortOption}
+                      sortOptions={sortOptions}
+                      onPageSizeChange={(value) => onPageSizeChange(value)}
+                      onSortOptionChange={(e) =>
+                        onSortOptionChange(e.target.value as string)
+                      }
+                    />
+                  </Grid>
+
+                  {/* Flight cards */}
+                  {loading && (
+                    <Grid
+                      item
+                      style={{ width: "100%" }}
+                      className={style.progressCircleGridLoading}
+                    >
+                      <ProgressCircle />
                     </Grid>
                   )}
-                </Grid>
-              )}
 
-              <Grid item xs={12}>
-                {!loading && !loadingOnMount && (
-                  <Pagination
-                    page={page}
-                    className={style.pagination}
-                    pageCount={getPageCount()}
-                    onChange={(e, pageNo) => onPageChange(pageNo)}
-                  />
-                )}
+                  {!loadingOnMount && (
+                    <Grid item xs={12} style={loading ? { filter: "blur(4px)" } : {}}>
+                      {areAnyFlightsReturned() ? (
+                        <div>
+                          {flights
+                            .slice(page * pageSize, page * pageSize + pageSize)
+                            .map((flight, i) => (
+                              <CardFlight variant="regular" key={i} flight={flight} />
+                            ))}
+                        </div>
+                      ) : (
+                        <Grid item className={style.notAvailableCardGrid}>
+                          <NotAvailableCard title="Oops...">
+                            There are no available flights for the selected booking
+                            parameters. Try with another ones.
+                          </NotAvailableCard>
+                        </Grid>
+                      )}
+                    </Grid>
+                  )}
+
+                  <Grid item xs={12}>
+                    {!loading && !loadingOnMount && (
+                      <Pagination
+                        page={page}
+                        className={style.pagination}
+                        pageCount={getPageCount()}
+                        onChange={(e, pageNo) => onPageChange(pageNo)}
+                      />
+                    )}
+                  </Grid>
+                </Grid>
               </Grid>
-            </Grid>
-          </Grid>
+            </>
+          )}
         </Grid>
       </div>
 
@@ -1414,7 +1440,15 @@ export function Flight_List() {
         onClose={() => setOpenDrawer(false)}
         classes={{ paper: style.drawer }}
       >
-        <SearchFilters />
+        <FlightSearchFilters
+          flights={flights}
+          priceRange={priceRange}
+          maxPrice={maxPrice}
+          flightFromAutocomplete={flightFromAutocomplete}
+          flightToAutocomplete={flightToAutocomplete}
+          exitFlightDates={state.exitFlightDates}
+          returnFlightDates={state.returnFlightDates}
+        />
       </Drawer>
 
       <Snackbar
