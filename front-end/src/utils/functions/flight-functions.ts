@@ -161,7 +161,7 @@ export function getAutocompleteLabel(
 ): string {
   if (option) {
     return type === "city"
-      ? `${option.city}, ${option.country}`
+      ? `${option.city}, ${option.name}, ${option.country}`
       : `${option.name}, ${capitalizeString(`${option.city}`, "each word")}`;
   }
   return "";

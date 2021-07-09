@@ -126,6 +126,13 @@ export function IataAutocomplete({
         iata.city.toLowerCase().indexOf(query) === 0
     );
 
+    predictionsBuffer.sort((a, b) => {
+      let carriersA: number = Number(a.carriers);
+      let carriersB: number = Number(b.carriers);
+
+      return carriersB - carriersA;
+    });
+
     return predictionsBuffer;
   }
 

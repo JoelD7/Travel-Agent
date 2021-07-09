@@ -62,6 +62,7 @@ import {
   setCarSearchFeatures,
   setCarSearchTransmission,
   setDestinationCity,
+  iataCodes,
   setFlightTo,
   setFlightToAutocomplete,
 } from "../../utils";
@@ -220,6 +221,8 @@ export function CarRental() {
   );
 
   let carReducer: CarReducer;
+  const filteredArray = iataCodes.filter((code: any) => code.city === "New York");
+  console.log("filteredArray: ", filteredArray);
 
   useEffect(() => {
     carReducer = convertURLToCarReducer(query);
@@ -244,7 +247,9 @@ export function CarRental() {
 
   useEffect(() => {
     if (!firstRender) {
+      setLoading(true);
       updateURLParams();
+      fetchCarRentals(carReducer);
     }
   }, [destinationCity]);
 
@@ -340,6 +345,10 @@ export function CarRental() {
             setLoading(false);
             setLoadingOnMount(false);
             setFirstRender(false);
+            setNoCarRentalsInfo({
+              code: "",
+              details: "",
+            });
           })
           .catch((error) => {
             if (error.response) {
