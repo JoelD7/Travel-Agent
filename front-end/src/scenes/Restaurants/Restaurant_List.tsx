@@ -52,16 +52,21 @@ interface Restaurant_List {
 }
 
 export function Restaurant_List() {
-  const style = restaurantListStyles();
-
-  const currentCity: IATALocation = useSelector(selectDestinationCity);
-  const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
-
   const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
 
   const query = useQuery();
+  const urlParams: { [index: string]: string } = getURLParamsAsKVP();
+
+  const style = restaurantListStyles();
+
+  const currentCity: IATALocation = useSelector(selectDestinationCity);
+  const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
+  let defaultCuisines: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
+  let defaultFeatures: RestaurantFeature[] = useSelector(selectRestaurantFeatures);
+  const cuisines: RestaurantCuisine[] = getCuisines();
+  const features: RestaurantFeature[] = getFeatures();
 
   const [deliveryRestaurants, setDeliveryRestaurants] = useState<RestaurantSearch[]>(
     filterByFeature("delivery", restaurants)
@@ -72,14 +77,11 @@ export function Restaurant_List() {
   const [reservationRestaurants, setReservationRestaurants] = useState<
     RestaurantSearch[]
   >(filterByFeature("restaurant_reservation", restaurants));
-
-  const urlParams: { [index: string]: string } = getURLParamsAsKVP();
-
-  let defaultCuisines: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
-  let defaultFeatures: RestaurantFeature[] = useSelector(selectRestaurantFeatures);
-
-  const cuisines: RestaurantCuisine[] = getCuisines();
-  const features: RestaurantFeature[] = getFeatures();
+  const [noRestaurants, setNoRestaurants] = useState(false);
+  const [total, setTotal] = useState<number>(0);
+  const [page, setPage] = useState<number>(getPage());
+  const [pageSize, setPageSize] = useState<number>(getPageSize());
+  const pageSizeOptions = [20, 30, 40];
 
   const resFilterParams: RestaurantFilterParams = useSelector(
     selectRestaurantFilterParams
@@ -92,12 +94,6 @@ export function Restaurant_List() {
   let batchedActionsOnFirstRender: AnyAction[] = [];
 
   const loading: boolean = useSelector(selectLoadingRestaurants);
-  const [noRestaurants, setNoRestaurants] = useState(false);
-
-  const [total, setTotal] = useState<number>(0);
-  const [page, setPage] = useState<number>(getPage());
-  const [pageSize, setPageSize] = useState<number>(getPageSize());
-  const pageSizeOptions = [20, 30, 40];
 
   const topRestaurantAnchorEl = useRef(null);
   const topRestaurantId = "topRestaurantId";
@@ -115,8 +111,6 @@ export function Restaurant_List() {
    * setting of the state is async.
    */
   let restaurantsRes: RestaurantSearch[] = [];
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     if (!loading) {

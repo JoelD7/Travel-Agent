@@ -53,7 +53,6 @@ import {
   selectOpenRequiredFieldSnack,
   setCarSearch,
   setDestinationCity,
-  setFlightTo,
   setFlightToAutocomplete,
   setOpenRequiredFieldSnack,
   store,
@@ -222,7 +221,6 @@ export function Home() {
         pickup_location: randomDestination.code,
       })
     );
-    batchedActions.push(setFlightTo(randomDestination.code));
     batchedActions.push(setFlightToAutocomplete(randomDestination));
     batchedActions.push(
       updateHotelCoordinates({
@@ -250,7 +248,6 @@ export function Home() {
           pickup_location: destination.code,
         })
       );
-      batchedActions.push(setFlightTo(destination.code));
       batchedActions.push(setFlightToAutocomplete(destination));
       batchedActions.push(
         updateHotelCoordinates({

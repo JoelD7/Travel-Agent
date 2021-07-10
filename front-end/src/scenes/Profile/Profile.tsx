@@ -19,6 +19,7 @@ import {
   selectOriginCity,
   LocationType,
   Person,
+  AutocompleteType,
   selectPerson,
   setPerson,
   backend,
@@ -205,7 +206,7 @@ export function Profile({}: ProfileProps) {
             <ThemeProvider theme={theme}>
               <Grid style={{ marginTop: 15 }} item xs={12}>
                 <IataAutocomplete
-                  type="city"
+                  type={AutocompleteType.CITY}
                   label="Origin city"
                   cityType={LocationType.ORIGIN}
                   required

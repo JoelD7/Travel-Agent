@@ -51,11 +51,9 @@ import {
   selectFlightToAutocomplete,
   getFlightClassLabel,
   selectFlightType,
+  AutocompleteType,
   setCityImage,
   setFlightType,
-} from "../../utils";
-import { fetchGreatFlightDeals } from "../../utils/external-apis/amadeus-apis";
-import {
   FlightSearch,
   setFlightAdults,
   setFlightChildren,
@@ -63,10 +61,12 @@ import {
   setFlightDeparture,
   setFlightInfants,
   setFlightReturn,
-} from "../../utils/store/flight-slice";
-import { CityImage, FlightTypes } from "../../utils/types";
-import { FlightSearchParams } from "../../utils/types/FlightSearchParams";
-import { IATALocation } from "../../utils/types/location-types";
+  CityImage,
+  FlightTypes,
+  fetchGreatFlightDeals,
+  FlightSearchParams,
+  IATALocation,
+} from "../../utils";
 import { flightStyles } from "./flights-styles";
 
 export function Flights_Home() {
@@ -393,13 +393,13 @@ export function Flights_Home() {
             <Grid item key="destinationTF" xs={12}>
               <h5 className={style.reservationParamText}>From</h5>
 
-              <IataAutocomplete type="airport" flightDirection="from" />
+              <IataAutocomplete type={AutocompleteType.AIRPORT} flightDirection="from" />
             </Grid>
 
             {/* To Grid */}
             <Grid item xs={12} key="destinationTF">
               <h5 className={style.reservationParamText}>To</h5>
-              <IataAutocomplete type="airport" flightDirection="to" />
+              <IataAutocomplete type={AutocompleteType.AIRPORT} flightDirection="to" />
             </Grid>
 
             {/* Dates */}

@@ -1,24 +1,23 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays, format } from "date-fns";
-import { getDefaultCity } from "../functions";
+import { getDefaultCity, sortIATAPredictionsByImportance } from "../functions";
 import { flightPlaceholder } from "../placeholders";
 import { FlightTypes } from "../types";
+import { iataCodes } from "../constants";
 import { IATALocation } from "../types/location-types";
 
 export interface FlightSearch {
   departure: Date;
   return?: Date;
-  from: string;
-  to: string;
   adults: number;
   class: FlightClassType;
   children?: number;
   flightType: FlightType;
   infants?: number;
   dictionaries?: FlightDictionary;
-  flightFromAutocomplete?: IATALocation | null;
-  flightToAutocomplete?: IATALocation | null;
+  flightFromAutocomplete: IATALocation | null;
+  flightToAutocomplete: IATALocation | null;
   flightListURL?: string;
   flightDetail: Flight;
   [key: string]: FlightSearch[keyof FlightSearch];
@@ -31,16 +30,14 @@ const initialState: FlightSearch = {
   departure: addDays(new Date(), 1),
   return: addDays(new Date(), 3),
   flightType: FlightTypes.ONE_WAY,
-  from: defaultOriginCity.code,
-  to: defaultDestinationCity.code,
   flightListURL: `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${
     defaultDestinationCity.code
   }&destinationLocationCode=MUC&departureDate=${format(
     addDays(new Date(), 1),
     "yyyy-MM-dd"
   )}&returnDate=${format(addDays(new Date(), 3), "yyyy-MM-dd")}&adults=${2}`,
-  flightFromAutocomplete: defaultOriginCity,
-  flightToAutocomplete: defaultDestinationCity,
+  flightFromAutocomplete: getMainAirportForCity(defaultOriginCity),
+  flightToAutocomplete: getMainAirportForCity(defaultDestinationCity),
   flightDetail: flightPlaceholder,
   dictionaries: {
     carriers: {
@@ -78,12 +75,6 @@ const flightSlice = createSlice({
     setFlightType(state, action: PayloadAction<FlightType>) {
       state.flightType = action.payload;
     },
-    setFlightFrom(state, action: PayloadAction<string>) {
-      state.from = action.payload;
-    },
-    setFlightTo(state, action: PayloadAction<string>) {
-      state.to = action.payload;
-    },
     setFlightAdults(state, action: PayloadAction<number>) {
       state.adults = action.payload;
     },
@@ -96,17 +87,27 @@ const flightSlice = createSlice({
     setFlightInfants(state, action: PayloadAction<number>) {
       state.infants = action.payload;
     },
-    setFlightFromAutocomplete(
-      state,
-      action: PayloadAction<IATALocation | null | undefined>
-    ) {
-      state.flightFromAutocomplete = action.payload;
+    setFlightFromAutocomplete: {
+      reducer(state, action: PayloadAction<IATALocation | null>) {
+        state.flightFromAutocomplete = action.payload;
+      },
+
+      prepare(iata: IATALocation | null) {
+        return {
+          payload: getMainAirportForCity(iata),
+        };
+      },
     },
-    setFlightToAutocomplete(
-      state,
-      action: PayloadAction<IATALocation | null | undefined>
-    ) {
-      state.flightToAutocomplete = action.payload;
+    setFlightToAutocomplete: {
+      reducer(state, action: PayloadAction<IATALocation | null>) {
+        state.flightToAutocomplete = action.payload;
+      },
+
+      prepare(iata: IATALocation | null) {
+        return {
+          payload: getMainAirportForCity(iata),
+        };
+      },
     },
     setFlightListURL(state, action: PayloadAction<string>) {
       state.flightListURL = action.payload;
@@ -121,8 +122,6 @@ export const {
   setFlightParams,
   setFlightDeparture,
   setFlightReturn,
-  setFlightFrom,
-  setFlightTo,
   setFlightAdults,
   setFlightListURL,
   setFlightClass,
@@ -135,3 +134,36 @@ export const {
   setFlightType,
 } = flightSlice.actions;
 export default flightSlice.reducer;
+
+/**
+ * Returns the most important airport for a particular
+ * city.
+ * NOTE: The "importance" of an airport is measured by the
+ * numbers of carriers it receives.
+ */
+function getMainAirportForCity(iata: IATALocation | null): IATALocation | null {
+  if (iata !== undefined && iata !== null) {
+    let city = iata.city.toLowerCase();
+    let predictionsBuffer: IATALocation[] = iataCodes.filter(
+      (iata) =>
+        iata.code.toLowerCase().indexOf(city) === 0 ||
+        iata.name.toLowerCase().indexOf(city) === 0 ||
+        iata.city.toLowerCase().indexOf(city) === 0
+    );
+
+    sortIATAPredictionsByImportance(predictionsBuffer);
+
+    return predictionsBuffer[0];
+  }
+
+  return iata;
+}
+
+function getDefaultDirectionCodes(iata: IATALocation): string {
+  let mainAirport: IATALocation | null | undefined = getMainAirportForCity(iata);
+
+  if (mainAirport !== undefined && mainAirport !== null) {
+    return mainAirport.code;
+  }
+  return "";
+}

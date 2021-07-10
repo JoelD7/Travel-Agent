@@ -51,6 +51,7 @@ import {
 import { Colors, Shadow } from "../../styles";
 import {
   addFlightDuration,
+  AutocompleteType,
   convertFlightToURLParams,
   convertURLParamsToFlight,
   FlightClass,
@@ -62,7 +63,6 @@ import {
   getFlightClassLabel,
   getMaxDate,
   getMinDate,
-  iataCodes,
   IATALocation,
   isDateAfterOrEqual,
   isDateBetweenRange,
@@ -1136,14 +1136,18 @@ export function Flight_List() {
     }
   }
 
-  function getCityFromIataCode(code: string) {
-    return iataCodes.filter((iata: IATALocation) => iata.code === code)[0].city;
+  function getCityFromIata(iataLocation: IATALocation | null): string {
+    if (iataLocation !== null) {
+      return iataLocation.city;
+    }
+
+    return "";
   }
 
   return (
     <div className={style.mainContainer}>
       <Helmet>
-        <title>{`Flights to ${getCityFromIataCode(flightSearch.to)}`}</title>
+        <title>{`Flights to ${getCityFromIata(flightToAutocomplete)}`}</title>
       </Helmet>
 
       {/* Page title box */}
@@ -1162,7 +1166,7 @@ export function Flight_List() {
 
                 <Grid item xs={10} style={{ margin: "0px auto" }}>
                   <Text component="hm" bold color="white">
-                    {`Flights to ${getCityFromIataCode(flightSearch.to)}`}
+                    {`Flights to ${getCityFromIata(flightToAutocomplete)}`}
                   </Text>
                 </Grid>
               </Grid>
@@ -1195,13 +1199,19 @@ export function Flight_List() {
                 {/* From */}
                 <Grid id="destinationTF" item className={style.reservParamGrid}>
                   <h5 className={style.reservationParamText}>From</h5>
-                  <IataAutocomplete type="airport" flightDirection="from" />
+                  <IataAutocomplete
+                    type={AutocompleteType.AIRPORT}
+                    flightDirection="from"
+                  />
                 </Grid>
 
                 {/* To */}
                 <Grid item className={style.reservParamGrid} id="destinationTF">
                   <h5 className={style.reservationParamText}>To</h5>
-                  <IataAutocomplete type="airport" flightDirection="to" />
+                  <IataAutocomplete
+                    type={AutocompleteType.AIRPORT}
+                    flightDirection="to"
+                  />
                 </Grid>
 
                 <ThemeProvider theme={theme}>

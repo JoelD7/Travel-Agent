@@ -23,17 +23,18 @@ import {
   isDateAfterOrEqual,
   muiDateFormatter,
   selectFlightFromAutocomplete,
+  FlightClass,
+  getFlightClassLabel,
   selectFlightSearchParams,
   selectFlightToAutocomplete,
+  AutocompleteType,
   setOpenRequiredFieldSnack,
-} from "../../utils";
-import {
   FlightSearch,
   setFlightAdults,
   setFlightClass,
   setFlightDeparture,
   setFlightReturn,
-} from "../../utils/store/flight-slice";
+} from "../../utils";
 import { CustomButton } from "../atoms";
 import { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 
@@ -207,7 +208,10 @@ export default function HomeFlightReservation() {
           {locationParms.map((param) => (
             <Grid key={param.label} item className={style.locationParamsGrid}>
               <h5 className={style.reservationParamText}>{param.label}</h5>
-              <IataAutocomplete type="airport" flightDirection={param.prop} />
+              <IataAutocomplete
+                type={AutocompleteType.AIRPORT}
+                flightDirection={param.prop}
+              />
             </Grid>
           ))}
         </ThemeProvider>
@@ -246,9 +250,9 @@ export default function HomeFlightReservation() {
                   dispatch(setFlightClass(e.target.value as FlightClassType))
                 }
               >
-                {classes.map((n, i) => (
+                {Object.values(FlightClass).map((n, i) => (
                   <MenuItem key={i} value={n}>
-                    {n}
+                    {getFlightClassLabel(n)}
                   </MenuItem>
                 ))}
               </Select>

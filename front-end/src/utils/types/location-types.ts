@@ -41,3 +41,15 @@ export interface IATALocation {
   direct_flights: string;
   carriers: string;
 }
+
+export interface City {
+  country: string;
+  name: string;
+  lat: string;
+  lng: string;
+}
+
+export enum AutocompleteType {
+  CITY = "city",
+  AIRPORT = "airport",
+}

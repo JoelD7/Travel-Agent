@@ -10,6 +10,7 @@ import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
 import {
+  AutocompleteType,
   CarReducer,
   convertCarReducerToURLParams,
   isDateAfterOrEqual,
@@ -194,7 +195,7 @@ export default function HomeCarReservation() {
                 Pickup location
               </Text>
               <div style={{ width: "100%" }}>
-                <IataAutocomplete type="airport" flightDirection="to" />
+                <IataAutocomplete type={AutocompleteType.AIRPORT} flightDirection="to" />
               </div>
             </Grid>
           ))}

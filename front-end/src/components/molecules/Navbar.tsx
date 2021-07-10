@@ -24,6 +24,7 @@ import { navbarStyles } from "../../styles/Navbar/navbar-styles";
 import {
   getLinkStyle,
   IATALocation,
+  AutocompleteType,
   LocationType,
   Person,
   Routes,
@@ -147,7 +148,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
             <Grid item className={style.searchBoxContainer}>
               <IataAutocomplete
                 className={style.autocompleteContainer}
-                type="city"
+                type={AutocompleteType.CITY}
                 isInNavbar
                 home={variant === "transparent"}
               />
@@ -256,7 +257,7 @@ export const Navbar: FunctionComponent<Navbar> = ({
             <Grid item className={style.searchBoxContainerPhone}>
               <IataAutocomplete
                 className={style.autocompleteContainer}
-                type="city"
+                type={AutocompleteType.CITY}
                 isInNavbar
                 home={variant === "transparent"}
               />
@@ -324,7 +325,11 @@ export const Navbar: FunctionComponent<Navbar> = ({
           <Text style={{ marginLeft: "12px" }}>
             Quickly answer this question before continue.
           </Text>
-          <IataAutocomplete type="city" cityType={LocationType.ORIGIN} required />
+          <IataAutocomplete
+            type={AutocompleteType.CITY}
+            cityType={LocationType.ORIGIN}
+            required
+          />
         </DialogContent>
 
         <DialogActions style={{ display: "flex", justifyContent: "flex-end" }}>

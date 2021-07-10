@@ -1,7 +1,7 @@
 import { createMuiTheme, MenuItem, ThemeProvider, Toolbar } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Colors } from "../../../styles";
 import {
   getCarRentalDefaultURL,
@@ -24,7 +24,6 @@ interface ServicesToolbar {
 }
 
 export function ServicesToolbar({ transparent, style }: ServicesToolbar) {
-  const location = useLocation();
   let segmentedURL = window.location.pathname.split("/").filter((e) => e.length > 0);
   let page = "/" + segmentedURL[segmentedURL.length - 1];
 

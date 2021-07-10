@@ -15,8 +15,10 @@ import { AnyAction } from "redux";
 import { batchActions } from "redux-batched-actions";
 import { Font } from "../../../assets";
 import {
+  AutocompleteType,
   CarSearch,
   FlightSearch,
+  selectDestinationCity,
   getAutocompleteLabel,
   getISOCodeFromCountry,
   iataCodes,
@@ -30,11 +32,10 @@ import {
   selectSearchQuery,
   setCarSearch,
   setDestinationCity,
-  setFlightFrom,
   setFlightFromAutocomplete,
-  setFlightTo,
   setFlightToAutocomplete,
   setOriginCity,
+  sortIATAPredictionsByImportance,
   updateAirportPredictions,
   updateCityPredictions,
   updateHotelCoordinates,
@@ -44,7 +45,7 @@ import { iataAutocompleteStyles } from "./iata-autocomplete-styles";
 
 interface IataAutocomplete {
   flightDirection?: "from" | "to";
-  type: "city" | "airport";
+  type: AutocompleteType;
   cityType?: LocationType.LocationType;
   home?: boolean;
   placeholder?: string;
@@ -87,29 +88,42 @@ export function IataAutocomplete({
 
   const searchQuery = useSelector(selectSearchQuery);
   const originCity: IATALocation = useSelector(selectOriginCity);
+  const destinationCity: IATALocation = useSelector(selectDestinationCity);
 
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState("");
 
   const style = iataAutocompleteStyles();
 
-  const [autocomplete, setAutocomplete] = useState<IATALocation | null | undefined>(
+  const [autocomplete, setAutocomplete] = useState<IATALocation | null>(
     getAutocompleteDefault()
   );
-  const [text, setText] = useState<string>(
-    type === "city"
-      ? searchQuery
-      : flightDirection === "from"
-      ? flightSearch.from
-      : flightSearch.to
-  );
+
+  console.log("autocomplete: ", autocomplete);
+  const [text, setText] = useState<string>(getDefaultText());
 
   function getAutocompleteDefault() {
-    if (type === "city") {
-      return cityType === LocationType.ORIGIN ? originCity : undefined;
+    if (type === AutocompleteType.CITY) {
+      return cityType === LocationType.ORIGIN ? originCity : null;
     } else {
       return flightDirection === "from" ? flightFromAutocomplete : flightToAutocomplete;
     }
+  }
+
+  function getDefaultText(): string {
+    if (type === AutocompleteType.CITY) {
+      return searchQuery;
+    }
+
+    if (flightDirection === "from" && flightFromAutocomplete !== null) {
+      return flightFromAutocomplete.code;
+    }
+
+    if (flightDirection === "to" && flightToAutocomplete !== null) {
+      return flightToAutocomplete.code;
+    }
+
+    return "";
   }
 
   useEffect(() => {
@@ -118,22 +132,46 @@ export function IataAutocomplete({
 
   function getPredictions(options: IATALocation[], query: string) {
     query = query.toLowerCase();
+    let predictionsBuffer: IATALocation[] = [];
 
-    let predictionsBuffer: IATALocation[] = options.filter(
-      (iata) =>
-        iata.code.toLowerCase().indexOf(query) === 0 ||
-        iata.name.toLowerCase().indexOf(query) === 0 ||
-        iata.city.toLowerCase().indexOf(query) === 0
-    );
+    if (type === AutocompleteType.AIRPORT) {
+      predictionsBuffer = options.filter(
+        (iata) =>
+          iata.code.toLowerCase().indexOf(query) === 0 ||
+          iata.name.toLowerCase().indexOf(query) === 0 ||
+          iata.city.toLowerCase().indexOf(query) === 0
+      );
+    } else {
+      predictionsBuffer = options.filter(
+        (iata) =>
+          iata.code.toLowerCase().indexOf(query) === 0 ||
+          iata.city.toLowerCase().indexOf(query) === 0
+      );
+    }
 
-    predictionsBuffer.sort((a, b) => {
-      let carriersA: number = Number(a.carriers);
-      let carriersB: number = Number(b.carriers);
-
-      return carriersB - carriersA;
-    });
+    predictionsBuffer = filterSameCityAirports(predictionsBuffer);
 
     return predictionsBuffer;
+  }
+
+  /**
+   * Excludes airports in the same city so that the predictions
+   * only include the most important airport in a city.
+   */
+  function filterSameCityAirports(predictionsBuffer: IATALocation[]): IATALocation[] {
+    let includedCities: string[] = [];
+    let filteredPredictions: IATALocation[] = [];
+
+    sortIATAPredictionsByImportance(predictionsBuffer);
+
+    predictionsBuffer.forEach((iata) => {
+      if (!includedCities.includes(iata.city)) {
+        includedCities.push(iata.city);
+        filteredPredictions.push(iata);
+      }
+    });
+
+    return filteredPredictions;
   }
 
   function onAutomcompleteValueChange(value: IATALocation | null) {
@@ -143,9 +181,9 @@ export function IataAutocomplete({
       checkRequiredField(value);
     }
 
-    if (value) {
-      setText(value.code);
-    }
+    // if (value) {
+    //   setText(value.code);
+    // }
   }
 
   function checkRequiredField(value: IATALocation | null) {
@@ -188,7 +226,6 @@ export function IataAutocomplete({
               country_code: getISOCodeFromCountry(autocomplete.country),
             })
           );
-          batchedActions.push(setFlightFrom(autocomplete.code));
           batchedActions.push(setFlightFromAutocomplete(autocomplete));
           batchedActions.push(setOriginCity(autocomplete));
         } else {
@@ -198,7 +235,6 @@ export function IataAutocomplete({
               pickup_location: autocomplete.code,
             })
           );
-          batchedActions.push(setFlightTo(autocomplete.code));
           batchedActions.push(setFlightToAutocomplete(autocomplete));
           batchedActions.push(
             updateHotelCoordinates({
@@ -213,10 +249,8 @@ export function IataAutocomplete({
       batchedActions.push(updateAirportPredictions(predictions));
 
       if (flightDirection === "from") {
-        batchedActions.push(setFlightFrom(text));
         batchedActions.push(setFlightFromAutocomplete(autocomplete));
       } else {
-        batchedActions.push(setFlightTo(text));
         batchedActions.push(setFlightToAutocomplete(autocomplete));
         if (autocomplete) {
           batchedActions.push(
@@ -230,6 +264,8 @@ export function IataAutocomplete({
     }
 
     dispatch(batchActions(batchedActions));
+    setAutocomplete(null);
+    setText("");
   }
 
   function ListboxComponent(props: any) {

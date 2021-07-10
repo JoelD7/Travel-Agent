@@ -246,7 +246,7 @@ export const isoCountryCodes = [
   { name: "Ukraine", "alpha-2": "UA", "country-code": "804" },
   { name: "United Arab Emirates", "alpha-2": "AE", "country-code": "784" },
   {
-    name: "United Kingdom of Great Britain and Northern Ireland",
+    name: "United Kingdom",
     "alpha-2": "GB",
     "country-code": "826",
   },

@@ -81,9 +81,12 @@ export function CardDealFlight({ deal, className, animate }: CardDealFlight) {
       kvp = { ...kvp, [key]: value };
     }
 
+    let fromIata = getIataLocation(kvp["originLocationCode"]);
+    let toIata = getIataLocation(kvp["destinationLocationCode"]);
+
     let flightSearch: FlightSearch = {
-      from: kvp["originLocationCode"],
-      to: kvp["destinationLocationCode"],
+      flightFromAutocomplete: fromIata ? fromIata : null,
+      flightToAutocomplete: toIata ? toIata : null,
       departure: parseISO(kvp["departureDate"]),
       return: parseISO(kvp["returnDate"]),
       adults: Number(kvp["adults"]),

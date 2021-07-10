@@ -161,7 +161,7 @@ export function getAutocompleteLabel(
 ): string {
   if (option) {
     return type === "city"
-      ? `${option.city}, ${option.name}, ${option.country}`
+      ? `${option.city}, ${option.country}`
       : `${option.name}, ${capitalizeString(`${option.city}`, "each word")}`;
   }
   return "";
@@ -203,8 +203,14 @@ export function convertFlightToURLParams(flight: FlightSearch) {
   if (flight.return) {
     params.push(`return=${format(flight.return, "yyyy-MM-dd")}`);
   }
-  params.push(`from=${flight.from}`);
-  params.push(`to=${flight.to}`);
+  if (flight.flightFromAutocomplete !== null) {
+    params.push(`from=${flight.flightFromAutocomplete.code}`);
+  }
+
+  if (flight.flightToAutocomplete !== null) {
+    params.push(`to=${flight.flightToAutocomplete.code}`);
+  }
+
   params.push(`adults=${flight.adults}`);
 
   if (flight.infants && flight.infants !== 0) {

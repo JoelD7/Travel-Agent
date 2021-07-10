@@ -21,6 +21,7 @@ import {
   IATALocation,
   LocationType,
   Routes,
+  AutocompleteType,
   selectIsAuthenticated,
   selectOriginCity,
 } from "./utils";
@@ -137,7 +138,11 @@ export default function App() {
           <Text style={{ marginLeft: "12px" }}>
             Quickly answer this question before continue.
           </Text>
-          <IataAutocomplete type="city" cityType={LocationType.ORIGIN} required />
+          <IataAutocomplete
+            type={AutocompleteType.CITY}
+            cityType={LocationType.ORIGIN}
+            required
+          />
         </DialogContent>
 
         <DialogActions style={{ display: "flex", justifyContent: "flex-end" }}>

@@ -25,6 +25,7 @@ import {
   muiDateFormatter,
   selectDestinationCity,
   selectHotelReservationParams,
+  AutocompleteType,
   IATALocation,
   updateReservationParams,
 } from "../../utils";
@@ -193,7 +194,7 @@ export default function HomeHotelReservation() {
   return (
     <div>
       <div className={style.searchLocationContainer}>
-        <IataAutocomplete type="city" placeholder="Where?" />
+        <IataAutocomplete type={AutocompleteType.CITY} placeholder="Where?" />
       </div>
 
       <Grid container className={style.reservationParamsGrid} spacing={2}>

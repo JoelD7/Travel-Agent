@@ -60,10 +60,10 @@ import {
   setCarSearch,
   setCarSearchBrands,
   setCarSearchFeatures,
+  AutocompleteType,
   setCarSearchTransmission,
   setDestinationCity,
   iataCodes,
-  setFlightTo,
   setFlightToAutocomplete,
 } from "../../utils";
 import { carRentalStyles } from "./carRental-styles";
@@ -238,7 +238,6 @@ export function CarRental() {
     if (destinationCity) {
       batchedActions.push(setDestinationCity(destinationCity));
       batchedActions.push(setFlightToAutocomplete(destinationCity));
-      batchedActions.push(setFlightTo(destinationCity.code));
     }
 
     dispatch(batchActions(batchedActions));
@@ -603,7 +602,10 @@ export function CarRental() {
                   Pickup location
                 </Text>
                 <div className={style.locationDiv}>
-                  <IataAutocomplete type="airport" flightDirection="to" />
+                  <IataAutocomplete
+                    type={AutocompleteType.AIRPORT}
+                    flightDirection="to"
+                  />
                 </div>
               </Grid>
 

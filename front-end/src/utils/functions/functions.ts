@@ -823,3 +823,16 @@ export function mapPersonToDomainType(data: any): Person {
     trips: data.trips.map((trip: any) => responseTripToDomainTrip(trip)),
   };
 }
+
+/**
+ * Sorts airports by relevance. The relevance of an airport is represented
+ * by the number of carriers it receives.
+ */
+export function sortIATAPredictionsByImportance(predictionsBuffer: IATALocation[]) {
+  predictionsBuffer.sort((a, b) => {
+    let carriersA: number = Number(a.carriers);
+    let carriersB: number = Number(b.carriers);
+
+    return carriersB - carriersA;
+  });
+}
