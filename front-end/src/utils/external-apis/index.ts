@@ -4,6 +4,7 @@ export { HotelBedAPI };
 export * from "./amadeus-apis";
 export * from "./backend";
 export * from "./avis-apis";
+export * from "./yelp-apis";
 export * from "./firebase";
 
 /**

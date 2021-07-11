@@ -6,29 +6,29 @@ import { restaurantListStyles } from "../../scenes/Restaurants/restaurantList-st
 import { Colors } from "../../styles";
 import {
   hasAny,
+  IATALocation,
   selectAllRestaurants,
   selectDestinationCity,
+  store,
+  selectRestaurantFilterParams,
   selectRestaurantCuisines,
   selectRestaurantFeatures,
-} from "../../utils";
-import { fetchRestaurants } from "../../utils/external-apis/yelp-apis";
-import {
   setLoadingRestaurants,
   setRestaurantFilterParams,
   setRestaurants,
   updateRestaurantCuisines,
   updateRestaurantFeatures,
-} from "../../utils/store/restaurant-slice";
-import { IATALocation } from "../../utils/types/location-types";
+  fetchRestaurants,
+} from "../../utils";
 import { CustomButton, Text } from "../atoms";
 import { ResCuisineSelector } from "./RestaurantCuisinesSelec/ResCuisineSelector";
 import { ResFeatureSelector } from "./RestaurantFeature/ResFeatureSelector";
 
 interface RestaurantFilters {
-  setLoading?: (value: boolean) => void;
+  loadAllRestaurants: () => void;
 }
 
-export function RestaurantFilters({ setLoading }: RestaurantFilters) {
+export function RestaurantFilters({ loadAllRestaurants }: RestaurantFilters) {
   const style = restaurantListStyles();
 
   const [cuisines, setCuisines] = useState<RestaurantCuisine[]>([]);
@@ -36,12 +36,15 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
 
   const featuresRedux: RestaurantFeature[] = useSelector(selectRestaurantFeatures);
   const [features, setFeatures] = useState<RestaurantFeature[]>([]);
+  const [firstRender, setFirstRender] = useState(true);
 
   const dispatch = useDispatch();
 
   const allRestaurants: RestaurantSearch[] = useSelector(selectAllRestaurants);
-
   const currentCity: IATALocation = useSelector(selectDestinationCity);
+  const resFilterParams: RestaurantFilterParams = useSelector(
+    selectRestaurantFilterParams
+  );
 
   useEffect(() => {
     setCuisines(cuisinesRedux);
@@ -51,7 +54,16 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
     setFeatures(featuresRedux);
   }, [featuresRedux]);
 
+  useEffect(() => {
+    if (!firstRender && areNoFiltersApplied()) {
+      console.log("resFilterParams: ", resFilterParams);
+
+      loadAllRestaurants();
+    }
+  }, [resFilterParams]);
+
   function applyFilters() {
+    setFirstRender(false);
     dispatch(setLoadingRestaurants(true));
 
     setTimeout(() => {
@@ -72,6 +84,13 @@ export function RestaurantFilters({ setLoading }: RestaurantFilters) {
         })
       );
     }, 250);
+  }
+
+  function areNoFiltersApplied(): boolean {
+    let filteredFeatures: RestaurantFeature[] = features.filter((f) => f.checked);
+    let filteredCuisines: RestaurantCuisine[] = cuisines.filter((c) => c.checked);
+
+    return filteredFeatures.length === 0 && filteredCuisines.length === 0;
   }
 
   function filterByFeatures(filteredFeatures: RestaurantFeature[]) {

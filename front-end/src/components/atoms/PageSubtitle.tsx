@@ -2,7 +2,6 @@ import { Divider, makeStyles } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import React from "react";
 import { Font } from "../../assets";
-import { Colors } from "../../styles";
 
 interface PageSubtitleProps {
   label: string;

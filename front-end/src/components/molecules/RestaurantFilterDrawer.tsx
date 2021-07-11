@@ -6,11 +6,12 @@ import { Font } from "../../assets";
 import { Colors } from "../../styles";
 import { CustomButton } from "../atoms";
 import { RestaurantFilters } from "../organisms";
+
 interface RestaurantFilterDrawer {
-  openDrawer: boolean;
+  loadAllRestaurants: () => void;
 }
 
-export function RestaurantFilterDrawer() {
+export function RestaurantFilterDrawer({ loadAllRestaurants }: RestaurantFilterDrawer) {
   const drawerStyles = makeStyles(() => ({
     drawer: {
       width: "250px",
@@ -43,8 +44,7 @@ export function RestaurantFilterDrawer() {
         onClose={() => setOpenDrawer(false)}
         classes={{ root: style.drawer, paper: style.drawer }}
       >
-        <RestaurantFilters />
-        {/* <RestaurantFilters setLoading={(value) => setLoading(value)} /> */}
+        <RestaurantFilters loadAllRestaurants={loadAllRestaurants} />
       </Drawer>
     </div>
   );

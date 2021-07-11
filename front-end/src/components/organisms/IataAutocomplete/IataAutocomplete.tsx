@@ -17,8 +17,6 @@ import { Font } from "../../../assets";
 import {
   AutocompleteType,
   CarSearch,
-  FlightSearch,
-  selectDestinationCity,
   getAutocompleteLabel,
   getISOCodeFromCountry,
   iataCodes,
@@ -26,7 +24,6 @@ import {
   onQueryChanged,
   selectCarSearch,
   selectFlightFromAutocomplete,
-  selectFlightSearchParams,
   selectFlightToAutocomplete,
   selectOriginCity,
   selectSearchQuery,
@@ -79,7 +76,6 @@ export function IataAutocomplete({
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
-  const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
   const carSearch: CarSearch = useSelector(selectCarSearch);
 
   const dispatch = useDispatch();
@@ -88,7 +84,6 @@ export function IataAutocomplete({
 
   const searchQuery = useSelector(selectSearchQuery);
   const originCity: IATALocation = useSelector(selectOriginCity);
-  const destinationCity: IATALocation = useSelector(selectDestinationCity);
 
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState("");
@@ -99,7 +94,6 @@ export function IataAutocomplete({
     getAutocompleteDefault()
   );
 
-  console.log("autocomplete: ", autocomplete);
   const [text, setText] = useState<string>(getDefaultText());
 
   function getAutocompleteDefault() {

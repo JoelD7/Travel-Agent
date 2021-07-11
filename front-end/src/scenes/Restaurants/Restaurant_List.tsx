@@ -57,7 +57,9 @@ export function Restaurant_List() {
   const location = useLocation();
 
   const query = useQuery();
-  const urlParams: { [index: string]: string } = getURLParamsAsKVP();
+  const [urlParams, setUrlParams] = useState<{ [index: string]: string }>(
+    getURLParamsAsKVP()
+  );
 
   const style = restaurantListStyles();
 
@@ -121,11 +123,13 @@ export function Restaurant_List() {
       updateURL();
     }
 
-    loadRestaurants();
+    loadAllRestaurants();
   }, [currentCity, page, pageSize]);
 
   useEffect(() => {
     if (!isFirstRender()) {
+      console.log("hey");
+      // setPage(1);
       updateURL();
     }
   }, [resFilterParams]);
@@ -213,7 +217,7 @@ export function Restaurant_List() {
    * Fetches restaurants from the APU and sets the variables that depend
    * on the response from it.
    */
-  function loadRestaurants() {
+  function loadAllRestaurants() {
     fetchRestaurants(currentCity.lat, currentCity.lon, pageSize, page * pageSize)
       .then((res) => {
         restaurantsRes = res.data.businesses;
@@ -336,6 +340,8 @@ export function Restaurant_List() {
     history.push(
       `${Routes.RESTAURANTS}${resFilterParamsAsURL}&page=${page + 1}&pageSize=${pageSize}`
     );
+
+    setUrlParams(getURLParamsAsKVP());
   }
 
   function convertURLParamsToResFilterParams(
@@ -459,8 +465,7 @@ export function Restaurant_List() {
   }
 
   function onPageChange(newPage: number) {
-    //@ts-ignore
-    setTimeout(() => setPage(newPage - 1), 250);
+    setPage(newPage - 1);
   }
 
   function onPageSizeChange(value: number) {
@@ -521,12 +526,12 @@ export function Restaurant_List() {
           <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
             <>
               <Grid item className={style.filterGrid}>
-                <RestaurantFilters setLoading={(value) => {}} />
+                <RestaurantFilters loadAllRestaurants={loadAllRestaurants} />
               </Grid>
 
               {/* Filter button */}
               <Grid item className={style.filterButtonGrid}>
-                <RestaurantFilterDrawer />
+                <RestaurantFilterDrawer loadAllRestaurants={loadAllRestaurants} />
               </Grid>
             </>
           </Grow>

@@ -1,10 +1,10 @@
-import React from "react";
-import { POICategories, POICategorySearch } from "../../../utils/POICategory";
-import Slider from "react-slick";
-import { CardActionArea, Card, CardContent } from "@material-ui/core";
-import { ProgressCircle, SliderArrow, Text } from "../../atoms";
-import { thingsToDoStyles } from "../../../scenes/ThingsToDo/thingsToDo-styles";
+import { Card, CardActionArea, CardContent } from "@material-ui/core";
 import { CSSProperties } from "@material-ui/styles";
+import React from "react";
+import Slider from "react-slick";
+import { thingsToDoStyles } from "../../../scenes/ThingsToDo/thingsToDo-styles";
+import { POICategories, POICategorySearch } from "../../../utils/POICategory";
+import { SliderArrow, Text } from "../../atoms";
 
 interface POICategorySlider {
   availableCategories: POICategorySearch[];

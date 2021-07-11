@@ -2,7 +2,7 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconButton, makeStyles, Theme, useMediaQuery } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
-import React, { MouseEvent, CSSProperties } from "react";
+import React, { MouseEvent } from "react";
 import { Colors } from "../../styles";
 
 type ArrowVariant = "regular" | "fullscreen";
