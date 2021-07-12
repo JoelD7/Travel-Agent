@@ -1,63 +1,59 @@
 import { Divider } from "@material-ui/core";
-import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { batchActions } from "redux-batched-actions";
 import { restaurantListStyles } from "../../scenes/Restaurants/restaurantList-styles";
 import { Colors } from "../../styles";
 import {
   fetchRestaurants,
-  hasAny,
   IATALocation,
-  selectAllRestaurants,
   selectDestinationCity,
   selectRestaurantCuisines,
-  selectRestaurantFeatures,
   selectRestaurantFilterParams,
   setLoadingRestaurants,
   setRestaurantFilterParams,
   setRestaurants,
   setTotalRestaurants,
   updateRestaurantCuisines,
-  updateRestaurantFeatures,
 } from "../../utils";
 import { CustomButton, Text } from "../atoms";
 import { ResCuisineSelector } from "./RestaurantCuisinesSelec/ResCuisineSelector";
-import { ResFeatureSelector } from "./RestaurantFeature/ResFeatureSelector";
 
 interface RestaurantFilters {
   loadAllRestaurants: () => void;
   setPage: Dispatch<SetStateAction<number>>;
+  updateURL: () => void;
 }
 
-export function RestaurantFilters({ loadAllRestaurants, setPage }: RestaurantFilters) {
+export function RestaurantFilters({
+  updateURL,
+  loadAllRestaurants,
+  setPage,
+}: RestaurantFilters) {
   const style = restaurantListStyles();
 
-  const [cuisines, setCuisines] = useState<RestaurantCuisine[]>([]);
   const cuisinesRedux: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
-
-  const featuresRedux: RestaurantFeature[] = useSelector(selectRestaurantFeatures);
-  const [features, setFeatures] = useState<RestaurantFeature[]>([]);
-  const [firstRender, setFirstRender] = useState(true);
-
-  const dispatch = useDispatch();
-
-  const allRestaurants: RestaurantSearch[] = useSelector(selectAllRestaurants);
   const currentCity: IATALocation = useSelector(selectDestinationCity);
   const resFilterParams: RestaurantFilterParams = useSelector(
     selectRestaurantFilterParams
   );
+
+  const [cuisines, setCuisines] = useState<RestaurantCuisine[]>([]);
+  const [firstRender, setFirstRender] = useState(true);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setCuisines(cuisinesRedux);
   }, [cuisinesRedux]);
 
   useEffect(() => {
-    setFeatures(featuresRedux);
-  }, [featuresRedux]);
-
-  useEffect(() => {
-    if (!firstRender && areNoFiltersApplied()) {
-      loadAllRestaurants();
+    if (!firstRender) {
+      if (areNoFiltersApplied()) {
+        loadAllRestaurants();
+      } else {
+        updateURL();
+      }
     }
   }, [resFilterParams]);
 
@@ -67,11 +63,6 @@ export function RestaurantFilters({ loadAllRestaurants, setPage }: RestaurantFil
     dispatch(setLoadingRestaurants(true));
 
     setTimeout(() => {
-      let filteredFeatures: RestaurantFeature[] = features.filter((f) => f.checked);
-      if (filteredFeatures.length > 0) {
-        filterByFeatures(filteredFeatures);
-      }
-
       let filteredCuisines: RestaurantCuisine[] = cuisines.filter((c) => c.checked);
       if (filteredCuisines.length > 0) {
         filterByCuisines(filteredCuisines);
@@ -79,11 +70,9 @@ export function RestaurantFilters({ loadAllRestaurants, setPage }: RestaurantFil
 
       dispatch(
         batchActions([
-          updateRestaurantFeatures(features),
           updateRestaurantCuisines(cuisines),
           setRestaurantFilterParams({
             cuisines,
-            features,
           }),
         ])
       );
@@ -91,27 +80,9 @@ export function RestaurantFilters({ loadAllRestaurants, setPage }: RestaurantFil
   }
 
   function areNoFiltersApplied(): boolean {
-    let filteredFeatures: RestaurantFeature[] = features.filter((f) => f.checked);
     let filteredCuisines: RestaurantCuisine[] = cuisines.filter((c) => c.checked);
 
-    return filteredFeatures.length === 0 && filteredCuisines.length === 0;
-  }
-
-  function filterByFeatures(filteredFeatures: RestaurantFeature[]) {
-    let selectedFeatures: string[] = filteredFeatures.map((f) => f.name);
-    let restaurantDispatcher;
-
-    if (selectedFeatures.length > 0) {
-      let buffer: RestaurantSearch[] = allRestaurants.filter((r) => {
-        let features: string[] = r.transactions;
-        return hasAny(features, selectedFeatures);
-      });
-      restaurantDispatcher = () => setRestaurants(buffer);
-    } else {
-      restaurantDispatcher = () => setRestaurants(allRestaurants);
-    }
-
-    dispatch(batchActions([restaurantDispatcher(), setLoadingRestaurants(false)]));
+    return filteredCuisines.length === 0;
   }
 
   function filterByCuisines(filteredCuisines: RestaurantCuisine[]) {
@@ -144,22 +115,6 @@ export function RestaurantFilters({ loadAllRestaurants, setPage }: RestaurantFil
         component="h4"
         weight="bold"
       >
-        Features
-      </Text>
-
-      <ResFeatureSelector
-        features={features}
-        updateState={(selected) => setFeatures(selected)}
-      />
-
-      <Divider style={{ margin: "18px 0px 10px 0px" }} />
-
-      <Text
-        color={Colors.BLUE}
-        className={style.filterTitle}
-        component="h4"
-        weight="bold"
-      >
         Cuisines
       </Text>
       <ResCuisineSelector
@@ -167,7 +122,9 @@ export function RestaurantFilters({ loadAllRestaurants, setPage }: RestaurantFil
         updateState={(selected) => setCuisines(selected)}
       />
 
-      <CustomButton onClick={() => applyFilters()}>Search</CustomButton>
+      <CustomButton style={{ marginTop: 20 }} onClick={() => applyFilters()}>
+        Search
+      </CustomButton>
     </div>
   );
 }

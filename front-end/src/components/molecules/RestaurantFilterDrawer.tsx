@@ -10,10 +10,12 @@ import { RestaurantFilters } from "../organisms";
 interface RestaurantFilterDrawer {
   loadAllRestaurants: () => void;
   setPage: Dispatch<SetStateAction<number>>;
+  updateURL: () => void;
 }
 
 export function RestaurantFilterDrawer({
   loadAllRestaurants,
+  updateURL,
   setPage,
 }: RestaurantFilterDrawer) {
   const drawerStyles = makeStyles(() => ({
@@ -48,7 +50,11 @@ export function RestaurantFilterDrawer({
         onClose={() => setOpenDrawer(false)}
         classes={{ root: style.drawer, paper: style.drawer }}
       >
-        <RestaurantFilters setPage={setPage} loadAllRestaurants={loadAllRestaurants} />
+        <RestaurantFilters
+          updateURL={updateURL}
+          setPage={setPage}
+          loadAllRestaurants={loadAllRestaurants}
+        />
       </Drawer>
     </div>
   );

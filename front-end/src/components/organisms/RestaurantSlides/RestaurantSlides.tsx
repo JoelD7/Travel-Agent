@@ -137,13 +137,6 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
           <Text style={{ marginLeft: "45px" }} color={Colors.BLUE} component="h2">
             {title}
           </Text>
-          <Button
-            style={{ textTransform: "capitalize", margin: "auto 0px 5px auto" }}
-            classes={{ root: style.textButton }}
-            onClick={() => {}}
-          >
-            Show all
-          </Button>
         </Grid>
 
         <Grid

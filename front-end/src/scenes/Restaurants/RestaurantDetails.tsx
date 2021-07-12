@@ -1,15 +1,12 @@
-import { faHeart as faHeartReg } from "@fortawesome/free-regular-svg-icons";
 import {
   faClock,
   faGlobe,
-  faHeart,
   faMapMarkerAlt,
   faPhone,
   faStar,
   faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Grid, Grow, IconButton, Snackbar } from "@material-ui/core";
+import { Grid, Grow, Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useEffect, useState } from "react";
 import Helmet from "react-helmet";
@@ -31,19 +28,18 @@ import {
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
 import {
-  EventTypes,
-  getRestaurantCategoriesList,
-  isRestaurantInAnyTrip,
-  getRestaurantHours,
-  getRestaurantTransactions,
-  restaurantPlaceholder,
-  TripEvent,
   backend,
   deleteTripEventFromStore,
-  tripEventPlaceholder,
+  EventTypes,
+  FavoriteTypes,
+  getRestaurantCategoriesList,
+  getRestaurantHours,
+  getRestaurantTransactions,
+  isRestaurantInAnyTrip,
   selectUserTrips,
   Trip,
-  FavoriteTypes,
+  TripEvent,
+  tripEventPlaceholder,
 } from "../../utils";
 import { fetchRestaurant } from "../../utils/external-apis/yelp-apis";
 import { restaurantDetailsStyles } from "./restaurantDetails-styles";
@@ -76,18 +72,6 @@ export function RestaurantDetails() {
   function onIncludeTripClick(event: MouseEvent<HTMLButtonElement>) {
     setTripAnchor(event.currentTarget);
     setOpenPopover(true);
-  }
-
-  function addToFavorites() {
-    if (restaurant) {
-      if (!restaurant.favorite) {
-        setRestaurant({ ...restaurant, favorite: true });
-        setOpenSnack(true);
-      } else {
-        setRestaurant({ ...restaurant, favorite: false });
-        setOpenSnackRemoved(true);
-      }
-    }
   }
 
   function deleteFromTrip() {

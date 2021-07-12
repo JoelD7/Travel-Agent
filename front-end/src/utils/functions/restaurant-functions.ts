@@ -146,17 +146,8 @@ export function convertResFilterParamsToURLParams(
     .map((cuisine) => cuisine.alias)
     .join(",");
 
-  let features: string = resFilterParams.features
-    .filter((feature) => feature.checked)
-    .map((feature) => feature.name)
-    .join(",");
-
   if (cuisines !== "") {
     params.push(`cuisines=${cuisines}`);
-  }
-
-  if (features !== "") {
-    params.push(`features=${features}`);
   }
 
   if (params.length === 0) {

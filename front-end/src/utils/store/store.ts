@@ -152,10 +152,6 @@ export const selectFlightDetail = (state: RootState) => state.flightSlice.flight
 //#endregion
 
 //#region Restaurant
-export const selectRestaurantFeatures = createSelector(
-  (state: RootState) => state.restaurantSlice.features,
-  (features) => features
-);
 export const selectRestaurantCuisines = createSelector(
   (state: RootState) => state.restaurantSlice.cuisines,
   (cuisines) => cuisines
@@ -166,9 +162,6 @@ export const selectAllRestaurants = (state: RootState) =>
 
 export const selectCheckedRestaurantCuisines = (state: RootState) =>
   state.restaurantSlice.checkedCuisines;
-
-export const selectCheckedRestaurantFeatures = (state: RootState) =>
-  state.restaurantSlice.checkedFeatures;
 
 export const selectLoadingRestaurants = (state: RootState) =>
   state.restaurantSlice.loadingRestaurants;

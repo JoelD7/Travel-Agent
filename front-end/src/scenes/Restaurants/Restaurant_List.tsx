@@ -22,18 +22,15 @@ import {
 import { Colors } from "../../styles";
 import {
   addRestaurantCuisines,
-  addRestaurantFeatures,
   convertResFilterParamsToURLParams,
   fetchRestaurants,
   filterByFeature,
   getDistinctCuisines,
-  hasAny,
   IATALocation,
   Routes,
   selectDestinationCity,
   selectLoadingRestaurants,
   selectRestaurantCuisines,
-  selectRestaurantFeatures,
   selectRestaurantFilterParams,
   selectRestaurants,
   selectTotalRestaurants,
@@ -43,16 +40,8 @@ import {
   setRestaurants,
   setTotalRestaurants,
   updateResCheckedCuisinesFromURL,
-  updateRestaurantCheckedFeatures,
 } from "../../utils";
 import { restaurantListStyles } from "./restaurantList-styles";
-
-interface Restaurant_List {
-  city: string;
-  establishments: RestaurantFeature[];
-  cuisines: RestaurantFeature[];
-  features: RestaurantFeature[];
-}
 
 export function Restaurant_List() {
   const history = useHistory();
@@ -67,10 +56,8 @@ export function Restaurant_List() {
   const currentCity: IATALocation = useSelector(selectDestinationCity);
   const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
   let defaultCuisines: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
-  let defaultFeatures: RestaurantFeature[] = useSelector(selectRestaurantFeatures);
   const totalRestaurants: number = useSelector(selectTotalRestaurants);
   const cuisines: RestaurantCuisine[] = getCuisines();
-  const features: RestaurantFeature[] = getFeatures();
 
   const [deliveryRestaurants, setDeliveryRestaurants] = useState<RestaurantSearch[]>(
     filterByFeature("delivery", restaurants)
@@ -126,13 +113,6 @@ export function Restaurant_List() {
 
     loadAllRestaurants();
   }, [currentCity, page, pageSize]);
-
-  useEffect(() => {
-    if (!isFirstRender()) {
-      // setPage(0); Move this variable to the store so that the cuisine filter
-      // can be able to change it when the user selects or deselects cuisines.
-    }
-  }, [resFilterParams]);
 
   /**
    * The restaurant slides actually depend only on the
@@ -195,30 +175,14 @@ export function Restaurant_List() {
     return cuisinesToReturn;
   }
 
-  function getFeatures(): RestaurantFeature[] {
-    if (!urlParams.hasOwnProperty("features")) {
-      return defaultFeatures;
-    }
-
-    let featuresInURL: string[] = urlParams["features"].split(",");
-
-    let featuresToReturn: RestaurantFeature[] = defaultFeatures.map((feature) => {
-      if (featuresInURL.includes(feature.name)) {
-        return { ...feature, checked: true };
-      }
-
-      return feature;
-    });
-
-    return featuresToReturn;
-  }
-
   /**
    * Fetches restaurants from the APU and sets the variables that depend
    * on the response from it.
    */
   function loadAllRestaurants() {
-    updateURL();
+    if (!isFirstRender()) {
+      updateURL();
+    }
 
     let cuisinesURL: string = "";
     urlParams = getURLParamsAsKVP();
@@ -253,20 +217,18 @@ export function Restaurant_List() {
   }
 
   function setRestaurantsDependencies() {
+    let restaurants: RestaurantSearch[] = [...restaurantsRes];
+
     let cuisinesToAdd: RestaurantCuisine[] = getCuisinesFromRestaurantsResponse(
       cuisines,
       restaurantsRes
     );
 
-    let featuresToAdd: RestaurantFeature[] = getFeaturesFromRestaurantResponse(
-      features,
-      restaurantsRes
-    );
     batchedActionsOnFirstRender = [];
 
     batchedActionsOnFirstRender.push(setAllRestaurants(restaurantsRes));
     batchedActionsOnFirstRender.push(setLoadingRestaurants(false));
-    batchedActionsOnFirstRender.push(setRestaurants(restaurantsRes));
+    batchedActionsOnFirstRender.push(setRestaurants(restaurants));
 
     /**
      * Do not dispatch the actions to set cuisines and features
@@ -276,13 +238,10 @@ export function Restaurant_List() {
     if (isURLWithResParams()) {
       convertURLParamsToResFilterParams(
         cuisinesToAdd,
-        featuresToAdd,
-        addRestaurantCuisines(cuisinesToAdd),
-        addRestaurantFeatures(featuresToAdd)
+        addRestaurantCuisines(cuisinesToAdd)
       );
     } else {
       batchedActionsOnFirstRender.push(addRestaurantCuisines(cuisinesToAdd));
-      batchedActionsOnFirstRender.push(addRestaurantFeatures(featuresToAdd));
     }
 
     firstRender.current = false;
@@ -318,34 +277,6 @@ export function Restaurant_List() {
     return newCuisines;
   }
 
-  /**
-   * Returns all the features included in the restaurants
-   * returned by the API.
-   */
-  function getFeaturesFromRestaurantResponse(
-    curFeatures: RestaurantFeature[],
-    restaurants: RestaurantSearch[]
-  ): RestaurantFeature[] {
-    let featuresMerge: any[] = [];
-    restaurants.forEach((r) => {
-      let featuresForRestaurant = r.transactions.filter((e) => e !== "");
-      featuresMerge = [...featuresMerge, ...featuresForRestaurant];
-    });
-
-    let curFeaturesString = curFeatures.map((ft) => ft.name);
-    let newFeatures: RestaurantFeature[] = [];
-
-    let featuresSet = new Set([...featuresMerge]);
-
-    featuresSet.forEach((ft) => {
-      if (!curFeaturesString.includes(ft)) {
-        newFeatures.push({ name: ft, checked: false });
-      }
-    });
-
-    return newFeatures;
-  }
-
   function updateURL() {
     let resFilterParamsAsURL: string = convertResFilterParamsToURLParams(resFilterParams);
 
@@ -363,9 +294,7 @@ export function Restaurant_List() {
 
   function convertURLParamsToResFilterParams(
     cuisines: RestaurantCuisine[],
-    features: RestaurantFeature[],
-    defaultCuisinesAction: AnyAction,
-    defaultFeaturesAction: AnyAction
+    defaultCuisinesAction: AnyAction
   ) {
     if (urlParams.hasOwnProperty("cuisines")) {
       let cuisinesURL: string = urlParams["cuisines"];
@@ -380,48 +309,6 @@ export function Restaurant_List() {
     } else {
       batchedActionsOnFirstRender.push(defaultCuisinesAction);
     }
-
-    if (urlParams.hasOwnProperty("features")) {
-      let featuresURL: string = urlParams["features"];
-      batchedActionsOnFirstRender.push(
-        updateRestaurantCheckedFeatures(features, featuresURL)
-      );
-
-      filterRestaurantsByFeatures(featuresURL);
-    } else {
-      batchedActionsOnFirstRender.push(defaultFeaturesAction);
-    }
-  }
-
-  /**
-   * In case that the URL includes the cuisines parameter, this function
-   * fetches restaurants from it.
-   * @param cuisinesURL
-   */
-  function fetchRestaurantsByCuisineURL(cuisinesURL: string) {
-    fetchRestaurants(currentCity.lat, currentCity.lon, pageSize, page * pageSize)
-      .then((res) => {
-        let restaurantsRes: RestaurantSearch[] = res.data.businesses;
-
-        dispatch(
-          batchActions([setRestaurants(restaurantsRes), setLoadingRestaurants(false)])
-        );
-      })
-      .catch((error) =>
-        console.log("Error while fetching restaurants by cuisines | ", error)
-      );
-  }
-
-  function filterRestaurantsByFeatures(featuresURL: string) {
-    let selectedFeatures: string[] = featuresURL.split(",");
-
-    let filteredRestaurants: RestaurantSearch[] = restaurantsRes.filter(
-      (restaurant: RestaurantSearch) => {
-        let resFeatures: string[] = restaurant.transactions;
-        return hasAny(resFeatures, selectedFeatures);
-      }
-    );
-    batchedActionsOnFirstRender.push(setRestaurants(filteredRestaurants));
   }
 
   function getPage(): number {
@@ -539,6 +426,7 @@ export function Restaurant_List() {
             <>
               <Grid item className={style.filterGrid}>
                 <RestaurantFilters
+                  updateURL={updateURL}
                   setPage={setPage}
                   loadAllRestaurants={loadAllRestaurants}
                 />
@@ -547,6 +435,7 @@ export function Restaurant_List() {
               {/* Filter button */}
               <Grid item className={style.filterButtonGrid}>
                 <RestaurantFilterDrawer
+                  updateURL={updateURL}
                   setPage={setPage}
                   loadAllRestaurants={loadAllRestaurants}
                 />
