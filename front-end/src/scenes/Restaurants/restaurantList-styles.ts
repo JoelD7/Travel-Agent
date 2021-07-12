@@ -14,6 +14,9 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     width: "95%",
     margin: "auto 5px",
   },
+  cardContainer: {
+    position: "relative",
+  },
   drawer: {
     width: "250px",
     backgroundColor: "transparent",
@@ -52,6 +55,11 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
     backgroundColor: "white",
     borderRadius: "5px",
     padding: "15px",
+  },
+  loadingContainer: {
+    display: "flex",
+    justifyContent: "center",
+    position: "relative",
   },
   pagination: {
     margin: "20px 0px 40px auto",

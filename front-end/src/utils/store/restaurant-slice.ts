@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getDistinctCuisines, sortCuisines } from "../functions";
+import { sortCuisines } from "../functions";
 
 interface RestaurantSlice {
   features: RestaurantFeature[];
@@ -10,9 +10,11 @@ interface RestaurantSlice {
   allRestaurants: RestaurantSearch[];
   filterParams: RestaurantFilterParams;
   loadingRestaurants: boolean;
+  totalRestaurants: number;
 }
 
 const initialState: RestaurantSlice = {
+  totalRestaurants: 0,
   features: [],
   cuisines: [],
   checkedFeatures: [],
@@ -30,6 +32,9 @@ const restaurantSlice = createSlice({
   name: "restaurantSlice",
   initialState,
   reducers: {
+    setTotalRestaurants(state, action: PayloadAction<number>) {
+      state.totalRestaurants = action.payload;
+    },
     addRestaurantFeatures(state, action: PayloadAction<RestaurantFeature[]>) {
       state.features = [...state.features, ...action.payload].sort((a, b) =>
         a.name.localeCompare(b.name)
@@ -37,9 +42,7 @@ const restaurantSlice = createSlice({
     },
 
     addRestaurantCuisines(state, action: PayloadAction<RestaurantCuisine[]>) {
-      state.cuisines = [...state.cuisines, ...action.payload].sort((a, b) =>
-        a.title.localeCompare(b.title)
-      );
+      state.cuisines = sortCuisines([...state.cuisines, ...action.payload]);
     },
 
     updateRestaurantFeatures(state, action: PayloadAction<RestaurantFeature[]>) {
@@ -79,20 +82,8 @@ const restaurantSlice = createSlice({
       },
 
       prepare(curCuisines: RestaurantCuisine[], cuisinesURL: string) {
-        //The cuisines in the URL are represented as their aliases.
-        let aliases: string[] = cuisinesURL.split(",");
-
-        let buffer: RestaurantCuisine[] = curCuisines.map((cuisine) => {
-          if (aliases.includes(cuisine.alias)) {
-            return { ...cuisine, checked: true };
-          }
-          return cuisine;
-        });
-
-        let sortedCuisines: RestaurantCuisine[] = sortCuisines(buffer);
-
         return {
-          payload: sortedCuisines,
+          payload: getCuisinesListByURL(curCuisines, cuisinesURL),
         };
       },
     },
@@ -108,11 +99,25 @@ const restaurantSlice = createSlice({
     setRestaurantFilterParams(state, action: PayloadAction<RestaurantFilterParams>) {
       state.filterParams = action.payload;
     },
+
+    setRestaurantFilterCuisines: {
+      reducer(state, action: PayloadAction<RestaurantCuisine[]>) {
+        state.filterParams.cuisines = action.payload;
+      },
+
+      prepare(curCuisines: RestaurantCuisine[], cuisinesURL: string) {
+        return {
+          payload: getCuisinesListByURL(curCuisines, cuisinesURL),
+        };
+      },
+    },
   },
 });
 
 export const {
+  setRestaurantFilterCuisines,
   addRestaurantFeatures,
+  setTotalRestaurants,
   setLoadingRestaurants,
   setRestaurants,
   setAllRestaurants,
@@ -125,3 +130,21 @@ export const {
 } = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;
+
+/**
+ * Returns a list of all the available cuisines, marking as 'checked'
+ * those in the URL.
+ */
+function getCuisinesListByURL(curCuisines: RestaurantCuisine[], cuisinesURL: string) {
+  //The cuisines in the URL are represented as their aliases.
+  let aliases: string[] = cuisinesURL.split(",");
+
+  let buffer: RestaurantCuisine[] = curCuisines.map((cuisine) => {
+    if (aliases.includes(cuisine.alias)) {
+      return { ...cuisine, checked: true };
+    }
+    return cuisine;
+  });
+
+  return sortCuisines(buffer);
+}

@@ -24,9 +24,11 @@ import {
   addRestaurantCuisines,
   addRestaurantFeatures,
   convertResFilterParamsToURLParams,
+  fetchRestaurants,
   filterByFeature,
   getDistinctCuisines,
   hasAny,
+  IATALocation,
   Routes,
   selectDestinationCity,
   selectLoadingRestaurants,
@@ -34,14 +36,15 @@ import {
   selectRestaurantFeatures,
   selectRestaurantFilterParams,
   selectRestaurants,
+  selectTotalRestaurants,
   setAllRestaurants,
   setLoadingRestaurants,
+  setRestaurantFilterCuisines,
   setRestaurants,
+  setTotalRestaurants,
   updateResCheckedCuisinesFromURL,
   updateRestaurantCheckedFeatures,
 } from "../../utils";
-import { fetchRestaurants } from "../../utils/external-apis/yelp-apis";
-import { IATALocation } from "../../utils/types/location-types";
 import { restaurantListStyles } from "./restaurantList-styles";
 
 interface Restaurant_List {
@@ -57,9 +60,7 @@ export function Restaurant_List() {
   const location = useLocation();
 
   const query = useQuery();
-  const [urlParams, setUrlParams] = useState<{ [index: string]: string }>(
-    getURLParamsAsKVP()
-  );
+  let urlParams: { [index: string]: string } = getURLParamsAsKVP();
 
   const style = restaurantListStyles();
 
@@ -67,6 +68,7 @@ export function Restaurant_List() {
   const restaurants: RestaurantSearch[] = useSelector(selectRestaurants);
   let defaultCuisines: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
   let defaultFeatures: RestaurantFeature[] = useSelector(selectRestaurantFeatures);
+  const totalRestaurants: number = useSelector(selectTotalRestaurants);
   const cuisines: RestaurantCuisine[] = getCuisines();
   const features: RestaurantFeature[] = getFeatures();
 
@@ -80,7 +82,6 @@ export function Restaurant_List() {
     RestaurantSearch[]
   >(filterByFeature("restaurant_reservation", restaurants));
   const [noRestaurants, setNoRestaurants] = useState(false);
-  const [total, setTotal] = useState<number>(0);
   const [page, setPage] = useState<number>(getPage());
   const [pageSize, setPageSize] = useState<number>(getPageSize());
   const pageSizeOptions = [20, 30, 40];
@@ -128,9 +129,8 @@ export function Restaurant_List() {
 
   useEffect(() => {
     if (!isFirstRender()) {
-      console.log("hey");
-      // setPage(1);
-      updateURL();
+      // setPage(0); Move this variable to the store so that the cuisine filter
+      // can be able to change it when the user selects or deselects cuisines.
     }
   }, [resFilterParams]);
 
@@ -187,9 +187,9 @@ export function Restaurant_List() {
     let cuisinesToReturn: RestaurantCuisine[] = defaultCuisines.map((cuisine) => {
       if (cuisinesInURL.includes(cuisine.alias)) {
         return { ...cuisine, checked: true };
+      } else {
+        return { ...cuisine, checked: false };
       }
-
-      return cuisine;
     });
 
     return cuisinesToReturn;
@@ -218,12 +218,28 @@ export function Restaurant_List() {
    * on the response from it.
    */
   function loadAllRestaurants() {
-    fetchRestaurants(currentCity.lat, currentCity.lon, pageSize, page * pageSize)
+    updateURL();
+
+    let cuisinesURL: string = "";
+    urlParams = getURLParamsAsKVP();
+
+    if (urlParams.hasOwnProperty("cuisines")) {
+      cuisinesURL = urlParams["cuisines"];
+    }
+
+    fetchRestaurants(
+      currentCity.lat,
+      currentCity.lon,
+      pageSize,
+      page * pageSize,
+      undefined,
+      cuisinesURL
+    )
       .then((res) => {
         restaurantsRes = res.data.businesses;
 
         let resTotal = Number(res.data.total);
-        setTotal(resTotal > 1000 ? 1000 : resTotal);
+        dispatch(setTotalRestaurants(resTotal > 1000 ? 1000 : resTotal));
 
         setRestaurantsDependencies();
 
@@ -246,6 +262,7 @@ export function Restaurant_List() {
       features,
       restaurantsRes
     );
+    batchedActionsOnFirstRender = [];
 
     batchedActionsOnFirstRender.push(setAllRestaurants(restaurantsRes));
     batchedActionsOnFirstRender.push(setLoadingRestaurants(false));
@@ -292,9 +309,9 @@ export function Restaurant_List() {
 
     let cuisinesSet = getDistinctCuisines(cuisinesMerge);
 
-    cuisinesSet.forEach((ft) => {
-      if (!curCuisinesString.includes(ft.title)) {
-        newCuisines.push({ title: ft.title, alias: ft.alias, checked: false });
+    cuisinesSet.forEach((c) => {
+      if (!curCuisinesString.includes(c.title)) {
+        newCuisines.push({ title: c.title, alias: c.alias, checked: false });
       }
     });
 
@@ -341,7 +358,7 @@ export function Restaurant_List() {
       `${Routes.RESTAURANTS}${resFilterParamsAsURL}&page=${page + 1}&pageSize=${pageSize}`
     );
 
-    setUrlParams(getURLParamsAsKVP());
+    urlParams = getURLParamsAsKVP();
   }
 
   function convertURLParamsToResFilterParams(
@@ -357,7 +374,9 @@ export function Restaurant_List() {
         updateResCheckedCuisinesFromURL(cuisines, cuisinesURL)
       );
 
-      fetchRestaurantsByCuisineURL(cuisinesURL);
+      batchedActionsOnFirstRender.push(
+        setRestaurantFilterCuisines(cuisines, cuisinesURL)
+      );
     } else {
       batchedActionsOnFirstRender.push(defaultCuisinesAction);
     }
@@ -380,14 +399,7 @@ export function Restaurant_List() {
    * @param cuisinesURL
    */
   function fetchRestaurantsByCuisineURL(cuisinesURL: string) {
-    fetchRestaurants(
-      currentCity.lat,
-      currentCity.lon,
-      pageSize,
-      page * pageSize,
-      undefined,
-      cuisinesURL
-    )
+    fetchRestaurants(currentCity.lat, currentCity.lon, pageSize, page * pageSize)
       .then((res) => {
         let restaurantsRes: RestaurantSearch[] = res.data.businesses;
 
@@ -526,12 +538,18 @@ export function Restaurant_List() {
           <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
             <>
               <Grid item className={style.filterGrid}>
-                <RestaurantFilters loadAllRestaurants={loadAllRestaurants} />
+                <RestaurantFilters
+                  setPage={setPage}
+                  loadAllRestaurants={loadAllRestaurants}
+                />
               </Grid>
 
               {/* Filter button */}
               <Grid item className={style.filterButtonGrid}>
-                <RestaurantFilterDrawer loadAllRestaurants={loadAllRestaurants} />
+                <RestaurantFilterDrawer
+                  setPage={setPage}
+                  loadAllRestaurants={loadAllRestaurants}
+                />
               </Grid>
             </>
           </Grow>
@@ -584,7 +602,7 @@ export function Restaurant_List() {
                   color={getTitleColor()}
                 >{`Top Restaurants in ${currentCity.city}`}</Text>
 
-                <div className={style.restaurantCardContainer}>
+                <Grid container className={style.restaurantCardContainer}>
                   <Grid container style={{ marginTop: "15px" }}>
                     <SortPageSize
                       includeSort={false}
@@ -599,23 +617,28 @@ export function Restaurant_List() {
                         className={style.pagination}
                         page={page}
                         onChange={(e, page) => onPageChange(page)}
-                        pageCount={Math.ceil(total / pageSize)}
+                        pageCount={Math.ceil(totalRestaurants / pageSize)}
                       />
                     )}
                   </Grid>
 
                   {/* ProgressCircle */}
                   {loading && (
-                    <Grid container justify="center">
+                    <Grid item xs={12} className={style.loadingContainer}>
                       <ProgressCircle />
                     </Grid>
                   )}
 
-                  <div style={loading ? { filter: "blur(4px)" } : {}}>
+                  <Grid
+                    item
+                    xs={12}
+                    className={style.cardContainer}
+                    style={loading ? { filter: "blur(4px)" } : {}}
+                  >
                     {restaurants.map((restaurant, i) => (
                       <RestaurantCard key={i} restaurant={restaurant} />
                     ))}
-                  </div>
+                  </Grid>
 
                   <Grid container>
                     {!loading && (
@@ -623,18 +646,20 @@ export function Restaurant_List() {
                         className={style.pagination}
                         page={page}
                         onChange={(e, page) => onPageChange(page)}
-                        pageCount={Math.ceil(total / pageSize)}
+                        pageCount={Math.ceil(totalRestaurants / pageSize)}
                       />
                     )}
                   </Grid>
-                </div>
+                </Grid>
               </>
             )}
           </Grid>
         </Grid>
       </div>
 
-      <Footer />
+      <div style={{ marginTop: 50 }}>
+        <Footer />
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { proxyUrl } from ".";
+import { store } from "../store";
 import { RestaurantCategories } from "../types/restaurant-types";
 export {};
 export const restaurantCategories: RestaurantCategories[] = [
@@ -1502,7 +1503,13 @@ export function fetchRestaurants(
   cuisines?: RestaurantCuisine[],
   cuisineAliases?: string
 ) {
-  let cuisinesList = "";
+  const resFilterParams: RestaurantFilterParams =
+    store.getState().restaurantSlice.filterParams;
+
+  let cuisinesList = resFilterParams.cuisines
+    .filter((c) => c.checked)
+    .map((c) => c.alias)
+    .join(",");
 
   if (cuisines) {
     cuisinesList = cuisines.map((c) => c.alias).join(",");

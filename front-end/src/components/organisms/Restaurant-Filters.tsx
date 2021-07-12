@@ -1,24 +1,24 @@
 import { Divider } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { batchActions } from "redux-batched-actions";
 import { restaurantListStyles } from "../../scenes/Restaurants/restaurantList-styles";
 import { Colors } from "../../styles";
 import {
+  fetchRestaurants,
   hasAny,
   IATALocation,
   selectAllRestaurants,
   selectDestinationCity,
-  store,
-  selectRestaurantFilterParams,
   selectRestaurantCuisines,
   selectRestaurantFeatures,
+  selectRestaurantFilterParams,
   setLoadingRestaurants,
   setRestaurantFilterParams,
   setRestaurants,
+  setTotalRestaurants,
   updateRestaurantCuisines,
   updateRestaurantFeatures,
-  fetchRestaurants,
 } from "../../utils";
 import { CustomButton, Text } from "../atoms";
 import { ResCuisineSelector } from "./RestaurantCuisinesSelec/ResCuisineSelector";
@@ -26,9 +26,10 @@ import { ResFeatureSelector } from "./RestaurantFeature/ResFeatureSelector";
 
 interface RestaurantFilters {
   loadAllRestaurants: () => void;
+  setPage: Dispatch<SetStateAction<number>>;
 }
 
-export function RestaurantFilters({ loadAllRestaurants }: RestaurantFilters) {
+export function RestaurantFilters({ loadAllRestaurants, setPage }: RestaurantFilters) {
   const style = restaurantListStyles();
 
   const [cuisines, setCuisines] = useState<RestaurantCuisine[]>([]);
@@ -56,13 +57,12 @@ export function RestaurantFilters({ loadAllRestaurants }: RestaurantFilters) {
 
   useEffect(() => {
     if (!firstRender && areNoFiltersApplied()) {
-      console.log("resFilterParams: ", resFilterParams);
-
       loadAllRestaurants();
     }
   }, [resFilterParams]);
 
   function applyFilters() {
+    setPage(0);
     setFirstRender(false);
     dispatch(setLoadingRestaurants(true));
 
@@ -78,10 +78,14 @@ export function RestaurantFilters({ loadAllRestaurants }: RestaurantFilters) {
       }
 
       dispatch(
-        setRestaurantFilterParams({
-          cuisines,
-          features,
-        })
+        batchActions([
+          updateRestaurantFeatures(features),
+          updateRestaurantCuisines(cuisines),
+          setRestaurantFilterParams({
+            cuisines,
+            features,
+          }),
+        ])
       );
     }, 250);
   }
@@ -107,13 +111,7 @@ export function RestaurantFilters({ loadAllRestaurants }: RestaurantFilters) {
       restaurantDispatcher = () => setRestaurants(allRestaurants);
     }
 
-    dispatch(
-      batchActions([
-        restaurantDispatcher(),
-        updateRestaurantFeatures(features),
-        setLoadingRestaurants(false),
-      ])
-    );
+    dispatch(batchActions([restaurantDispatcher(), setLoadingRestaurants(false)]));
   }
 
   function filterByCuisines(filteredCuisines: RestaurantCuisine[]) {
@@ -125,10 +123,12 @@ export function RestaurantFilters({ loadAllRestaurants }: RestaurantFilters) {
       filteredCuisines
     )
       .then((res) => {
+        let resTotal = Number(res.data.total);
+
         dispatch(
           batchActions([
+            setTotalRestaurants(resTotal > 1000 ? 1000 : resTotal),
             setRestaurants(res.data.businesses),
-            updateRestaurantCuisines(cuisines),
             setLoadingRestaurants(false),
           ])
         );
