@@ -51,20 +51,18 @@ import {
   selectUserTrips,
   setHotelReservations,
   setHotelRsv,
+  selectIsAuthenticated,
   store,
+  HotelBooking,
+  HotelBookingParams,
   Trip,
-} from "../../utils";
-import {
+  IATALocation,
   getHotelBedHeaders,
   getHotelDetails,
-} from "../../utils/external-apis/hotelbeds-apis";
-import {
   setHotelDetail,
   setOpenRedirecDialog,
   updateReservationParams,
-} from "../../utils/store/hotel-slice";
-import { HotelBooking, HotelBookingParams } from "../../utils/types/hotel-types";
-import { IATALocation } from "../../utils/types/location-types";
+} from "../../utils";
 import { hotelDetailsStyles } from "./hotelDetails-styles";
 
 interface RoomAccordion {
@@ -74,17 +72,16 @@ interface RoomAccordion {
 export function HotelDetails() {
   const style = hotelDetailsStyles();
   const hotel: HotelBooking | undefined = useSelector(selectHotelDetail);
-
   let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
-
-  const { id } = useParams<any>();
-  const location = useLocation();
-
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
   const hotelReservations: HotelReservation[] = useSelector(selectHotelReservations);
   const geolocation: IATALocation = useSelector(selectDestinationCity);
   const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
   const idPerson: number = useSelector(selectIdPerson);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
+
+  const { id } = useParams<any>();
+  const location = useLocation();
 
   const history = useHistory();
 
@@ -450,43 +447,59 @@ export function HotelDetails() {
                         </Text>
                       </Grid>
 
+                      {/* Reservation buttons */}
                       <Grid container style={{ marginTop: 15 }}>
-                        {!isHotelRsvInAnyTrip() && !isHotelBooked() && (
+                        {!isAuthenticated ? (
                           <CustomButton
                             backgroundColor={Colors.GREEN}
-                            disabled={!areAllRoomsToBookBooked()}
                             style={{ marginLeft: "auto" }}
-                            onClick={() => setOpenConfirmation(true)}
+                            onClick={() => Routes.LOGIN}
                           >
-                            Confirm Reservation
+                            Log in to make a reservation
                           </CustomButton>
-                        )}
+                        ) : (
+                          <>
+                            {!isHotelRsvInAnyTrip() && !isHotelBooked() && (
+                              <CustomButton
+                                backgroundColor={Colors.GREEN}
+                                disabled={!areAllRoomsToBookBooked()}
+                                style={{ marginLeft: "auto" }}
+                                onClick={() => setOpenConfirmation(true)}
+                              >
+                                Confirm Reservation
+                              </CustomButton>
+                            )}
 
-                        {isHotelRsvInAnyTrip() && (
-                          <CustomButton
-                            backgroundColor={Colors.RED}
-                            style={{ marginLeft: "auto" }}
-                            onClick={() => setOpenConfirmation(true)}
-                          >
-                            Delete from trip
-                          </CustomButton>
-                        )}
+                            {isHotelRsvInAnyTrip() && (
+                              <CustomButton
+                                backgroundColor={Colors.RED}
+                                style={{ marginLeft: "auto" }}
+                                onClick={() => setOpenConfirmation(true)}
+                              >
+                                Delete from trip
+                              </CustomButton>
+                            )}
 
-                        {isHotelBooked() && !isHotelRsvInAnyTrip() && (
-                          <div style={{ width: "100%" }}>
-                            <Divider className={style.reservationLinkDivider} />
-                            <Text color={Colors.GRAY_TEXT} style={{ marginBottom: 0 }}>
-                              You have a reservation on this hotel
-                            </Text>
-                            <CustomButton
-                              type="text"
-                              textColor={Colors.BLUE}
-                              style={{ padding: "10px 0px", fontWeight: "bold" }}
-                              onClick={() => history.push(Routes.RESERVATIONS)}
-                            >
-                              Wanna see it?
-                            </CustomButton>
-                          </div>
+                            {isHotelBooked() && !isHotelRsvInAnyTrip() && (
+                              <div style={{ width: "100%" }}>
+                                <Divider className={style.reservationLinkDivider} />
+                                <Text
+                                  color={Colors.GRAY_TEXT}
+                                  style={{ marginBottom: 0 }}
+                                >
+                                  You have a reservation on this hotel
+                                </Text>
+                                <CustomButton
+                                  type="text"
+                                  textColor={Colors.BLUE}
+                                  style={{ padding: "10px 0px", fontWeight: "bold" }}
+                                  onClick={() => history.push(Routes.RESERVATIONS)}
+                                >
+                                  Wanna see it?
+                                </CustomButton>
+                              </div>
+                            )}
+                          </>
                         )}
                       </Grid>
                     </Grid>

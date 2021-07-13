@@ -53,6 +53,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
 
     "& .MuiInputBase-input": {
       padding: "6px 7px 7px",
+      fontSize: 14,
     },
   },
   datepickerItemGrid: {
@@ -161,7 +162,7 @@ export const hotelsStyles = makeStyles((theme: Theme) => ({
     },
   },
   hotelsGridLoading: {
-    width: "75%",
+    width: "100%",
     height: "45vh",
     display: "flex",
     [theme.breakpoints.down(1280)]: {

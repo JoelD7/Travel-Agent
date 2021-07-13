@@ -1,6 +1,7 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  Tooltip,
   Backdrop,
   Dialog,
   Grid,
@@ -23,6 +24,7 @@ import {
   HotelReservation,
   mapHotelDTOToDomainType,
   Person,
+  selectIsAuthenticated,
   Routes,
   selectCarRsv,
   selectHotelReservations,
@@ -64,6 +66,10 @@ export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps)
       padding: 20,
       minWidth: 420,
     },
+    tooltip: {
+      fontSize: 13,
+      fontFamily: Font.Family,
+    },
   }));
 
   const style = dialogStyles();
@@ -77,8 +83,9 @@ export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps)
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
   const hotelReservations: HotelReservation[] = useSelector(selectHotelReservations);
   const carRsv: CarRsv = useSelector(selectCarRsv);
-
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
   const person: Person | undefined = useSelector(selectPerson);
+
   const dispatch = useDispatch();
   const history = useHistory();
 

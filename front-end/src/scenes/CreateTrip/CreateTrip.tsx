@@ -25,7 +25,14 @@ import {
   TripDates,
 } from "../../components";
 import { Colors, Shadow } from "../../styles";
-import { backend, selectIdPerson, selectPerson, Person } from "../../utils";
+import {
+  backend,
+  Person,
+  Routes,
+  selectIdPerson,
+  selectIsAuthenticated,
+  selectPerson,
+} from "../../utils";
 import { createTripStyles } from "./createTrip-styles";
 
 export function CreateTrip() {
@@ -42,6 +49,7 @@ export function CreateTrip() {
   const is1255OrLess = useMediaQuery("(max-width:1255px)");
   const is720OrLess = useMediaQuery("(max-width:720px)");
   const idPerson: number = useSelector(selectIdPerson);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
   const person: Person | undefined = useSelector(selectPerson);
 
   const [openSnack, setOpenSnack] = useState(false);
@@ -112,119 +120,144 @@ export function CreateTrip() {
           </Text>
         </Grid>
 
-        {/* Params container */}
-        <Grid item xs={12}>
-          <Grid container className={style.paramsContainer}>
-            {/* Left Pane */}
-            <Grid item className={style.leftPane}>
-              {/* Trip name */}
-              <Text component="h4" color={Colors.BLUE}>
-                Name your trip
-              </Text>
-              <CreateTripTF
-                style={{ width: getNameTFWidth() }}
-                value={name}
-                updateState={(value) => setName(value)}
-                icon={faFont}
-                placeholder="Trip name"
-              />
-
-              {/* Image upload */}
-              <div style={{ marginTop: 45 }}>
-                <Grid container alignItems="center" style={{ width: 385 }}>
-                  <Text component="h4" color={Colors.BLUE}>
-                    Add a cover
+        {/* Login to create trip */}
+        {!isAuthenticated && (
+          <div className={style.noLoggedInContainer}>
+            <Grid container className={style.noLoggedInGrid}>
+              <Grid item xs={12}>
+                <Grid container justify="center">
+                  <Text color={Colors.GRAY_TEXT}>
+                    Organize your ideal vacation in <b>Trips</b>. Book flights, hotels and
+                    more and group them in a single place.
                   </Text>
-
-                  <IconTP style={{ marginLeft: 10 }} icon={faImage} />
                 </Grid>
+              </Grid>
 
-                <ImageUploader
-                  images={[image]}
-                  updateState={(images) => onAlbumCoverChange(images)}
-                  onPictureUploadSucess={onTripCoverUploadSuccess}
-                />
-              </div>
-            </Grid>
-
-            {/* Right Pane */}
-            <Grid item className={style.rightPane}>
-              <Grid container style={{ height: "100%" }}>
-                {/* Dates */}
-                <Grid item xs={12}>
-                  <Grid container>
-                    <Text component="h4" color={Colors.BLUE}>
-                      Dates
-                    </Text>
-                    <IconTP style={{ marginLeft: 10 }} icon={faCalendar} />
-                  </Grid>
-
-                  {/* Pickers container */}
-                  <TripDates
-                    startDate={startDate}
-                    endDate={endDate}
-                    updateDates={updateDates}
-                  />
-                </Grid>
-
-                {/* Country selector */}
-                <Grid item xs={12} style={is720OrLess ? { marginTop: 30 } : {}}>
-                  <Grid container>
-                    <Text component="h4" color={Colors.BLUE}>
-                      Countries
-                    </Text>
-                    <IconTP style={{ marginLeft: 10 }} icon={faFlag} />
-                  </Grid>
-
-                  <CountrySelector
-                    selectedCountries={countries}
-                    updateState={(values) => {
-                      setCountries(values);
-                    }}
-                  />
-                </Grid>
-
-                {/* Budget */}
-                <Grid item xs={12} style={is720OrLess ? { marginTop: 30 } : {}}>
-                  <Grid container>
-                    <Text component="h4" color={Colors.BLUE}>
-                      Budget
-                    </Text>
-                  </Grid>
-
-                  <CreateTripTF
-                    value={String(budget)}
-                    updateState={(value) => onBudgetChange(value)}
-                    placeholder="Enter a budget"
-                    icon={faDollarSign}
-                    numeric
-                  />
-                </Grid>
-
-                {/* Save button */}
-                <Grid
-                  item
-                  xs={12}
-                  style={is720OrLess ? { marginTop: 30 } : { marginTop: "auto" }}
-                >
+              <Grid item xs={12}>
+                <Grid container justify="center">
                   <CustomButton
-                    onClick={() => createTrip()}
-                    loading={loadingButton}
-                    style={{ boxShadow: Shadow.LIGHT3D }}
                     backgroundColor={Colors.GREEN}
+                    onClick={() => Routes.LOGIN}
                   >
-                    Create trip
+                    Login to create a trip
                   </CustomButton>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+          </div>
+        )}
 
-      <div className={style.footerContainer}>
-        <Footer />
-      </div>
+        {/* Params container */}
+        {isAuthenticated && (
+          <Grid item xs={12}>
+            <Grid container className={style.paramsContainer}>
+              {/* Left Pane */}
+              <Grid item className={style.leftPane}>
+                {/* Trip name */}
+                <Text component="h4" color={Colors.BLUE}>
+                  Name your trip
+                </Text>
+                <CreateTripTF
+                  style={{ width: getNameTFWidth() }}
+                  value={name}
+                  updateState={(value) => setName(value)}
+                  icon={faFont}
+                  placeholder="Trip name"
+                />
+
+                {/* Image upload */}
+                <div style={{ marginTop: 45 }}>
+                  <Grid container alignItems="center" style={{ width: 385 }}>
+                    <Text component="h4" color={Colors.BLUE}>
+                      Add a cover
+                    </Text>
+
+                    <IconTP style={{ marginLeft: 10 }} icon={faImage} />
+                  </Grid>
+
+                  <ImageUploader
+                    images={[image]}
+                    updateState={(images) => onAlbumCoverChange(images)}
+                    onPictureUploadSucess={onTripCoverUploadSuccess}
+                  />
+                </div>
+              </Grid>
+
+              {/* Right Pane */}
+              <Grid item className={style.rightPane}>
+                <Grid container style={{ height: "100%" }}>
+                  {/* Dates */}
+                  <Grid item xs={12}>
+                    <Grid container>
+                      <Text component="h4" color={Colors.BLUE}>
+                        Dates
+                      </Text>
+                      <IconTP style={{ marginLeft: 10 }} icon={faCalendar} />
+                    </Grid>
+
+                    {/* Pickers container */}
+                    <TripDates
+                      startDate={startDate}
+                      endDate={endDate}
+                      updateDates={updateDates}
+                    />
+                  </Grid>
+
+                  {/* Country selector */}
+                  <Grid item xs={12} style={is720OrLess ? { marginTop: 30 } : {}}>
+                    <Grid container>
+                      <Text component="h4" color={Colors.BLUE}>
+                        Countries
+                      </Text>
+                      <IconTP style={{ marginLeft: 10 }} icon={faFlag} />
+                    </Grid>
+
+                    <CountrySelector
+                      selectedCountries={countries}
+                      updateState={(values) => {
+                        setCountries(values);
+                      }}
+                    />
+                  </Grid>
+
+                  {/* Budget */}
+                  <Grid item xs={12} style={is720OrLess ? { marginTop: 30 } : {}}>
+                    <Grid container>
+                      <Text component="h4" color={Colors.BLUE}>
+                        Budget
+                      </Text>
+                    </Grid>
+
+                    <CreateTripTF
+                      value={String(budget)}
+                      updateState={(value) => onBudgetChange(value)}
+                      placeholder="Enter a budget"
+                      icon={faDollarSign}
+                      numeric
+                    />
+                  </Grid>
+
+                  {/* Save button */}
+                  <Grid
+                    item
+                    xs={12}
+                    style={is720OrLess ? { marginTop: 30 } : { marginTop: "auto" }}
+                  >
+                    <CustomButton
+                      onClick={() => createTrip()}
+                      loading={loadingButton}
+                      style={{ boxShadow: Shadow.LIGHT3D }}
+                      backgroundColor={Colors.GREEN}
+                    >
+                      Create trip
+                    </CustomButton>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        )}
+      </Grid>
 
       <Snackbar
         open={openSnack}

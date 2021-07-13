@@ -203,37 +203,18 @@ export function Hotels() {
   const [urlParams, setURLParams] = useState<{ [index: string]: string }>(
     getURLParamsAsKVP()
   );
-
   const [state, setState] = useState<HotelSearchFilter>({
     priceRange: [0, 500],
     stars: 0,
   });
-
-  let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
-
-  const dispatch = useDispatch();
-
   const [hotelAvailability, setHotelAvailability] =
     useState<HotelAvailability>(hotelsPlaceholder);
-
   const [allHotels, setAllHotels] = useState<HotelBooking[]>([]);
-
   const [openDrawer, setOpenDrawer] = useState(false);
-
   const [openOccupancies, setOpenOccupancies] = useState<boolean>(false);
   const [occupanciesAnchor, setOccupanciesAnchor] = useState<HTMLButtonElement | null>(
     null
   );
-
-  const sortOptions: string[] = [
-    "Name | A - Z",
-    "Name | Z - A",
-    "Stars | desc",
-    "Stars | asc",
-    "Price | desc",
-    "Price | asc",
-  ];
-
   const [sortOption, setSortOption] = useState<string>(getSortOption());
   const [occupancyParamsChanged, setOccupancyParamsChanged] = useState(false);
   const [loadingOnMount, setLoadingOnMount] = useState(true);
@@ -246,8 +227,20 @@ export function Hotels() {
   const [pageSize, setPageSize] = useState(getPageSize());
   const [page, setPage] = useState(getPage());
 
+  let reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
   const openRedirecDialog: boolean = useSelector(selectOpenRedirecDialog);
   const geolocation: IATALocation = useSelector(selectDestinationCity);
+
+  const dispatch = useDispatch();
+
+  const sortOptions: string[] = [
+    "Name | A - Z",
+    "Name | Z - A",
+    "Stars | desc",
+    "Stars | asc",
+    "Price | desc",
+    "Price | asc",
+  ];
 
   const history = useHistory();
 
@@ -873,34 +866,36 @@ export function Hotels() {
         <Grid item className={style.pageContainerChilds}>
           <Grid container className={style.pageContentContainer}>
             {/* Filters */}
-            <Grid item className={style.filtersGrid}>
-              <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
-                <div className={style.filtersContainer}>
-                  <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-                    Price range
-                  </Text>
-                  <PriceRange
-                    values={state.priceRange}
-                    baseCurrency="USD"
-                    max={maxRate}
-                    updateState={onPriceRangeChange}
-                  />
+            {!loadingOnMount && (
+              <Grid item className={style.filtersGrid}>
+                <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                  <div className={style.filtersContainer}>
+                    <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+                      Price range
+                    </Text>
+                    <PriceRange
+                      values={state.priceRange}
+                      baseCurrency="USD"
+                      max={maxRate}
+                      updateState={onPriceRangeChange}
+                    />
 
-                  <Divider style={{ margin: "10px auto" }} />
+                    <Divider style={{ margin: "10px auto" }} />
 
-                  <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
-                    Stars
-                  </Text>
-                  <Rating
-                    type="star"
-                    readonly={false}
-                    score={state.stars}
-                    onChange={onStarChange}
-                    size={40}
-                  />
-                </div>
-              </Grow>
-            </Grid>
+                    <Text component="h4" weight="bold" style={{ color: Colors.BLUE }}>
+                      Stars
+                    </Text>
+                    <Rating
+                      type="star"
+                      readonly={false}
+                      score={state.stars}
+                      onChange={onStarChange}
+                      size={40}
+                    />
+                  </div>
+                </Grow>
+              </Grid>
+            )}
 
             {/* Hotels grid */}
             <Grid
@@ -909,39 +904,41 @@ export function Hotels() {
             >
               <Grid container>
                 {/* Sort by and filter button */}
-                <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
-                  <Grid item className={style.sortFilterGrid}>
-                    <Grid container>
-                      {/* Filter button */}
-                      <Grid item className={style.filterButtonGrid}>
-                        <Grid container alignItems="center" style={{ height: "100%" }}>
-                          <CustomButton
-                            icon={faFilter}
-                            backgroundColor={Colors.PURPLE}
-                            style={{ paddingLeft: "10px", fontSize: "14px" }}
-                            onClick={() => setOpenDrawer(true)}
-                          >
-                            Filter
-                          </CustomButton>
+                {!loadingOnMount && (
+                  <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+                    <Grid item className={style.sortFilterGrid}>
+                      <Grid container>
+                        {/* Filter button */}
+                        <Grid item className={style.filterButtonGrid}>
+                          <Grid container alignItems="center" style={{ height: "100%" }}>
+                            <CustomButton
+                              icon={faFilter}
+                              backgroundColor={Colors.PURPLE}
+                              style={{ paddingLeft: "10px", fontSize: "14px" }}
+                              onClick={() => setOpenDrawer(true)}
+                            >
+                              Filter
+                            </CustomButton>
+                          </Grid>
+                        </Grid>
+
+                        {/* Sort and paging grid */}
+                        <Grid item className={style.sortGrid}>
+                          <SortPageSize
+                            pageSize={pageSize}
+                            pageSizeOptions={pageSizeOptions}
+                            sortOption={sortOption}
+                            sortOptions={sortOptions}
+                            onPageSizeChange={(value) => onPageSizeChange(value)}
+                            onSortOptionChange={(e) =>
+                              onSortOptionChange(e.target.value as string)
+                            }
+                          />
                         </Grid>
                       </Grid>
-
-                      {/* Sort and paging grid */}
-                      <Grid item className={style.sortGrid}>
-                        <SortPageSize
-                          pageSize={pageSize}
-                          pageSizeOptions={pageSizeOptions}
-                          sortOption={sortOption}
-                          sortOptions={sortOptions}
-                          onPageSizeChange={(value) => onPageSizeChange(value)}
-                          onSortOptionChange={(e) =>
-                            onSortOptionChange(e.target.value as string)
-                          }
-                        />
-                      </Grid>
                     </Grid>
-                  </Grid>
-                </Grow>
+                  </Grow>
+                )}
 
                 {/* Hotel cards */}
                 <Grid item style={{ margin: "auto" }}>

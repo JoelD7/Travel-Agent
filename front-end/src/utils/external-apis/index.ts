@@ -6,6 +6,7 @@ export * from "./backend";
 export * from "./avis-apis";
 export * from "./yelp-apis";
 export * from "./firebase";
+export * from "./hotelbeds-apis";
 
 /**
  * To use Google Places API and HotelBeds API on the client side, a proxy is required to add the

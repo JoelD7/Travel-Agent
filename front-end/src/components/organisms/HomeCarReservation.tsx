@@ -182,7 +182,7 @@ export default function HomeCarReservation() {
                   muiDateFormatter(date, invalidLabel, "date")
                 }
                 className={style.datepicker}
-                minDate={new Date()}
+                minDate={carReducer.carSearch.pickup_date}
                 format="dd MMM., yyyy  hh:mm a"
                 onChange={(d) => onDateChange(d, "dropoff_date")}
               />

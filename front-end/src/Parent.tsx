@@ -55,7 +55,7 @@ export function Parent({ children }: ParentProps) {
           dispatch(setLoginReferrer(curPathname));
 
           if (curPathname !== Routes.SIGNUP) {
-            history.push(Routes.LOGIN);
+            // history.push(Routes.LOGIN);
           }
         }
 

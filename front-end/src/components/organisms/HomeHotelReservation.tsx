@@ -64,6 +64,14 @@ export default function HomeHotelReservation() {
           color: Colors.BLUE,
         },
       },
+      MuiListItem: {
+        button: {
+          "&:hover": {
+            borderBottom: "0px solid white",
+            backgroundColor: "rgb(0 0 0 / 12%)",
+          },
+        },
+      },
       //@ts-ignore
       MuiPickersToolbar: {
         toolbar: {
@@ -117,9 +125,9 @@ export default function HomeHotelReservation() {
   const [hotel, setHotel] = useState<HotelType>({
     checkIn: new Date(),
     checkOut: addDays(new Date(), 2),
-    adults: 0,
+    adults: 2,
     children: 0,
-    rooms: 0,
+    rooms: 1,
   });
 
   const hotelReservationParams = [
@@ -198,6 +206,7 @@ export default function HomeHotelReservation() {
       </div>
 
       <Grid container className={style.reservationParamsGrid} spacing={2}>
+        {/* Dates */}
         <ThemeProvider theme={theme}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid item className={style.datepickerItemGrid}>
@@ -222,7 +231,7 @@ export default function HomeHotelReservation() {
                   muiDateFormatter(date, invalidLabel, "date")
                 }
                 className={style.datepicker}
-                minDate={new Date()}
+                minDate={addDays(hotel.checkIn, 1)}
                 format="dd MMM., yyyy"
                 onChange={(d) => onDateChange(d, "checkOut")}
               />

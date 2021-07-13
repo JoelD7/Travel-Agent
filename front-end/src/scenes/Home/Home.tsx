@@ -112,6 +112,7 @@ export function Home() {
   const openRequiredFieldSnack = useSelector(selectOpenRequiredFieldSnack);
   const history = useHistory();
   let batchedActions: AnyAction[] = [];
+  console.log('home')
 
   const popularDestinations: PopularDestination[] = [
     {
@@ -441,6 +442,7 @@ export function Home() {
                   <CustomButton
                     backgroundColor={Colors.GREEN}
                     style={styles.style_createTripButton}
+                    onClick={() => history.push(Routes.CREATE_TRIP)}
                   >
                     Create trip
                   </CustomButton>

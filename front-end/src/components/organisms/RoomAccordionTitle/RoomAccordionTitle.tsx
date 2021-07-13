@@ -40,6 +40,7 @@ import {
   selectHotelReservationParams,
   selectHotelRsv,
   setHotelRsv,
+  selectIsAuthenticated,
 } from "../../../utils";
 import { CustomButton, IconText, Text } from "../../atoms";
 
@@ -51,7 +52,7 @@ interface RoomAccordionTitle {
 export function RoomAccordionTitle({ room, totalRoomCost }: RoomAccordionTitle) {
   const hotel: HotelBooking | undefined = useSelector(selectHotelDetail);
   const reservationParams: HotelBookingParams = useSelector(selectHotelReservationParams);
-
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
 
   let image: string = getRoomImage(room);
@@ -156,9 +157,6 @@ export function RoomAccordionTitle({ room, totalRoomCost }: RoomAccordionTitle) 
 
   const style = accordionTitleStyles();
   const [openDialog, setOpenDialog] = useState(false);
-
-  // const [totalRoomCost, setTotalRoomCost] = useState<number>(0);
-
   const [roomsToBookLabel, setRoomsToBookLabel] = useState<string>("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -337,35 +335,39 @@ export function RoomAccordionTitle({ room, totalRoomCost }: RoomAccordionTitle) 
             </Grid>
 
             {/* Booked button */}
-            {isRoomBooked() ? (
+            {isAuthenticated && (
               <>
-                <IconText
-                  icon={faCheck}
-                  backgroundColor={Colors.GREEN}
-                  iconColor={"white"}
-                >
-                  Room booked
-                </IconText>
-                <CustomButton
-                  rounded
-                  style={{ marginLeft: "5px", boxShadow: Shadow.LIGHT3D }}
-                  onClick={() => removeRoomFromReservation()}
-                  backgroundColor={Colors.ORANGE}
-                >
-                  Change board
-                </CustomButton>
-              </>
-            ) : (
-              <>
-                {!areAllRoomsToBookBooked() && (
-                  <CustomButton
-                    rounded
-                    style={{ marginLeft: "5px", boxShadow: Shadow.LIGHT3D }}
-                    onClick={() => addRoomToReservation()}
-                    backgroundColor={Colors.PURPLE}
-                  >
-                    Book room
-                  </CustomButton>
+                {isRoomBooked() ? (
+                  <>
+                    <IconText
+                      icon={faCheck}
+                      backgroundColor={Colors.GREEN}
+                      iconColor={"white"}
+                    >
+                      Room booked
+                    </IconText>
+                    <CustomButton
+                      rounded
+                      style={{ marginLeft: "5px", boxShadow: Shadow.LIGHT3D }}
+                      onClick={() => removeRoomFromReservation()}
+                      backgroundColor={Colors.ORANGE}
+                    >
+                      Change board
+                    </CustomButton>
+                  </>
+                ) : (
+                  <>
+                    {!areAllRoomsToBookBooked() && (
+                      <CustomButton
+                        rounded
+                        style={{ marginLeft: "5px", boxShadow: Shadow.LIGHT3D }}
+                        onClick={() => addRoomToReservation()}
+                        backgroundColor={Colors.PURPLE}
+                      >
+                        Book room
+                      </CustomButton>
+                    )}
+                  </>
                 )}
               </>
             )}

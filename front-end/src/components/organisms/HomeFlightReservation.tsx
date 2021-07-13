@@ -197,7 +197,7 @@ export default function HomeFlightReservation() {
                   muiDateFormatter(date, invalidLabel, "date")
                 }
                 className={style.datepicker}
-                minDate={new Date()}
+                minDate={addDays(flight.departure, 1)}
                 format="dd MMM., yyyy"
                 onChange={(d) => onDateChange(d, "return")}
               />
