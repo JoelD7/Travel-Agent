@@ -116,7 +116,7 @@ export function CarFilters() {
     <div>
       {/* Brands */}
       <div>
-        <Text component="h3" color={Colors.BLUE}>
+        <Text component="h4" color={Colors.BLUE}>
           Brands
         </Text>
         <FormGroup style={{ marginLeft: "10px" }}>
@@ -129,9 +129,13 @@ export function CarFilters() {
                 <Checkbox
                   checked={brand.checked}
                   classes={{ colorSecondary: style.colorSecondary }}
-                  icon={<FontAwesomeIcon icon={faSquare} />}
+                  icon={<FontAwesomeIcon size="xs" icon={faSquare} />}
                   checkedIcon={
-                    <FontAwesomeIcon icon={faCheckSquare} color={Colors.PURPLE} />
+                    <FontAwesomeIcon
+                      icon={faCheckSquare}
+                      size="xs"
+                      color={Colors.PURPLE}
+                    />
                   }
                   onChange={onBrandChange}
                   name={brand.name}
@@ -144,7 +148,7 @@ export function CarFilters() {
 
       {/* Transmission */}
       <div style={{ marginTop: "20px" }}>
-        <Text component="h3" color={Colors.BLUE}>
+        <Text component="h4" color={Colors.BLUE}>
           Transmission
         </Text>
         <RadioGroup
@@ -166,7 +170,7 @@ export function CarFilters() {
 
       {/* Features */}
       <div style={{ marginTop: "20px" }}>
-        <Text component="h3" color={Colors.BLUE}>
+        <Text component="h4" color={Colors.BLUE}>
           Features
         </Text>
         <FormGroup style={{ marginLeft: "10px" }}>
@@ -179,9 +183,13 @@ export function CarFilters() {
                 <Checkbox
                   checked={feature.checked}
                   classes={{ colorSecondary: style.colorSecondary }}
-                  icon={<FontAwesomeIcon icon={faSquare} />}
+                  icon={<FontAwesomeIcon size="xs" icon={faSquare} />}
                   checkedIcon={
-                    <FontAwesomeIcon icon={faCheckSquare} color={Colors.PURPLE} />
+                    <FontAwesomeIcon
+                      size="xs"
+                      icon={faCheckSquare}
+                      color={Colors.PURPLE}
+                    />
                   }
                   onChange={onFeatureChange}
                   name={feature.name}

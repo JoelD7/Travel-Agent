@@ -1,6 +1,6 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../../assets";
-import { Colors, Shadow } from "../../../styles";
+import { Colors } from "../../../styles";
 
 export const carFiltersStyles = makeStyles((theme: Theme) => ({
   colorSecondary: {
@@ -16,6 +16,7 @@ export const carFiltersStyles = makeStyles((theme: Theme) => ({
     },
   },
   formLabel: {
+    fontSize: 14,
     fontFamily: Font.Family,
   },
 }));

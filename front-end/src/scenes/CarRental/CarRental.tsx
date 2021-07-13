@@ -35,6 +35,7 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
+  AutocompleteType,
   AvisToken,
   Car,
   CarCheckbox,
@@ -60,10 +61,8 @@ import {
   setCarSearch,
   setCarSearchBrands,
   setCarSearchFeatures,
-  AutocompleteType,
   setCarSearchTransmission,
   setDestinationCity,
-  iataCodes,
   setFlightToAutocomplete,
 } from "../../utils";
 import { carRentalStyles } from "./carRental-styles";
@@ -221,8 +220,6 @@ export function CarRental() {
   );
 
   let carReducer: CarReducer;
-  const filteredArray = iataCodes.filter((code: any) => code.city === "New York");
-  console.log("filteredArray: ", filteredArray);
 
   useEffect(() => {
     carReducer = convertURLToCarReducer(query);
@@ -675,63 +672,79 @@ export function CarRental() {
       <Grid container className={style.pageContainer} justify="center">
         {/* Filter button */}
         <Grid item className={style.filterButtonGrid}>
-          <Grid container alignItems="center" style={{ height: "100%" }}>
-            <CustomButton
-              icon={faFilter}
-              backgroundColor={Colors.GREEN}
-              style={{ paddingLeft: "10px", fontSize: "14px" }}
-              onClick={() => setOpenDrawer(true)}
-            >
-              Filter
-            </CustomButton>
-          </Grid>
+          {!loadingOnMount && (
+            <Grid container alignItems="center" style={{ height: "100%" }}>
+              <CustomButton
+                icon={faFilter}
+                backgroundColor={Colors.GREEN}
+                style={{ paddingLeft: "10px", fontSize: "14px" }}
+                onClick={() => setOpenDrawer(true)}
+              >
+                Filter
+              </CustomButton>
+            </Grid>
+          )}
         </Grid>
 
         {/* Sort */}
-        <Grow in={true} mountOnEnter style={{ transformOrigin: "0 0 0" }} timeout={1000}>
-          <Grid item className={style.sortGrid}>
-            <Grid container className={style.gridContainer}>
-              <Grid container className={style.sortContainer}>
-                <Text
-                  bold
-                  style={{ alignSelf: "end", margin: "auto 0px" }}
-                  color={Colors.BLUE}
-                >
-                  Sort by
-                </Text>
-
-                <FormControl className={style.sortFormControl}>
-                  <Select
-                    value={sortOption}
-                    variant="outlined"
-                    classes={{ icon: style.selectIcon }}
-                    className={style.select}
-                    onChange={onSortOptionChange}
+        {!loadingOnMount && (
+          <Grow
+            in={true}
+            mountOnEnter
+            style={{ transformOrigin: "0 0 0" }}
+            timeout={1000}
+          >
+            <Grid item className={style.sortGrid}>
+              <Grid container className={style.gridContainer}>
+                <Grid container className={style.sortContainer}>
+                  <Text
+                    bold
+                    style={{ alignSelf: "end", margin: "auto 0px" }}
+                    color={Colors.BLUE}
                   >
-                    {sortOptions.map((option, i) => (
-                      <MenuItem
-                        classes={{ root: style.menuItemSelect }}
-                        key={i}
-                        value={option}
-                      >
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                    Sort by
+                  </Text>
+
+                  <FormControl className={style.sortFormControl}>
+                    <Select
+                      value={sortOption}
+                      variant="outlined"
+                      classes={{ icon: style.selectIcon }}
+                      className={style.select}
+                      onChange={onSortOptionChange}
+                    >
+                      {sortOptions.map((option, i) => (
+                        <MenuItem
+                          classes={{ root: style.menuItemSelect }}
+                          key={i}
+                          value={option}
+                        >
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Grow>
+          </Grow>
+        )}
 
         {/* Filters */}
-        <Grow in={true} mountOnEnter style={{ transformOrigin: "0 0 0" }} timeout={1000}>
-          <Grid item className={style.filterGrid}>
-            <div className={style.filterContainer}>
-              <CarFilters />
-            </div>
-          </Grid>
-        </Grow>
+        {!loadingOnMount && (
+          <Grow
+            in={true}
+            mountOnEnter
+            style={{ transformOrigin: "0 0 0" }}
+            timeout={1000}
+          >
+            <Grid item className={style.filterGrid}>
+              <div className={style.filterContainer}>
+                <CarFilters />
+              </div>
+            </Grid>
+          </Grow>
+        )}
 
         {/* Cars cards */}
         <Grid item className={style.carsGrid}>

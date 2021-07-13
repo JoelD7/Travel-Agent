@@ -135,7 +135,7 @@ export const thingsToDoStyles = makeStyles((theme: Theme) => ({
   },
   pageContentContainer: {
     width: "80%",
-    zIndex: 1,
+    zIndex: 0,
     margin: "25px auto 150px auto",
     position: "relative",
 

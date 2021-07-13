@@ -58,6 +58,7 @@ export function Restaurant_List() {
   let defaultCuisines: RestaurantCuisine[] = useSelector(selectRestaurantCuisines);
   const totalRestaurants: number = useSelector(selectTotalRestaurants);
   const cuisines: RestaurantCuisine[] = getCuisines();
+  const loading: boolean = useSelector(selectLoadingRestaurants);
 
   const [deliveryRestaurants, setDeliveryRestaurants] = useState<RestaurantSearch[]>(
     filterByFeature("delivery", restaurants)
@@ -71,6 +72,7 @@ export function Restaurant_List() {
   const [noRestaurants, setNoRestaurants] = useState(false);
   const [page, setPage] = useState<number>(getPage());
   const [pageSize, setPageSize] = useState<number>(getPageSize());
+  const [loadingOnMount, setLoadingOnMount] = useState(true);
   const pageSizeOptions = [20, 30, 40];
 
   const resFilterParams: RestaurantFilterParams = useSelector(
@@ -82,8 +84,6 @@ export function Restaurant_List() {
    * to improve performance.
    */
   let batchedActionsOnFirstRender: AnyAction[] = [];
-
-  const loading: boolean = useSelector(selectLoadingRestaurants);
 
   const topRestaurantAnchorEl = useRef(null);
   const topRestaurantId = "topRestaurantId";
@@ -206,6 +206,7 @@ export function Restaurant_List() {
         dispatch(setTotalRestaurants(resTotal > 1000 ? 1000 : resTotal));
 
         setRestaurantsDependencies();
+        setLoadingOnMount(false);
 
         if (restaurantsRes.length === 0) {
           setNoRestaurants(true);
@@ -422,26 +423,28 @@ export function Restaurant_List() {
 
         <Grid container spacing={2} className={style.pageContentContainer}>
           {/* Filters */}
-          <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
-            <>
-              <Grid item className={style.filterGrid}>
-                <RestaurantFilters
-                  updateURL={updateURL}
-                  setPage={setPage}
-                  loadAllRestaurants={loadAllRestaurants}
-                />
-              </Grid>
+          {!loadingOnMount && (
+            <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+              <>
+                <Grid item className={style.filterGrid}>
+                  <RestaurantFilters
+                    updateURL={updateURL}
+                    setPage={setPage}
+                    loadAllRestaurants={loadAllRestaurants}
+                  />
+                </Grid>
 
-              {/* Filter button */}
-              <Grid item className={style.filterButtonGrid}>
-                <RestaurantFilterDrawer
-                  updateURL={updateURL}
-                  setPage={setPage}
-                  loadAllRestaurants={loadAllRestaurants}
-                />
-              </Grid>
-            </>
-          </Grow>
+                {/* Filter button */}
+                <Grid item className={style.filterButtonGrid}>
+                  <RestaurantFilterDrawer
+                    updateURL={updateURL}
+                    setPage={setPage}
+                    loadAllRestaurants={loadAllRestaurants}
+                  />
+                </Grid>
+              </>
+            </Grow>
+          )}
 
           {/* Restaurants */}
           <Grid item className={style.restaurantsGrid}>
@@ -493,13 +496,15 @@ export function Restaurant_List() {
 
                 <Grid container className={style.restaurantCardContainer}>
                   <Grid container style={{ marginTop: "15px" }}>
-                    <SortPageSize
-                      includeSort={false}
-                      pageSize={pageSize}
-                      className={style.topSorter}
-                      pageSizeOptions={pageSizeOptions}
-                      onPageSizeChange={(value) => onPageSizeChange(value)}
-                    />
+                    {!loadingOnMount && (
+                      <SortPageSize
+                        includeSort={false}
+                        pageSize={pageSize}
+                        className={style.topSorter}
+                        pageSizeOptions={pageSizeOptions}
+                        onPageSizeChange={(value) => onPageSizeChange(value)}
+                      />
+                    )}
 
                     {!loading && (
                       <Pagination

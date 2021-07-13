@@ -38,6 +38,7 @@ export const restaurantListStyles = makeStyles((theme: Theme) => ({
   },
   restaurantsGrid: {
     padding: "15px",
+    margin: "auto",
     width: "77%",
     [theme.breakpoints.down(1040)]: {
       width: "100%",
