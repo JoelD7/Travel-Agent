@@ -159,10 +159,30 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logoutUser(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        removePersonUuidCookie(request, response);
 
         sessionRegistry.removeSessionInformation(request.getSession().getId());
         rememberMeService.logout(request, response, authentication);
         new SecurityContextLogoutHandler().logout(request, response, authentication);
+    }
+
+    private void removePersonUuidCookie(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getCookies() != null) {
+            Cookie personUuidCookie = Stream.of(request.getCookies())
+                    .filter(cookie -> cookie.getName().equals(CookieName.PERSON_UUID.toString()))
+                    .findFirst()
+                    .orElse(null);
+
+            if (isCookiePresent(personUuidCookie)) {
+                String value = personUuidCookie.getValue();
+
+                personUuidCookie.setValue(value);
+                personUuidCookie.setMaxAge(0);
+                personUuidCookie.setDomain("localhost");
+                personUuidCookie.setPath("/");
+                response.addCookie(personUuidCookie);
+            }
+        }
     }
 
 }

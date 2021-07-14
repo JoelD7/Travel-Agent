@@ -29,8 +29,8 @@ export const restaurantDetailsStyles = makeStyles((theme: Theme) => ({
   detailsContainer: {
     borderRadius: "5px",
     padding: "15px",
-    backgroundColor: Colors.BLUE,
-    boxShadow: Shadow.LIGHT,
+    backgroundColor: "white",
+    boxShadow: Shadow.LIGHTER3D,
   },
   imageGrid: {
     width: "58%",

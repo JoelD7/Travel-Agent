@@ -39,6 +39,7 @@ import {
   selectUserTrips,
   Trip,
   TripEvent,
+  selectIsAuthenticated,
   tripEventPlaceholder,
 } from "../../utils";
 import { fetchRestaurant } from "../../utils/external-apis/yelp-apis";
@@ -47,11 +48,9 @@ import { restaurantDetailsStyles } from "./restaurantDetails-styles";
 export function RestaurantDetails() {
   const style = restaurantDetailsStyles();
   const { id } = useParams<any>();
+
   const [loading, setLoading] = useState<boolean>(true);
-
   const [restaurant, setRestaurant] = useState<Restaurant>();
-  const amenities: string = getRestaurantTransactions(restaurant);
-
   const [tripAnchor, setTripAnchor] = useState<HTMLButtonElement | null>(null);
   const [openPopover, setOpenPopover] = useState(false);
   const [openSnack, setOpenSnack] = useState(false);
@@ -59,6 +58,9 @@ export function RestaurantDetails() {
   const [removedSnackText, setRemovedSnackText] = useState("");
 
   const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
+
+  const amenities: string = getRestaurantTransactions(restaurant);
 
   useEffect(() => {
     fetchRestaurant(id)
@@ -157,33 +159,35 @@ export function RestaurantDetails() {
                     <IconText text={restaurant.display_phone} icon={faPhone} />
 
                     <Grid item className={style.tripButtonGrid}>
-                      <Grid container>
-                        {isRestaurantInAnyTrip(restaurant) ? (
-                          <CustomButton
-                            style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
-                            onClick={() => deleteFromTrip()}
-                            backgroundColor={Colors.RED}
-                            rounded
-                          >
-                            Delete from trip
-                          </CustomButton>
-                        ) : (
-                          <CustomButton
-                            style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
-                            onClick={(e) => onIncludeTripClick(e)}
-                            backgroundColor={Colors.GREEN}
-                            rounded
-                          >
-                            Include in trip
-                          </CustomButton>
-                        )}
+                      {isAuthenticated && (
+                        <Grid container>
+                          {isRestaurantInAnyTrip(restaurant) ? (
+                            <CustomButton
+                              style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
+                              onClick={() => deleteFromTrip()}
+                              backgroundColor={Colors.RED}
+                              rounded
+                            >
+                              Delete from trip
+                            </CustomButton>
+                          ) : (
+                            <CustomButton
+                              style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
+                              onClick={(e) => onIncludeTripClick(e)}
+                              backgroundColor={Colors.GREEN}
+                              rounded
+                            >
+                              Include in trip
+                            </CustomButton>
+                          )}
 
-                        <AddFavoritesButton
-                          style={{ margin: "auto 0px auto 10px" }}
-                          type={FavoriteTypes.RESTAURANT}
-                          restaurant={restaurant}
-                        />
-                      </Grid>
+                          <AddFavoritesButton
+                            style={{ margin: "auto 0px auto 10px" }}
+                            type={FavoriteTypes.RESTAURANT}
+                            restaurant={restaurant}
+                          />
+                        </Grid>
+                      )}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -203,7 +207,7 @@ export function RestaurantDetails() {
                 <div className={style.detailsContainer}>
                   <Text
                     bold
-                    color="white"
+                    color={Colors.BLUE}
                     component="h3"
                     style={{ marginBottom: "15px" }}
                   >
@@ -215,13 +219,13 @@ export function RestaurantDetails() {
                     <Text
                       bold
                       style={{ marginBottom: "7px" }}
-                      color="white"
+                      color={Colors.BLUE}
                       component="h4"
                     >
                       Cuisines
                     </Text>
                     <IconText
-                      textColor="white"
+                      textColor={Colors.BLUE}
                       fontSize={15}
                       icon={faUtensils}
                       style={{ marginBottom: "20px" }}
@@ -235,7 +239,7 @@ export function RestaurantDetails() {
                     <Text
                       bold
                       style={{ marginBottom: "7px" }}
-                      color="white"
+                      color={Colors.BLUE}
                       component="h4"
                     >
                       Timings
@@ -243,7 +247,7 @@ export function RestaurantDetails() {
                     {getRestaurantHours(restaurant).map((timing) => (
                       <IconText
                         key={timing}
-                        textColor="white"
+                        textColor={Colors.BLUE}
                         fontSize={15}
                         icon={faClock}
                         style={{ marginBottom: "5px" }}
@@ -258,19 +262,19 @@ export function RestaurantDetails() {
                     <Text
                       bold
                       style={{ margin: "20px 0px 7px 0px" }}
-                      color="white"
+                      color={Colors.BLUE}
                       component="h4"
                     >
                       Menu
                     </Text>
                     <IconText
-                      textColor="white"
+                      textColor={Colors.BLUE}
                       fontSize={15}
                       icon={faUtensils}
                       style={{ marginBottom: "20px" }}
                     >
                       <a
-                        style={{ color: "white", fontSize: "15px" }}
+                        style={{ color: Colors.BLUE, fontSize: "15px" }}
                         href={restaurant.url}
                       >
                         Click here
@@ -283,19 +287,19 @@ export function RestaurantDetails() {
                     <Text
                       bold
                       style={{ marginBottom: "7px" }}
-                      color="white"
+                      color={Colors.BLUE}
                       component="h4"
                     >
                       Website
                     </Text>
                     <IconText
-                      textColor="white"
+                      textColor={Colors.BLUE}
                       fontSize={15}
                       icon={faGlobe}
                       style={{ marginBottom: "20px" }}
                     >
                       <a
-                        style={{ color: "white", fontSize: "15px" }}
+                        style={{ color: Colors.BLUE, fontSize: "15px" }}
                         href={restaurant.url}
                       >
                         Click here
@@ -309,13 +313,13 @@ export function RestaurantDetails() {
                       <Text
                         bold
                         style={{ marginBottom: "7px" }}
-                        color="white"
+                        color={Colors.BLUE}
                         component="h4"
                       >
                         Amenities
                       </Text>
                       <IconText
-                        textColor="white"
+                        textColor={Colors.BLUE}
                         fontSize={15}
                         icon={faStar}
                         style={{ marginBottom: "20px" }}

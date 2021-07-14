@@ -12,7 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Avatar,
-  createMuiTheme,
+  createTheme,
   Divider,
   Drawer,
   List,
@@ -39,9 +39,9 @@ import {
   selectLastTrip,
   selectPerson,
   setIsAuthenticated,
+  setLogout,
   setPerson,
   Trip,
-  setLogout,
 } from "../../../utils";
 import { DrawerOptions } from "../../../utils/types/drawerOption-types";
 import { CustomButton } from "../../atoms";
@@ -65,7 +65,7 @@ export function NavDrawer({ open, onClose }: NavDrawer) {
   const person: Person | undefined = useSelector(selectPerson);
   const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
 
-  const theme = createMuiTheme({
+  const theme = createTheme({
     overrides: {
       MuiTypography: {
         body1: {

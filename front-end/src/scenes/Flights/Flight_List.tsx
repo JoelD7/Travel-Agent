@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  createMuiTheme,
+  createTheme,
   Divider,
   Drawer,
   FormControl,
@@ -98,7 +98,7 @@ interface FlightSearchFiltersProps {
 export function Flight_List() {
   const style = flightListStyles();
 
-  const theme = createMuiTheme({
+  const theme = createTheme({
     overrides: {
       MuiMenuItem: {
         root: {
@@ -173,10 +173,15 @@ export function Flight_List() {
     },
   });
 
+  const location = useLocation();
+
+  const query = useQuery();
+
+  const urlParams: { [index: string]: string } = getURLParamsAsKVP();
+
   const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
-
   const flightType: FlightType = useSelector(selectFlightType);
 
   const [state, setState] = useState<FlightSearchParams>({
@@ -207,33 +212,6 @@ export function Flight_List() {
   const [allFlights, setAllFlights] = useState<Flight[]>([]);
   const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
   const [occupancyParamsChanged, setOccupancyParamsChanged] = useState(false);
-
-  const dispatch = useDispatch();
-
-  const passengersParams = [
-    {
-      variable: "adults",
-      icon: faUsers,
-      label: "Adults",
-    },
-    {
-      variable: "children",
-      icon: faChild,
-      label: "Children",
-    },
-    {
-      variable: "infants",
-      icon: faBaby,
-      label: "Infants",
-    },
-  ];
-
-  const location = useLocation();
-
-  const query = useQuery();
-
-  const urlParams: { [index: string]: string } = getURLParamsAsKVP();
-
   const [sortOptions, setSortOptions] = useState<string[]>(
     flightType === FlightTypes.ROUND
       ? [
@@ -261,13 +239,31 @@ export function Flight_List() {
           "Latest outbound arrival",
         ]
   );
-
   const [sortOption, setSortOption] = useState<string>(getSortOption());
-
   const [page, setPage] = useState<number>(getPage());
   const [pageSize, setPageSize] = useState<number>(getPageSize());
   const pageSizeOptions = [20, 30, 40];
   const [isFirstRender, setIsFirstRender] = useState(true);
+
+  const dispatch = useDispatch();
+
+  const passengersParams = [
+    {
+      variable: "adults",
+      icon: faUsers,
+      label: "Adults",
+    },
+    {
+      variable: "children",
+      icon: faChild,
+      label: "Children",
+    },
+    {
+      variable: "infants",
+      icon: faBaby,
+      label: "Infants",
+    },
+  ];
 
   const sortRef = useRef(null);
   const sortRefId = "sortRef";

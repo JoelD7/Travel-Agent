@@ -412,28 +412,32 @@ export function FlightDetails({
           </Grid>
         </Grid>
 
-        {/* Include in trip */}
-        {!isFlightIncludedInAnyTrip() && isAuthenticated && (
-          <CustomButton
-            style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
-            onClick={(e) => onIncludeTripClick(e)}
-            backgroundColor={Colors.GREEN}
-            rounded
-          >
-            Include in trip
-          </CustomButton>
-        )}
+        {isAuthenticated && userTrips && (
+          <>
+            {/* Include in trip */}
+            {!isFlightIncludedInAnyTrip() && userTrips.length > 0 && (
+              <CustomButton
+                style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
+                onClick={(e) => onIncludeTripClick(e)}
+                backgroundColor={Colors.GREEN}
+                rounded
+              >
+                Include in trip
+              </CustomButton>
+            )}
 
-        {/* Delete from trip */}
-        {isFlightIncludedInAnyTrip() && isAuthenticated && (
-          <CustomButton
-            rounded
-            backgroundColor={Colors.RED}
-            style={{ boxShadow: Shadow.LIGHT3D, fontSize: 14 }}
-            onClick={() => deleteFlightFromTrip()}
-          >
-            Delete from trip
-          </CustomButton>
+            {/* Delete from trip */}
+            {isFlightIncludedInAnyTrip() && (
+              <CustomButton
+                rounded
+                backgroundColor={Colors.RED}
+                style={{ boxShadow: Shadow.LIGHT3D, fontSize: 14 }}
+                onClick={() => deleteFlightFromTrip()}
+              >
+                Delete from trip
+              </CustomButton>
+            )}
+          </>
         )}
 
         <FlightCard itinerary={0} />

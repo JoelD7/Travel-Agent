@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { CloudImage } from "./assets";
 import {
   AuthStatus,
@@ -24,7 +24,6 @@ interface ParentProps {
 
 export function Parent({ children }: ParentProps) {
   const dispatch = useAppDispatch();
-  const history = useHistory();
   const location = useLocation();
   const curPathname = location.pathname;
   const person: Person | undefined = useSelector(selectPerson);
