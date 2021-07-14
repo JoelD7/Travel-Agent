@@ -79,12 +79,6 @@ export function Home() {
 
   const services = [
     {
-      name: "Hotel",
-      prop: "hotel",
-      route: "",
-      icon: faConciergeBell,
-    },
-    {
       name: "Flight",
       prop: "flight",
       route: "",
@@ -96,23 +90,28 @@ export function Home() {
       route: "",
       icon: faCar,
     },
+    {
+      name: "Hotel",
+      prop: "hotel",
+      route: "",
+      icon: faConciergeBell,
+    },
   ];
 
   const [selectedService, setSelectedService] = useState<ServiceIconType>({
-    hotel: true,
-    flight: false,
+    flight: true,
     carRental: false,
+    hotel: false,
   });
+  const [index, setIndex] = useState(0);
+
+  const carSearch: CarSearch = useSelector(selectCarSearch);
+  const openRequiredFieldSnack = useSelector(selectOpenRequiredFieldSnack);
 
   const dispatch = useDispatch();
-
-  const [index, setIndex] = useState(0);
-  const carSearch: CarSearch = useSelector(selectCarSearch);
-
-  const openRequiredFieldSnack = useSelector(selectOpenRequiredFieldSnack);
   const history = useHistory();
+
   let batchedActions: AnyAction[] = [];
-  console.log('home')
 
   const popularDestinations: PopularDestination[] = [
     {
@@ -353,9 +352,9 @@ export function Home() {
                     index={index}
                     onChangeIndex={(i) => onSlideIndexChange(i)}
                   >
-                    <HomeHotelReservation />
                     <HomeFlightReservation />
                     <HomeCarReservation />
+                    <HomeHotelReservation />
                   </SwipeableViews>
                 </div>
               </div>

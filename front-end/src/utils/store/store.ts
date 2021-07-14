@@ -184,7 +184,7 @@ export const selectCarSearchTransmission = (state: RootState) =>
   state.carSlice.transmission;
 //#endregion
 
-//#region
+//#region Auth
 export const selectPerson = (state: RootState) => state.authSlice.person;
 
 export const selectIsAuthenticated = (state: RootState) =>

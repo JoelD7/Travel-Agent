@@ -2,7 +2,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { faBaby, faChild, faStar, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  createMuiTheme,
+  createTheme,
   FormControl,
   Grid,
   Grow,
@@ -29,7 +29,6 @@ import {
   Footer,
   IataAutocomplete,
   Navbar,
-  NotAvailableCard,
   PageSubtitle,
   ProgressCircle,
   ServicesToolbar,
@@ -37,42 +36,36 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
-  fetchCityImage,
+  AutocompleteType,
+  fetchGreatFlightDeals,
+  FlightClass,
+  FlightSearch,
+  FlightSearchParams,
+  FlightTypes,
+  getFlightClassLabel,
   getFlightSearchURL,
-  getFlightClassForAPI,
-  isCityImageUpdated,
+  IATALocation,
   isDateAfterOrEqual,
   muiDateFormatter,
-  selectCityImage,
-  FlightClass,
-  selectDestinationCity,
   selectFlightFromAutocomplete,
   selectFlightSearchParams,
   selectFlightToAutocomplete,
-  getFlightClassLabel,
   selectFlightType,
-  AutocompleteType,
-  setCityImage,
-  setFlightType,
-  FlightSearch,
+  selectOriginCity,
   setFlightAdults,
   setFlightChildren,
   setFlightClass,
-  setFlightDeparture,
+  setFlightDepartureDate,
   setFlightInfants,
-  setFlightReturn,
-  CityImage,
-  FlightTypes,
-  fetchGreatFlightDeals,
-  FlightSearchParams,
-  IATALocation,
+  setFlightReturnDate,
+  setFlightType,
 } from "../../utils";
 import { flightStyles } from "./flights-styles";
 
 export function Flights_Home() {
   const style = flightStyles();
 
-  const theme = createMuiTheme({
+  const theme = createTheme({
     overrides: {
       MuiMenuItem: {
         root: {
@@ -150,7 +143,7 @@ export function Flights_Home() {
     },
   });
 
-  const reservationParamsTheme = createMuiTheme({
+  const reservationParamsTheme = createTheme({
     overrides: {
       MuiInputBase: {
         root: {
@@ -216,8 +209,9 @@ export function Flights_Home() {
     },
     flightType: useSelector(selectFlightType),
   });
-
-  const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
+  const [deals, setDeals] = useState<FlightDeal[]>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
 
   const passengersParams = [
     {
@@ -237,25 +231,13 @@ export function Flights_Home() {
     },
   ];
 
-  const classes: FlightClassType[] = ["ECONOMY", "PREMIUM_ECONOMY", "BUSINESS", "FIRST"];
-
-  const [deals, setDeals] = useState<FlightDeal[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const destinationCity: IATALocation = useSelector(selectDestinationCity);
-  const cityImage: CityImage = useSelector(selectCityImage);
-
-  const [openRequiredFieldSnack, setOpenRequiredFieldSnack] = useState(false);
-
+  const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
+  const originCity: IATALocation = useSelector(selectOriginCity);
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
 
   useEffect(() => {
-    if (!isCityImageUpdated(destinationCity, cityImage)) {
-      getCityImage();
-    }
-
-    fetchGreatFlightDeals(destinationCity, flightSearch.departure)
+    fetchGreatFlightDeals(originCity, flightSearch.departure)
       .then((res) => {
         let deals = res.data.data;
         setDeals(deals);
@@ -264,15 +246,10 @@ export function Flights_Home() {
       .catch((error) => {
         if (invalidDestinationsError(error)) {
           setLoading(false);
+          setDeals([]);
         }
       });
   }, []);
-
-  function getCityImage() {
-    fetchCityImage(destinationCity.city).then((res) => {
-      dispatch(setCityImage({ city: destinationCity.city, image: String(res) }));
-    });
-  }
 
   function invalidDestinationsError(error: any) {
     return error.response && error.response.status === 500;
@@ -306,13 +283,13 @@ export function Flights_Home() {
     if (flightType === FlightTypes.ONE_WAY) {
       setState({ ...state, flightType: FlightTypes.ONE_WAY });
       dispatch(
-        batchActions([setFlightType(FlightTypes.ONE_WAY), setFlightReturn(undefined)])
+        batchActions([setFlightType(FlightTypes.ONE_WAY), setFlightReturnDate(undefined)])
       );
     } else {
       dispatch(
         batchActions([
           setFlightType(FlightTypes.ROUND),
-          setFlightReturn(addDays(flightSearch.departure, 1)),
+          setFlightReturnDate(addDays(flightSearch.departure, 1)),
         ])
       );
       setState({ ...state, flightType: FlightTypes.ROUND });
@@ -325,25 +302,21 @@ export function Flights_Home() {
         let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
 
         if (flightSearch.return && isDateAfterOrEqual(newDate, flightSearch.return)) {
-          dispatch(setFlightReturn(addDays(newDate, 1)));
+          dispatch(setFlightReturnDate(addDays(newDate, 1)));
         }
 
-        dispatch(setFlightDeparture(date));
+        dispatch(setFlightDepartureDate(date));
         break;
       case "return":
-        dispatch(setFlightReturn(date));
+        dispatch(setFlightReturnDate(date));
         break;
     }
-  }
-
-  function areNoDealsReturned(): boolean {
-    return !loading && deals.length === 0;
   }
 
   return (
     <div className={style.mainContainer}>
       <Helmet>
-        <title>{`Flights to ${destinationCity.city}`}</title>
+        <title>{`Flights from ${originCity.city}`}</title>
       </Helmet>
 
       <Navbar />
@@ -365,7 +338,7 @@ export function Flights_Home() {
           {/* Reservation Container */}
           <Grid container spacing={2} className={style.reservationContainer}>
             <Grid item xs={12}>
-              <Text component="h3">{`Find the best flight to ${destinationCity.city}`}</Text>
+              <Text component="h3">{`Find the best flights from ${originCity.city}`}</Text>
             </Grid>
 
             {/* Flight type toolbar */}
@@ -505,30 +478,23 @@ export function Flights_Home() {
         </Grid>
       </Grow>
 
-      <PageSubtitle label="Great deals" containerStyle={{ margin: "20px auto" }} />
-
-      {/* Loading animation */}
-      {loading && (
-        <Grid container justify="center">
-          <ProgressCircle />
-        </Grid>
-      )}
-
       {/* Deals */}
-      <Grid container className={style.dealsContainer}>
-        {deals.slice(0, 6).map((deal) => (
-          <CardDealFlight key={deal.links.flightOffers} deal={deal} animate />
-        ))}
-      </Grid>
+      {deals && deals.length > 0 && (
+        <>
+          <PageSubtitle label="Great deals" containerStyle={{ margin: "20px auto" }} />
 
-      {areNoDealsReturned() && (
-        <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
+          {/* Loading animation */}
+          {loading && (
+            <Grid container justify="center">
+              <ProgressCircle />
+            </Grid>
+          )}
           <Grid container className={style.dealsContainer}>
-            <NotAvailableCard title="Sorry!">
-              There are no deals available for these destinations.
-            </NotAvailableCard>
+            {deals.slice(0, 6).map((deal) => (
+              <CardDealFlight key={deal.links.flightOffers} deal={deal} animate />
+            ))}
           </Grid>
-        </Grow>
+        </>
       )}
 
       <Footer />

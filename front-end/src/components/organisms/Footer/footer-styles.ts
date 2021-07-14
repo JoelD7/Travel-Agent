@@ -87,6 +87,8 @@ export const footerStyles = makeStyles((theme: Theme) => ({
   },
   selectControl: {
     "& .MuiOutlinedInput-root": {
+      borderRadius: 4,
+
       "&:hover fieldset": {
         borderColor: `${Colors.GREEN_HOVER} !important`,
       },

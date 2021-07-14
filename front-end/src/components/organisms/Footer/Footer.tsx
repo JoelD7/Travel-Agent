@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Divider, FormControl, Grid, MenuItem, Select } from "@material-ui/core";
 import Axios from "axios";
 import { differenceInHours } from "date-fns";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoIcon } from "../../../assets";
@@ -16,7 +16,6 @@ import {
   getRestaurantsDefaultRoute,
   Routes,
   selectExchangeRate,
-  selectHotelReservationParams,
   selectUserCurrency,
   setEndCurrency,
   setExchangeRate,
@@ -26,8 +25,6 @@ import { footerStyles } from "./footer-styles";
 
 export function Footer() {
   const style = footerStyles();
-
-  const reservationParams = useSelector(selectHotelReservationParams);
 
   const bookLinks = [
     {
@@ -70,10 +67,8 @@ export function Footer() {
 
   const exchangeRate: ExchangeRate = useSelector(selectExchangeRate);
   const baseCurrencyStore: string = useSelector(selectUserCurrency);
-  const [currency, setCurrency] = useState<string>(baseCurrencyStore);
 
   const dispatch = useDispatch();
-  const firstRender = useRef(true);
 
   useEffect(() => {
     if (!areRatesUpdated()) {
@@ -114,7 +109,6 @@ export function Footer() {
     }>
   ) {
     let newCurrency = e.target.value as string;
-    setCurrency(newCurrency);
 
     dispatch(setEndCurrency(newCurrency));
     localStorage.setItem("userCurrency", newCurrency);

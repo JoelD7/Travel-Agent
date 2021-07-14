@@ -2,7 +2,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { faClock, faPlaneDeparture, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  createMuiTheme,
+  createTheme,
   FormControl,
   Grid,
   IconButton,
@@ -36,11 +36,13 @@ import {
   IATALocation,
   mapFlightToDomainType,
   muiDateFormatter,
+  Person,
   responseTripToDomainTrip,
   Routes,
   selectCarRsv,
   selectHotelReservationParams,
   selectHotelRsv,
+  selectPerson,
   selectUserTrips,
   setFlightDetail,
   Trip,
@@ -66,7 +68,7 @@ export function IncludeInTripPopover({
   setOpenPopover,
   setTripAnchor,
 }: IncludeInTripPopover) {
-  const theme = createMuiTheme({
+  const theme = createTheme({
     overrides: {
       MuiMenuItem: {
         root: {
@@ -200,6 +202,7 @@ export function IncludeInTripPopover({
   const [loadingButton, setLoadingButton] = useState(false);
 
   const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
+  const person: Person | undefined = useSelector(selectPerson);
   const hotelRsv: HotelReservation = useSelector(selectHotelRsv);
   const carRsv: CarRsv = useSelector(selectCarRsv);
   const hotelReservationParams: HotelBookingParams = useSelector(
@@ -216,10 +219,10 @@ export function IncludeInTripPopover({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (userTrips) {
+    if (userTrips && person) {
       if (userTrips.length === 0) {
         backend
-          .get("/trip/all")
+          .get(`/trip/all?personUuid=${person.uuid}`)
           .then((res: any) => {
             let tripsInResponse = res.data._embedded.tripList;
             let tripsBuffer = tripsInResponse.map((resTrip: any) =>

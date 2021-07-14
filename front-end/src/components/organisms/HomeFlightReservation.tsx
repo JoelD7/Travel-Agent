@@ -2,12 +2,13 @@ import DateFnsUtils from "@date-io/date-fns";
 import { faStar, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  createMuiTheme,
+  createTheme,
   FormControl,
   Grid,
   MenuItem,
   Select,
   ThemeProvider,
+  Toolbar,
 } from "@material-ui/core";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
@@ -15,31 +16,35 @@ import { addDays, parseISO } from "date-fns";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { batchActions } from "redux-batched-actions";
 import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 import { homeStyles } from "../../styles/Home/home-styles";
 import {
+  AutocompleteType,
+  FlightClass,
+  FlightSearch,
+  FlightTypes,
+  setFlightType,
+  getFlightClassLabel,
   getFlightSearchURL,
   isDateAfterOrEqual,
   muiDateFormatter,
   selectFlightFromAutocomplete,
-  FlightClass,
-  getFlightClassLabel,
   selectFlightSearchParams,
   selectFlightToAutocomplete,
-  AutocompleteType,
-  setOpenRequiredFieldSnack,
-  FlightSearch,
+  selectFlightType,
   setFlightAdults,
   setFlightClass,
-  setFlightDeparture,
-  setFlightReturn,
+  setFlightDepartureDate,
+  setFlightReturnDate,
+  setOpenRequiredFieldSnack,
 } from "../../utils";
 import { CustomButton } from "../atoms";
 import { IataAutocomplete } from "./IataAutocomplete/IataAutocomplete";
 
 export default function HomeFlightReservation() {
-  const theme = createMuiTheme({
+  const theme = createTheme({
     overrides: {
       MuiMenuItem: {
         root: {
@@ -118,13 +123,12 @@ export default function HomeFlightReservation() {
     },
   });
   const dispatch = useDispatch();
-
-  const flight: FlightSearch = useSelector(selectFlightSearchParams);
+  const history = useHistory();
 
   const flightFromAutocomplete = useSelector(selectFlightFromAutocomplete);
   const flightToAutocomplete = useSelector(selectFlightToAutocomplete);
-
-  const history = useHistory();
+  const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
+  const flightType: FlightType = useSelector(selectFlightType);
 
   const locationParms: { label: string; prop: "from" | "to" }[] = [
     {
@@ -136,10 +140,6 @@ export default function HomeFlightReservation() {
       prop: "to",
     },
   ];
-
-  const classes: FlightClassType[] = ["ECONOMY", "PREMIUM_ECONOMY", "BUSINESS", "FIRST"];
-
-  const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
 
   const style = homeStyles();
 
@@ -158,27 +158,70 @@ export default function HomeFlightReservation() {
         let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
 
         if (flightSearch.return && isDateAfterOrEqual(newDate, flightSearch.return)) {
-          dispatch(setFlightReturn(addDays(newDate, 1)));
+          dispatch(setFlightReturnDate(addDays(newDate, 1)));
         }
 
-        dispatch(setFlightDeparture(date));
+        dispatch(setFlightDepartureDate(date));
         break;
       case "return":
-        dispatch(setFlightReturn(date));
+        dispatch(setFlightReturnDate(date));
         break;
+    }
+  }
+
+  function onFlightTypeChange(flightType: string) {
+    if (flightType === FlightTypes.ONE_WAY) {
+      dispatch(
+        batchActions([setFlightType(FlightTypes.ONE_WAY), setFlightReturnDate(undefined)])
+      );
+    } else {
+      dispatch(
+        batchActions([
+          setFlightType(FlightTypes.ROUND),
+          setFlightReturnDate(addDays(flightSearch.departure, 1)),
+        ])
+      );
     }
   }
 
   return (
     <div>
       <Grid container className={style.reservationParamsGrid} spacing={2}>
+        {/* Flight type toolbar */}
+        <Grid item xs={12} style={{ padding: 0 }}>
+          <Toolbar classes={{ root: style.reservationOptionsToolbar }}>
+            <MenuItem
+              selected={flightType === FlightTypes.ROUND}
+              classes={{ root: style.menuItemRoot }}
+              onClick={() => onFlightTypeChange(FlightTypes.ROUND)}
+            >
+              Round-trip
+            </MenuItem>
+
+            <MenuItem
+              selected={flightType === FlightTypes.ONE_WAY}
+              classes={{ root: style.menuItemRoot }}
+              onClick={() => onFlightTypeChange(FlightTypes.ONE_WAY)}
+            >
+              One way
+            </MenuItem>
+          </Toolbar>
+        </Grid>
+
         <ThemeProvider theme={theme}>
           {/* Dates */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid item className={style.datepickerItemGridFlight}>
+            <Grid
+              item
+              className={
+                flightType === FlightTypes.ROUND
+                  ? style.datepickerItemGridFlight
+                  : style.datepickerItemGridFlightFull
+              }
+            >
               <h5 className={style.reservationParamText}>Departure</h5>
               <KeyboardDatePicker
-                value={flight.departure}
+                value={flightSearch.departure}
                 labelFunc={(date, invalidLabel) =>
                   muiDateFormatter(date, invalidLabel, "date")
                 }
@@ -189,19 +232,21 @@ export default function HomeFlightReservation() {
               />
             </Grid>
 
-            <Grid item className={style.datepickerItemGridFlight}>
-              <h5 className={style.reservationParamText}>Return</h5>
-              <KeyboardDatePicker
-                value={flight.return}
-                labelFunc={(date, invalidLabel) =>
-                  muiDateFormatter(date, invalidLabel, "date")
-                }
-                className={style.datepicker}
-                minDate={addDays(flight.departure, 1)}
-                format="dd MMM., yyyy"
-                onChange={(d) => onDateChange(d, "return")}
-              />
-            </Grid>
+            {flightType === FlightTypes.ROUND && (
+              <Grid item className={style.datepickerItemGridFlight}>
+                <h5 className={style.reservationParamText}>Return</h5>
+                <KeyboardDatePicker
+                  value={flightSearch.return}
+                  labelFunc={(date, invalidLabel) =>
+                    muiDateFormatter(date, invalidLabel, "date")
+                  }
+                  className={style.datepicker}
+                  minDate={addDays(flightSearch.departure, 1)}
+                  format="dd MMM., yyyy"
+                  onChange={(d) => onDateChange(d, "return")}
+                />
+              </Grid>
+            )}
           </MuiPickersUtilsProvider>
 
           {/* Locations */}
@@ -222,7 +267,7 @@ export default function HomeFlightReservation() {
 
             <FormControl style={{ width: "100%" }}>
               <Select
-                value={flight.adults}
+                value={flightSearch.adults}
                 variant="outlined"
                 className={style.select}
                 startAdornment={<FontAwesomeIcon icon={faUsers} color={Colors.BLUE} />}
@@ -242,7 +287,7 @@ export default function HomeFlightReservation() {
 
             <FormControl style={{ width: "100%" }}>
               <Select
-                value={flight.class}
+                value={flightSearch.class}
                 variant="outlined"
                 className={style.select}
                 startAdornment={<FontAwesomeIcon icon={faStar} color={Colors.BLUE} />}

@@ -76,11 +76,11 @@ import {
   setFlightAdults,
   setFlightChildren,
   setFlightClass,
-  setFlightDeparture,
+  setFlightDepartureDate,
   setFlightDictionaries,
   setFlightInfants,
   setFlightParams,
-  setFlightReturn,
+  setFlightReturnDate,
   setFlightType,
 } from "../../utils";
 import { flightListStyles } from "./flight-list-styles";
@@ -1108,13 +1108,13 @@ export function Flight_List() {
         let newDate: Date = date === null ? new Date() : parseISO(date.toISOString());
 
         if (flightSearch.return && isDateAfterOrEqual(newDate, flightSearch.return)) {
-          dispatch(setFlightReturn(addDays(newDate, 1)));
+          dispatch(setFlightReturnDate(addDays(newDate, 1)));
         }
 
-        dispatch(setFlightDeparture(date));
+        dispatch(setFlightDepartureDate(date));
         break;
       case "return":
-        dispatch(setFlightReturn(date));
+        dispatch(setFlightReturnDate(date));
         break;
     }
   }
@@ -1123,13 +1123,13 @@ export function Flight_List() {
     if (flightType === FlightTypes.ONE_WAY) {
       setState({ ...state, flightType: FlightTypes.ONE_WAY });
       dispatch(
-        batchActions([setFlightType(FlightTypes.ONE_WAY), setFlightReturn(undefined)])
+        batchActions([setFlightType(FlightTypes.ONE_WAY), setFlightReturnDate(undefined)])
       );
     } else {
       dispatch(
         batchActions([
           setFlightType(FlightTypes.ROUND),
-          setFlightReturn(addDays(flightSearch.departure, 1)),
+          setFlightReturnDate(addDays(flightSearch.departure, 1)),
         ])
       );
       setState({ ...state, flightType: FlightTypes.ROUND });

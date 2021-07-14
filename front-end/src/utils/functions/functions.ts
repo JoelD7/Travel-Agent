@@ -68,6 +68,10 @@ export function convertToUserCurrency(value: number, fromCurrency: string): numb
   const exchangeRate: ExchangeRate = store.getState().rootSlice.exchangeRate;
   const toCurrency: string = store.getState().rootSlice.userCurrency;
 
+  if (!fromCurrency) {
+    return value;
+  }
+
   // From USD to anything
   if (fromCurrency === DEFAULT_CURRENCY) {
     let convertedValue: number = value * exchangeRate.rates[toCurrency];

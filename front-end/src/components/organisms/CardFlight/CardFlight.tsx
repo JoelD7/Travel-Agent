@@ -379,7 +379,6 @@ const CardFlight = React.memo(function Component({
 
       <FlightDetails
         bookedFlight={bookedFlight}
-        isFlightInTrip={isFlightInTrip}
         onClose={() => setFlightDetailsModal(false)}
         open={flightDetailsModal}
       />

@@ -19,6 +19,7 @@ import { Alert } from "@material-ui/lab";
 import { format } from "date-fns";
 import React, { MouseEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 import { Font } from "../../assets";
 import { CustomButton, IconTP, IncludeInTripPopover, Text } from "../../components";
 import { Colors, Shadow } from "../../styles";
@@ -41,6 +42,7 @@ import {
   Person,
   responseTripToDomainTrip,
   selectFlightDetail,
+  selectIsAuthenticated,
   selectFlightDictionaries,
   selectFlightSearchParams,
   selectPerson,
@@ -49,6 +51,8 @@ import {
   Trip,
   TripEvent,
   tripEventPlaceholder,
+  Routes,
+  setLoginReferrer,
 } from "../../utils";
 import { flightDetailsStyles } from "./flightDetails-styles";
 
@@ -56,7 +60,6 @@ interface FlightDetails {
   open: boolean;
   onClose: () => void;
   bookedFlight?: boolean;
-  isFlightInTrip?: boolean;
 }
 
 interface FlightCard {
@@ -64,7 +67,6 @@ interface FlightCard {
 }
 
 export function FlightDetails({
-  isFlightInTrip: isFlightInTripProp,
   open,
   bookedFlight: bookedFlightProp,
   onClose,
@@ -72,8 +74,10 @@ export function FlightDetails({
   const style = flightDetailsStyles();
 
   const flightSearch: FlightSearch = useSelector(selectFlightSearchParams);
-
   const flight: Flight = useSelector(selectFlightDetail);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
+  const person: Person | undefined = useSelector(selectPerson);
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
 
   const passengers = getFlightPassengers();
 
@@ -90,9 +94,7 @@ export function FlightDetails({
   const [openPopover, setOpenPopover] = useState(false);
 
   const dispatch = useDispatch();
-
-  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
-  const person: Person | undefined = useSelector(selectPerson);
+  const location = useLocation();
 
   function getFlightPassengers() {
     let total: number = 0;
@@ -333,6 +335,10 @@ export function FlightDetails({
     return format(firstDate, "EEE, d/MMM");
   }
 
+  function onLoginClicked() {
+    dispatch(setLoginReferrer(location.pathname + location.search));
+  }
+
   return (
     <Dialog
       open={open}
@@ -407,7 +413,7 @@ export function FlightDetails({
         </Grid>
 
         {/* Include in trip */}
-        {!isFlightIncludedInAnyTrip() && (
+        {!isFlightIncludedInAnyTrip() && isAuthenticated && (
           <CustomButton
             style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
             onClick={(e) => onIncludeTripClick(e)}
@@ -419,7 +425,7 @@ export function FlightDetails({
         )}
 
         {/* Delete from trip */}
-        {isFlightIncludedInAnyTrip() && (
+        {isFlightIncludedInAnyTrip() && isAuthenticated && (
           <CustomButton
             rounded
             backgroundColor={Colors.RED}
@@ -440,7 +446,7 @@ export function FlightDetails({
               convertToUserCurrency(flight.price.total, flight.price.currency)
             )}`}</h2>
 
-            {!bookedFlight && !isFlightIncludedInAnyTrip() && (
+            {!bookedFlight && !isFlightIncludedInAnyTrip() && isAuthenticated && (
               <CustomButton
                 backgroundColor={Colors.GREEN}
                 style={{ boxShadow: Shadow.LIGHT3D }}
@@ -451,6 +457,24 @@ export function FlightDetails({
             )}
           </Grid>
         </Grid>
+
+        {/* Login message */}
+        {!isAuthenticated && (
+          <Grid item xs={12}>
+            <Divider style={{ marginBottom: 10 }} />
+
+            <Text color={Colors.BLUE} style={{ fontStyle: "italic" }}>
+              <Link
+                to={Routes.LOGIN}
+                onClick={() => onLoginClicked()}
+                style={{ color: Colors.BLUE, fontWeight: "bold" }}
+              >
+                Login
+              </Link>
+              {" to purchase this flight"}
+            </Text>
+          </Grid>
+        )}
       </Grid>
 
       <IncludeInTripPopover

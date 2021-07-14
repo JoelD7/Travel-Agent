@@ -38,9 +38,6 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     width: "100%",
     justifyContent: "center",
-    // [theme.breakpoints.down(1150)]: {
-    //   display: "none",
-    // },
   },
   datepicker: {
     backgroundColor: "white",
@@ -85,6 +82,12 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     marginTop: "5px",
     width: "50%",
   },
+  datepickerItemGridFlightFull: {
+    borderRadius: "20px",
+    margin: "auto",
+    width: "100%",
+  },
+
   drawerOpenButton: {
     display: "none",
     [theme.breakpoints.down(1000)]: {
@@ -149,6 +152,31 @@ export const homeStyles = makeStyles((theme: Theme) => ({
     },
     width: "60%",
     padding: "10px",
+  },
+  menuItemRoot: {
+    fontFamily: Font.Family,
+    borderBottom: `2px solid rgba(0,0,0,0)`,
+    marginRight: 5,
+    fontSize: 13,
+    color: Colors.BLUE,
+
+    "&.MuiListItem-root": {
+      "&.Mui-selected": {
+        backgroundColor: "rgba(0,0,0,0)",
+        borderBottom: `2px solid ${Colors.BLUE}`,
+      },
+    },
+    "&.MuiListItem-button": {
+      "&:hover": {
+        borderBottom: `2px solid ${Colors.BLUE}`,
+      },
+    },
+  },
+  reservationOptionsToolbar: {
+    display: "flex",
+    minHeight: "20px",
+    height: "40px",
+    paddingLeft: "0px",
   },
   reservationGrid: {
     [theme.breakpoints.down(1150)]: {

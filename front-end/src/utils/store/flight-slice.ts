@@ -29,7 +29,7 @@ const defaultDestinationCity: IATALocation = getDefaultCity("destinationCity");
 const initialState: FlightSearch = {
   departure: addDays(new Date(), 1),
   return: addDays(new Date(), 3),
-  flightType: FlightTypes.ONE_WAY,
+  flightType: FlightTypes.ROUND,
   flightListURL: `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${
     defaultDestinationCity.code
   }&destinationLocationCode=MUC&departureDate=${format(
@@ -60,11 +60,11 @@ const flightSlice = createSlice({
     setFlightParams(state, action: PayloadAction<FlightSearch>) {
       return { ...state, ...action.payload };
     },
-    setFlightDeparture(state, action: PayloadAction<MaterialUiPickersDate>) {
+    setFlightDepartureDate(state, action: PayloadAction<MaterialUiPickersDate>) {
       //@ts-ignore
       state.departure = new Date(action.payload.getTime());
     },
-    setFlightReturn(state, action: PayloadAction<MaterialUiPickersDate | undefined>) {
+    setFlightReturnDate(state, action: PayloadAction<MaterialUiPickersDate | undefined>) {
       //@ts-ignore
       if (action.payload) {
         state.return = new Date(action.payload.getTime());
@@ -120,8 +120,8 @@ const flightSlice = createSlice({
 
 export const {
   setFlightParams,
-  setFlightDeparture,
-  setFlightReturn,
+  setFlightDepartureDate,
+  setFlightReturnDate,
   setFlightAdults,
   setFlightListURL,
   setFlightClass,

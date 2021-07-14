@@ -1,5 +1,5 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { createTheme, ThemeProvider } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconButton } from "@material-ui/core";
 import React, { CSSProperties, MouseEvent, useState } from "react";
@@ -13,9 +13,7 @@ interface ButtonIconInterface {
   primary: string;
   secondary?: string;
   icon: IconProp;
-  onClick: (
-    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-  ) => void;
+  onClick: (event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 }
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -33,7 +31,7 @@ export function ButtonIcon({
   secondary,
   selectable,
 }: ButtonIconType) {
-  const theme = createMuiTheme({
+  const theme = createTheme({
     overrides: {
       MuiIconButton: {
         root: {
@@ -46,7 +44,7 @@ export function ButtonIcon({
   });
 
   /**
-   * The color assigment logic changes depending 
+   * The color assigment logic changes depending
    * whether the icon button is selectable or not.
    */
   function getStyle() {
@@ -62,13 +60,7 @@ export function ButtonIcon({
 
   function getIconColor() {
     if (selectable) {
-      return hover
-        ? secondary
-          ? secondary
-          : primary
-        : selected
-        ? secondary
-        : primary;
+      return hover ? (secondary ? secondary : primary) : selected ? secondary : primary;
     } else {
       return hover ? secondary : primary;
     }
