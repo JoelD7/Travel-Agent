@@ -166,4 +166,8 @@ export const navbarStyles = makeStyles((theme: Theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  tooltip: {
+    fontFamily: Font.Family,
+    fontSize: 12,
+  },
 }));

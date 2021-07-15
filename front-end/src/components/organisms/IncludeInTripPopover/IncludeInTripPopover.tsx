@@ -48,8 +48,8 @@ import {
   selectUserTrips,
   setCreateTripReferrer,
   setFlightDetail,
-  Trip,
   setUserTrips,
+  Trip,
 } from "../../../utils";
 import { CustomButton, IconText, ProgressCircle, Text } from "../../atoms";
 import { includeInTripStyles } from "./includeInTripStyles";
@@ -562,17 +562,25 @@ export function IncludeInTripPopover({
 
               {/* Bottom buttons */}
               <Grid container alignItems="center" style={{ marginTop: 10 }}>
-                <CustomButton
-                  size={14}
-                  style={{ height: "max-content", boxShadow: Shadow.LIGHT3D }}
-                  backgroundColor={Colors.GREEN}
-                  onClick={() => onNewTripClicked()}
+                <Tooltip
+                  arrow
+                  classes={{ tooltip: style.tooltip }}
+                  title="Create new trip"
                 >
-                  New trip
-                </CustomButton>
+                  <div>
+                    <CustomButton
+                      size={14}
+                      style={{ height: "max-content", boxShadow: Shadow.LIGHT3D }}
+                      backgroundColor={Colors.GREEN}
+                      onClick={() => onNewTripClicked()}
+                    >
+                      New trip
+                    </CustomButton>
+                  </div>
+                </Tooltip>
 
                 {/* Add button */}
-                <Tooltip classes={{ tooltip: style.tooltip }} title="Add to trip">
+                <Tooltip arrow classes={{ tooltip: style.tooltip }} title="Add to trip">
                   <div style={{ marginLeft: "auto" }}>
                     <IconButton
                       disabled={loadingButton}

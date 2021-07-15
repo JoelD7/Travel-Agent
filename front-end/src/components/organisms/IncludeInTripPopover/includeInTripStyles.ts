@@ -81,6 +81,6 @@ export const includeInTripStyles = makeStyles((theme: Theme) => ({
   },
   tooltip: {
     fontFamily: Font.Family,
-    fontSize: 13,
+    fontSize: 12,
   },
 }));

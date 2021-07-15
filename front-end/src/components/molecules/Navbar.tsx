@@ -2,6 +2,7 @@ import { faBars, faMapMarkerAlt, faTimes } from "@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   AppBar,
+  Tooltip,
   Avatar,
   Dialog,
   DialogActions,
@@ -237,10 +238,17 @@ export const Navbar: FunctionComponent<Navbar> = ({
                 </>
               )}
 
+              {/* Avatar icon */}
               {isAuthenticated && person && (
-                <IconButton onClick={onAvatarClick} style={{ marginLeft: "10px" }}>
-                  <Avatar src={getAvatarPicture()} />
-                </IconButton>
+                <Tooltip
+                  classes={{ tooltip: style.tooltip }}
+                  title={person.firstName}
+                  arrow
+                >
+                  <IconButton onClick={onAvatarClick} style={{ marginLeft: "10px" }}>
+                    <Avatar src={getAvatarPicture()} />
+                  </IconButton>
+                </Tooltip>
               )}
             </div>
 

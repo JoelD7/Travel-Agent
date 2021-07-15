@@ -1,4 +1,4 @@
-import { createMuiTheme, makeStyles, TextField } from "@material-ui/core";
+import { createTheme, makeStyles, TextField } from "@material-ui/core";
 import { CreateCSSProperties, ThemeProvider } from "@material-ui/styles";
 import React, { ChangeEvent, ReactNode, useEffect, useState } from "react";
 import { Font } from "../../assets";
@@ -39,7 +39,7 @@ export function TextInput({
   error: errorProp,
   helperText: helperTextProp,
 }: TextInputType) {
-  const theme = createMuiTheme({
+  const theme = createTheme({
     overrides: {
       MuiFormLabel: {
         root: {
@@ -115,6 +115,8 @@ export function TextInput({
     },
   });
   const styles = textStyles();
+
+  // useEffect
 
   useEffect(() => {
     if (errorProp) {

@@ -11,7 +11,6 @@ import { addDays } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router";
 import { Font } from "../../assets";
 import {
@@ -19,7 +18,6 @@ import {
   CreateTripTF,
   CustomButton,
   DashDrawer,
-  Footer,
   IconTP,
   ImageUploader,
   Navbar,
@@ -29,16 +27,16 @@ import {
 import { Colors, Shadow } from "../../styles";
 import {
   backend,
-  selectCreateTripReferrer,
   Person,
+  responseTripToDomainTrip,
   Routes,
+  selectCreateTripReferrer,
   selectIdPerson,
   selectIsAuthenticated,
   selectPerson,
-  responseTripToDomainTrip,
   selectUserTrips,
-  Trip,
   setUserTrips,
+  Trip,
 } from "../../utils";
 import { createTripStyles } from "./createTrip-styles";
 

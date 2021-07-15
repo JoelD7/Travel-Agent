@@ -78,6 +78,8 @@ export function ProfilePicture({
           setImageFetched(true);
           setImages([imageFile]);
         });
+    } else {
+      setImageFetched(true);
     }
   }, []);
 

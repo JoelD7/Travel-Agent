@@ -1,7 +1,9 @@
-import { Grid, ThemeProvider, createMuiTheme } from "@material-ui/core";
+import { Grid, ThemeProvider, createTheme, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
+import { Font } from "../../assets";
 import {
   CustomButton,
   DashDrawer,
@@ -36,7 +38,7 @@ interface VisibilityProps {
 }
 
 export function Profile({}: ProfileProps) {
-  const theme = createMuiTheme({
+  const theme = createTheme({
     overrides: {
       MuiInputBase: {
         input: {
@@ -68,6 +70,7 @@ export function Profile({}: ProfileProps) {
     newPasswordConfirmation: "",
   });
   const [changePassword, setChangePassword] = useState(false);
+  const [openSnack, setOpenSnack] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingButton, setLoadingButton] = useState(false);
   const [wrongPassword, setWrongPassword] = useState<boolean>(false);
@@ -77,17 +80,17 @@ export function Profile({}: ProfileProps) {
     if (person) {
       setLoading(false);
 
-      setCredentials({
-        uuid: person.uuid,
-        firstName: person.firstName,
-        lastName: person.lastName,
-        email: person.email,
-        origin: "",
-        profilePic: person.profilePic,
-        curPassword: null,
-        newPassword: null,
-        newPasswordConfirmation: "",
-      });
+      // setCredentials({
+      //   uuid: person.uuid,
+      //   firstName: person.firstName,
+      //   lastName: person.lastName,
+      //   email: person.email,
+      //   origin: "",
+      //   profilePic: person.profilePic,
+      //   curPassword: null,
+      //   newPassword: null,
+      //   newPasswordConfirmation: "",
+      // });
     }
   }, [person]);
 
@@ -107,6 +110,7 @@ export function Profile({}: ProfileProps) {
           setLoadingButton(false);
           dispatch(setPerson(editedPerson));
           setUserTripsFromPerson(editedPerson);
+          setOpenSnack(true);
         })
         .catch((error) => {
           if (
@@ -329,6 +333,22 @@ export function Profile({}: ProfileProps) {
           </>
         )}
       </Grid>
+
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnack(false)}
+      >
+        <Alert
+          style={{ fontFamily: Font.Family }}
+          variant="filled"
+          elevation={6}
+          onClose={() => setOpenSnack(false)}
+          severity="success"
+        >
+          Changes saved
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
