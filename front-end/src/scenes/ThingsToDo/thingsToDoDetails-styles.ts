@@ -1,13 +1,13 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
-import { Colors, Shadow } from "../../styles";
+import { Shadow } from "../../styles";
 
 export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
   aboutContainer: {
     borderRadius: "10px",
     background: "white",
     padding: "20px",
-    boxShadow: Shadow.MEDIUM,
+    boxShadow: Shadow.LIGHTER3D,
   },
   aboutGrid: {
     width: "48%",
@@ -25,8 +25,8 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
   detailsContainer: {
     borderRadius: "5px",
     padding: "15px",
-    backgroundColor: Colors.BLUE,
-    boxShadow: Shadow.LIGHT,
+    backgroundColor: "white",
+    boxShadow: Shadow.LIGHTER3D,
     color: "white",
   },
   divider: {
@@ -76,7 +76,6 @@ export const thingsToDoDetailsStyles = makeStyles((theme: Theme) => ({
     width: "85%",
     margin: "auto auto 150px auto",
     borderRadius: "10px",
-    boxShadow: Shadow.LIGHT,
     padding: "10px",
     backgroundColor: "white",
   },

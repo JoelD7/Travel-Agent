@@ -42,7 +42,7 @@ import { POICategoryFetch, POICategorySearch } from "../../utils/POICategory";
 import {
   addPOIsByCategoryGroup,
   fetchPOIsOfCategory,
-  onLoadingPOICardChange,
+  setLoadingPOICard,
   setPOIs,
 } from "../../utils/store/poi-slice";
 import { IATALocation } from "../../utils/types/location-types";
@@ -54,9 +54,6 @@ type SortOption = "" | "Name | A - Z" | "Name | Z - A";
 export function ThingsToDo() {
   const style = thingsToDoStyles();
 
-  const pois = useSelector(selectPOIs);
-  const allPois = useSelector(selectAllPOIs);
-
   /**
    * ID used by an <a> to scroll to
    * this title, once the Tours category
@@ -64,6 +61,14 @@ export function ThingsToDo() {
    */
   const toursTitleID = "tours-activities";
   const toursTitleAnchorEl = useRef(null);
+
+  const pois = useSelector(selectPOIs);
+  const allPois = useSelector(selectAllPOIs);
+  const loadingPOICard = useSelector(selectLoadingPOICard);
+  const poisByCategory = useSelector(selectPOIsByCategory);
+  const destinationCity: IATALocation = useSelector(selectDestinationCity);
+  const consultedCategories = useSelector(selectConsultedCategories);
+  const consultedCoordinates = useSelector(selectConsultedCoordinates);
 
   const poiCardStyels = makeStyles((theme: Theme) => ({
     poiCardItem: {
@@ -96,11 +101,8 @@ export function ThingsToDo() {
     useState<POICategorySearch>(categoryPlaceholder);
 
   const [poiSliderRows, setPoiSliderRows] = useState(2);
-
-  const loadingPOICard = useSelector(selectLoadingPOICard);
-
-  const consultedCategories = useSelector(selectConsultedCategories);
-  const consultedCoordinates = useSelector(selectConsultedCoordinates);
+  const [sortOption, setSortOption] = useState<SortOption>("");
+  const sortOptions: SortOption[] = ["Name | A - Z", "Name | Z - A"];
 
   const poiSliderSettings = {
     className: loadingPOICard ? style.poiSliderLoading : style.poiSlider,
@@ -127,13 +129,8 @@ export function ThingsToDo() {
 
   const dispatch = useAppDispatch();
 
-  const [sortOption, setSortOption] = useState<SortOption>("");
-  const sortOptions: SortOption[] = ["Name | A - Z", "Name | Z - A"];
-
   const availableCategories: POICategorySearch[] = POICategory.POICategories;
-  const poisByCategory = useSelector(selectPOIsByCategory);
-
-  const destinationCity: IATALocation = useSelector(selectDestinationCity);
+  const firstRender = useRef(true);
 
   useEffect(() => {
     if (JSON.stringify(allPois) === JSON.stringify(poisPlaceholder)) {
@@ -142,6 +139,14 @@ export function ThingsToDo() {
       dispatch(setPOIs(allPois));
     }
   }, []);
+
+  useEffect(() => {
+    if (!firstRender.current) {
+      dispatch(setLoadingPOICard(true));
+      dispatch(fetchPOIs(`${destinationCity.lat}, ${destinationCity.lon}`));
+    }
+    firstRender.current = false;
+  }, [destinationCity]);
 
   useEffect(() => {
     goToToursTitle();
@@ -160,7 +165,7 @@ export function ThingsToDo() {
   }
 
   function onCategorySelected(category: POICategorySearch) {
-    dispatch(onLoadingPOICardChange(true));
+    dispatch(setLoadingPOICard(true));
 
     //Unselect category and show all pois
     if (category.name === selectedCategory.name) {

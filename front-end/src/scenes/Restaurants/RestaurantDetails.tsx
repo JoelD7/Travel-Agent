@@ -151,13 +151,6 @@ export function RestaurantDetails() {
                 {/* Location, phone, include in trip */}
                 <Grid item xs={12}>
                   <Grid container>
-                    <IconText
-                      text={restaurant.location.display_address.join(", ")}
-                      icon={faMapMarkerAlt}
-                    />
-                    <p style={{ margin: "auto 5px" }}>|</p>
-                    <IconText text={restaurant.display_phone} icon={faPhone} />
-
                     <Grid item className={style.tripButtonGrid}>
                       {isAuthenticated && (
                         <Grid container>
@@ -214,6 +207,46 @@ export function RestaurantDetails() {
                     Details
                   </Text>
 
+                  {/* Location */}
+                  <>
+                    <Text
+                      bold
+                      style={{ marginBottom: "7px" }}
+                      color={Colors.BLUE}
+                      component="h4"
+                    >
+                      Location
+                    </Text>
+                    <IconText
+                      textColor="black"
+                      fontSize={15}
+                      icon={faMapMarkerAlt}
+                      style={{ marginBottom: "20px" }}
+                    >
+                      {restaurant.location.display_address.join(", ")}
+                    </IconText>
+                  </>
+
+                  {/* Phone */}
+                  <>
+                    <Text
+                      bold
+                      style={{ marginBottom: "7px" }}
+                      color={Colors.BLUE}
+                      component="h4"
+                    >
+                      Cuisines
+                    </Text>
+                    <IconText
+                      textColor="black"
+                      fontSize={15}
+                      icon={faPhone}
+                      style={{ marginBottom: "20px" }}
+                    >
+                      {restaurant.display_phone}
+                    </IconText>
+                  </>
+
                   {/* Cuisines */}
                   <div>
                     <Text
@@ -225,7 +258,7 @@ export function RestaurantDetails() {
                       Cuisines
                     </Text>
                     <IconText
-                      textColor={Colors.BLUE}
+                      textColor="black"
                       fontSize={15}
                       icon={faUtensils}
                       style={{ marginBottom: "20px" }}
@@ -247,7 +280,7 @@ export function RestaurantDetails() {
                     {getRestaurantHours(restaurant).map((timing) => (
                       <IconText
                         key={timing}
-                        textColor={Colors.BLUE}
+                        textColor="black"
                         fontSize={15}
                         icon={faClock}
                         style={{ marginBottom: "5px" }}
@@ -268,7 +301,7 @@ export function RestaurantDetails() {
                       Menu
                     </Text>
                     <IconText
-                      textColor={Colors.BLUE}
+                      textColor="black"
                       fontSize={15}
                       icon={faUtensils}
                       style={{ marginBottom: "20px" }}
@@ -293,7 +326,7 @@ export function RestaurantDetails() {
                       Website
                     </Text>
                     <IconText
-                      textColor={Colors.BLUE}
+                      textColor="black"
                       fontSize={15}
                       icon={faGlobe}
                       style={{ marginBottom: "20px" }}
@@ -319,7 +352,7 @@ export function RestaurantDetails() {
                         Amenities
                       </Text>
                       <IconText
-                        textColor={Colors.BLUE}
+                        textColor="black"
                         fontSize={15}
                         icon={faStar}
                         style={{ marginBottom: "20px" }}

@@ -637,7 +637,7 @@ export function CarRental() {
                         muiDateFormatter(date, invalidLabel, "datetime")
                       }
                       className={style.datepicker}
-                      minDate={new Date()}
+                      minDate={parseISO(localCarSearch.pickup_date)}
                       format="EEE. d/MMM, yyyy 'at' h:mm"
                       onChange={(d) => onDateChange(d, "dropoff_date")}
                     />

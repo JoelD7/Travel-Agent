@@ -118,7 +118,7 @@ const poiSlice = createSlice({
       }
     },
 
-    onLoadingPOICardChange(state, action: PayloadAction<boolean>) {
+    setLoadingPOICard(state, action: PayloadAction<boolean>) {
       state.loadingPOICard = action.payload;
     },
 
@@ -176,7 +176,7 @@ const poiSlice = createSlice({
 
 export const {
   setAvailableCategories,
-  onLoadingPOICardChange,
+  setLoadingPOICard,
   setPOIs,
   addPOIsByCategoryGroup,
 } = poiSlice.actions;

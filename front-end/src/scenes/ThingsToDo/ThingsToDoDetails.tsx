@@ -39,6 +39,7 @@ import {
   Trip,
   TripEvent,
   tripEventPlaceholder,
+  selectIsAuthenticated,
 } from "../../utils";
 import { thingsToDoDetailsStyles as thingsToDoDetailsStyles } from "./thingsToDoDetails-styles";
 
@@ -54,6 +55,7 @@ export function ThingsToDoDetails() {
   const [openSnackRemoved, setOpenSnackRemoved] = useState(false);
   const [removedSnackText, setRemovedSnackText] = useState("");
 
+  const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
   const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
 
   useEffect(() => {
@@ -137,18 +139,6 @@ export function ThingsToDoDetails() {
     );
   }
 
-  function addToFavorites() {
-    if (poi) {
-      if (!poi.favorite) {
-        setPOI({ ...poi, favorite: true });
-        setOpenSnack(true);
-      } else {
-        setPOI({ ...poi, favorite: false });
-        setOpenSnackRemoved(true);
-      }
-    }
-  }
-
   function deleteFromTrip() {
     setRemovedSnackText("Deleted from trip");
 
@@ -230,31 +220,35 @@ export function ThingsToDoDetails() {
                     )}
                   </Grid>
 
-                  {isPoiInAnyTrip(poi) ? (
-                    <CustomButton
-                      style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
-                      onClick={() => deleteFromTrip()}
-                      backgroundColor={Colors.RED}
-                      rounded
-                    >
-                      Delete from trip
-                    </CustomButton>
-                  ) : (
-                    <CustomButton
-                      style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
-                      onClick={(e) => onIncludeTripClick(e)}
-                      backgroundColor={Colors.GREEN}
-                      rounded
-                    >
-                      Include in trip
-                    </CustomButton>
-                  )}
+                  {isAuthenticated && (
+                    <>
+                      {isPoiInAnyTrip(poi) ? (
+                        <CustomButton
+                          style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
+                          onClick={() => deleteFromTrip()}
+                          backgroundColor={Colors.RED}
+                          rounded
+                        >
+                          Delete from trip
+                        </CustomButton>
+                      ) : (
+                        <CustomButton
+                          style={{ boxShadow: Shadow.LIGHT, marginLeft: "auto" }}
+                          onClick={(e) => onIncludeTripClick(e)}
+                          backgroundColor={Colors.GREEN}
+                          rounded
+                        >
+                          Include in trip
+                        </CustomButton>
+                      )}
 
-                  <AddFavoritesButton
-                    style={{ margin: "auto 0px auto 10px" }}
-                    type={FavoriteTypes.POI}
-                    poi={poi}
-                  />
+                      <AddFavoritesButton
+                        style={{ margin: "auto 0px auto 10px" }}
+                        type={FavoriteTypes.POI}
+                        poi={poi}
+                      />
+                    </>
+                  )}
                 </Grid>
               </Grid>
             </Grow>
@@ -288,7 +282,7 @@ export function ThingsToDoDetails() {
                   <Text
                     bold
                     style={{ marginBottom: "15px" }}
-                    color="white"
+                    color={Colors.BLUE}
                     component="h3"
                   >
                     Details
@@ -298,7 +292,7 @@ export function ThingsToDoDetails() {
                     <Text
                       bold
                       style={{ marginBottom: "7px" }}
-                      color="white"
+                      color={Colors.BLUE}
                       component="h4"
                     >
                       Contact
@@ -307,7 +301,7 @@ export function ThingsToDoDetails() {
 
                   {poi.contact.formattedPhone && (
                     <IconText
-                      textColor="white"
+                      textColor="black"
                       icon={faPhone}
                       fontSize={15}
                       text={poi.contact.formattedPhone}
@@ -316,7 +310,7 @@ export function ThingsToDoDetails() {
 
                   {poi.contact.facebookName && (
                     <IconText
-                      textColor="white"
+                      textColor="black"
                       icon={faFacebook}
                       fontSize={15}
                       text={poi.contact.facebookName}
@@ -325,7 +319,7 @@ export function ThingsToDoDetails() {
 
                   {poi.contact.twitter && (
                     <IconText
-                      textColor="white"
+                      textColor="black"
                       style={{ marginBottom: "20px" }}
                       icon={faTwitter}
                       fontSize={15}
@@ -338,13 +332,13 @@ export function ThingsToDoDetails() {
                       <Text
                         bold
                         style={{ marginBottom: "7px" }}
-                        color="white"
+                        color={Colors.BLUE}
                         component="h4"
                       >
                         Address
                       </Text>
                       <IconText
-                        textColor="white"
+                        textColor="black"
                         style={{ marginBottom: "20px" }}
                         icon={faMapMarkerAlt}
                         fontSize={15}
@@ -358,13 +352,13 @@ export function ThingsToDoDetails() {
                       <Text
                         bold
                         style={{ marginBottom: "7px" }}
-                        color="white"
+                        color={Colors.BLUE}
                         component="h4"
                       >
                         Hours
                       </Text>
                       <IconText
-                        textColor="white"
+                        textColor="black"
                         style={{ marginBottom: "20px" }}
                         icon={faClock}
                         fontSize={15}
@@ -378,13 +372,13 @@ export function ThingsToDoDetails() {
                       <Text
                         bold
                         style={{ marginBottom: "7px" }}
-                        color="white"
+                        color={Colors.BLUE}
                         component="h4"
                       >
                         Website
                       </Text>
                       <IconText
-                        textColor="white"
+                        textColor="black"
                         style={{ marginBottom: "20px" }}
                         icon={faGlobe}
                         fontSize={15}
@@ -398,13 +392,13 @@ export function ThingsToDoDetails() {
                       <Text
                         bold
                         style={{ marginBottom: "7px" }}
-                        color="white"
+                        color={Colors.BLUE}
                         component="h4"
                       >
                         Amenities
                       </Text>
                       <IconText
-                        textColor="white"
+                        textColor="black"
                         style={{ marginBottom: "20px" }}
                         icon={faStar}
                         fontSize={15}
@@ -416,6 +410,7 @@ export function ThingsToDoDetails() {
               </Grid>
             </Grow>
 
+            {/* About */}
             {poi.description && (
               <Grow in={true} style={{ transformOrigin: "0 0 0" }} timeout={1000}>
                 <Grid item className={style.aboutGrid}>
