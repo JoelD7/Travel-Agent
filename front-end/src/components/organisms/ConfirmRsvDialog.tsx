@@ -15,8 +15,9 @@ import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { Link, useLocation } from "react-router-dom";
 import { Font } from "../../assets";
-import { Colors } from "../../styles";
+import { Colors, Shadow } from "../../styles";
 import {
   backend,
   CarRsv,
@@ -32,6 +33,7 @@ import {
   selectPerson,
   setHotelReservations,
   setHotelRsv,
+  setLoginReferrer,
 } from "../../utils";
 import { CustomButton, Text } from "../atoms";
 import { IncludeInTripPopover } from "./IncludeInTripPopover/IncludeInTripPopover";
@@ -88,6 +90,7 @@ export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps)
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
 
   function onIncludeInTripOpen(event: MouseEvent<HTMLButtonElement>) {
     setTripAnchor(event.currentTarget);
@@ -120,6 +123,10 @@ export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps)
     }
   }
 
+  function onLoginClicked() {
+    dispatch(setLoginReferrer(location.pathname + location.search));
+  }
+
   return (
     <Dialog
       open={open}
@@ -143,20 +150,38 @@ export function ConfirmRsvDialog({ onClose, open, type }: ConfirmRsvDialogProps)
 
       {/* Buttons */}
       <Grid container style={{ marginTop: 20 }}>
-        <CustomButton
-          backgroundColor={Colors.GREEN}
-          onClick={(e) => onIncludeInTripOpen(e)}
-        >
-          Include in trip
-        </CustomButton>
+        {isAuthenticated ? (
+          <>
+            <CustomButton
+              size={14}
+              style={{ boxShadow: Shadow.LIGHT3D }}
+              backgroundColor={Colors.GREEN}
+              onClick={(e) => onIncludeInTripOpen(e)}
+            >
+              Include in trip
+            </CustomButton>
 
-        <CustomButton
-          backgroundColor={Colors.PURPLE}
-          onClick={() => makeBooking()}
-          style={{ marginLeft: "auto" }}
-        >
-          No, proceed with reservation
-        </CustomButton>
+            <CustomButton
+              size={14}
+              style={{ marginLeft: "auto", boxShadow: Shadow.LIGHT3D }}
+              backgroundColor={Colors.PURPLE}
+              onClick={() => makeBooking()}
+            >
+              No, proceed with reservation
+            </CustomButton>
+          </>
+        ) : (
+          <Text color={Colors.BLUE} style={{ fontStyle: "italic" }}>
+            <Link
+              to={Routes.LOGIN}
+              onClick={() => onLoginClicked()}
+              style={{ color: Colors.BLUE, fontWeight: "bold" }}
+            >
+              Login
+            </Link>
+            {" to proceed with this reservation"}
+          </Text>
+        )}
       </Grid>
 
       <IncludeInTripPopover

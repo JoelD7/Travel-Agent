@@ -11,6 +11,7 @@ import {
   Select,
   Snackbar,
   ThemeProvider,
+  Tooltip,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -19,8 +20,9 @@ import { addHours, compareAsc, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { useLocation } from "react-router-dom";
 import { Font } from "../../../assets";
-import { Colors } from "../../../styles";
+import { Colors, Shadow } from "../../../styles";
 import {
   backend,
   CarRsv,
@@ -44,11 +46,12 @@ import {
   selectHotelRsv,
   selectPerson,
   selectUserTrips,
+  setCreateTripReferrer,
   setFlightDetail,
   Trip,
+  setUserTrips,
 } from "../../../utils";
-import { setUserTrips } from "../../../utils/store/trip-slice";
-import { IconText, ProgressCircle, Text } from "../../atoms";
+import { CustomButton, IconText, ProgressCircle, Text } from "../../atoms";
 import { includeInTripStyles } from "./includeInTripStyles";
 
 interface IncludeInTripPopover {
@@ -217,6 +220,7 @@ export function IncludeInTripPopover({
 
   const history = useHistory();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   useEffect(() => {
     if (userTrips && person) {
@@ -331,7 +335,7 @@ export function IncludeInTripPopover({
   }
 
   function redirectToTripDetail(trip: Trip) {
-    history.push(`${Routes.TRIPS}/${trip.idTrip}`);
+    history.push(`${Routes.TRIPS}/${trip.uuid}`);
   }
 
   /**
@@ -475,6 +479,11 @@ export function IncludeInTripPopover({
     return eventType === EventTypes.RESTAURANT || eventType === EventTypes.POI;
   }
 
+  function onNewTripClicked() {
+    history.push(Routes.CREATE_TRIP);
+    dispatch(setCreateTripReferrer(location.pathname + location.search));
+  }
+
   return (
     <>
       <Popover
@@ -551,19 +560,33 @@ export function IncludeInTripPopover({
                 </Grid>
               ))}
 
-              {/* Add button */}
-              <Grid container>
-                <IconButton
-                  disabled={loadingButton}
-                  onClick={() => addToTrip()}
-                  className={style.addButton}
+              {/* Bottom buttons */}
+              <Grid container alignItems="center" style={{ marginTop: 10 }}>
+                <CustomButton
+                  size={14}
+                  style={{ height: "max-content", boxShadow: Shadow.LIGHT3D }}
+                  backgroundColor={Colors.GREEN}
+                  onClick={() => onNewTripClicked()}
                 >
-                  {loadingButton ? (
-                    <ProgressCircle style={{ top: 3 }} size={20} color="white" />
-                  ) : (
-                    <FontAwesomeIcon icon={faPlus} color="white" />
-                  )}
-                </IconButton>
+                  New trip
+                </CustomButton>
+
+                {/* Add button */}
+                <Tooltip classes={{ tooltip: style.tooltip }} title="Add to trip">
+                  <div style={{ marginLeft: "auto" }}>
+                    <IconButton
+                      disabled={loadingButton}
+                      onClick={() => addToTrip()}
+                      className={style.addButton}
+                    >
+                      {loadingButton ? (
+                        <ProgressCircle style={{ top: 3 }} size={20} color="white" />
+                      ) : (
+                        <FontAwesomeIcon icon={faPlus} color="white" />
+                      )}
+                    </IconButton>
+                  </div>
+                </Tooltip>
               </Grid>
             </Grid>
           </MuiPickersUtilsProvider>

@@ -11,6 +11,7 @@ interface TripSlice {
   userTrips?: Trip[];
   favPlaces?: Favorite[];
   albumPictures: AlbumPicture[];
+  createTripReferrer: string;
 }
 
 type ThunkAPIType = {
@@ -58,6 +59,7 @@ export const fetchFavorites = createAsyncThunk<Favorite[], null, ThunkAPIType>(
 
 const initialState: TripSlice = {
   albumPictures: [],
+  createTripReferrer: "",
 };
 
 const tripSlice = createSlice({
@@ -84,6 +86,10 @@ const tripSlice = createSlice({
     setUserTrips(state, action: PayloadAction<Trip[]>) {
       state.userTrips = action.payload;
     },
+
+    setCreateTripReferrer(state, action: PayloadAction<string>) {
+      state.createTripReferrer = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -103,6 +109,7 @@ export const {
   setLastTrip,
   setAlbumPictures,
   setFavorites,
+  setCreateTripReferrer,
 } = tripSlice.actions;
 
 export default tripSlice.reducer;

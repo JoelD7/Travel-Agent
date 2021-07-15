@@ -73,6 +73,8 @@ export const selectLastTrip = (state: RootState) => state.tripSlice.lastTrip;
 export const selectUserTrips = (state: RootState) => state.tripSlice.userTrips;
 export const selectAlbumPictures = (state: RootState) => state.tripSlice.albumPictures;
 export const selectFavorites = (state: RootState) => state.tripSlice.favPlaces;
+export const selectCreateTripReferrer = (state: RootState) =>
+  state.tripSlice.createTripReferrer;
 
 //#endregion
 

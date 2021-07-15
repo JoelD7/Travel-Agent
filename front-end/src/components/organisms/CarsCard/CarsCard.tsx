@@ -9,16 +9,16 @@ import {
   faSmokingBan,
   faSnowflake,
 } from "@fortawesome/free-solid-svg-icons";
-import { Backdrop, Dialog, Grid, Grow } from "@material-ui/core";
+import { Grid, Grow } from "@material-ui/core";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Colors } from "../../../styles";
 import {
   Car,
+  carToCarRsv,
   convertToUserCurrency,
   formatAsCurrency,
   setCarRsv,
-  carToCarRsv,
 } from "../../../utils";
 import { CustomButton, IconText, IconTP, Text } from "../../atoms";
 import { ConfirmRsvDialog } from "../ConfirmRsvDialog";

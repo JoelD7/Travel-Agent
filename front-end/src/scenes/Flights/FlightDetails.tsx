@@ -289,7 +289,7 @@ export function FlightDetails({
           let newUserTrips: Trip[] = [];
 
           userTrips.forEach((trip) => {
-            if (trip.idTrip === updatedEventsTrip.idTrip) {
+            if (trip.uuid === updatedEventsTrip.uuid) {
               newUserTrips.push(updatedEventsTrip);
             } else {
               newUserTrips.push(trip);

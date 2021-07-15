@@ -10,7 +10,9 @@ import { Alert } from "@material-ui/lab";
 import { addDays } from "date-fns";
 import React, { useState } from "react";
 import Helmet from "react-helmet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router";
 import { Font } from "../../assets";
 import {
   CountrySelector,
@@ -27,11 +29,16 @@ import {
 import { Colors, Shadow } from "../../styles";
 import {
   backend,
+  selectCreateTripReferrer,
   Person,
   Routes,
   selectIdPerson,
   selectIsAuthenticated,
   selectPerson,
+  responseTripToDomainTrip,
+  selectUserTrips,
+  Trip,
+  setUserTrips,
 } from "../../utils";
 import { createTripStyles } from "./createTrip-styles";
 
@@ -45,15 +52,19 @@ export function CreateTrip() {
   const [countries, setCountries] = useState<string[]>([]);
   const [loadingButton, setLoadingButton] = useState(false);
   const [budget, setBudget] = useState<string>("");
+  const [openSnack, setOpenSnack] = useState(false);
+  const [coverUrl, setCoverUrl] = useState<string>("");
 
   const is1255OrLess = useMediaQuery("(max-width:1255px)");
   const is720OrLess = useMediaQuery("(max-width:720px)");
   const idPerson: number = useSelector(selectIdPerson);
   const isAuthenticated: boolean = useSelector(selectIsAuthenticated);
   const person: Person | undefined = useSelector(selectPerson);
+  const createTripReferrer: string = useSelector(selectCreateTripReferrer);
+  const userTrips: Trip[] | undefined = useSelector(selectUserTrips);
 
-  const [openSnack, setOpenSnack] = useState(false);
-  const [coverUrl, setCoverUrl] = useState<string>("");
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   function updateDates(startDate: Date, endDate: Date) {
     setStartDate(startDate);
@@ -66,6 +77,7 @@ export function CreateTrip() {
 
   function createTrip() {
     setLoadingButton(true);
+
     if (person) {
       backend
         .post(`/trip/create?personUuid=${person.uuid}`, {
@@ -80,6 +92,15 @@ export function CreateTrip() {
         .then((res) => {
           setOpenSnack(true);
           setLoadingButton(false);
+
+          if (userTrips) {
+            let updatedUserTrips = [...userTrips, responseTripToDomainTrip(res.data)];
+            dispatch(setUserTrips(updatedUserTrips));
+          }
+
+          if (createTripReferrer !== "") {
+            history.push(createTripReferrer);
+          }
         })
         .catch((err) => console.log(err));
     }

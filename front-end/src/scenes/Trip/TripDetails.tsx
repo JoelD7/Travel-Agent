@@ -374,7 +374,7 @@ export function TripDetails() {
                           <CustomButton
                             className={style.itineraryButton}
                             onClick={() =>
-                              history.push(`${Routes.ITINERARY}?trip=${trip.idTrip}`)
+                              history.push(`${Routes.ITINERARY}?trip=${trip.uuid}`)
                             }
                             icon={faCalendar}
                           >

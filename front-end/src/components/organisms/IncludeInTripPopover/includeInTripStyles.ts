@@ -1,11 +1,11 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../../assets";
-import { Colors } from "../../../styles";
+import { Shadow, Colors } from "../../../styles";
 
 export const includeInTripStyles = makeStyles((theme: Theme) => ({
   addButton: {
-    margin: "10px 0px 0px auto",
     width: 50,
+    boxShadow: Shadow.LIGHT3D,
     height: 50,
     backgroundColor: Colors.GREEN,
 
@@ -78,5 +78,9 @@ export const includeInTripStyles = makeStyles((theme: Theme) => ({
   },
   selectIcon: {
     color: Colors.BLUE,
+  },
+  tooltip: {
+    fontFamily: Font.Family,
+    fontSize: 13,
   },
 }));
