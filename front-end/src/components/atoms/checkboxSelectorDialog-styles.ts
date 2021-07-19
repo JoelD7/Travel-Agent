@@ -4,13 +4,13 @@ import { Colors } from "../../styles";
 
 export const checkboxSelectorDialog = makeStyles((theme: Theme) => ({
   button: {
-    padding: '0px',
-    fontWeight: 'bold',
+    padding: "0px",
+    fontWeight: "bold",
     "&:hover": {
       backgroundColor: "rgba(0,0,0,0)",
       textDecoration: "underline black solid",
     },
-  }, 
+  },
   dialogTitle: {
     padding: "0px",
 
@@ -34,6 +34,7 @@ export const checkboxSelectorDialog = makeStyles((theme: Theme) => ({
   },
   formLabel: {
     fontFamily: Family,
+    fontSize: 14,
   },
   paper: {
     maxWidth: "1000px",

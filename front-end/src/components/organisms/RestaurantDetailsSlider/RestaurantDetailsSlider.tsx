@@ -1,8 +1,9 @@
-import { Backdrop, CardActionArea, Dialog } from "@material-ui/core";
-import { CSSProperties } from "@material-ui/styles";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Backdrop, CardActionArea, Dialog, IconButton } from "@material-ui/core";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import Slider from "react-slick";
+import { Colors } from "../../../styles";
 import { SliderArrow } from "../../atoms";
 import { restaurantDetailSliderStyles } from "./restaurantDetailSliderStyles";
 
@@ -16,8 +17,6 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
   const [viewerOpen, setViewerOpen] = useState(false);
   const [initialImageSlide, setInitialImageSlide] = useState(0);
 
-  const dispatch = useDispatch();
-
   const sliderSettings = {
     className: style.slider,
     nextArrow: <SliderArrow direction="right" />,
@@ -25,17 +24,10 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
     slidesToShow: 1,
   };
 
-  const sliderArrowStyles: CSSProperties = {
-    backgroundColor: "#00000075",
-    "&:hover": {
-      backgroundColor: "#000000b5",
-    },
-  };
-
   const imageSliderSettings = {
     className: style.imageSlider,
-    nextArrow: <SliderArrow iconColor="#b6b6b6" direction="right" />,
-    prevArrow: <SliderArrow iconColor="#b6b6b6" direction="left" />,
+    nextArrow: <SliderArrow iconColor="white" variant="fullscreen" direction="right" />,
+    prevArrow: <SliderArrow iconColor="white" variant="fullscreen" direction="left" />,
     slidesToShow: 1,
     initialSlide: initialImageSlide,
   };
@@ -46,6 +38,10 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
   }
 
   function onFullScreenViewerClose() {
+    setViewerOpen(false);
+  }
+
+  function onClose() {
     setViewerOpen(false);
   }
 
@@ -75,6 +71,10 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
           classes: { root: style.backdrop },
         }}
       >
+        <IconButton onClick={() => onClose()} className={style.closeButton}>
+          <FontAwesomeIcon size="sm" color={Colors.BLUE} icon={faTimes} />
+        </IconButton>
+
         <Slider {...imageSliderSettings} lazyLoad="ondemand">
           {photos.map((photo) => (
             <div key={photo} className={style.photoContainerImage}>

@@ -5,6 +5,30 @@ export const restaurantDetailSliderStyles = makeStyles((theme: Theme) => ({
   backdrop: {
     backdropFilter: "blur(4px)",
   },
+  closeButton: {
+    marginLeft: "auto",
+    marginBottom: "32px",
+    width: "45px",
+    height: "45px",
+    position: "absolute",
+    right: 0,
+    zIndex: 4,
+    backgroundColor: "white",
+
+    "&:hover": {
+      backgroundColor: "#e0e0e0",
+    },
+
+    [theme.breakpoints.down(790)]: {
+      top: "5px",
+    },
+    [theme.breakpoints.down(570)]: {
+      top: 30,
+    },
+    [theme.breakpoints.down(525)]: {
+      top: 60,
+    },
+  },
   imageSlider: {
     width: "68vw",
     display: "flex",

@@ -1,5 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
-import { Colors, Shadow } from "../../../styles";
+import { Shadow } from "../../../styles";
 
 export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
   card: {
@@ -20,8 +20,8 @@ export const restaurantSlidesStyles = makeStyles((theme: Theme) => ({
     textOverflow: "ellipsis",
   },
   restaurantCuisines: {
-    fontSize: "13px",
-    color: "#5f5f5f",
+    fontSize: "13px !important",
+    color: "#353535 !important",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",

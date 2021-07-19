@@ -1,14 +1,16 @@
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Backdrop,
   CardActionArea,
   Dialog,
   Grid,
   Grow,
+  IconButton,
   makeStyles,
-  useMediaQuery,
   Theme,
+  useMediaQuery,
 } from "@material-ui/core";
-import { CSSProperties } from "@material-ui/styles";
 import React, { useState } from "react";
 import Slider from "react-slick";
 import { Colors, Shadow } from "../../../styles";
@@ -23,6 +25,30 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
   const hotelDetailsSliderStyles = makeStyles((theme: Theme) => ({
     backdrop: {
       backdropFilter: "blur(4px)",
+    },
+    closeButton: {
+      marginLeft: "auto",
+      marginBottom: "32px",
+      width: "45px",
+      height: "45px",
+      position: "absolute",
+      right: 0,
+      zIndex: 4,
+      backgroundColor: "white",
+
+      "&:hover": {
+        backgroundColor: "#e0e0e0",
+      },
+
+      [theme.breakpoints.down(790)]: {
+        top: "5px",
+      },
+      [theme.breakpoints.down(570)]: {
+        top: 30,
+      },
+      [theme.breakpoints.down(525)]: {
+        top: 60,
+      },
     },
     imageSlider: {
       width: "68vw",
@@ -136,14 +162,6 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
     ],
   };
 
-  const sliderArrowStyles: CSSProperties = {
-    backgroundColor: "#00000075",
-    "&:hover": {
-      backgroundColor: "#000000b5",
-    },
-    zIndex: is500pxOrLess ? 2 : 0,
-  };
-
   const imageSliderSettings = {
     className: style.imageSlider,
     nextArrow: <SliderArrow variant="fullscreen" direction="right" />,
@@ -190,6 +208,13 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
           classes: { root: style.backdrop },
         }}
       >
+        <IconButton
+          onClick={() => onFullScreenViewerClose()}
+          className={style.closeButton}
+        >
+          <FontAwesomeIcon size="sm" color={Colors.BLUE} icon={faTimes} />
+        </IconButton>
+
         <Slider {...imageSliderSettings} lazyLoad="ondemand">
           {hotelPhotos.map((photo) => (
             <Grow

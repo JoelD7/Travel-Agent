@@ -25,12 +25,9 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
     width: "45px",
     height: "45px",
     position: "absolute",
-    left: "92%",
+    right: 5,
     [theme.breakpoints.down(790)]: {
       top: "5px",
-    },
-    [theme.breakpoints.down(500)]: {
-      left: "88%",
     },
   },
   citiesGrid: {

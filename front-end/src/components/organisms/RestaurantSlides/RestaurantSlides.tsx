@@ -101,9 +101,9 @@ export function RestaurantSlides({ restaurants, title, loading }: RestaurantSlid
                   }
                 />
 
-                <p className={style.restaurantCuisines}>
+                <Text className={style.restaurantCuisines}>
                   {getRestaurantCategoriesList(restaurant)}
-                </p>
+                </Text>
               </CardContent>
             </Card>
           </CardActionArea>

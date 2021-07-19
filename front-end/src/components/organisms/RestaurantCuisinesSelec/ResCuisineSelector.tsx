@@ -61,9 +61,9 @@ export function ResCuisineSelector({ cuisines, updateState }: ResCuisineSelector
               <Checkbox
                 checked={cuisine.checked}
                 classes={{ colorSecondary: style.colorSecondary }}
-                icon={<FontAwesomeIcon icon={faCircle} />}
+                icon={<FontAwesomeIcon size="xs" icon={faCircle} />}
                 checkedIcon={
-                  <FontAwesomeIcon icon={faCheckCircle} color={Colors.PURPLE} />
+                  <FontAwesomeIcon size="xs" icon={faCheckCircle} color={Colors.PURPLE} />
                 }
                 onChange={onCuisineChange}
                 name={cuisine.title}
@@ -101,9 +101,13 @@ export function ResCuisineSelector({ cuisines, updateState }: ResCuisineSelector
                     <Checkbox
                       checked={cuisine.checked}
                       classes={{ colorSecondary: style.colorSecondary }}
-                      icon={<FontAwesomeIcon icon={faCircle} />}
+                      icon={<FontAwesomeIcon size="xs" icon={faCircle} />}
                       checkedIcon={
-                        <FontAwesomeIcon icon={faCheckCircle} color={Colors.PURPLE} />
+                        <FontAwesomeIcon
+                          size="xs"
+                          icon={faCheckCircle}
+                          color={Colors.PURPLE}
+                        />
                       }
                       onChange={onCuisineChange}
                       name={cuisine.title}
@@ -125,9 +129,13 @@ export function ResCuisineSelector({ cuisines, updateState }: ResCuisineSelector
                     <Checkbox
                       checked={cuisine.checked}
                       classes={{ colorSecondary: style.colorSecondary }}
-                      icon={<FontAwesomeIcon icon={faCircle} />}
+                      icon={<FontAwesomeIcon size="xs" icon={faCircle} />}
                       checkedIcon={
-                        <FontAwesomeIcon icon={faCheckCircle} color={Colors.PURPLE} />
+                        <FontAwesomeIcon
+                          size="xs"
+                          icon={faCheckCircle}
+                          color={Colors.PURPLE}
+                        />
                       }
                       onChange={onCuisineChange}
                       name={cuisine.title}
