@@ -29,8 +29,8 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
     closeButton: {
       marginLeft: "auto",
       marginBottom: "32px",
-      width: "45px",
-      height: "45px",
+      width: 30,
+      height: 30,
       position: "absolute",
       right: 0,
       zIndex: 4,
@@ -212,7 +212,7 @@ export function HotelDetailsSlider({ hotel }: HotelDetailsSlider) {
           onClick={() => onFullScreenViewerClose()}
           className={style.closeButton}
         >
-          <FontAwesomeIcon size="sm" color={Colors.BLUE} icon={faTimes} />
+          <FontAwesomeIcon size="xs" color={Colors.BLUE} icon={faTimes} />
         </IconButton>
 
         <Slider {...imageSliderSettings} lazyLoad="ondemand">

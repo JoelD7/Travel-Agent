@@ -22,8 +22,8 @@ export const flightDetailsStyles = makeStyles((theme: Theme) => ({
   closeButton: {
     marginLeft: "auto",
     marginBottom: "32px",
-    width: "45px",
-    height: "45px",
+    width: 30,
+    height: 30,
     position: "absolute",
     right: 5,
     [theme.breakpoints.down(790)]: {

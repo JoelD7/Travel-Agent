@@ -44,6 +44,7 @@ export function SliderArrow({
   iconSize = "1x",
 }: SliderArrowProps) {
   const is500pxOrLess = useMediaQuery("(max-width:500px)");
+  const is370pxOrLess = useMediaQuery("(max-width:370px)");
 
   const sliderArrowStyles = makeStyles((theme: Theme) => ({
     iconContainer: {
@@ -54,6 +55,11 @@ export function SliderArrow({
 
       "&:hover": {
         backgroundColor: getBackgroundColorHover(),
+      },
+
+      [theme.breakpoints.down(370)]: {
+        height: iconSize === "1x" ? "30px" : "56px",
+        width: iconSize === "1x" ? "30px" : "56px",
       },
     },
   }));
@@ -91,7 +97,7 @@ export function SliderArrow({
       style={getIconButtonStyle()}
     >
       <FontAwesomeIcon
-        size={iconSize}
+        size={is370pxOrLess ? "xs" : iconSize}
         icon={direction === "right" ? faChevronRight : faChevronLeft}
         color={iconColor}
         style={

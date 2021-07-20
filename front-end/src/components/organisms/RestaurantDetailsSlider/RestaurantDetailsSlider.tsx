@@ -72,7 +72,7 @@ export function RestaurantDetailsSlider({ photos }: RestaurantDetailsSlider) {
         }}
       >
         <IconButton onClick={() => onClose()} className={style.closeButton}>
-          <FontAwesomeIcon size="sm" color={Colors.BLUE} icon={faTimes} />
+          <FontAwesomeIcon size="xs" color={Colors.BLUE} icon={faTimes} />
         </IconButton>
 
         <Slider {...imageSliderSettings} lazyLoad="ondemand">

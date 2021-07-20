@@ -8,8 +8,8 @@ export const restaurantDetailSliderStyles = makeStyles((theme: Theme) => ({
   closeButton: {
     marginLeft: "auto",
     marginBottom: "32px",
-    width: "45px",
-    height: "45px",
+    width: 30,
+    height: 30,
     position: "absolute",
     right: 0,
     zIndex: 4,

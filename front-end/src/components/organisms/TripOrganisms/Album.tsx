@@ -1,4 +1,8 @@
-import { faExclamationTriangle, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faExclamationTriangle,
+  faTimes,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Backdrop,
@@ -43,16 +47,33 @@ interface AlbumRouteParams {
   uuid?: string;
 }
 
-interface AlbumProps {}
-
 interface PictureGroup {
   [index: string]: AlbumPicture[];
 }
 
-export function Album({}: AlbumProps) {
+export function Album() {
   const stylesFunction = makeStyles((theme: Theme) => ({
     backdrop: {
       backdropFilter: "blur(4px)",
+    },
+    closeButton: {
+      marginLeft: "auto",
+      marginBottom: "32px",
+      width: 30,
+      height: 30,
+      position: "absolute",
+      right: 50,
+      top: 10,
+      zIndex: 4,
+      backgroundColor: "white",
+
+      "&:hover": {
+        backgroundColor: "#e0e0e0",
+      },
+
+      [theme.breakpoints.down(790)]: {
+        top: "5px",
+      },
     },
     card: {
       borderRadius: 10,
@@ -131,17 +152,8 @@ export function Album({}: AlbumProps) {
       [theme.breakpoints.down(690)]: {
         width: "89vw",
       },
-      [theme.breakpoints.down(580)]: {
-        width: "87vw",
-      },
-      [theme.breakpoints.down(450)]: {
-        width: "85vw",
-      },
-      [theme.breakpoints.down(420)]: {
-        width: "83vw",
-      },
-      [theme.breakpoints.down(380)]: {
-        width: "81vw",
+      [theme.breakpoints.down(500)]: {
+        width: "100vw",
       },
     },
     navbar: {
@@ -162,10 +174,15 @@ export function Album({}: AlbumProps) {
     },
     paperImage: {
       maxWidth: "94vw",
+      margin: 0,
       width: "auto",
       backgroundColor: Colors.TRANSPARENT,
       "&.MuiPaper-elevation24": {
         boxShadow: Shadow.TRANSPARENT,
+      },
+
+      [theme.breakpoints.down(500)]: {
+        maxWidth: "100vw",
       },
     },
     pageContentGrid: {
@@ -225,8 +242,8 @@ export function Album({}: AlbumProps) {
 
   const imageSliderSettings = {
     className: style.imageSlider,
-    nextArrow: <SliderArrow iconColor="#b6b6b6" direction="right" />,
-    prevArrow: <SliderArrow iconColor="#b6b6b6" direction="left" />,
+    nextArrow: <SliderArrow iconColor="white" variant="fullscreen" direction="right" />,
+    prevArrow: <SliderArrow iconColor="white" variant="fullscreen" direction="left" />,
     slidesToShow: 1,
     initialSlide: initialImageSlide,
   };
@@ -453,6 +470,13 @@ export function Album({}: AlbumProps) {
             classes: { root: style.backdrop },
           }}
         >
+          <IconButton
+            onClick={() => setOpenFullImage(false)}
+            className={style.closeButton}
+          >
+            <FontAwesomeIcon size="xs" color={Colors.BLUE} icon={faTimes} />
+          </IconButton>
+
           <Slider {...imageSliderSettings} lazyLoad="progressive">
             {album.pictures.map((picture) => (
               <Grid
