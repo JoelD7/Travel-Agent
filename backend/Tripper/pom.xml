@@ -12,7 +12,11 @@
     <artifactId>Tripper</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Tripper</name>
-    <description>Demo project for Spring Boot</description>
+    <description>
+        Web application that helps in the travel planning process by providing 
+        information on points of interest, restaurants, hotels and flights and providing 
+        an organization mechanism through travel itineraries.
+    </description>
     <properties>
         <java.version>11</java.version>
     </properties>
