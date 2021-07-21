@@ -1,7 +1,6 @@
 import {
   Chip,
   FormControl,
-  Input,
   makeStyles,
   MenuItem,
   Select,

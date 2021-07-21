@@ -1,6 +1,6 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
-import { Colors, Shadow } from "../../styles";
+import { Colors } from "../../styles";
 
 export const itineraryStyles = makeStyles((theme: Theme) => ({
   calendarGrid: {

@@ -1,4 +1,4 @@
-import { Grid, ThemeProvider, createTheme, Snackbar } from "@material-ui/core";
+import { createTheme, Grid, Snackbar, ThemeProvider } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -17,27 +17,23 @@ import {
 } from "../../components";
 import { Colors } from "../../styles";
 import {
-  IATALocation,
-  selectOriginCity,
+  AutocompleteType,
+  backend,
+  ExceptionMessage,
   LocationType,
   Person,
-  AutocompleteType,
+  ProfileCredentials,
   selectPerson,
   setPerson,
-  backend,
   setUserTripsFromPerson,
-  ProfileCredentials,
-  ExceptionMessage,
 } from "../../utils";
 import { profileStyles } from "./profile-styles";
-
-interface ProfileProps {}
 
 interface VisibilityProps {
   [index: string]: boolean;
 }
 
-export function Profile({}: ProfileProps) {
+export function Profile() {
   const theme = createTheme({
     overrides: {
       MuiInputBase: {

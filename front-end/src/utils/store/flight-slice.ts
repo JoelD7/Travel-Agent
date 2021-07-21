@@ -1,10 +1,10 @@
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays, format } from "date-fns";
+import { iataCodes } from "../constants";
 import { getDefaultCity, sortIATAPredictionsByImportance } from "../functions";
 import { flightPlaceholder } from "../placeholders";
 import { FlightTypes } from "../types";
-import { iataCodes } from "../constants";
 import { IATALocation } from "../types/location-types";
 
 export interface FlightSearch {
@@ -157,13 +157,4 @@ function getMainAirportForCity(iata: IATALocation | null): IATALocation | null {
   }
 
   return iata;
-}
-
-function getDefaultDirectionCodes(iata: IATALocation): string {
-  let mainAirport: IATALocation | null | undefined = getMainAirportForCity(iata);
-
-  if (mainAirport !== undefined && mainAirport !== null) {
-    return mainAirport.code;
-  }
-  return "";
 }

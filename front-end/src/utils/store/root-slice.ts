@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getDefaultCityImage } from "../functions";
-import { CityImage, ExchangeRate, Person, Trip } from "../types";
+import { CityImage, ExchangeRate } from "../types";
 
 interface RootSlice {
   idPerson: number;

@@ -1,17 +1,16 @@
-import { parseISO } from "date-fns";
 import { Routes } from "..";
 import { carRsvPlaceholder } from "../placeholders";
 import { CarReducer, store } from "../store";
 import {
   Car,
   CarCheckbox,
-  CarSearch,
-  CarRsv,
   CarFeatures,
+  CarRsv,
   CarRsvFeatures,
-  Trip,
+  CarSearch,
   EventTypes,
   IATALocation,
+  Trip,
 } from "../types";
 import { convertToCurrency, getDefaultCarReducer, getIataLocation } from "./functions";
 

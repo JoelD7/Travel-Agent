@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { signup } from "../../assets";
 
 interface StateIndexSignature {
   password: string;

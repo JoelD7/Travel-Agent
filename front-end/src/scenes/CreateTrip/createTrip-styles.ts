@@ -1,6 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
-import { Colors } from "../../styles";
 
 export const createTripStyles = makeStyles((theme: Theme) => ({
   footerContainer: {

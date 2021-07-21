@@ -164,7 +164,7 @@ export default function HomeHotelReservation() {
     let newHotel = { ...hotel, [param]: newDate };
 
     if (param === "checkIn" && isDateAfterOrEqual(newDate, checkOut)) {
-      newHotel = { ...newHotel, ["checkOut"]: addDays(newDate, 2) };
+      newHotel = { ...newHotel, checkOut: addDays(newDate, 2) };
     }
 
     setHotel(newHotel);

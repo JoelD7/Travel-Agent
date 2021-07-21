@@ -1,7 +1,7 @@
 import { faCalendar, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Direction, Grid, Grow, IconButton, Slide, useTheme } from "@material-ui/core";
-import React, { CSSProperties, ReactNode, useEffect, useRef, useState } from "react";
+import React, { CSSProperties, ReactNode, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
@@ -27,7 +27,6 @@ import {
   CarRsv,
   EventTypes,
   HotelReservation,
-  mapFlightToDomainType,
   mapHotelDTOToDomainType,
   responseTripToDomainTrip,
   Routes,
@@ -342,7 +341,7 @@ export function TripDetails() {
         {trip && (
           <div style={{ width: "100%" }}>
             <Grid item xs={12} style={{ marginBottom: "10px" }}>
-              <CustomButton icon={faChevronLeft} rounded>
+              <CustomButton icon={faChevronLeft} rounded onClick={() => history.goBack()}>
                 All trips
               </CustomButton>
             </Grid>

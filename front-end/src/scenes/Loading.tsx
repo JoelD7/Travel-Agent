@@ -24,7 +24,7 @@ export function Loading() {
     <Grid container justify="center" alignItems="center" className={style.mainContainer}>
       <Grid item xs={12}>
         <Grid container justify="center">
-          <img src={tripperLogoImg} className={style.image} />
+          <img src={tripperLogoImg} alt="tripper-logo" className={style.image} />
         </Grid>
       </Grid>
 

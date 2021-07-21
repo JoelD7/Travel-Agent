@@ -114,7 +114,7 @@ export function Login() {
         <Grid item className={style.formGrid}>
           <div className={style.imageContainer}>
             <Link to={Routes.HOME} className={style.logoLinkContainer}>
-              <img className={style.logotype} src={logoType} />
+              <img className={style.logotype} alt="tripper-logo" src={logoType} />
             </Link>
           </div>
 
@@ -178,7 +178,7 @@ export function Login() {
         </Grid>
 
         <Grid item className={style.imageGrid}>
-          <img className={style.image} src={loginImage} />
+          <img className={style.image} alt="travel-image" src={loginImage} />
         </Grid>
       </Grid>
 

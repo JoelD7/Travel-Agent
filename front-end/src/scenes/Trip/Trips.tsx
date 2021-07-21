@@ -7,7 +7,7 @@ import {
   Grid,
   Grow,
 } from "@material-ui/core";
-import { compareDesc, format } from "date-fns";
+import { format } from "date-fns";
 import React, { CSSProperties, useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import { useSelector } from "react-redux";
@@ -29,8 +29,8 @@ import {
   Routes,
   selectIsAuthenticated,
   selectLastTrip,
-  setUpLastTrip,
   selectUserTrips,
+  setUpLastTrip,
   Trip,
 } from "../../utils";
 import { tripStyles } from "./trip-styles";

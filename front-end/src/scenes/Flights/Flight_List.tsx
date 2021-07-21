@@ -272,7 +272,6 @@ export function Flight_List() {
 
   useEffect(() => {
     fetchFlights();
-    getUserLocation();
   }, []);
 
   useEffect(() => {
@@ -293,12 +292,6 @@ export function Flight_List() {
       setOccupancyParamsChanged(true);
     }
   }, [flightFromAutocomplete, flightToAutocomplete]);
-
-  function getUserLocation() {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      let crd = pos.coords;
-    });
-  }
 
   function fetchFlights() {
     setLoading(true);
@@ -737,35 +730,35 @@ export function Flight_List() {
     let booleanValues = [];
 
     booleanValues.push(
-      state.exitFlightDates.departureDatetimeRange[0] !=
+      state.exitFlightDates.departureDatetimeRange[0] !==
         state.exitFlightDates.minDeparture
     );
     booleanValues.push(
-      state.exitFlightDates.departureDatetimeRange[1] !=
+      state.exitFlightDates.departureDatetimeRange[1] !==
         state.exitFlightDates.maxDeparture
     );
     booleanValues.push(
-      state.exitFlightDates.arrivalDatetimeRange[0] != state.exitFlightDates.minArrival
+      state.exitFlightDates.arrivalDatetimeRange[0] !== state.exitFlightDates.minArrival
     );
     booleanValues.push(
-      state.exitFlightDates.arrivalDatetimeRange[1] != state.exitFlightDates.maxArrival
+      state.exitFlightDates.arrivalDatetimeRange[1] !== state.exitFlightDates.maxArrival
     );
 
     if (flightType === FlightTypes.ROUND && state.returnFlightDates) {
       booleanValues.push(
-        state.returnFlightDates.departureDatetimeRange[0] !=
+        state.returnFlightDates.departureDatetimeRange[0] !==
           state.returnFlightDates.minDeparture
       );
       booleanValues.push(
-        state.returnFlightDates.departureDatetimeRange[1] !=
+        state.returnFlightDates.departureDatetimeRange[1] !==
           state.returnFlightDates.maxDeparture
       );
       booleanValues.push(
-        state.returnFlightDates.arrivalDatetimeRange[0] !=
+        state.returnFlightDates.arrivalDatetimeRange[0] !==
           state.returnFlightDates.minArrival
       );
       booleanValues.push(
-        state.returnFlightDates.arrivalDatetimeRange[1] !=
+        state.returnFlightDates.arrivalDatetimeRange[1] !==
           state.returnFlightDates.maxArrival
       );
     }

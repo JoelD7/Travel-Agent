@@ -17,13 +17,11 @@ import {
   capitalizeString,
   convertToUserCurrency,
   formatAsCurrency,
-  getRoomImage,
   getRoomTotalPrice,
   HotelBooking,
   HotelReservation,
   HotelRoom,
   HotelRoomRate,
-  HotelRoomReservation,
   selectHotelRsv,
   selectRoomAccordionExpanded,
 } from "../../../utils";
@@ -132,15 +130,6 @@ export const RoomAccordion = React.memo(function Component({
   function onBoardChange(event: ChangeEvent<HTMLInputElement>, rate: HotelRoomRate) {
     setSelectedRateKey(event.target.value);
     setTotalRoomCost(getRoomTotalPrice(rate));
-  }
-
-  function mapRoomToRoomReservation(room: HotelRoom): HotelRoomReservation {
-    return {
-      code: room.code,
-      image: getRoomImage(room),
-      name: room.name,
-      totalAmount: totalRoomCost,
-    };
   }
 
   return (

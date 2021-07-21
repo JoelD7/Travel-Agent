@@ -7,13 +7,8 @@ import { Colors } from "../../../styles";
 import { Routes, selectIsAuthenticated } from "../../../utils";
 import { CustomButton, IconText, Text } from "../../atoms";
 
-interface NoTripsProps {}
-
-export function NoTrips({}: NoTripsProps) {
+export function NoTrips() {
   const noTripStyles = makeStyles((theme: Theme) => ({
-    buttonGrid: {
-      // width: '50%',
-    },
     noTripContainer: {
       marginLeft: "260px",
       marginBottom: "100px",
@@ -92,7 +87,7 @@ export function NoTrips({}: NoTripsProps) {
             </Text>
           </Grid>
 
-          <Grid item xs={12} className={style.buttonGrid}>
+          <Grid item xs={12}>
             <Grid container justify="center">
               {isAuthenticated ? (
                 <CustomButton backgroundColor={Colors.GREEN} onClick={() => redirect()}>

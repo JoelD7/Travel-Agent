@@ -19,7 +19,6 @@ import {
   Theme,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import { CSSProperties } from "@material-ui/styles";
 import { format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -41,7 +40,6 @@ import {
 import { CustomButton, ProgressCircle, SliderArrow, Text } from "../../atoms";
 import { Navbar } from "../../molecules";
 import { DashDrawer } from "../DashDrawer/DashDrawer";
-import { Footer } from "../Footer/Footer";
 
 interface AlbumRouteParams {
   uuid?: string;
@@ -233,13 +231,6 @@ export function Album() {
 
   const history = useHistory();
 
-  const sliderArrowStyles: CSSProperties = {
-    backgroundColor: "#00000075",
-    "&:hover": {
-      backgroundColor: "#000000b5",
-    },
-  };
-
   const imageSliderSettings = {
     className: style.imageSlider,
     nextArrow: <SliderArrow iconColor="white" variant="fullscreen" direction="right" />,
@@ -402,12 +393,6 @@ export function Album() {
           </>
         )}
       </Grid>
-
-      {album && (
-        <div className={style.footerContainer}>
-          <Footer />
-        </div>
-      )}
 
       {/* Delete confirmation */}
       <Dialog

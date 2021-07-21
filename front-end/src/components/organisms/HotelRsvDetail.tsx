@@ -22,7 +22,7 @@ import {
 import { Alert } from "@material-ui/lab";
 import { format } from "date-fns";
 import React, { MouseEvent, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { Font } from "../../assets";
 import { Colors, Shadow } from "../../styles";
@@ -144,8 +144,6 @@ export function HotelRsvDetail({ open, onClose }: HotelRsvDetail) {
 
   const is363OrLess = useMediaQuery("(max-width:363px)");
   const [openRsvDeletedSnack, setOpenRsvDeletedSnack] = useState(false);
-
-  const dispatch = useDispatch();
 
   function getOccupancyText(param: "room" | "adult") {
     if (hotelRsv) {

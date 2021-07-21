@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { addDays } from "date-fns";
 import { getDefaultCity } from "../functions";
-import { hotelPlaceholder, hotelRsvPlaceholder } from "../placeholders";
+import { hotelRsvPlaceholder } from "../placeholders";
 import {
   HotelBooking,
   HotelBookingParams,

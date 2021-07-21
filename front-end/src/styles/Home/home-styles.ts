@@ -1,7 +1,7 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import { Colors, Shadow } from "..";
-import { Font, home, homeItinerary } from "../../assets";
+import { Font, homeItinerary } from "../../assets";
 import { Family } from "../../assets/fonts";
 
 export const home_explore_button: CreateCSSProperties<{}> = {

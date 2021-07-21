@@ -6,12 +6,11 @@ import { EventTypes, Trip } from "../types";
 import {
   HotelBooking,
   HotelBookingParams,
-  HotelPax,
-  HotelRoomRate,
-  HotelRoom,
-  HotelReservation,
-  HotelRoomReservation,
   HotelImage,
+  HotelPax,
+  HotelReservation,
+  HotelRoom,
+  HotelRoomRate,
 } from "../types/hotel-types";
 import { IATALocation } from "../types/location-types";
 

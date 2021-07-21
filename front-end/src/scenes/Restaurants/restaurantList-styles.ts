@@ -1,6 +1,5 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { Font } from "../../assets";
-import { Family } from "../../assets/fonts";
 import { Colors, Shadow } from "../../styles";
 
 export const restaurantListStyles = makeStyles((theme: Theme) => ({

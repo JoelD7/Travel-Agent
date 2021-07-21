@@ -1,7 +1,6 @@
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconButton, makeStyles, Theme, useMediaQuery } from "@material-ui/core";
-import { CreateCSSProperties } from "@material-ui/styles";
 import React, { MouseEvent } from "react";
 import { Colors } from "../../styles";
 
@@ -23,24 +22,18 @@ interface SliderArrowProps {
     | "8x"
     | "9x"
     | "10x";
-  className?: string;
-  onTop?: boolean;
   variant?: ArrowVariant;
   iconColor?: string;
   backgroundColor?: string;
-  style?: CreateCSSProperties<{}>;
   onClick?: (event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
 }
 
 export function SliderArrow({
   onClick,
-  onTop,
   direction,
   variant = "regular",
-  style,
   backgroundColor = Colors.BLUE,
   iconColor = "white",
-  className,
   iconSize = "1x",
 }: SliderArrowProps) {
   const is500pxOrLess = useMediaQuery("(max-width:500px)");

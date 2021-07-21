@@ -2,7 +2,6 @@ import { faCircle as faCircleReg } from "@fortawesome/free-regular-svg-icons";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Button,
   Card,
   CardActionArea,
   CardContent,

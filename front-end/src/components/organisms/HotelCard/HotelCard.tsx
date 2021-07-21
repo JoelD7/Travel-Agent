@@ -5,23 +5,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { Colors } from "../../../styles";
 import {
-  getHotelReservation,
   capitalizeString,
   convertReservationParamsToURLParams,
-  ExchangeRate,
   convertToUserCurrency,
+  formatAsCurrency,
   getHotelImages,
+  getHotelReservation,
   getHotelStars,
   getMinRate,
   HotelBooking,
   HotelBookingParams,
   Routes,
-  selectUserCurrency,
-  setHotelRsv,
-  selectExchangeRate,
   selectHotelReservationParams,
   setHotelDetail,
-  formatAsCurrency,
+  setHotelRsv,
 } from "../../../utils";
 import { CustomButton, IconText, Rating, Text } from "../../atoms";
 import { hotelCardStyles } from "./hotelCardStyles";
@@ -70,7 +67,11 @@ export default function HotelCard({ hotel }: HotelCard) {
       {hotel.images && (
         <Grid item className={style.hotelImageGrid} id="photo">
           {hotel.images.length > 1 && (
-            <img src={`${getHotelImages(hotel)[0]}`} className={style.hotelImage} />
+            <img
+              src={`${getHotelImages(hotel)[0]}`}
+              alt="hotel-image"
+              className={style.hotelImage}
+            />
           )}
         </Grid>
       )}

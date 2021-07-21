@@ -1,7 +1,6 @@
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  Tooltip,
   Backdrop,
   Dialog,
   Grid,
@@ -25,11 +24,11 @@ import {
   HotelReservation,
   mapHotelDTOToDomainType,
   Person,
-  selectIsAuthenticated,
   Routes,
   selectCarRsv,
   selectHotelReservations,
   selectHotelRsv,
+  selectIsAuthenticated,
   selectPerson,
   setHotelReservations,
   setHotelRsv,

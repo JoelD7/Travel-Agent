@@ -22,7 +22,6 @@ type ThunkAPIType = {
 export const fetchUserTrips = createAsyncThunk<Trip[], null, ThunkAPIType>(
   "tripSlice/fetchUserTrips",
   (_, thunkAPI) => {
-    let idPerson = thunkAPI.getState().rootSlice.idPerson;
     let person = thunkAPI.getState().authSlice.person;
 
     return backend

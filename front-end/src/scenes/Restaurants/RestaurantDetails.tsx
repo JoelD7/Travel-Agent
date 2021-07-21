@@ -153,10 +153,10 @@ export function RestaurantDetails() {
                   <Grid container>
                     <Grid item className={style.tripButtonGrid}>
                       {isAuthenticated && (
-                        <Grid container>
+                        <Grid container alignItems="center">
                           {isRestaurantInAnyTrip(restaurant) ? (
                             <CustomButton
-                              style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
+                              style={{ boxShadow: Shadow.LIGHT, height: "fit-content" }}
                               onClick={() => deleteFromTrip()}
                               backgroundColor={Colors.RED}
                               rounded
@@ -165,7 +165,7 @@ export function RestaurantDetails() {
                             </CustomButton>
                           ) : (
                             <CustomButton
-                              style={{ boxShadow: Shadow.LIGHT, fontSize: 14 }}
+                              style={{ boxShadow: Shadow.LIGHT, height: "fit-content" }}
                               onClick={(e) => onIncludeTripClick(e)}
                               backgroundColor={Colors.GREEN}
                               rounded

@@ -1,23 +1,21 @@
 import {
-  faUtensils,
   faCalendar,
-  faClock,
   faMapMarkerAlt,
+  faUtensils,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-  CardActionArea,
-  Theme,
-  makeStyles,
   Card,
+  CardActionArea,
   CardContent,
   CardMedia,
   Grid,
   Grow,
+  makeStyles,
+  Theme,
 } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React from "react";
 import { Colors, Shadow } from "../../../styles";
-import { rsvRestaurantsPlaceholder } from "../../../utils";
 import { IconText, Rating, Text } from "../../atoms";
 import { NotCreatedMessage } from "../../molecules";
 
