@@ -33,11 +33,12 @@ public class SameSiteFilter implements Filter {
 
         for (String header : headers) {
             response.setHeader("Set-Cookie", String.format("%s; %s", header, "SameSite=None"));
+            System.out.println("RESPONSE HEADERS after adding SameSite: " + response.getHeaders("Set-Cookie"));
         }
 
-        System.out.println("======================================");
-        System.out.println("RESPONSE HEADERS after adding SameSite: " + response.getHeaders("Set-Cookie"));
-        System.out.println("======================================");
+//        System.out.println("======================================");
+//        System.out.println("RESPONSE HEADERS after adding SameSite: " + response.getHeaders("Set-Cookie"));
+//        System.out.println("======================================");
     }
 
     @Override
