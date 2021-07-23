@@ -105,7 +105,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(rememberMeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(sameSiteFilter, RememberMeAuthenticationFilter.class);
+        http.addFilterBefore(sameSiteFilter, RememberMeAuthenticationFilter.class);
     }
 
     @Bean
