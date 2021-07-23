@@ -118,23 +118,29 @@ public class AuthServiceImpl implements AuthService {
         String status = AuthStatus.NOT_REGISTERED.toString();
 
         if (request.getCookies() != null) {
+            System.out.println("Request has cookies");
             Cookie rememberMe = Stream.of(request.getCookies())
                     .filter(cookie -> cookie.getName().equals(CookieName.REMEMBER_ME.toString()))
                     .findFirst()
                     .orElse(null);
 
             if (rememberMe != null) {
+                System.out.println(" - Remember-me cookie");
                 status = AuthStatus.AUTHENTICATED.toString();
             } else {
+                System.out.println(" - personUuid cookie");
                 Cookie personUuidCookie = Stream.of(request.getCookies())
                         .filter(cookie -> cookie.getName().equals(CookieName.PERSON_UUID.toString()))
                         .findFirst()
                         .orElse(null);
 
                 if (personUuidCookieExists(personUuidCookie)) {
+                    System.out.println(" - User recognized but session expired");
                     status = AuthStatus.NOT_AUTHENTICATED.toString();
                 }
             }
+        } else {
+            System.out.println("Request doesn't have cookies");
         }
 
         return status;
