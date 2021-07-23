@@ -6,6 +6,11 @@ import com.tripper.Tripper.dtos.ProfileDTO;
 import com.tripper.Tripper.exceptions.PersonNotFoundException;
 import com.tripper.Tripper.models.Person;
 import com.tripper.Tripper.services.PersonServiceImpl;
+import com.tripper.Tripper.utils.CookieName;
+import java.util.stream.Stream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +42,22 @@ public class PersonController {
     }
 
     @GetMapping("/{uuid}")
-    public EntityModel<Person> get(@PathVariable String uuid) {
-        Person person = personRepo.findByUuid(uuid)
+    public EntityModel<Person> get(@PathVariable String uuid, HttpServletRequest request,
+            HttpServletResponse response) {
+        String uuidToUse = uuid;
+
+        if (uuidToUse.equals("")) {
+            if (request.getCookies() != null) {
+                Cookie personUuidCookie = Stream.of(request.getCookies())
+                        .filter(cookie -> cookie.getName().equals(CookieName.PERSON_UUID.toString()))
+                        .findFirst()
+                        .orElse(null);
+
+                uuidToUse = personUuidCookie.getValue();
+            }
+        }
+
+        Person person = personRepo.findByUuid(uuidToUse)
                 .orElseThrow(() -> new PersonNotFoundException(uuid));
 
         return assembler.toModel(person);

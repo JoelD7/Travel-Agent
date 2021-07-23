@@ -64,14 +64,19 @@ export function Parent({ children }: ParentProps) {
   }
 
   async function fetchPerson() {
-    console.log(document.cookie);
     const personUuidCookie = document.cookie
       .split("; ")
       .find((row) => row.startsWith("personUuid="));
 
-    if (personUuidCookie) {
-      const uuid = personUuidCookie.split("=")[1];
+    console.log(personUuidCookie);
 
+    if (personUuidCookie) {
+      let uuid = personUuidCookie.split("=")[1];
+
+      const res = await backend.get(`/person/${uuid}`);
+      setPersonDependencies(res.data);
+    } else {
+      let uuid = "";
       const res = await backend.get(`/person/${uuid}`);
       setPersonDependencies(res.data);
     }

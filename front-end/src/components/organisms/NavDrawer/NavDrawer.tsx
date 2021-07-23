@@ -186,6 +186,7 @@ export function NavDrawer({ open, onClose }: NavDrawer) {
   async function logout() {
     setLoading(true);
     dispatch(setIsAuthenticated(false));
+    localStorage.removeItem("personUuid");
     dispatch(setPerson(undefined));
     dispatch(setLogout(""));
     history.push(Routes.LOGIN);
