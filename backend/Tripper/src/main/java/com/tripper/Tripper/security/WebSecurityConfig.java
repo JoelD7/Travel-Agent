@@ -5,8 +5,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.sql.DataSource;
+import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
+import org.apache.tomcat.util.http.SameSiteCookies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -69,6 +72,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
         return new RememberMeAuthenticationProvider(rememberMeKey);
+    }
+
+    @Bean
+    public TomcatContextCustomizer sameSiteCookiesConfig() {
+        return context -> {
+            final Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
+            cookieProcessor.setSameSiteCookies(SameSiteCookies.NONE.getValue());
+            context.setCookieProcessor(cookieProcessor);
+        };
     }
 
     @Bean

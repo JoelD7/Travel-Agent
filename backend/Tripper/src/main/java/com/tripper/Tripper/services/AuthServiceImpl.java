@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -103,12 +105,19 @@ public class AuthServiceImpl implements AuthService {
                     .orElse(null);
 
             if (!isCookiePresent(personUuidCookie)) {
-                personUuidCookie = new Cookie(CookieName.PERSON_UUID.toString(), uuid);
-                personUuidCookie.setDomain(DOMAIN);
-                personUuidCookie.setPath("/");
-                personUuidCookie.setMaxAge(ONE_YEAR);
+                ResponseCookie resCookie = ResponseCookie.from(CookieName.PERSON_UUID.toString(), uuid)
+                        .domain(DOMAIN)
+                        .path("/")
+                        .maxAge(ONE_YEAR)
+                        .build();
 
-                response.addCookie(personUuidCookie);
+//                personUuidCookie = new Cookie(CookieName.PERSON_UUID.toString(), uuid);
+//                personUuidCookie.setDomain(DOMAIN);
+//                personUuidCookie.setPath("/");
+//                personUuidCookie.setMaxAge(ONE_YEAR);
+//
+//                response.addCookie(personUuidCookie);
+                response.setHeader(HttpHeaders.SET_COOKIE, resCookie.toString());
             }
         }
     }
