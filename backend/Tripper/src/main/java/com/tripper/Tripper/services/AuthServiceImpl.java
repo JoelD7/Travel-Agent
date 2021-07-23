@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,6 +38,9 @@ public class AuthServiceImpl implements AuthService {
     private final PersistentTokenBasedRememberMeServices rememberMeService;
     private final PersistentLoginRepository persistenLoginRepo;
     private final int ONE_YEAR = 31536000;
+
+    @Value("${tripper.app.domain}")
+    private String DOMAIN;
 
     public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder encoder,
             PersonRepository personRepo, SessionRegistry sessionRegistry,
@@ -100,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
 
             if (!isCookiePresent(personUuidCookie)) {
                 personUuidCookie = new Cookie(CookieName.PERSON_UUID.toString(), uuid);
-                personUuidCookie.setDomain("localhost");
+                personUuidCookie.setDomain(DOMAIN);
                 personUuidCookie.setPath("/");
                 personUuidCookie.setMaxAge(ONE_YEAR);
 
@@ -184,7 +188,7 @@ public class AuthServiceImpl implements AuthService {
 
                 personUuidCookie.setValue(value);
                 personUuidCookie.setMaxAge(0);
-                personUuidCookie.setDomain("localhost");
+                personUuidCookie.setDomain(DOMAIN);
                 personUuidCookie.setPath("/");
                 response.addCookie(personUuidCookie);
             }
