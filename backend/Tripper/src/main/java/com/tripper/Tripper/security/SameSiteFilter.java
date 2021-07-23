@@ -21,15 +21,17 @@ public class SameSiteFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        addSameSiteAttribute((HttpServletResponse) response);
 
         chain.doFilter(request, response);
+        addSameSiteAttribute((HttpServletResponse) response);
     }
 
     private void addSameSiteAttribute(HttpServletResponse response) {
         Collection<String> headers = response.getHeaders("Set-Cookie");
         boolean firstHeader = true;
-//        response.setHeader("Set-Cookie", ".");
+        System.out.println("======================================");
+        System.out.println("RESPONSE HEADERS: " + response.getHeaders("Set-Cookie"));
+        System.out.println("======================================");
 
         for (String header : headers) {
             response.setHeader("Set-Cookie", String.format("%s; %s", header, "SameSite=None"));
