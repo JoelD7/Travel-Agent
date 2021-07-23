@@ -21,8 +21,9 @@ public class SameSiteFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        chain.doFilter(request, response);
         addSameSiteAttribute((HttpServletResponse) response);
+
+        chain.doFilter(request, response);
     }
 
     private void addSameSiteAttribute(HttpServletResponse response) {
@@ -30,18 +31,18 @@ public class SameSiteFilter implements Filter {
         boolean firstHeader = true;
         response.setHeader("Set-Cookie", ".");
 
-        for (String header : headers) {
-            if (firstHeader) {
-                response.setHeader("Set-Cookie", String.format("%s; %s", header, "SameSite=None"));
-                firstHeader = false;
-                continue;
-            }
-            response.addHeader("Set-Cookie", String.format("%s; %s", header, "SameSite=None"));
-        }
-
-        System.out.println("======================================");
-        System.out.println("RESPONSE HEADERS after adding SameSite: " + response.getHeaders("Set-Cookie"));
-        System.out.println("======================================");
+//        for (String header : headers) {
+//            if (firstHeader) {
+//                response.setHeader("Set-Cookie", String.format("%s; %s", header, "SameSite=None"));
+//                firstHeader = false;
+//                continue;
+//            }
+//            response.addHeader("Set-Cookie", String.format("%s; %s", header, "SameSite=None"));
+//        }
+//
+//        System.out.println("======================================");
+//        System.out.println("RESPONSE HEADERS after adding SameSite: " + response.getHeaders("Set-Cookie"));
+//        System.out.println("======================================");
     }
 
     @Override
