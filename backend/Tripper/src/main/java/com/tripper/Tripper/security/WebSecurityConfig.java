@@ -105,11 +105,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public SameSiteFilter sameSiteFilter() {
-        return new SameSiteFilter();
-    }
-
-    @Bean
     public RememberMeAuthenticationFilter rememberMeAuthenticationFilter() throws Exception {
         RememberMeAuthenticationFilter filter
                 = new RememberMeAuthenticationFilter(authenticationManagerBean(),
