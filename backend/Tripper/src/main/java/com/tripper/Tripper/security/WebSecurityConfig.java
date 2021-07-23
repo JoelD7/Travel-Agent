@@ -57,9 +57,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${tripper.app.allowed-origins}")
     private String allowedOrigins;
 
-    @Autowired
-    private SameSiteFilter sameSiteFilter;
-
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
@@ -104,8 +101,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         http.addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(sameSiteFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(sameSiteFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(rememberMeAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public SameSiteFilter sameSiteFilter() {
+        return new SameSiteFilter();
     }
 
     @Bean
