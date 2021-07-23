@@ -19,7 +19,7 @@ public class PersonModelAssembler implements RepresentationModelAssembler<Person
         String uuid = entity.getUuid();
 
         return EntityModel.of(entity,
-                linkTo(methodOn(PersonController.class).get(uuid)).withSelfRel(),
+                linkTo(methodOn(PersonController.class).get(uuid, null, null)).withSelfRel(),
                 linkTo(methodOn(PersonController.class).editProfile(uuid, null)).withRel("editProfile"),
                 linkTo(methodOn(PersonController.class).getAll()).withRel("personList"));
     }
