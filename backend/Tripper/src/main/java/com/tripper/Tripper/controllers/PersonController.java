@@ -46,7 +46,7 @@ public class PersonController {
             HttpServletResponse response) {
         String uuidToUse = uuid;
 
-        if (uuidToUse.equals(".")) {
+        if (uuidToUse.equals("0")) {
             if (request.getCookies() != null) {
                 Cookie personUuidCookie = Stream.of(request.getCookies())
                         .filter(cookie -> cookie.getName().equals(CookieName.PERSON_UUID.toString()))
