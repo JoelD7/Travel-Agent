@@ -106,6 +106,8 @@ public class AuthServiceImpl implements AuthService {
                 personUuidCookie = new Cookie(CookieName.PERSON_UUID.toString(), uuid);
                 personUuidCookie.setDomain(DOMAIN);
                 personUuidCookie.setPath("/");
+                personUuidCookie.setHttpOnly(false);
+                personUuidCookie.setSecure(false);
                 personUuidCookie.setMaxAge(ONE_YEAR);
 
                 response.addCookie(personUuidCookie);

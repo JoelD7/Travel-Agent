@@ -64,6 +64,7 @@ export function Parent({ children }: ParentProps) {
   }
 
   async function fetchPerson() {
+    console.log(document.cookie);
     const personUuidCookie = document.cookie
       .split("; ")
       .find((row) => row.startsWith("personUuid="));
