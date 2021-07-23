@@ -76,7 +76,7 @@ export function Parent({ children }: ParentProps) {
       const res = await backend.get(`/person/${uuid}`);
       setPersonDependencies(res.data);
     } else {
-      let uuid = " ";
+      let uuid = ".";
       const res = await backend.get(`/person/${uuid}`);
       setPersonDependencies(res.data);
     }
