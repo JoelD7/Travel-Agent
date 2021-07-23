@@ -39,28 +39,30 @@ public class SameSiteFilter implements Filter {
         System.out.println("RESPONSE HEADERS: " + response.getHeaders("Set-Cookie"));
         System.out.println("======================================");
 
-        List<ResponseCookie> responseCookies = Stream.of(request.getCookies())
-                .map(cookie -> {
-                    return ResponseCookie.from(cookie.getName(), cookie.getValue())
-                            .domain(cookie.getDomain())
-                            .path(cookie.getPath())
-                            .maxAge(cookie.getMaxAge())
-                            .sameSite("None")
-                            .build();
-                })
-                .collect(Collectors.toList());
+        if (request.getCookies() != null) {
+            List<ResponseCookie> responseCookies = Stream.of(request.getCookies())
+                    .map(cookie -> {
+                        return ResponseCookie.from(cookie.getName(), cookie.getValue())
+                                .domain(cookie.getDomain())
+                                .path(cookie.getPath())
+                                .maxAge(cookie.getMaxAge())
+                                .sameSite("None")
+                                .build();
+                    })
+                    .collect(Collectors.toList());
 
-        for (ResponseCookie cookie : responseCookies) {
-            if (firstHeader) {
-                response.setHeader("Set-Cookie", cookie.toString());
-                firstHeader = false;
-                continue;
+            for (ResponseCookie cookie : responseCookies) {
+                if (firstHeader) {
+                    response.setHeader("Set-Cookie", cookie.toString());
+                    firstHeader = false;
+                    continue;
+                }
+
+                response.addHeader("Set-Cookie", cookie.toString());
             }
 
-            response.addHeader("Set-Cookie", cookie.toString());
+            System.out.println("RESPONSE HEADERS after adding SameSite: " + response.getHeaders("Set-Cookie"));
         }
-
-        System.out.println("RESPONSE HEADERS after adding SameSite: " + response.getHeaders("Set-Cookie"));
 
 //        System.out.println("======================================");
 //        System.out.println("RESPONSE HEADERS after adding SameSite: " + response.getHeaders("Set-Cookie"));
