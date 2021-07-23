@@ -28,14 +28,18 @@ public class SameSiteFilter implements Filter {
     private void addSameSiteAttribute(HttpServletResponse response) {
         Collection<String> headers = response.getHeaders("Set-Cookie");
         boolean firstHeader = true;
+        System.out.println("======================================");
+        System.out.println("COOKIE HEADERS: ");
         for (String header : headers) {
+            System.out.println("Header: " + header);
             if (firstHeader) {
-                response.setHeader("Set-Cookie", String.format("%s; %s", header, "SameSite=Strict"));
+                response.setHeader("Set-Cookie", String.format("%s; %s", header, "SameSite=None"));
                 firstHeader = false;
                 continue;
             }
-            response.addHeader("Set-Cookie", String.format("%s; %s", header, "SameSite=Strict"));
+            response.addHeader("Set-Cookie", String.format("%s; %s", header, "SameSite=None"));
         }
+        System.out.println("======================================");
     }
 
     @Override
