@@ -2,7 +2,6 @@ import { faBars, faMapMarkerAlt, faTimes } from "@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   AppBar,
-  Tooltip,
   Avatar,
   Dialog,
   DialogActions,
@@ -13,19 +12,20 @@ import {
   MenuItem,
   Snackbar,
   Toolbar,
+  Tooltip,
   useMediaQuery,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React, { CSSProperties, FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory, useRouteMatch } from "react-router-dom";
-import { CloudImage, Font, logoIcon, logoType, logoTypeWhiteFore } from "../../assets";
+import { CloudImage, Font, logoIcon } from "../../assets";
 import { Colors } from "../../styles";
 import { navbarStyles } from "../../styles/Navbar/navbar-styles";
 import {
+  AutocompleteType,
   getLinkStyle,
   IATALocation,
-  AutocompleteType,
   LocationType,
   Person,
   Routes,
@@ -130,7 +130,11 @@ export const Navbar: FunctionComponent<Navbar> = ({
           >
             <img
               alt=" "
-              src={variant === "transparent" ? logoTypeWhiteFore : logoType}
+              src={
+                variant === "transparent"
+                  ? CloudImage.logoTypeWhiteFore
+                  : CloudImage.logoType
+              }
               className={style.logotype}
             />
           </Link>

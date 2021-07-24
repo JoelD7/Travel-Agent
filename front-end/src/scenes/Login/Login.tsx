@@ -6,7 +6,7 @@ import React, { MouseEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { batchActions } from "redux-batched-actions";
-import { loginImage, logoType } from "../../assets";
+import { CloudImage } from "../../assets";
 import { CustomButton, Footer } from "../../components";
 import { TextInput } from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
@@ -114,7 +114,11 @@ export function Login() {
         <Grid item className={style.formGrid}>
           <div className={style.imageContainer}>
             <Link to={Routes.HOME} className={style.logoLinkContainer}>
-              <img className={style.logotype} alt="tripper-logo" src={logoType} />
+              <img
+                className={style.logotype}
+                alt="tripper-logo"
+                src={CloudImage.logoType}
+              />
             </Link>
           </div>
 
@@ -179,7 +183,7 @@ export function Login() {
         </Grid>
 
         <Grid item className={style.imageGrid}>
-          <img className={style.image} alt="travel-image" src={loginImage} />
+          <img className={style.image} alt="travel-image" src={CloudImage.loginImage} />
         </Grid>
       </Grid>
 

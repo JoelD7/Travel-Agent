@@ -1,7 +1,7 @@
 import { makeStyles, Theme } from "@material-ui/core";
 import { CreateCSSProperties } from "@material-ui/styles";
 import { Colors, Shadow } from "..";
-import { Font, homeItinerary } from "../../assets";
+import { CloudImage, Font, homeItinerary } from "../../assets";
 import { Family } from "../../assets/fonts";
 
 export const home_explore_button: CreateCSSProperties<{}> = {
@@ -201,7 +201,7 @@ export const homeStyles = makeStyles((theme: Theme) => ({
   },
   planTripPhotoContainer: {
     width: "50%",
-    backgroundImage: `url(${homeItinerary})`,
+    backgroundImage: `url(${CloudImage.homeItinerary})`,
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     borderRadius: "10px",

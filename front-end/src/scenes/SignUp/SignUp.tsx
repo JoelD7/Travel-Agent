@@ -3,7 +3,7 @@ import { Alert } from "@material-ui/lab";
 import React, { MouseEvent, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Font } from "../../assets";
-import { logoType, signup } from "../../assets/images";
+import { CloudImage } from "../../assets/images";
 import { CustomButton, Footer, PasswordEye } from "../../components";
 import { TextInput } from "../../components/atoms/TextInput";
 import { Colors, signStyles } from "../../styles";
@@ -78,7 +78,11 @@ export function SignUp() {
         <Grid item className={style.formGrid}>
           <div className={style.imageContainer}>
             <Link to={Routes.HOME} className={style.logoLinkContainer}>
-              <img className={style.logotype} alt="tripper-logo" src={logoType} />
+              <img
+                className={style.logotype}
+                alt="tripper-logo"
+                src={CloudImage.logoType}
+              />
             </Link>
           </div>
 
@@ -190,7 +194,7 @@ export function SignUp() {
         </Grid>
 
         <Grid item className={style.imageGrid}>
-          <img className={style.image} alt="signup" src={signup} />
+          <img className={style.image} alt="signup" src={CloudImage.signup} />
         </Grid>
       </Grid>
 
