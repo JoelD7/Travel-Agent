@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Travel-Agent/static/css/main.120b813f.chunk.css",
-    "main.js": "/Travel-Agent/static/js/main.bd3995a8.chunk.js",
-    "main.js.map": "/Travel-Agent/static/js/main.bd3995a8.chunk.js.map",
+    "main.js": "/Travel-Agent/static/js/main.0c2b7ba7.chunk.js",
+    "main.js.map": "/Travel-Agent/static/js/main.0c2b7ba7.chunk.js.map",
     "runtime-main.js": "/Travel-Agent/static/js/runtime-main.b17264c3.js",
     "runtime-main.js.map": "/Travel-Agent/static/js/runtime-main.b17264c3.js.map",
     "static/css/2.39ab7e1f.chunk.css": "/Travel-Agent/static/css/2.39ab7e1f.chunk.css",
-    "static/js/2.4950d974.chunk.js": "/Travel-Agent/static/js/2.4950d974.chunk.js",
-    "static/js/2.4950d974.chunk.js.map": "/Travel-Agent/static/js/2.4950d974.chunk.js.map",
+    "static/js/2.c8a69726.chunk.js": "/Travel-Agent/static/js/2.c8a69726.chunk.js",
+    "static/js/2.c8a69726.chunk.js.map": "/Travel-Agent/static/js/2.c8a69726.chunk.js.map",
     "static/js/3.d9837601.chunk.js": "/Travel-Agent/static/js/3.d9837601.chunk.js",
     "static/js/3.d9837601.chunk.js.map": "/Travel-Agent/static/js/3.d9837601.chunk.js.map",
     "static/js/4.a77d3358.chunk.js": "/Travel-Agent/static/js/4.a77d3358.chunk.js",
@@ -49,11 +49,11 @@
     "static/js/22.51cee51d.chunk.js": "/Travel-Agent/static/js/22.51cee51d.chunk.js",
     "static/js/22.51cee51d.chunk.js.map": "/Travel-Agent/static/js/22.51cee51d.chunk.js.map",
     "index.html": "/Travel-Agent/index.html",
-    "precache-manifest.da5457ae1c5d14317ace5a41dbe57469.js": "/Travel-Agent/precache-manifest.da5457ae1c5d14317ace5a41dbe57469.js",
+    "precache-manifest.b97f336852764178b1e7025d327d3b6e.js": "/Travel-Agent/precache-manifest.b97f336852764178b1e7025d327d3b6e.js",
     "service-worker.js": "/Travel-Agent/service-worker.js",
     "static/css/2.39ab7e1f.chunk.css.map": "/Travel-Agent/static/css/2.39ab7e1f.chunk.css.map",
     "static/css/main.120b813f.chunk.css.map": "/Travel-Agent/static/css/main.120b813f.chunk.css.map",
-    "static/js/2.4950d974.chunk.js.LICENSE.txt": "/Travel-Agent/static/js/2.4950d974.chunk.js.LICENSE.txt",
+    "static/js/2.c8a69726.chunk.js.LICENSE.txt": "/Travel-Agent/static/js/2.c8a69726.chunk.js.LICENSE.txt",
     "static/media/carlos.e71c303a.jpg": "/Travel-Agent/static/media/carlos.e71c303a.jpg",
     "static/media/home-itinerary.1e9c6c56.jpg": "/Travel-Agent/static/media/home-itinerary.1e9c6c56.jpg",
     "static/media/home.css": "/Travel-Agent/static/media/home.c606593d.jpg",
@@ -66,8 +66,8 @@
   "entrypoints": [
     "static/js/runtime-main.b17264c3.js",
     "static/css/2.39ab7e1f.chunk.css",
-    "static/js/2.4950d974.chunk.js",
+    "static/js/2.c8a69726.chunk.js",
     "static/css/main.120b813f.chunk.css",
-    "static/js/main.bd3995a8.chunk.js"
+    "static/js/main.0c2b7ba7.chunk.js"
   ]
 }
