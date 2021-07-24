@@ -1,1 +1,0 @@
-{"version":3,"sources":["scenes/NotFound/NotFoundDefault.tsx"],"names":[],"mappings":"+GAAA","file":"static/js/13.db50a11f.chunk.js","sourcesContent":["export { NotFound as default } from \"./NotFound\";\r\n"],"sourceRoot":""}

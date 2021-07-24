@@ -1,1 +1,0 @@
-{"version":3,"sources":["scenes/FavPlaces/FavPlacesDefault.tsx"],"names":[],"mappings":"8GAAA","file":"static/js/5.0c9e35b6.chunk.js","sourcesContent":["export { FavPlaces as default } from \"./FavPlaces\";\r\n"],"sourceRoot":""}

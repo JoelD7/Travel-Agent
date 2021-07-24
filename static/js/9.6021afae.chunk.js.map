@@ -1,0 +1,1 @@
+{"version":3,"sources":["scenes/Hotels/HotelDetailsDefault.tsx"],"names":[],"mappings":"8GAAA","file":"static/js/9.6021afae.chunk.js","sourcesContent":["export { HotelDetails as default } from \"./HotelDetails\";\r\n"],"sourceRoot":""}

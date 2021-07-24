@@ -1,0 +1,1 @@
+{"version":3,"sources":["scenes/CreateTrip/CreateTripDefault.tsx"],"names":[],"mappings":"8GAAA","file":"static/js/4.a77d3358.chunk.js","sourcesContent":["export { CreateTrip as default } from \"./CreateTrip\";\r\n"],"sourceRoot":""}

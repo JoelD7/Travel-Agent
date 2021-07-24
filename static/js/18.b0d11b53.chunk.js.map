@@ -1,1 +1,0 @@
-{"version":3,"sources":["scenes/SignUp/SignUpDefault.tsx"],"names":[],"mappings":"+GAAA","file":"static/js/18.b0d11b53.chunk.js","sourcesContent":["export { SignUp as default } from \"./SignUp\";\r\n"],"sourceRoot":""}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["scenes/Itinerary/ItineraryDefault.tsx"],"names":[],"mappings":"+GAAA","file":"static/js/11.a832e5a6.chunk.js","sourcesContent":["export { Itinerary as default } from \"./Itinerary\";\r\n"],"sourceRoot":""}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["scenes/Flights/Flight_ListDefault.tsx"],"names":[],"mappings":"8GAAA","file":"static/js/6.151cf388.chunk.js","sourcesContent":["export { Flight_List as default } from \"./Flight_List\";\r\n"],"sourceRoot":""}
