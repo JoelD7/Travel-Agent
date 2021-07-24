@@ -140,6 +140,7 @@ export function Login() {
               <TextInput
                 label="Password"
                 name="password"
+                immediateUpdate
                 error={wrongPassword}
                 helperText={wrongPasswordText}
                 updateState={(name, value) =>

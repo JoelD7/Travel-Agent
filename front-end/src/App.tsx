@@ -24,6 +24,7 @@ import {
   AutocompleteType,
   selectIsAuthenticated,
   selectOriginCity,
+  airportCityPlaceholder,
 } from "./utils";
 
 const Home = lazy(() => import("./scenes/Home/HomeDefault"));
@@ -62,6 +63,7 @@ export default function App() {
 
   useEffect(() => {
     if (!isOriginCityDefined()) {
+      localStorage.setItem(LocationType.ORIGIN, JSON.stringify(airportCityPlaceholder));
       setOpenOriginCityDialog(true);
     }
   }, [isAuthenticated]);

@@ -15,6 +15,9 @@ interface TextInputProps {
   coPassword: string;
   style: CreateCSSProperties<{}>;
   className: string;
+  //Indicates whether the state of this component is
+  //immediately propagated to its parent.
+  immediateUpdate?: boolean;
   updateState: (name: string, value: string) => void;
   endAdornment: ReactNode;
 }
@@ -33,6 +36,7 @@ export function TextInput({
   style,
   className,
   type,
+  immediateUpdate,
   endAdornment,
   coPassword,
   updateState,
@@ -116,8 +120,6 @@ export function TextInput({
   });
   const styles = textStyles();
 
-  // useEffect
-
   useEffect(() => {
     if (errorProp) {
       setError(errorProp);
@@ -129,6 +131,9 @@ export function TextInput({
 
   function onChange(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     setText(e.target.value);
+    if (updateState && immediateUpdate) {
+      updateState(name, e.target.value);
+    }
   }
 
   function validateInput() {
