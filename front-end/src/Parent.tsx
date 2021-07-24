@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { CloudImage } from "./assets";
+import { Loading } from "./scenes";
 import {
   AuthStatus,
   backend,
@@ -128,5 +129,11 @@ export function Parent({ children }: ParentProps) {
     }
   }
 
-  return <>{childrenVisible && children}</>;
+  return (
+    <>
+      {!childrenVisible && <Loading />}
+
+      {childrenVisible && children}
+    </>
+  );
 }
